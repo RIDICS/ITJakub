@@ -1044,15 +1044,39 @@ table {
 
             .pages-start {
                 position: relative;
-                height: 520px; //TODO
+                height: 550px; //TODO
                 overflow: auto;
+
+                .page-splitter {
+                    border: 1px solid #ccc;
+                    margin: 1em 0 0.5em 0;
+                }
 
                 .page-row {
                     position: relative;
                     min-height: 150px;
 
+                    .page-toolbar {
+                        .btn {
+                            padding: 3px 8px;
+                        }
+                    }
+
+                    .page-number {
+                        margin-bottom: 1em;
+                    }
+
                     .highlighted-element {
                         background: rgba(255,0,0,0.4);
+                    }
+
+                    .CodeMirror,
+                    .editor-toolbar {
+                        border-radius: 0;
+
+                        a {
+                            border-radius: 0;
+                        }
                     }
 
                     .comment-area {
@@ -1167,7 +1191,7 @@ table {
 
                             & textarea {
                                 width: 100%;
-                                min-height: 100px;
+                                min-height: 170px;
                             }
                         }
 

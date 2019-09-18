@@ -17,18 +17,16 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly AuthenticationManager m_authenticationManager;
         private readonly ResourceRepository m_resourceRepository;
-        private readonly BookViewRepository m_bookRepository;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly IFileSystemManager m_fileSystemManager;
         private readonly IMapper m_mapper;
 
         public ProjectItemManager(AuthenticationManager authenticationManager, ResourceRepository resourceRepository,
-            BookViewRepository bookRepository, FulltextStorageProvider fulltextStorageProvider, IFileSystemManager fileSystemManager,
+            FulltextStorageProvider fulltextStorageProvider, IFileSystemManager fileSystemManager,
             IMapper mapper)
         {
             m_authenticationManager = authenticationManager;
             m_resourceRepository = resourceRepository;
-            m_bookRepository = bookRepository;
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_fileSystemManager = fileSystemManager;
             m_mapper = mapper;
@@ -66,7 +64,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<TermContract> GetPageTermList(long pageId)
         {
-            var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetPageTermList(pageId));
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestPageTermList(pageId));
             var result = m_mapper.Map<List<TermContract>>(dbResult);
             return result;
         }

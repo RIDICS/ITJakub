@@ -2,6 +2,9 @@
     private readonly commentArea: CommentArea;
     private readonly util: EditorsApiClient;
 
+    readonly commentPattern = `komentar-`;
+    readonly commentRegexExpr = `(${this.commentPattern}\\w+)`;
+
     constructor(commentArea: CommentArea, util: EditorsApiClient) {
         this.commentArea = commentArea;
         this.util = util;
@@ -29,8 +32,8 @@
         const serverAddress = this.util.getServerAddress();
         if (!commentText) {
             bootbox.alert({
-                title: "Warning",
-                message: "Comment is empty. Please fill it",
+                title: localization.translate("Warning", "RidicsProject").value,
+                message: localization.translate("EmptyComment", "RidicsProject").value,
                 buttons: {
                     ok: {
                         className: "btn-default"
@@ -52,8 +55,8 @@
             );
             sendAjax.done(() => {
                 bootbox.alert({
-                    title: "Success",
-                    message: "Successfully sent",
+                    title: localization.translate("Success", "RidicsProject").value,
+                    message: localization.translate("CommentCreateSuccess", "RidicsProject").value,
                     buttons: {
                         ok: {
                             className: "btn-default"
@@ -68,8 +71,8 @@
             });
             sendAjax.fail(() => {
                 bootbox.alert({
-                    title: "Error",
-                    message: "Sending failed. Server error.",
+                    title: localization.translate("Fail", "RidicsProject").value,
+                    message: localization.translate("Failed to create comment.", "RidicsProject").value,
                     buttons: {
                         ok: {
                             className: "btn-default"
@@ -123,45 +126,62 @@
             });
     }
 
-    toggleCommentSignsAndReturnCommentNumber(codeMirror: CodeMirror.Doc, addSigns: boolean): string {
-        let output = "";
+    toggleCommentSignsAndCreateComment(codeMirror: CodeMirror.Doc, addSigns: boolean, commentText?: string, textId?: number, saveTextFunction?: (textId: number, text: string) => JQuery.jqXHR, thisForCallback?) {
+        let output: string;
         let markSize: number;
         const selectedText = codeMirror.getSelection();
         const selectionStartChar = codeMirror.getCursor("from").ch;
         const selectionStartLine = codeMirror.getCursor("from").line;
         const selectionEndChar = codeMirror.getCursor("to").ch;
         const selectionEndLine = codeMirror.getCursor("to").line;
-        const guidRegExpString =
-            "([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}";
-        const customCommentarySign =
-            selectedText.match(
-                new RegExp(
-                    `\\$${guidRegExpString}\\%`)); //searching on one side only because of the same amount of characters.
+        const customCommentarySign = selectedText.match(new RegExp(`\\$${this.commentRegexExpr}\\%`)); //searching on one side only because of the same amount of characters.
         if (!addSigns) {
             if (customCommentarySign) {
-                output = selectedText.replace(
-                    new RegExp(`\\$${guidRegExpString}\\%`),
-                    "");
-                output = output.replace(
-                    new RegExp(`\\%${guidRegExpString}\\$`),
-                    "");
+                output = selectedText.replace(new RegExp(`\\$${this.commentRegexExpr}\\%`), "");
+                output = output.replace(new RegExp(`\\%${this.commentRegexExpr}\\$`), "");
                 markSize = customCommentarySign[0].length;
                 codeMirror.replaceSelection(output);
                 codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar },
                     { line: selectionEndLine, ch: selectionEndChar - markSize });
             }
-            return null;
         } else {
-            const textReferenceId = this.util.createTextRefereceId();
+            this.util.createTextReferenceId(textId).done((commentId) => {
                 if (addSigns) {
+                    const textReferenceId = `${this.commentPattern}${commentId}`;
                     const uniqueNumberLength = textReferenceId.length;
                     markSize = uniqueNumberLength + 2; // + $ + %
                     output = `$${textReferenceId}%${selectedText}%${textReferenceId}$`;
                     codeMirror.replaceSelection(output);
-                    codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
-                        { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
+                    
+                    saveTextFunction.call(thisForCallback, textId, codeMirror.getValue()).done(() => {
+                        const id = 0; //creating comment
+                        this.processCommentSendClick(textId, textReferenceId, id, null, commentText);
+                        codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
+                            { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
+                    }).fail((error) => {
+                        codeMirror.replaceSelection(selectedText);
+                        bootbox.alert({
+                            title: localization.translate("Fail", "RidicsProject").value,
+                            message: localization.translate("Failed to create comment.", "RidicsProject").value,
+                            buttons: {
+                                ok: {
+                                    className: "btn-default"
+                                }
+                            }
+                        });
+                    });
                 }
-                return textReferenceId;
+            }).fail(() => {
+                bootbox.alert({
+                    title: localization.translate("Fail", "RidicsProject").value,
+                    message: localization.translate("Failed to create comment.", "RidicsProject").value,
+                    buttons: {
+                        ok: {
+                            className: "btn-default"
+                        }
+                    }
+                });
+            });
         }
     }
 
@@ -225,8 +245,8 @@
     private onCommentSendRequest(sendAjax:JQueryXHR, textAreaEl:JQuery, textId:number) {
         sendAjax.done(() => {
             bootbox.alert({
-                title: "Success",
-                message: "Successfully sent",
+                title: localization.translate("Success", "RidicsProject").value,
+                message: localization.translate("CommentCreateSuccess", "RidicsProject").value,
                 buttons: {
                     ok: {
                         className: "btn-default"
@@ -239,8 +259,8 @@
         });
         sendAjax.fail(() => {
             bootbox.alert({
-                title: "Error",
-                message: "Sending failed. Server error.",
+                title: localization.translate("Fail", "RidicsProject").value,
+                message: localization.translate("CommentCreateFail", "RidicsProject").value,
                 buttons: {
                     ok: {
                         className: "btn-default"

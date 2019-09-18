@@ -11,6 +11,7 @@ namespace Vokabular.MainService.Core.Works.Snapshot
 {
     public class CreateSnapshotWork : UnitOfWorkBase<long>
     {
+        private const int BatchSize = 100;
         private readonly ProjectRepository m_projectRepository;
         private readonly ResourceRepository m_resourceRepository;
         private readonly long m_projectId;
@@ -40,17 +41,52 @@ namespace Vokabular.MainService.Core.Works.Snapshot
             var now = DateTime.UtcNow;
             var user = m_projectRepository.Load<User>(m_userId);
             var project = m_projectRepository.Load<Project>(m_projectId);
+
             var latestSnapshot = m_projectRepository.GetLatestSnapshot(m_projectId);
             var bookTypes = m_bookTypes.Select(bookTypeEnum => m_projectRepository.GetBookTypeByEnum(bookTypeEnum)).ToList();
             var defaultBookType = m_projectRepository.GetBookTypeByEnum(m_defaultBookType);
-            var resourceVersions = m_resourceVersionIds.Select(x => m_projectRepository.Load<ResourceVersion>(x)).ToList();
             var versionNumber = latestSnapshot?.VersionNumber ?? 0;
+
+            // Get all resources (specified in request)
+
+            var resourceVersions = new List<ResourceVersion>();
+
+            var textResourceVersions = BatchGetResourceVersions<TextResource>(m_resourceVersionIds);
+            resourceVersions.AddRange(textResourceVersions);
+
+            var imageResourceVersions = BatchGetResourceVersions<ImageResource>(m_resourceVersionIds);
+            resourceVersions.AddRange(imageResourceVersions);
+
+            var audioResourceVersions = BatchGetResourceVersions<AudioResource>(m_resourceVersionIds);
+            resourceVersions.AddRange(audioResourceVersions);
+
+            // Get required related resources
+
+            var trackResourceVersions = GetTrackResourceVersions(audioResourceVersions);
+            resourceVersions.AddRange(trackResourceVersions);
+
+            var chapterResourceVersions = GetChapterResourceVersions(trackResourceVersions);
+            resourceVersions.AddRange(chapterResourceVersions);
+
+            var pageResourceVersions = GetPageResourceVersions(textResourceVersions, imageResourceVersions, chapterResourceVersions, trackResourceVersions);
+            resourceVersions.AddRange(pageResourceVersions);
+
+            // Get all required resources
+
+            var metadataResourceVersion = m_resourceRepository.GetLatestMetadata(m_projectId);
+            resourceVersions.Add(metadataResourceVersion);
 
             var editionNote = m_resourceRepository.GetLatestEditionNote(m_projectId);
             if (editionNote != null)
             {
                 resourceVersions.Add(editionNote);
             }
+
+            // Headwords are not loaded because they are not supported in project editor
+            // BinaryResource is not used at all now
+            // BookVersionResource is not used in publish process (it is used only for eXist-db)
+
+            // Create snapshot
 
             var newDbSnapshot = new DataEntities.Database.Entities.Snapshot
             {
@@ -70,11 +106,67 @@ namespace Vokabular.MainService.Core.Works.Snapshot
 
             var snapshotId = (long)m_projectRepository.Create(newDbSnapshot);
 
-            var textResourceVersions = m_resourceRepository.GetResourceVersions<TextResource>(m_resourceVersionIds);
-            var metadataResourceVersion = m_resourceRepository.GetLatestMetadata(m_projectId);
+            // Publish snapshot to fulltext database
+
             m_fulltextStorage.CreateSnapshot(newDbSnapshot, textResourceVersions, metadataResourceVersion);
 
             return snapshotId;
+        }
+
+        private List<T> BatchGetResourceVersions<T>(IList<long> resourceVersionIds) where T : ResourceVersion
+        {
+            var resultList = new List<T>();
+            for (int i = 0; i < resourceVersionIds.Count; i += BatchSize)
+            {
+                var ids = resourceVersionIds.Skip(i).Take(BatchSize);
+                var dbResultPart = m_resourceRepository.GetResourceVersions<T>(ids);
+
+                resultList.AddRange(dbResultPart);
+            }
+
+            return resultList;
+        }
+
+        private List<T> BatchGetLatestResourceVersions<T>(IList<long> resourceIds) where T : ResourceVersion
+        {
+            var resultList = new List<T>();
+            for (int i = 0; i < resourceIds.Count; i += BatchSize)
+            {
+                var ids = resourceIds.Skip(i).Take(BatchSize);
+                var dbResult = m_resourceRepository.GetLatestResourceVersions<T>(ids);
+
+                resultList.AddRange(dbResult);
+            }
+
+            return resultList;
+        }
+
+        private IList<PageResource> GetPageResourceVersions(IList<TextResource> textResources, IList<ImageResource> imageResources, IList<ChapterResource> chapterResources, IList<TrackResource> trackResources)
+        {
+            var allResourceIds = new List<long>();
+            allResourceIds.AddRange(textResources.Select(x => x.ResourcePage.Id));
+            allResourceIds.AddRange(imageResources.Select(x => x.ResourcePage.Id));
+            allResourceIds.AddRange(chapterResources.Select(x => x.ResourceBeginningPage.Id));
+            allResourceIds.AddRange(trackResources.Where(x => x.ResourceBeginningPage != null).Select(x => x.ResourceBeginningPage.Id));
+            var resourceIds = allResourceIds.Distinct().ToList();
+
+            var resultList = BatchGetLatestResourceVersions<PageResource>(resourceIds);
+
+            return resultList;
+        }
+
+        private IList<ChapterResource> GetChapterResourceVersions(IList<TrackResource> trackResources)
+        {
+            var trackIds = trackResources.Where(x => x.ResourceChapter != null).Select(x => x.ResourceChapter.Id);
+            var chapterResourceVersions = m_resourceRepository.GetLatestResourceVersions<ChapterResource>(trackIds);
+            return chapterResourceVersions;
+        }
+
+        private IList<TrackResource> GetTrackResourceVersions(IList<AudioResource> audioResources)
+        {
+            var trackResourceVersions =
+                m_resourceRepository.GetLatestResourceVersions<TrackResource>(audioResources.Select(x => x.ResourceTrack.Id));
+            return trackResourceVersions;
         }
     }
 }

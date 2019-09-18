@@ -23,14 +23,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
         }
 
-        [HttpPost]
-        public IActionResult GetGuid()
-        {
-            var guid = Guid.NewGuid();
-            return Json(guid);
-        }
-
-        [HttpPost]
         public IActionResult LoadCommentFile(long textId)
         {
             var parts = new List<CommentStructureResponse>();
@@ -99,6 +91,24 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             var client = GetProjectClient();
             client.DeleteComment(commentId);
+        }
+
+        [HttpPost]
+        public IActionResult GenerateCommentId(long textId)
+        {
+            var client = GetProjectClient();
+            var comments = client.GetCommentsForText(textId);
+            var maxId = 0;
+            foreach (var comment in comments)
+            {
+                var isNumber = int.TryParse(comment.TextReferenceId.Split('-')[1], out var value);
+                if (isNumber && value > maxId)
+                {
+                    maxId = value;
+                }
+            }
+
+            return Json(maxId + 1);
         }
 
         [HttpGet]

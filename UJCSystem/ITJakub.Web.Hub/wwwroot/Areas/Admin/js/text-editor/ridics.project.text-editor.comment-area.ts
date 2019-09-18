@@ -9,7 +9,6 @@
     init() {
         this.processToggleCommentAresSizeClick();
         this.processToggleNestedCommentClick();
-        this.processDeleteCommentClick();
     }
 
     /**
@@ -21,7 +20,7 @@
         if (content === null) {
             return null;
         }
-        const textId = commentAreaEl.parent(".page-row").data("page") as number;
+        const textId = commentAreaEl.parents(".page-row").data("page") as number;
         const threadsContainerStart = `<div class="threads-container">`;
         const threadStart = `<ul class="media-list">`;
         const threadEnd = `</ul>`;
@@ -67,14 +66,21 @@
             var unixTimeMilliseconds = content[i].time;
             var timeUtc = new Date(unixTimeMilliseconds);
             var commentBodyStart = `<div class="media-body" data-comment-id=${id}>`;
-            var commentImage =
-                `<a href="#"><img alt="48x48" class="media-object" src="${picture
-                    }" style="width: 48px; height: 48px;"></a>`;
+            let commentImage;
+            if (picture == null) {
+                commentImage =
+                    `<div><i class="fa fa-4x fa-user media-object"></i></div>`;
+            } else {
+                commentImage =
+                    `<a href="#"><img alt="48x48" class="media-object" src="${picture
+                        }" style="width: 48px; height: 48px;"></a>`;
+            }
+
             var mainCommentLeftPartStart =
-                `<div class="media-left main-comment" id="${textReferenceId}-comment" data-parent-comment-id="${id}">`;
+                `<div class="media-left main-comment" data-text-reference-id="${textReferenceId}" data-parent-comment-id="${id}">`;
             var commentName = `<h5 class="media-heading">${name} ${surname}</h5>`;
             var mainCommentBody =
-                `<p class="comment-body">${body}</p><button class="respond-to-comment">Respond</button>`;
+                `<p class="comment-body">${body}</p><button class="respond-to-comment">${localization.translate("Respond", "RidicsProject").value}</button>`;
             var nestedCommentBody = `<p class="comment-body">${body}</p>`;
             if (commentTextId === textId) {
                 if (needToCloseTag) {
@@ -91,7 +97,7 @@
                     areaContent += commentImage;
                     areaContent += commentLeftPartEnd;
                     areaContent += commentBodyStart;
-                    areaContent += `<div class="text-center id-in-comment-area text-muted">Commentary ${textReferenceId
+                    areaContent += `<div class="text-center id-in-comment-area text-muted">${localization.translate("Commentary", "RidicsProject").value} ${textReferenceId
                         }</div>`;
                     areaContent += commentName;
                     areaContent += `<p class="replied-on text-muted">On ${timeUtc.toDateString()} at ${timeUtc
@@ -110,7 +116,15 @@
                         .toTimeString().split(" ")[0]}</p>`; //only date and time, no timezone
                     areaContent += nestedCommentBody;
                     areaContent += nestedCommentBodyEnd;
-                    areaContent += `<div class="row comment-actions-row"><div class="col-xs-8"></div><div class="col-xs-4"><div class="btn-group"><button type="button" class="edit-comment">Edit</button><button type="button" class="delete-comment">Delete</button></div></div></div>`;
+                    areaContent += `<div class="row comment-actions-row">
+                                        <div class="col-xs-8"></div>
+                                        <div class="col-xs-4">
+                                            <div class="btn-group">
+                                                <button type="button" class="edit-comment">${localization.translate("Edit", "RidicsProject").value}</button>
+                                                <button type="button" class="delete-comment">${localization.translate("Delete", "RidicsProject").value}</button>
+                                            </div>
+                                        </div>
+                                    </div>`;
                     areaContent += nestedCommentEnd;
                 }
             }
@@ -137,9 +151,9 @@
         const ellipsisStart = "<div class=\"ellipsis-container\">";
         const ellipsisBodyStart = "<div class=\"ellipsis toggleCommentViewAreaSize\">";
         const ellipsisIconExpand =
-            "<i class=\"fa fa-expand expand-icon fa-lg\" aria-hidden=\"true\" title=\"Expand comment area\"></i>";
+            `<i class="fa fa-expand expand-icon fa-lg" aria-hidden="true" title="${localization.translate("ExpandCommentArea", "RidicsProject").value}"></i>`;
         const ellipsisIconCollapse =
-            "<i class=\"fa fa-compress collapse-icon fa-lg\" aria-hidden=\"true\" title=\"Collapse comment area\"></i>";
+            `<i class="fa fa-compress collapse-icon fa-lg" aria-hidden="true" title="${localization.translate("CollapseCommentArea", "RidicsProject").value}"></i>`;
         const ellipsisBodyEnd = "</div>";
         const ellipsisEnd = "</div>";
         areaContent += ellipsisStart;
@@ -174,9 +188,9 @@
         const ellipsisStart = "<div class=\"ellipsis-container\">";
         const ellipsisBodyStart = "<div class=\"ellipsis toggleCommentViewAreaSize\">";
         const ellipsisIconExpand =
-            "<i class=\"fa fa-expand expand-icon fa-lg\" aria-hidden=\"true\" title=\"Expand comment area\"></i>";
+            `<i class="fa fa-expand expand-icon fa-lg" aria-hidden="true" title="${localization.translate("ExpandCommentArea", "RidicsProject").value}"></i>`;
         const ellipsisIconCollapse =
-            "<i class=\"fa fa-compress collapse-icon fa-lg\" aria-hidden=\"true\" title=\"Collapse comment area\"></i>";
+            `<i class="fa fa-compress collapse-icon fa-lg" aria-hidden="true" title="${localization.translate("CollapseCommentArea", "RidicsProject").value}"></i>`;
         const ellipsisBodyEnd = "</div>";
         const ellipsisEnd = "</div>";
         areaContent += ellipsisStart;
@@ -213,7 +227,7 @@
                     if (nestedComments.length) {
                         nestedComments.addClass("nested-comment-collapsed");
                         thread.append(`<p class="text-center toggle-nested-comments-icon-container">
-                                           <i class="fa fa-bars fa-lg toggle-nested-comments" aria-hidden="true" title="Toggle nested comments"></i>
+                                           <i class="fa fa-bars fa-lg toggle-nested-comments" aria-hidden="true" title="${localization.translate("CollapseCommentArea", "RidicsProject").value}"></i>
                                        </p>`);
                     }
                 });
@@ -285,15 +299,9 @@
                 }
             });
         ajax.fail(() => {
-            bootbox.alert({
-                title: "Error",
-                message: `Failed to construct comment area for page ${pageName}`,
-                buttons: {
-                    ok: {
-                        className: "btn-default"
-                    }
-                }
-            });
+            const alert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(localization.translateFormat("LoadCommentsFailed", [pageName], "RidicsProject").value).buildElement();
+            commentAreaEl.append(alert);
         });
         return ajax;
     }
@@ -330,6 +338,7 @@
                 }
                 const sortedContent = this.util.splitArrayToArrays(content, indexes);
                 this.constructCommentArea(sortedContent, commentAreaEl);
+                this.processDeleteCommentClick(commentAreaEl);
             }
         }
     }
@@ -340,14 +349,14 @@
         commentAreaEl.append(html);
     }
 
-    private processDeleteCommentClick() {
-        $(".delete-comment").on("click", (event) => {
+    private processDeleteCommentClick(commentAreaEl: JQuery) {
+        commentAreaEl.find(".delete-comment").on("click", (event) => {
             const target = $(event.target as Node as HTMLElement);
             const commentActionsRowEl = target.parents(".comment-actions-row");
             const commentId = parseInt(commentActionsRowEl.siblings(".media-body").attr("data-comment-id"));
             bootbox.confirm({
-                message:"Do you want to delete this comment?",
-                title: "Please confirm",
+                message: localization.translate("DeleteCommentConfirm", "RidicsProject").value,
+                title: localization.translate("ConfirmTitle", "RidicsProject").value,
                 buttons: {
                     confirm: {
                         className: "btn-default"
@@ -362,8 +371,8 @@
                         deleteAjax.done(() => {
                             const textId = commentActionsRowEl.parents(".page-row").data("page");
                             bootbox.alert({
-                                title: "Success",
-                                message: "Comment successfully deleted.",
+                                title: localization.translate("Success", "RidicsProject").value,
+                                message: localization.translate("CommentDeleteSuccess", "RidicsProject").value,
                                 buttons: {
                                     ok: {
                                         className: "btn-default"
@@ -374,8 +383,8 @@
                         });
                         deleteAjax.fail(() => {
                             bootbox.alert({
-                                title: "Fail",
-                                message: "Failed to delete this comment.",
+                                title: localization.translate("Fail", "RidicsProject").value,
+                                message: localization.translate("CommentDeleteFail", "RidicsProject").value,
                                 buttons: {
                                     ok: {
                                         className: "btn-default"
