@@ -141,6 +141,19 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
+        public virtual IList<Term> GetLatestPageTermList(long resourcePageId)
+        {
+            PageResource pageResourceAlias = null;
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<Term>()
+                .JoinAlias(x => x.PageResources, () => pageResourceAlias)
+                .JoinAlias(() => pageResourceAlias.Resource, () => resourceAlias)
+                .Where(() => resourceAlias.Id == resourcePageId && pageResourceAlias.Id == resourceAlias.LatestVersion.Id)
+                .OrderBy(x => x.Position).Asc
+                .List();
+        }
+
         public virtual Term GetTermByExternalId(string externalId)
         {
             return GetSession().QueryOver<Term>()
@@ -308,6 +321,19 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Id == resourceId)
                 .SingleOrDefault();
+        }
+
+        public virtual IList<T> GetLatestResourceVersions<T>(IEnumerable<long> resourceIds) where T : ResourceVersion
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<T>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id)
+                .AndRestrictionOn(() => resourceAlias.Id).IsInG(resourceIds)
+                .List();
         }
 
         public virtual TextResource GetTextResource(long resourceId)
