@@ -53,6 +53,13 @@
             spellChecker: false,
             mode: "gfm",
             toolbar: [
+                {
+                    name: "save",
+                    action: (editor) => { this.saveNote(editor.value()) },
+                    className: "fa fa-floppy-o",
+                    title: localization.translate("Save", "ItJakubJs").value
+                },
+                this.simpleMdeIcons.toolSeparator,
                 this.simpleMdeIcons.toolBold,
                 this.simpleMdeIcons.toolItalic,
                 this.simpleMdeIcons.toolSeparator,
@@ -66,13 +73,7 @@
                 this.simpleMdeIcons.toolQuote,
                 this.simpleMdeIcons.toolPreview,
                 this.simpleMdeIcons.toolHorizontalRule,
-                this.simpleMdeIcons.toolSeparator,
-                {
-                    name: "save",
-                    action: (editor) => { this.saveNote(editor.value()) },
-                    className: "fa fa-floppy-o",
-                    title: localization.translate("Save", "ItJakubJs").value
-                }
+                this.simpleMdeIcons.toolSeparator
             ]
         };
         this.simpleMde = new SimpleMDE(simpleMdeOptions);
@@ -87,7 +88,8 @@
             originalVersionId: this.editionNoteVersionId
         };
         this.alertHolder.empty();
-        this.util.saveEditionNote(request).done(() => {
+        this.util.saveEditionNote(request).done((editionNoteVersionId) => {
+            this.editionNoteVersionId = editionNoteVersionId;
             const error = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("EditionNoteSaveSuccess", "RidicsProject").value);
             this.alertHolder.empty().append(error.buildElement());
         }).fail((error) => {

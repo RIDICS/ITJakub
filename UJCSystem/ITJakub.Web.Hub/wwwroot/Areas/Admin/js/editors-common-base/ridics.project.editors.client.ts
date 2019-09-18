@@ -121,7 +121,7 @@
         return ajax;
     }
 
-    saveEditionNote(noteRequest: ICreateEditionNote): JQuery.jqXHR {
+    saveEditionNote(noteRequest: ICreateEditionNote): JQuery.jqXHR<number> {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/SetEditionNote`,
             noteRequest as JQuery.PlainObject);
         return ajax;
