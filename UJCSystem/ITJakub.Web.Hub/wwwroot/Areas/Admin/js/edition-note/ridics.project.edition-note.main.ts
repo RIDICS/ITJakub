@@ -91,7 +91,7 @@
         this.util.saveEditionNote(request).done((editionNoteVersionId) => {
             this.editionNoteVersionId = editionNoteVersionId;
             const error = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("EditionNoteSaveSuccess", "RidicsProject").value);
-            this.alertHolder.empty().append(error.buildElement());
+            this.alertHolder.empty().append(error.buildElement()).delay(3000).fadeOut(2000);
         }).fail((error) => {
             const alert = new AlertComponentBuilder(AlertType.Error)
                 .addContent(this.errorHandler.getErrorMessage(error, localization.translate("EditionNoteSaveFailed", "RidicsProject").value));
