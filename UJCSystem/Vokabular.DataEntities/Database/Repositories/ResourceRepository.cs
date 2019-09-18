@@ -310,6 +310,19 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
+        public virtual IList<T> GetLatestResourceVersions<T>(IEnumerable<long> resourceIds) where T : ResourceVersion
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<T>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id)
+                .AndRestrictionOn(() => resourceAlias.Id).IsInG(resourceIds)
+                .List();
+        }
+
         public virtual TextResource GetTextResource(long resourceId)
         {
             Resource resourceAlias = null;
