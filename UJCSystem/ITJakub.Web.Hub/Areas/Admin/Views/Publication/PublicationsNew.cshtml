@@ -21,7 +21,7 @@
 <div class="content-container">
     <div class="snapshot-layout">
         <div id="new-snapshot-container">
-            <form asp-controller="Publication" asp-action="NewSnapshot" method="post">
+            <form id="createSnapshot" asp-controller="Publication" asp-action="NewSnapshot" method="post">
                 <div asp-validation-summary="All" class="alert alert-danger"></div>
                 <input type="hidden" asp-for="ProjectId" />
                 <div class="project-snapshot-new">

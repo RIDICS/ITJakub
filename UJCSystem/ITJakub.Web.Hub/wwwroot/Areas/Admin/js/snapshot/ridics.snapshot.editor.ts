@@ -74,6 +74,33 @@ class SnapshotEditor {
         for (let table of $(".publish-resource-panel table").toArray()) {
             this.setIncludeAllCheckbox($(table));
         }
+
+        $("#createSnapshot button[type=\"submit\"]").on("click",
+            (event) => {
+                event.preventDefault();
+                if ($("table .include-checkboxes input[type=\"checkbox\"]:checked").length === 0) {
+                    bootbox.confirm({
+                        message: localization.translate("CreateSnapshotWithoutResources", "RidicsProject").value,
+                        callback: (result) => {
+                            if (result) {
+                                $("#createSnapshot").submit();
+                            }
+                        },
+                        buttons: {
+                            confirm: {
+                                className: "btn btn-default",
+                                label: localization.translate("Confirm", "Admin").value
+                            },
+                            cancel: {
+                                className: "btn btn-default",
+                                label: localization.translate("Cancel", "Admin").value
+                            }
+                        }
+                    });
+                } else {
+                    $("#createSnapshot").submit();
+                }
+            });
     }
 
     private setIncludeAllCheckbox(table: JQuery) {
@@ -94,6 +121,9 @@ class SnapshotEditor {
         this.setResourcesCount();
     }
 
+    
+    
+    
     private setResourcesCount(): void {
         let textResources;
         let textSelectedResources;
