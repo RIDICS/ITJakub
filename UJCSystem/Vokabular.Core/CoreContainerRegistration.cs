@@ -13,7 +13,7 @@ namespace Vokabular.Core
             services.AddScoped<MetadataSearchCriteriaDirector>();
             services.AddScoped<MetadataSearchCriteriaProcessor>();
 
-            services.AddScoped<FileSystemManager>();
+            services.AddScoped<IFileSystemManager, FileSystemManager>();
             services.AddScoped<IResourceTypePathResolver, ConvertedMetadataPathResolver>();
             services.AddScoped<IResourceTypePathResolver, UploadedMetaDataPathResolver>();
             services.AddScoped<IResourceTypePathResolver, BookPathResolver>();

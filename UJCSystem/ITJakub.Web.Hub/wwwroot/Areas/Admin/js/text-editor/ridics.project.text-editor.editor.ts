@@ -4,7 +4,7 @@
     private simplemde: IExtendedSimpleMDE;
     private simpleMdeOptions: SimpleMDE.Options;
     private readonly commentInput: CommentInput;
-    private readonly util: EditorsUtil;
+    private readonly util: EditorsApiClient;
     private readonly commentArea: CommentArea;
     private readonly editModeSelector = "is-edited";
     private readonly client: TextApiClient;
@@ -12,7 +12,7 @@
     private isPreviewRendering = true;
     private editorExistsInTab = false;
 
-    constructor(commentInput: CommentInput, util: EditorsUtil, commentArea: CommentArea) {
+    constructor(commentInput: CommentInput, util: EditorsApiClient, commentArea: CommentArea) {
         this.commentInput = commentInput;
         this.util = util;
         this.commentArea = commentArea;
@@ -238,22 +238,23 @@
         const pageEl = $(`*[data-page="${textId}"]`);
         const compositionArea = pageEl.children(".composition-area");
         const id = compositionArea.data("id");
-        const versionNumber = compositionArea.data("version-number");
+        const versionId = compositionArea.data("version-id");
         const request: ICreateTextVersion = {
             id: id,
             text: contents,
-            versionNumber: versionNumber
+            resourceVersionId: versionId
         };
         const ajax = this.util.savePlainText(textId, request);
-        ajax.done(() => {
+        ajax.done((newVersionId: number) => {
             this.originalContent = contents;
+            compositionArea.data("version-id", newVersionId);
         });
         return ajax;
     }
 
     saveContents(textId: number, contents: string): JQuery.jqXHR {
         const saveAjax = this.saveText(textId, contents);
-        saveAjax.done(() => {
+        saveAjax.done((newVersionId: number) => {
             bootbox.alert({
                 title: localization.translate("Success", "RidicsProject").value,
                 message: localization.translate("ChangesSaveSuccess", "RidicsProject").value,

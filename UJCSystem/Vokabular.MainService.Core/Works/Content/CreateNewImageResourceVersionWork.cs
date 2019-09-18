@@ -1,10 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Net;
-using Vokabular.Core.Storage.Resources;
+using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Content
@@ -12,17 +14,19 @@ namespace Vokabular.MainService.Core.Works.Content
     public class CreateNewImageResourceVersionWork : UnitOfWorkBase<long>
     {
         private readonly ResourceRepository m_resourceRepository;
+        private readonly IFileSystemManager m_fileSystemManager;
         private readonly long m_imageId;
         private readonly CreateImageContract m_data;
-        private readonly SaveResourceResult m_fileInfo;
+        private readonly Stream m_fileStream;
         private readonly int m_userId;
 
-        public CreateNewImageResourceVersionWork(ResourceRepository resourceRepository, long imageId, CreateImageContract data, SaveResourceResult fileInfo, int userId) : base(resourceRepository)
+        public CreateNewImageResourceVersionWork(ResourceRepository resourceRepository, IFileSystemManager fileSystemManager, long imageId, CreateImageContract data, Stream fileStream, int userId) : base(resourceRepository)
         {
             m_resourceRepository = resourceRepository;
+            m_fileSystemManager = fileSystemManager;
             m_imageId = imageId;
             m_data = data;
-            m_fileInfo = fileInfo;
+            m_fileStream = fileStream;
             m_userId = userId;
         }
 
@@ -49,17 +53,25 @@ namespace Vokabular.MainService.Core.Works.Content
                 CreateTime = now,
                 CreatedByUser = user,
                 Comment = m_data.Comment,
-                FileId = m_fileInfo.FileNameId,
+                FileId = null, // Must be added after saving in FileStorageManager
                 FileName = m_data.FileName,
                 MimeType = mimeType,
                 Resource = latestImage.Resource,
                 ResourcePage = resourcePage,
-                Size = m_fileInfo.FileSize,
+                Size = 0, // Must be added after saving in FileStorageManager
                 VersionNumber = latestImage.VersionNumber + 1,
             };
             newImageResource.Resource.LatestVersion = newImageResource;
 
-            return (long) m_resourceRepository.Create(newImageResource);
+            var resourceVersionId = (long) m_resourceRepository.Create(newImageResource);
+
+            var fileInfo = m_fileSystemManager.SaveResource(ResourceType.Image, latestImage.Resource.Project.Id, m_fileStream);
+
+            newImageResource.FileId = fileInfo.FileNameId;
+            newImageResource.Size = fileInfo.FileSize;
+            m_resourceRepository.Update(newImageResource);
+
+            return resourceVersionId;
         }
     }
 }

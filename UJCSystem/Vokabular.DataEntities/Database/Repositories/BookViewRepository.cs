@@ -4,6 +4,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
+using Vokabular.DataEntities.Database.ConditionCriteria;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
@@ -12,9 +13,9 @@ using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
 {
-    public class BookRepository : MainDbRepositoryBase
+    public class BookViewRepository : MainDbRepositoryBase
     {
-        public BookRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
+        public BookViewRepository(UnitOfWorkProvider unitOfWorkProvider) : base(unitOfWorkProvider)
         {
         }
 
@@ -102,6 +103,29 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(() => resourceAlias.Project.Id == projectId)
                 .OrderBy(x => x.Position).Asc
                 .List();
+        }
+
+        public virtual IList<PageCountResult> GetPublishedPageCount(IEnumerable<long> projectIdList)
+        {
+            PageResource pageResourceAlias = null;
+            Snapshot snapshotAlias = null;
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+            PageCountResult resultAlias = null;
+
+            var result = GetSession().QueryOver(() => pageResourceAlias)
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .WhereRestrictionOn(() => resourceAlias.Project.Id).IsInG(projectIdList)
+                .And(() => snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
+                .SelectList(list => list
+                    .SelectGroup(() => projectAlias.Id).WithAlias(() => resultAlias.ProjectId)
+                    .SelectCount(() => pageResourceAlias.Id).WithAlias(() => resultAlias.PageCount))
+                .TransformUsing(Transformers.AliasToBean<PageCountResult>())
+                .List<PageCountResult>();
+
+            return result;
         }
 
         public virtual IList<ChapterResource> GetChapterList(long projectId)
@@ -349,6 +373,15 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Take(creator.GetCount())
                 .Skip(creator.GetStart())
                 .List<HeadwordSearchResult>();
+            return result;
+        }
+
+        public virtual IList<PageResource> GetPagesWithTerms(TermCriteriaPageConditionCreator creator)
+        {
+            var query = GetSession().CreateQuery(creator.GetQueryString())
+                .SetParameters(creator)
+                .SetResultTransformer(Transformers.DistinctRootEntity);
+            var result = query.List<PageResource>();
             return result;
         }
 

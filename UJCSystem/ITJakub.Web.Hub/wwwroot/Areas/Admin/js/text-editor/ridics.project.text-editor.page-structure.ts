@@ -1,10 +1,10 @@
 ﻿class PageStructure {
     private readonly commentArea: CommentArea;
-    private readonly util: EditorsUtil;
+    private readonly util: EditorsApiClient;
     private readonly main: TextEditorMain;
     private readonly editor: Editor;
 
-    constructor(commentArea: CommentArea, util: EditorsUtil, main: TextEditorMain, editor: Editor) {
+    constructor(commentArea: CommentArea, util: EditorsApiClient, main: TextEditorMain, editor: Editor) {
         this.commentArea = commentArea;
         this.util = util;
         this.main = main;
@@ -62,9 +62,10 @@
         renderedText.done((data: ITextWithContent) => {
             const pageBody = data.text;
             const id = data.id;
+            const versionId = data.versionId;
             const versionNumber = data.versionNumber;
             const compositionAreaEl = pageEl.children(".composition-area");
-            compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber } as JQuery.PlainObject);
+            compositionAreaEl.attr({ "data-id": id, "data-version-id": versionId, "data-version-number": versionNumber } as JQuery.PlainObject);
             compositionAreaDiv.empty().append(pageBody);
             pageEl.css("min-height", "0");
             var event = $.Event("pageConstructed", { page: textId });
@@ -92,8 +93,9 @@
             textAreaEl.val(data.text);
             const compositionAreaEl = pageEl.children(".composition-area");
             const id = data.id;
+            const versionId = data.versionId;
             const versionNumber = data.versionNumber;
-            compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber } as JQuery.PlainObject);
+            compositionAreaEl.attr({ "data-id": id, "data-version-id": versionId, "data-version-number": versionNumber } as JQuery.PlainObject);
             var event = $.Event("pageConstructed", { page: textId });
             textAreaEl.trigger(event);
             if (pageEl.hasClass("init-editor")) {

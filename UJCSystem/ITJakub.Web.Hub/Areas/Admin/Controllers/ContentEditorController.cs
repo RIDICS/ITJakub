@@ -137,7 +137,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             model.HasImage = client.HasPageImage(pageId);
             model.PageId = pageId;
             
-            return PartialView("../Project/Work/_PageListDetail", model);
+            return PartialView("../Project/Work/SubView/_PageListDetail", model);
         }
 
         [HttpPost]
@@ -176,8 +176,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult SetTextResource(long textId, CreateTextRequestContract request)
         {
             var client = GetProjectClient();
-            var result = client.CreateTextResourceVersion(textId, request);
-            return Json(result);
+            var resourceVersionId = client.CreateTextResourceVersion(textId, request);
+            return Json(resourceVersionId);
         }
 
         [HttpGet]

@@ -46,7 +46,7 @@ namespace Vokabular.MainService.Core.Works
             m_resultCount = dbResult.Count;
 
             m_pageCount = m_fetchPageCount
-                ? m_metadataRepository.GetPageCount(projectIdList)
+                ? m_projectRepository.GetAllPageCount(projectIdList)
                 : new List<PageCountResult>();
 
             return dbResult.List;

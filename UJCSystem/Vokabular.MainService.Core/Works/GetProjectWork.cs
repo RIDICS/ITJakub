@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -38,7 +37,7 @@ namespace Vokabular.MainService.Core.Works
 
             if (m_fetchPageCount)
             {
-                var pageCounts = m_metadataRepository.GetPageCount(new[] {m_projectId});
+                var pageCounts = m_projectRepository.GetAllPageCount(new[] {m_projectId});
                 var item = pageCounts.FirstOrDefault();
                 if (item != null)
                 {

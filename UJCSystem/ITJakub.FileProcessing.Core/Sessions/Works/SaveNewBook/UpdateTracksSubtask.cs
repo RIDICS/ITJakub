@@ -32,8 +32,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var project = m_resourceRepository.Load<Project>(projectId);
             var user = m_resourceRepository.Load<User>(userId);
 
-            var dbTracks = m_resourceRepository.GetProjectTracks(projectId);
-            var dbAudioList = m_resourceRepository.GetProjectAudioResources(projectId);
+            var dbTracks = m_resourceRepository.GetProjectLatestTracks(projectId);
+            var dbAudioList = m_resourceRepository.GetProjectLatestAudioResources(projectId);
             var dbAudioGroups = dbAudioList.Where(x => x.ResourceTrack != null)
                 .GroupBy(x => x.ResourceTrack.Id)
                 .ToDictionary(x => x.Key, x => x.ToList());
@@ -169,7 +169,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var project = m_resourceRepository.Load<Project>(projectId);
             var user = m_resourceRepository.Load<User>(userId);
 
-            var dbFullBookAudioList = m_resourceRepository.GetProjectFullAudioResources(projectId);
+            var dbFullBookAudioList = m_resourceRepository.GetProjectLatestFullAudioResources(projectId);
 
             foreach (var fullBookRecording in bookData.FullBookRecordings)
             {

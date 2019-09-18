@@ -1,11 +1,11 @@
 ﻿class CommentInput {
     private readonly commentArea: CommentArea;
-    private readonly util: EditorsUtil;
+    private readonly util: EditorsApiClient;
 
     readonly commentPattern = `komentar-`;
     readonly commentRegexExpr = `(${this.commentPattern}\\w+-\\w+)`;
 
-    constructor(commentArea: CommentArea, util: EditorsUtil) {
+    constructor(commentArea: CommentArea, util: EditorsApiClient) {
         this.commentArea = commentArea;
         this.util = util;
     }

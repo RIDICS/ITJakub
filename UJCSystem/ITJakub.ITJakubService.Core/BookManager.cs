@@ -24,11 +24,11 @@ namespace ITJakub.ITJakubService.Core
         private readonly AuthorizationManager m_authorizationManager;
         private readonly BookRepository m_bookRepository;
         private readonly BookVersionRepository m_bookVersionRepository;
-        private readonly FileSystemManager m_fileSystemManager;
+        private readonly IFileSystemManager m_fileSystemManager;
         private readonly SearchServiceClient m_searchServiceClient;
 
         public BookManager(SearchServiceClient searchServiceClient, BookRepository bookRepository,
-            BookVersionRepository bookVersionRepository, FileSystemManager fileSystemManager,
+            BookVersionRepository bookVersionRepository, IFileSystemManager fileSystemManager,
             AuthorizationManager authorizationManager)
         {
             m_searchServiceClient = searchServiceClient;

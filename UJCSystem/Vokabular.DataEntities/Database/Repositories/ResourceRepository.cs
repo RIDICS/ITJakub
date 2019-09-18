@@ -25,7 +25,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public virtual IList<PageResource> GetProjectPages(long projectId)
+        public virtual IList<PageResource> GetProjectLatestPages(long projectId)
         {
             Resource resourceAlias = null;
 
@@ -63,7 +63,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual IList<TextResource> GetProjectTexts(long projectId, long? namedResourceGroupId, bool fetchParentPage)
+        public virtual IList<TextResource> GetProjectLatestTexts(long projectId, long? namedResourceGroupId, bool fetchParentPage)
         {
             Resource resourceAlias = null;
 
@@ -91,7 +91,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result.ToList();
         }
 
-        public virtual IList<ImageResource> GetProjectImages(long projectId, long? namedResourceGroupId, bool fetchParentPage)
+        public virtual IList<ImageResource> GetProjectLatestImages(long projectId, long? namedResourceGroupId, bool fetchParentPage)
         {
             Resource resourceAlias = null;
 
@@ -128,7 +128,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public virtual IList<ChapterResource> GetProjectChapters(long projectId)
+        public virtual IList<ChapterResource> GetProjectLatestChapters(long projectId)
         {
             Resource resourceAlias = null;
 
@@ -183,6 +183,33 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
+        public virtual IList<HeadwordResource> GetHeadwordWithFetch(IEnumerable<long> headwordVersionIds)
+        {
+            var result = GetSession().QueryOver<HeadwordResource>()
+                .WhereRestrictionOn(x => x.Id).IsInG(headwordVersionIds)
+                .Fetch(SelectMode.Fetch, x => x.Resource)
+                .Fetch(SelectMode.Fetch, x => x.HeadwordItems)
+                .TransformUsing(Transformers.DistinctRootEntity)
+                .List();
+            return result;
+        }
+
+        public virtual HeadwordResource GetHeadwordWithFetchByExternalId(string projectExternalId, string headwordExternalId, ProjectTypeEnum projectType)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            var result = GetSession().QueryOver<HeadwordResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .Where(x => x.ExternalId == headwordExternalId && projectAlias.ExternalId == projectExternalId && projectAlias.ProjectType == projectType && x.Id == resourceAlias.LatestVersion.Id)
+                .Fetch(SelectMode.Fetch, x => x.Resource)
+                .Fetch(SelectMode.Fetch, x => x.HeadwordItems)
+                .TransformUsing(Transformers.DistinctRootEntity)
+                .SingleOrDefault();
+            return result;
+        }
+
         public virtual IList<AudioResource> GetRecordings(long trackResourceVersionId)
         {
             Resource resourceAlias = null;
@@ -198,7 +225,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public virtual IList<TrackResource> GetProjectTracks(long projectId)
+        public virtual IList<TrackResource> GetProjectLatestTracks(long projectId)
         {
             Resource resourceAlias = null;
 
@@ -209,7 +236,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual IList<AudioResource> GetProjectAudioResources(long projectId)
+        public virtual IList<AudioResource> GetProjectLatestAudioResources(long projectId)
         {
             Resource resourceAlias = null;
 
@@ -219,7 +246,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual IList<AudioResource> GetProjectFullAudioResources(long projectId)
+        public virtual IList<AudioResource> GetProjectLatestFullAudioResources(long projectId)
         {
             Resource resourceAlias = null;
 
@@ -274,9 +301,11 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual T GetLatestResourceVersion<T>(long resourceId) where T : ResourceVersion
         {
             Resource resourceAlias = null;
+            Project projectAlias = null;
 
             return GetSession().QueryOver<T>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Id == resourceId)
                 .SingleOrDefault();
         }

@@ -22,10 +22,10 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
     public class ExistDbStorage : IFulltextStorage
     {
         private readonly CommunicationProvider m_communicationProvider;
-        private readonly BookRepository m_bookRepository;
+        private readonly BookViewRepository m_bookRepository;
         private readonly IMapper m_mapper;
 
-        public ExistDbStorage(CommunicationProvider communicationProvider, BookRepository bookRepository, IMapper mapper)
+        public ExistDbStorage(CommunicationProvider communicationProvider, BookViewRepository bookRepository, IMapper mapper)
         {
             m_communicationProvider = communicationProvider;
             m_bookRepository = bookRepository;
@@ -390,7 +390,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
-        public string CreateNewTextVersion(TextResource textResource)
+        public string CreateNewTextVersion(TextResource textResource, string text)
         {
             throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
         }

@@ -4,9 +4,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
     public class FileDbStoreProcessor : IResourceProcessor
     {
-        private readonly FileSystemManager m_fileSystemManager;
+        private readonly IFileSystemManager m_fileSystemManager;
 
-        public FileDbStoreProcessor(FileSystemManager fileSystemManager)
+        public FileDbStoreProcessor(IFileSystemManager fileSystemManager)
         {
             m_fileSystemManager = fileSystemManager;
         }

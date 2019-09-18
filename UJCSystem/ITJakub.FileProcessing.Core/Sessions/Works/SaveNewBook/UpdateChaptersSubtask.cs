@@ -32,7 +32,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var user = m_resourceRepository.Load<User>(userId);
             var project = m_resourceRepository.Load<Project>(projectId);
 
-            var dbChapters = m_resourceRepository.GetProjectChapters(projectId);
+            var dbChapters = m_resourceRepository.GetProjectLatestChapters(projectId);
             var dbChaptersByName = dbChapters.ToDictionaryMultipleValues(x => x.Name);
             var dbPagesByPosition = dbPageResources != null
                 ? dbPageResources.ToDictionary(x => x.Position)

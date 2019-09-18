@@ -14,10 +14,10 @@ namespace ITJakub.ITJakubService.Core
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly BookVersionRepository m_bookVersionRepository;
-        private readonly FileSystemManager m_fileSystemManager;
+        private readonly IFileSystemManager m_fileSystemManager;
         private readonly AuthorizationManager m_authorizationManager;
 
-        public AudioBookManager(BookVersionRepository bookVersionRepository, FileSystemManager fileSystemManager, AuthorizationManager mAuthorizationManager)
+        public AudioBookManager(BookVersionRepository bookVersionRepository, IFileSystemManager fileSystemManager, AuthorizationManager mAuthorizationManager)
         {
             m_bookVersionRepository = bookVersionRepository;
             m_fileSystemManager = fileSystemManager;

@@ -52,6 +52,7 @@
     "oai-pmh-communication-error": "Error while requesting: {0}. {1} : {2}",
     "oai-pmh-communication-failed": "Error while requesting: {0}.",
     "project-parser-not-found": "The project parser was not found for bibliographic format {0}.",
+    "change-in-conflict": "Could not save your changes because a conflict changes have already been made by another user.",
 
     //Auth service codes
     "generic-error": "Operation failed",

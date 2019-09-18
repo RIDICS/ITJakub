@@ -1,13 +1,4 @@
-﻿///<reference path="./ridics.project.text-editor.connections.ts" />
-///<reference path="./ridics.project.text-editor.editor.ts" />
-///<reference path="../editors-common-base/ridics.project.editors.util.ts" />
-///<reference path="./ridics.project.text-editor.comment-area.ts" />
-///<reference path="./ridics.project.text-editor.comment-input.ts" />
-///<reference path="./ridics.project.text-editor.page-structure.ts" />
-///<reference path="./ridics.project.text-editor.page-navigation.ts" />
-///<reference path="./ridics.project.text-editor.lazyloading.ts" />
-
-class TextEditorMain {
+﻿class TextEditorMain {
     private numberOfPages: number = 0;
     private showPageNumber = false;
 
@@ -20,7 +11,7 @@ class TextEditorMain {
     }
 
     init(projectId: number) {
-        const util = new EditorsUtil();
+        const util = new EditorsApiClient();
         const projectAjax = util.getProjectContent(projectId);
         projectAjax.done((data: ITextWithPage[]) => {
             if (data.length) {

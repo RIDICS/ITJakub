@@ -1,7 +1,7 @@
 ﻿class ImageViewerContentAddition {
-    private readonly util: EditorsUtil;
+    private readonly util: EditorsApiClient;
 
-    constructor(util: EditorsUtil) {
+    constructor(util: EditorsApiClient) {
         this.util = util;
     }
 

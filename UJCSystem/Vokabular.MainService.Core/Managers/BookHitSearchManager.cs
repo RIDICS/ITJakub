@@ -24,16 +24,14 @@ namespace Vokabular.MainService.Core.Managers
         private readonly CriteriaKey[] m_supportedSearchPageCriteria = { CriteriaKey.Fulltext, CriteriaKey.Heading, CriteriaKey.Sentence, CriteriaKey.Term, CriteriaKey.TokenDistance };
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly AuthorizationManager m_authorizationManager;
-        private readonly BookRepository m_bookRepository;
-        private readonly MetadataRepository m_metadataRepository;
+        private readonly BookViewRepository m_bookRepository;
         private readonly IMapper m_mapper;
 
-        public BookHitSearchManager(FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager, BookRepository bookRepository, MetadataRepository metadataRepository, IMapper mapper)
+        public BookHitSearchManager(FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager, BookViewRepository bookRepository, IMapper mapper)
         {
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_authorizationManager = authorizationManager;
             m_bookRepository = bookRepository;
-            m_metadataRepository = metadataRepository;
             m_mapper = mapper;
         }
 
@@ -70,7 +68,7 @@ namespace Vokabular.MainService.Core.Managers
                 termConditionCreator.AddCriteria(termConditions);
                 termConditionCreator.SetProjectIds(new[] { projectId });
 
-                pagesByMetadata = m_metadataRepository.InvokeUnitOfWork(x => x.GetPagesWithTerms(termConditionCreator));
+                pagesByMetadata = m_bookRepository.InvokeUnitOfWork(x => x.GetPagesWithTerms(termConditionCreator));
             }
 
             IList<PageResource> pagesByFulltext = null;

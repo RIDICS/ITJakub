@@ -9,7 +9,7 @@ using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.Core.Storage
 {
-    public class FileSystemManager
+    public class FileSystemManager : IFileSystemManager
     {
         private static readonly ILog m_log = LogManager.GetLogger(typeof(FileSystemManager));
 

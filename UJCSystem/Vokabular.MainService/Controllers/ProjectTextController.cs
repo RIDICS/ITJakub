@@ -51,8 +51,6 @@ namespace Vokabular.MainService.Controllers
         {
             var result = m_projectContentManager.CreateNewTextResourceVersion(request);
             return Ok(result);
-            //TODO check result
-            //return StatusCode(StatusCodes.Status409Conflict); // Version conflict
         }
 
         [HttpGet("text/{textId}/comment")]
