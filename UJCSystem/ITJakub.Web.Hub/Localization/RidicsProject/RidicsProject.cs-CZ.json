@@ -15,7 +15,7 @@
     "CreateLiteraryGenre": "Chyba při vytváření nového literárního žánru",
     "CreateResourcesError": "Chyba při načítání zdrojů k publikaci",
     "SelectedResources": "Vybráno {0}/{1} textů, {2}/{3} obrázků, {4}/{5} audio zdrojů.",
-    "CreateSnapshotWithoutResources": "Jste si jisti, že chcete vytvořit publikaci bez zdrojů?",
+    "CreateSnapshotWithoutResources": "Nebyl vybrán žádný zdroj pro publikaci. Opravdu si přejete dílo publikovat?",
 
     "Pages": "Stránky",
     "PageContent": "Obsah stránky",
