@@ -36,21 +36,21 @@ namespace Vokabular.FulltextService.Controllers
         /// </param>
         /// <returns></returns>
         [HttpPost("search")]
-        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshots([FromBody] CorpusSearchRequestContract searchRequest)
+        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshots([FromBody] BookPagedCorpusSearchRequestContract searchRequest)
         {
             var result = m_searchManager.SearchCorpusSnapshotsByCriteria(searchRequest);
             return result;
         }
 
         [HttpPost("snapshot/{snapshotId}/search")]
-        public List<CorpusSearchResultContract> SearchCorpusSnapshot(long snapshotId,[FromBody] CorpusSearchRequestContract searchRequest)
+        public List<CorpusSearchResultContract> SearchCorpusSnapshot(long snapshotId, [FromBody] BookPagedCorpusSearchInSnapshotRequestContract searchRequest)
         {
             var result = m_searchManager.SearchCorpusSnapshotByCriteria(snapshotId, searchRequest);
             return result;
         }
 
         [HttpPost("search-count")]
-        public long SearchCorpusSnapshotsCount([FromBody] CorpusSearchRequestContract searchRequest)
+        public long SearchCorpusSnapshotsCount([FromBody] SearchRequestContractBase searchRequest)
         {
             var result = m_searchManager.SearchCorpusSnapshotsByCriteriaCount(searchRequest);
             return result.Result;

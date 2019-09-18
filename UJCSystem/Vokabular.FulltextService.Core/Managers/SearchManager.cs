@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using Nest;
 using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.Core.Helpers;
 using Vokabular.FulltextService.Core.Options;
@@ -345,7 +343,7 @@ namespace Vokabular.FulltextService.Core.Managers
             return response.Documents.SelectMany(document => document.Pages).ToList();
         }
 
-        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(CorpusSearchRequestContract searchRequest)
+        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(BookPagedCorpusSearchRequestContract searchRequest)
         {
             var filterQuery = m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
             var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
@@ -430,7 +428,7 @@ namespace Vokabular.FulltextService.Core.Managers
             }
         }
 
-        public List<CorpusSearchResultContract> SearchCorpusSnapshotByCriteria(long snapshotId, CorpusSearchRequestContract searchRequest)
+        public List<CorpusSearchResultContract> SearchCorpusSnapshotByCriteria(long snapshotId, BookPagedCorpusSearchInSnapshotRequestContract searchRequest)
         {
             var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
             var filterQuery = m_queriesBuilder.GetFilterByFieldSearchQuery(SnapshotIdField, snapshotId.ToString());
@@ -470,7 +468,7 @@ namespace Vokabular.FulltextService.Core.Managers
             return m_searchResultProcessor.ProccessSearchCorpusSnapshotByCriteria(response, HighlightTag, searchRequest.Start ?? DefaultStart, searchRequest.Count ?? DefaultSize);
         }
 
-        public async Task<long> SearchCorpusSnapshotsByCriteriaCount(CorpusSearchRequestContract searchRequest)
+        public async Task<long> SearchCorpusSnapshotsByCriteriaCount(SearchRequestContractBase searchRequest)
         {
             var filterQuery = m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
             var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);

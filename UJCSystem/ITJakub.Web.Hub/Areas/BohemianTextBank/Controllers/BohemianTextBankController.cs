@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
@@ -270,7 +269,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var start = searchQuery.Start;
             var count = searchQuery.Count;
 
-            return Json(GetCorpusSearchResultSnapshotList(new CorpusSearchRequestContract
+            return Json(GetCorpusSearchResultSnapshotList(new BookPagedCorpusSearchRequestContract
             {
                 Start = start,
                 Count = count,
@@ -301,7 +300,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var start = searchQuery.Start;
             var count = searchQuery.Count;
 
-            return GetCorpusSearchResultSnapshotList(new CorpusSearchRequestContract
+            return GetCorpusSearchResultSnapshotList(new BookPagedCorpusSearchRequestContract
             {
                 Start = start,
                 Count = count,
@@ -329,7 +328,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var contextLength = request.ContextLength;
             var snapshotId = request.SnapshotId;
 
-            return GetSearchCorpusInSnapshotResult(snapshotId, new CorpusSearchRequestContract
+            return GetSearchCorpusInSnapshotResult(snapshotId, new BookPagedCorpusSearchInSnapshotRequestContract
             {
                 Start = start,
                 Count = count,
@@ -359,7 +358,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 return BadRequest(exception.Message);
             }
 
-            return Json(GetCorpusSearchResultSnapshotList(new CorpusSearchRequestContract
+            return Json(GetCorpusSearchResultSnapshotList(new BookPagedCorpusSearchRequestContract
             {
                 Start = start,
                 Count = count,
@@ -383,7 +382,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var start = searchQuery.Start;
             var count = searchQuery.Count;
 
-            return GetCorpusSearchResultSnapshotList(new CorpusSearchRequestContract
+            return GetCorpusSearchResultSnapshotList(new BookPagedCorpusSearchRequestContract
             {
                 Start = start,
                 Count = count,
@@ -415,7 +414,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var contextLength = request.ContextLength;
             var snapshotId = request.SnapshotId;
 
-            return GetSearchCorpusInSnapshotResult(snapshotId, new CorpusSearchRequestContract
+            return GetSearchCorpusInSnapshotResult(snapshotId, new BookPagedCorpusSearchInSnapshotRequestContract
             {
                 Start = start,
                 Count = count,
@@ -487,14 +486,14 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return listSearchCriteriaContracts;
         }
 
-        private ActionResult GetSearchCorpusInSnapshotResult(long snapshotId, CorpusSearchRequestContract request)
+        private ActionResult GetSearchCorpusInSnapshotResult(long snapshotId, BookPagedCorpusSearchInSnapshotRequestContract request)
         {
             var client = GetBookClient();
             var result = client.SearchCorpusInSnapshot(snapshotId, request);
             return Json(new {results = result});
         }
 
-        private CorpusSearchSnapshotsResultContract GetCorpusSearchResultSnapshotList(CorpusSearchRequestContract request)
+        private CorpusSearchSnapshotsResultContract GetCorpusSearchResultSnapshotList(BookPagedCorpusSearchRequestContract request)
         {
             var client = GetBookClient();
             var result = client.SearchCorpusGetSnapshotList(request, GetDefaultProjectType());

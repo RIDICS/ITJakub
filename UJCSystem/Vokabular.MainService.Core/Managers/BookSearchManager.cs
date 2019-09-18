@@ -329,7 +329,7 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(CorpusSearchRequestContract request,
+        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(BookPagedCorpusSearchRequestContract request,
             ProjectTypeContract projectType)
         {
             var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
@@ -347,7 +347,7 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
         
-        public List<CorpusSearchResultContract> SearchCorpusInSnapshotByCriteria(long snapshotId, CorpusSearchRequestContract request)
+        public List<CorpusSearchResultContract> SearchCorpusInSnapshotByCriteria(long snapshotId, BookPagedCorpusSearchInSnapshotRequestContract request)
         {
             var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;

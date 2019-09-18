@@ -540,7 +540,7 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region BookPagedCorpus
 
-        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotList(CorpusSearchRequestContract request, ProjectTypeContract projectType)
+        public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotList(BookPagedCorpusSearchRequestContract request, ProjectTypeContract projectType)
         {
             try
             {
@@ -556,7 +556,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<CorpusSearchResultContract> SearchCorpusInSnapshot(long snapshotId, CorpusSearchRequestContract request)
+        public List<CorpusSearchResultContract> SearchCorpusInSnapshot(long snapshotId, BookPagedCorpusSearchInSnapshotRequestContract request)
         {
             try
             {
