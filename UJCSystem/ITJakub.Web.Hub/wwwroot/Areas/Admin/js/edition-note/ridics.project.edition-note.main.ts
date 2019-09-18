@@ -87,7 +87,8 @@
             originalVersionId: this.editionNoteVersionId
         };
         this.alertHolder.empty();
-        this.util.saveEditionNote(request).done(() => {
+        this.util.saveEditionNote(request).done((editionNoteVersionId) => {
+            this.editionNoteVersionId = editionNoteVersionId;
             const error = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("EditionNoteSaveSuccess", "RidicsProject").value);
             this.alertHolder.empty().append(error.buildElement());
         }).fail((error) => {

@@ -187,8 +187,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 Text = request.Content,
                 OriginalVersionId = request.OriginalVersionId
             };
-            client.CreateEditionNote(request.ProjectId, data);
-            return AjaxOkResponse();
+            var resourceVersionId = client.CreateEditionNote(request.ProjectId, data);
+            return Json(resourceVersionId);
         }
     }
 }

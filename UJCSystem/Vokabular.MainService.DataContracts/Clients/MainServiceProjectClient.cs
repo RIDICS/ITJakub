@@ -614,11 +614,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void CreateEditionNote(long projectId, CreateEditionNoteContract data)
+        public long CreateEditionNote(long projectId, CreateEditionNoteContract data)
         {
             try
             {
-                m_client.Post<object>($"project/{projectId}/edition-note", data);
+                return m_client.Post<long>($"project/{projectId}/edition-note", data);
             }
             catch (HttpRequestException e)
             {
