@@ -26,6 +26,15 @@
                 <input type="hidden" asp-for="ProjectId" />
                 <div class="project-snapshot-new">
                     <h2>@Localizer.Translate("CreateNewPublication", "Admin")</h2>
+                    <div class="project-snapshot-resources">
+                        @{
+                            for (var i = 0; i < Model.ResourceTypes.Count; i++)
+                            {
+                                ViewData[PublicationViewConstants.ActualResourceType] = i;
+                                @await Html.PartialAsync("_PublicationsNewResources", Model, ViewData)
+                            }
+                        }
+                    </div>
                     <div class="row">
                         <div class="col-xs-12 col-md-6">
                             <div class="panel panel-default">
@@ -80,36 +89,6 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <div class="collapse-icon">
-                                        <a data-toggle="collapse" href="#snapshotVisibility" aria-expanded="true">
-                                            <span class="fa fa-chevron-up"></span>
-                                            <span class="fa fa-chevron-down"></span>
-                                        </a>
-                                    </div>
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" href="#snapshotVisibility" aria-expanded="true">@Localizer.Translate("Visibility", "Admin")</a>
-                                    </h4>
-                                </div>
-                                <div id="snapshotVisibility" class="panel-collapse collapse in">
-                                    <div class="panel-body">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project-snapshot-resources">
-                        @{
-                            for (var i = 0; i < Model.ResourceTypes.Count; i++)
-                            {
-                                ViewData[PublicationViewConstants.ActualResourceType] = i;
-                                @await Html.PartialAsync("_PublicationsNewResources", Model, ViewData)
-                            }
-                        }
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <div class="collapse-icon">
                                         <a data-toggle="collapse" href="#snapshotInfo" aria-expanded="true">
                                             <span class="fa fa-chevron-up"></span>
                                             <span class="fa fa-chevron-down"></span>
@@ -124,12 +103,12 @@
                                         <div class="">
                                             <div class="col-xs-12 form-horizontal">
                                                 <div class="form-group">
-                                                    <label class="control-label col-xs-12 col-sm-3 col-lg-2">
+                                                    <label class="control-label col-xs-12 col-sm-3 col-md-4 col-lg-3">
                                                         @Localizer.Translate("EditionNote", "Admin"):
                                                     </label>
                                                     @if (Model.EditionNoteText != null)
                                                     {
-                                                        <div class="col-md-9 col-lg-10">
+                                                        <div class="col-xs-12 col-sm-9 col-md-8 col-lg-9">
                                                             @Localizer.Translate("Yes")
                                                             <div class="btn btn-default edition-note-preview" data-toggle="modal" data-target="#editionNotePreviewModal">
                                                                 @Localizer.Translate("Preview", "Admin")
@@ -138,24 +117,21 @@
                                                     }
                                                     else
                                                     {
-                                                        <div class="col-md-9 col-lg-10 control-input">
+                                                        <div class="col-xs-12 col-sm-9 col-md-8 col-lg-9 control-input">
                                                             @Localizer.Translate("No")
                                                         </div>
                                                     }
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="control-label col-xs-12 col-sm-3 col-lg-2">@Localizer.Translate("SelectedResources", "Admin"):</label>
-                                                    <div class="col-sm-9 col-lg-10 control-input">
+                                                    <label class="control-label col-xs-12 col-sm-3 col-md-4 col-lg-3">@Localizer.Translate("SelectedResources", "Admin"):</label>
+                                                    <div class="col-xs-12 col-sm-9 col-md-8 col-lg-9 control-input">
                                                         <ul id="selectedResourcesCount">
-                                                            <li id="selectedTextResourcesCount"></li>
-                                                            <li id="selectedImageResourcesCount"></li>
-                                                            <li id="selectedAudioResourcesCount"></li>
                                                         </ul>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="commentInput" class="control-label col-xs-12 col-sm-3 col-lg-2">@Localizer.Translate("Comment", "Admin"):</label>
-                                                    <div class="col-sm-7 col-md-6 col-lg-5">
+                                                    <label for="commentInput" class="control-label col-xs-12 col-sm-3 col-md-4 col-lg-3">@Localizer.Translate("Comment", "Admin"):</label>
+                                                    <div class="col-xs-12 col-sm-9 col-md-8 col-lg-9">
                                                         <input type="text" id="commentInput" asp-for="Comment" class="form-control" />
                                                     </div>
                                                 </div>

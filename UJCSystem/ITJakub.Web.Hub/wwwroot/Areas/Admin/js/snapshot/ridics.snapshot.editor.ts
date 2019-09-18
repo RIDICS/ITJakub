@@ -123,14 +123,13 @@ class SnapshotEditor {
 
 
     private setResourcesCount(): void {
+        const resourcesCount = $("#selectedResourcesCount");
+        resourcesCount.empty();
         for (let panel of $(".publish-resource-panel").toArray()) {
             const resourceType = Number($(panel).data("resource-type"));
             const resources = $(panel).find("table .include-checkboxes input[type=\"checkbox\"]").length;
             const selectedResources =
                 $(panel).find("table .include-checkboxes input[type=\"checkbox\"]:checked").length;
-
-            const resourcesCount = $("#selectedResourcesCount");
-            resourcesCount.empty();
 
             switch (resourceType) {
             case ResourceType.Audio:
