@@ -157,10 +157,14 @@
     "AudioSources": "translate[Audio zdroje]",
     "VideoSources": "translate[Video zdroje]",
     "Author": "translate[Autor]",
+    "CreateNewPublication": "translate[Vytvořit novou publikaci]",
+    "CreatePublication": "Create publication",
     "DuplicateSettings": "translate[Duplikovat nastavení]",
     "NoSnapshotCreated": "No publication was created yet",
-    "CreateNewPublication": "translate[Vytvořit novou publikaci]",
-
+    "SelectedResources": "Selected resources",
+    "SelectedTextResources": "{0}/{1} texts",
+    "SelectedImageResources": "{0}/{1} images",
+    "SelectedAudioResources": "{0}/{1} audio resource",
     "Visibility": "translate[Viditelnost]",
     "AddGroupUser": "translate[Přidat skupinu/uživatele]",
 

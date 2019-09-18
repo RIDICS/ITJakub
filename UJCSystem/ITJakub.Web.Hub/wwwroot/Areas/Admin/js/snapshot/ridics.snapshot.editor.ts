@@ -121,50 +121,48 @@ class SnapshotEditor {
         this.setResourcesCount();
     }
 
-    
-    
-    
+
     private setResourcesCount(): void {
-        let textResources = "0";
-        let textSelectedResources = "0";
-        let imageResources = "0";
-        let imageSelectedResources = "0";
-        let audioResources = "0";
-        let audioSelectedResources = "0";
         for (let panel of $(".publish-resource-panel").toArray()) {
             const resourceType = Number($(panel).data("resource-type"));
             const resources = $(panel).find("table .include-checkboxes input[type=\"checkbox\"]").length;
-            const selectedResources = $(panel).find("table .include-checkboxes input[type=\"checkbox\"]:checked").length;
+            const selectedResources =
+                $(panel).find("table .include-checkboxes input[type=\"checkbox\"]:checked").length;
+
+            const resourcesCount = $("#selectedResourcesCount");
+            resourcesCount.empty();
 
             switch (resourceType) {
             case ResourceType.Audio:
-                {
-                    audioResources = String(resources);
-                    audioSelectedResources = String(selectedResources);
-                }
+                const audioResources = String(resources);
+                const audioSelectedResources = String(selectedResources);
+                resourcesCount.append(`<li>${localization.translateFormat("SelectedAudioResources",
+                    [audioSelectedResources, audioResources],
+                    "Admin").value}</li>`);
                 break;
             case ResourceType.Image:
-                {
-                    imageResources = String(resources);
-                    imageSelectedResources = String(selectedResources);
-                }
-            break;
+                const imageResources = String(resources);
+                const imageSelectedResources = String(selectedResources);
+                resourcesCount.append(`<li>${localization.translateFormat("SelectedImageResources",
+                    [imageSelectedResources, imageResources],
+                    "Admin").value}</li>`);
+                break;
             case ResourceType.Text:
-                {
-                    textResources = String(resources);
-                    textSelectedResources = String(selectedResources);
-                }
-            break;
+                const textResources = String(resources);
+                const textSelectedResources = String(selectedResources);
+                resourcesCount.append(`<li>${localization.translateFormat("SelectedTextResources",
+                    [textSelectedResources, textResources],
+                    "Admin").value}</li>`);
+                break;
             }
         }
-
-        $("#selectedResourcesCount").text(localization.translateFormat("SelectedResources", [textSelectedResources, textResources, imageSelectedResources, imageResources, audioSelectedResources, audioResources], "RidicsProject").value);
     }
 
     private loadResourceVersions(selectBox: JQuery) {
         const dataLoaded = selectBox.data("loaded");
         if (!dataLoaded) {
-            selectBox.parent(".dropdown").find(".dropdown-menu.inner").append(`<li><a><i class="fa fa-refresh fa-spin"></i></a></li>`);
+            selectBox.parent(".dropdown").find(".dropdown-menu.inner")
+                .append(`<li><a><i class="fa fa-refresh fa-spin"></i></a></li>`);
             const resourceId = selectBox.parents(".resource-row").data("id");
             this.client.getVersionList(resourceId).done((data) => {
                 const selectedValue = Number(selectBox.val());

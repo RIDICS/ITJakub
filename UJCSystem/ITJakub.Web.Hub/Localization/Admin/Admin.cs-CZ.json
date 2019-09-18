@@ -49,7 +49,6 @@
     "EditionNotePublish": "Ediční poznámka bude publikována s dílem",
     "NoEditionNote": "Ediční poznámka k dílu není vytvořena",
 
-
     "Edit": "Upravit",
     "Close": "Uzavřít",
     "NewPost": "Nový příspěvek",
@@ -160,7 +159,12 @@
     "Author": "Autor",
     "DuplicateSettings": "Duplikovat nastavení",
     "CreateNewPublication": "Vytvořit novou publikaci",
+    "CreatePublication": "Vytvořit publikaci",
     "NoSnapshotCreated": "Žádná publikace zatím nebyla vytvořena",
+    "SelectedResources": "Vybrané zdroje",
+    "SelectedTextResources": "{0}/{1} textů",
+    "SelectedImageResources": "{0}/{1} obrázků",
+    "SelectedAudioResources": "{0}/{1} audio zdrojů",
     "Visibility": "Viditelnost",
     "AddGroupUser": "Přidat skupinu/uživatele",
 
