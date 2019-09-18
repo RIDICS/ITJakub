@@ -29,16 +29,7 @@
     getServerAddress(): string {
         return this.serverPath;
     }
-
-    /**
- * Generates guid on the server
- * @returns {JQueryXHR} Ajax conraining GUID
- */
-    createTextRefereceId(): string {
-        const guid = Guid.generate();
-        return guid;
-    }
-
+    
     getProjectContent(projectId: number): JQuery.jqXHR<ITextWithPage[]> {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetProjectContent`,
             {
@@ -133,6 +124,11 @@
     saveEditionNote(noteRequest: ICreateEditionNote): JQuery.jqXHR {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/SetEditionNote`,
             noteRequest as JQuery.PlainObject);
+        return ajax;
+    }
+
+    createTextReferenceId(textId: number): JQuery.jqXHR<string> {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GenerateCommentId`, { textId: textId } as JQuery.PlainObject);
         return ajax;
     }
 }

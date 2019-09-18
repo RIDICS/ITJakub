@@ -1,27 +1,23 @@
 ﻿class Editor {
     private currentTextId = 0; //default initialisation
-    private editingMode = false;
     private originalContent = "";
     private simplemde: IExtendedSimpleMDE;
+    private simpleMdeOptions: SimpleMDE.Options;
     private readonly commentInput: CommentInput;
     private readonly util: EditorsApiClient;
     private readonly commentArea: CommentArea;
-    private commentInputDialog: BootstrapDialogWrapper;
-
-    private commentIdPattern =
-        "([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}";
-    private overlappingCommentString = "Your comment overlaps with another comment. Please select other part of text.";
+    private readonly editModeSelector = "is-edited";
+    private readonly client: TextApiClient;
+    private readonly simpleMdeTools: SimpleMdeTools;
+    private isPreviewRendering = true;
+    private editorExistsInTab = false;
 
     constructor(commentInput: CommentInput, util: EditorsApiClient, commentArea: CommentArea) {
         this.commentInput = commentInput;
         this.util = util;
         this.commentArea = commentArea;
-
-        this.commentInputDialog = new BootstrapDialogWrapper({
-            element: $("#comment-input-dialog"),
-            autoClearInputs: true,
-            submitCallback: this.onSendButtonClick.bind(this)
-        });
+        this.client = new TextApiClient();
+        this.simpleMdeTools = new SimpleMdeTools();
 
         bootbox.setLocale("cs");
     }
@@ -30,33 +26,47 @@
         return this.currentTextId;
     }
 
-    getIsEditingMode() {
-        return this.editingMode;
+    getEditModeSelector() {
+        return this.editModeSelector;
     }
 
     init() {
         this.processAreaSwitch();
     }
 
+    private processAreaSwitch () {
+        this.editorExistsInTab = false;
+
+        $(".page-toolbar .edit-page").click((event) => {
+            const pageRow = $(event.currentTarget).parents(".page-row");
+            pageRow.addClass("init-editor");
+            pageRow.data(this.editModeSelector, true);
+            this.changeOrInitEditor(pageRow);
+        });
+
+        $("#project-resource-preview").on("click", ".editor", (e) => { //dynamically instantiating SimpleMDE editor on textarea
+            const elSelected = e.target as HTMLElement;
+            const selectedPageRow = $(elSelected).closest(".page-row");
+            this.changeOrInitEditor(selectedPageRow);
+        });
+    }
+
     private onSendButtonClick(text: string) {
         const textId = this.getCurrentTextId();
         const cm = this.simplemde.codemirror as CodeMirror.Doc;
-        const textReferenceId = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(cm, true);
-        const id = 0; //creating comment
-        const parentComment = null; //creating comment
-        this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment, text);
+        (this.commentInput).toggleCommentSignsAndCreateComment(cm, true, text, textId, this.saveText, this);
     }
 
     private toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
         const cm = editor.codemirror as CodeMirror.Doc;
         if (userIsEnteringText) {
             const commentText = cm.getSelection();
-            const commentBeginRegex = new RegExp(`(\\$${this.commentIdPattern}\\%)`);
-            const commentEndRegex = new RegExp(`(\\%${this.commentIdPattern}\\$)`);
+            const commentBeginRegex = new RegExp(`(\\$${this.commentInput.commentRegexExpr}\\%)`);
+            const commentEndRegex = new RegExp(`(\\%${this.commentInput.commentRegexExpr}\\$)`);
             if (commentBeginRegex.test(commentText) || commentEndRegex.test(commentText)) {
                 bootbox.alert({
-                    title: "Warning",
-                    message: this.overlappingCommentString,
+                    title: localization.translate("Warning", "RidicsProject").value,
+                    message: localization.translate("OverlappingComment", "RidicsProject").value,
                     buttons: {
                         ok: {
                             className: "btn-default"
@@ -65,165 +75,166 @@
                 });
                 return;
             }
-            bootbox.prompt({
-                title: "Please enter your comment here:",
-                inputType: "textarea",
+            bootbox.dialog({
+                title: localization.translate("EnterComment", "RidicsProject").value,
+                message: `<div class="alert alert-warning">
+                                <i class="fa fa-warning"></i> ${localization.translate("CreateCommentWarning", "RidicsProject").value}
+                            </div>
+                            <div class="bootbox-body">
+                                <form class="bootbox-form">
+                                    <textarea id="commentInput" class="bootbox-input bootbox-input-textarea form-control" spellcheck="false"></textarea>
+                                </form>
+                            </div>`, 
                 buttons: {
-                    confirm: {
-                        className: "btn-default"
-                    },
                     cancel: {
+                        label: localization.translate("Cancel", "RidicsProject").value,
                         className: "btn-default",
                         callback: () => {
                             this.toggleCommentFromEditor(editor, false);
                         }
-                    }
-                },
-                callback: (result) => {
-                    if (!result) {
-                        this.toggleCommentFromEditor(editor, false);
-                    } else {
-                        this.onSendButtonClick(result);
+                    },
+                    confirm: {
+                        label: localization.translate("AddComment", "RidicsProject").value,
+                        className: "btn-default",
+                        callback: () => {
+                            const result = String($("#commentInput").val());
+                            if (!result) {
+                                this.toggleCommentFromEditor(editor, false);
+                            } else {
+                                this.onSendButtonClick(result);
+                            }
+                        }
                     }
                 }
             });
         } else {
-            (this.commentInput).toggleCommentSignsAndReturnCommentNumber(cm, false);
+            (this.commentInput).toggleCommentSignsAndCreateComment(cm, false);
         }
     }
 
-    private processAreaSwitch = () => {
-        var editorExistsInTab = false;
-        $("#project-resource-preview").on("click",
-            ".editor",
-            (e) => { //dynamically instantiating SimpleMDE editor on textarea
-                if (this.editingMode) {
-                    let pageDiffers = false;
-                    const elSelected = e.target as HTMLElement;
-                    const jElSelected = $(elSelected).closest(".page-row");
-                    const textId = jElSelected.data("page") as number;
-                    if (textId !== this.currentTextId) {
-                        pageDiffers = true;
-                    }
-                    const editorEl = $(".CodeMirror");
-                    editorExistsInTab = (editorEl.length !== 0);
-                    if (!editorExistsInTab) {
-                        if (typeof this.simplemde !== "undefined" && this.simplemde !== null) {
-                            this.simplemde.toTextArea();
-                            this.simplemde = null;
-                        }
-                        this.addEditor(jElSelected);
-                        this.originalContent = this.simplemde.value();
-                    }
-                    if (editorExistsInTab && pageDiffers) {
-                        const previousPageEl = $(`*[data-page="${this.currentTextId}"]`);
-                        const contentBeforeClose = this.simplemde.value();
-                        if (contentBeforeClose !== this.originalContent) {
-                            const editorPageName = editorEl.parents(".page-row").data("page-name");
-                            bootbox.dialog({
-                                title: "Warning",
-                                message: `There's an open editor in page ${editorPageName
-                                    }. Are you sure you want to close it without saving?`,
-                                buttons: {
-                                    confirm: {
-                                        label: "Close",
-                                        className: "btn-default",
-                                        callback: () => {
-                                            this.editorChangePage(previousPageEl, jElSelected);
-                                        }
-                                    },
-                                    cancel: {
-                                        label: "Cancel",
-                                        className: "btn-default",
-                                        callback: () => {
-                                            const textareaEl = jElSelected.find(".editor")
-                                                .children(".textarea-plain-text");
-                                            textareaEl.trigger("blur");
-                                            this.simplemde.codemirror.focus();
-                                        }
-                                    },
-                                    save: {
-                                        label: "Save and close",
-                                        className: "btn-default",
-                                        callback: () => {
-                                            this.saveContents(this.currentTextId, contentBeforeClose);
-                                        }
-                                    }
+    changeOrInitEditor(selectedPageRow: JQuery) {
+        if (selectedPageRow.data(this.editModeSelector)) {
+            let pageDiffers = false;
+            const textId = selectedPageRow.data("page") as number;
+            if (textId !== this.currentTextId) {
+                pageDiffers = true;
+            }
+            const editorEl = $(".CodeMirror");
+            this.editorExistsInTab = (editorEl.length !== 0);
+            if (!this.editorExistsInTab) {
+                if (typeof this.simplemde !== "undefined" && this.simplemde !== null) {
+                    this.simplemde.toTextArea();
+                    this.simplemde = null;
+                }
+                this.togglePageRows(selectedPageRow);
+            }
+            if (this.editorExistsInTab && pageDiffers) {
+                const previousPageEl = $(`*[data-page="${this.currentTextId}"]`);
+                const contentBeforeClose = this.simplemde.value();
+                if (contentBeforeClose !== this.originalContent) {
+                    const editorPageName = editorEl.parents(".page-row").data("page-name");
+                    bootbox.dialog({
+                        title: localization.translate("Warning", "RidicsProject").value,
+                        message: localization.translateFormat("CloseEditedPage", [editorPageName], "RidicsProject").value,
+                        buttons: {
+                            confirm: {
+                                label: localization.translate("CloseWithoutSaving", "RidicsProject").value,
+                                className: "btn-default",
+                                callback: () => {
+                                    this.editorChangePage(previousPageEl, selectedPageRow);
                                 }
-                            });
-                        } else if (contentBeforeClose === this.originalContent) {
-                            this.editorChangePage(previousPageEl, jElSelected);
-                        }
-                    }
-                }
-            });
-
-        $("#project-resource-preview").on("click",
-            ".editing-mode-button",
-            () => {
-                const thisClass = this;
-                this.editingMode = !this.editingMode;
-                if (typeof this.simplemde === "undefined" || this.simplemde === null) {
-                    this.toggleDivAndTextarea();
-                }
-                if (typeof this.simplemde !== "undefined" && !this.editingMode && this.simplemde !== null) {
-                    const contentBeforeClose = this.simplemde.value();
-                    if (contentBeforeClose !== this.originalContent) {
-                        const editorEl = $(".CodeMirror");
-                        const editorPageName = editorEl.parents(".page-row").data("page-name");
-                        bootbox.dialog({
-                            title: "Warning",
-                            message: `There's an open editor in page ${editorPageName
-                                }. Are you sure you want to close it without saving?`,
-                            buttons: {
-                                confirm: {
-                                    label: "Close",
-                                    className: "btn-default",
-                                    callback: () => {
-                                        this.simplemde.toTextArea();
-                                        this.simplemde = null;
-                                        this.toggleDivAndTextarea();
-                                    }
-                                },
-                                cancel: {
-                                    label: "Cancel",
-                                    className: "btn-default",
-                                    callback: () => {
-                                        this.editingMode = !this.editingMode; //Switch back to editing mode on cancel
-                                    }
-                                },
-                                save: {
-                                    label: "Save and close",
-                                    className: "btn-default",
-                                    callback: () => {
-                                        this.saveContents(this.currentTextId, contentBeforeClose);
-                                        thisClass.simplemde.toTextArea();
-                                        thisClass.simplemde = null;
-                                        thisClass.toggleDivAndTextarea();
-                                    }
+                            },
+                            cancel: {
+                                label: localization.translate("Cancel", "RidicsProject").value,
+                                className: "btn-default",
+                                callback: () => {
+                                    const textareaEl = selectedPageRow.find(".editor")
+                                        .children(".textarea-plain-text");
+                                    textareaEl.trigger("blur");
+                                    this.simplemde.codemirror.focus();
+                                }
+                            },
+                            save: {
+                                label: localization.translate("SaveAndClose", "RidicsProject").value,
+                                className: "btn-default",
+                                callback: () => {
+                                    this.saveContents(this.currentTextId, contentBeforeClose).done(() => {
+                                        this.editorChangePage(previousPageEl, selectedPageRow);
+                                    });
                                 }
                             }
-                        });
-                    } else if (contentBeforeClose === this.originalContent) {
-                        thisClass.simplemde.toTextArea();
-                        thisClass.simplemde = null;
-                        thisClass.toggleDivAndTextarea();
-                    }
+                        }
+                    });
+                } else if (contentBeforeClose === this.originalContent) {
+                    this.editorChangePage(previousPageEl, selectedPageRow);
                 }
-            });
+            }
+        }
+    }
+
+    private closeEditor(pageRows: JQuery) {
+        const thisClass = this;
+        pageRows.data(this.editModeSelector, false);
+        if (typeof this.simplemde !== "undefined" && this.simplemde !== null) {
+            const contentBeforeClose = this.simplemde.value();
+            if (contentBeforeClose !== this.originalContent) {
+                const editorEl = $(".CodeMirror");
+                const editorPageName = editorEl.parents(".page-row").data("page-name");
+                bootbox.dialog({
+                    title: localization.translate("Warning", "RidicsProject").value,
+                    message: localization.translateFormat("CloseEditedPage", [editorPageName], "RidicsProject").value,
+                    buttons: {
+                        confirm: {
+                            label: localization.translate("CloseWithoutSaving", "RidicsProject").value,
+                            className: "btn-default",
+                            callback: () => {
+                                this.simplemde.toTextArea();
+                                this.simplemde = null;
+                                this.togglePageRows(pageRows);
+                            }
+                        },
+                        cancel: {
+                            label: localization.translate("Cancel", "RidicsProject").value,
+                            className: "btn-default",
+                            callback: () => { //Switch back to editing mode on cancel
+                                pageRows.data(this.editModeSelector, true);
+                            }
+                        },
+                        save: {
+                            label: localization.translate("SaveAndClose", "RidicsProject").value,
+                            className: "btn-default",
+                            callback: () => {
+                                this.saveContents(this.currentTextId, contentBeforeClose).done(() => {
+                                    thisClass.simplemde.toTextArea();
+                                    thisClass.simplemde = null;
+                                    this.togglePageRows(pageRows);
+                                });
+                            }
+                        }
+                    }
+                });
+            } else if (contentBeforeClose === this.originalContent) {
+                thisClass.simplemde.toTextArea();
+                thisClass.simplemde = null;
+                this.togglePageRows(pageRows);
+            }
+        } else {
+            this.togglePageRows(pageRows);
+        }
     }
 
     private editorChangePage(previousPageEl: JQuery, currentPageEl: JQuery) {
+        previousPageEl.data(this.editModeSelector, false);
+        this.togglePageRows(previousPageEl);
         const previousPageCommentAreaEl = previousPageEl.children(".comment-area");
-        this.simplemde.toTextArea();
-        this.simplemde = null;
         this.commentArea.updateCommentAreaHeight(previousPageEl);
         this.commentArea.toggleAreaSizeIconHide(previousPageCommentAreaEl);
-        this.addEditor(currentPageEl);
+        currentPageEl.data(this.editModeSelector, true);
+        this.togglePageRows(currentPageEl);
         this.originalContent = this.simplemde.value();
     }
 
-    private saveContents(textId: number, contents: string) {
+    saveText(textId: number, contents: string): JQuery.jqXHR {
         const pageEl = $(`*[data-page="${textId}"]`);
         const compositionArea = pageEl.children(".composition-area");
         const id = compositionArea.data("id");
@@ -233,25 +244,31 @@
             text: contents,
             resourceVersionId: versionId
         };
-        const saveAjax = this.util.savePlainText(textId, request);
-        saveAjax.done((versionId: number) => {
+        const ajax = this.util.savePlainText(textId, request);
+        ajax.done((newVersionId: number) => {
+            this.originalContent = contents;
+            compositionArea.data("version-id", newVersionId);
+        });
+        return ajax;
+    }
+
+    saveContents(textId: number, contents: string): JQuery.jqXHR {
+        const saveAjax = this.saveText(textId, contents);
+        saveAjax.done((newVersionId: number) => {
             bootbox.alert({
-                title: "Success!",
-                message: "Your changes have been successfully saved.",
+                title: localization.translate("Success", "RidicsProject").value,
+                message: localization.translate("ChangesSaveSuccess", "RidicsProject").value,
                 buttons: {
                     ok: {
                         className: "btn-default"
                     }
                 }
             });
-            this.originalContent = contents;
-            compositionArea.data("version-id", versionId);
-        });
-        saveAjax.fail(() => {
-            if (saveAjax.status === 409) {
+        }).fail((error) => {
+            if (error.status === 409) {
                 bootbox.alert({
-                    title: "Fail",
-                    message: "Failed to save your changes due to version conflict.",
+                    title: localization.translate("Fail", "RidicsProject").value,
+                    message: localization.translate("ChangesSaveConflict", "RidicsProject").value,
                     buttons: {
                         ok: {
                             className: "btn-default"
@@ -260,8 +277,8 @@
                 });
             } else {
                 bootbox.alert({
-                    title: "Fail",
-                    message: "There was an error while saving your changes.",
+                    title: localization.translate("Fail", "RidicsProject").value,
+                    message: localization.translate("ChangesSaveFail", "RidicsProject").value,
                     buttons: {
                         ok: {
                             className: "btn-default"
@@ -270,51 +287,66 @@
                 });
             }
         });
+
+        return saveAjax;
     }
 
-    private openMarkdownHelp() {
-        const url = "#";
-        window.open(url, "_blank");
-    }
-
-    private addEditor(jEl: JQuery) {
-        const editorEl = jEl.find(".editor");
+    addEditor(pageRow: JQuery) {
+        const editorEl = pageRow.find(".editor");
         const textAreaEl = editorEl.children("textarea");
-        const textId = parseInt(jEl.data("page") as string);
+        const textId = parseInt(pageRow.data("page") as string);
         this.currentTextId = textId;
-        const simpleMdeOptions: SimpleMDE.Options = {
+        this.simpleMdeOptions = {
             element: textAreaEl[0],
             autoDownloadFontAwesome: false,
             spellChecker: false,
             mode: "gfm",
-            toolbar: [
-                "bold", "italic", "|", "unordered-list", "ordered-list", "|", "heading-1", "heading-2", "heading-3",
-                "|", "quote", "preview", "horizontal-rule", "|", {
+            toolbar: [ 
+                {
+                    name: "save",
+                    action: (editor) => { this.saveContents(textId, editor.value()) },
+                    className: "fa fa-floppy-o",
+                    title: localization.translate("Save", "RidicsProject").value
+                },{
+                    name: "close",
+                    action: () => { this.closeEditor(pageRow) },
+                    className: "fa fa-times",
+                    title: localization.translate("Close", "RidicsProject").value
+                },
+                this.simpleMdeTools.toolSeparator,
+                this.simpleMdeTools.toolSeparator,
+                this.simpleMdeTools.toolBold,
+                this.simpleMdeTools.toolItalic,
+                this.simpleMdeTools.toolSeparator,
+                this.simpleMdeTools.toolUnorderedList,
+                this.simpleMdeTools.toolOrderedList,
+                this.simpleMdeTools.toolSeparator,
+                this.simpleMdeTools.toolHeading1,
+                this.simpleMdeTools.toolHeading2,
+                this.simpleMdeTools.toolHeading3,
+                this.simpleMdeTools.toolSeparator,
+                this.simpleMdeTools.toolQuote,
+                this.simpleMdeTools.toolPreview,
+                this.simpleMdeTools.toolHorizontalRule,
+                this.simpleMdeTools.toolSeparator,
+                {
                     name: "comment",
                     action: ((editor) => {
                         this.toggleCommentFromEditor(editor, true);
                     }),
                     className: "fa fa-comment",
-                    title: "Add comment"
+                    title: localization.translate("AddComment", "RidicsProject").value
                 },
-                //{Temporarily hide while there is no markdown manual yet
-                //    name: "help",
-                //    action: (() => { this.openMarkdownHelp(); }),
-                //    className: "fa fa-question-circle",
-                //    title: "Markdown help"
-                //},
-                "|", {
-                    name: "save",
-                    action: (editor) => { this.saveContents(textId, editor.value()) },
-                    className: "fa fa-floppy-o",
-                    title: "Save"
-                }
+                this.simpleMdeTools.toolGuide
             ]
         };
-        this.simplemde = new SimpleMDE(simpleMdeOptions);
-        const commentIdRegex = new RegExp(`${this.commentIdPattern}`);
-        const commentBeginRegex = new RegExp(`(\\$${this.commentIdPattern}\\%)`);
-        const commentEndRegex = new RegExp(`(\\%${this.commentIdPattern}\\$)`);
+
+        this.setCustomPreviewRender();
+        this.simplemde = new SimpleMDE(this.simpleMdeOptions);
+        
+        const commentIdRegex = new RegExp(`${this.commentInput.commentRegexExpr}`);
+        const commentBeginRegex = new RegExp(`(\\$${this.commentInput.commentRegexExpr}\\%)`);
+        const commentEndRegex = new RegExp(`(\\%${this.commentInput.commentRegexExpr}\\$)`);
         this.simplemde.defineMode("comment",
             () => ({
                 token(stream: CodeMirror.StringStream) {
@@ -328,18 +360,41 @@
                         !stream.match(commentIdRegex, false)) {
                         return null;
                     }
-
                 }
             }));
 
         this.simplemde.codemirror.addOverlay("comment");
         this.simplemde.codemirror.focus();
-        this.commentArea.updateCommentAreaHeight(jEl);
-        this.commentArea.toggleAreaSizeIconHide(jEl.children(".comment-area"));
+        this.commentArea.updateCommentAreaHeight(pageRow);
+        this.commentArea.toggleAreaSizeIconHide(pageRow.children(".comment-area"));
+        this.originalContent = this.simplemde.value();
     }
 
-    toggleDivAndTextarea = () => {
-        const pageRow = $(".page-row");
+
+    private setCustomPreviewRender() {
+        this.simpleMdeTools.toolPreview.action = (editor: SimpleMDE) => {
+            this.simpleMdeOptions.previewRender = (plainText: string, preview: HTMLElement) => {
+                this.previewRemoteRender(plainText, preview);
+                return "<div class=\"loading\"></div>";
+            };
+            SimpleMDE.togglePreview(editor);
+        };
+    }
+
+    private previewRemoteRender(text: string, previewElement: HTMLElement) {
+        this.isPreviewRendering = !this.isPreviewRendering;
+        if (this.isPreviewRendering) {
+            return;
+        }
+
+        this.client.renderPreview(text, "markdown").done((generatedHtml) => {
+            previewElement.innerHTML = generatedHtml;
+        }).fail(() => {
+            previewElement.innerHTML = `<div>${localization.translate("RenderError", "ItJakubJs").value}</div>`;
+        });
+    }
+
+    togglePageRows = (pageRow: JQuery) => {
         const lazyloadedCompositionEl = pageRow.children(".composition-area");
         if (pageRow.hasClass("lazyloaded") && !lazyloadedCompositionEl.hasClass("lazyloaded")) {
             lazyloadedCompositionEl.addClass("lazyload");
@@ -348,25 +403,22 @@
             lazyloadedCompositionEl.removeClass("lazyloaded");
             lazyloadedCompositionEl.addClass("lazyload");
         }
-        if (this.editingMode) { // changing div to textarea here
-            pageRow.each((index, child) => {
-                const pageEl = $(child as Node as HTMLElement);
-                const compositionAreaEl = pageEl.children(".composition-area");
-                this.commentArea.updateCommentAreaHeight(pageEl);
-                const placeholderSpinner = pageEl.find(".loading");
-                placeholderSpinner.show();
+
+        pageRow.each((index, child) => {
+            const pageEl = $(child as Node as HTMLElement);
+            const compositionAreaEl = pageEl.children(".composition-area");
+            this.commentArea.updateCommentAreaHeight(pageEl);
+            const placeholderSpinner = pageEl.find(".loading");
+            placeholderSpinner.show();
+            const editPageButton = pageEl.find(".edit-page");
+            if (pageEl.data(this.editModeSelector)) { // changing div to textarea here
+                editPageButton.addClass("hide");
                 this.createEditorAreaBody(compositionAreaEl);
-            });
-        } else { // changing textarea to div here
-            pageRow.each((index, child) => {
-                const pageEl = $(child as Node as HTMLElement);
-                const compositionAreaEl = pageEl.children(".composition-area");
-                this.commentArea.updateCommentAreaHeight(pageEl);
-                const placeholderSpinner = pageEl.find(".loading");
-                placeholderSpinner.show();
+            } else { // changing textarea to div here
+                editPageButton.removeClass("hide");
                 this.createViewerAreaBody(compositionAreaEl);
-            });
-        }
+            }
+        });
     }
 
     private createEditorAreaBody(compositionAreaEl: JQuery) {
@@ -377,10 +429,9 @@
         }
         const viewerElement = child.children(".viewer");
         viewerElement.remove();
-        if (this.editingMode) {
-            const elm = `<div class="editor"><textarea class="plain-text textarea-no-resize"></textarea></div>`;
-            child.append(elm);
-        }
+       
+        const elm = `<div class="editor"><textarea class="plain-text textarea-no-resize"></textarea></div>`;
+        child.append(elm);
     }
 
     private createViewerAreaBody(compositionAreaEl: JQuery) {
@@ -389,11 +440,10 @@
         if (viewerElement.length) {
             viewerElement.remove();
         }
+
         const editorElement = child.children(".editor");
         editorElement.remove();
-        if (!this.editingMode) {
-            const elm = `<div class="viewer"><span class="rendered-text"></span></div>`;
-            child.append(elm);
-        }
+        const elm = `<div class="viewer"><span class="rendered-text"></span></div>`;
+        child.append(elm);
     }
 }
