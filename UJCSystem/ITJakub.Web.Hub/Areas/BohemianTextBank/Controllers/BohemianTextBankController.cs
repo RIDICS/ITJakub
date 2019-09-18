@@ -172,7 +172,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         }
 
         [LimitedAccess(PortalType.ResearchPortal)]
-        public ActionResult TextSearchFulltextPaged(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
+        public ActionResult TextSearchFulltextPaged(string text, int start, int count, int contextLength, SortTypeEnumContract sortingEnum, bool sortAsc,
             IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             if (string.IsNullOrEmpty(text))
@@ -191,7 +191,8 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 Count = count,
                 ContextLength = contextLength,
                 ConditionConjunction = listSearchCriteriaContracts,
-                // TODO is sorting required? is sorting possible?
+                Sort = sortingEnum,
+                SortDirection = sortAsc == false ? SortDirectionEnumContract.Desc : SortDirectionEnumContract.Asc,
             }, GetDefaultProjectType());
             return Json(new {results = resultList});
         }
@@ -221,7 +222,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         }
 
         [LimitedAccess(PortalType.ResearchPortal)]
-        public ActionResult AdvancedSearchCorpusPaged(string json, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
+        public ActionResult AdvancedSearchCorpusPaged(string json, int start, int count, int contextLength, SortTypeEnumContract sortingEnum, bool sortAsc,
             IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var deserialized =
@@ -244,7 +245,8 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 Count = count,
                 ContextLength = contextLength,
                 ConditionConjunction = listSearchCriteriaContracts,
-                // TODO is sorting required? is sorting possible?
+                Sort = sortingEnum,
+                SortDirection = sortAsc == false ? SortDirectionEnumContract.Desc : SortDirectionEnumContract.Asc,
             }, GetDefaultProjectType());
             return Json(new {results = resultList});
         }
