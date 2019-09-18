@@ -77,7 +77,7 @@
             }
 
             var mainCommentLeftPartStart =
-                `<div class="media-left main-comment" id="${textReferenceId}-comment" data-parent-comment-id="${id}">`;
+                `<div class="media-left main-comment" data-text-reference-id="${textReferenceId}" data-parent-comment-id="${id}">`;
             var commentName = `<h5 class="media-heading">${name} ${surname}</h5>`;
             var mainCommentBody =
                 `<p class="comment-body">${body}</p><button class="respond-to-comment">${localization.translate("Respond", "RidicsProject").value}</button>`;

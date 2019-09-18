@@ -101,7 +101,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var maxId = 0;
             foreach (var comment in comments)
             {
-                var isNumber = int.TryParse(comment.TextReferenceId.Split('-')[2], out var value);
+                var isNumber = int.TryParse(comment.TextReferenceId.Split('-')[1], out var value);
                 if (isNumber && value > maxId)
                 {
                     maxId = value;

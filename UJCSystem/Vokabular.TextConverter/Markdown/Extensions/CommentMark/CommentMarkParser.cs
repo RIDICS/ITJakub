@@ -139,36 +139,13 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
                 commentId += slice.Text[i];
                 i++;
             }
-
-            commentId += slice.Text[i]; // add '-'
-            i++;
-
-            while (slice.Text[i].IsDigit())
-            {
-                commentId += slice.Text[i];
-                i++;
-            }
-
+            
             return commentId;
         }
 
         private bool IsBeginningOfTag(StringSlice slice, char tagClosingChar)
         {
             var i = slice.Start + CommentMark.Length + 1;
-            while (slice.Text[i].IsDigit())
-            {
-                i++;
-            }
-
-            if (slice.Text[i] == '-')
-            {
-                i++;
-            }
-            else
-            {
-                return false;
-            }
-
             while (slice.Text[i].IsDigit())
             {
                 i++;

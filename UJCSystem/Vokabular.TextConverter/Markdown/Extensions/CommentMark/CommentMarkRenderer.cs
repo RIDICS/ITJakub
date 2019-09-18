@@ -16,7 +16,7 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
         private void WriteComment(HtmlRenderer renderer, CommentMarkContainer commentMarkContainer)
         {
             if (commentMarkContainer == null) return;
-            renderer.Write("<span id=\"").Write(commentMarkContainer.CommentId).Write("-text\">"); 
+            renderer.Write($"<span data-text-reference-id=\"{commentMarkContainer.CommentId}\">"); 
             
             foreach (var child in commentMarkContainer.ChildList)
             {

@@ -3,7 +3,7 @@
     private readonly util: EditorsApiClient;
 
     readonly commentPattern = `komentar-`;
-    readonly commentRegexExpr = `(${this.commentPattern}\\w+-\\w+)`;
+    readonly commentRegexExpr = `(${this.commentPattern}\\w+)`;
 
     constructor(commentArea: CommentArea, util: EditorsApiClient) {
         this.commentArea = commentArea;
@@ -147,7 +147,7 @@
         } else {
             this.util.createTextReferenceId(textId).done((commentId) => {
                 if (addSigns) {
-                    const textReferenceId = `${this.commentPattern}${textId}-${commentId}`;
+                    const textReferenceId = `${this.commentPattern}${commentId}`;
                     const uniqueNumberLength = textReferenceId.length;
                     markSize = uniqueNumberLength + 2; // + $ + %
                     output = `$${textReferenceId}%${selectedText}%${textReferenceId}$`;
