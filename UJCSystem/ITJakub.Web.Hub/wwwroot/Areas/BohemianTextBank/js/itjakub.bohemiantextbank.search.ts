@@ -220,8 +220,8 @@ class BohemianTextbankSearch {
     }
 
     private sortOrderChanged() {
-        if (paginator) {
-            paginator.goToPage(1);
+        if (this.paginator) {
+            this.paginator.goToPage(1);
         }
     }
 
