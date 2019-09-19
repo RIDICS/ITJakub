@@ -123,13 +123,13 @@
                             <div class="col-md-12">
                                 <div class="checkbox">
                                     <label>
-                                        <input disabled class="book-cover-checkbox" type="checkbox" />
+                                        <input disabled class="book-cover-checkbox" type="checkbox"/>
                                         <span class="page-list-editor-controls-label">@Localizer.Translate("Cover", "Admin")</span>
                                     </label>
                                 </div>
                                 <div class="checkbox">
                                     <label>
-                                        <input disabled class="book-startpage-checkbox" type="checkbox" />
+                                        <input disabled class="book-startpage-checkbox" type="checkbox"/>
                                         <span class="page-list-editor-controls-label">@Localizer.Translate("FrontPage", "Admin")</span>
                                     </label>
                                 </div>
@@ -140,13 +140,13 @@
                                 <div class="col-md-12">
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="page-type" checked="checked" />
+                                            <input type="radio" name="page-type" checked="checked"/>
                                             <span class="page-list-editor-controls-label">@Localizer.Translate("SinglePage", "Admin")</span>
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            <input class="doublepage-radiobutton" type="radio" name="page-type" />
+                                            <input class="doublepage-radiobutton" type="radio" name="page-type"/>
                                             <span class="page-list-editor-controls-label">@Localizer.Translate("DoublePage", "Admin")</span>
                                         </label>
                                     </div>
@@ -163,20 +163,28 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group-section generate-list-numberic-input-group">
-                                <div class="generate-list-numberic-input-group-heading">@Localizer.Translate("GeneratePages", "Admin")</div>
-                                <div class="form-group">
-                                    <label class="col-md-1 control-label" for="project-pages-generate-from">@Localizer.Translate("From", "Admin"):</label>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control input-sm" id="project-pages-generate-from" />
+                            <form id="rangeForm">
+                                <div class="form-group-section generate-list-numberic-input-group">
+                                    <div class="generate-list-numberic-input-group-heading">@Localizer.Translate("GeneratePages", "Admin")</div>
+                                    <div class="form-group">
+                                        <label class="col-md-1 control-label" for="project-pages-generate-from">@Localizer.Translate("From", "Admin"):</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control input-sm" id="project-pages-generate-from" name="project-pages-generate-from" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-1 control-label" for="project-pages-generate-to">@Localizer.Translate("To", "Admin"):</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control input-sm" id="project-pages-generate-to" name="project-pages-generate-to" />
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-md-1 control-label" for="project-pages-generate-to">@Localizer.Translate("To", "Admin"):</label>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control input-sm" id="project-pages-generate-to" />
-                                    </div>
-                                </div>
+                            </form>
+                            <div id="doubleGenerationWarning" class="alert alert-warning hide">
+                                @Localizer.Translate("DoubleGenerationWarning", "RidicsProject")
+                            </div>
+                            <div id="swapNumbersError" class="alert alert-danger hide">
+                                @Localizer.Translate("SwapNumbers", "RidicsProject")
                             </div>
                         </div>
                     </div>
