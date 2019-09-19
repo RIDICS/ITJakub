@@ -26,7 +26,7 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
                     {
                         StartTag = value,
                         Identifier = identifier,
-                        IsValid = isValid,
+                        IsIdValid = isValid,
                     };
                     processedItems.Add(item.Identifier, item);
                     resultList.Add(item);
@@ -44,7 +44,7 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
                         {
                             EndTag = value,
                             Identifier = identifier,
-                            IsValid = isValid,
+                            IsIdValid = isValid,
                         };
                         resultList.Add(item);
                     }

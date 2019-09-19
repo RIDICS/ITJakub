@@ -15,11 +15,11 @@ namespace Vokabular.MainService.Test
             var result = analyzer.FindAllComments(testText);
 
             Assert.AreEqual(2, result.Count);
-            Assert.IsTrue(result[0].IsValid);
+            Assert.IsTrue(result[0].IsIdValid);
             Assert.IsNotNull(result[0].StartTag);
             Assert.IsNotNull(result[0].EndTag);
 
-            Assert.IsTrue(result[1].IsValid);
+            Assert.IsTrue(result[1].IsIdValid);
             Assert.IsNotNull(result[1].StartTag);
             Assert.IsNotNull(result[1].EndTag);
         }
@@ -33,11 +33,11 @@ namespace Vokabular.MainService.Test
             var result = analyzer.FindAllComments(testText);
 
             Assert.AreEqual(2, result.Count);
-            Assert.IsTrue(result[0].IsValid);
+            Assert.IsTrue(result[0].IsIdValid);
             Assert.IsNotNull(result[0].StartTag);
             Assert.IsNotNull(result[0].EndTag);
 
-            Assert.IsTrue(result[1].IsValid);
+            Assert.IsTrue(result[1].IsIdValid);
             Assert.IsNotNull(result[1].StartTag);
             Assert.IsNull(result[1].EndTag);
         }
@@ -51,11 +51,11 @@ namespace Vokabular.MainService.Test
             var result = analyzer.FindAllComments(testText);
 
             Assert.AreEqual(2, result.Count);
-            Assert.IsFalse(result[0].IsValid);
+            Assert.IsFalse(result[0].IsIdValid);
             Assert.IsNotNull(result[0].StartTag);
             Assert.IsNull(result[0].EndTag);
 
-            Assert.IsFalse(result[1].IsValid);
+            Assert.IsFalse(result[1].IsIdValid);
             Assert.IsNull(result[1].StartTag);
             Assert.IsNotNull(result[1].EndTag);
         }
