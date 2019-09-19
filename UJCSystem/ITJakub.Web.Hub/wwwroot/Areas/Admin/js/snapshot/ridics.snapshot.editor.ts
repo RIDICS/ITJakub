@@ -135,23 +135,23 @@ class SnapshotEditor {
             case ResourceType.Audio:
                 const audioResources = String(resources);
                 const audioSelectedResources = String(selectedResources);
-                resourcesCount.append(`<li>${localization.translateFormat("SelectedAudioResources",
+                resourcesCount.append(`<p>${localization.translateFormat("SelectedAudioResources",
                     [audioSelectedResources, audioResources],
-                    "Admin").value}</li>`);
+                    "Admin").value}</p>`);
                 break;
             case ResourceType.Image:
                 const imageResources = String(resources);
                 const imageSelectedResources = String(selectedResources);
-                resourcesCount.append(`<li>${localization.translateFormat("SelectedImageResources",
+                resourcesCount.append(`<p>${localization.translateFormat("SelectedImageResources",
                     [imageSelectedResources, imageResources],
-                    "Admin").value}</li>`);
+                    "Admin").value}</p>`);
                 break;
             case ResourceType.Text:
                 const textResources = String(resources);
                 const textSelectedResources = String(selectedResources);
-                resourcesCount.append(`<li>${localization.translateFormat("SelectedTextResources",
+                resourcesCount.append(`<p>${localization.translateFormat("SelectedTextResources",
                     [textSelectedResources, textResources],
-                    "Admin").value}</li>`);
+                    "Admin").value}</p>`);
                 break;
             }
         }
