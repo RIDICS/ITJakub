@@ -293,7 +293,7 @@
 
     private populateList(pageList: string[]) {
         const listContainerEl = $(".page-listing tbody");
-        if (listContainerEl.length) {
+        if (listContainerEl.children().length) {
             this.gui.showInfoDialog(localization.translate("Info").value, localization.translate("AddingGeneratedNames", "RidicsProject").value);
         }
 
