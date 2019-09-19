@@ -254,8 +254,8 @@
         return ajax;
     }
 
-    saveContents(textId: number, contents: string): JQuery.jqXHR {
-        const saveAjax = this.saveText(textId, contents, SaveTextModeType.FullValidateOrDeny);
+    saveContents(textId: number, contents: string, mode = SaveTextModeType.FullValidateOrDeny): JQuery.jqXHR {
+        const saveAjax = this.saveText(textId, contents, mode);
         saveAjax.done((response) => {
             if (!response.isValidationSuccess) {
                 bootbox.dialog({
@@ -265,22 +265,19 @@
                         cancel: {
                             label: localization.translate("Cancel", "RidicsProject").value,
                             className: "btn-default",
-                            callback: () => {
-                                console.log("cancel");
-                            }
                         },
                         autofix: {
                             label: localization.translate("AutomaticallyFixProblems", "RidicsProject").value,
                             className: "btn-default",
                             callback: () => {
-                                console.log("automatically fix problems");
+                                this.saveContents(textId, contents, SaveTextModeType.FullValidateAndRepair);
                             }
                         },
                         overwrite: {
                             label: localization.translate("SaveWithErrors", "RidicsProject").value,
                             className: "btn-default",
                             callback: () => {
-                                console.log("force overwrite");
+                                this.saveContents(textId, contents, SaveTextModeType.NoValidation);
                             }
                         }
                     }

@@ -192,6 +192,9 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 case SaveTextModeType.ValidateOnlySyntax:
                     response = m_textManager.SaveTextValidateSyntax(textId, request);
                     break;
+                case SaveTextModeType.NoValidation:
+                    response = m_textManager.SaveWithoutValidation(textId, request);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
             }

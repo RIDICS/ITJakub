@@ -17,14 +17,14 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
             m_communicationProvider = communicationProvider;
         }
 
-        public bool HasOnlyValidCommentSyntax(string text)
+        private bool HasOnlyValidCommentSyntax(string text)
         {
             var commentMarks = m_markdownCommentAnalyzer.FindAllComments(text);
             var result = commentMarks.All(x => x.IsIdValid && x.ContainsBothTags);
             return result;
         }
 
-        public bool HasOnlyValidCommentsWithValues(string text, long textId)
+        private bool HasOnlyValidCommentsWithValues(string text, long textId)
         {
             var commentMarks = m_markdownCommentAnalyzer.FindAllComments(text);
             var isValidSyntax = commentMarks.All(x => x.IsIdValid && x.ContainsBothTags);
@@ -53,24 +53,19 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
             return true;
         }
 
+        private SaveTextResponse ValidationFailResponse()
+        {
+            return new SaveTextResponse
+            {
+                IsValidationSuccess = false
+            };
+        }
+
         public SaveTextResponse SaveTextFullValidate(long textId, CreateTextRequestContract request)
         {
             var isValid = HasOnlyValidCommentsWithValues(request.Text, textId);
-            if (!isValid)
-            {
-                return new SaveTextResponse
-                {
-                    IsValidationSuccess = false
-                };
-            }
 
-            var client = m_communicationProvider.GetMainServiceProjectClient();
-            var resourceVersionId = client.CreateTextResourceVersion(textId, request);
-            return new SaveTextResponse
-            {
-                IsValidationSuccess = true,
-                ResourceVersionId = resourceVersionId,
-            };
+            return !isValid ? ValidationFailResponse() : SaveWithoutValidation(textId, request);
         }
 
         public SaveTextResponse SaveTextFullValidateAndRepair(long textId, CreateTextRequestContract request)
@@ -82,14 +77,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
         public SaveTextResponse SaveTextValidateSyntax(long textId, CreateTextRequestContract request)
         {
             var isValidSyntax = HasOnlyValidCommentSyntax(request.Text);
-            if (!isValidSyntax)
-            {
-                return new SaveTextResponse
-                {
-                    IsValidationSuccess = false
-                };
-            }
 
+            return !isValidSyntax ? ValidationFailResponse() : SaveWithoutValidation(textId, request);
+        }
+
+        public SaveTextResponse SaveWithoutValidation(long textId, CreateTextRequestContract request)
+        {
             var client = m_communicationProvider.GetMainServiceProjectClient();
             var resourceVersionId = client.CreateTextResourceVersion(textId, request);
             return new SaveTextResponse

@@ -575,6 +575,7 @@ enum SaveTextModeType {
     FullValidateOrDeny = 0,
     FullValidateAndRepair = 1,
     ValidateOnlySyntax = 2,
+    NoValidation = 3,
 }
 
 interface IForumViewModel {
