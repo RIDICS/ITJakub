@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
 using ITJakub.Web.Hub.Core.Communication;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -70,8 +71,46 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
 
         public SaveTextResponse SaveTextFullValidateAndRepair(long textId, CreateTextRequestContract request)
         {
-            // The most difficult function
-            throw new System.NotImplementedException();
+            var client = m_communicationProvider.GetMainServiceProjectClient();
+            var commentContracts = client.GetCommentsForText(textId);
+            var commentMarks = m_markdownCommentAnalyzer.FindAllComments(request.Text);
+
+            var textBuilder = new StringBuilder(request.Text);
+
+            foreach (var commentMark in commentMarks)
+            {
+                var isInvalid = !commentMark.IsIdValid || !commentMark.ContainsBothTags;
+                var commentContract = commentContracts.FirstOrDefault(x => x.TextReferenceId == commentMark.Identifier);
+
+                if (isInvalid || commentContract == null)
+                {
+                    // Remove tag reference from text
+                    if (!string.IsNullOrEmpty(commentMark.StartTag))
+                    {
+                        textBuilder.Replace(commentMark.StartTag, string.Empty);
+                    }
+
+                    if (!string.IsNullOrEmpty(commentMark.EndTag))
+                    {
+                        textBuilder.Replace(commentMark.EndTag, string.Empty);
+                    }
+                }
+            }
+
+            foreach (var commentContract in commentContracts)
+            {
+                var commentMark = commentMarks.FirstOrDefault(x => x.Identifier == commentContract.TextReferenceId);
+
+                if (commentMark == null || !commentMark.ContainsBothTags || !commentMark.IsIdValid)
+                {
+                    // Add missing reference to the text
+                    textBuilder.Insert(0, $"${commentContract.TextReferenceId}%%{commentContract.TextReferenceId}$");
+                }
+            }
+
+            request.Text = textBuilder.ToString();
+            
+            return SaveWithoutValidation(textId, request);
         }
 
         public SaveTextResponse SaveTextValidateSyntax(long textId, CreateTextRequestContract request)
