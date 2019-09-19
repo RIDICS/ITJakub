@@ -381,6 +381,7 @@
             this.getSelectedFormat()))
         {
             const pageList = this.listGenerator.generatePageList(fromFieldValue, toFieldValue, this.getSelectedFormat(), this.isSetDoublePageGeneration());
+            $("#project-pages-dialog").modal("hide");
             this.populateList(pageList);
             this.enableCheckboxes();
             this.trackSpecialPagesCheckboxesState();
@@ -392,7 +393,6 @@
 
     private populateList(pageList: string[]) {
         const listContainerEl = $(".page-listing tbody");
-        console.log(listContainerEl.children().length);
         if (listContainerEl.children().length) {
             this.gui.showInfoDialog(localization.translate("Info").value,
                 localization.translate("AddingGeneratedNames", "RidicsProject").value);
