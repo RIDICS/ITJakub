@@ -1,5 +1,7 @@
 ﻿using System.Linq;
+using ITJakub.Web.Hub.Areas.Admin.Models.Response;
 using ITJakub.Web.Hub.Core.Communication;
+using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.TextConverter.Markdown.Extensions.CommentMark;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Core
@@ -49,6 +51,52 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
             }
 
             return true;
+        }
+
+        public SaveTextResponse SaveTextFullValidate(long textId, CreateTextRequestContract request)
+        {
+            var isValid = HasOnlyValidCommentsWithValues(request.Text, textId);
+            if (!isValid)
+            {
+                return new SaveTextResponse
+                {
+                    IsValidationSuccess = false
+                };
+            }
+
+            var client = m_communicationProvider.GetMainServiceProjectClient();
+            var resourceVersionId = client.CreateTextResourceVersion(textId, request);
+            return new SaveTextResponse
+            {
+                IsValidationSuccess = true,
+                ResourceVersionId = resourceVersionId,
+            };
+        }
+
+        public SaveTextResponse SaveTextFullValidateAndRepair(long textId, CreateTextRequestContract request)
+        {
+            // The most difficult function
+            throw new System.NotImplementedException();
+        }
+
+        public SaveTextResponse SaveTextValidateSyntax(long textId, CreateTextRequestContract request)
+        {
+            var isValidSyntax = HasOnlyValidCommentSyntax(request.Text);
+            if (!isValidSyntax)
+            {
+                return new SaveTextResponse
+                {
+                    IsValidationSuccess = false
+                };
+            }
+
+            var client = m_communicationProvider.GetMainServiceProjectClient();
+            var resourceVersionId = client.CreateTextResourceVersion(textId, request);
+            return new SaveTextResponse
+            {
+                IsValidationSuccess = true,
+                ResourceVersionId = resourceVersionId,
+            };
         }
     }
 }

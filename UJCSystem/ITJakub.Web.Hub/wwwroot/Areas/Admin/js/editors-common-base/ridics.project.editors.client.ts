@@ -68,11 +68,12 @@
         return ajax;
     }
 
-    savePlainText(textId: number, request: ICreateTextVersion): JQueryXHR {
+    savePlainText(textId: number, request: ICreateTextVersion, mode: SaveTextModeType): JQuery.jqXHR<ISaveTextResponse> {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/SetTextResource`,
             {
                 textId: textId,
-                request: request
+                request: request,
+                mode: mode,
             } as JQuery.PlainObject);
         return ajax;
     }

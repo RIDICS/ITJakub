@@ -51,10 +51,10 @@
         });
     }
 
-    private onSendButtonClick(text: string) {
+    private onSendCommentButtonClick(text: string) {
         const textId = this.getCurrentTextId();
         const cm = this.simplemde.codemirror as CodeMirror.Doc;
-        (this.commentInput).toggleCommentSignsAndCreateComment(cm, true, text, textId, this.saveText, this);
+        this.commentInput.toggleCommentSignsAndCreateComment(cm, true, text, textId, this.saveText, this);
     }
 
     private toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
@@ -101,7 +101,7 @@
                             if (!result) {
                                 this.toggleCommentFromEditor(editor, false);
                             } else {
-                                this.onSendButtonClick(result);
+                                this.onSendCommentButtonClick(result);
                             }
                         }
                     }
@@ -234,7 +234,7 @@
         this.originalContent = this.simplemde.value();
     }
 
-    saveText(textId: number, contents: string): JQuery.jqXHR {
+    saveText(textId: number, contents: string, mode: SaveTextModeType): JQuery.jqXHR<ISaveTextResponse> {
         const pageEl = $(`*[data-page="${textId}"]`);
         const compositionArea = pageEl.children(".composition-area");
         const id = compositionArea.data("id");
@@ -244,17 +244,49 @@
             text: contents,
             resourceVersionId: versionId
         };
-        const ajax = this.util.savePlainText(textId, request);
-        ajax.done((newVersionId: number) => {
-            this.originalContent = contents;
-            compositionArea.data("version-id", newVersionId);
+        const ajax = this.util.savePlainText(textId, request, mode);
+        ajax.done((response) => {
+            if (response.isValidationSuccess) {
+                this.originalContent = contents;
+                compositionArea.data("version-id", response.resourceVersionId);
+            }
         });
         return ajax;
     }
 
     saveContents(textId: number, contents: string): JQuery.jqXHR {
-        const saveAjax = this.saveText(textId, contents);
-        saveAjax.done((newVersionId: number) => {
+        const saveAjax = this.saveText(textId, contents, SaveTextModeType.FullValidateOrDeny);
+        saveAjax.done((response) => {
+            if (!response.isValidationSuccess) {
+                bootbox.dialog({
+                    title: localization.translate("Fail", "RidicsProject").value,
+                    message: localization.translate("CommentValidationError", "RidicsProject").value,
+                    buttons: {
+                        cancel: {
+                            label: localization.translate("Cancel", "RidicsProject").value,
+                            className: "btn-default",
+                            callback: () => {
+                                console.log("cancel");
+                            }
+                        },
+                        autofix: {
+                            label: localization.translate("AutomaticallyFixProblems", "RidicsProject").value,
+                            className: "btn-default",
+                            callback: () => {
+                                console.log("automatically fix problems");
+                            }
+                        },
+                        overwrite: {
+                            label: localization.translate("SaveWithErrors", "RidicsProject").value,
+                            className: "btn-default",
+                            callback: () => {
+                                console.log("force overwrite");
+                            }
+                        }
+                    }
+                });
+                return;
+            }
             bootbox.alert({
                 title: localization.translate("Success", "RidicsProject").value,
                 message: localization.translate("ChangesSaveSuccess", "RidicsProject").value,
