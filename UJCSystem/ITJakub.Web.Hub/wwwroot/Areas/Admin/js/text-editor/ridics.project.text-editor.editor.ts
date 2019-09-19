@@ -204,7 +204,11 @@
                             label: localization.translate("SaveAndClose", "RidicsProject").value,
                             className: "btn-default",
                             callback: () => {
-                                this.saveContents(this.currentTextId, contentBeforeClose).done(() => {
+                                // TODO saveContents should call done() after all dialogs are closed and page is saved
+                                this.saveContents(this.currentTextId, contentBeforeClose).done((response) => {
+                                    if (!response.isValidationSuccess) {
+                                        return;
+                                    }
                                     thisClass.simplemde.toTextArea();
                                     thisClass.simplemde = null;
                                     this.togglePageRows(pageRows);
@@ -254,7 +258,7 @@
         return ajax;
     }
 
-    saveContents(textId: number, contents: string, mode = SaveTextModeType.FullValidateOrDeny): JQuery.jqXHR {
+    saveContents(textId: number, contents: string, mode = SaveTextModeType.FullValidateOrDeny): JQuery.jqXHR<ISaveTextResponse> {
         const saveAjax = this.saveText(textId, contents, mode);
         saveAjax.done((response) => {
             if (!response.isValidationSuccess) {
@@ -284,6 +288,7 @@
                 });
                 return;
             }
+            this.simplemde.value(response.newText);
             bootbox.alert({
                 title: localization.translate("Success", "RidicsProject").value,
                 message: localization.translate("ChangesSaveSuccess", "RidicsProject").value,

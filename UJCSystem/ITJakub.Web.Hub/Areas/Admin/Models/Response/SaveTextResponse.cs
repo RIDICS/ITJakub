@@ -4,5 +4,6 @@
     {
         public long? ResourceVersionId { get; set; }
         public bool IsValidationSuccess { get; set; }
+        public string NewText { get; set; }
     }
 }

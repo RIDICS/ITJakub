@@ -400,6 +400,7 @@ interface ICreateTextVersion {
 interface ISaveTextResponse {
     resourceVersionId?: number;
     isValidationSuccess: boolean;
+    newText: string;
 }
 
 interface ITextWithContent {

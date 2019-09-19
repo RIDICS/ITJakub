@@ -128,6 +128,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
             {
                 IsValidationSuccess = true,
                 ResourceVersionId = resourceVersionId,
+                NewText = request.Text,
             };
         }
     }
