@@ -5,7 +5,6 @@
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract>
 @inject ILocalizationService Localizer
 
-<div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
 @foreach (var role in Model.List)
 {
     <tr data-role-id="@role.Id" class="role-row">
