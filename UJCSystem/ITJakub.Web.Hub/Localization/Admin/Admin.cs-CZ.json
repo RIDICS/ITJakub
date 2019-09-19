@@ -159,6 +159,7 @@
     "Author": "Autor",
     "DuplicateSettings": "Duplikovat nastavení",
     "CreateNewPublication": "Vytvořit novou publikaci",
+    "CreateNewPublicationHeader": "Vytvořit novou publikaci - {0}",
     "CreatePublication": "Vytvořit publikaci",
     "NoSnapshotCreated": "Žádná publikace zatím nebyla vytvořena",
     "SelectedResources": "Vybrané zdroje",

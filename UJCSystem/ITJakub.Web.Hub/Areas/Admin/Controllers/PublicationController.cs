@@ -130,6 +130,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         private NewPublicationViewModel CreateNewPublicationViewModel(long projectId)
         {
             var client = GetProjectClient();
+            var project = client.GetProject(projectId);
             var audio = client.GetResourceList(projectId, ResourceTypeEnumContract.Audio);
             var images = client.GetResourceList(projectId, ResourceTypeEnumContract.Image);
             var text = client.GetResourceList(projectId, ResourceTypeEnumContract.Text);
@@ -162,6 +163,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return new NewPublicationViewModel
             {
                 ProjectId = projectId,
+                ProjectName = project.Name,
                 ResourceTypes = new List<ResourceTypeViewModel>
                 {
                     new ResourceTypeViewModel

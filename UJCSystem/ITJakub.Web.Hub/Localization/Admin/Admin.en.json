@@ -158,6 +158,7 @@
     "VideoSources": "translate[Video zdroje]",
     "Author": "translate[Autor]",
     "CreateNewPublication": "translate[Vytvořit novou publikaci]",
+    "CreateNewPublicationHeader": "translate[Vytvořit novou publikaci - {0}]",
     "CreatePublication": "Create publication",
     "DuplicateSettings": "translate[Duplikovat nastavení]",
     "NoSnapshotCreated": "No publication was created yet",
