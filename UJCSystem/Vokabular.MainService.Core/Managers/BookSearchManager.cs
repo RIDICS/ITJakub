@@ -420,7 +420,7 @@ namespace Vokabular.MainService.Core.Managers
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);
             var start = m_corpusSearchManager.GetCorpusStart(request.Start);
             var count = m_corpusSearchManager.GetCorpusCount(request.Count);
-            var result = fulltextStorage.SearchCorpusByCriteria(start, count, request.ContextLength, nonMetadataCriterias, projectIdentificatorList);
+            var result = fulltextStorage.SearchCorpusByCriteria(start, count, request.ContextLength, request.Sort, request.SortDirection, nonMetadataCriterias, projectIdentificatorList);
 
             var projectTypeEnum = m_mapper.Map<ProjectTypeEnum>(projectType);
             switch (result.SearchResultType)

@@ -292,14 +292,15 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
-        public CorpusSearchResultDataList SearchCorpusByCriteria(int start, int count, int contextLength, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        public CorpusSearchResultDataList SearchCorpusByCriteria(int start, int count, int contextLength, SortTypeEnumContract? sort,
+            SortDirectionEnumContract? sortDirection, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithBookVersionRestriction(criteria, projects);
 
             criteria.Add(new ResultCriteriaContract
             {
-                Sorting = SortEnum.Title, // TODO use sorting from method parameter
-                Direction = ListSortDirection.Ascending,
+                Sorting = ConvertSortType(sort),
+                Direction = ConvertSortDirection(sortDirection),
                 HitSettingsContract = new HitSettingsContract
                 {
                     Start = start,
