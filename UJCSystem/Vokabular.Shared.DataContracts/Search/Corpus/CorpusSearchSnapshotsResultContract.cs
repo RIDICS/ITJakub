@@ -14,7 +14,5 @@ namespace Vokabular.Shared.DataContracts.Search.Corpus
         public long SnapshotId { get; set; }
 
         public long ResultCount { get; set; }
-
-        //TODO maybe add book title etc...
     }
 }

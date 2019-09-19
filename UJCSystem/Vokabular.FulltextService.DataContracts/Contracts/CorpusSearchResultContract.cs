@@ -7,8 +7,6 @@ namespace Vokabular.FulltextService.DataContracts.Contracts
     {
         public long ProjectId { get; set; }
 
-        //public string ProjectExternalId { get; set; }
-
         public IList<string> Notes { get; set; }
 
         public CorpusSearchPageResultContract PageResultContext { get; set; }
@@ -20,8 +18,6 @@ namespace Vokabular.FulltextService.DataContracts.Contracts
 
     public class CorpusSearchPageResultContract
     {
-        //public long TextId { get; set; }
-
         public string TextExternalId { get; set; }
 
         public KwicStructure ContextStructure { get; set; }

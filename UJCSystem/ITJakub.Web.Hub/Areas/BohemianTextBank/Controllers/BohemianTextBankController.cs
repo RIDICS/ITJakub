@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
@@ -173,7 +172,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         }
 
         [LimitedAccess(PortalType.ResearchPortal)]
-        public ActionResult TextSearchFulltextPaged(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
+        public ActionResult TextSearchFulltextPaged(string text, int start, int count, int contextLength, SortTypeEnumContract sortingEnum, bool sortAsc,
             IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             if (string.IsNullOrEmpty(text))
@@ -192,7 +191,8 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 Count = count,
                 ContextLength = contextLength,
                 ConditionConjunction = listSearchCriteriaContracts,
-                // TODO is sorting required? is sorting possible?
+                Sort = sortingEnum,
+                SortDirection = sortAsc == false ? SortDirectionEnumContract.Desc : SortDirectionEnumContract.Asc,
             }, GetDefaultProjectType());
             return Json(new {results = resultList});
         }
@@ -222,7 +222,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         }
 
         [LimitedAccess(PortalType.ResearchPortal)]
-        public ActionResult AdvancedSearchCorpusPaged(string json, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
+        public ActionResult AdvancedSearchCorpusPaged(string json, int start, int count, int contextLength, SortTypeEnumContract sortingEnum, bool sortAsc,
             IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var deserialized =
@@ -245,7 +245,8 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 Count = count,
                 ContextLength = contextLength,
                 ConditionConjunction = listSearchCriteriaContracts,
-                // TODO is sorting required? is sorting possible?
+                Sort = sortingEnum,
+                SortDirection = sortAsc == false ? SortDirectionEnumContract.Desc : SortDirectionEnumContract.Asc,
             }, GetDefaultProjectType());
             return Json(new {results = resultList});
         }
@@ -270,7 +271,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var start = searchQuery.Start;
             var count = searchQuery.Count;
 
-            return Json(GetCorpusSearchResultSnapshotList(new CorpusSearchRequestContract
+            return Json(GetCorpusSearchResultSnapshotList(new BookPagedCorpusSearchRequestContract
             {
                 Start = start,
                 Count = count,
@@ -301,7 +302,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var start = searchQuery.Start;
             var count = searchQuery.Count;
 
-            return GetCorpusSearchResultSnapshotList(new CorpusSearchRequestContract
+            return GetCorpusSearchResultSnapshotList(new BookPagedCorpusSearchRequestContract
             {
                 Start = start,
                 Count = count,
@@ -329,7 +330,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var contextLength = request.ContextLength;
             var snapshotId = request.SnapshotId;
 
-            return GetSearchCorpusInSnapshotResult(snapshotId, new CorpusSearchRequestContract
+            return GetSearchCorpusInSnapshotResult(snapshotId, new BookPagedCorpusSearchInSnapshotRequestContract
             {
                 Start = start,
                 Count = count,
@@ -359,7 +360,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 return BadRequest(exception.Message);
             }
 
-            return Json(GetCorpusSearchResultSnapshotList(new CorpusSearchRequestContract
+            return Json(GetCorpusSearchResultSnapshotList(new BookPagedCorpusSearchRequestContract
             {
                 Start = start,
                 Count = count,
@@ -383,7 +384,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var start = searchQuery.Start;
             var count = searchQuery.Count;
 
-            return GetCorpusSearchResultSnapshotList(new CorpusSearchRequestContract
+            return GetCorpusSearchResultSnapshotList(new BookPagedCorpusSearchRequestContract
             {
                 Start = start,
                 Count = count,
@@ -415,7 +416,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var contextLength = request.ContextLength;
             var snapshotId = request.SnapshotId;
 
-            return GetSearchCorpusInSnapshotResult(snapshotId, new CorpusSearchRequestContract
+            return GetSearchCorpusInSnapshotResult(snapshotId, new BookPagedCorpusSearchInSnapshotRequestContract
             {
                 Start = start,
                 Count = count,
@@ -487,14 +488,14 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return listSearchCriteriaContracts;
         }
 
-        private ActionResult GetSearchCorpusInSnapshotResult(long snapshotId, CorpusSearchRequestContract request)
+        private ActionResult GetSearchCorpusInSnapshotResult(long snapshotId, BookPagedCorpusSearchInSnapshotRequestContract request)
         {
             var client = GetBookClient();
             var result = client.SearchCorpusInSnapshot(snapshotId, request);
             return Json(new {results = result});
         }
 
-        private CorpusSearchSnapshotsResultContract GetCorpusSearchResultSnapshotList(CorpusSearchRequestContract request)
+        private CorpusSearchSnapshotsResultContract GetCorpusSearchResultSnapshotList(BookPagedCorpusSearchRequestContract request)
         {
             var client = GetBookClient();
             var result = client.SearchCorpusGetSnapshotList(request, GetDefaultProjectType());

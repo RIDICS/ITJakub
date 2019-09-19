@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.FulltextService.Core.Managers;
 using Vokabular.FulltextService.DataContracts.Contracts;
-using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Request;
 
 namespace Vokabular.FulltextService.Controllers
 {
+    [Obsolete("This function has never worked as intended. It was replaced by BookPagedCorpus.")]
     [Route("api/[controller]")]
     public class CorpusController : Controller
     {

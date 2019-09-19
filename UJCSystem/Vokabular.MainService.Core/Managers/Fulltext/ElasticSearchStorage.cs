@@ -133,13 +133,14 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             return result;
         }
 
-        public CorpusSearchResultDataList SearchCorpusByCriteria(int start, int count, int contextLength,
-            List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        public CorpusSearchResultDataList SearchCorpusByCriteria(int start, int count, int contextLength, SortTypeEnumContract? sort,
+            SortDirectionEnumContract? sortDirection, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithSnapshotRestriction(criteria, projects);
 
             var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient();
             var result = fulltextServiceClient.SearchCorpusByCriteria(start, count, contextLength, criteria);
+            // sorting is currently not used
 
             var resultList = result.Select(x => new CorpusSearchResultData
             {
