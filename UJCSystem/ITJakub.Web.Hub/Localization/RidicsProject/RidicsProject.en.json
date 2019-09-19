@@ -14,6 +14,8 @@
     "CreateLiteraryKind": "An unexpected error occurred while creating a new literary kind.",
     "CreateLiteraryGenre": "An unexpected error occurred while creating a new literary genre.",
     "CreateResourcesError": "An unexpected error occurred while loading resources for publication.",
+    "SelectedResources": "Selected {0}/{1} texts, {2}/{3} images, {4}/{5} audio resources.",
+    "CreateSnapshotWithoutResources": "No resource was selected for publication. Are you sure that you want to publish the work?",
 
     "Page": "Page",
     "PageName": "Page: {0}",

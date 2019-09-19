@@ -22,6 +22,7 @@ class SnapshotEditor {
             const table = checkbox.parents(".table");
             const isChecked = checkbox.is(":checked");
             table.find(".include-checkboxes input[type=\"checkbox\"]").prop("checked", isChecked);
+            this.setResourcesCount();
         });
 
         $(".include-checkboxes input[type=\"checkbox\"]").click((event) => {
@@ -73,6 +74,33 @@ class SnapshotEditor {
         for (let table of $(".publish-resource-panel table").toArray()) {
             this.setIncludeAllCheckbox($(table));
         }
+
+        $("#createSnapshot button[type=\"submit\"]").on("click",
+            (event) => {
+                event.preventDefault();
+                if ($("table .include-checkboxes input[type=\"checkbox\"]:checked").length === 0) {
+                    bootbox.confirm({
+                        message: localization.translate("CreateSnapshotWithoutResources", "RidicsProject").value,
+                        callback: (result) => {
+                            if (result) {
+                                $("#createSnapshot").submit();
+                            }
+                        },
+                        buttons: {
+                            confirm: {
+                                className: "btn btn-default",
+                                label: localization.translate("Confirm", "Admin").value
+                            },
+                            cancel: {
+                                className: "btn btn-default",
+                                label: localization.translate("Cancel", "Admin").value
+                            }
+                        }
+                    });
+                } else {
+                    $("#createSnapshot").submit();
+                }
+            });
     }
 
     private setIncludeAllCheckbox(table: JQuery) {
@@ -90,12 +118,50 @@ class SnapshotEditor {
         }
 
         table.find(".include-all-checkbox").prop("checked", isAllChecked);
+        this.setResourcesCount();
+    }
+
+
+    private setResourcesCount(): void {
+        const resourcesCount = $("#selectedResourcesCount");
+        resourcesCount.empty();
+        for (let panel of $(".publish-resource-panel").toArray()) {
+            const resourceType = Number($(panel).data("resource-type"));
+            const resources = $(panel).find("table .include-checkboxes input[type=\"checkbox\"]").length;
+            const selectedResources =
+                $(panel).find("table .include-checkboxes input[type=\"checkbox\"]:checked").length;
+
+            switch (resourceType) {
+            case ResourceType.Audio:
+                const audioResources = String(resources);
+                const audioSelectedResources = String(selectedResources);
+                resourcesCount.append(`<p>${localization.translateFormat("SelectedAudioResources",
+                    [audioSelectedResources, audioResources],
+                    "Admin").value}</p>`);
+                break;
+            case ResourceType.Image:
+                const imageResources = String(resources);
+                const imageSelectedResources = String(selectedResources);
+                resourcesCount.append(`<p>${localization.translateFormat("SelectedImageResources",
+                    [imageSelectedResources, imageResources],
+                    "Admin").value}</p>`);
+                break;
+            case ResourceType.Text:
+                const textResources = String(resources);
+                const textSelectedResources = String(selectedResources);
+                resourcesCount.append(`<p>${localization.translateFormat("SelectedTextResources",
+                    [textSelectedResources, textResources],
+                    "Admin").value}</p>`);
+                break;
+            }
+        }
     }
 
     private loadResourceVersions(selectBox: JQuery) {
         const dataLoaded = selectBox.data("loaded");
         if (!dataLoaded) {
-            selectBox.parent(".dropdown").find(".dropdown-menu.inner").append(`<li><a><i class="fa fa-refresh fa-spin"></i></a></li>`);
+            selectBox.parent(".dropdown").find(".dropdown-menu.inner")
+                .append(`<li><a><i class="fa fa-refresh fa-spin"></i></a></li>`);
             const resourceId = selectBox.parents(".resource-row").data("id");
             this.client.getVersionList(resourceId).done((data) => {
                 const selectedValue = Number(selectBox.val());
@@ -125,7 +191,8 @@ class SnapshotEditor {
         defaultBookType.attr("disabled", "disabled");
         defaultBookType.trigger("change");
 
-        const otherBookTypes = $("#publishToModules").find(`.book-types-value:not([value="${bookType}"]) + .book-types`);
+        const otherBookTypes =
+            $("#publishToModules").find(`.book-types-value:not([value="${bookType}"]) + .book-types`);
         otherBookTypes.removeAttr("disabled");
     }
 
@@ -140,39 +207,31 @@ class SnapshotEditor {
 
         switch (resourceType) {
         case ResourceType.Audio:
-            {
-                this.client.getAudio(resourceVersionId).done((response) => {
-                    modalBody.html(response);
-                }).fail((error) => {
-                    const alert = new AlertComponentBuilder(AlertType.Error)
-                        .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
-                    modalBody.html(alert);
-                });
-            }
+            this.client.getAudio(resourceVersionId).done((response) => {
+                modalBody.html(response);
+            }).fail((error) => {
+                const alert = new AlertComponentBuilder(AlertType.Error)
+                    .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                modalBody.html(alert);
+            });
             break;
         case ResourceType.Image:
-            {
-                const imageUrl = this.client.getImageUrl(resourceVersionId);
-                this.imageViewer.addImageContent(modalBody, imageUrl);
-            }
+            const imageUrl = this.client.getImageUrl(resourceVersionId);
+            this.imageViewer.addImageContent(modalBody, imageUrl);
             break;
         case ResourceType.Text:
-            {
-                this.client.getText(resourceVersionId).done((response) => {
-                    modalBody.html(response.text);
-                }).fail((error) => {
-                    const alert = new AlertComponentBuilder(AlertType.Error)
-                        .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
-                    modalBody.html(alert);
-                });
-            }
+            this.client.getText(resourceVersionId).done((response) => {
+                modalBody.html(response.text);
+            }).fail((error) => {
+                const alert = new AlertComponentBuilder(AlertType.Error)
+                    .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                modalBody.html(alert);
+            });
             break;
         default:
-        {
             const alert = new AlertComponentBuilder(AlertType.Error)
                 .addContent(localization.translate("UnsupportedResourceType", "Admin").value).buildElement();
             modalBody.html(alert);
-        }
         }
         resourcePreviewModal.modal("show");
     }

@@ -31,6 +31,7 @@
     "FirstVersionComment": "translate[Komentář k první verzi]",
     "ErrorDuringSave": "translate[Chyba při ukládání]",
     "Cancel": "translate[Zrušit]",
+    "Confirm": "Confirm",
     "Done": "translate[Hotovo]",
     "OriginalTitle": "translate[Původní název]",
     "NewTitle": "translate[Nový název]",
@@ -44,6 +45,9 @@
     "ResourceNewVersion": "translate[Nová verze zdroje ]",
     "NewVersionComment": "translate[Komentář k nové verzi]",
     "ProjectsList": "translate[Projekty - Seznam]",
+    "PublicationInfo": "Information about publication",
+    "EditionNotePublish": "The edition note will be published with work",
+    "NoEditionNote": "The edition note to this work is not created",
 
     "Edit": "Edit",
     "Close": "Close",
@@ -57,7 +61,7 @@
 
     "Cooperation": "translate[Spolupráce]",
     "DiscussionPosts": "translate[Příspěvky v diskuzi]",
-    "Snapshots": "translate[Snapshoty]",
+    "Snapshots": "Publications",
     "ResourcesHistory": "translate[Změny zdrojů]",
 
     "CommonInformation": "translate[Obecné informace]",
@@ -146,17 +150,21 @@
     "Transliteration": "translate[Transliterace]",
     "Generate": "translate[Generovat]",
 
-    "PublishedSnapshots": "translate[Zveřejněné snapshoty]",
+    "PublishedSnapshots": "Published publications",
     "Date": "translate[Datum]",
     "TextSources": "translate[Textové zdroje]",
     "ImageSources": "translate[Obrazové zdroje]",
     "AudioSources": "translate[Audio zdroje]",
     "VideoSources": "translate[Video zdroje]",
     "Author": "translate[Autor]",
-    "DuplicateSettings": "translate[Duplikovat nastavení]",
-    "NoSnapshotCreated": "translate[Žádný snapshot zatím nebyl vytvořen]",
     "CreateNewPublication": "translate[Vytvořit novou publikaci]",
-
+    "CreatePublication": "Create publication",
+    "DuplicateSettings": "translate[Duplikovat nastavení]",
+    "NoSnapshotCreated": "No publication was created yet",
+    "SelectedResources": "Selected resources",
+    "SelectedTextResources": "{0}/{1} texts",
+    "SelectedImageResources": "{0}/{1} images",
+    "SelectedAudioResources": "{0}/{1} audio resource",
     "Visibility": "translate[Viditelnost]",
     "AddGroupUser": "translate[Přidat skupinu/uživatele]",
 

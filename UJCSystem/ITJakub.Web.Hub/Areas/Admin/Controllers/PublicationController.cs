@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
@@ -9,6 +10,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using ITJakub.Web.Hub.Options;
 using Scalesoft.Localization.AspNetCore;
+using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
@@ -131,6 +133,24 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var audio = client.GetResourceList(projectId, ResourceTypeEnumContract.Audio);
             var images = client.GetResourceList(projectId, ResourceTypeEnumContract.Image);
             var text = client.GetResourceList(projectId, ResourceTypeEnumContract.Text);
+            EditionNoteContract editionNote;
+            try
+            {
+                editionNote = client.GetLatestEditionNote(projectId, TextFormatEnumContract.Html);
+            }
+            catch (HttpErrorCodeException e)
+            {
+                if (e.StatusCode == HttpStatusCode.NotFound)
+                {
+                    editionNote = null;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+
             var availableBookTypes = new List<BookTypeEnumContract>
             {
                 BookTypeEnumContract.Edition,
@@ -164,7 +184,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     }
                 },
                 AvailableBookTypes = availableBookTypes,
-                PublishBookTypes = availableBookTypes.Select(x => new SelectableBookType { BookType = x }).ToList()
+                PublishBookTypes = availableBookTypes.Select(x => new SelectableBookType { BookType = x }).ToList(),
+                EditionNoteText = editionNote?.Text
              };
         }
     }

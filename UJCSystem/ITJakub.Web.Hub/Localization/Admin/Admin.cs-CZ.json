@@ -31,6 +31,7 @@
     "FirstVersionComment": "Komentář k první verzi",
     "ErrorDuringSave": "Chyba při ukládání",
     "Cancel": "Zrušit",
+    "Confirm": "Potvrdit",
     "Done": "Hotovo",
     "OriginalTitle": "Původní název",
     "NewTitle": "Nový název",
@@ -44,6 +45,9 @@
     "ResourceNewVersion": "Nová verze zdroje ",
     "NewVersionComment": "Komentář k nové verzi",
     "ProjectsList": "Projekty - Seznam",
+    "PublicationInfo": "Informace o publikaci",
+    "EditionNotePublish": "Ediční poznámka bude publikována s dílem",
+    "NoEditionNote": "Ediční poznámka k dílu není vytvořena",
 
     "Edit": "Upravit",
     "Close": "Uzavřít",
@@ -57,7 +61,7 @@
 
     "Cooperation": "Spolupráce",
     "DiscussionPosts": "Příspěvky v diskuzi",
-    "Snapshots": "Snapshoty",
+    "Snapshots": "Publikace",
     "ResourcesHistory": "Změny zdrojů",
 
     "CommonInformation": "Obecné informace",
@@ -146,7 +150,7 @@
     "Transliteration": "Transliterace",
     "Generate": "Generovat",
 
-    "PublishedSnapshots": "Zveřejněné snapshoty",
+    "PublishedSnapshots": "Zveřejněné publikace",
     "Date": "Datum",
     "TextSources": "Textové zdroje",
     "ImageSources": "Obrazové zdroje",
@@ -155,7 +159,12 @@
     "Author": "Autor",
     "DuplicateSettings": "Duplikovat nastavení",
     "CreateNewPublication": "Vytvořit novou publikaci",
-    "NoSnapshotCreated": "Žádný snapshot zatím nebyl vytvořen",
+    "CreatePublication": "Vytvořit publikaci",
+    "NoSnapshotCreated": "Žádná publikace zatím nebyla vytvořena",
+    "SelectedResources": "Vybrané zdroje",
+    "SelectedTextResources": "{0}/{1} textů",
+    "SelectedImageResources": "{0}/{1} obrázků",
+    "SelectedAudioResources": "{0}/{1} audio zdrojů",
     "Visibility": "Viditelnost",
     "AddGroupUser": "Přidat skupinu/uživatele",
 
