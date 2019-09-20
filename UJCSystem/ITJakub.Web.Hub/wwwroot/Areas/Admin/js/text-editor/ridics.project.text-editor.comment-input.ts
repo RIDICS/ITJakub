@@ -91,7 +91,7 @@
             const mainCommentContentEl = commentBody.parents(".media-body");
             const mainCommentLeftHeader = mainCommentContentEl.siblings(".main-comment");
             const parentCommentId = mainCommentLeftHeader.data("parent-comment-id");
-            const textReferenceId = mainCommentLeftHeader.attr("id").replace("-comment", "");
+            const textReferenceId = mainCommentLeftHeader.data("text-reference-id");
             const textId = mainCommentLeftHeader.parents(".page-row").data("page");
             const commentTextEl = commentBody.children(".comment-body");
             const commentText = commentTextEl.text();
