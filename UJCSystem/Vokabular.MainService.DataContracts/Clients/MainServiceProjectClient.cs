@@ -377,6 +377,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public GetTextCommentContract GetComment(long commentId)
+        {
+            try
+            {
+                var result = m_client.Get<GetTextCommentContract>($"project/text/comment/{commentId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public long CreateComment(long textId, CreateTextCommentContract request)
         {
             try

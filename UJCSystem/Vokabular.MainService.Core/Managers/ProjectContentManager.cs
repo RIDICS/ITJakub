@@ -111,7 +111,16 @@ namespace Vokabular.MainService.Core.Managers
         public List<GetTextCommentContract> GetCommentsForText(long textId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetCommentsForText(textId));
-            var result = m_userDetailManager.AddUserDetails(m_mapper.Map<List<GetTextCommentContract>>(dbResult));
+            var contractList = m_mapper.Map<List<GetTextCommentContract>>(dbResult);
+            var result = m_userDetailManager.AddUserDetails(contractList);
+            return result;
+        }
+
+        public GetTextCommentContract GetComment(long commentId)
+        {
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetComment(commentId));
+            var contract = m_mapper.Map<GetTextCommentContract>(dbResult);
+            var result = m_userDetailManager.AddUserDetails(contract);
             return result;
         }
 

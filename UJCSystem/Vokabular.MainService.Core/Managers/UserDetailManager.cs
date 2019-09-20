@@ -138,11 +138,17 @@ namespace Vokabular.MainService.Core.Managers
         {
             foreach (var textComment in list)
             {
-                textComment.User = GetUserContractForUser(textComment.User);
-                textComment.TextComments = AddUserDetails(textComment.TextComments);
+                AddUserDetails(textComment);
             }
 
             return list;
+        }
+
+        public GetTextCommentContract AddUserDetails(GetTextCommentContract textComment)
+        {
+            textComment.User = GetUserContractForUser(textComment.User);
+            textComment.TextComments = AddUserDetails(textComment.TextComments);
+            return textComment;
         }
 
         private AuthUserContract GetDetailUserFromAuthService(int userExternalId)
