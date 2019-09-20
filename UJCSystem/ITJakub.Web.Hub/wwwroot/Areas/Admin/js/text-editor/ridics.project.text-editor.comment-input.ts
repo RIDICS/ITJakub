@@ -16,20 +16,19 @@
     }
 
     /**
-* Detects buttons click and sends data to server according to ICommentStructureReply
-* @param {Number} textId  - Text Id of page, where comment occured
-* @param {string} textReferenceId  - Comment thread unique id to connect composition area and comment area
-* @param {Number} id - Unique comment id 
-* @param {Number} parentCommentId - Unique id of parent comment
-* @param {JQuery} dialogEl - Dialog element to display result message about send
-* @param {string} text - Comment body
-*/
+    * Detects buttons click and sends data to server according to ICommentStructureReply
+    * @param {Number} textId  - Text Id of page, where comment occured
+    * @param {string} textReferenceId  - Comment thread unique id to connect composition area and comment area
+    * @param {Number} id - Unique comment id 
+    * @param {Number} parentCommentId - Unique id of parent comment
+    * @param {JQuery} dialogEl - Dialog element to display result message about send
+    * @param {string} text - Comment body
+    */
     processCommentSendClick(
         textId: number,
         textReferenceId: string,
         id: number,
         parentCommentId: number, commentText: string) {
-        const serverAddress = this.util.getServerAddress();
         if (!commentText) {
             bootbox.alert({
                 title: localization.translate("Warning", "RidicsProject").value,
@@ -47,13 +46,8 @@
                 parentCommentId: parentCommentId,
                 textReferenceId: textReferenceId
             };
-            const sendAjax = $.post(`${serverAddress}Admin/ContentEditor/SaveComment`,
-                {
-                    comment: comment,
-                    textId: textId
-                } as JQuery.PlainObject
-            );
-            sendAjax.done(() => {
+
+            this.util.createComment(textId, comment).done(() => {
                 bootbox.alert({
                     title: localization.translate("Success", "RidicsProject").value,
                     message: localization.translate("CommentCreateSuccess", "RidicsProject").value,
@@ -68,8 +62,7 @@
                     const pageEl = $(`[data-page="${textId}"]`);
                     this.commentArea.collapseIfCommentAreaContentOverflows(pageEl.children(".comment-area"));//collapse section fully when updating section height initially
                 });
-            });
-            sendAjax.fail(() => {
+            }).fail(() => {
                 bootbox.alert({
                     title: localization.translate("Fail", "RidicsProject").value,
                     message: localization.translate("Failed to create comment.", "RidicsProject").value,
@@ -172,7 +165,7 @@
                         this.processCommentSendClick(textId, textReferenceId, id, null, commentText);
                         codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
                             { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
-                    }).fail((error) => {
+                    }).fail(() => {
                         codeMirror.setValue(originalText);
                         bootbox.alert({
                             title: localization.translate("Fail", "RidicsProject").value,
@@ -219,7 +212,6 @@
         parentCommentId: number,
         textAreaEl: JQuery,
         jEl: JQuery) {
-        var serverAddress = this.util.getServerAddress();
         var commentTextOriginal = textAreaEl.val() as string;
         textAreaEl.on("focusout",
             (event: JQuery.Event) => {
@@ -236,20 +228,10 @@
                         textReferenceId: textReferenceId
                     };
                     if (commentId === 0) {
-                        const sendAjax = $.post(`${serverAddress}Admin/ContentEditor/SaveComment`,
-                            {
-                                comment: comment,
-                                textId: textId
-                            } as JQuery.PlainObject
-                        );
+                        const sendAjax = this.util.createComment(textId, comment);
                         this.onCommentSendRequest(sendAjax, textAreaEl, textId);
                     } else {
-                        const sendAjax = $.post(`${serverAddress}Admin/ContentEditor/UpdateComment`,
-                            {
-                                comment: comment,
-                                commentId: commentId
-                            } as JQuery.PlainObject
-                        );
+                        const sendAjax = this.util.editComment(commentId, comment);
                         this.onCommentSendRequest(sendAjax, textAreaEl, textId);
                     }
                 }
