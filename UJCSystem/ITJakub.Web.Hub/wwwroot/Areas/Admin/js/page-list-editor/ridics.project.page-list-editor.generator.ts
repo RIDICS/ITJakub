@@ -186,16 +186,16 @@ class RectoVersoPageListGenerator extends PageListGeneratorBase {
     }
 
     protected parseNumber(value: string): number {
-        let numericValue = Number(value.substr(0, value.length - 2));
+        let numericValue = Number(value.substr(0, value.length - 1)) * 2;
         if (value[value.length - 1] === "r") {
-            numericValue = - 1;
+            numericValue -= 1;
         }
         return numericValue;
     }
 }
 
 
-class RectoVerso2PaginationGenerator extends PageListGeneratorBase {
+class RectoVersoExtendedPageListGenerator extends PageListGeneratorBase {
 
     constructor() {
         super("^(I')(([1-9]){1}|([0-9]){2,})(r|v)$");
@@ -209,15 +209,15 @@ class RectoVerso2PaginationGenerator extends PageListGeneratorBase {
     }
 
     protected parseNumber(value: string): number {
-        let numericValue = Number(value.substr(2, value.length - 2));
+        let numericValue = Number(value.substr(2, value.length - 1)) * 2;
         if (value[value.length - 1] === "r") {
-            numericValue = - 1;
+            numericValue -= 1;
         }
         return numericValue;
     }
 }
 
-class ArabicPaginationGenerator extends PageListGeneratorBase {
+class ArabicPageListGenerator extends PageListGeneratorBase {
 
     constructor() {
         super("^([1-9]{1}|[0-9]{2,})$");
