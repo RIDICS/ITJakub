@@ -84,7 +84,7 @@
             const mainCommentContentEl = commentBody.parents(".media-body");
             const mainCommentLeftHeader = mainCommentContentEl.siblings(".main-comment");
             const parentCommentId = mainCommentLeftHeader.data("parent-comment-id");
-            const textReferenceId = mainCommentLeftHeader.attr("id").replace("-comment", "");
+            const textReferenceId = mainCommentLeftHeader.data("text-reference-id");
             const textId = mainCommentLeftHeader.parents(".page-row").data("page");
             const commentTextEl = commentBody.children(".comment-body");
             const commentText = commentTextEl.text();
@@ -96,6 +96,25 @@
             const commentId = parseInt(commentBody.attr("data-comment-id"));
             this.processCommentReply(textId, textReferenceId, commentId, parentCommentId, jTextareaEl, commentActionsRowEl);
         });
+
+        $("#project-resource-preview").on("click", ".edit-root-comment", (event) => {
+            const target = $(event.target as HTMLElement);
+            const commentActionsRowEl = target.parents(".comment-actions-row");
+            const mainCommentContentEl = commentActionsRowEl.parents(".media-body");
+            const mainCommentLeftHeader = mainCommentContentEl.siblings(".main-comment");
+            const parentCommentId = mainCommentLeftHeader.data("parent-comment-id");
+            const textReferenceId = mainCommentLeftHeader.data("text-reference-id");
+            const textId = mainCommentLeftHeader.parents(".page-row").data("page");
+            const commentTextEl = mainCommentContentEl.children(".comment-body");
+            const commentText = commentTextEl.text();
+            commentActionsRowEl.hide();
+            commentTextEl.hide();
+            mainCommentContentEl.append(`<textarea cols="40" rows="3" class="textarea-no-resize edit-comment-textarea">${commentText}</textarea>`);
+            const jTextareaEl = $(".edit-comment-textarea");
+            jTextareaEl.focus();
+            const commentId = parseInt(mainCommentContentEl.attr("data-comment-id"));
+            this.processCommentReply(textId, textReferenceId, commentId, parentCommentId, jTextareaEl, commentActionsRowEl);
+        });
     }
 
     private processRespondToCommentClick() {
@@ -103,12 +122,10 @@
             "button.respond-to-comment",
             (event) => { // Process click on "Respond" button
                 const target = $(event.target as HTMLElement);
-                const pageRow =
-                    target.parents(".comment-area").parent(".page-row");
+                const pageRow = target.parents(".comment-area").parent(".page-row");
                 var textId = $(pageRow).data("page") as number;
-                const textReferenceId = target.parent().siblings(".main-comment").data("text-reference-id");
-                const parentCommentId =
-                    target.parent().siblings(".main-comment").data("parent-comment-id") as number;
+                const textReferenceId = target.parents(".media-body").siblings(".main-comment").data("text-reference-id");
+                const parentCommentId = target.parents(".media-body").siblings(".main-comment").data("parent-comment-id") as number;
                 const id = 0; //creating comment
                 if (textReferenceId !== null && typeof textReferenceId !== "undefined") {
                     this.addCommentFromCommentArea(textReferenceId, textId, id, parentCommentId, target);
@@ -198,8 +215,8 @@
         parentCommentId: number,
         buttonEl: JQuery) {
         const elm = `<textarea class="respond-to-comment-textarea textarea-no-resize"></textarea>`;
-        buttonEl.after(elm);
-        buttonEl.hide();
+        buttonEl.parents(".comment-actions-row").hide();
+        buttonEl.parents(".comment-actions-row").after(elm);
         const textareaEl = $(".respond-to-comment-textarea");
         textareaEl.focus();
         this.processCommentReply(textId, textReferenceId, id, parentCommentId, textareaEl, buttonEl);
@@ -218,7 +235,7 @@
                 event.stopImmediatePropagation();
                 var commentText = textAreaEl.val() as string;
                 if (commentText === commentTextOriginal) {
-                    jEl.show();
+                    jEl.parents(".comment-actions-row").show();
                     textAreaEl.remove();
                 } else {
                     const comment: ICommentStructureReply = {
@@ -232,17 +249,17 @@
                         this.onCommentSendRequest(sendAjax, textAreaEl, textId);
                     } else {
                         const sendAjax = this.util.editComment(commentId, comment);
-                        this.onCommentSendRequest(sendAjax, textAreaEl, textId);
+                        this.onCommentSendRequest(sendAjax, textAreaEl, textId, true);
                     }
                 }
             });
     }
 
-    private onCommentSendRequest(sendAjax:JQueryXHR, textAreaEl:JQuery, textId:number) {
+    private onCommentSendRequest(sendAjax:JQueryXHR, textAreaEl:JQuery, textId:number, isEditRequest = false) {
         sendAjax.done(() => {
             bootbox.alert({
                 title: localization.translate("Success", "RidicsProject").value,
-                message: localization.translate("CommentCreateSuccess", "RidicsProject").value,
+                message: localization.translate(isEditRequest ? "CommentUpdateSuccess" : "CommentCreateSuccess", "RidicsProject").value,
                 buttons: {
                     ok: {
                         className: "btn-default"
@@ -256,7 +273,7 @@
         sendAjax.fail(() => {
             bootbox.alert({
                 title: localization.translate("Fail", "RidicsProject").value,
-                message: localization.translate("CommentCreateFail", "RidicsProject").value,
+                message: localization.translate(isEditRequest ? "CommentUpdateFail" : "CommentCreateFail", "RidicsProject").value,
                 buttons: {
                     ok: {
                         className: "btn-default"

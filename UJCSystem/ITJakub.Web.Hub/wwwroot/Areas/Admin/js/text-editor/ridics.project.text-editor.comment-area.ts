@@ -80,7 +80,15 @@
                 `<div class="media-left main-comment" data-text-reference-id="${textReferenceId}" data-parent-comment-id="${id}">`;
             var commentName = `<h5 class="media-heading">${name} ${surname}</h5>`;
             var mainCommentBody =
-                `<p class="comment-body">${body}</p><button class="respond-to-comment">${localization.translate("Respond", "RidicsProject").value}</button>`;
+                `<p class="comment-body">${body}</p>
+                <div class="comment-actions-row">
+                    <div class="btn-group">
+                        <button class="respond-to-comment">${localization.translate("Respond", "RidicsProject").value}</button>
+                        <button type="button" class="edit-root-comment">${localization.translate("Edit", "RidicsProject").value}</button>
+                        <button type="button" class="delete-root-comment">${localization.translate("Delete", "RidicsProject").value}</button>
+                    </div>
+                </div>`;
+
             var nestedCommentBody = `<p class="comment-body">${body}</p>`;
             if (commentTextId === textId) {
                 if (needToCloseTag) {
