@@ -3,7 +3,6 @@
     private readonly gui: EditorsGui;
     private readonly util: EditorsApiClient;
     private readonly errorHandler: ErrorHandler;
-    private readonly listGenerator: PageListGenerator;
     private readonly fsPageName = "FS";
     private readonly fcPageName = "FC";
 
@@ -11,7 +10,6 @@
         this.gui = new EditorsGui();
         this.errorHandler = new ErrorHandler();
         this.util = new EditorsApiClient();
-        this.listGenerator = new PageListGenerator();
 
         jQuery.extend(jQuery.validator.messages,
             {
@@ -23,7 +21,7 @@
             (value, element, regex) => {
                 if (value === "")
                     return false;
-                return this.listGenerator.checkInputValue(value, this.getSelectedFormat());
+                return PageListGeneratorFactory.createPageListGenerator(this.getSelectedFormat()).checkInputValue(value);
             },
             localization.translate("EnterValidNumbers", "RidicsProject").value
         );
@@ -148,14 +146,14 @@
 
         const doubleGenerationWarning = $("#doubleGenerationWarning");
         const swapNumbersError = $("#swapNumbersError");
+        const listGenerator = PageListGeneratorFactory.createPageListGenerator(this.getSelectedFormat());
 
-        if (!this.listGenerator.checkInputValue(from, this.getSelectedFormat()) ||
-            !this.listGenerator.checkInputValue(to, this.getSelectedFormat())) {
+        if (!listGenerator.checkInputValue(from) || !listGenerator.checkInputValue(to)) {
             doubleGenerationWarning.addClass("hide");
             swapNumbersError.addClass("hide");
         }
         else {
-            if (this.listGenerator.checkValidPagesLength(from, to, this.getSelectedFormat())) {
+            if (listGenerator.checkValidPagesLength(from, to)) {
                 swapNumbersError.addClass("hide");
                 this.setDoubleGenerationWarning();
             } else {
@@ -170,8 +168,9 @@
         if (this.isSetDoublePageGeneration()) {
             const to = String($("#project-pages-generate-from").val());
             const from = String($("#project-pages-generate-to").val());
+            const listGenerator = PageListGeneratorFactory.createPageListGenerator(this.getSelectedFormat());
 
-            if (this.listGenerator.checkValidDoublePageRange(to, from, this.getSelectedFormat())) {
+            if (listGenerator.checkValidDoublePageRange(to, from)) {
                 doubleGenerationWarning.addClass("hide");
             } else {
                 doubleGenerationWarning.removeClass("hide");
@@ -371,16 +370,15 @@
     private startGeneration() {
         const fromFieldValue = ($("#project-pages-generate-from").val() as string).replace(" ", "");;
         const toFieldValue = ($("#project-pages-generate-to").val() as string).replace(" ", "");;
+        const listGenerator = PageListGeneratorFactory.createPageListGenerator(this.getSelectedFormat());
 
-        if (!this.listGenerator.checkInputValue(fromFieldValue, this.getSelectedFormat()) ||
-            !this.listGenerator.checkInputValue(toFieldValue, this.getSelectedFormat())) {
+        if (!listGenerator.checkInputValue(fromFieldValue) || !listGenerator.checkInputValue(toFieldValue)) {
             this.gui.showInfoDialog(localization.translate("Warning").value,
                 localization.translate("EnterValidNumbers", "RidicsProject").value);
-        } else if (this.listGenerator.checkValidPagesLength(String($("#project-pages-generate-from").val()),
-            String($("#project-pages-generate-to").val()),
-            this.getSelectedFormat()))
+        } else if (listGenerator.checkValidPagesLength(String($("#project-pages-generate-from").val()),
+            String($("#project-pages-generate-to").val())))
         {
-            const pageList = this.listGenerator.generatePageList(fromFieldValue, toFieldValue, this.getSelectedFormat(), this.isSetDoublePageGeneration());
+            const pageList = listGenerator.generatePageList(fromFieldValue, toFieldValue, this.isSetDoublePageGeneration());
             $("#project-pages-dialog").modal("hide");
             this.populateList(pageList);
             this.enableCheckboxes();
