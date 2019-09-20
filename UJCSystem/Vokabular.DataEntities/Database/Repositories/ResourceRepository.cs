@@ -349,7 +349,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public virtual IList<TextComment> GetCommentsForText(long textId)
+        private IList<TextComment> GetAllCommentsForText(long textId)
         {
             TextComment subcommentAlias = null;
 
@@ -361,22 +361,22 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
                 .Fetch(SelectMode.Fetch, x => x.TextComments)
                 .TransformUsing(Transformers.DistinctRootEntity)
-                .List()
+                .List();
+        }
+
+        public virtual IList<TextComment> GetCommentsForText(long textId)
+        {
+            return GetAllCommentsForText(textId)
                 .Where(x => x.ParentComment == null)
                 .ToList();
         }
-
-        public TextComment GetComment(long commentId)
+        
+        public virtual TextComment GetComment(long commentId)
         {
-            TextComment subcommentAlias = null;
+            var textComment = FindById<TextComment>(commentId);
 
-            return GetSession().QueryOver<TextComment>()
-                .JoinAlias(x => x.TextComments, () => subcommentAlias, JoinType.LeftOuterJoin)
-                .OrderBy(() => subcommentAlias.CreateTime).Asc
-                .Where(x => x.Id == commentId)
-                .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
-                .Fetch(SelectMode.Fetch, x => x.TextComments)
-                .SingleOrDefault();
+            return GetCommentsForText(textComment.ResourceText.Id)
+                .SingleOrDefault(x => x.Id == commentId);
         }
 
         public virtual IList<NamedResourceGroup> GetNamedResourceGroupList(long projectId, ResourceTypeEnum? filterResourceType)

@@ -137,11 +137,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
             };
         }
         
-        public void DeleteRootComment(long commentId, long textId)
+        public void DeleteRootComment(long commentId)
         {
             var client = m_communicationProvider.GetMainServiceProjectClient();
-            var text = client.GetTextResource(textId, TextFormatEnumContract.Raw);
             var comment = client.GetComment(commentId);
+            var text = client.GetTextResource(comment.TextResourceId, TextFormatEnumContract.Raw);
 
             var newText = text.Text;
             var allCommentMarks = m_markdownCommentAnalyzer.FindAllComments(text.Text);
@@ -165,9 +165,9 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
 
                 try
                 {
-                    client.CreateTextResourceVersion(textId, new CreateTextRequestContract
+                    client.CreateTextResourceVersion(text.Id, new CreateTextRequestContract
                     {
-                        Id = textId,
+                        Id = text.Id,
                         ResourceVersionId = text.VersionId,
                         Text = newText,
                     });
@@ -177,7 +177,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
                     // do nothing if error occured during updating the text (empty reference is not such a big problem)
                     if (m_logger.IsEnabled(LogLevel.Warning))
                     {
-                        m_logger.LogWarning($"Comment with ID={commentId} deleted but error occured while deleting reference from text with ID={textId}");
+                        m_logger.LogWarning($"Comment with ID={commentId} deleted but error occured while deleting reference from text with ID={text.Id}");
                     }
                 }
             }
