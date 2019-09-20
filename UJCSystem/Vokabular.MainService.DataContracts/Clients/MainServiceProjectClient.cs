@@ -564,7 +564,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.GetString($"project/page/{pageId}/text?format={format}");
+                var result = m_client.GetString($"project/page/{pageId}/text-content?format={format}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -580,7 +580,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.GetStream($"project/page/{pageId}/image");
+                var result = m_client.GetStream($"project/page/{pageId}/image-content");
                 return result;
             }
             catch (HttpRequestException e)
