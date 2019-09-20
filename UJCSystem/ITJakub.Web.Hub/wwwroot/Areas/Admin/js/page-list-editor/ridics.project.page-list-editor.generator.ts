@@ -9,13 +9,13 @@ class PageListGeneratorFactory {
     static createPageListGenerator(format: number): PageListGeneratorBase {
         switch (format) {
             case PageListFormat["1r"]:
-                return new RectoVersoPaginationGenerator();
+                return new RectoVersoPageListGenerator();
             case PageListFormat["I'1r"]:
-                return new RectoVerso2PaginationGenerator();
+                return new RectoVersoExtendedPageListGenerator();
             case PageListFormat.Roman:
-                return new RomanPaginationGenerator();
+                return new RomanPageListGenerator();
             case PageListFormat.Arabic:
-                return new ArabicPaginationGenerator();
+                return new ArabicPageListGenerator();
             default:
                 return null;
         }
@@ -94,7 +94,7 @@ abstract class PageListGeneratorBase {
     }
 }
 
-class RomanPaginationGenerator extends PageListGeneratorBase {
+class RomanPageListGenerator extends PageListGeneratorBase {
     constructor() {
         super("^[MDCLXVI)(]+$");
     }
@@ -173,7 +173,7 @@ class RomanPaginationGenerator extends PageListGeneratorBase {
 }
 
 
-class RectoVersoPaginationGenerator extends PageListGeneratorBase {
+class RectoVersoPageListGenerator extends PageListGeneratorBase {
 
     constructor() {
         super("^(([1-9]){1}|([0-9]){2,})(r|v)$");
