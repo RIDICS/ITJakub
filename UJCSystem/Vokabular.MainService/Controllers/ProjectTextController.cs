@@ -60,6 +60,13 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        [HttpGet("text/comment/{commentId}")]
+        public ActionResult<GetTextCommentContract> GetComment(long commentId)
+        {
+            var result = m_projectContentManager.GetComment(commentId);
+            return Ok(result);
+        }
+
         [HttpPost("text/{textId}/comment")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
         public IActionResult CreateComment(long textId, [FromBody] CreateTextCommentContract request)

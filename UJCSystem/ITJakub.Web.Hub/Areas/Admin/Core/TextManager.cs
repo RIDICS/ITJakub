@@ -1,8 +1,11 @@
 ﻿using System.Linq;
+using System.Net.Http;
 using System.Text;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
 using ITJakub.Web.Hub.Core.Communication;
+using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.Shared.DataContracts.Types;
 using Vokabular.TextConverter.Markdown.Extensions.CommentMark;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Core
@@ -11,11 +14,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
     {
         private readonly MarkdownCommentAnalyzer m_markdownCommentAnalyzer;
         private readonly CommunicationProvider m_communicationProvider;
+        private readonly ILogger m_logger;
 
-        public TextManager(MarkdownCommentAnalyzer markdownCommentAnalyzer, CommunicationProvider communicationProvider)
+        public TextManager(MarkdownCommentAnalyzer markdownCommentAnalyzer, CommunicationProvider communicationProvider, ILogger logger)
         {
             m_markdownCommentAnalyzer = markdownCommentAnalyzer;
             m_communicationProvider = communicationProvider;
+            m_logger = logger;
         }
 
         private bool HasOnlyValidCommentSyntax(string text)
@@ -130,6 +135,52 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
                 ResourceVersionId = resourceVersionId,
                 NewText = request.Text,
             };
+        }
+        
+        public void DeleteRootComment(long commentId, long textId)
+        {
+            var client = m_communicationProvider.GetMainServiceProjectClient();
+            var text = client.GetTextResource(textId, TextFormatEnumContract.Raw);
+            var comment = client.GetComment(commentId);
+
+            var newText = text.Text;
+            var allCommentMarks = m_markdownCommentAnalyzer.FindAllComments(text.Text);
+            var commentMark = allCommentMarks.FirstOrDefault(x => x.Identifier == comment.TextReferenceId);
+
+            // Delete comment
+            client.DeleteComment(commentId);
+
+            // Try update text
+            if (commentMark != null)
+            {
+                if (!string.IsNullOrEmpty(commentMark.StartTag))
+                {
+                    newText = newText.Replace(commentMark.StartTag, string.Empty);
+                }
+
+                if (!string.IsNullOrEmpty(commentMark.EndTag))
+                {
+                    newText = newText.Replace(commentMark.EndTag, string.Empty);
+                }
+
+                try
+                {
+                    client.CreateTextResourceVersion(textId, new CreateTextRequestContract
+                    {
+                        Id = textId,
+                        ResourceVersionId = text.VersionId,
+                        Text = newText,
+                    });
+                }
+                catch (HttpRequestException)
+                {
+                    // do nothing if error occured during updating the text (empty reference is not such a big problem)
+                    if (m_logger.IsEnabled(LogLevel.Warning))
+                    {
+                        m_logger.LogWarning($"Comment with ID={commentId} deleted but error occured while deleting reference from text with ID={textId}");
+                    }
+                }
+            }
         }
     }
 }

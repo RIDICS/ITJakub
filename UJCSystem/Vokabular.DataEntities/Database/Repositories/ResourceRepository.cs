@@ -366,6 +366,19 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .ToList();
         }
 
+        public TextComment GetComment(long commentId)
+        {
+            TextComment subcommentAlias = null;
+
+            return GetSession().QueryOver<TextComment>()
+                .JoinAlias(x => x.TextComments, () => subcommentAlias, JoinType.LeftOuterJoin)
+                .OrderBy(() => subcommentAlias.CreateTime).Asc
+                .Where(x => x.Id == commentId)
+                .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
+                .Fetch(SelectMode.Fetch, x => x.TextComments)
+                .SingleOrDefault();
+        }
+
         public virtual IList<NamedResourceGroup> GetNamedResourceGroupList(long projectId, ResourceTypeEnum? filterResourceType)
         {
             Resource resourceAlias = null;
