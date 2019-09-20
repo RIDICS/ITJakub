@@ -113,11 +113,10 @@
                 const pageRow =
                     target.parents(".comment-area").parent(".page-row");
                 var textId = $(pageRow).data("page") as number;
-                const textReferenceIdWithText = target.parent().siblings(".main-comment").attr("id");
+                const textReferenceId = target.parent().siblings(".main-comment").data("text-reference-id");
                 const parentCommentId =
                     target.parent().siblings(".main-comment").data("parent-comment-id") as number;
                 const id = 0; //creating comment
-                var textReferenceId = textReferenceIdWithText.replace("-comment", "");
                 if (textReferenceId !== null && typeof textReferenceId !== "undefined") {
                     this.addCommentFromCommentArea(textReferenceId, textId, id, parentCommentId, target);
                 } else {
