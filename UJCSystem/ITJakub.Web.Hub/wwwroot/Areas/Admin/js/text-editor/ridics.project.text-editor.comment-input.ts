@@ -150,9 +150,12 @@
                     const uniqueNumberLength = textReferenceId.length;
                     markSize = uniqueNumberLength + 2; // + $ + %
                     output = `$${textReferenceId}%${selectedText}%${textReferenceId}$`;
+                    const originalText = codeMirror.getValue();
+                    codeMirror.replaceSelection(output);
 
                     saveTextFunction.call(thisForCallback, textId, codeMirror.getValue(), SaveTextModeType.ValidateOnlySyntax).done((response: ISaveTextResponse) => {
                         if (!response.isValidationSuccess) {
+                            codeMirror.setValue(originalText);
                             bootbox.alert({
                                 title: localization.translate("Fail", "RidicsProject").value,
                                 message: localization.translate("CommentSyntaxError", "RidicsProject").value,
@@ -165,14 +168,12 @@
                             return;
                         }
 
-                        codeMirror.replaceSelection(output);
-
                         const id = 0; //creating comment
                         this.processCommentSendClick(textId, textReferenceId, id, null, commentText);
                         codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
                             { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
                     }).fail((error) => {
-                        codeMirror.replaceSelection(selectedText);
+                        codeMirror.setValue(originalText);
                         bootbox.alert({
                             title: localization.translate("Fail", "RidicsProject").value,
                             message: localization.translate("Failed to create comment.", "RidicsProject").value,
