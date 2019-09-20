@@ -358,10 +358,25 @@
     }
 
     private processDeleteCommentClick(commentAreaEl: JQuery) {
-        commentAreaEl.find(".delete-comment").on("click", (event) => {
-            const target = $(event.target as Node as HTMLElement);
+        commentAreaEl.find(".delete-comment, .delete-root-comment").on("click",
+            (event) => {
+                const target = $(event.target as Node as HTMLElement);
+
+                if (target.hasClass("delete-root-comment") && target.parents(".page-row").find(".viewer").length === 0) {
+                    bootbox.alert({
+                        message: localization.translate("CannotDeleteComment", "RidicsProject").value,
+                        buttons: {
+                            ok: {
+                                className: "btn-default"
+                            }
+                        }
+                    });
+
+                    return;
+                }
+        
             const commentActionsRowEl = target.parents(".comment-actions-row");
-            const commentId = parseInt(commentActionsRowEl.siblings(".media-body").attr("data-comment-id"));
+            const commentId = parseInt(commentActionsRowEl.parents(".media-body").attr("data-comment-id"));
             bootbox.confirm({
                 message: localization.translate("DeleteCommentConfirm", "RidicsProject").value,
                 title: localization.translate("ConfirmTitle", "RidicsProject").value,
@@ -375,7 +390,13 @@
                 },
                 callback: (result) => {
                     if (result) {
-                        const deleteAjax = this.util.deleteComment(commentId);
+                        let deleteAjax;
+                        if (target.hasClass("delete-root-comment")) {
+                            deleteAjax = this.util.deleteRootComment(commentId);
+                        } else {
+                            deleteAjax = this.util.deleteComment(commentId);
+                        }
+
                         deleteAjax.done(() => {
                             const textId = commentActionsRowEl.parents(".page-row").data("page");
                             bootbox.alert({

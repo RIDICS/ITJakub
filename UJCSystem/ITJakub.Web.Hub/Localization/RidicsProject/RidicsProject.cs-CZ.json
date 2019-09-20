@@ -71,6 +71,7 @@
     "EmptyComment": "Komentář je prázdný. Prosím, vložte text komentáře",
     "DeleteCommentConfirm": "Opravdu chcete smazat tento komentář?",
     "ConfirmTitle": "Potvrzení",
+    "CannotDeleteComment": "Nelze smazat komentář první úrovně, pokud je zapnutý editační mód.",
     "CommentCreateSuccess": "Komentář úspěšně vytvořen.",
     "CommentUpdateSuccess": "Komentář úspěšně upravit.",
     "CommentCreateFail": "Komentář se nepodařilo vytvořit.",

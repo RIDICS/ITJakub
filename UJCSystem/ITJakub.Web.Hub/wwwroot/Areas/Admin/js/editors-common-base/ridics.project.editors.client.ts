@@ -64,6 +64,14 @@
         return ajax;
     }
 
+    deleteRootComment(commentId: number): JQueryXHR {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/DeleteRootComment`,
+            {
+                commentId: commentId
+            } as JQuery.PlainObject);
+        return ajax;
+    }
+
     /**
 * Loads plain text with markdown from the server.
 * @param {Number} textId - Number of page for which to load plain text
