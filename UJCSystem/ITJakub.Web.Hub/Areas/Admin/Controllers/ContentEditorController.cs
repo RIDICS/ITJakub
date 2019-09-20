@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using ITJakub.Web.Hub.Areas.Admin.Core;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
+using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
@@ -19,8 +21,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     [Area("Admin")]
     public class ContentEditorController : BaseController
     {
-        public ContentEditorController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        private readonly TextManager m_textManager;
+
+        public ContentEditorController(CommunicationProvider communicationProvider, TextManager textManager) : base(communicationProvider)
         {
+            m_textManager = textManager;
         }
 
         public IActionResult LoadCommentFile(long textId)
@@ -173,11 +178,28 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult SetTextResource(long textId, CreateTextRequestContract request)
+        public IActionResult SetTextResource(long textId, CreateTextRequestContract request, SaveTextModeType mode)
         {
-            var client = GetProjectClient();
-            var resourceVersionId = client.CreateTextResourceVersion(textId, request);
-            return Json(resourceVersionId);
+            SaveTextResponse response;
+            switch (mode)
+            {
+                case SaveTextModeType.FullValidateOrDeny:
+                    response = m_textManager.SaveTextFullValidate(textId, request);
+                    break;
+                case SaveTextModeType.FullValidateAndRepair:
+                    response = m_textManager.SaveTextFullValidateAndRepair(textId, request);
+                    break;
+                case SaveTextModeType.ValidateOnlySyntax:
+                    response = m_textManager.SaveTextValidateSyntax(textId, request);
+                    break;
+                case SaveTextModeType.NoValidation:
+                    response = m_textManager.SaveWithoutValidation(textId, request);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+            }
+
+            return Json(response);
         }
 
         [HttpGet]

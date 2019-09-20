@@ -9,7 +9,7 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
 {
     public class CommentMarkParser : InlineParser
     {
-        private const string CommentMark = "komentar-";
+        public const string CommentMark = "komentar-";
         private readonly char m_closingChar;
         private readonly char m_escapeChar;
         private readonly char m_openingChar;

@@ -397,6 +397,12 @@ interface ICreateTextVersion {
     resourceVersionId: number;
 }
 
+interface ISaveTextResponse {
+    resourceVersionId?: number;
+    isValidationSuccess: boolean;
+    newText: string;
+}
+
 interface ITextWithContent {
     id: number;
     versionId: number;
@@ -565,6 +571,13 @@ enum TextFormatEnumContract {
 //    Editor = "Editor",
 //    Kolace = "Kolace",
 //}
+
+enum SaveTextModeType {
+    FullValidateOrDeny = 0,
+    FullValidateAndRepair = 1,
+    ValidateOnlySyntax = 2,
+    NoValidation = 3,
+}
 
 interface IForumViewModel {
     name: string;

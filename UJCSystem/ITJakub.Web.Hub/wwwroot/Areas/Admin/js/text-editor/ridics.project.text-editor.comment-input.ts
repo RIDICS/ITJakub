@@ -125,7 +125,7 @@
             });
     }
 
-    toggleCommentSignsAndCreateComment(codeMirror: CodeMirror.Doc, addSigns: boolean, commentText?: string, textId?: number, saveTextFunction?: (textId: number, text: string) => JQuery.jqXHR, thisForCallback?) {
+    toggleCommentSignsAndCreateComment(codeMirror: CodeMirror.Doc, addSigns: boolean, commentText?: string, textId?: number, saveTextFunction?: (textId: number, text: string, mode: SaveTextModeType) => JQuery.jqXHR<ISaveTextResponse>, thisForCallback?) {
         let output: string;
         let markSize: number;
         const selectedText = codeMirror.getSelection();
@@ -150,9 +150,23 @@
                     const uniqueNumberLength = textReferenceId.length;
                     markSize = uniqueNumberLength + 2; // + $ + %
                     output = `$${textReferenceId}%${selectedText}%${textReferenceId}$`;
-                    codeMirror.replaceSelection(output);
-                    
-                    saveTextFunction.call(thisForCallback, textId, codeMirror.getValue()).done(() => {
+
+                    saveTextFunction.call(thisForCallback, textId, codeMirror.getValue(), SaveTextModeType.ValidateOnlySyntax).done((response: ISaveTextResponse) => {
+                        if (!response.isValidationSuccess) {
+                            bootbox.alert({
+                                title: localization.translate("Fail", "RidicsProject").value,
+                                message: localization.translate("CommentSyntaxError", "RidicsProject").value,
+                                buttons: {
+                                    ok: {
+                                        className: "btn-default"
+                                    }
+                                }
+                            });
+                            return;
+                        }
+
+                        codeMirror.replaceSelection(output);
+
                         const id = 0; //creating comment
                         this.processCommentSendClick(textId, textReferenceId, id, null, commentText);
                         codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
