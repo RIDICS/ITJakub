@@ -8,8 +8,8 @@
      */
     private checkIfOverFlowing(commentId: string, container: JQuery): boolean {
         let overflowing: boolean = false;
-        const textEl = container.find(".composition-area").find(`span[data-text-reference-id="${commentId}"]`);
-        if (length in textEl) {
+        const textEl = $(container.find(".composition-area").find(`span[data-text-reference-id="${commentId}"]`));
+        if (textEl.length) {
             const pageTextOffsetTop = textEl.offset().top;
             const commentEl = container.find(".comment-area").find(`div[data-text-reference-id="${commentId}"]`);
             const commentName = commentEl.siblings(".media-body").find(".media-heading");

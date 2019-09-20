@@ -75,7 +75,8 @@ class SnapshotEditor {
             this.setIncludeAllCheckbox($(table));
         }
 
-        $("#createSnapshot button[type=\"submit\"]").on("click",
+        const createSnapshotButton = $("#createSnapshotButton");
+        $("#createSnapshotButton").on("click",
             (event) => {
                 event.preventDefault();
                 if ($("table .include-checkboxes input[type=\"checkbox\"]:checked").length === 0) {
@@ -83,6 +84,8 @@ class SnapshotEditor {
                         message: localization.translate("CreateSnapshotWithoutResources", "RidicsProject").value,
                         callback: (result) => {
                             if (result) {
+                                createSnapshotButton.children(".saving-icon").removeClass("hide");
+                                createSnapshotButton.attr("disabled", "disabled");
                                 $("#createSnapshot").submit();
                             }
                         },
@@ -98,6 +101,8 @@ class SnapshotEditor {
                         }
                     });
                 } else {
+                    createSnapshotButton.children(".saving-icon").removeClass("hide");
+                    createSnapshotButton.attr("disabled", "disabled");
                     $("#createSnapshot").submit();
                 }
             });

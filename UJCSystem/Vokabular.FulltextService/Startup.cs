@@ -11,6 +11,7 @@ using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
+using Vokabular.Shared.AspNetCore.Middleware;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Options;
@@ -73,6 +74,8 @@ namespace Vokabular.FulltextService
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
         {
             ApplicationLogging.LoggerFactory = loggerFactory;
+
+            app.UseMiddleware<Log4NetPropertiesMiddleware>();
 
             if (env.IsDevelopment())
             {

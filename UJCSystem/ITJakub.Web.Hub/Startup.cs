@@ -36,6 +36,7 @@ using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.AspNetCore.Extensions;
+using Vokabular.Shared.AspNetCore.Middleware;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.Options;
 using Vokabular.TextConverter.Options;
@@ -223,6 +224,8 @@ namespace ITJakub.Web.Hub
             IApplicationLifetime applicationLifetime)
         {
             ApplicationLogging.LoggerFactory = loggerFactory;
+
+            app.UseMiddleware<Log4NetPropertiesMiddleware>();
 
             if (env.IsDevelopment())
             {

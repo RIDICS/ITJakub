@@ -5,7 +5,7 @@
 @inject ILocalizationService Localizer
 
 @{
-    ViewBag.Title = Localizer.Translate("CreateNewPublication", "Admin");
+    ViewBag.Title = Localizer.TranslateFormat("CreateNewPublicationHeader", "Admin", Model.ProjectName);
 }
 @section styles {
     <link asp-append-version="true" rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css" />
@@ -25,7 +25,7 @@
                 <div asp-validation-summary="All" class="alert alert-danger"></div>
                 <input type="hidden" asp-for="ProjectId" />
                 <div class="project-snapshot-new">
-                    <h2>@Localizer.Translate("CreateNewPublication", "Admin")</h2>
+                    <h3>@Localizer.TranslateFormat("CreateNewPublicationHeader", "Admin", Model.ProjectName)</h3>
                     <div class="project-snapshot-resources">
                         @{
                             for (var i = 0; i < Model.ResourceTypes.Count; i++)
@@ -135,7 +135,10 @@
                                                         <input type="text" id="commentInput" asp-for="Comment" class="form-control" />
                                                     </div>
                                                 </div>
-                                                <button type="submit" class="btn btn-default">@Localizer.Translate("CreatePublication", "Admin")</button>
+                                                <button type="submit" class="btn btn-default" id="createSnapshotButton">
+                                                    <span class="saving-icon loading-small-button hide"></span>
+                                                    @Localizer.Translate("CreatePublication", "Admin")
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
