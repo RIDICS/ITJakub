@@ -158,7 +158,7 @@
                                 label: localization.translate("SaveAndClose", "RidicsProject").value,
                                 className: "btn-default",
                                 callback: () => {
-                                    this.saveContents(this.currentTextId, contentBeforeClose).done(() => {
+                                    this.saveContents(this.currentTextId, contentBeforeClose, SaveTextModeType.FullValidateOrDeny, () => {
                                         this.editorChangePage(previousPageEl, selectedPageRow);
                                     });
                                 }
@@ -204,11 +204,7 @@
                             label: localization.translate("SaveAndClose", "RidicsProject").value,
                             className: "btn-default",
                             callback: () => {
-                                // TODO saveContents should call done() after all dialogs are closed and page is saved
-                                this.saveContents(this.currentTextId, contentBeforeClose).done((response) => {
-                                    if (!response.isValidationSuccess) {
-                                        return;
-                                    }
+                                this.saveContents(this.currentTextId, contentBeforeClose, SaveTextModeType.FullValidateOrDeny, () => {
                                     thisClass.simplemde.toTextArea();
                                     thisClass.simplemde = null;
                                     this.togglePageRows(pageRows);
@@ -258,7 +254,7 @@
         return ajax;
     }
 
-    saveContents(textId: number, contents: string, mode = SaveTextModeType.FullValidateOrDeny): JQuery.jqXHR<ISaveTextResponse> {
+    saveContents(textId: number, contents: string, mode = SaveTextModeType.FullValidateOrDeny, doneCallback: () => void = null): void {
         const saveAjax = this.saveText(textId, contents, mode);
         saveAjax.done((response) => {
             if (!response.isValidationSuccess) {
@@ -274,14 +270,14 @@
                             label: localization.translate("AutomaticallyFixProblems", "RidicsProject").value,
                             className: "btn-default",
                             callback: () => {
-                                this.saveContents(textId, contents, SaveTextModeType.FullValidateAndRepair);
+                                this.saveContents(textId, contents, SaveTextModeType.FullValidateAndRepair, doneCallback);
                             }
                         },
                         overwrite: {
                             label: localization.translate("SaveWithErrors", "RidicsProject").value,
                             className: "btn-default",
                             callback: () => {
-                                this.saveContents(textId, contents, SaveTextModeType.NoValidation);
+                                this.saveContents(textId, contents, SaveTextModeType.NoValidation, doneCallback);
                             }
                         }
                     }
@@ -298,6 +294,9 @@
                     }
                 }
             });
+            if (doneCallback != null) {
+                doneCallback();
+            }
         }).fail((error) => {
             if (error.status === 409) {
                 bootbox.alert({
@@ -321,8 +320,6 @@
                 });
             }
         });
-
-        return saveAjax;
     }
 
     addEditor(pageRow: JQuery) {
