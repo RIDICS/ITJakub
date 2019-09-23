@@ -30,8 +30,8 @@
         return this.serverPath;
     }
     
-    getProjectContent(projectId: number): JQuery.jqXHR<ITextWithPage[]> {
-        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetProjectContent`,
+    getTextPages(projectId: number): JQuery.jqXHR<ITextWithPage[]> {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextPages`,
             {
                 projectId: projectId
             } as JQuery.PlainObject);

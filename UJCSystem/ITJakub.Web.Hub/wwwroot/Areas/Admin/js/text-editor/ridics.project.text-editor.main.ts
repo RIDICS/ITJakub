@@ -12,7 +12,7 @@
 
     init(projectId: number) {
         const util = new EditorsApiClient();
-        const projectAjax = util.getProjectContent(projectId);
+        const projectAjax = util.getTextPages(projectId);
         projectAjax.done((data: ITextWithPage[]) => {
             if (data.length) {
                 const connections = new Connections();
