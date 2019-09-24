@@ -388,7 +388,7 @@ interface IBookInfo {
     LastEditation: string;
     EditationNote: string; //anchor href?
     Copyright: string;
-    Pages: IPage[];
+    //Pages: IPage[];
     Archive: IArchive;
     Century: number;
     Sign: string;
@@ -408,10 +408,10 @@ enum BookTypeEnum {
     AudioBook = "AudioBook"
 }
 
-interface IPage {
-    Start: number;
-    End: number;
-}
+//interface IPage {
+//    Start: number;
+//    End: number;
+//}
 
 interface IArchive {
     Name: string;

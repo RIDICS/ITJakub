@@ -156,19 +156,38 @@
         }
     }
 
-    // TODO this method must be completely refactored because it uses absolutely wrong assumptions:
+    private getPageById(pageId: number, compositionPages: IPage[]): IPage {
+        for (let page of compositionPages) {
+            if (page.id === pageId) {
+                return page;
+            }
+        }
+        return null;
+    }
+
+    private getPageByPosition(position: number, compositionPages: IPage[]): IPage {
+        for (let page of compositionPages) {
+            if (page.position === position) {
+                return page;
+            }
+        }
+        return null;
+    }
+
     private navigateToPage(pageId: number, loadingPageIds: number[], compositionPages: IPage[]) {
-        const firstPageId = compositionPages[0].id;
+        const firstPagePosition = compositionPages[0].position;
+        const targetPage = this.getPageById(pageId, compositionPages);
         const numberOfPagesToPreload = 10;
-        const preloadedPage = pageId - numberOfPagesToPreload;
-        if (preloadedPage > firstPageId) {
+        const preloadedPagePosition = targetPage.position - numberOfPagesToPreload;
+        if (preloadedPagePosition > firstPagePosition) { // load 10 previous pages
             $(".preloading-pages-spinner").show();
             this.pageToSkipTo = pageId;
             this.skippingToPage = true;
-            for (let i = preloadedPage; i <= pageId; i++) {
-                const currentPageEl = $(`*[data-page-id="${i}"]`);
+            for (let i = preloadedPagePosition; i <= targetPage.position; i++) {
+                const pageByPosition = this.getPageByPosition(i, compositionPages);
+                const currentPageEl = $(`*[data-page-id="${pageByPosition.id}"]`);
                 if (!currentPageEl.hasClass("lazyloaded")) {
-                    loadingPageIds.push(i);
+                    loadingPageIds.push(pageByPosition.id);
                     lazySizes.loader.unveil(currentPageEl[0]);
                 }
             }
