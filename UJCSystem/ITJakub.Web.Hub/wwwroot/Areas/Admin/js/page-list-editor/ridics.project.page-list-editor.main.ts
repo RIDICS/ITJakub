@@ -111,23 +111,22 @@
             }
 
             this.trackSpecialPagesCheckboxesState();
-
-
-            $(".page-list-editor-content").on("click",
-                ".generate-page-list",
-                () => {
-                    this.startGeneration();
-                });
-
-            $(".page-list-editor-content").on("click",
-                ".cancel-page-list",
-                (event) => {
-                    event.stopPropagation();
-                    this.editDialog.hide();
-                    $(".page-list-editor-content").off();
-                }
-            );
         });
+
+        $(".page-list-editor-content").on("click",
+            ".generate-page-list",
+            () => {
+                this.startGeneration();
+            });
+
+        $(".page-list-editor-content").on("click",
+            ".cancel-page-list",
+            (event) => {
+                event.stopPropagation();
+                this.editDialog.hide();
+                $(".page-list-editor-content").off();
+            }
+        );
     }
 
     private getSelectedFormat(): number {

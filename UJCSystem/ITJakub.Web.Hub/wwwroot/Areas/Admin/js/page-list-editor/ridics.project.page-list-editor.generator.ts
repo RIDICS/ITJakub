@@ -186,7 +186,7 @@ class RectoVersoPageListGenerator extends PageListGeneratorBase {
     }
 
     protected parseNumber(value: string): number {
-        let numericValue = Number(value.substr(0, value.length - 1)) * 2;
+        let numericValue = Number(value.substring(0, value.length - 1)) * 2;
         if (value[value.length - 1] === "r") {
             numericValue -= 1;
         }
@@ -209,7 +209,7 @@ class RectoVersoExtendedPageListGenerator extends PageListGeneratorBase {
     }
 
     protected parseNumber(value: string): number {
-        let numericValue = Number(value.substr(2, value.length - 1)) * 2;
+        let numericValue = Number(value.substring(2, value.length - 1)) * 2;
         if (value[value.length - 1] === "r") {
             numericValue -= 1;
         }
