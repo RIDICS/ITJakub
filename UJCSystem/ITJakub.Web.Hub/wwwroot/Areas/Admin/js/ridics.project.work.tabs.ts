@@ -749,6 +749,20 @@ class ProjectWorkPageListTab extends ProjectModuleTabBase {
     }
 }
 
+class ProjectWorkChapterEditorTab extends ProjectModuleTabBase {
+    private readonly projectId: number;
+
+    constructor(projectId: number) {
+        super();
+        this.projectId = projectId;
+    }
+
+    initTab() {
+        const main = new ChapterEditorMain();
+        main.init(this.projectId);
+    }
+}
+
 class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
     private readonly projectId: number;
     private readonly projectClient: ProjectClient;

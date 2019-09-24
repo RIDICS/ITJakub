@@ -33,19 +33,27 @@
                     <div class="list-container selectable chapter-listing">
                         <div class="table-responsive">
                             <div class="table table-hover">
-                                @{
-                                    ViewData.Add("levelOfHierarchy", 0);
-                                    foreach (var chapter in Model)
-                                    {
-                                        @await Html.PartialAsync("Work/SubView/_ChapterRow", chapter, ViewData);
+                                <div class="sub-chapters">
+                                    @{
+                                        ViewData.Add("levelOfHierarchy", 0);
+                                        foreach (var chapter in Model)
+                                        {
+                                            @await Html.PartialAsync("Work/SubView/_ChapterRow", chapter, ViewData)
+                                        }
                                     }
-                                }
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="panel-bottom-buttons text-right">
+                        <button type="button" class="btn btn-default move-chapter-left" title="@Localizer.Translate("ShiftChapterUp", "RidicsProject")">
+                            <span class="glyphicon glyphicon-arrow-left"></span>
+                        </button>
+                        <button type="button" class="btn btn-default move-chapter-right" title="@Localizer.Translate("ShiftChapterDown", "RidicsProject")">
+                            <span class="glyphicon glyphicon-arrow-right"></span>
+                        </button>
                         <label for="chapterMoveDistance">@Localizer.Translate("Shift", "RidicsProject")</label>
-                        <input type="number" id="chapterMoveDistance" class="chapter-move-distance form-control" value="1" min="1" max="@Model.Count" />
+                        <input type="number" id="chapterMoveDistance" class="chapter-move-distance form-control" value="1" min="1" max="@Model.Count"/>
                         <button type="button" class="btn btn-default move-chapter-up" title="@Localizer.Translate("ShiftChapterUp", "RidicsProject")">
                             <span class="glyphicon glyphicon-arrow-up"></span>
                         </button>
@@ -56,7 +64,7 @@
                 </div>
             </div>
         </div>
-        <div id="page-detail" class="hide col-xs-12 col-md-6 col-lg-7">
+        <div id="page-detail" class="hide col-xs-12 col-md-6 col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="panel-title">
