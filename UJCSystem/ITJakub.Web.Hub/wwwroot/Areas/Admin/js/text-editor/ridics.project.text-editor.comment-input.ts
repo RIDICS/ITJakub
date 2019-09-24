@@ -77,43 +77,35 @@
     }
 
     private processEditCommentClick() {
-        $("#project-resource-preview").on("click", ".edit-comment", (event) => {
+        $("#project-resource-preview").on("click", ".edit-comment, .edit-root-comment", (event) => {
             const target = $(event.target as HTMLElement);
             const commentActionsRowEl = target.parents(".comment-actions-row");
-            const commentBody = commentActionsRowEl.siblings(".media-body");
-            const mainCommentContentEl = commentBody.parents(".media-body");
-            const mainCommentLeftHeader = mainCommentContentEl.siblings(".main-comment");
-            const parentCommentId = mainCommentLeftHeader.data("parent-comment-id");
-            const textReferenceId = mainCommentLeftHeader.data("text-reference-id");
-            const textId = mainCommentLeftHeader.parents(".page-row").data("page");
-            const commentTextEl = commentBody.children(".comment-body");
-            const commentText = commentTextEl.text();
-            commentActionsRowEl.hide();
-            commentTextEl.hide();
-            commentBody.append(`<textarea cols="40" rows="3" class="textarea-no-resize edit-comment-textarea">${commentText}</textarea>`);
-            const jTextareaEl = $(".edit-comment-textarea");
-            jTextareaEl.focus();
-            const commentId = parseInt(commentBody.attr("data-comment-id"));
-            this.processCommentReply(textId, textReferenceId, commentId, parentCommentId, jTextareaEl, commentActionsRowEl);
-        });
 
-        $("#project-resource-preview").on("click", ".edit-root-comment", (event) => {
-            const target = $(event.target as HTMLElement);
-            const commentActionsRowEl = target.parents(".comment-actions-row");
-            const mainCommentContentEl = commentActionsRowEl.parents(".media-body");
+            let mainCommentContentEl: JQuery<HTMLElement>;
+            let editedCommentBody: JQuery<HTMLElement>;
+            if (target.hasClass("edit-root-comment"))
+            {
+                editedCommentBody = commentActionsRowEl.parents(".media-body");
+                mainCommentContentEl = editedCommentBody;
+            }
+            else {
+                editedCommentBody = commentActionsRowEl.siblings(".media-body");
+                mainCommentContentEl = editedCommentBody.parents(".media-body");
+            }
+
             const mainCommentLeftHeader = mainCommentContentEl.siblings(".main-comment");
             const parentCommentId = mainCommentLeftHeader.data("parent-comment-id");
             const textReferenceId = mainCommentLeftHeader.data("text-reference-id");
             const textId = mainCommentLeftHeader.parents(".page-row").data("page");
-            const commentTextEl = mainCommentContentEl.children(".comment-body");
+            const commentTextEl = editedCommentBody.children(".comment-body");
             const commentText = commentTextEl.text();
             commentActionsRowEl.hide();
             commentTextEl.hide();
-            mainCommentContentEl.append(`<textarea cols="40" rows="3" class="textarea-no-resize edit-comment-textarea">${commentText}</textarea>`);
+            editedCommentBody.append(`<textarea cols="40" rows="3" class="textarea-no-resize edit-comment-textarea">${commentText}</textarea>`);
             const jTextareaEl = $(".edit-comment-textarea");
             jTextareaEl.focus();
-            const commentId = parseInt(mainCommentContentEl.attr("data-comment-id"));
-            this.processCommentReply(textId, textReferenceId, commentId, parentCommentId, jTextareaEl, commentActionsRowEl);
+            const commentId = parseInt(editedCommentBody.attr("data-comment-id"));
+            this.processCommentReply(textId, textReferenceId, commentId, parentCommentId, jTextareaEl, target);
         });
     }
 
@@ -235,7 +227,15 @@
                 event.stopImmediatePropagation();
                 var commentText = textAreaEl.val() as string;
                 if (commentText === commentTextOriginal) {
-                    jEl.parents(".comment-actions-row").show();
+                    const actionsRow = jEl.parents(".comment-actions-row");
+                    actionsRow.show();
+
+                    if (jEl.hasClass("edit-root-comment")) {
+                        actionsRow.siblings(".comment-body").show();
+                    } else {
+                        actionsRow.siblings(".media-body").find(".comment-body").show();
+                    }
+                    
                     textAreaEl.remove();
                 } else {
                     const comment: ICommentStructureReply = {
