@@ -176,10 +176,10 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetTextResource(long textId, TextFormatEnumContract? format)
+        public IActionResult GetTextResourceByPageId(long pageId, TextFormatEnumContract? format)
         {
             var client = GetProjectClient();
-            var result = client.GetTextResource(textId, format);
+            var result = client.GetTextResourceByPageId(pageId, format);
             return Json(result);
         }
 

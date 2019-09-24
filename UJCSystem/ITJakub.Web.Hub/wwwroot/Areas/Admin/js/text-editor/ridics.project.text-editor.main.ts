@@ -12,8 +12,8 @@
 
     init(projectId: number) {
         const util = new EditorsApiClient();
-        const projectAjax = util.getTextPages(projectId);
-        projectAjax.done((data: ITextWithPage[]) => {
+        const projectAjax = util.getPagesList(projectId);
+        projectAjax.done((data) => {
             if (data.length) {
                 const connections = new Connections();
                 const commentArea = new CommentArea(util);
@@ -26,7 +26,7 @@
                 const numberOfPages = data.length;
                 this.numberOfPages = numberOfPages;
                 for (let i = 0; i < numberOfPages; i++) {
-                    const textProjectPage = data[i];
+                    const projectPage = data[i];
                     let commentAreaClass = "";
                     if (i % 2 === 0) {
                         commentAreaClass =
@@ -47,7 +47,7 @@
                                                         </button>
                                                     </div>
                                                     <div class="col-xs-4 page-number text-center invisible">
-                                                        [${textProjectPage.parentPage.name}]
+                                                        [${projectPage.name}]
                                                     </div>
                                                     <div class="col-xs-4"></div>
                                                 </div>
@@ -55,7 +55,7 @@
                     $(".pages-start")
                         .append(
                             `<div class="page-splitter"></div>
-                            <div class="page-row row lazyload" data-page="${textProjectPage.id}" data-page-name="${textProjectPage.parentPage.name}">
+                            <div class="page-row row lazyload" data-page-id="${projectPage.id}" data-page-name="${projectPage.name}">
                                 ${pageToolbarDiv}
                                 ${compositionAreaDiv}
                                 ${commentAreaDiv}

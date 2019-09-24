@@ -56,20 +56,30 @@
     }
 
     private appendRenderedText(pageEl: JQuery): JQuery.jqXHR<ITextWithContent> {
-        const textId = pageEl.data("page") as number;
-        const renderedText = this.util.loadRenderedText(textId);
+        const pageId = pageEl.data("page-id") as number;
+        const renderedText = this.util.loadRenderedText(pageId);
         const compositionAreaDiv = pageEl.find(".rendered-text");
         renderedText.done((data: ITextWithContent) => {
-            const pageBody = data.text;
-            const id = data.id;
-            const versionId = data.versionId;
-            const versionNumber = data.versionNumber;
-            const compositionAreaEl = pageEl.children(".composition-area");
-            compositionAreaEl.attr({ "data-id": id, "data-version-id": versionId, "data-version-number": versionNumber } as JQuery.PlainObject);
-            compositionAreaDiv.empty().append(pageBody);
-            pageEl.css("min-height", "0");
-            var event = $.Event("pageConstructed", { page: textId });
-            compositionAreaDiv.trigger(event);
+            if (data == null) {
+                var infoAlert = new AlertComponentBuilder(AlertType.Info)
+                    .addContent(localization.translate("PageDoesNotContainText", "RidicsProject").value)
+                    // TODO add button for creating text
+                    .buildElement();
+                compositionAreaDiv.empty().append(infoAlert);
+            } else {
+                const pageBody = data.text;
+                const id = data.id;
+                const versionId = data.versionId;
+                const versionNumber = data.versionNumber;
+                const compositionAreaEl = pageEl.children(".composition-area");
+                compositionAreaEl.attr({ "data-id": id, "data-version-id": versionId, "data-version-number": versionNumber } as JQuery.PlainObject);
+                compositionAreaDiv.empty().append(pageBody);
+                pageEl.css("min-height", "0")
+                    .attr("data-text-id", id)
+                    .data("text-id", id);
+            }
+            var event = $.Event("pageConstructed");
+            compositionAreaDiv.trigger(event, { pageId: pageId } as IPageConstructedEventData);
         });
         renderedText.fail(() => {
             const pageName = pageEl.data("page-name");
@@ -86,8 +96,8 @@
     }
 
     private appendPlainText(pageEl: JQuery): JQuery.jqXHR<ITextWithContent> {
-        const textId = pageEl.data("page") as number;
-        const plainText = this.util.loadPlainText(textId);
+        const pageId = pageEl.data("page-id") as number;
+        const plainText = this.util.loadPlainText(pageId);
         const textAreaEl = $(pageEl.find(".plain-text"));
         plainText.done((data: ITextWithContent) => {
             textAreaEl.val(data.text);
@@ -96,12 +106,15 @@
             const versionId = data.versionId;
             const versionNumber = data.versionNumber;
             compositionAreaEl.attr({ "data-id": id, "data-version-id": versionId, "data-version-number": versionNumber } as JQuery.PlainObject);
-            var event = $.Event("pageConstructed", { page: textId });
-            textAreaEl.trigger(event);
+            var event = $.Event("pageConstructed");
+            textAreaEl.trigger(event, { pageId: pageId } as IPageConstructedEventData);
             if (pageEl.hasClass("init-editor")) {
                 pageEl.removeClass("init-editor");
                 this.editor.addEditor(pageEl);
             }
+
+            pageEl.attr("data-text-id", id)
+                .data("text-id", id);
         });
         plainText.fail(() => {
             textAreaEl.val(localization.translate("ContentLoadFailed", "RidicsProject").value);
@@ -111,4 +124,8 @@
         });
         return plainText;
     }
+}
+
+interface IPageConstructedEventData {
+    pageId: number;
 }
