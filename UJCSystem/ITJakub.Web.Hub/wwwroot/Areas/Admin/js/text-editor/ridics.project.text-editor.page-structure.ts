@@ -77,7 +77,13 @@
                 pageEl.css("min-height", "0")
                     .attr("data-text-id", id)
                     .data("text-id", id);
+
+                if (pageEl.hasClass("comment-never-loaded")) {
+                    const commentAreaEl = $(".comment-area", pageEl);
+                    this.commentArea.asyncConstructCommentArea(commentAreaEl);
+                }
             }
+
             var event = $.Event("pageConstructed");
             compositionAreaDiv.trigger(event, { pageId: pageId } as IPageConstructedEventData);
         });

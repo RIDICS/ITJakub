@@ -55,7 +55,7 @@
                     $(".pages-start")
                         .append(
                             `<div class="page-splitter"></div>
-                            <div class="page-row row lazyload" data-page-id="${projectPage.id}" data-page-name="${projectPage.name}">
+                            <div class="page-row row lazyload comment-never-loaded" data-page-id="${projectPage.id}" data-page-name="${projectPage.name}">
                                 ${pageToolbarDiv}
                                 ${compositionAreaDiv}
                                 ${commentAreaDiv}
