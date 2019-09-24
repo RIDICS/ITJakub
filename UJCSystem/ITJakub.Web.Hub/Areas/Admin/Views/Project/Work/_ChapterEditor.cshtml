@@ -1,0 +1,133 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model IList<Vokabular.MainService.DataContracts.Contracts.ChapterHierarchyContract>
+@inject ILocalizationService Localizer
+
+<div class="project-chapter-list">
+    <div class="row resource-tab-row-fix">
+        <div id="unsavedChanges" class="col-xs-12 hide">
+            <div class="alert alert-warning">
+                <div class="row">
+                    <div class="col-xs-8">@Localizer.Translate("UnsavedChanges", "RidicsProject")</div>
+                    <div class="col-xs-4 text-right">
+                        <button type="button" class="btn btn-default save-chapters-button">@Localizer.Translate("Save", "Admin")</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-md-6 col-lg-6">
+            <div class="panel panel-default chapters">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-4">
+                            <div class="panel-title">
+                                @Localizer.Translate("Chapters", "Admin")
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-8 panel-buttons text-right">
+                            <button type="button" class="btn btn-default form-control" id="project-chapters-edit-button">@Localizer.Translate("CreateChapter", "Admin")</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="list-container selectable chapter-listing">
+                        <div class="table-responsive">
+                            <div class="table table-hover">
+                                @{
+                                    ViewData.Add("levelOfHierarchy", 0);
+                                    foreach (var chapter in Model)
+                                    {
+                                        @await Html.PartialAsync("Work/SubView/_ChapterRow", chapter, ViewData);
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-bottom-buttons text-right">
+                        <label for="chapterMoveDistance">@Localizer.Translate("Shift", "RidicsProject")</label>
+                        <input type="number" id="chapterMoveDistance" class="chapter-move-distance form-control" value="1" min="1" max="@Model.Count" />
+                        <button type="button" class="btn btn-default move-chapter-up" title="@Localizer.Translate("ShiftChapterUp", "RidicsProject")">
+                            <span class="glyphicon glyphicon-arrow-up"></span>
+                        </button>
+                        <button type="button" class="btn btn-default move-chapter-down" title="@Localizer.Translate("ShiftChapterDown", "RidicsProject")">
+                            <span class="glyphicon glyphicon-arrow-down"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="page-detail" class="hide col-xs-12 col-md-6 col-lg-7">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                @Localizer.Translate("PageContent", "RidicsProject")
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <i class="hide fa fa-file-text-o" title="@Localizer.Translate("PageContainsText", "RidicsProject")"></i>
+                                <i class="hide fa fa-image" title="@Localizer.Translate("PageContainsImage", "RidicsProject")"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="alert-holder"></div>
+                    <div class="body-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="project-bottom-buttons">
+        <button type="button" class="btn btn-default save-chapters-button">@Localizer.Translate("Save", "Admin")</button>
+    </div>
+</div>
+
+<div class="modal fade project-chapters-dialog" role="dialog" id="project-chapters-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content chapter-list-editor-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Localizer.Translate("NewChapter", "Admin")</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 form-horizontal">
+                        <div class="form-group">
+                            <label>@Localizer.Translate("ChapterName", "Admin")</label>
+                            <input type="text" />
+                        </div>
+                        <div class="form-group">
+                            <label>@Localizer.Translate("StartsOnPage", "Admin")</label>
+                            @*TODO dropdown select?*@
+                            <input type="text" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("SaveError", "Admin")</div>
+                <button type="button" class="btn btn-default cancel-chapter">@Localizer.Translate("Cancel", "Admin")</button>
+                <button type="button" class="btn btn-default create-chapter">@Localizer.Translate("Create", "Admin")</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade info-modal-dialog" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title info-dialog-title"></h4>
+            </div>
+            <div class="modal-body">
+                <p class="info-dialog-message"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Admin")</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -31,7 +31,9 @@
     "AddingGeneratedNames": "Projekt již obshauje stránky. Vygenerované stránky byly přidány na konec seznamu.",
     "Shift": "Posun",
     "ShiftPageUp": "Posunout vybrané stránky nahoru",
+    "ShiftChapterUp": "Posunout vybrané kapitoly nahoru",
     "ShiftPageDown": "Posunout vybrané stránky dolů",
+    "ShiftChapterDown": "Posunout vybrané kapitoly dolů",
     "EditPageName": "Upravit název stránky",
     "DeletePage": "Smazat stránku",
 

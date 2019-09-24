@@ -63,6 +63,12 @@
     "DiscussionPosts": "translate[Příspěvky v diskuzi]",
     "Snapshots": "Publications",
     "ResourcesHistory": "translate[Změny zdrojů]",
+    "Chapters": "Chapters",
+
+    "CreateChapter": "Create chapter",
+    "ChapterName": "Chapter name",
+    "NewChapter": "New chapter",
+    "StartsOnPage": "Starts on page",
 
     "CommonInformation": "translate[Obecné informace]",
     "ProjectName": "translate[Název díla]",

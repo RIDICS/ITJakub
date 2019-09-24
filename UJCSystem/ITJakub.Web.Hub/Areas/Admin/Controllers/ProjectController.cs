@@ -134,6 +134,9 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     workCategorizationViewModel.AllLiteraryGenreList = literaryGenres;
                     workCategorizationViewModel.AllCategoryList = categories;
                     return PartialView("Work/_Categorization", workCategorizationViewModel);
+                case ProjectModuleTabType.WorkChapters:
+                    var chapterList = projectClient.GetChapterList(projectId.Value);
+                    return PartialView("Work/_ChapterEditor", chapterList);
                 case ProjectModuleTabType.WorkHistory:
                     return PartialView("Work/_History");
                 case ProjectModuleTabType.WorkNote:

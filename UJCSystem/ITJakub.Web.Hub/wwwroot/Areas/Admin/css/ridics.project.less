@@ -1430,6 +1430,53 @@ table {
     }
 }
 
+.chapter-listing {
+    height: 400px;
+    overflow-y: auto;
+
+    .chapter-row {
+        cursor: pointer;
+        border-bottom: @box-border;
+        display: flex;
+        flex-direction: row;
+
+        div {
+            display: inline-block;
+            padding: 0.3em 0.3em 0.3em 0.3em;
+            text-align: left;
+        }
+
+        .name {
+            padding-left: 0;
+        }
+
+        .buttons {
+            align-self: flex-end;
+            min-width: 115px;
+            margin-left: auto;
+
+            a.btn-default {
+                margin-bottom: 0;
+                margin-left: 0.5em;
+            }
+        }
+
+        .ridics-checkbox {
+            width: 2em;
+            padding-bottom: 2px;
+            align-self: center;
+
+            label {
+                margin: 0;
+            }
+        }
+
+        .alert:empty {
+            display: none;
+        }
+    }
+}
+
 .body-content {
     height: 458px;
     overflow-y: auto;
@@ -1449,6 +1496,7 @@ table {
     }
 }
 
+.chapter-move-distance,
 .page-move-distance {
     max-width: 5em;
     display: inline-block;

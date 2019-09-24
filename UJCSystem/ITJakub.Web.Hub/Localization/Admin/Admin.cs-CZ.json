@@ -63,6 +63,12 @@
     "DiscussionPosts": "Příspěvky v diskuzi",
     "Snapshots": "Publikace",
     "ResourcesHistory": "Změny zdrojů",
+    "Chapters": "Kapitoly",
+
+    "CreateChapter": "Vytvořit kapitolu",
+    "ChapterName": "Název kapitoly",
+    "NewChapter": "Nová kapitola",
+    "StartsOnPage": "Začíná na stránce",
 
     "CommonInformation": "Obecné informace",
     "ProjectName": "Název díla",

@@ -31,7 +31,9 @@
     "AddingGeneratedNames": "Page names already exist for this project. Appending generated names to the end of the list.",
     "Shift": "Shift",
     "ShiftPageUp": "Shift selected pages up",
+    "ShiftChapterUp": "Shift selected chapters up",
     "ShiftPageDown": "Shift selected pages down",
+    "ShiftChapterDown": "Shift selected chapters down",
     "EditPageName": "Edit page name",
     "DeletePage": "Delete page",
 

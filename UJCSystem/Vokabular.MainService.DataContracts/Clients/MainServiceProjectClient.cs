@@ -740,5 +740,72 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        #region Chapters
+
+        public IList<ChapterHierarchyContract> GetChapterList(long projectId)
+        {
+            try
+            {
+                var result = m_client.Get<IList<ChapterHierarchyContract>>($"project/{projectId}/chapter");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public ChapterHierarchyContract GetChapter(long chapterId)
+        {
+            try
+            {
+                var result = m_client.Get<ChapterHierarchyContract>($"project/chapter/{chapterId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long CreateChapter(long projectId, CreateChapterContract request)
+        {
+            try
+            {
+                var result = m_client.Post<long>($"project/{projectId}/chapter", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateChapter(long chapterId, CreateChapterContract request)
+        {
+            try
+            {
+                m_client.Put<object>($"project/chapter/{chapterId}", request);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
     }
 }
