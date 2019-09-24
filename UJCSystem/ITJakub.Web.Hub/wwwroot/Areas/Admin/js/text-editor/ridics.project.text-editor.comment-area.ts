@@ -415,25 +415,7 @@
                                         return;
                                     } else {
                                         const deleteAjax = this.util.deleteRootComment(commentId).done(() => {
-                                            const renderedText = this.util.loadPlainText(textId);
-                                            const compositionAreaDiv = pageRow.find(".rendered-text");
-                                            renderedText.done((data: ITextWithContent) => {
-                                                const pageBody = data.text;
-                                                this.editor.getSimpleMdeEditor().codemirror.setValue(pageBody);
-                                                const id = data.id;
-                                                const versionId = data.versionId;
-                                                const versionNumber = data.versionNumber;
-                                                const compositionAreaEl = pageRow.children(".composition-area");
-                                                compositionAreaEl.attr({ "data-id": id, "data-version-id": versionId, "data-version-number": versionNumber } as JQuery.PlainObject);
-                                            });
-                                            renderedText.fail(() => {
-                                                const pageName = pageRow.data("page-name");
-                                                const alert = new AlertComponentBuilder(AlertType.Error)
-                                                    .addContent(localization.translateFormat("PageLoadFailed", [pageName], "RidicsProject").value)
-                                                    .buildElement();
-                                                compositionAreaDiv.empty().append(alert);
-                                                pageRow.css("min-height", "0");
-                                            });
+                                            this.editor.reloadCurrentEditorArea();
                                         });
                                         this.onCommentDeleteRequest(deleteAjax, target);
                                     }

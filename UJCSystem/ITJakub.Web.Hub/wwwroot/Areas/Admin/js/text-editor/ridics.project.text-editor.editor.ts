@@ -404,6 +404,30 @@
         this.originalContent = this.simplemde.value();
     }
 
+    reloadCurrentEditorArea() {
+        const pageRow = $(".CodeMirror").parents(".page-row");
+        const compositionAreaDiv = pageRow.find(".rendered-text");
+        const renderedText = this.util.loadPlainText(this.currentTextId);
+        renderedText.done((data: ITextWithContent) => {
+            const pageBody = data.text;
+            this.simplemde.codemirror.setValue(pageBody);
+            this.originalContent = pageBody;
+            const id = data.id;
+            const versionId = data.versionId;
+            const versionNumber = data.versionNumber;
+            const compositionAreaEl = pageRow.children(".composition-area");
+            compositionAreaEl.data("version-id", versionId);
+            compositionAreaEl.data("version-number", versionNumber);
+        });
+        renderedText.fail(() => {
+            const pageName = pageRow.data("page-name");
+            const alert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(localization.translateFormat("PageLoadFailed", [pageName], "RidicsProject").value)
+                .buildElement();
+            compositionAreaDiv.empty().append(alert);
+            pageRow.css("min-height", "0");
+        });
+    }
 
     private setCustomPreviewRender() {
         this.simpleMdeTools.toolPreview.action = (editor: SimpleMDE) => {

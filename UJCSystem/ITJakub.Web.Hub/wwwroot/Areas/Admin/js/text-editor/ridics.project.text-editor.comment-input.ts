@@ -65,7 +65,7 @@
             }).fail(() => {
                 bootbox.alert({
                     title: localization.translate("Fail", "RidicsProject").value,
-                    message: localization.translate("Failed to create comment.", "RidicsProject").value,
+                    message: localization.translate("CommentCreateFail", "RidicsProject").value,
                     buttons: {
                         ok: {
                             className: "btn-default"
