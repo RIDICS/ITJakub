@@ -30,6 +30,10 @@
         return this.editModeSelector;
     }
 
+    getSimpleMdeEditor() {
+        return this.simplemde;
+    }
+
     init() {
         this.processAreaSwitch();
     }
