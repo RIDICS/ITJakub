@@ -399,6 +399,7 @@
                                 const originalText = codeMirror.getValue();
                                 const textId = Number(pageRow.data("page"));
 
+                                // save text before removing root comment
                                 this.editor.saveText(textId, originalText, SaveTextModeType.ValidateOnlySyntax).done((response: ISaveTextResponse) => {
                                     if (!response.isValidationSuccess) {
                                         codeMirror.setValue(originalText);
@@ -413,15 +414,15 @@
                                             }
                                         });
                                         return;
-                                    } else {
-                                        const deleteAjax = this.util.deleteRootComment(commentId).done(() => {
-                                            this.editor.reloadCurrentEditorArea();
-                                        });
-                                        this.onCommentDeleteRequest(deleteAjax, target);
                                     }
+
+                                    const deleteAjax = this.util.deleteRootComment(commentId).done(() => {
+                                        this.editor.reloadCurrentEditorArea();
+                                    });
+                                    this.onCommentDeleteRequest(deleteAjax, target);
                                 });
                             }
-                        } else {
+                        } else { // delete child comment
                             const deleteAjax = this.util.deleteComment(commentId);
                             this.onCommentDeleteRequest(deleteAjax, target);
                         }
