@@ -358,28 +358,25 @@
     }
 
     private processDeleteCommentClick(commentAreaEl: JQuery) {
-        commentAreaEl.find(".delete-comment, .delete-root-comment").on("click",
-            (event) => {
-                const target = $(event.target as Node as HTMLElement);
-
-                if (target.hasClass("delete-root-comment") && target.parents(".page-row").find(".viewer").length === 0) {
-                    bootbox.alert({
-                        message: localization.translate("CannotDeleteComment", "RidicsProject").value,
-                        buttons: {
-                            ok: {
-                                className: "btn-default"
-                            }
-                        }
-                    });
-
-                    return;
-                }
-        
+        commentAreaEl.find(".delete-comment, .delete-root-comment").on("click", (event) => {
+            const target = $(event.target as Node as HTMLElement);
+            let confirmMessage: string;
+            if (target.hasClass("delete-root-comment")) {
+                confirmMessage = `<div class="alert alert-warning">
+                                        <i class="fa fa-warning"></i>${localization.translate("DeleteCommentWarning", "RidicsProject").value}
+                                    </div>
+                                    <div class="bootbox-body">
+                                       ${localization.translate("DeleteCommentConfirm", "RidicsProject").value}
+                                    </div>`;
+            } else {
+                confirmMessage = localization.translate("DeleteCommentConfirm", "RidicsProject").value;
+            }
             const commentActionsRowEl = target.parents(".comment-actions-row");
             const commentId = parseInt(commentActionsRowEl.parents(".media-body").attr("data-comment-id"));
+                
             bootbox.confirm({
-                message: localization.translate("DeleteCommentConfirm", "RidicsProject").value,
                 title: localization.translate("ConfirmTitle", "RidicsProject").value,
+                message: confirmMessage,
                 buttons: {
                     confirm: {
                         className: "btn-default"
