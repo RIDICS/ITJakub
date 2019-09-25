@@ -68,6 +68,7 @@
     "ExpandCommentArea": "Zvětšit sekci komentářů",
     "CollapseCommentArea": "Zmenšit sekci komentářů",
     "LoadCommentsFailed": "Při načítání komentářů stránky {0} nastala neočekávaná chyba.",
+    "CommentNotLoadedMissingText": "Nelze zobrazit komentáře, protože stránka neobsahuje žádný text.",
     "ToggleNestedComments": "Přepnout vnořené komentáře",
     "EmptyComment": "Komentář je prázdný. Prosím, vložte text komentáře",
     "DeleteCommentConfirm": "Opravdu chcete smazat tento komentář?",
@@ -87,6 +88,7 @@
     "ChangesSaveConflict": "Nelze uložit změny. Jiný editor uložil změny dříve než Vy.",
     "EnterPageName": "Prosím vyplňte název stránky.",
     "PageDoesNotExist": "Stránka {0} neexistuje.",
+    "PageDoesNotContainText": "Stránka neobsahuje žádný text. Přejete si ho vytvořit?",
     "EditionNoteLoadFailed": "Při načítání ediční poznámky nastala neočekávaná chyba.",
     "EditionNoteSaveSuccess": "Ediční poznámka byla úspěšně uložena.",
     "EditionNoteSaveFailed": "Při ukládání ediční poznámky nastala neočekávaná chyba."

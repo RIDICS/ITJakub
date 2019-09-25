@@ -152,7 +152,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetProjectContent(long projectId, long? resourceGroupId)
+        public IActionResult GetTextPages(long projectId, long? resourceGroupId)
         {
             var client = GetProjectClient();
             var result = client.GetAllTextResourceList(projectId, resourceGroupId);
@@ -176,10 +176,10 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetTextResource(long textId, TextFormatEnumContract? format)
+        public IActionResult GetTextResourceByPageId(long pageId, TextFormatEnumContract? format)
         {
             var client = GetProjectClient();
-            var result = client.GetTextResource(textId, format);
+            var result = client.GetTextResourceByPageId(pageId, format);
             return Json(result);
         }
 

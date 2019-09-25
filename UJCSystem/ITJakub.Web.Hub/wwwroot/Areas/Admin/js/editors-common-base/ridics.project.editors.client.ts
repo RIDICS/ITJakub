@@ -30,8 +30,8 @@
         return this.serverPath;
     }
     
-    getProjectContent(projectId: number): JQuery.jqXHR<ITextWithPage[]> {
-        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetProjectContent`,
+    getTextPages(projectId: number): JQuery.jqXHR<ITextWithPage[]> {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextPages`,
             {
                 projectId: projectId
             } as JQuery.PlainObject);
@@ -48,23 +48,23 @@
 
     /**
 * Loads plain text with markdown from the server.
-* @param {Number} textId - Number of page for which to load plain text
+* @param {Number} pageId - Id of page for which to load plain text
 * @returns {JQueryXHR} Ajax containing page plain text
 */
-    loadPlainText(textId: number): JQuery.jqXHR<ITextWithContent> {
-        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResource`,
-            { textId: textId, format: TextFormatEnumContract.Raw } as JQuery.PlainObject);
+    loadPlainText(pageId: number): JQuery.jqXHR<ITextWithContent> {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResourceByPageId`,
+            { pageId: pageId, format: TextFormatEnumContract.Raw } as JQuery.PlainObject);
         return ajax;
     }
 
     /**
 * Loads markdown rendered to html from the server.
-* @param {Number} textId  - Id of page for which to load rendered text
+* @param {Number} pageId  - Id of page for which to load rendered text
 * @returns {JQueryXHR} Ajax query of rendered text
 */
-    loadRenderedText(textId: number): JQuery.jqXHR<ITextWithContent> {
-        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResource`,
-            { textId: textId, format: TextFormatEnumContract.Html } as JQuery.PlainObject);
+    loadRenderedText(pageId: number): JQuery.jqXHR<ITextWithContent> {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResourceByPageId`,
+            { pageId: pageId, format: TextFormatEnumContract.Html } as JQuery.PlainObject);
         return ajax;
     }
 
