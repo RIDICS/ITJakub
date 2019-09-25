@@ -53,6 +53,8 @@
     "UploadNewVersion": "Nahrát novou verzi",
 
     "EditPage": "Upravit stránku",
+    "CreateText": "Vytvořit text",
+    "CreateTextPage": "Vytvořit text stránky",
     "Commentary": "Komentář",
     "Respond": "Odpovědět",
     "Edit": "Upravit",
@@ -88,7 +90,7 @@
     "ChangesSaveConflict": "Nelze uložit změny. Jiný editor uložil změny dříve než Vy.",
     "EnterPageName": "Prosím vyplňte název stránky.",
     "PageDoesNotExist": "Stránka {0} neexistuje.",
-    "PageDoesNotContainText": "Stránka neobsahuje žádný text. Přejete si ho vytvořit?",
+    "PageDoesNotContainText": "Stránka neobsahuje žádný text. Pro vytvoření nového textu použijte tlačítko \"Vytvořit text\" nahoře.",
     "EditionNoteLoadFailed": "Při načítání ediční poznámky nastala neočekávaná chyba.",
     "EditionNoteSaveSuccess": "Ediční poznámka byla úspěšně uložena.",
     "EditionNoteSaveFailed": "Při ukládání ediční poznámky nastala neočekávaná chyba."

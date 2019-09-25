@@ -19,7 +19,7 @@
                 const commentArea = new CommentArea(util);
                 const commentInput = new CommentInput(commentArea, util);
                 const pageTextEditor = new Editor(commentInput, util, commentArea);
-                const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor);
+                const pageStructure = new PageStructure(commentArea, util, pageTextEditor);
                 const lazyLoad = new PageLazyLoading(pageStructure);
                 const pageNavigation = new TextEditorPageNavigation(this);
                 connections.init();
@@ -42,9 +42,16 @@
                     const pageToolbarDiv = `<div class="col-xs-12 page-toolbar">
                                                 <div class="row">
                                                     <div class="col-xs-4">
+                                                      <div class="page-toolbar-buttons">
+                                                        <button type="button" class="btn btn-default create-text hidden" title="${localization.translate("CreateTextPage", "RidicsProject").value}">
+                                                            <i class="fa fa-plus-circle"></i>
+                                                            ${localization.translate("CreateText", "RidicsProject").value}
+                                                        </button>
                                                         <button type="button" class="btn btn-default edit-page" title="${localization.translate("EditPage", "RidicsProject").value}">
                                                             <i class="fa fa-pencil"></i>
+                                                            ${localization.translate("Edit", "RidicsProject").value}
                                                         </button>
+                                                      </div>
                                                     </div>
                                                     <div class="col-xs-4 page-number text-center invisible">
                                                         [${projectPage.name}]
@@ -61,7 +68,7 @@
                                 ${commentAreaDiv}
                             </div>`);
                 }
-                pageTextEditor.init();
+                pageTextEditor.init(pageStructure);
                 lazyLoad.init();
                 pageNavigation.init(data);
                 this.attachEventShowPageCheckbox(pageNavigation);

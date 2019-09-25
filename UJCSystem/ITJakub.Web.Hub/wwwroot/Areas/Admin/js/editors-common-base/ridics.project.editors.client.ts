@@ -78,6 +78,14 @@
         return ajax;
     }
 
+    createTextOnPage(pageId: number): JQuery.jqXHR<number> {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/CreateTextResource`,
+            {
+                pageId: pageId,
+            } as JQuery.PlainObject);
+        return ajax;
+    }
+
     /**
      * Receives array of comments sorted by id. Splits it into arrays with same id. Sorts every array and rejoins them into one array.
      * @param {ICommentSctucture[]} content - Array of comments.
