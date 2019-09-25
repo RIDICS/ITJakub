@@ -19,7 +19,7 @@
                 const commentArea = new CommentArea(util);
                 const commentInput = new CommentInput(commentArea, util);
                 const pageTextEditor = new Editor(commentInput, util, commentArea);
-                const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor);
+                const pageStructure = new PageStructure(commentArea, util, pageTextEditor);
                 const lazyLoad = new PageLazyLoading(pageStructure);
                 const pageNavigation = new TextEditorPageNavigation(this);
                 connections.init();
@@ -68,7 +68,7 @@
                                 ${commentAreaDiv}
                             </div>`);
                 }
-                pageTextEditor.init();
+                pageTextEditor.init(pageStructure);
                 lazyLoad.init();
                 pageNavigation.init(data);
                 this.attachEventShowPageCheckbox(pageNavigation);
