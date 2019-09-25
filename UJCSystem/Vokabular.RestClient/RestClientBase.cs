@@ -443,6 +443,11 @@ namespace Vokabular.RestClient
             }
 
             var exceptionMessage = responseContent.Trim('\"');
+            if (string.IsNullOrWhiteSpace(exceptionMessage))
+            {
+                exceptionMessage = $"Response status code does not indicate success: {response.StatusCode:D} ({response.StatusCode}).";
+            }
+
             throw new HttpErrorCodeException(exceptionMessage, responseStatusCode);
         }
 
