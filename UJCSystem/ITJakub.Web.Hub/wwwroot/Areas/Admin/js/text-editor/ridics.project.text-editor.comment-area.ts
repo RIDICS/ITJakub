@@ -376,20 +376,27 @@
     private processDeleteCommentClick(commentAreaEl: JQuery) {
         commentAreaEl.find(".delete-comment, .delete-root-comment").on("click", (event) => {
             const target = $(event.target as Node as HTMLElement);
-            let confirmMessage: string;
-            if (target.hasClass("delete-root-comment") && target.parents(".page-row").find(".viewer").length === 0) {
-                confirmMessage = `<div class="alert alert-warning">
+            const isEditingModeEnabled = target.parents(".page-row").find(".viewer").length === 0;
+            const commentActionsRowEl = target.parents(".comment-actions-row");
+
+            let confirmMessage = localization.translate("DeleteCommentConfirm", "RidicsProject").value;
+            let commentId: number;
+
+            if (target.hasClass("delete-root-comment")) {
+                commentId = parseInt(commentActionsRowEl.parents(".media-body").attr("data-comment-id"));
+
+                if (isEditingModeEnabled) {
+                    confirmMessage = `<div class="alert alert-warning">
                                         <i class="fa fa-warning"></i> ${localization.translate("DeleteCommentWarning", "RidicsProject").value}
                                     </div>
                                     <div class="bootbox-body">
                                        ${localization.translate("DeleteCommentConfirm", "RidicsProject").value}
                                     </div>`;
+                }
             } else {
-                confirmMessage = localization.translate("DeleteCommentConfirm", "RidicsProject").value;
+                commentId = parseInt(commentActionsRowEl.siblings(".media-body").attr("data-comment-id"));
             }
-            const commentActionsRowEl = target.parents(".comment-actions-row");
-            const commentId = parseInt(commentActionsRowEl.parents(".media-body").attr("data-comment-id"));
-                
+
             bootbox.confirm({
                 title: localization.translate("ConfirmTitle", "RidicsProject").value,
                 message: confirmMessage,
@@ -403,40 +410,44 @@
                 },
                 callback: (result) => {
                     if (result) {
+                        let deleteAjax: JQueryXHR;
                         if (target.hasClass("delete-root-comment")) {
                             const pageRow = target.parents(".page-row");
-                            if (pageRow.find(".viewer").length === 0) {
+                            if (isEditingModeEnabled) { 
                                 const codeMirror = this.editor.getSimpleMdeEditor().codemirror;
                                 const originalText = codeMirror.getValue();
                                 const textId = Number(pageRow.data("text-id"));
 
                                 // save text before removing root comment
-                                this.editor.saveText(textId, originalText, SaveTextModeType.ValidateOnlySyntax).done((response: ISaveTextResponse) => {
-                                    if (!response.isValidationSuccess) {
-                                        codeMirror.setValue(originalText);
-                                        bootbox.alert({
-                                            title: localization.translate("Fail", "RidicsProject").value,
-                                            message: localization.translate("CommentSyntaxError", "RidicsProject")
-                                                .value,
-                                            buttons: {
-                                                ok: {
-                                                    className: "btn-default"
+                                this.editor.saveText(textId, originalText, SaveTextModeType.ValidateOnlySyntax).done(
+                                    (response: ISaveTextResponse) => {
+                                        if (!response.isValidationSuccess) {
+                                            codeMirror.setValue(originalText);
+                                            bootbox.alert({
+                                                title: localization.translate("Fail", "RidicsProject").value,
+                                                message: localization.translate("CommentSyntaxError", "RidicsProject")
+                                                    .value,
+                                                buttons: {
+                                                    ok: {
+                                                        className: "btn-default"
+                                                    }
                                                 }
-                                            }
-                                        });
-                                        return;
-                                    }
+                                            });
+                                            return;
+                                        }
 
-                                    const deleteAjax = this.util.deleteRootComment(commentId).done(() => {
-                                        this.editor.reloadCurrentEditorArea();
+                                        deleteAjax = this.util.deleteRootComment(commentId).done(() => {
+                                            this.editor.reloadCurrentEditorArea();
+                                        });
                                     });
-                                    this.onCommentDeleteRequest(deleteAjax, target);
-                                });
+                            } else {
+                                deleteAjax = this.util.deleteRootComment(commentId);
                             }
                         } else { // delete child comment
-                            const deleteAjax = this.util.deleteComment(commentId);
-                            this.onCommentDeleteRequest(deleteAjax, target);
+                            deleteAjax = this.util.deleteComment(commentId);
                         }
+
+                        this.onCommentDeleteRequest(deleteAjax, target);
                     }
                 }
             });
