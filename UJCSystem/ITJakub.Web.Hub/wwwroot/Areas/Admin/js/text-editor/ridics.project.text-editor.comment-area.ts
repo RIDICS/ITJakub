@@ -451,8 +451,8 @@
                             }
 
                             const deleteAjax = this.util.deleteRootComment(commentId);
-                            deleteAjax.done(() => {
-                                this.editor.reloadCurrentEditorArea();
+                            deleteAjax.done((result) => {
+                                this.editor.setTextInEditor(result.newText, true);
                             });
                             this.onRootCommentDeleteRequest(deleteAjax, pageRow);
                             this.onCommentDeleteRequest(deleteAjax, target);
