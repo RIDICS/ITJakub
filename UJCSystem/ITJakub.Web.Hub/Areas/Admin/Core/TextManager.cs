@@ -137,7 +137,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
             };
         }
         
-        public void DeleteRootComment(long commentId)
+        public DeleteRootCommentResponse DeleteRootComment(long commentId)
         {
             var client = m_communicationProvider.GetMainServiceProjectClient();
             var comment = client.GetComment(commentId);
@@ -165,12 +165,18 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
 
                 try
                 {
-                    client.CreateTextResourceVersion(text.Id, new CreateTextRequestContract
+                    var resourceVersionId = client.CreateTextResourceVersion(text.Id, new CreateTextRequestContract
                     {
                         Id = text.Id,
                         ResourceVersionId = text.VersionId,
                         Text = newText,
                     });
+
+                    return new DeleteRootCommentResponse
+                    {
+                        ResourceVersionId = resourceVersionId,
+                        NewText = newText,
+                    };
                 }
                 catch (HttpRequestException)
                 {
@@ -181,6 +187,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
                     }
                 }
             }
+
+            // text wasn't updated, so return original values:
+            return new DeleteRootCommentResponse
+            {
+                ResourceVersionId = text.VersionId,
+                NewText = text.Text,
+            };
         }
     }
 }

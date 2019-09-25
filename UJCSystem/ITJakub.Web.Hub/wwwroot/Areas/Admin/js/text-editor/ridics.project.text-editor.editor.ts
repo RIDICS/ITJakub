@@ -33,6 +33,10 @@
         return this.editModeSelector;
     }
 
+    getSimpleMdeEditor() {
+        return this.simplemde;
+    }
+
     init(pageStructure: PageStructure) {
         this.pageStructure = pageStructure;
 
@@ -374,7 +378,6 @@
                     title: localization.translate("Close", "RidicsProject").value
                 },
                 this.simpleMdeTools.toolSeparator,
-                this.simpleMdeTools.toolSeparator,
                 this.simpleMdeTools.toolBold,
                 this.simpleMdeTools.toolItalic,
                 this.simpleMdeTools.toolSeparator,
@@ -430,6 +433,12 @@
         this.originalContent = this.simplemde.value();
     }
 
+    setTextInEditor(text: string, overwriteOriginalText: boolean) {
+        this.simplemde.codemirror.setValue(text);
+        if (overwriteOriginalText) {
+            this.originalContent = text;
+        }
+    }
 
     private setCustomPreviewRender() {
         this.simpleMdeTools.toolPreview.action = (editor: SimpleMDE) => {

@@ -16,20 +16,19 @@
     }
 
     /**
-* Detects buttons click and sends data to server according to ICommentStructureReply
-* @param {Number} textId  - Text Id of page, where comment occured
-* @param {string} textReferenceId  - Comment thread unique id to connect composition area and comment area
-* @param {Number} id - Unique comment id 
-* @param {Number} parentCommentId - Unique id of parent comment
-* @param {JQuery} dialogEl - Dialog element to display result message about send
-* @param {string} text - Comment body
-*/
+    * Detects buttons click and sends data to server according to ICommentStructureReply
+    * @param {Number} textId  - Text Id of page, where comment occured
+    * @param {string} textReferenceId  - Comment thread unique id to connect composition area and comment area
+    * @param {Number} id - Unique comment id 
+    * @param {Number} parentCommentId - Unique id of parent comment
+    * @param {JQuery} dialogEl - Dialog element to display result message about send
+    * @param {string} text - Comment body
+    */
     processCommentSendClick(
         textId: number,
         textReferenceId: string,
         id: number,
         parentCommentId: number, commentText: string) {
-        const serverAddress = this.util.getServerAddress();
         if (!commentText) {
             bootbox.alert({
                 title: localization.translate("Warning", "RidicsProject").value,
@@ -47,13 +46,8 @@
                 parentCommentId: parentCommentId,
                 textReferenceId: textReferenceId
             };
-            const sendAjax = $.post(`${serverAddress}Admin/ContentEditor/SaveComment`,
-                {
-                    comment: comment,
-                    textId: textId
-                } as JQuery.PlainObject
-            );
-            sendAjax.done(() => {
+
+            this.util.createComment(textId, comment).done(() => {
                 bootbox.alert({
                     title: localization.translate("Success", "RidicsProject").value,
                     message: localization.translate("CommentCreateSuccess", "RidicsProject").value,
@@ -68,11 +62,10 @@
                     const pageEl = $(`[data-text-id="${textId}"]`);
                     this.commentArea.collapseIfCommentAreaContentOverflows(pageEl.children(".comment-area"));//collapse section fully when updating section height initially
                 });
-            });
-            sendAjax.fail(() => {
+            }).fail(() => {
                 bootbox.alert({
                     title: localization.translate("Fail", "RidicsProject").value,
-                    message: localization.translate("Failed to create comment.", "RidicsProject").value,
+                    message: localization.translate("CommentCreateFail", "RidicsProject").value,
                     buttons: {
                         ok: {
                             className: "btn-default"
@@ -84,24 +77,35 @@
     }
 
     private processEditCommentClick() {
-        $("#project-resource-preview").on("click", ".edit-comment", (event) => {
+        $("#project-resource-preview").on("click", ".edit-comment, .edit-root-comment", (event) => {
             const target = $(event.target as HTMLElement);
             const commentActionsRowEl = target.parents(".comment-actions-row");
-            const commentBody = commentActionsRowEl.siblings(".media-body");
-            const mainCommentContentEl = commentBody.parents(".media-body");
+
+            let mainCommentContentEl: JQuery<HTMLElement>;
+            let editedCommentBody: JQuery<HTMLElement>;
+            if (target.hasClass("edit-root-comment"))
+            {
+                editedCommentBody = commentActionsRowEl.parents(".media-body");
+                mainCommentContentEl = editedCommentBody;
+            }
+            else {
+                editedCommentBody = commentActionsRowEl.siblings(".media-body");
+                mainCommentContentEl = editedCommentBody.parents(".media-body");
+            }
+
             const mainCommentLeftHeader = mainCommentContentEl.siblings(".main-comment");
             const parentCommentId = mainCommentLeftHeader.data("parent-comment-id");
             const textReferenceId = mainCommentLeftHeader.data("text-reference-id");
             const textId = mainCommentLeftHeader.parents(".page-row").data("text-id");
-            const commentTextEl = commentBody.children(".comment-body");
+            const commentTextEl = editedCommentBody.children(".comment-body");
             const commentText = commentTextEl.text();
             commentActionsRowEl.hide();
             commentTextEl.hide();
-            commentBody.append(`<textarea cols="40" rows="3" class="textarea-no-resize edit-comment-textarea">${commentText}</textarea>`);
+            editedCommentBody.append(`<textarea cols="40" rows="3" class="textarea-no-resize edit-comment-textarea">${commentText}</textarea>`);
             const jTextareaEl = $(".edit-comment-textarea");
             jTextareaEl.focus();
-            const commentId = parseInt(commentBody.attr("data-comment-id"));
-            this.processCommentReply(textId, textReferenceId, commentId, parentCommentId, jTextareaEl, commentActionsRowEl);
+            const commentId = parseInt(editedCommentBody.attr("data-comment-id"));
+            this.processCommentReply(textId, textReferenceId, commentId, parentCommentId, jTextareaEl, target);
         });
     }
 
@@ -110,12 +114,10 @@
             "button.respond-to-comment",
             (event) => { // Process click on "Respond" button
                 const target = $(event.target as HTMLElement);
-                const pageRow =
-                    target.parents(".comment-area").parent(".page-row");
+                const pageRow = target.parents(".comment-area").parent(".page-row");
                 var textId = $(pageRow).data("text-id") as number;
-                const textReferenceId = target.parent().siblings(".main-comment").data("text-reference-id");
-                const parentCommentId =
-                    target.parent().siblings(".main-comment").data("parent-comment-id") as number;
+                const textReferenceId = target.parents(".media-body").siblings(".main-comment").data("text-reference-id");
+                const parentCommentId = target.parents(".media-body").siblings(".main-comment").data("parent-comment-id") as number;
                 const id = 0; //creating comment
                 if (textReferenceId !== null && typeof textReferenceId !== "undefined") {
                     this.addCommentFromCommentArea(textReferenceId, textId, id, parentCommentId, target);
@@ -172,7 +174,7 @@
                         this.processCommentSendClick(textId, textReferenceId, id, null, commentText);
                         codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
                             { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
-                    }).fail((error) => {
+                    }).fail(() => {
                         codeMirror.setValue(originalText);
                         bootbox.alert({
                             title: localization.translate("Fail", "RidicsProject").value,
@@ -205,8 +207,8 @@
         parentCommentId: number,
         buttonEl: JQuery) {
         const elm = `<textarea class="respond-to-comment-textarea textarea-no-resize"></textarea>`;
-        buttonEl.after(elm);
-        buttonEl.hide();
+        buttonEl.parents(".comment-actions-row").hide();
+        buttonEl.parents(".comment-actions-row").after(elm);
         const textareaEl = $(".respond-to-comment-textarea");
         textareaEl.focus();
         this.processCommentReply(textId, textReferenceId, id, parentCommentId, textareaEl, buttonEl);
@@ -219,14 +221,21 @@
         parentCommentId: number,
         textAreaEl: JQuery,
         jEl: JQuery) {
-        var serverAddress = this.util.getServerAddress();
         var commentTextOriginal = textAreaEl.val() as string;
         textAreaEl.on("focusout",
             (event: JQuery.Event) => {
                 event.stopImmediatePropagation();
                 var commentText = textAreaEl.val() as string;
                 if (commentText === commentTextOriginal) {
-                    jEl.show();
+                    const actionsRow = jEl.parents(".comment-actions-row");
+                    actionsRow.show();
+
+                    if (jEl.hasClass("edit-root-comment")) {
+                        actionsRow.siblings(".comment-body").show();
+                    } else {
+                        actionsRow.siblings(".media-body").find(".comment-body").show();
+                    }
+                    
                     textAreaEl.remove();
                 } else {
                     const comment: ICommentStructureReply = {
@@ -236,31 +245,21 @@
                         textReferenceId: textReferenceId
                     };
                     if (commentId === 0) {
-                        const sendAjax = $.post(`${serverAddress}Admin/ContentEditor/SaveComment`,
-                            {
-                                comment: comment,
-                                textId: textId
-                            } as JQuery.PlainObject
-                        );
+                        const sendAjax = this.util.createComment(textId, comment);
                         this.onCommentSendRequest(sendAjax, textAreaEl, textId);
                     } else {
-                        const sendAjax = $.post(`${serverAddress}Admin/ContentEditor/UpdateComment`,
-                            {
-                                comment: comment,
-                                commentId: commentId
-                            } as JQuery.PlainObject
-                        );
-                        this.onCommentSendRequest(sendAjax, textAreaEl, textId);
+                        const sendAjax = this.util.editComment(commentId, comment);
+                        this.onCommentSendRequest(sendAjax, textAreaEl, textId, true);
                     }
                 }
             });
     }
 
-    private onCommentSendRequest(sendAjax:JQueryXHR, textAreaEl:JQuery, textId:number) {
+    private onCommentSendRequest(sendAjax:JQueryXHR, textAreaEl:JQuery, textId:number, isEditRequest = false) {
         sendAjax.done(() => {
             bootbox.alert({
                 title: localization.translate("Success", "RidicsProject").value,
-                message: localization.translate("CommentCreateSuccess", "RidicsProject").value,
+                message: localization.translate(isEditRequest ? "CommentUpdateSuccess" : "CommentCreateSuccess", "RidicsProject").value,
                 buttons: {
                     ok: {
                         className: "btn-default"
@@ -274,7 +273,7 @@
         sendAjax.fail(() => {
             bootbox.alert({
                 title: localization.translate("Fail", "RidicsProject").value,
-                message: localization.translate("CommentCreateFail", "RidicsProject").value,
+                message: localization.translate(isEditRequest ? "CommentUpdateFail" : "CommentCreateFail", "RidicsProject").value,
                 buttons: {
                     ok: {
                         className: "btn-default"

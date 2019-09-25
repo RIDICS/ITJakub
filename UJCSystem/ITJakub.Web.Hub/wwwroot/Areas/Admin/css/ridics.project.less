@@ -1083,7 +1083,11 @@ table {
                         min-height: @comment-area-min-height;
                         position: relative;
 
-                        .respond-to-comment, .edit-comment, .delete-comment {
+                        .respond-to-comment,
+                        .edit-comment,
+                        .delete-comment,
+                        .edit-root-comment,
+                        .delete-root-comment {
                             background-color: @comment-action-background-color;
                             color: @comment-action-font-color;
                             border: none;
@@ -1151,7 +1155,9 @@ table {
                             }
                         }
 
-                        .respond-to-comment {
+                        .respond-to-comment,
+                        .edit-root-comment,
+                        .delete-root-comment {
                             max-height: 22px;
                             font-size: 11px;
 

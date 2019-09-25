@@ -38,8 +38,34 @@
         return ajax;
     }
 
-    deleteComment(commentId: number): JQueryXHR {
+    createComment(textId: number, comment: ICommentStructureReply): JQueryXHR {
+        return $.post(`${this.serverPath}Admin/ContentEditor/SaveComment`,
+            {
+                comment: comment,
+                textId: textId
+            } as JQuery.PlainObject
+        );
+    }
+
+    editComment(commentId: number, comment: ICommentStructureReply): JQueryXHR {
+        return $.post(`${this.serverPath}Admin/ContentEditor/UpdateComment`,
+            {
+                comment: comment,
+                commentId: commentId
+            } as JQuery.PlainObject
+        );
+    }
+
+    deleteComment(commentId: number): JQuery.jqXHR {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/DeleteComment`,
+            {
+                commentId: commentId
+            } as JQuery.PlainObject);
+        return ajax;
+    }
+
+    deleteRootComment(commentId: number): JQuery.jqXHR<IDeleteRootCommentResponse> {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/DeleteRootComment`,
             {
                 commentId: commentId
             } as JQuery.PlainObject);

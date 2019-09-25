@@ -74,7 +74,8 @@
                 this.attachEventShowPageCheckbox(pageNavigation);
                 commentInput.init();
                 commentArea.init();
-                
+                commentArea.initCommentsDeleting(pageTextEditor);
+
             } else {
                 const error = new AlertComponentBuilder(AlertType.Error)
                     .addContent(localization.translate("NoTextPages", "RidicsProject").value);
