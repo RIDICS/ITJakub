@@ -35,6 +35,13 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        [HttpPost("page/{pageId}/text")]
+        public long CreateTextResource(long pageId)
+        {
+            var resultResourceId = m_projectContentManager.CreateTextResourceOnPage(pageId);
+            return resultResourceId;
+        }
+
         [HttpGet("text/{textId}")]
         public FullTextContract GetTextResource(long textId, [FromQuery] TextFormatEnumContract? format)
         {

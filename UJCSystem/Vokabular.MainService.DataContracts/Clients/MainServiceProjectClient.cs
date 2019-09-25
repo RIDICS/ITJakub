@@ -454,6 +454,22 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+        
+        public long CreateTextResource(long pageId)
+        {
+            try
+            {
+                var result = m_client.Post<long>($"project/page/{pageId}/text", null);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
 
         public long CreateTextResourceVersion(long textId, CreateTextRequestContract request)
         {
@@ -539,26 +555,6 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
-
-        #region Text
-
-        public long CreateNewTextResourceVersion(long textId, TextContract request)
-        {
-            try
-            {
-                var result = m_client.Post<long>($"text/{textId}", request);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        #endregion
 
         public SnapshotContract GetLatestPublishedSnapshot(long projectId)
         {

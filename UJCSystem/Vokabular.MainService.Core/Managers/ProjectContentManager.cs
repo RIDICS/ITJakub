@@ -112,14 +112,7 @@ namespace Vokabular.MainService.Core.Managers
         public FullTextContract GetTextResourceVersion(long textVersionId, TextFormatEnumContract formatValue)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetResourceVersion<TextResource>(textVersionId, true, true));
-            var result = m_mapper.Map<FullTextContract>(dbResult);
-
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(dbResult.Resource.Project.ProjectType);
-
-            var text = fulltextStorage.GetPageText(dbResult, formatValue);
-            result.Text = text;
-
-            return result;
+            return GetTextResource(dbResult, formatValue);
         }
 
         public List<GetTextCommentContract> GetCommentsForText(long textId)
@@ -215,6 +208,17 @@ namespace Vokabular.MainService.Core.Managers
             var createNewTextResourceWork = new CreateNewTextResourceWork(m_resourceRepository, request, userId, fulltextStorage);
             var resultId = createNewTextResourceWork.Execute();
             return resultId;
+        }
+
+        public long CreateTextResourceOnPage(long pageId)
+        {
+            var latestPage = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<PageResource>(pageId));
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(latestPage.Resource.Project.ProjectType);
+
+            var userId = m_authenticationManager.GetCurrentUserId();
+
+            var resourceId = new CreateEmptyTextResourceWork(m_resourceRepository, pageId, userId, fulltextStorage).Execute();
+            return resourceId;
         }
     }
 }
