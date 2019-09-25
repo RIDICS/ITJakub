@@ -424,6 +424,7 @@
                     const pageRow = target.parents(".page-row");
                     if (!isEditingModeEnabled) {
                         const deleteAjax = this.util.deleteRootComment(commentId);
+                        this.onRootCommentDeleteRequest(deleteAjax, pageRow);
                         this.onCommentDeleteRequest(deleteAjax, target);
                         return;
                     }
@@ -439,8 +440,7 @@
                                 codeMirror.setValue(originalText);
                                 bootbox.alert({
                                     title: localization.translate("Fail", "RidicsProject").value,
-                                    message: localization.translate("CommentSyntaxError", "RidicsProject")
-                                        .value,
+                                    message: localization.translate("CommentSyntaxError", "RidicsProject").value,
                                     buttons: {
                                         ok: {
                                             className: "btn-default"
@@ -450,9 +450,11 @@
                                 return;
                             }
 
-                            const deleteAjax = this.util.deleteRootComment(commentId).done(() => {
+                            const deleteAjax = this.util.deleteRootComment(commentId);
+                            deleteAjax.done(() => {
                                 this.editor.reloadCurrentEditorArea();
                             });
+                            this.onRootCommentDeleteRequest(deleteAjax, pageRow);
                             this.onCommentDeleteRequest(deleteAjax, target);
                         });
                 }
@@ -460,7 +462,7 @@
         });
     }
 
-    private onCommentDeleteRequest(deleteAjax: JQueryXHR, targetButton: JQuery) {
+    private onCommentDeleteRequest(deleteAjax: JQuery.Promise<any>, targetButton: JQuery) {
         deleteAjax.done(() => {
             const textId = targetButton.parents(".page-row").data("text-id");
             bootbox.alert({
@@ -484,6 +486,13 @@
                     }
                 }
             });
+        });
+    }
+
+    private onRootCommentDeleteRequest(deleteAjax: JQuery.jqXHR<IDeleteRootCommentResponse>, pageRow: JQuery) {
+        deleteAjax.done((response) => {
+            const compositionArea = pageRow.children(".composition-area");
+            compositionArea.data("version-id", response.resourceVersionId);
         });
     }
 

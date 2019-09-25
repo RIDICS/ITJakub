@@ -99,9 +99,10 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public void DeleteRootComment(long commentId)
+        public IActionResult DeleteRootComment(long commentId)
         {
-            m_textManager.DeleteRootComment(commentId);
+            var result = m_textManager.DeleteRootComment(commentId);
+            return Json(result);
         }
 
         [HttpPost]

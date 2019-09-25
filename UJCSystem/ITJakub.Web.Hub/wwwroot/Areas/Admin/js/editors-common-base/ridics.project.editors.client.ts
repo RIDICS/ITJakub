@@ -56,7 +56,7 @@
         );
     }
 
-    deleteComment(commentId: number): JQueryXHR {
+    deleteComment(commentId: number): JQuery.jqXHR {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/DeleteComment`,
             {
                 commentId: commentId
@@ -64,7 +64,7 @@
         return ajax;
     }
 
-    deleteRootComment(commentId: number): JQueryXHR {
+    deleteRootComment(commentId: number): JQuery.jqXHR<IDeleteRootCommentResponse> {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/DeleteRootComment`,
             {
                 commentId: commentId

@@ -383,6 +383,11 @@ interface ICommentSctucture extends ICommentStructureBase {
     time: number;
 }
 
+interface IDeleteRootCommentResponse {
+    resourceVersionId: number;
+    newText: string;
+}
+
 interface ITextWithPage {
     bookVersionId: number;
     id: number;
