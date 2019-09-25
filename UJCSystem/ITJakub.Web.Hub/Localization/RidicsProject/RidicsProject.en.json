@@ -36,6 +36,8 @@
     "ShiftChapterDown": "Shift selected chapters down",
     "EditPageName": "Edit page name",
     "DeletePage": "Delete page",
+    "EditChapterName": "Edit chapter name",
+    "DeleteChapter": "Delete chapter",
 
     "Fail": "Fail",
     "Success": "Success",

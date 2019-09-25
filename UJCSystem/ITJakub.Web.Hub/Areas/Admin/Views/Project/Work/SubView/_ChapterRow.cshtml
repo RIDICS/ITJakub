@@ -6,7 +6,7 @@
     int levelOfHierarchy = (int)ViewData["levelOfHierarchy"];
 }
 <div class="chapter-container">
-    <div class="chapter-row" data-chapter-id="@Model.Id" data-page-id="@Model.BeginningPageId" data-position="@Model.Position" data-level="@levelOfHierarchy">
+    <div class="chapter-row" data-chapter-id="@Model.Id" data-beginning-page-id="@Model.BeginningPageId" data-position="@Model.Position" data-level="@levelOfHierarchy">
         <div class="ridics-checkbox" style="margin-left: @(levelOfHierarchy)em">
             <label>
                 <input type="checkbox" class="selection-checkbox" />
@@ -17,17 +17,17 @@
         </div>
         <div class="name">
             <div>
-                <input type="text" name="page-name" class="form-control hide" value="@Model.Name" />
+                <input type="text" name="chapter-name" class="form-control hide" value="@Model.Name" />
                 @Model.Name
             </div>
             <div class="alert alert-danger"></div>
         </div>
         <div class="buttons">
             [@Model.BeginningPageId]
-            <a class="edit-page btn btn-sm btn-default" title="@Localizer.Translate("EditPageName", "RidicsProject")">
+            <a class="edit-chapter btn btn-sm btn-default" title="@Localizer.Translate("EditChapterName", "RidicsProject")">
                 <i class="fa fa-pencil"></i>
             </a>
-            <a class="remove-page btn btn-sm btn-default" title="@Localizer.Translate("DeletePage", "RidicsProject")">
+            <a class="remove-chapter btn btn-sm btn-default" title="@Localizer.Translate("DeleteChapter", "RidicsProject")">
                 <i class="fa fa-trash"></i>
             </a>
         </div>

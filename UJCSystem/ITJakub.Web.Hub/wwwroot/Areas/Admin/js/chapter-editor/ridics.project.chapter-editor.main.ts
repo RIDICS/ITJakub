@@ -4,10 +4,7 @@
     private readonly util: EditorsApiClient;
     private readonly errorHandler: ErrorHandler;
     private readonly moveEditor: ChapterMoveEditor;
-    private moveChapterDownButton: JQuery<HTMLElement>;
-    private moveChapterUpButton: JQuery<HTMLElement>;
-    private moveChapterLeftButton: JQuery<HTMLElement>;
-    private moveChapterRightButton: JQuery<HTMLElement>;
+    private position = 0;
 
     constructor() {
         this.gui = new EditorsGui();
@@ -15,7 +12,7 @@
         this.util = new EditorsApiClient();
         this.moveEditor = new ChapterMoveEditor();
     }
-    
+
     init(projectId: number) {
         this.moveEditor.init();
         this.editDialog = new BootstrapDialogWrapper({
@@ -24,21 +21,12 @@
         });
         
         $(".save-chapters-button").on("click", () => {
-            const chapters = $(".chapter-row").toArray();
-            // TODO save chapters
-           /* const pageListArray: IUpdatePage[] = [];
-            for (let i = 0; i < pages.length; i++) {
-                pageListArray.push({
-                    id: $(pages[i]).data("page-id"),
-                    position: i + 1,
-                    name: $(pages[i]).find(".name").text().trim()
-                });
-            }
-            this.util.savePageList(projectId, pageListArray).done(() => {
+            this.position = 0;
+            this.util.saveChapterList(projectId, this.getChapters($(".chapter-listing table > .sub-chapters"))).done(() => {
                 $("#unsavedChanges").addClass("hide");
             }).fail((error) => {
                 this.gui.showInfoDialog(localization.translate("Error").value, this.errorHandler.getErrorMessage(error));
-            });*/
+            });
         });
 
         this.initChapterRowClicks($($(".sub-chapters").get(0)));
@@ -64,6 +52,32 @@
         );
     }
 
+    private getChapters(subChaptersElements: JQuery<HTMLElement>, parentId: number = null): IUpdateChapter[] {
+        const chapters = subChaptersElements.children(".chapter-container").children(".chapter-row");
+        const subChaptersEl = subChaptersElements.children(".chapter-container").children(".sub-chapters");
+
+        const chapterList: IUpdateChapter[] = [];
+        for (let i = 0; i < chapters.length; i++) {
+            const newChapter = {
+                id: Number($(chapters[i]).data("chapter-id")),
+                parentId: parentId,
+                position: this.position + 1,
+                name: $(chapters[i]).find(".name").text().trim(), //TODO check, add others things
+                starts: 0, //TODO page id or page name?
+                subChapters: []
+            }
+            this.position++;
+
+            if (subChaptersEl.children(".chapter-container").length !== 0) {
+                newChapter.subChapters = this.getChapters(subChaptersEl, newChapter.id);
+            }
+
+            chapterList.push(newChapter);
+        }
+
+        return chapterList;
+    }
+
     private initChapterRowClicks(subChapters: JQuery<HTMLElement>) {
         subChapters.find(".chapter-row .ridics-checkbox").change(() => {
             this.moveEditor.checkMoveButtonsAvailability();
@@ -81,6 +95,7 @@
             const chapterRow = $(event.currentTarget).parents(".chapter-row");
             chapterRow.remove();
             this.showUnsavedChangesAlert();
+            this.moveEditor.checkMoveButtonsAvailability();
         });
 
         subChapters.find(".chapter-row .edit-chapter").off();
@@ -169,53 +184,40 @@
         });
     }
 
-    private populateList(pageList: string[]) {
-        const listContainerEl = $(".page-listing tbody");
-        if (listContainerEl.length) {
-            this.gui.showInfoDialog(localization.translate("Info").value, localization.translate("AddingGeneratedNames", "RidicsProject").value);
-        }
-
-        for (let page of pageList) {
-            const html = this.createChapterRow(page);
-            listContainerEl.append(html);
-        }
-
-        this.showUnsavedChangesAlert();
-       // this.initChapterRowClicks();
-    }
-
     private showUnsavedChangesAlert() {
         $("#unsavedChanges").removeClass("hide");
     }
 
-    //TODO fix this
-    private createChapterRow(name: string): string {
-        return `<tr class="chapter-row">
-                    <td class="ridics-checkbox">
-                        <label>
-                            <input type="checkbox" class="selection-checkbox">
-                            <span class="cr cr-black">
-                                <i class="cr-icon glyphicon glyphicon-ok"></i>
-                            </span>
-                        </label>
-                    </td>
-                    <td>
-                        <div>
-                            <input type="text" name="page-name" class="form-control hide" value="${name}" />
-                            <div class="name">
-                                ${name}
-                            </div>
+    private createChapterRow(name: string, beginningPageId: number, beginningPageName: string, levelOfHierarchy = 0): string {
+        return `<div class="chapter-container">
+                    <div class="chapter-row" data-beginning-page-id="${beginningPageId}" data-level="${levelOfHierarchy}">
+                        <div class="ridics-checkbox" style="margin-left: ${levelOfHierarchy}em">
+                            <label>
+                                <input type="checkbox" class="selection-checkbox" />
+                                <span class="cr cr-black">
+                                    <i class="cr-icon glyphicon glyphicon-ok"></i>
+                                </span>
+                            </label>
                         </div>
-                        <div class="alert alert-danger"></div>
-                    </td>
-                    <td class="buttons">
-                        <a class="edit-page btn btn-sm btn-default">
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                        <a class="remove-page btn btn-sm btn-default">
-                            <i class="fa fa-trash"></i>
-                        </a>
-                    </td>
-                </tr>`;
+                        <div class="name">
+                            <div>
+                                <input type="text" name="chapter-name" class="form-control hide" value=" ${name}" />
+                                 ${name}
+                            </div>
+                            <div class="alert alert-danger"></div>
+                        </div>
+                        <div class="buttons">
+                            ${beginningPageName}
+                            <a class="edit-chapter btn btn-sm btn-default" title="${localization.translate("EditChapterName", "RidicsProject").value}">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                            <a class="remove-chapter btn btn-sm btn-default" title="${localization.translate("DeleteChapter", "RidicsProject").value}">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sub-chapters">
+                    </div>
+                </div>`;
     }
 }
