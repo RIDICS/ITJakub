@@ -410,7 +410,6 @@
                 },
                 callback: (result) => {
                     if (result) {
-                        let deleteAjax: JQueryXHR;
                         if (target.hasClass("delete-root-comment")) {
                             const pageRow = target.parents(".page-row");
                             if (isEditingModeEnabled) { 
@@ -436,18 +435,19 @@
                                             return;
                                         }
 
-                                        deleteAjax = this.util.deleteRootComment(commentId).done(() => {
+                                        const deleteAjax = this.util.deleteRootComment(commentId).done(() => {
                                             this.editor.reloadCurrentEditorArea();
                                         });
+                                        this.onCommentDeleteRequest(deleteAjax, target);
                                     });
                             } else {
-                                deleteAjax = this.util.deleteRootComment(commentId);
+                                const deleteAjax = this.util.deleteRootComment(commentId);
+                                this.onCommentDeleteRequest(deleteAjax, target);
                             }
                         } else { // delete child comment
-                            deleteAjax = this.util.deleteComment(commentId);
-                        }
-
-                        this.onCommentDeleteRequest(deleteAjax, target);
+                            const deleteAjax = this.util.deleteComment(commentId);
+                            this.onCommentDeleteRequest(deleteAjax, target);
+                        } 
                     }
                 }
             });
