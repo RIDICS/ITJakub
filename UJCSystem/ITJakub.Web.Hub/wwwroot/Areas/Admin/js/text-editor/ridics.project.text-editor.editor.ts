@@ -436,7 +436,7 @@
     reloadCurrentEditorArea() {
         const pageRow = $(".CodeMirror").parents(".page-row");
         const compositionAreaDiv = pageRow.find(".rendered-text");
-        const renderedText = this.util.loadPlainText(this.currentTextId);
+        const renderedText = this.apiClient.loadPlainText(this.currentTextId);
         renderedText.done((data: ITextWithContent) => {
             const pageBody = data.text;
             this.simplemde.codemirror.setValue(pageBody);

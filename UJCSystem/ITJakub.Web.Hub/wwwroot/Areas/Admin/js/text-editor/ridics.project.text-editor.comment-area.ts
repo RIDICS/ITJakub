@@ -409,46 +409,52 @@
                     }
                 },
                 callback: (result) => {
-                    if (result) {
-                        if (target.hasClass("delete-root-comment")) {
-                            const pageRow = target.parents(".page-row");
-                            if (isEditingModeEnabled) { 
-                                const codeMirror = this.editor.getSimpleMdeEditor().codemirror;
-                                const originalText = codeMirror.getValue();
-                                const textId = Number(pageRow.data("text-id"));
-
-                                // save text before removing root comment
-                                this.editor.saveText(textId, originalText, SaveTextModeType.ValidateOnlySyntax).done(
-                                    (response: ISaveTextResponse) => {
-                                        if (!response.isValidationSuccess) {
-                                            codeMirror.setValue(originalText);
-                                            bootbox.alert({
-                                                title: localization.translate("Fail", "RidicsProject").value,
-                                                message: localization.translate("CommentSyntaxError", "RidicsProject")
-                                                    .value,
-                                                buttons: {
-                                                    ok: {
-                                                        className: "btn-default"
-                                                    }
-                                                }
-                                            });
-                                            return;
-                                        }
-
-                                        const deleteAjax = this.util.deleteRootComment(commentId).done(() => {
-                                            this.editor.reloadCurrentEditorArea();
-                                        });
-                                        this.onCommentDeleteRequest(deleteAjax, target);
-                                    });
-                            } else {
-                                const deleteAjax = this.util.deleteRootComment(commentId);
-                                this.onCommentDeleteRequest(deleteAjax, target);
-                            }
-                        } else { // delete child comment
-                            const deleteAjax = this.util.deleteComment(commentId);
-                            this.onCommentDeleteRequest(deleteAjax, target);
-                        } 
+                    if (!result) {
+                        return;
                     }
+
+                    // delete child comment:
+                    if (!target.hasClass("delete-root-comment")) {
+                        const deleteAjax = this.util.deleteComment(commentId);
+                        this.onCommentDeleteRequest(deleteAjax, target);
+                        return;
+                    }
+
+                    // delete root comment in reading mode:
+                    const pageRow = target.parents(".page-row");
+                    if (!isEditingModeEnabled) {
+                        const deleteAjax = this.util.deleteRootComment(commentId);
+                        this.onCommentDeleteRequest(deleteAjax, target);
+                        return;
+                    }
+
+                    // delete root comment in editing mode:
+                    const codeMirror = this.editor.getSimpleMdeEditor().codemirror;
+                    const originalText = codeMirror.getValue();
+                    const textId = Number(pageRow.data("text-id"));
+
+                    this.editor.saveText(textId, originalText, SaveTextModeType.ValidateOnlySyntax).done(
+                        (response: ISaveTextResponse) => {
+                            if (!response.isValidationSuccess) {
+                                codeMirror.setValue(originalText);
+                                bootbox.alert({
+                                    title: localization.translate("Fail", "RidicsProject").value,
+                                    message: localization.translate("CommentSyntaxError", "RidicsProject")
+                                        .value,
+                                    buttons: {
+                                        ok: {
+                                            className: "btn-default"
+                                        }
+                                    }
+                                });
+                                return;
+                            }
+
+                            const deleteAjax = this.util.deleteRootComment(commentId).done(() => {
+                                this.editor.reloadCurrentEditorArea();
+                            });
+                            this.onCommentDeleteRequest(deleteAjax, target);
+                        });
                 }
             });
         });
