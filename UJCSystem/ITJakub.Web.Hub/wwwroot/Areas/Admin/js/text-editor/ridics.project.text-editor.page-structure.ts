@@ -55,6 +55,18 @@
         }
     }
 
+    private updateToolBar(pageEl: JQuery, isContainsText: boolean) {
+        const createBtn = $(".page-toolbar .create-text", pageEl);
+        const editBtn = $(".page-toolbar .edit-page", pageEl);
+        if (isContainsText) {
+            createBtn.addClass("hidden");
+            editBtn.prop("disabled", false);
+        } else {
+            createBtn.removeClass("hidden");
+            editBtn.prop("disabled", true);
+        }
+    }
+
     private appendRenderedText(pageEl: JQuery): JQuery.jqXHR<ITextWithContent> {
         const pageId = pageEl.data("page-id") as number;
         const renderedText = this.util.loadRenderedText(pageId);
@@ -63,7 +75,6 @@
             if (data == null) {
                 var infoAlert = new AlertComponentBuilder(AlertType.Info)
                     .addContent(localization.translate("PageDoesNotContainText", "RidicsProject").value)
-                    // TODO add button for creating text
                     .buildElement();
                 compositionAreaDiv.empty().append(infoAlert);
             } else {
@@ -83,6 +94,7 @@
                     this.commentArea.asyncConstructCommentArea(commentAreaEl);
                 }
             }
+            this.updateToolBar(pageEl, data != null);
 
             var event = $.Event("pageConstructed");
             compositionAreaDiv.trigger(event, { pageId: pageId } as IPageConstructedEventData);

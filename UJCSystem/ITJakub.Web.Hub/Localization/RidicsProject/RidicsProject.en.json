@@ -53,6 +53,8 @@
     "UploadNewVersion": "Upload new version",
 
     "EditPage": "Edit page",
+    "CreateText": "Create text",
+    "CreateTextPage": "Create a text page",
     "Commentary": "Commentary",
     "Respond": "Respond",
     "Edit": "Edit",
@@ -88,7 +90,7 @@
     "ChangesSaveConflict": "Failed to save your changes due to version conflict.",
     "EnterPageName": "Please enter a page name.",
     "PageDoesNotExist": "Page {0} does not exist.",
-    "PageDoesNotContainText": "The page does not contain any text. Do you want to create it?",
+    "PageDoesNotContainText": "The page does not contain any text. Use the \"Create text\" button above to create new text.",
     "EditionNoteLoadFailed": "An unexpected error occurred while loading edition note.",
     "EditionNoteSaveSuccess": "Note has been saved successfully",
     "EditionNoteSaveFailed": "An unexpected error occurred while saving edition note."

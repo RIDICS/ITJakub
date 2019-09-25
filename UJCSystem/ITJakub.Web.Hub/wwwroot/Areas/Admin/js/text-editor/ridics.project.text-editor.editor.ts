@@ -441,12 +441,12 @@
             this.commentArea.updateCommentAreaHeight(pageEl);
             const placeholderSpinner = pageEl.find(".loading");
             placeholderSpinner.show();
-            const editPageButton = pageEl.find(".edit-page");
+            const toolbarButtons = pageEl.find(".page-toolbar-buttons");
             if (pageEl.data(this.editModeSelector)) { // changing div to textarea here
-                editPageButton.addClass("hide");
+                toolbarButtons.addClass("hide");
                 this.createEditorAreaBody(compositionAreaEl);
             } else { // changing textarea to div here
-                editPageButton.removeClass("hide");
+                toolbarButtons.removeClass("hide");
                 this.createViewerAreaBody(compositionAreaEl);
             }
         });
