@@ -82,8 +82,8 @@
         const containerXPos = $(".pages-start").offset().left;
         const containerYPos = $(".pages-start").offset().top;
         const element = document.elementFromPoint(containerXPos, containerYPos);
-        if (element !== null && typeof element !== "undefined") {
-            const pageNumberString = element.getAttribute("data-page");
+        if (element !== null && typeof element !== "undefined" && $(element).parents(".page-row").length === 1) {
+            const pageNumberString = $(element).parents(".page-row").data("page");
             if (typeof pageNumberString !== "undefined" && pageNumberString !== null && !this.skippingToPage) {
                 const pageNumber = parseInt(pageNumberString);
                 this.updateOnlySliderValue = true;
