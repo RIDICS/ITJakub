@@ -85,13 +85,27 @@ namespace Vokabular.MainService.Core.Managers
         public FullTextContract GetTextResource(long textId, TextFormatEnumContract formatValue)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetTextResource(textId));
+            return GetTextResource(dbResult, formatValue);
+        }
+
+        public FullTextContract GetTextResourceByPageId(long pageId, TextFormatEnumContract formatValue)
+        {
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestPageText(pageId));
+            return GetTextResource(dbResult, formatValue);
+        }
+
+        private FullTextContract GetTextResource(TextResource dbResult, TextFormatEnumContract formatValue)
+        {
             var result = m_mapper.Map<FullTextContract>(dbResult);
 
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(dbResult.Resource.Project.ProjectType);
+            if (result != null)
+            {
+                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(dbResult.Resource.Project.ProjectType);
 
-            var text = fulltextStorage.GetPageText(dbResult, formatValue);
-            result.Text = text;
-
+                var text = fulltextStorage.GetPageText(dbResult, formatValue);
+                result.Text = text;
+            }
+            
             return result;
         }
 

@@ -59,7 +59,7 @@
                 });
                 const deferred = this.commentArea.reloadCommentArea(textId);
                 deferred.done(() => {
-                    const pageEl = $(`[data-page="${textId}"]`);
+                    const pageEl = $(`[data-text-id="${textId}"]`);
                     this.commentArea.collapseIfCommentAreaContentOverflows(pageEl.children(".comment-area"));//collapse section fully when updating section height initially
                 });
             }).fail(() => {
@@ -96,7 +96,7 @@
             const mainCommentLeftHeader = mainCommentContentEl.siblings(".main-comment");
             const parentCommentId = mainCommentLeftHeader.data("parent-comment-id");
             const textReferenceId = mainCommentLeftHeader.data("text-reference-id");
-            const textId = mainCommentLeftHeader.parents(".page-row").data("page");
+            const textId = mainCommentLeftHeader.parents(".page-row").data("text-id");
             const commentTextEl = editedCommentBody.children(".comment-body");
             const commentText = commentTextEl.text();
             commentActionsRowEl.hide();
@@ -115,7 +115,7 @@
             (event) => { // Process click on "Respond" button
                 const target = $(event.target as HTMLElement);
                 const pageRow = target.parents(".comment-area").parent(".page-row");
-                var textId = $(pageRow).data("page") as number;
+                var textId = $(pageRow).data("text-id") as number;
                 const textReferenceId = target.parents(".media-body").siblings(".main-comment").data("text-reference-id");
                 const parentCommentId = target.parents(".media-body").siblings(".main-comment").data("parent-comment-id") as number;
                 const id = 0; //creating comment

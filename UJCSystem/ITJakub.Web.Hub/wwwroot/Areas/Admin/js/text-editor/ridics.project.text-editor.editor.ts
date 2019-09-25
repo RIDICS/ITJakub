@@ -119,7 +119,7 @@
     changeOrInitEditor(selectedPageRow: JQuery) {
         if (selectedPageRow.data(this.editModeSelector)) {
             let pageDiffers = false;
-            const textId = selectedPageRow.data("page") as number;
+            const textId = selectedPageRow.data("text-id") as number;
             if (textId !== this.currentTextId) {
                 pageDiffers = true;
             }
@@ -133,7 +133,7 @@
                 this.togglePageRows(selectedPageRow);
             }
             if (this.editorExistsInTab && pageDiffers) {
-                const previousPageEl = $(`*[data-page="${this.currentTextId}"]`);
+                const previousPageEl = $(`*[data-text-id="${this.currentTextId}"]`);
                 const contentBeforeClose = this.simplemde.value();
                 if (contentBeforeClose !== this.originalContent) {
                     const editorPageName = editorEl.parents(".page-row").data("page-name");
@@ -239,7 +239,7 @@
     }
 
     saveText(textId: number, contents: string, mode: SaveTextModeType): JQuery.jqXHR<ISaveTextResponse> {
-        const pageEl = $(`*[data-page="${textId}"]`);
+        const pageEl = $(`*[data-text-id="${textId}"]`);
         const compositionArea = pageEl.children(".composition-area");
         const id = compositionArea.data("id");
         const versionId = compositionArea.data("version-id");
@@ -329,7 +329,7 @@
     addEditor(pageRow: JQuery) {
         const editorEl = pageRow.find(".editor");
         const textAreaEl = editorEl.children("textarea");
-        const textId = parseInt(pageRow.data("page") as string);
+        const textId = parseInt(pageRow.data("text-id") as string);
         this.currentTextId = textId;
         this.simpleMdeOptions = {
             element: textAreaEl[0],

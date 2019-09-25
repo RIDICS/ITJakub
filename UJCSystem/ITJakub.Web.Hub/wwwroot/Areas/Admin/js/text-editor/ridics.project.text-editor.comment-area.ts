@@ -25,7 +25,7 @@
         if (content === null) {
             return null;
         }
-        const textId = commentAreaEl.parents(".page-row").data("page") as number;
+        const textId = commentAreaEl.parents(".page-row").data("text-id") as number;
         const threadsContainerStart = `<div class="threads-container">`;
         const threadStart = `<ul class="media-list">`;
         const threadEnd = `</ul>`;
@@ -294,10 +294,20 @@
  * Loads contents of files with comments in a page from the server.
  * @param {JQuery} commentAreaEl Comment area element for which to construct structure
  */
-    asyncConstructCommentArea(commentAreaEl: JQuery): JQuery.jqXHR<ICommentSctucture[]> {
+    asyncConstructCommentArea(commentAreaEl: JQuery): JQuery.Promise<ICommentSctucture[]> {
+        var deferredResult = $.Deferred<ICommentSctucture[]>();
         const pageRowEl = commentAreaEl.parent(".page-row");
         const pageName = pageRowEl.data("page-name") as string;
-        const textId = pageRowEl.data("page") as number;
+        const textId = pageRowEl.data("text-id") as number;
+        commentAreaEl.empty();
+        if (!textId) { // textId doesn't have to be specified (text is not created yet)
+            const alert = new AlertComponentBuilder(AlertType.Info).addContent(localization.translate("CommentNotLoadedMissingText", "RidicsProject").value);
+            commentAreaEl.append(alert.buildElement());
+            deferredResult.reject();
+            return deferredResult.promise();
+        }
+
+        pageRowEl.removeClass("comment-never-loaded");
         const ajax = this.adminApiClient.loadCommentFile(textId);
         ajax.done(
             (fileContent: ICommentSctucture[]) => {
@@ -310,13 +320,15 @@
                         `<div class="comment-placeholder-container"><div class="comment-placeholder-text">${localization.translate("NoComments", "RidicsProject").value}</div></div>`;
                     commentAreaEl.append(placeHolderText);
                 }
+                deferredResult.resolve(fileContent);
             });
         ajax.fail(() => {
             const alert = new AlertComponentBuilder(AlertType.Error)
                 .addContent(localization.translateFormat("LoadCommentsFailed", [pageName], "RidicsProject").value).buildElement();
             commentAreaEl.append(alert);
+            deferredResult.reject();
         });
-        return ajax;
+        return deferredResult.promise();
     }
 
     /**
@@ -356,8 +368,7 @@
         }
     }
 
-    private constructCommentArea = (content: ICommentSctucture[],
-        commentAreaEl: JQuery) => {
+    private constructCommentArea(content: ICommentSctucture[], commentAreaEl: JQuery) {
         const html = this.constructCommentAreaHtml(content, commentAreaEl);
         commentAreaEl.append(html);
     }
@@ -397,7 +408,7 @@
                             if (pageRow.find(".viewer").length === 0) {
                                 const codeMirror = this.editor.getSimpleMdeEditor().codemirror;
                                 const originalText = codeMirror.getValue();
-                                const textId = Number(pageRow.data("page"));
+                                const textId = Number(pageRow.data("text-id"));
 
                                 // save text before removing root comment
                                 this.editor.saveText(textId, originalText, SaveTextModeType.ValidateOnlySyntax).done((response: ISaveTextResponse) => {
@@ -434,7 +445,7 @@
 
     private onCommentDeleteRequest(deleteAjax: JQueryXHR, targetButton: JQuery) {
         deleteAjax.done(() => {
-            const textId = targetButton.parents(".page-row").data("page");
+            const textId = targetButton.parents(".page-row").data("text-id");
             bootbox.alert({
                 title: localization.translate("Success", "RidicsProject").value,
                 message: localization.translate("CommentDeleteSuccess", "RidicsProject").value,
@@ -542,7 +553,7 @@
 
     reloadCommentArea(textId: number) {
         var deferred = $.Deferred();
-        const commentAreaEl = $(`*[data-page="${textId}"]`).children(".comment-area");
+        const commentAreaEl = $(`*[data-text-id="${textId}"]`).children(".comment-area");
         const threadsContainer = commentAreaEl.children(".threads-container");
         threadsContainer.remove();
         if (commentAreaEl.children(".comment-placeholder-container").length) {

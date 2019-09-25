@@ -3,7 +3,6 @@
     private readonly gui: EditorsGui;
     private readonly util: EditorsApiClient;
     private readonly errorHandler: ErrorHandler;
-    private readonly listGenerator: PageListGenerator;
     private readonly fsPageName = "FS";
     private readonly fcPageName = "FC";
 
@@ -11,9 +10,57 @@
         this.gui = new EditorsGui();
         this.errorHandler = new ErrorHandler();
         this.util = new EditorsApiClient();
-        this.listGenerator = new PageListGenerator();
+
+        jQuery.extend(jQuery.validator.messages,
+            {
+                required: localization.translate("EnterValidNumbers", "RidicsProject").value
+            });
+
+        $.validator.addMethod(
+            "regex",
+            (value, element, regex) => {
+                if (value === "")
+                    return false;
+                return PageListGeneratorFactory.createPageListGenerator(this.getSelectedFormat()).checkInputValue(value);
+            },
+            localization.translate("EnterValidNumbers", "RidicsProject").value
+        );
+
+        $("#rangeForm").validate({
+            rules: {
+                "project-pages-generate-from": {
+                    required: true,
+                    regex: true,
+                },
+                "project-pages-generate-to": {
+                    required: true,
+                    regex: true,
+                }
+            },
+            highlight: (element) => {
+                $(element).parents(".form-group").removeClass("has-success").addClass("has-error");
+            },
+            unhighlight: (element) => {
+                $(element).parents(".form-group").removeClass("has-error").addClass("has-success");
+            }
+        });
+
+        $("#project-pages-format").change(() => {
+            $("#rangeForm").validate().element(":input[name=\"project-pages-generate-from\"]");
+            $("#rangeForm").validate().element(":input[name=\"project-pages-generate-to\"]");
+            this.setAlerts();
+        });
+      
+        const doublePageRadiobuttonEl = $(".doublepage-radiobutton");
+        doublePageRadiobuttonEl.change(() => {
+            this.setAlerts();
+        });
+
+        $("#project-pages-generate-to, #project-pages-generate-from").on("input", () => {
+            this.setAlerts();
+        });
     }
-    
+
     init(projectId: number) {
         this.editDialog = new BootstrapDialogWrapper({
             element: $("#project-pages-dialog"),
@@ -28,24 +75,26 @@
             this.moveList(false, $(".pages"));
         });
 
-        $(".save-pages-button").on("click", () => {
-            const pages = $(".page-row").toArray();
-            const pageListArray: IUpdatePage[] = [];
-            for (let i = 0; i < pages.length; i++) {
-                pageListArray.push({
-                    id: $(pages[i]).data("page-id"),
-                    position: i + 1,
-                    name: $(pages[i]).find(".name").text().trim()
+        $(".save-pages-button").on("click",
+            () => {
+                const pages = $(".page-row").toArray();
+                const pageListArray: IUpdatePage[] = [];
+                for (let i = 0; i < pages.length; i++) {
+                    pageListArray.push({
+                        id: $(pages[i]).data("page-id"),
+                        position: i + 1,
+                        name: $(pages[i]).find(".name").text().trim()
+                    });
+                }
+                this.util.savePageList(projectId, pageListArray).done(() => {
+                    $("#unsavedChanges").addClass("hide");
+                }).fail((error) => {
+                    this.gui.showInfoDialog(localization.translate("Error").value,
+                        this.errorHandler.getErrorMessage(error));
                 });
-            }
-            this.util.savePageList(projectId, pageListArray).done(() => {
-                $("#unsavedChanges").addClass("hide");
-            }).fail((error) => {
-                this.gui.showInfoDialog(localization.translate("Error").value, this.errorHandler.getErrorMessage(error));
             });
-        });
 
-       this.initPageRowClicks();
+        this.initPageRowClicks();
 
         $("#project-pages-edit-button").click(() => {
             this.editDialog.show();
@@ -60,27 +109,74 @@
                     this.checkmarkFS();
                 }
             }
-           
+
             this.trackSpecialPagesCheckboxesState();
-
-            
-            $(".page-list-editor-content").on("click",
-                ".generate-page-list",
-                () => {
-                    const doublePageRadiobuttonEl = $(".doublepage-radiobutton");
-                    const doublePageGeneration = doublePageRadiobuttonEl.prop("checked") as boolean;
-                    this.startGeneration(doublePageGeneration);
-                });
-
-            $(".page-list-editor-content").on("click",
-                ".cancel-page-list",
-                (event) => {
-                    event.stopPropagation();
-                    this.editDialog.hide();
-                    $(".page-list-editor-content").off();
-                }
-            );
         });
+
+        $(".page-list-editor-content").on("click",
+            ".generate-page-list",
+            () => {
+                this.startGeneration();
+            });
+
+        $(".page-list-editor-content").on("click",
+            ".cancel-page-list",
+            (event) => {
+                event.stopPropagation();
+                this.editDialog.hide();
+                $(".page-list-editor-content").off();
+            }
+        );
+    }
+
+    private getSelectedFormat(): number {
+        const formatString = $("#project-pages-format").find(":selected").data("format-value") as string;
+        return PageListFormat[formatString] as number;
+    }
+
+    private isSetDoublePageGeneration(): boolean {
+        const doublePageRadiobuttonEl = $(".doublepage-radiobutton");
+        return doublePageRadiobuttonEl.prop("checked") as boolean;
+    }
+
+    private setAlerts(): void {
+        const from = String($("#project-pages-generate-from").val());
+        const to = String($("#project-pages-generate-to").val());
+
+        const doubleGenerationWarning = $("#doubleGenerationWarning");
+        const swapNumbersError = $("#swapNumbersError");
+        const listGenerator = PageListGeneratorFactory.createPageListGenerator(this.getSelectedFormat());
+
+        if (!listGenerator.checkInputValue(from) || !listGenerator.checkInputValue(to)) {
+            doubleGenerationWarning.addClass("hide");
+            swapNumbersError.addClass("hide");
+        }
+        else {
+            if (listGenerator.checkValidPagesLength(from, to)) {
+                swapNumbersError.addClass("hide");
+                this.setDoubleGenerationWarning();
+            } else {
+                swapNumbersError.removeClass("hide");
+                doubleGenerationWarning.addClass("hide");
+            }
+        }
+    }
+
+    private setDoubleGenerationWarning(): void {
+        const doubleGenerationWarning = $("#doubleGenerationWarning");
+        if (this.isSetDoublePageGeneration()) {
+            const to = String($("#project-pages-generate-from").val());
+            const from = String($("#project-pages-generate-to").val());
+            const listGenerator = PageListGeneratorFactory.createPageListGenerator(this.getSelectedFormat());
+
+            if (listGenerator.checkValidDoublePageRange(to, from)) {
+                doubleGenerationWarning.addClass("hide");
+            } else {
+                doubleGenerationWarning.removeClass("hide");
+            }
+        } else {
+            doubleGenerationWarning.addClass("hide");
+        }
     }
 
     private initPageRowClicks() {
@@ -99,17 +195,19 @@
         });
 
         $(".page-row .edit-page").off();
-        $(".page-row .edit-page").on("click", (event) => {
-            event.stopPropagation();
-            this.editPage($(event.currentTarget));
-        });
+        $(".page-row .edit-page").on("click",
+            (event) => {
+                event.stopPropagation();
+                this.editPage($(event.currentTarget));
+            });
 
         $(".page-row").off();
-        $(".page-row").on("click", (event) => {
-            const checkbox = $(event.currentTarget).find(".selection-checkbox");
-            checkbox.prop("checked", !checkbox.is(":checked"));
-            this.selectPage($(event.currentTarget));
-        });
+        $(".page-row").on("click",
+            (event) => {
+                const checkbox = $(event.currentTarget).find(".selection-checkbox");
+                checkbox.prop("checked", !checkbox.is(":checked"));
+                this.selectPage($(event.currentTarget));
+            });
     }
 
     private editPage(element: JQuery) {
@@ -158,7 +256,7 @@
         const subcontent = content.find(".sub-content");
         subcontent.addClass("loader");
         pageDetail.removeClass("hide");
-        
+
         this.util.getPageDetail(pageId).done((response) => {
             subcontent.removeClass("loader");
             subcontent.html(response);
@@ -268,33 +366,33 @@
             });
     }
 
-    private startGeneration(doublePage:boolean) {
-        const fromFieldValue = $("#project-pages-generate-from").val() as string;
-        const toFieldValue = $("#project-pages-generate-to").val() as string;
-        if (/\d+/.test(fromFieldValue) && /\d+/.test(toFieldValue)) {
-            const from = parseInt(fromFieldValue);
-            const to = parseInt(toFieldValue);
-            const formatString = $("#project-pages-format").find(":selected").data("format-value") as string;
-            const format = PageListFormat[formatString] as number;
-            if (!isNaN(from) && !isNaN(to)) {
-                if (to > from) {
-                    const pageList = this.listGenerator.generatePageList(from, to, format, doublePage);
-                    this.populateList(pageList);
-                    this.enableCheckboxes();
-                    this.trackSpecialPagesCheckboxesState();
-                } else {
-                    this.gui.showInfoDialog(localization.translate("Warning").value, localization.translate("SwapNumbers", "RidicsProject").value);
-                }
-            }
+    private startGeneration() {
+        const fromFieldValue = ($("#project-pages-generate-from").val() as string).replace(" ", "");;
+        const toFieldValue = ($("#project-pages-generate-to").val() as string).replace(" ", "");;
+        const listGenerator = PageListGeneratorFactory.createPageListGenerator(this.getSelectedFormat());
+
+        if (!listGenerator.checkInputValue(fromFieldValue) || !listGenerator.checkInputValue(toFieldValue)) {
+            this.gui.showInfoDialog(localization.translate("Warning").value,
+                localization.translate("EnterValidNumbers", "RidicsProject").value);
+        } else if (listGenerator.checkValidPagesLength(String($("#project-pages-generate-from").val()),
+            String($("#project-pages-generate-to").val())))
+        {
+            const pageList = listGenerator.generatePageList(fromFieldValue, toFieldValue, this.isSetDoublePageGeneration());
+            $("#project-pages-dialog").modal("hide");
+            this.populateList(pageList);
+            this.enableCheckboxes();
+            this.trackSpecialPagesCheckboxesState();
         } else {
-            this.gui.showInfoDialog(localization.translate("Warning").value, localization.translate("EnterValidNumbers", "RidicsProject").value);
+            this.gui.showInfoDialog(localization.translate("Warning").value,
+                localization.translate("SwapNumbers", "RidicsProject").value);
         }
     }
 
     private populateList(pageList: string[]) {
         const listContainerEl = $(".page-listing tbody");
-        if (listContainerEl.length) {
-            this.gui.showInfoDialog(localization.translate("Info").value, localization.translate("AddingGeneratedNames", "RidicsProject").value);
+        if (listContainerEl.children().length) {
+            this.gui.showInfoDialog(localization.translate("Info").value,
+                localization.translate("AddingGeneratedNames", "RidicsProject").value);
         }
 
         for (let page of pageList) {
