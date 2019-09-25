@@ -29,4 +29,9 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public long BeginningPageId { get; set; }
         public long? ParentChapterId { get; set; }
     }
+
+    public class CreateOrUpdateChapterContract : CreateChapterContract
+    {
+        public long? Id { get; set; }
+    }
 }

@@ -103,6 +103,12 @@ namespace Vokabular.MainService.Core.Managers
             new CreateOrUpdateChapterWork(m_resourceRepository, chapterData, null, chapterId, userId).Execute();
         }
 
+        public void UpdateChapters(long projectId, IList<CreateOrUpdateChapterContract> chapterData)
+        {
+            var userId = m_authenticationManager.GetCurrentUserId();
+            new CreateOrUpdateChaptersWork(m_resourceRepository, chapterData, projectId, userId).Execute();
+        }
+
         public List<TrackContract> GetTrackList(long projectId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestTracks(projectId));
