@@ -32,20 +32,17 @@
             </a>
         </div>
     </div>
-
-    @if (Model.SubChapters.Count > 0)
-    {
-        <div class="sub-chapters">
-            @{
-                levelOfHierarchy++;
-                ViewData["levelOfHierarchy"] = levelOfHierarchy;
-                foreach (var chapter in Model.SubChapters)
-                {
-                    @await Html.PartialAsync("Work/SubView/_ChapterRow", chapter, ViewData)
-                }
-                levelOfHierarchy--;
-                ViewData["levelOfHierarchy"] = levelOfHierarchy;
+    <div class="sub-chapters">
+        @if (Model.SubChapters.Count > 0)
+        {
+            levelOfHierarchy++;
+            ViewData["levelOfHierarchy"] = levelOfHierarchy;
+            foreach (var chapter in Model.SubChapters)
+            {
+                @await Html.PartialAsync("Work/SubView/_ChapterRow", chapter, ViewData)
             }
-        </div>
-    }
+            levelOfHierarchy--;
+            ViewData["levelOfHierarchy"] = levelOfHierarchy;
+        }
+    </div>
 </div>
