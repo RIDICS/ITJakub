@@ -4,20 +4,23 @@
     private simplemde: IExtendedSimpleMDE;
     private simpleMdeOptions: SimpleMDE.Options;
     private readonly commentInput: CommentInput;
-    private readonly util: EditorsApiClient;
+    private readonly apiClient: EditorsApiClient;
     private readonly commentArea: CommentArea;
     private readonly editModeSelector = "is-edited";
     private readonly client: TextApiClient;
     private readonly simpleMdeTools: SimpleMdeTools;
+    private readonly errorHandler: ErrorHandler;
+    private pageStructure: PageStructure;
     private isPreviewRendering = true;
     private editorExistsInTab = false;
 
-    constructor(commentInput: CommentInput, util: EditorsApiClient, commentArea: CommentArea) {
+    constructor(commentInput: CommentInput, apiClient: EditorsApiClient, commentArea: CommentArea) {
         this.commentInput = commentInput;
-        this.util = util;
+        this.apiClient = apiClient;
         this.commentArea = commentArea;
         this.client = new TextApiClient();
         this.simpleMdeTools = new SimpleMdeTools();
+        this.errorHandler = new ErrorHandler();
 
         bootbox.setLocale("cs");
     }
@@ -34,7 +37,9 @@
         return this.simplemde;
     }
 
-    init() {
+    init(pageStructure: PageStructure) {
+        this.pageStructure = pageStructure;
+
         this.processAreaSwitch();
     }
 
@@ -46,6 +51,11 @@
             pageRow.addClass("init-editor");
             pageRow.data(this.editModeSelector, true);
             this.changeOrInitEditor(pageRow);
+        });
+
+        $(".page-toolbar .create-text").click((event) => {
+            const pageRow = $(event.currentTarget).parents(".page-row");
+            this.createText(pageRow);
         });
 
         $("#project-resource-preview").on("click", ".editor", (e) => { //dynamically instantiating SimpleMDE editor on textarea
@@ -238,6 +248,25 @@
         this.originalContent = this.simplemde.value();
     }
 
+    private createText(pageRow: JQuery<HTMLElement>) {
+        const pageId = pageRow.data("page-id");
+        this.apiClient.createTextOnPage(pageId).done(() => {
+            this.pageStructure.loadPage(pageRow).done(() => {
+                $(".edit-page", pageRow).click(); //Open editor
+            });
+        }).fail((error) => {
+            bootbox.alert({
+                title: localization.translate("Fail", "RidicsProject").value,
+                message: this.errorHandler.getErrorMessage(error),
+                buttons: {
+                    ok: {
+                        className: "btn-default"
+                    }
+                }
+            });
+        });
+    }
+
     saveText(textId: number, contents: string, mode: SaveTextModeType): JQuery.jqXHR<ISaveTextResponse> {
         const pageEl = $(`*[data-text-id="${textId}"]`);
         const compositionArea = pageEl.children(".composition-area");
@@ -248,7 +277,7 @@
             text: contents,
             resourceVersionId: versionId
         };
-        const ajax = this.util.savePlainText(textId, request, mode);
+        const ajax = this.apiClient.savePlainText(textId, request, mode);
         ajax.done((response) => {
             if (response.isValidationSuccess) {
                 this.originalContent = contents;
@@ -452,7 +481,7 @@
         });
     }
 
-    togglePageRows = (pageRow: JQuery) => {
+    togglePageRows(pageRow: JQuery) {
         const lazyloadedCompositionEl = pageRow.children(".composition-area");
         if (pageRow.hasClass("lazyloaded") && !lazyloadedCompositionEl.hasClass("lazyloaded")) {
             lazyloadedCompositionEl.addClass("lazyload");
@@ -468,12 +497,12 @@
             this.commentArea.updateCommentAreaHeight(pageEl);
             const placeholderSpinner = pageEl.find(".loading");
             placeholderSpinner.show();
-            const editPageButton = pageEl.find(".edit-page");
+            const toolbarButtons = pageEl.find(".page-toolbar-buttons");
             if (pageEl.data(this.editModeSelector)) { // changing div to textarea here
-                editPageButton.addClass("hide");
+                toolbarButtons.addClass("hide");
                 this.createEditorAreaBody(compositionAreaEl);
             } else { // changing textarea to div here
-                editPageButton.removeClass("hide");
+                toolbarButtons.removeClass("hide");
                 this.createViewerAreaBody(compositionAreaEl);
             }
         });

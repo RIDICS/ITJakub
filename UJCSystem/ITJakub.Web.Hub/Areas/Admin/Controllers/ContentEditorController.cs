@@ -208,6 +208,14 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return Json(response);
         }
 
+        [HttpPost]
+        public IActionResult CreateTextResource(long pageId)
+        {
+            var client = GetProjectClient();
+            var resourceId = client.CreateTextResource(pageId);
+            return Json(resourceId);
+        }
+
         [HttpGet]
         public IActionResult GetEditionNote(long projectId, TextFormatEnumContract format)
         {

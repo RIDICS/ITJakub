@@ -1,13 +1,11 @@
 ﻿class PageStructure {
     private readonly commentArea: CommentArea;
-    private readonly util: EditorsApiClient;
-    private readonly main: TextEditorMain;
+    private readonly apiClient: EditorsApiClient;
     private readonly editor: Editor;
 
-    constructor(commentArea: CommentArea, util: EditorsApiClient, main: TextEditorMain, editor: Editor) {
+    constructor(commentArea: CommentArea, apiClient: EditorsApiClient, editor: Editor) {
         this.commentArea = commentArea;
-        this.util = util;
-        this.main = main;
+        this.apiClient = apiClient;
         this.editor = editor;
     }
 
@@ -34,7 +32,7 @@
         }
     }
 
-    loadPage(pageEl: JQuery) {
+    loadPage(pageEl: JQuery): JQuery.Promise<any> {
         const commentArea = pageEl.children(".comment-area");
         const isEditingMode = pageEl.data(this.editor.getEditModeSelector());
         if (isEditingMode) {
@@ -44,26 +42,38 @@
                 this.commentArea.updateCommentAreaHeight(pageEl);
                 this.commentArea.collapseIfCommentAreaIsTall(commentArea, true, true);
             });
-        }
-        if (!isEditingMode) {
+            return ajax; // return Promise about loaded page, not about related comments
+        } else {
             const ajax = this.appendRenderedText(pageEl);
             const ajax2 = this.commentArea.asyncConstructCommentArea(commentArea);
             $.when(ajax, ajax2).done(() => {
                 this.commentArea.updateCommentAreaHeight(pageEl);
                 this.commentArea.collapseIfCommentAreaIsTall(commentArea, true, true);
             });
+            return ajax; // return Promise about loaded page, not about related comments
+        }
+    }
+
+    private updateToolBar(pageEl: JQuery, isContainsText: boolean) {
+        const createBtn = $(".page-toolbar .create-text", pageEl);
+        const editBtn = $(".page-toolbar .edit-page", pageEl);
+        if (isContainsText) {
+            createBtn.addClass("hidden");
+            editBtn.prop("disabled", false);
+        } else {
+            createBtn.removeClass("hidden");
+            editBtn.prop("disabled", true);
         }
     }
 
     private appendRenderedText(pageEl: JQuery): JQuery.jqXHR<ITextWithContent> {
         const pageId = pageEl.data("page-id") as number;
-        const renderedText = this.util.loadRenderedText(pageId);
+        const renderedText = this.apiClient.loadRenderedText(pageId);
         const compositionAreaDiv = pageEl.find(".rendered-text");
         renderedText.done((data: ITextWithContent) => {
             if (data == null) {
                 var infoAlert = new AlertComponentBuilder(AlertType.Info)
                     .addContent(localization.translate("PageDoesNotContainText", "RidicsProject").value)
-                    // TODO add button for creating text
                     .buildElement();
                 compositionAreaDiv.empty().append(infoAlert);
             } else {
@@ -83,6 +93,7 @@
                     this.commentArea.asyncConstructCommentArea(commentAreaEl);
                 }
             }
+            this.updateToolBar(pageEl, data != null);
 
             var event = $.Event("pageConstructed");
             compositionAreaDiv.trigger(event, { pageId: pageId } as IPageConstructedEventData);
@@ -103,7 +114,7 @@
 
     private appendPlainText(pageEl: JQuery): JQuery.jqXHR<ITextWithContent> {
         const pageId = pageEl.data("page-id") as number;
-        const plainText = this.util.loadPlainText(pageId);
+        const plainText = this.apiClient.loadPlainText(pageId);
         const textAreaEl = $(pageEl.find(".plain-text"));
         plainText.done((data: ITextWithContent) => {
             textAreaEl.val(data.text);
