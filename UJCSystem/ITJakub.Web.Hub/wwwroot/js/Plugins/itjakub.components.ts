@@ -25,13 +25,13 @@
     }
 
     public static getErrorFunction(): (file: Dropzone.DropzoneFile, message: string|Error, xhr: XMLHttpRequest) => void {
-        var resultFunction = function (file, message, xhr) {
+        var resultFunction = function (file: Dropzone.DropzoneFile, message: string|Error, xhr: XMLHttpRequest) {
             var errorMessage = xhr
                 ? this.options.dictResponseError.replace("{{statusCode}}", xhr.status.toString())
                 : message;
             this.defaultOptions.error(file, errorMessage, xhr);
         }
-        return (resultFunction) as any; //HACK ohterwise ReSharper shows type error
+        return resultFunction;
     }
 
     public static getFullConfiguration(options: Dropzone.DropzoneOptions): Dropzone.DropzoneOptions {

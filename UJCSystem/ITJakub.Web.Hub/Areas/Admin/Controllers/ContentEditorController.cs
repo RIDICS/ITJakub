@@ -127,8 +127,18 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult GetPageImage(long pageId)
         {
             var client = GetProjectClient();
-            var result = client.GetPageImage(pageId);
-            return new FileStreamResult(result.Stream, result.MimeType);
+            try
+            {
+                var result = client.GetPageImage(pageId);
+                return new FileStreamResult(result.Stream, result.MimeType);
+            }
+            catch (HttpErrorCodeException e)
+            {
+                if (e.StatusCode == HttpStatusCode.NotFound)
+                    return NotFound();
+
+                throw;
+            }
         }
 
         [HttpGet]

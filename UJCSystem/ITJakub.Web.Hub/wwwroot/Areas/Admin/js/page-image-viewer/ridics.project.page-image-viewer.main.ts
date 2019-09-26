@@ -11,7 +11,8 @@
             upload.init();
         });
         compositionPagesAjax.fail(() => {
-            const error = new AlertComponentBuilder(AlertType.Error).addContent("Failed to load project info");
+            const error = new AlertComponentBuilder(AlertType.Error)
+                .addContent(localization.translate("ProjectLoadFailed", "RidicsProject").value);
             $("#project-resource-images").empty().append(error.buildElement());
         });
     }

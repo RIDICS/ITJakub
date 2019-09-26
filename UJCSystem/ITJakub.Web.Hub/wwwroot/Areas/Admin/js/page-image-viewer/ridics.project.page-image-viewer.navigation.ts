@@ -25,13 +25,13 @@
                 min: 0,
                 max: pages.length - 1,
                 step: 1,
-                create: function() {
-                    thisClass.loadPage(0, pages);
+                create: () => {
+                    this.loadPage(0, pages);
                 },
-                slide(event, ui) {
+                slide: (event, ui) => {
                     const index = ui.value;
                     if (!isNaN(index)) {
-                        tooltipText.text(`Page: ${pages[index].name}`);
+                        tooltipText.text(localization.translateFormat("PageName", [pages[index].name], "RidicsProject").value);
                         tooltip.show();
                     }
                 },
@@ -56,8 +56,6 @@
             index++;
             if (index > -1 && index < this.pages.length) {
                 $(".text-editor-page-slider").slider("value", index);
-            } else {
-                this.gui.showInfoDialog("Warning", "No more pages on the right.");
             }
         }
     }
@@ -68,8 +66,6 @@
             index--;
             if (index > -1 && index < this.pages.length) {
                 $(".text-editor-page-slider").slider("value", index);
-            } else {
-                this.gui.showInfoDialog("Warning", "No more pages on the left.");
             }
         }
     }
@@ -85,14 +81,14 @@
             () => {
                 this.loadNextPage();
             });
-        $(document.documentElement).keypress(
+        $(document.documentElement).keyup(
             (event) => {
                 var keycode = (event.which);
                 switch (keycode) {
-                case 106: //j
+                case 37: //left arrow
                     this.loadPreviousPage();
                     break;
-                case 107: //k
+                case 39: //right arrow
                     this.loadNextPage();
                     break;
                 default:
@@ -121,17 +117,18 @@
         const inputField = $(".go-to-page-field");
         const inputFieldValue = inputField.val() as string;
         if (inputFieldValue === "") {
-            this.gui.showInfoDialog("Warning", "You haven't entered anything. Please enter a page name.");
+            this.gui.showInfoDialog(localization.translate("Warning", "RidicsProject").value,
+                localization.translate("EnterPageName", "RidicsProject").value);
         } else {
             const namesStringArray: string[] = $.map(pages, (x) => { return x.name });
-            let index = this.getPageIdByPageName(inputFieldValue,
-                namesStringArray); //TODO precise page names are needed. Implement partial page name search?
+            let index = this.getPageIdByPageName(inputFieldValue, namesStringArray);
             if (index === -1) {
                 const minusToDashInputValue = inputFieldValue.replace("-", "–");
                 index = this.getPageIdByPageName(minusToDashInputValue, namesStringArray);
             }
             if (index === -1) {
-                this.gui.showInfoDialog("Warning", "No such page.");
+                this.gui.showInfoDialog(localization.translate("Warning", "RidicsProject").value,
+                    localization.translateFormat("PageDoesNotExist", [inputFieldValue], "RidicsProject").value);
             } else {
                 $(".text-editor-page-slider").slider("value", index);
                 inputField.val("");
@@ -152,7 +149,7 @@
     private updateSliderTooltipText(index: number, pageName: string) {
         const tooltip = $(".slider-tooltip");
         const tooltipText = tooltip.children(".slider-tooltip-text");
-        tooltipText.text(`Page: ${pageName}`);
+        tooltipText.text(localization.translateFormat("PageName", [pageName], "RidicsProject").value);
     }
 
     private loadPage(index: number, pages: IPage[]) {

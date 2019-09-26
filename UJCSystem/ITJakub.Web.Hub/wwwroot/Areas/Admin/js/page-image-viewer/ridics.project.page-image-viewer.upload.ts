@@ -1,8 +1,4 @@
-﻿interface JQuery {//hack, interface extension form d ts doesn't work, check the reason why
-    dropzone(options: Dropzone.DropzoneOptions): Dropzone;
-}
-
-class ImageViewerUpload {
+﻿class ImageViewerUpload {
     private addImageDropzoneDialog: BootstrapDialogWrapper;
     private readonly projectClient: ProjectClient;
     private readonly projectId: number;
