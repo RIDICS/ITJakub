@@ -31,10 +31,17 @@
             } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
-            success: callback
+            success: callback,
+            error: function() {
+                this.clearLoading();
+                var errorMessage = document.createElement('div');
+                $(errorMessage).addClass("no-messages");
+                $(errorMessage).text("Chyba při načítání zpráv");
+                $(this.newsContainer).append(errorMessage);
+            }
         });
     }
-    
+
     private paginatorClickedCallback(pageNumber: number) {
         var start = (pageNumber - 1) * this.newsOnPage;
         this.loadNews(start);
@@ -50,31 +57,37 @@
 
     private showNews(items: Array<INewsSyndicationItemContract>) {
         this.clearLoading();
+        if (items.length === 0) {
+            var noNews = document.createElement('div');
+            $(noNews).addClass("no-messages");
+            $(noNews).text("Žádné zprávy k zobrazení");
+            $(this.newsContainer).append(noNews);
+        } else {
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
 
-        for (var i = 0; i < items.length; i++) {
-            var item = items[i];
+                var itemDiv = document.createElement("div");
+                $(itemDiv).addClass("message");
 
-            var itemDiv = document.createElement("div");
-            $(itemDiv).addClass("message");
+                var date = new Date(item.createTime);
+                var titleHeader = document.createElement("h2");
+                titleHeader.innerHTML = item.title;
 
-            var date = new Date(item.createTime);
-            var titleHeader = document.createElement("h2");
-            titleHeader.innerHTML = item.title;
+                itemDiv.appendChild(titleHeader);
 
-            itemDiv.appendChild(titleHeader);
+                var dateDiv = document.createElement("div");
+                $(dateDiv).addClass("news-date");
+                dateDiv.innerHTML = date.toLocaleDateString();
 
-            var dateDiv = document.createElement("div");
-            $(dateDiv).addClass("news-date");
-            dateDiv.innerHTML = date.toLocaleDateString();
+                itemDiv.appendChild(dateDiv);
 
-            itemDiv.appendChild(dateDiv);
+                var itemMessage = document.createElement("p");
+                itemMessage.innerHTML = item.text;
 
-            var itemMessage = document.createElement("p");
-            itemMessage.innerHTML = item.text;
+                itemDiv.appendChild(itemMessage);
 
-            itemDiv.appendChild(itemMessage);
-
-            $(this.newsContainer).append(itemDiv);
+                $(this.newsContainer).append(itemDiv);
+            }
         }
     }
 
