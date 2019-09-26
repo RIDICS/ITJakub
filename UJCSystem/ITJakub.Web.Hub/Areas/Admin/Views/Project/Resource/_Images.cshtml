@@ -61,7 +61,9 @@
                             <div class="col-md-12">
                                 <form action="@Url.Action("UploadResource", "Project")" method="post" class="dropzone" enctype="multipart/form-data" id="new-image-upload">
                                     <div class="hidden">
-                                        <input type="hidden" id="new-image-resource-session-id" name="sessionId" value="0"/>
+                                        <input type="hidden" id="new-image-page-id" name="pageId" />
+                                        <input type="hidden" id="new-image-image-id" name="imageId" />
+                                        <input type="hidden" id="new-image-resource-version-id" name="resourceVersionId" />
                                     </div>
                                 </form>
                             </div>

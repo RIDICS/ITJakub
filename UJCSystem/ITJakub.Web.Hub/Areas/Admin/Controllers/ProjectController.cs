@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.AspNetCore.Helpers;
 using ITJakub.Web.Hub.Options;
@@ -237,6 +236,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Obsolete]
         public async Task<IActionResult> UploadResource()
         {
             var boundary = UploadHelper.GetBoundary(Request.ContentType);
@@ -273,6 +273,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Obsolete]
         public async Task<IActionResult> UploadNewResourceVersion()
         {
             var boundary = UploadHelper.GetBoundary(Request.ContentType);
@@ -308,14 +309,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return Json(new { });
         }
 
-        public IActionResult GetResourceList(long projectId, ResourceTypeEnumContract resourceType)
-        {
-            var client = GetProjectClient();
-            var result = client.GetResourceList(projectId, resourceType);
-            return Json(result);
-        }
-
         [HttpPost]
+        [Obsolete]
         public IActionResult ProcessUploadedResources([FromBody] ProcessResourcesRequest request)
         {
             var client = GetProjectClient();
@@ -328,6 +323,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Obsolete]
         public IActionResult ProcessUploadResourceVersion([FromBody] ProcessResourceVersionRequest request)
         {
             var client = GetResourceClient();
@@ -379,6 +375,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Obsolete]
         public IActionResult DeleteResource([FromBody] DeleteResourceRequest request)
         {
             var client = GetResourceClient();
@@ -387,6 +384,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Obsolete]
         public IActionResult RenameResource([FromBody] RenameResourceRequest request)
         {
             var client = GetResourceClient();
@@ -398,6 +396,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Obsolete]
         public IActionResult DuplicateResource([FromBody] DuplicateResourceRequest request)
         {
             var client = GetResourceClient();

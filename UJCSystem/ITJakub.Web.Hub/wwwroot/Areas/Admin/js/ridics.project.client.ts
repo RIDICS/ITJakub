@@ -32,14 +32,6 @@
         this.postAjax("Admin/Project/DeleteProject", {id: id}, (response, errorCode) => callback(errorCode));
     }
 
-    public getResourceList(projectId: number, resourceType: ResourceType, callback: (list: IProjectResource[], errorCode: HttpStatusCode) => void) {
-        var data = {
-            projectId: projectId,
-            resourceType: resourceType
-        }
-        this.getAjax("Admin/Project/GetResourceList", data, callback);
-    }
-
     public processUploadedResources(projectId: number, sessionId: string, comment: string, callback: (errorCode: HttpStatusCode) => void) {
         var data = {
             projectId: projectId,

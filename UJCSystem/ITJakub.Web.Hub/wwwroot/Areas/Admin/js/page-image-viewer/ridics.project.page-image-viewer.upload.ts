@@ -1,11 +1,12 @@
 ﻿class ImageViewerUpload {
+    private dropzone: Dropzone;
     private addImageDropzoneDialog: BootstrapDialogWrapper;
-    private readonly projectClient: ProjectClient;
+    private readonly apiClient: EditorsApiClient;
     private readonly projectId: number;
 
     constructor(projectId: number) {
         this.projectId = projectId;
-        this.projectClient = new ProjectClient();
+        this.apiClient = new EditorsApiClient();
     }
 
     init() {
@@ -17,30 +18,38 @@
     private initDialog() {
         this.addImageDropzoneDialog = new BootstrapDialogWrapper({
             element: $("#upload-image-dialog"),
-            submitCallback: this.addResource.bind(this),
+            submitCallback: this.submit.bind(this),
             autoClearInputs: true
         });  
     }
 
-    private initDropzone(){
+    private initDropzone() {
         
         const dropzoneOptions = DropzoneHelper.getFullConfiguration({
-            url: `${getBaseUrl()}Admin/Project/UploadResource`,//TODO check whether it's an actual address
-            error: DropzoneHelper.getErrorFunction()
+            //url: `${getBaseUrl()}Admin/Project/UploadResource`,//TODO check whether it's an actual address
+            url: `${getBaseUrl()}Admin/ContentEditor/CreateImageResource`,
+            error: DropzoneHelper.getErrorFunction(),
+            autoProcessQueue: false,
+            maxFiles: 1,
         });
-        $("#new-image-upload").dropzone(dropzoneOptions);
+        this.dropzone = $("#new-image-upload").dropzone(dropzoneOptions);
     }
 
     private attachAndProcessUploadButton() {
         $("#project-resource-images").on("click", ".upload-new-image-button", () => {
-            $("#new-image-resource-session-id").val(Guid.generate());
+            // TODO set correct input values, like:
+            $("#new-image-page-id").val("555"); // TODO this is mock
+
             this.addImageDropzoneDialog.show();
         });
     }
 
-    private addResource() {
+    private submit() {
         const sessionId = $("#new-image-resource-session-id").val() as string;
         const comment = $("#new-image-resource-comment").val() as string;
+
+        this.dropzone.processQueue();
+
         //this.projectClient.processUploadedResources(this.projectId, sessionId, comment, errorCode => {//TODO check correct way to upload
         //    if (errorCode != null) {
         //        this.addImageDropzoneDialog.showError();

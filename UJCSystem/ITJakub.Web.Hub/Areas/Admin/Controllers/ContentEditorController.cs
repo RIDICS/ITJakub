@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Types;
 using ITJakub.Web.Hub.Options;
+using Microsoft.AspNetCore.Http;
 using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
@@ -225,6 +226,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var client = GetProjectClient();
             var resourceId = client.CreateTextResource(pageId);
             return Json(resourceId);
+        }
+
+        [HttpPost]
+        public IActionResult CreateImageResource(SaveImageResourceRequest request)
+        {
+            // TODO specify all required parameters
+            return StatusCode(StatusCodes.Status501NotImplemented);
         }
 
         [HttpGet]
