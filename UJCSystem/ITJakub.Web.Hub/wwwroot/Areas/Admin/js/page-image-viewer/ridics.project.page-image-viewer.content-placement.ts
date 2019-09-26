@@ -1,21 +1,22 @@
 ﻿class ImageViewerContentAddition {
-    private readonly util: EditorsApiClient;
+    private readonly apiClient: EditorsApiClient;
 
-    constructor(util: EditorsApiClient) {
-        this.util = util;
+    constructor(apiClient: EditorsApiClient) {
+        this.apiClient = apiClient;
     }
 
     formImageContent(pageId: number) {
-        const imgUrl = this.util.getImageUrlOnPage(pageId);
         const pageImageEl = $(".page-image");
-        const imageString = `<img src="${imgUrl}">`;
-        pageImageEl.fadeOut(150, () => {
-            pageImageEl.empty(); 
-            pageImageEl.append(imageString);
-            this.onError(pageImageEl);
+        pageImageEl.data("page-id", pageId);
+
+        this.apiClient.getImageResourceByPageId(pageId).done(result => {
+            pageImageEl.data("image-id", result.id)
+                .data("version-id", result.versionId);
+            this.addImageContent(pageImageEl, result.imageUrl);
+        }).fail(() => {
+            //TODO show correct error
         });
-        pageImageEl.fadeIn(150);
-        pageImageEl.off();
+        //const imgUrl = this.apiClient.getImageUrlOnPage(pageId);
     }
 
     addImageContent(element: JQuery, imageUrl: string) {

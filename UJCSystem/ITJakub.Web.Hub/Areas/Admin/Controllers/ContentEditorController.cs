@@ -143,6 +143,25 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        public IActionResult GetImageResourceByPageId(long pageId)
+        {
+            var client = GetProjectClient();
+            try
+            {
+                var result = client.GetImageResourceByPageId(pageId);
+                result.ImageUrl = Url.Action("GetPageImage", "ContentEditor", new {Area = "Admin", pageId = pageId});
+                return Json(result);
+            }
+            catch (HttpErrorCodeException e)
+            {
+                if (e.StatusCode == HttpStatusCode.NotFound)
+                    return NotFound();
+
+                throw;
+            }
+        }
+
+        [HttpGet]
         public IActionResult GetPageDetail(long pageId)
         {
             var client = GetProjectClient();

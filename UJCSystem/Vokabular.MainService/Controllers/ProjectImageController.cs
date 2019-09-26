@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -21,6 +22,12 @@ namespace Vokabular.MainService.Controllers
         {
             var result = m_projectContentManager.GetImageResourceList(projectId);
             return result;
+        }
+
+        [HttpGet("page/{pageId}/image")]
+        public ImageContract GetImageResourceByPageId(long pageId)
+        {
+            throw new NotImplementedException();
         }
 
         [HttpGet("image/{imageId}")]

@@ -42,17 +42,21 @@
 
     private attachAndProcessUploadButton() {
         $("#project-resource-images").on("click", ".upload-new-image-button", () => {
-            // TODO set correct input values, like:
-            $("#new-image-page-id").val("555"); // TODO this is mock
+            const imageEl = $(".page-image");
+            const pageId = imageEl.data("page-id");
+            const imageId = imageEl.data("image-id");
+            const resourceVersionId = imageEl.data("version-id");
+            $("#new-image-page-id").val(pageId);
+            $("#new-image-image-id").val(imageId);
+            $("#new-image-resource-version-id").val(resourceVersionId);
+
+            this.dropzone.removeAllFiles(true);
 
             this.addImageDropzoneDialog.show();
         });
     }
 
     private submit() {
-        const sessionId = $("#new-image-resource-session-id").val() as string;
-        const comment = $("#new-image-resource-comment").val() as string;
-
         this.dropzone.processQueue();
 
         //this.projectClient.processUploadedResources(this.projectId, sessionId, comment, errorCode => {//TODO check correct way to upload
