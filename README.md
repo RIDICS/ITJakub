@@ -243,4 +243,10 @@ System user IIS_IUSRS must has permission to write to "logs" folder.
 **The large file upload fails with 413.0 - Request Entity Too Large on IIS server**
 The problem may be caused by enabled client certificate. Try to set "Ignore client certificate" in SSL Settings in IIS Manager.
 
+**Random errors when running `InitFulltextDatabases.ps1`**
+Ensure that JAVA_HOME environment variable is set to correct Java installation folder.
+
+**eXist-db installed as service won't start with error "The eXist-db Native XML Database service terminated unexpectedly"**
+The problem may be caused by wrong path to Java installation folder. Ensure that JAVA_HOME environment variable is set and also ensure that correct path is specified in C:\eXist-db\tools\wrapper\conf\wrapper.conf configuration file.
+
 > You can also check Troubleshooting section in Readme file of Authentication Service
