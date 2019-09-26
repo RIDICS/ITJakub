@@ -28,7 +28,9 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         protected override void TryParseAndThrowResponseError(HttpStatusCode responseStatusCode, string responseContent)
         {
-            if (responseStatusCode == HttpStatusCode.BadRequest &&
+            var statusCodeNumber = (int) responseStatusCode;
+            if (statusCodeNumber >= 400 &&
+                statusCodeNumber < 500 &&
                 TryDeserialize<ErrorContract>(responseContent, out var errorContract))
             {
                 var exception = new MainServiceException(errorContract.Code, errorContract.Description, responseStatusCode, errorContract.DescriptionParams);
