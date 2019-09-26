@@ -108,6 +108,13 @@
         <script asp-append-version="true" src="~/js/Plugins/itjakub.plugins.bundle.js"></script>
         <script asp-append-version="true" src="~/js/Favorite/itjakub.favorite.bundle.js"></script>
         <script asp-append-version="true" src="~/lib/loading-visualization/dist/main.js"></script>
+        <script>
+            $(document).ready(function() {
+                var loader = new lv();
+                loader.initLoaderAll();
+                loader.startObserving();
+            });
+        </script>
 
         @RenderSection("scripts", false)
 

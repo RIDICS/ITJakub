@@ -1,4 +1,6 @@
-﻿class DictionaryViewer {
+﻿///
+
+class DictionaryViewer {
     private headwordDescriptionContainer: string;
     private paginationContainer: string;
     private headwordListContainer: string;
@@ -18,9 +20,7 @@
     private searchCriteria: string;
     private isCriteriaJson: boolean;
     private defaultPageNumber: number;
-
-    private localization : Localization;
-
+    private localization: Localization;
     private loadingItemsElement: string = '<div class="lv-circles lv-mid sm"></div>';
 
     constructor(headwordListContainer: string, paginationContainer: string, headwordDescriptionContainer: string, lazyLoad: boolean) {
@@ -35,7 +35,6 @@
             maxVisibleElements: 11,
             showInput: true
         });
-
         this.localization = localization;
     }
 
@@ -129,12 +128,18 @@
 
         var backgroundDiv1 = document.createElement("div");
         var backgroundDiv2 = document.createElement("div");
-        var loadingDiv = document.createElement("div");
-        $(loadingDiv).addClass("lv-dots lv-mid md");
+
+        var loadingDiv1 = document.createElement('div');
+        $(loadingDiv1).addClass("lv-dots md lv-mid");
+        var loadingDiv2 = document.createElement('div');
+        $(loadingDiv2).addClass("lv-dots md lv-mid");
 
         $(backgroundDiv1).addClass("dictionary-loading");
         $(backgroundDiv2).addClass("dictionary-loading");
-        $(backgroundDiv1).append(loadingDiv);
+        $(backgroundDiv1).append(loadingDiv1);
+        $(backgroundDiv2).append(loadingDiv2);
+        lv.create(loadingDiv1);
+        lv.create(loadingDiv2);
         $(this.headwordListContainer).append(backgroundDiv1);
         $(this.headwordDescriptionContainer).append(backgroundDiv2);
     }
@@ -157,6 +162,7 @@
 
         var listUl = document.createElement("ul");
         var descriptionsDiv = document.createElement("div");
+        var bar;
         for (var i = 0; i < headwords.headwordList.length; i++) {
             var headwordLi = document.createElement("li");
             var record = headwords.headwordList[i];
@@ -182,7 +188,6 @@
             
             var dictionaryListDiv = document.createElement("div");
             $(dictionaryListDiv).addClass("dictionary-result-book-list");
-
             for (var j = 0; j < record.dictionaries.length; j++) {
                 var dictionary = record.dictionaries[j];
                 var dictionaryMetadata = this.dictionariesMetadataList[dictionary.bookId];
@@ -191,7 +196,9 @@
                 // create description
                 var mainHeadwordDiv = document.createElement("div");
 
-                $(mainHeadwordDiv).append($(this.loadingItemsElement));
+                bar = $(this.loadingItemsElement);
+                $(mainHeadwordDiv).append(bar);
+                lv.create(bar[0]);
 
                 if (dictionary.pageId) { //image may be exists
                     var imageCheckBoxDiv = document.createElement("div");

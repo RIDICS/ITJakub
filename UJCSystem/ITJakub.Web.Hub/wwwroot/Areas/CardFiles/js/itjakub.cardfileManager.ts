@@ -68,13 +68,16 @@ class CardFileViewer {
 
     private localization: Localization; 
 
+    private loaderClasses: string = "lv-circles md lv-mid lvt-5";
+
     constructor(cardFileId: string, cardFileName: string, bucket: Bucket, initCardPosition?: number) {
         this.localization = localization;
 
         this.cardFileId = cardFileId;
         this.cardFileName = cardFileName;
         var cardFileDiv = document.createElement("div");
-        $(cardFileDiv).addClass("cardfile-listing lv-circles md lv-mid lvt-5");
+        $(cardFileDiv).addClass("cardfile-listing");
+        $(cardFileDiv).addClass(this.loaderClasses);
         this.htmlBody = cardFileDiv;
         this.actualBucket = bucket;
         bucket.addOnFinishLoadCallback(() => this.makePanel(initCardPosition));
@@ -90,7 +93,7 @@ class CardFileViewer {
     }
 
     private showError() {
-        $(this.htmlBody).removeClass("lv-circles md lv-mid lvt-5");
+        $(this.htmlBody).removeClass(this.loaderClasses);
         $(this.htmlBody).addClass("error");
         //$(this.htmlBody).html("Nepodařilo se načíst výsledek ze zásuvky '" + this.actualBucket.getName() + "' z kartotéky '" + this.cardFileName + "'");
         $(this.htmlBody).html(this.localization.translateFormat("LoadingError", new Array<string>(this.actualBucket.getName(), this.cardFileName)  , "CardFiles").value);
@@ -108,7 +111,7 @@ class CardFileViewer {
         } else {
             this.changeViewedCard(0);    
         }
-        $(cardFileDiv).removeClass("lv-circles md lv-mid lvt-5");
+        $(cardFileDiv).removeClass(this.loaderClasses);
     }
 
     private changeViewedCard(newActualCardPosition: number) {
