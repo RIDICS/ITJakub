@@ -229,7 +229,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateImageResource(SaveImageResourceRequest request)
+        public IActionResult CreateImageResource([FromForm] SaveImageResourceRequest request)
         {
             // TODO specify all required parameters
             return StatusCode(StatusCodes.Status501NotImplemented);

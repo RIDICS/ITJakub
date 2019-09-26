@@ -24,15 +24,20 @@
     }
 
     private initDropzone() {
-        
+        const self = this;
         const dropzoneOptions = DropzoneHelper.getFullConfiguration({
             //url: `${getBaseUrl()}Admin/Project/UploadResource`,//TODO check whether it's an actual address
             url: `${getBaseUrl()}Admin/ContentEditor/CreateImageResource`,
             error: DropzoneHelper.getErrorFunction(),
             autoProcessQueue: false,
             maxFiles: 1,
+            uploadMultiple: false,
+            paramName: "File",
+            init: function() {
+                self.dropzone = this;
+            }
         });
-        this.dropzone = $("#new-image-upload").dropzone(dropzoneOptions);
+        $("#new-image-upload").dropzone(dropzoneOptions);
     }
 
     private attachAndProcessUploadButton() {
