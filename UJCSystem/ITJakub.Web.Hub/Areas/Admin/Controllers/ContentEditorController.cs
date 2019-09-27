@@ -149,6 +149,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             try
             {
                 var result = client.GetImageResourceByPageId(pageId);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
                 result.ImageUrl = Url.Action("GetPageImage", "ContentEditor", new {Area = "Admin", pageId = pageId});
                 return Json(result);
             }
@@ -250,7 +255,17 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult CreateImageResource([FromForm] SaveImageResourceRequest request)
         {
-            // TODO specify all required parameters
+            var client = GetProjectClient();
+            var data = new CreateImageContract
+            {
+                ImageId = request.ImageId,
+                OriginalVersionId = request.ResourceVersionId,
+                ResourcePageId = request.PageId,
+                Comment = request.Comment,
+                FileName = request.File.FileName,
+            };
+            var result = client.CreateImageResource(data, request.File.OpenReadStream());
+            // TODO result must be object
             return StatusCode(StatusCodes.Status501NotImplemented);
         }
 

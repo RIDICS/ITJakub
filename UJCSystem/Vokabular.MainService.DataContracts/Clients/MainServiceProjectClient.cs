@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
@@ -492,6 +493,30 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = m_client.Post<long>($"project/text/{textId}", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public NewResourceResultContract CreateImageResource(CreateImageContract data, Stream dataStream)
+        {
+            try
+            {
+                var formData = FormDataBuilder.Create()
+                    .AddParameter(nameof(CreateImageContract.ImageId), data.ImageId)
+                    .AddParameter(nameof(CreateImageContract.OriginalVersionId), data.OriginalVersionId)
+                    .AddParameter(nameof(CreateImageContract.ResourcePageId), data.ResourcePageId)
+                    .AddParameter(nameof(CreateImageContract.Comment), data.Comment)
+                    .AddParameter(nameof(CreateImageContract.FileName), data.FileName)
+                    .ToResult();
+                
+                var result = m_client.PostStreamAsForm<NewResourceResultContract>("project/image", dataStream, data.FileName, formData);
                 return result;
             }
             catch (HttpRequestException e)

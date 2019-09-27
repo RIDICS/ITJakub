@@ -50,26 +50,18 @@ namespace Vokabular.MainService.Controllers
             return File(result.Stream, result.MimeType, result.FileName, result.FileSize);
         }
 
-        [HttpPost("image/{imageId}")]
-        [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult CreateNewImageResourceVersion(long imageId, [FromQuery] string fileName, [FromQuery] long? originalVersionId, [FromQuery] long? pageId, [FromQuery] string comment)
+        [HttpPost("image")]
+        [ProducesResponseType(typeof(NewResourceResultContract), StatusCodes.Status200OK)]
+        public IActionResult CreateNewImageResourceVersion([FromForm] CreateImageContract data, IFormFile file)
         {
-            if (fileName == null || originalVersionId == null || pageId == null)
+            if ((data.ImageId == null || data.OriginalVersionId == null) && data.ResourcePageId == null)
             {
-                return BadRequest("Missing required parameters");
+                return BadRequest("Image must be specified by ImageId + OriginalVersionId or by ResourcePageId");
             }
 
-            var stream = Request.Body;
-            var contract = new CreateImageContract
-            {
-                Comment = comment,
-                FileName = fileName,
-                OriginalVersionId = originalVersionId.Value,
-                ResourcePageId = pageId.Value,
-            };
-
-            var resultVersionId = m_projectContentManager.CreateNewImageVersion(imageId, contract, stream);
-            return Ok(resultVersionId);
+            //var resultVersionId = m_projectContentManager.CreateNewImageVersion(data, file.OpenReadStream());
+            //return Ok(resultVersionId);
+            throw new NotImplementedException();
         }
     }
 }
