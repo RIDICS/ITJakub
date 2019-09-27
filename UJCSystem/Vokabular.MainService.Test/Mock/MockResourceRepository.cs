@@ -120,6 +120,7 @@ namespace Vokabular.MainService.Test.Mock
                 {
                     Id = resourceId + 10,
                     Resource = GetMockResource(resourceId),
+                    ResourcePage = GetMockResource(90),
                     VersionNumber = 1,
                 };
             }

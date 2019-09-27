@@ -151,6 +151,13 @@ namespace Vokabular.MainService.Core.Managers
             deleteCommentWork.Execute();
         }
 
+        public ImageContract GetImageResourceByPageId(long pageId)
+        {
+            var imageResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestPageImage(pageId));
+            var result = m_mapper.Map<ImageContract>(imageResource);
+            return result;
+        }
+
         public FileResultData GetImageResource(long imageId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<ImageResource>(imageId));
@@ -179,10 +186,10 @@ namespace Vokabular.MainService.Core.Managers
             };
         }
 
-        public long CreateNewImageVersion(long imageId, CreateImageContract data, Stream stream)
+        public NewResourceResultContract CreateNewImageVersion(CreateImageContract data, Stream stream)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
-            var resultVersionId = new CreateNewImageResourceVersionWork(m_resourceRepository, m_fileSystemManager, imageId,
+            var resultVersionId = new CreateNewImageResourceVersionWork(m_resourceRepository, m_fileSystemManager,
                 data, stream, userId).Execute();
 
             return resultVersionId;

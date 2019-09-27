@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -27,7 +26,8 @@ namespace Vokabular.MainService.Controllers
         [HttpGet("page/{pageId}/image")]
         public ImageContract GetImageResourceByPageId(long pageId)
         {
-            throw new NotImplementedException();
+            var result = m_projectContentManager.GetImageResourceByPageId(pageId);
+            return result;
         }
 
         [HttpGet("image/{imageId}")]
@@ -59,9 +59,8 @@ namespace Vokabular.MainService.Controllers
                 return BadRequest("Image must be specified by ImageId + OriginalVersionId or by ResourcePageId");
             }
 
-            //var resultVersionId = m_projectContentManager.CreateNewImageVersion(data, file.OpenReadStream());
-            //return Ok(resultVersionId);
-            throw new NotImplementedException();
+            var result = m_projectContentManager.CreateNewImageVersion(data, file.OpenReadStream());
+            return Ok(result);
         }
     }
 }

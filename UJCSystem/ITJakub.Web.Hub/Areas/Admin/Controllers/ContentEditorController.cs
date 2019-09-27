@@ -265,8 +265,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 FileName = request.File.FileName,
             };
             var result = client.CreateImageResource(data, request.File.OpenReadStream());
-            // TODO result must be object
-            return StatusCode(StatusCodes.Status501NotImplemented);
+
+            return Json(result);
         }
 
         [HttpGet]
