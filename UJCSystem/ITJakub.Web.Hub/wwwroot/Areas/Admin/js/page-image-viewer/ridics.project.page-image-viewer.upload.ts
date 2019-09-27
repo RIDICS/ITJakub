@@ -1,13 +1,6 @@
 ﻿class ImageViewerUpload {
     private dropzone: Dropzone;
     private addImageDropzoneDialog: BootstrapDialogWrapper;
-    private readonly apiClient: EditorsApiClient;
-    private readonly projectId: number;
-
-    constructor(projectId: number) {
-        this.projectId = projectId;
-        this.apiClient = new EditorsApiClient();
-    }
 
     init() {
         this.initDialog();
@@ -27,7 +20,7 @@
         const self = this;
         const dropzoneOptions = DropzoneHelper.getFullConfiguration({
             //url: `${getBaseUrl()}Admin/Project/UploadResource`,//TODO check whether it's an actual address
-            url: `${getBaseUrl()}Admin/ContentEditor/CreateImageResource`,
+            //url: null, // Url is not required because it is specified on <form> element
             error: DropzoneHelper.getErrorFunction(),
             autoProcessQueue: false,
             maxFiles: 1,
@@ -35,6 +28,18 @@
             paramName: "File",
             init: function() {
                 self.dropzone = this;
+            },
+            params: () => {
+                return {
+                    comment: $("#new-image-resource-comment").val()
+                };
+            },
+            success: (file, response) => {
+                const resultData = response as INewResourceResultContract;
+
+                // TODO whole reload of image is required
+                $(".page-image").data("image-id", resultData.resourceId)
+                    .data("version-id", resultData.resourceVersionId);
             }
         });
         $("#new-image-upload").dropzone(dropzoneOptions);

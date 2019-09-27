@@ -59,7 +59,8 @@
                     <div class="form-horizontal">
                         <div class="form-group">
                             <div class="col-md-12">
-                                <form action="@Url.Action("UploadResource", "Project")" method="post" class="dropzone" enctype="multipart/form-data" id="new-image-upload">
+                                @*The whole form is Dropzone, so it isn't possible to add comment input here*@
+                                <form action="@Url.Action("CreateImageResource", "ContentEditor")" method="post" class="dropzone" enctype="multipart/form-data" id="new-image-upload">
                                     <div class="fallback">
                                         <input name="file" type="file" />
                                     </div>
@@ -73,8 +74,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-12">
-                                <label for="new-resource-comment">@Localization.Translate("Comment", "RidicsProject")</label>
-                                <textarea class="form-control" id="new-image-resource-comment" maxlength="@Projects.MaxResourceCommentLength"></textarea>
+                                <label for="new-image-resource-comment">@Localization.Translate("Comment", "RidicsProject")</label>
+                                <textarea class="form-control" id="new-image-resource-comment" name="comment" maxlength="@Projects.MaxResourceCommentLength"></textarea>
                             </div>
                         </div>
                     </div>

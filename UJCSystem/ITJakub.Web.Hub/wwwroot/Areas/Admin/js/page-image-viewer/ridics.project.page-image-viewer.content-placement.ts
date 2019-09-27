@@ -1,8 +1,10 @@
 ﻿class ImageViewerContentAddition {
     private readonly apiClient: EditorsApiClient;
+    private readonly errorHandler: ErrorHandler;
 
     constructor(apiClient: EditorsApiClient) {
         this.apiClient = apiClient;
+        this.errorHandler = new ErrorHandler();
     }
 
     formImageContent(pageId: number) {
@@ -13,10 +15,13 @@
             pageImageEl.data("image-id", result.id)
                 .data("version-id", result.versionId);
             this.addImageContent(pageImageEl, result.imageUrl);
-        }).fail(() => {
-            //TODO show correct error
+        }).fail((response) => {
+            const errorMessage = response.status === 404
+                ? localization.translate("NoImageOnPage", "RidicsProject").value
+                : this.errorHandler.getErrorMessage(response);
+            const alert = new AlertComponentBuilder(AlertType.Error).addContent(errorMessage);
+            pageImageEl.empty().append(alert.buildElement());
         });
-        //const imgUrl = this.apiClient.getImageUrlOnPage(pageId);
     }
 
     addImageContent(element: JQuery, imageUrl: string) {
@@ -24,13 +29,13 @@
         element.fadeOut(150, () => {
             element.empty();
             element.append(imageString);
-            this.onError(element);
+            this.attachOnErrorEvent(element);
         });
         element.fadeIn(150);
         element.off();
     }
 
-    private onError(pageImageEl) {
+    private attachOnErrorEvent(pageImageEl) {
         const imageEl = pageImageEl.children("img");
         imageEl.on("error", () => {
             const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("NoImageOnPage","RidicsProject").value);

@@ -9,10 +9,6 @@
         return pageListAjax;
     }
 
-    getImageUrlOnPage(pageId: number): string {
-        return `${this.serverPath}Admin/ContentEditor/GetPageImage?pageId=${pageId}`;
-    }
-
     getImageResourceByPageId(pageId: number): JQuery.jqXHR<IImageContract> {
         return $.get(`${this.serverPath}Admin/ContentEditor/GetImageResourceByPageId?pageId=${pageId}`);
     }
