@@ -100,7 +100,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                 var url = UrlQueryBuilder.Create("book/info")
                     .AddParameter("externalId", externalId)
                     .AddParameter("projectType", projectType)
-                    .ToQuery();
+                    .ToResult();
                 var result = m_client.Get<BookContract>(url);
                 return result;
             }
@@ -486,7 +486,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("bookType", bookType)
                     .AddParameterList("selectedCategoryIds", selectedCategoryIds)
                     .AddParameterList("selectedProjectIds", selectedProjectIds)
-                    .ToQuery();
+                    .ToResult();
 
                 var result = m_client.Get<List<string>>(url);
                 return result;

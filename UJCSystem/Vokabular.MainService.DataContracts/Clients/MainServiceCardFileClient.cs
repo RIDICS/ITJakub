@@ -41,7 +41,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             {
                 var url = UrlQueryBuilder.Create($"cardfile/{cardFileId}/bucket")
                     .AddParameter("headword", headword)
-                    .ToQuery();
+                    .ToResult();
                 var result = m_client.Get<List<BucketShortContract>>(url);
                 return result;
             }

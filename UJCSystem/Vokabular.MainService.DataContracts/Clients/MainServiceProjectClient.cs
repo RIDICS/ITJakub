@@ -35,7 +35,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("projectType", projectType)
                     .AddParameter("filterByName", filterByName)
                     .AddParameter("fetchPageCount", fetchPageCount)
-                    .ToQuery();
+                    .ToResult();
                 var result = m_client.GetPagedList<ProjectDetailContract>(url);
                 return result;
             }
@@ -283,7 +283,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("start", start)
                     .AddParameter("count", count)
                     .AddParameter("filterByComment", query)
-                    .ToQuery();
+                    .ToResult();
 
                 var result = m_client.GetPagedList<SnapshotAggregatedInfoContract>(url);
                 return result;
@@ -511,7 +511,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("start", start)
                     .AddParameter("count", count)
                     .AddParameter("filterByName", query)
-                    .ToQuery();
+                    .ToResult();
 
                 var result = m_client.GetPagedList<RoleContract>(url);
                 return result;
