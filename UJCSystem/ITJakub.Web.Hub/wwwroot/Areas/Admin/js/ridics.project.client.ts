@@ -32,22 +32,6 @@
         this.postAjax("Admin/Project/DeleteProject", {id: id}, (response, errorCode) => callback(errorCode));
     }
 
-    public deleteResource(resourceId: number, callback: (errorCode: HttpStatusCode) => void) {
-        this.postAjax("Admin/Project/DeleteResource", {resourceId: resourceId}, (response, errorCode) => callback(errorCode));
-    }
-
-    public renameResource(resourceId: number, newName: string, callback: (errorCode: HttpStatusCode) => void) {
-        var data = {
-            resourceId: resourceId,
-            newName: newName
-        }
-        this.postAjax("Admin/Project/RenameResource", data, (response, errorCode) => callback(errorCode));
-    }
-
-    public duplicateResource(resourceId: number, callback: (newResourceId: number, errorCode: HttpStatusCode) => void) {
-        this.postAjax("Admin/Project/DuplicateResource", {resourceId: resourceId}, callback);
-    }
-
     public createPublisher(name: string, email: string, callback: (newPublisherId: number, errorCode: HttpStatusCode) => void) {
         var data = {
             text: name,

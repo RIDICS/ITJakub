@@ -168,36 +168,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return PartialView("Work/SubView/_PublicationListPage", model);
         }
 
-        public IActionResult ProjectResourceModuleTab(ProjectModuleTabType tabType, long? resourceId)
-        {
-            if (resourceId == null)
-            {
-                return BadRequest();
-            }
-
-            var client = GetResourceClient();
-
-            switch (tabType)
-            {
-                case ProjectModuleTabType.ResourceDiscussion:
-                    return PartialView("Resource/_Discussion");
-                case ProjectModuleTabType.ResourceMetadata:
-                    var resourceMetadata = client.GetResourceMetadata(resourceId.Value);
-                    var resourceMetadataViewModel = Mapper.Map<ProjectResourceMetadataViewModel>(resourceMetadata);
-                    return PartialView("Resource/_Metadata", resourceMetadataViewModel);
-                default:
-                    return NotFound();
-            }
-        }
-
-        public IActionResult ProjectResourceVersion(long resourceId)
-        {
-            var client = GetResourceClient();
-            var resourceVersionList = client.GetResourceVersionHistory(resourceId);
-            var viewModel = Mapper.Map<List<ResourceVersionViewModel>>(resourceVersionList);
-            return PartialView("_ResourceVersion", viewModel);
-        }
-
         [HttpPost]
         public IActionResult CreateForum(long projectId)
         {
@@ -267,36 +237,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var client = GetCodeListClient();
             var result = client.GetKeywordAutocomplete(keyword, count);
             return Json(result);
-        }
-
-        [HttpPost]
-        [Obsolete]
-        public IActionResult DeleteResource([FromBody] DeleteResourceRequest request)
-        {
-            var client = GetResourceClient();
-            client.DeleteResource(request.ResourceId);
-            return Json(new { });
-        }
-
-        [HttpPost]
-        [Obsolete]
-        public IActionResult RenameResource([FromBody] RenameResourceRequest request)
-        {
-            var client = GetResourceClient();
-            client.RenameResource(request.ResourceId, new ResourceContract
-            {
-                Name = request.NewName
-            });
-            return Json(new { });
-        }
-
-        [HttpPost]
-        [Obsolete]
-        public IActionResult DuplicateResource([FromBody] DuplicateResourceRequest request)
-        {
-            var client = GetResourceClient();
-            var newResourceId = client.DuplicateResource(request.ResourceId);
-            return Json(newResourceId);
         }
 
         [HttpGet]

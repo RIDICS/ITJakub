@@ -32,59 +32,12 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long DuplicateResource(long resourceId)
-        {
-            try
-            {
-                var newResourceId = m_client.Post<long>($"resource/{resourceId}/duplicate", null);
-                return newResourceId;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
         public IList<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
         {
             try
             {
                 var result = m_client.Get<IList<ResourceVersionContract>>($"resource/{resourceId}/version");
                 return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public ResourceMetadataContract GetResourceMetadata(long resourceId)
-        {
-            try
-            {
-                var result = m_client.Get<ResourceMetadataContract>($"resource/{resourceId}/metadata");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void RenameResource(long resourceId, ResourceContract resource)
-        {
-            try
-            {
-                m_client.Put<object>($"resource/{resourceId}", resource);
             }
             catch (HttpRequestException e)
             {
