@@ -32,24 +32,6 @@
         this.postAjax("Admin/Project/DeleteProject", {id: id}, (response, errorCode) => callback(errorCode));
     }
 
-    public processUploadedResources(projectId: number, sessionId: string, comment: string, callback: (errorCode: HttpStatusCode) => void) {
-        var data = {
-            projectId: projectId,
-            sessionId: sessionId,
-            comment: comment
-        };
-        this.postAjax("Admin/Project/ProcessUploadedResources", data, (response, errorCode) => callback(errorCode));
-    }
-
-    public processUploadedResourceVersion(resourceId: number, sessionId: string, comment: string, callback: (errorCode: HttpStatusCode) => void) {
-        var data = {
-            resourceId: resourceId,
-            sessionId: sessionId,
-            comment: comment
-        };
-        this.postAjax("Admin/Project/ProcessUploadResourceVersion", data, (response, errorCode) => callback(errorCode));
-    }
-
     public deleteResource(resourceId: number, callback: (errorCode: HttpStatusCode) => void) {
         this.postAjax("Admin/Project/DeleteResource", {resourceId: resourceId}, (response, errorCode) => callback(errorCode));
     }

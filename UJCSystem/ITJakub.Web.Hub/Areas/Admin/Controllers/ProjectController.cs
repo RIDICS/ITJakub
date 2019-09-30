@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
@@ -13,11 +12,8 @@ using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Helpers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Net.Http.Headers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
-using Vokabular.Shared.AspNetCore.Helpers;
 using ITJakub.Web.Hub.Options;
 using Scalesoft.Localization.AspNetCore;
 
@@ -234,108 +230,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             client.DeleteProject(request.Id);
             return Json(new { });
         }
-
-        [HttpPost]
-        [Obsolete]
-        public async Task<IActionResult> UploadResource()
-        {
-            var boundary = UploadHelper.GetBoundary(Request.ContentType);
-            var reader = new MultipartReader(boundary, Request.Body, UploadHelper.MultipartReaderBufferSize);
-
-            var valuesByKey = new Dictionary<string, string>();
-            MultipartSection section;
-
-            while ((section = await reader.ReadNextSectionAsync()) != null)
-            {
-                var contentDispo = section.GetContentDispositionHeader();
-
-                if (contentDispo.IsFileDisposition())
-                {
-                    if (!valuesByKey.TryGetValue("sessionId", out var sessionId))
-                    {
-                        return BadRequest();
-                    }
-
-                    var fileSection = section.AsFileSection();
-
-                    var client = GetSessionClient();
-                    client.UploadResource(sessionId, fileSection.FileStream, fileSection.FileName);
-                }
-                else if (contentDispo.IsFormDisposition())
-                {
-                    var formSection = section.AsFormDataSection();
-                    var value = await formSection.GetValueAsync();
-                    valuesByKey.Add(formSection.Name, value);
-                }
-            }
-
-            return Json(new { });
-        }
-
-        [HttpPost]
-        [Obsolete]
-        public async Task<IActionResult> UploadNewResourceVersion()
-        {
-            var boundary = UploadHelper.GetBoundary(Request.ContentType);
-            var reader = new MultipartReader(boundary, Request.Body, UploadHelper.MultipartReaderBufferSize);
-
-            var valuesByKey = new Dictionary<string, string>();
-            MultipartSection section;
-
-            while ((section = await reader.ReadNextSectionAsync()) != null)
-            {
-                var contentDispo = section.GetContentDispositionHeader();
-
-                if (contentDispo.IsFileDisposition())
-                {
-                    if (!valuesByKey.TryGetValue("sessionId", out var sessionId))
-                    {
-                        return BadRequest();
-                    }
-
-                    var fileSection = section.AsFileSection();
-
-                    var client = GetSessionClient();
-                    client.UploadResource(sessionId, fileSection.FileStream, fileSection.FileName);
-                }
-                else if (contentDispo.IsFormDisposition())
-                {
-                    var formSection = section.AsFormDataSection();
-                    var value = await formSection.GetValueAsync();
-                    valuesByKey.Add(formSection.Name, value);
-                }
-            }
-
-            return Json(new { });
-        }
-
-        [HttpPost]
-        [Obsolete]
-        public IActionResult ProcessUploadedResources([FromBody] ProcessResourcesRequest request)
-        {
-            var client = GetProjectClient();
-            var resourceId = client.ProcessUploadedResources(request.ProjectId, new NewResourceContract
-            {
-                SessionId = request.SessionId,
-                Comment = request.Comment
-            });
-            return Json(resourceId);
-        }
-
-        [HttpPost]
-        [Obsolete]
-        public IActionResult ProcessUploadResourceVersion([FromBody] ProcessResourceVersionRequest request)
-        {
-            var client = GetResourceClient();
-            var resourceVersionId = client.ProcessUploadedResourceVersion(request.ResourceId,
-                new NewResourceContract
-                {
-                    SessionId = request.SessionId,
-                    Comment = request.Comment
-                });
-            return Json(resourceVersionId);
-        }
-
+        
         [HttpPost]
         public IActionResult CreateKeywordsWithArray(List<KeywordContract> request)
         {

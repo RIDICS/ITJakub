@@ -259,23 +259,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
-
-        public long ProcessUploadedResources(long projectId, NewResourceContract resourceInfo)
-        {
-            try
-            {
-                var resourceId = m_client.Post<long>($"project/{projectId}/resource", resourceInfo);
-                return resourceId;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
+        
         public PagedResultList<SnapshotAggregatedInfoContract> GetSnapshotList(long projectId, int start, int count, string query)
         {
             try

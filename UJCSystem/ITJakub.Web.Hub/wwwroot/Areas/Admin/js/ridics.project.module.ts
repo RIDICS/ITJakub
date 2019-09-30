@@ -33,15 +33,7 @@ class ProjectModule {
             $(this).addClass("active");
             self.showModule($(e.currentTarget as Node as Element).attr("id"));
         });
-
-
-        var dropzoneOptions = DropzoneHelper.getFullConfiguration({
-            //url: getBaseUrl() + "Admin/Project/UploadResource"
-            error: DropzoneHelper.getErrorFunction()
-        });
-        $("#new-resource-upload").dropzone(dropzoneOptions);
-        $("#new-resource-version-upload").dropzone(dropzoneOptions);
-
+        
         this.showModule(null);
     }
 
@@ -264,8 +256,6 @@ class ProjectResourceModule extends ProjectModuleBase {
     private resourceType: ResourceType;
     private projectId: number;
     private currentResourceId: number;
-    private addResourceDialog: BootstrapDialogWrapper;
-    private createResourceVersionDialog: BootstrapDialogWrapper;
     private deleteResourceDialog: BootstrapDialogWrapper;
     private renameResourceDialog: BootstrapDialogWrapper;
     private duplicateResourceDialog: BootstrapDialogWrapper;
@@ -328,16 +318,6 @@ class ProjectResourceModule extends ProjectModuleBase {
     }
 
     private initDialogs() {
-        this.addResourceDialog = new BootstrapDialogWrapper({
-            element: $("#new-resource-dialog"),
-            submitCallback: this.addResource.bind(this),
-            autoClearInputs: true
-        });
-        this.createResourceVersionDialog = new BootstrapDialogWrapper({
-            element: $("#new-resource-version-dialog"),
-            submitCallback: this.createResourceVersion.bind(this),
-            autoClearInputs: true
-        });
         this.renameResourceDialog = new BootstrapDialogWrapper({
             element: $("#rename-resource-dialog"),
             submitCallback: this.renameResource.bind(this),
@@ -358,15 +338,6 @@ class ProjectResourceModule extends ProjectModuleBase {
     private initMainResourceButtons() {
         $("#resource-panel button").off();
 
-        $("#add-resource-button").click(() => {
-            $("#new-resource-session-id").val(Guid.generate());
-            this.addResourceDialog.show();
-        });
-        $("#create-resource-version-button").click(() => {
-            $("#new-resource-version-session-id").val(Guid.generate());
-            $("#new-resource-version-original").text(this.getSelectedResourceName());
-            this.createResourceVersionDialog.show();
-        });
         $("#rename-resource-button").click(() => {
             $("#rename-resource-original").val(this.getSelectedResourceName());
             this.renameResourceDialog.show();
@@ -412,42 +383,7 @@ class ProjectResourceModule extends ProjectModuleBase {
         }
     }
 
-    private addResource() {
-        var sessionId = $("#new-resource-session-id").val() as string;
-        var comment = $("#new-resource-comment").val() as string;
-        this.projectClient.processUploadedResources(this.projectId,
-            sessionId,
-            comment,
-            errorCode => {
-                if (errorCode != null) {
-                    this.addResourceDialog.showError();
-                    return;
-                }
-
-                this.toggleElementsVisibility(false, null);
-
-                this.addResourceDialog.hide();
-            });
-    }
-
-    private createResourceVersion() {
-        var resourceId = this.currentResourceId;
-        var sessionId = $("#new-resource-version-session-id").val() as string;
-        var comment = $("#new-resource-version-comment").val() as string;
-        this.projectClient.processUploadedResourceVersion(resourceId,
-            sessionId,
-            comment,
-            errorCode => {
-                if (errorCode != null) {
-                    this.createResourceVersionDialog.showError();
-                    return;
-                }
-
-                this.toggleElementsVisibility(false, null);
-
-                this.createResourceVersionDialog.hide();
-            });
-    }
+    // TODO remove these obsolete methods:
 
     private deleteResource() {
         var resourceId = this.currentResourceId;

@@ -19,7 +19,6 @@
     private initDropzone() {
         const self = this;
         const dropzoneOptions = DropzoneHelper.getFullConfiguration({
-            //url: `${getBaseUrl()}Admin/Project/UploadResource`,//TODO check whether it's an actual address
             //url: null, // Url is not required because it is specified on <form> element
             error: DropzoneHelper.getErrorFunction(),
             autoProcessQueue: false,
@@ -41,6 +40,7 @@
                 $(".page-image").data("image-id", resultData.resourceId)
                     .data("version-id", resultData.resourceVersionId);
             }
+            // TODO add fail handling this.addImageDropzoneDialog.showError();
         });
         $("#new-image-upload").dropzone(dropzoneOptions);
     }
@@ -63,14 +63,5 @@
 
     private submit() {
         this.dropzone.processQueue();
-
-        //this.projectClient.processUploadedResources(this.projectId, sessionId, comment, errorCode => {//TODO check correct way to upload
-        //    if (errorCode != null) {
-        //        this.addImageDropzoneDialog.showError();
-        //        return;
-        //    }
-
-        //    this.addImageDropzoneDialog.hide();
-        //});
     }
 }
