@@ -30,7 +30,7 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
-        [HttpGet("image/{imageId}")]
+        [HttpGet("image/{imageId}/content")]
         public IActionResult GetImage(long imageId)
         {
             var result = m_projectContentManager.GetImageResource(imageId);
@@ -40,7 +40,7 @@ namespace Vokabular.MainService.Controllers
             return File(result.Stream, result.MimeType, result.FileName, result.FileSize);
         }
 
-        [HttpGet("image/version/{imageVersionId}")]
+        [HttpGet("image/version/{imageVersionId}/content")]
         public IActionResult GetImageVersion(long imageVersionId)
         {
             var result = m_projectContentManager.GetImageResourceVersion(imageVersionId);

@@ -686,7 +686,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.GetStream($"project/image/{imageId}");
+                var result = m_client.GetStream($"project/image/{imageId}/content");
                 return result;
             }
             catch (HttpRequestException e)
@@ -702,7 +702,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.GetStream($"project/image/version/{imageVersionId}");
+                var result = m_client.GetStream($"project/image/version/{imageVersionId}/content");
                 return result;
             }
             catch (HttpRequestException e)
