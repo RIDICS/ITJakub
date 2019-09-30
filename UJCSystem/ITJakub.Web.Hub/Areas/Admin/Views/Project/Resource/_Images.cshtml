@@ -60,7 +60,7 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 @*The whole form is Dropzone, so it isn't possible to add comment input here*@
-                                <form action="@Url.Action("CreateImageResource", "ContentEditor")" method="post" class="dropzone" enctype="multipart/form-data" id="new-image-upload">
+                                <form action="@Url.Action("CreateImageResource", "ContentEditor")" method="post" class="dropzone dropzone-in-modal" enctype="multipart/form-data" id="new-image-upload">
                                     <div class="fallback">
                                         <input name="file" type="file" />
                                     </div>
@@ -82,7 +82,7 @@
                 </div>
                 <div class="modal-footer">
                     <div class="dialog-error alert alert-danger true-inline-alert">
-                        SAVE ERROR @*@Localization.Translate("SaveError", "RidicsProject")*@
+                        @Localization.Translate("Fail", "RidicsProject")
                     </div>
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         @Localization.Translate("Cancel", "Admin")
