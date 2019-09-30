@@ -1,6 +1,13 @@
 ﻿class ImageViewerUpload {
+    private viewer: ImageViewerContentAddition;
+    private errorHandler: ErrorHandler;
     private dropzone: Dropzone;
     private addImageDropzoneDialog: BootstrapDialogWrapper;
+
+    constructor(viewer: ImageViewerContentAddition) {
+        this.viewer = viewer;
+        this.errorHandler = new ErrorHandler();
+    }
 
     init() {
         this.initDialog();
@@ -34,13 +41,24 @@
                 };
             },
             success: (file, response) => {
-                const resultData = response as INewResourceResultContract;
+                const resultData = response as IImageContract;
+                const pageImageEl = $(".page-image");
 
-                // TODO whole reload of image is required
-                $(".page-image").data("image-id", resultData.resourceId)
-                    .data("version-id", resultData.resourceVersionId);
+                pageImageEl.data("image-id", resultData.id)
+                    .data("version-id", resultData.versionId);
+
+                this.viewer.addImageContent(pageImageEl, resultData.imageUrl);
+                this.addImageDropzoneDialog.hide();
+            },
+            sending: (file, xhr, formData) => {
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status !== 200) {
+                        const errorMessage = this.errorHandler.getErrorMessageDirect(xhr.responseText, xhr.status);
+                        this.addImageDropzoneDialog.showError(errorMessage);
+                        this.addImageDropzoneDialog.setSubmitEnabled(false);
+                    }
+                };
             }
-            // TODO add fail handling this.addImageDropzoneDialog.showError();
         });
         $("#new-image-upload").dropzone(dropzoneOptions);
     }

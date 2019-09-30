@@ -423,12 +423,6 @@ interface IImageContract {
     imageUrl: string;
 }
 
-interface INewResourceResultContract {
-    resourceId: number;
-    resourceVersionId: number;
-    versionNumber: number;
-}
-
 interface ILiteraryGenreContract {
     id: number;
     name: string;

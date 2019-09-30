@@ -266,7 +266,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             };
             var result = client.CreateImageResource(data, request.File.OpenReadStream());
 
-            return Json(result);
+            return Json(new ImageContract
+            {
+                Id = result.ResourceId,
+                VersionId = result.ResourceVersionId,
+                VersionNumber = result.VersionNumber,
+                ImageUrl = Url.Action("GetPageImage", "ContentEditor", new { Area = "Admin", pageId = request.PageId }),
+            });
         }
 
         [HttpGet]

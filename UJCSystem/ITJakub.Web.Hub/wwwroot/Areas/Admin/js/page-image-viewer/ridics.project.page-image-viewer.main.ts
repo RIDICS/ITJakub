@@ -3,7 +3,7 @@
         const util = new EditorsApiClient();
         const gui = new EditorsGui();
         const contentAddition = new ImageViewerContentAddition(util);
-        const upload = new ImageViewerUpload();
+        const upload = new ImageViewerUpload(contentAddition);
         const navigation = new ImageViewerPageNavigation(contentAddition, gui);
         const compositionPagesAjax = util.getPagesList(projectId);
         compositionPagesAjax.done((pages: IPage[]) => {

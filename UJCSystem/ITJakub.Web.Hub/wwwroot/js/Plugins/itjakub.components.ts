@@ -106,6 +106,7 @@ class BootstrapDialogWrapper {
             $("textarea", this.$element).val("");
             $("select", this.$element).val("");
         }
+        this.setSubmitEnabled(true);
     }
 
     private showSaving() {
@@ -121,6 +122,10 @@ class BootstrapDialogWrapper {
 
         $(this.options.progressElementSelector, this.$element).hide();
         $error.show();
+    }
+
+    public setSubmitEnabled(enabled: boolean) {
+        $(this.options.submitElementSelector, this.$element).prop("disabled", !enabled);
     }
 }
 

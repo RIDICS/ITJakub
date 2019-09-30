@@ -20,7 +20,10 @@
                 ? localization.translate("NoImageOnPage", "RidicsProject").value
                 : this.errorHandler.getErrorMessage(response);
             const alert = new AlertComponentBuilder(AlertType.Error).addContent(errorMessage);
-            pageImageEl.empty().append(alert.buildElement());
+            pageImageEl.data("image-id", null)
+                .data("version-id", null)
+                .empty()
+                .append(alert.buildElement());
         });
     }
 
