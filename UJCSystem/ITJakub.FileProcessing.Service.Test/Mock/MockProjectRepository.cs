@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
@@ -20,6 +21,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
         public static readonly long GetProjectIdValue = 555;
 
         public List<ProjectOriginalAuthor> ProjectOriginalAuthors { get; set; }
+        public List<ProjectResponsiblePerson> ProjectResponsiblePersons { get; set; }
         public bool CanFindProjectByExternalId { get; set; }
         public List<object> CreatedObjects { get; }
         public List<object> UpdatedObjects { get; }
@@ -103,7 +105,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
 
         public override void DeleteAll(IEnumerable data)
         {
-            throw new NotSupportedException();
+            DeletedObjects.AddRange(data.Cast<object>());
         }
 
         public override void Save(object instance)
@@ -134,6 +136,11 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
         public override IList<ProjectOriginalAuthor> GetProjectOriginalAuthorList(long projectId, bool includeAuthors = false)
         {
             return ProjectOriginalAuthors;
+        }
+
+        public override IList<ProjectResponsiblePerson> GetProjectResponsibleList(long projectId)
+        {
+            return ProjectResponsiblePersons;
         }
     }
 }
