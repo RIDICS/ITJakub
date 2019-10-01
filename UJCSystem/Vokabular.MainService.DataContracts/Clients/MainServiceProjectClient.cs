@@ -259,7 +259,38 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
-        
+
+        public void RemoveResource(long resourceId)
+        {
+            try
+            {
+                m_client.Delete($"project/resource/{resourceId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public IList<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
+        {
+            try
+            {
+                var result = m_client.Get<IList<ResourceVersionContract>>($"project/resource/{resourceId}/version");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public PagedResultList<SnapshotAggregatedInfoContract> GetSnapshotList(long projectId, int start, int count, string query)
         {
             try

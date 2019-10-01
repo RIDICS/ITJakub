@@ -67,7 +67,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult VersionList(long resourceId)
         {
-            var client = GetResourceClient();
+            var client = GetProjectClient();
             var resourceVersionList = client.GetResourceVersionHistory(resourceId);
             var viewModel = Mapper.Map<List<ResourceVersionViewModel>>(resourceVersionList);
             return Json(viewModel);
