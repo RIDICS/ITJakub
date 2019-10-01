@@ -1,12 +1,13 @@
-﻿@using Scalesoft.Localization.AspNetCore
-@model Vokabular.MainService.DataContracts.Contracts.ChapterHierarchyContract
+﻿@using ITJakub.Web.Hub.Areas.Admin.Models
+@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Areas.Admin.Models.ChapterEditorRowViewModel
 @inject ILocalizationService Localizer
 
 @{
     int levelOfHierarchy = (int)ViewData["levelOfHierarchy"];
 }
 <div class="chapter-container">
-    <div class="chapter-row" data-chapter-id="@Model.Id" data-beginning-page-id="@Model.BeginningPageId" data-position="@Model.Position" data-level="@levelOfHierarchy">
+    <div class="chapter-row" data-chapter-id="@Model.Chapter.Id" data-beginning-page-id="@Model.Chapter.BeginningPageId" data-position="@Model.Chapter.Position" data-level="@levelOfHierarchy">
         <div class="ridics-checkbox" style="margin-left: @(levelOfHierarchy)em">
             <label>
                 <input type="checkbox" class="selection-checkbox" />
@@ -17,13 +18,26 @@
         </div>
         <div class="name">
             <div>
-                <input type="text" name="chapter-name" class="form-control hide" value="@Model.Name" />
-                @Model.Name
+                <input type="text" name="chapter-name" class="form-control hide" value="@Model.Chapter.Name" />
+                <span class="chapter-name">@Model.Chapter.Name</span>
             </div>
             <div class="alert alert-danger"></div>
         </div>
         <div class="buttons">
-            [@Model.BeginningPageId]
+            <span class="page-name">[@Model.Chapter.BeginningPageName]</span>
+            <select name="chapter-page" class="form-control select-page selectpicker hide" value="@Model.Chapter.BeginningPageName">
+                @foreach (var pageItem in Model.Pages)
+                {
+                    if (pageItem.Id == Model.Chapter.BeginningPageId)
+                    {
+                        <option value="@pageItem.Id" selected="selected">@pageItem.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@pageItem.Id" >@pageItem.Name</option>
+                    }
+                }
+            </select>
             <a class="edit-chapter btn btn-sm btn-default" title="@Localizer.Translate("EditChapterName", "RidicsProject")">
                 <i class="fa fa-pencil"></i>
             </a>
@@ -33,13 +47,16 @@
         </div>
     </div>
     <div class="sub-chapters">
-        @if (Model.SubChapters.Count > 0)
+        @if (Model.Chapter.SubChapters.Count > 0)
         {
             levelOfHierarchy++;
             ViewData["levelOfHierarchy"] = levelOfHierarchy;
-            foreach (var chapter in Model.SubChapters)
+            foreach (var chapter in Model.Chapter.SubChapters)
             {
-                @await Html.PartialAsync("Work/SubView/_ChapterRow", chapter, ViewData)
+                @await Html.PartialAsync("Work/SubView/_ChapterRow", new ChapterEditorRowViewModel{
+                   Chapter = chapter,
+                   Pages = Model.Pages
+               }, ViewData)
             }
             levelOfHierarchy--;
             ViewData["levelOfHierarchy"] = levelOfHierarchy;

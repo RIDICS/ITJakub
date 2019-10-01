@@ -1440,7 +1440,9 @@ table {
         display: flex;
         flex-direction: row;
 
-        div {
+        .ridics-checkbox,
+        .name,
+        .buttons {
             display: inline-block;
             padding: 0.3em 0.3em 0.3em 0.3em;
             text-align: left;
@@ -1448,12 +1450,28 @@ table {
 
         .name {
             padding-left: 0;
+
+            input,
+            & > div {
+                padding: 0.3em 0.3em 0.3em 0.3em;
+            }
         }
 
         .buttons {
-            align-self: flex-end;
-            min-width: 115px;
+            align-self: center;
+            min-width: 120px;
             margin-left: auto;
+            text-align: right;
+
+            .select-page.bootstrap-select {
+                width: 6em;
+                height: 32px;
+                display: inline-block;
+
+                .active a {
+                    background-color: @button-background-color;
+                }
+            }
 
             a.btn-default {
                 margin-bottom: 0;

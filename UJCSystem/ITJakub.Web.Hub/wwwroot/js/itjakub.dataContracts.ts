@@ -156,11 +156,10 @@ interface IUpdatePage {
 
 interface IUpdateChapter {
     id?: number;
-    parentId?: number;
-    starts: number;
+    parentChapterId?: number;
+    beginningPageId: number;
     name: string;
     position: number;
-    subChapters: IUpdateChapter[];
 }
 
 interface IPageWithContext extends IPage {

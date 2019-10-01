@@ -19,6 +19,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
     public class ChapterHierarchyContract : ChapterContractBase
     {
         public List<ChapterHierarchyContract> SubChapters { get; set; }
+        public string BeginningPageName { get; set; }
     }
 
     public class CreateChapterContract

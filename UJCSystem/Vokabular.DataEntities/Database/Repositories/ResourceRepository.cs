@@ -131,12 +131,13 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual IList<ChapterResource> GetProjectLatestChapters(long projectId)
         {
             Resource resourceAlias = null;
-
+            
             return GetSession().QueryOver<ChapterResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(() => resourceAlias.Project.Id == projectId)
                 .And(x => x.Id == resourceAlias.LatestVersion.Id)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
+                .Fetch(SelectMode.Fetch, x => x.ResourceBeginningPage)
                 .OrderBy(x => x.Position).Asc
                 .List();
         }

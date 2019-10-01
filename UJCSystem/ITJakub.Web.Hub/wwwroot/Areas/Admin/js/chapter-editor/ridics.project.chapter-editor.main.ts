@@ -5,6 +5,7 @@
     private readonly errorHandler: ErrorHandler;
     private readonly moveEditor: ChapterMoveEditor;
     private position = 0;
+    private chaptersToSave: IUpdateChapter[];
 
     constructor() {
         this.gui = new EditorsGui();
@@ -22,7 +23,9 @@
         
         $(".save-chapters-button").on("click", () => {
             this.position = 0;
-            this.util.saveChapterList(projectId, this.getChapters($(".chapter-listing table > .sub-chapters"))).done(() => {
+            this.chaptersToSave = [];
+            this.getChaptersToSave($(".chapter-listing table > .sub-chapters"));
+            this.util.saveChapterList(projectId, this.chaptersToSave).done(() => {
                 $("#unsavedChanges").addClass("hide");
             }).fail((error) => {
                 this.gui.showInfoDialog(localization.translate("Error").value, this.errorHandler.getErrorMessage(error));
@@ -50,32 +53,34 @@
                 $(".chapter-list-editor-content").off();
             }
         );
+
+        $("select[name=\"chapter-page\"]").selectpicker({
+            liveSearch: true,
+            maxOptions: 1
+        });
     }
 
-    private getChapters(subChaptersElements: JQuery<HTMLElement>, parentId: number = null): IUpdateChapter[] {
+    private getChaptersToSave(subChaptersElements: JQuery<HTMLElement>, parentId: number = null): void {
         const chapters = subChaptersElements.children(".chapter-container").children(".chapter-row");
         const subChaptersEl = subChaptersElements.children(".chapter-container").children(".sub-chapters");
 
-        const chapterList: IUpdateChapter[] = [];
         for (let i = 0; i < chapters.length; i++) {
+            const id = Number($(chapters[i]).data("chapter-id"));
             const newChapter = {
-                id: Number($(chapters[i]).data("chapter-id")),
-                parentId: parentId,
+                id: id,
+                parentChapterId: parentId,
                 position: this.position + 1,
-                name: $(chapters[i]).find(".name").text().trim(), //TODO check, add others things
-                starts: 0, //TODO page id or page name?
-                subChapters: []
+                name: $(chapters[i]).find(".chapter-name").text().trim(), 
+                beginningPageId: Number($(chapters[i]).find("option:selected").val())
             }
             this.position++;
 
+            this.chaptersToSave.push(newChapter);
+
             if (subChaptersEl.children(".chapter-container").length !== 0) {
-                newChapter.subChapters = this.getChapters(subChaptersEl, newChapter.id);
+                this.getChaptersToSave(subChaptersEl, newChapter.id);
             }
-
-            chapterList.push(newChapter);
         }
-
-        return chapterList;
     }
 
     private initChapterRowClicks(subChapters: JQuery<HTMLElement>) {
@@ -115,21 +120,39 @@
 
     private editChapter(element: JQuery) {
         const editButton = element.find("i.fa");
-        const chapterRow = editButton.parents(".page-chapter");
-        const nameElement = chapterRow.find(".name");
-        //TODO fix, edit also page number
+        const chapterRow = editButton.parents(".chapter-row");
+        const nameElement = chapterRow.find(".chapter-name");
+        const pageElement = chapterRow.find(".page-name");
+        
         const nameInput = chapterRow.find("input[name=\"chapter-name\"]");
+        const pageInput = chapterRow.find(".select-page.bootstrap-select");
+        
+
         if (editButton.hasClass("fa-pencil")) {
             editButton.switchClass("fa-pencil", "fa-check");
+            nameElement.addClass("hide");
+            pageElement.addClass("hide");
             nameInput.removeClass("hide");
+            pageInput.removeClass("hide");
         } else {
-            nameInput.addClass("hide");
             editButton.switchClass("fa-check", "fa-pencil");
+            nameInput.addClass("hide");
+            pageInput.addClass("hide");
+           
             const newName = String(nameInput.val());
             if (String(nameElement.text()) !== newName) {
                 nameElement.text(newName);
                 this.showUnsavedChangesAlert();
             }
+            
+            const newPageName = String(pageInput.find("option:selected").text());
+            if (newPageName !== "" && String(pageElement.text()) !== newPageName) {
+                pageElement.text(`[${newPageName}]`);
+                this.showUnsavedChangesAlert();
+            }
+
+            nameElement.removeClass("hide");
+            pageElement.removeClass("hide");
         }
     }
 
@@ -137,7 +160,7 @@
         chapterRow.siblings().removeClass("active");
         chapterRow.addClass("active");
 
-        const pageId = chapterRow.data("page-id");
+        const pageId = chapterRow.data("beginning-page-id");
         const pageDetail = $("#page-detail");
         const alertHolder = pageDetail.find(".alert-holder");
         const content = pageDetail.find(".body-content");
@@ -188,36 +211,15 @@
         $("#unsavedChanges").removeClass("hide");
     }
 
-    private createChapterRow(name: string, beginningPageId: number, beginningPageName: string, levelOfHierarchy = 0): string {
-        return `<div class="chapter-container">
-                    <div class="chapter-row" data-beginning-page-id="${beginningPageId}" data-level="${levelOfHierarchy}">
-                        <div class="ridics-checkbox" style="margin-left: ${levelOfHierarchy}em">
-                            <label>
-                                <input type="checkbox" class="selection-checkbox" />
-                                <span class="cr cr-black">
-                                    <i class="cr-icon glyphicon glyphicon-ok"></i>
-                                </span>
-                            </label>
-                        </div>
-                        <div class="name">
-                            <div>
-                                <input type="text" name="chapter-name" class="form-control hide" value=" ${name}" />
-                                 ${name}
-                            </div>
-                            <div class="alert alert-danger"></div>
-                        </div>
-                        <div class="buttons">
-                            ${beginningPageName}
-                            <a class="edit-chapter btn btn-sm btn-default" title="${localization.translate("EditChapterName", "RidicsProject").value}">
-                                <i class="fa fa-pencil"></i>
-                            </a>
-                            <a class="remove-chapter btn btn-sm btn-default" title="${localization.translate("DeleteChapter", "RidicsProject").value}">
-                                <i class="fa fa-trash"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="sub-chapters">
-                    </div>
-                </div>`;
+    private createChapterRow(name: string, beginningPageId: number, beginningPageName: string, levelOfHierarchy = 0): JQuery<HTMLElement> {
+        const newChapter = $(".chapter-template").children(".chapter-container").clone();
+        newChapter.children(".chapter-row").data("level", levelOfHierarchy);
+        newChapter.find(".ridics-checkbox").attr("style", `margin-left: ${levelOfHierarchy}em`);
+        newChapter.find(".chapter-name").text(name);
+        newChapter.find("input[name=\"chapter-name\"]").val(name);
+        newChapter.find(".page-name").text(beginningPageName);
+        newChapter.find("input[name=\"page-name\"]").val(beginningPageName);
+
+        return newChapter;
     }
 }

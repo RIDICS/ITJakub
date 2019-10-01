@@ -136,7 +136,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     return PartialView("Work/_Categorization", workCategorizationViewModel);
                 case ProjectModuleTabType.WorkChapters:
                     var chapterList = projectClient.GetChapterList(projectId.Value);
-                    return PartialView("Work/_ChapterEditor", chapterList);
+                    var pageList = projectClient.GetAllPageList(projectId.Value);
+                    var chapterEditorViewModel = new ChapterEditorViewModel
+                    {
+                        Chapters = chapterList,
+                        Pages = pageList
+                    };
+                    return PartialView("Work/_ChapterEditor", chapterEditorViewModel);
                 case ProjectModuleTabType.WorkHistory:
                     return PartialView("Work/_History");
                 case ProjectModuleTabType.WorkNote:
