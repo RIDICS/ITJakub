@@ -9,13 +9,12 @@
         return pageListAjax;
     }
 
-    getImageUrlOnPage(pageId: number): string {
-        return `${this.serverPath}Admin/ContentEditor/GetPageImage?pageId=${pageId}`;
+    getImageResourceByPageId(pageId: number): JQuery.jqXHR<IImageContract> {
+        return $.get(`${this.serverPath}Admin/ContentEditor/GetImageResourceByPageId?pageId=${pageId}`);
     }
 
-
     getPageDetail(pageId: number): JQuery.jqXHR<string> {
-        return  $.get(`${this.serverPath}Admin/ContentEditor/GetPageDetail?pageId=${pageId}`);
+        return $.get(`${this.serverPath}Admin/ContentEditor/GetPageDetail?pageId=${pageId}`);
     }
 
     savePageList(projectId: number, pageList: IUpdatePage[]): JQuery.jqXHR {

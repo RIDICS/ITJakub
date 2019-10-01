@@ -416,6 +416,13 @@ interface ITextWithContent {
     text: string;
 }
 
+interface IImageContract {
+    id: number;
+    versionId: number;
+    versionNumber: number;
+    imageUrl: string;
+}
+
 interface ILiteraryGenreContract {
     id: number;
     name: string;

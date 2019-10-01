@@ -47,6 +47,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             return Json(new {pageText = text}, GetJsonSerializerSettings());
         }
 
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public ActionResult GetBookImage(long? snapshotId, long pageId)
         {
             try

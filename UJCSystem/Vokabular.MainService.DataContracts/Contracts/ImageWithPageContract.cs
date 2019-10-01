@@ -10,9 +10,13 @@
 
     public class CreateImageContract
     {
-        public string Comment { get; set; }
-        public long OriginalVersionId { get; set; }
-        public long ResourcePageId { get; set; }
+        // Identify by ImageId & OriginalVersionId or by ResourcePageId
+        public long? ImageId { get; set; }
+        public long? OriginalVersionId { get; set; }
+
+        public long? ResourcePageId { get; set; }
+
         public string FileName { get; set; }
+        public string Comment { get; set; }
     }
 }

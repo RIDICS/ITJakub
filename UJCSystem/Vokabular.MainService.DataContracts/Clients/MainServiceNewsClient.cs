@@ -27,7 +27,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("start", start)
                     .AddParameter("count", count)
                     .AddParameter("itemType", itemType)
-                    .ToQuery();
+                    .ToResult();
                 var result = m_client.GetPagedList<NewsSyndicationItemContract>(url);
                 return result;
             }

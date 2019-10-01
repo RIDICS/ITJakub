@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Types;
 using ITJakub.Web.Hub.Options;
+using Microsoft.AspNetCore.Http;
 using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
@@ -124,11 +125,46 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult GetPageImage(long pageId)
         {
             var client = GetProjectClient();
-            var result = client.GetPageImage(pageId);
-            return new FileStreamResult(result.Stream, result.MimeType);
+            try
+            {
+                var result = client.GetPageImage(pageId);
+                return new FileStreamResult(result.Stream, result.MimeType);
+            }
+            catch (HttpErrorCodeException e)
+            {
+                if (e.StatusCode == HttpStatusCode.NotFound)
+                    return NotFound();
+
+                throw;
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetImageResourceByPageId(long pageId)
+        {
+            var client = GetProjectClient();
+            try
+            {
+                var result = client.GetImageResourceByPageId(pageId);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                result.ImageUrl = Url.Action("GetPageImage", "ContentEditor", new {Area = "Admin", pageId = pageId});
+                return Json(result);
+            }
+            catch (HttpErrorCodeException e)
+            {
+                if (e.StatusCode == HttpStatusCode.NotFound)
+                    return NotFound();
+
+                throw;
+            }
         }
 
         [HttpGet]
@@ -215,6 +251,29 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var client = GetProjectClient();
             var resourceId = client.CreateTextResource(pageId);
             return Json(resourceId);
+        }
+
+        [HttpPost]
+        public IActionResult CreateImageResource([FromForm] SaveImageResourceRequest request)
+        {
+            var client = GetProjectClient();
+            var data = new CreateImageContract
+            {
+                ImageId = request.ImageId,
+                OriginalVersionId = request.ResourceVersionId,
+                ResourcePageId = request.PageId,
+                Comment = request.Comment,
+                FileName = request.File.FileName,
+            };
+            var result = client.CreateImageResource(data, request.File.OpenReadStream());
+
+            return Json(new ImageContract
+            {
+                Id = result.ResourceId,
+                VersionId = result.ResourceVersionId,
+                VersionNumber = result.VersionNumber,
+                ImageUrl = Url.Action("GetPageImage", "ContentEditor", new { Area = "Admin", pageId = request.PageId }),
+            });
         }
 
         [HttpGet]

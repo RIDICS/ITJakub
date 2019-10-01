@@ -112,7 +112,7 @@
     "AuthorSort": "translate[Autor]",
 
     "FormatNotSupported": "translate[Tento formát není podporovaný. Vyberte prosím jiný soubor s příponou ]",
-    "DropFilesForUpload": "translate[Pro nahrávání sem přesuňte soubory]",
+    "DropFilesForUpload": "translate[Pro nahrání souborů klikněte na formulář a proveďtě výběr nebo je na formulář přetáhněte.]",
     "BrowserDoesntSupportDragNDrop": "translate[Váš prohlížeč nepodporuje nahrávání souborů pomocí drag'n'drop.]",
     "UseBackupForm": "translate[Použijte prosím záložní formulář umíštěný níže.]",
     "FileTooBig": "translate[Velikost souboru ({{filesize}}MB) překročila maximální povolenou velikost {{maxFilesize}}MB.]",

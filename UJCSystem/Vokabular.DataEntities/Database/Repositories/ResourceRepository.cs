@@ -223,13 +223,13 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public virtual IList<AudioResource> GetRecordings(long trackResourceVersionId)
+        public virtual IList<AudioResource> GetRecordings(long trackId)
         {
             Resource resourceAlias = null;
 
             var result = GetSession().QueryOver<AudioResource>()
                 .JoinAlias(x => x.ResourceTrack, () => resourceAlias)
-                .Where(() => resourceAlias.Id == trackResourceVersionId)
+                .Where(() => resourceAlias.Id == trackId)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
                 .OrderBy(x => x.ResourceTrack).Asc
                 .OrderBy(x => x.AudioType).Asc

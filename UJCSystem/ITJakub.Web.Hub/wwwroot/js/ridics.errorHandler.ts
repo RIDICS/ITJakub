@@ -1,10 +1,14 @@
 ﻿class ErrorHandler {
 
     public getErrorMessage(ajaxResponse: JQuery.jqXHR, defaultMessage?: string): string {
-        const response = ajaxResponse.responseText;
+        const responseText = ajaxResponse.responseText;
         const statusCode = ajaxResponse.status;
+        return this.getErrorMessageDirect(responseText, statusCode, defaultMessage);
+    }
+
+    public getErrorMessageDirect(responseText: string, statusCode: number, defaultMessage?: string): string {
         try {
-            const parsedResponse = JSON.parse(response);
+            const parsedResponse = JSON.parse(responseText);
 
             if (this.isErrorContract(parsedResponse)) {
                 return  parsedResponse.errorMessage;

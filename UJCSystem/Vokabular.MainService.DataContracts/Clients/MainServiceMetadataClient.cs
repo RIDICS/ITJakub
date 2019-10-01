@@ -47,7 +47,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("projectType", projectType)
                     .AddParameterList("selectedCategoryIds", selectedCategoryIds)
                     .AddParameterList("selectedProjectIds", selectedProjectIds)
-                    .ToQuery();
+                    .ToResult();
 
                 var result = m_client.Get<List<string>>(url);
                 return result;

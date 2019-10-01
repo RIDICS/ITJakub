@@ -112,7 +112,7 @@
     "AuthorSort": "Autor",
 
     "FormatNotSupported": "Tento formát není podporovaný. Vyberte prosím jiný soubor s příponou ",
-    "DropFilesForUpload": "Pro nahrávání sem přesuňte soubory",
+    "DropFilesForUpload": "Pro nahrání souborů klikněte na formulář a proveďtě výběr nebo je na formulář přetáhněte.",
     "BrowserDoesntSupportDragNDrop": "Váš prohlížeč nepodporuje nahrávání souborů pomocí drag'n'drop.",
     "UseBackupForm": "Použijte prosím záložní formulář umíštěný níže.",
     "FileTooBig": "Velikost souboru ({{filesize}}MB) překročila maximální povolenou velikost {{maxFilesize}}MB.",
