@@ -230,7 +230,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public void RemoveResource(long resourceId)
         {
-            throw new System.NotImplementedException();
+            var work = new RemoveResourceWork(m_resourceRepository, resourceId);
+            work.Execute();
         }
     }
 }

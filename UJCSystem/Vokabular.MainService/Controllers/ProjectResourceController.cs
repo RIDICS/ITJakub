@@ -7,12 +7,12 @@ using Vokabular.MainService.DataContracts.Contracts.Type;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/Project")]
-    public class ResourceController : BaseController
+    public class ProjectResourceController : BaseController
     {
         private readonly ProjectContentManager m_projectContentManager;
         private readonly ResourceManager m_resourceManager;
 
-        public ResourceController(ProjectContentManager projectContentManager, ResourceManager resourceManager)
+        public ProjectResourceController(ProjectContentManager projectContentManager, ResourceManager resourceManager)
         {
             m_projectContentManager = projectContentManager;
             m_resourceManager = resourceManager;
