@@ -9,6 +9,7 @@
 
     public class ProjectResponsiblePersonContract : ResponsiblePersonContract
     {
+        public int Sequence { get; set; }
         public ResponsibleTypeContract ResponsibleType { get; set; }
     }
 

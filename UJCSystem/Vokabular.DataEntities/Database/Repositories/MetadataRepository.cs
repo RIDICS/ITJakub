@@ -63,11 +63,15 @@ namespace Vokabular.DataEntities.Database.Repositories
             }
             if (includeResponsibles)
             {
+                ProjectResponsiblePerson projectResponsiblePersonAlias = null;
+
                 session.QueryOver<Project>()
+                    .JoinAlias(x => x.ResponsiblePersons, () => projectResponsiblePersonAlias, JoinType.LeftOuterJoin)
                     .Where(x => x.Id == projectId)
                     .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons)
                     .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsiblePerson)
                     .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsibleType)
+                    .OrderBy(() => projectResponsiblePersonAlias.Sequence).Asc
                     .FutureValue();
             }
             if (includeKind)
@@ -249,6 +253,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons)
                 .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsiblePerson)
                 .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsibleType)
+                .OrderBy(() => projectResponsiblePersonAlias.Sequence).Asc
                 .Future();
 
             return result.Value;
@@ -359,6 +364,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             Resource resourceAlias = null;
             Project projectAlias = null;
             ProjectOriginalAuthor projectOriginalAuthorAlias = null;
+            ProjectResponsiblePerson projectResponsiblePersonAlias = null;
 
             var metadataListFuture = GetSession().QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
@@ -383,10 +389,12 @@ namespace Vokabular.DataEntities.Database.Repositories
             if (fetchResponsiblePersons)
             {
                 GetSession().QueryOver<Project>()
+                    .JoinAlias(x => x.ResponsiblePersons, () => projectResponsiblePersonAlias, JoinType.LeftOuterJoin)
                     .WhereRestrictionOn(x => x.Id).IsInG(projectIds)
                     .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons)
                     .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsiblePerson)
                     .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsibleType)
+                    .OrderBy(() => projectResponsiblePersonAlias.Sequence).Asc
                     .Future();
             }
 
@@ -485,6 +493,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual IList<Project> FetchAuthorsAndResponsibles(IList<long> projectIds)
         {
             ProjectOriginalAuthor projectOriginalAuthorAlias = null;
+            ProjectResponsiblePerson projectResponsiblePersonAlias = null;
 
             GetSession().QueryOver<Project>()
                 .WhereRestrictionOn(x => x.Id).IsInG(projectIds)
@@ -497,10 +506,12 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return GetSession().QueryOver<Project>()
                 .WhereRestrictionOn(x => x.Id).IsInG(projectIds)
+                .JoinAlias(x => x.ResponsiblePersons, () => projectResponsiblePersonAlias, JoinType.LeftOuterJoin)
                 .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons)
                 .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsiblePerson)
                 .Fetch(SelectMode.Fetch, x => x.ResponsiblePersons[0].ResponsibleType)
                 .OrderBy(x => x.Id).Asc
+                .ThenBy(() => projectResponsiblePersonAlias.Sequence).Asc
                 .Future().ToList();
         }
     }
