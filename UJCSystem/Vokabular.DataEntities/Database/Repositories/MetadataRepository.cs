@@ -23,7 +23,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             var query = GetSession().QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
-                .Where(x => resourceAlias.Project.Id == projectId && resourceAlias.ResourceType == ResourceTypeEnum.ProjectMetadata && resourceAlias.LatestVersion.Id == x.Id)
+                .Where(x => resourceAlias.Project.Id == projectId && resourceAlias.ResourceType == ResourceTypeEnum.ProjectMetadata && resourceAlias.LatestVersion.Id == x.Id && !resourceAlias.IsRemoved)
                 .Fetch(SelectMode.Fetch, x => x.Resource);
 
             return query.SingleOrDefault();
@@ -38,7 +38,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .Where(x => projectAlias.ExternalId == projectExternalId && projectAlias.ProjectType == projectType &&
-                            resourceAlias.ResourceType == ResourceTypeEnum.ProjectMetadata && resourceAlias.LatestVersion.Id == x.Id)
+                            resourceAlias.ResourceType == ResourceTypeEnum.ProjectMetadata && resourceAlias.LatestVersion.Id == x.Id && !resourceAlias.IsRemoved)
                 .Fetch(SelectMode.Fetch, x => x.Resource);
 
             return query.SingleOrDefault();
@@ -133,7 +133,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => projectAlias.Permissions, () => permissionAlias)
                 .JoinAlias(() => permissionAlias.UserGroup, () => userGroupAlias)
                 .JoinAlias(() => userGroupAlias.Users, () => userAlias)
-                .Where(x => x.Id == resourceAlias.LatestVersion.Id && bookTypeAlias.Type == bookTypeEnum)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved && bookTypeAlias.Type == bookTypeEnum)
                 .And(() => userAlias.Id == userId && projectAlias.ProjectType == projectType)
                 .OrderBy(x => x.Title).Asc
                 .Fetch(SelectMode.Fetch, x => x.Resource.Project.Categories)
@@ -164,7 +164,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             var result = session.QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .WhereRestrictionOn(() => resourceAlias.Project.Id).IsInG(projectIdList)
-                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
                 .Fetch(SelectMode.Fetch, x => x.Resource.Project)
                 .Fetch(SelectMode.Fetch, x => x.Resource.Project.LatestPublishedSnapshot)
@@ -185,7 +185,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .WhereRestrictionOn(() => projectAlias.ExternalId).IsInG(projectExternalIdList)
                 .And(() => projectAlias.ProjectType == projectType)
-                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
                 .Fetch(SelectMode.Fetch, x => x.Resource.Project)
                 .Fetch(SelectMode.Fetch, x => x.Resource.Project.LatestPublishedSnapshot)
@@ -213,7 +213,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias, JoinType.LeftOuterJoin)
                 .JoinAlias(() => snapshotAlias.DefaultBookType, () => bookTypeAlias, JoinType.LeftOuterJoin)
-                .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Project.Id == projectId)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved && resourceAlias.Project.Id == projectId)
                 .FutureValue();
 
             session.QueryOver<Project>()
@@ -267,7 +267,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return GetSession().QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
-                .Where(x => x.Id == resourceAlias.LatestVersion.Id)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
                 .AndRestrictionOn(x => x.PublisherText).IsLike(query, MatchMode.Start)
                 .Select(Projections.Distinct(Projections.Property<MetadataResource>(x => x.PublisherText)))
                 .OrderBy(x => x.PublisherText).Asc
@@ -283,7 +283,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return GetSession().QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
-                .Where(x => x.Id == resourceAlias.LatestVersion.Id)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
                 .AndRestrictionOn(x => x.Copyright).IsLike(query, MatchMode.Start)
                 .Select(Projections.Distinct(Projections.Property<MetadataResource>(x => x.Copyright)))
                 .OrderBy(x => x.Copyright).Asc
@@ -300,7 +300,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return GetSession().QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
-                .Where(x => x.Id == resourceAlias.LatestVersion.Id)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
                 .AndRestrictionOn(x => x.ManuscriptRepository).IsLike(query, MatchMode.Start)
                 .Select(Projections.Distinct(Projections.Property<MetadataResource>(x => x.ManuscriptRepository)))
                 .OrderBy(x => x.ManuscriptRepository).Asc
@@ -329,7 +329,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => projectAlias.Permissions, () => permissionAlias)
                 .JoinAlias(() => permissionAlias.UserGroup, () => userGroupAlias)
                 .JoinAlias(() => userGroupAlias.Users, () => userAlias)
-                .Where(x => x.Id == resourceAlias.LatestVersion.Id && userAlias.Id == userId)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved && userAlias.Id == userId)
                 .AndRestrictionOn(x => x.Title).IsLike(queryString, MatchMode.Anywhere)
                 .Select(Projections.Distinct(Projections.Property<MetadataResource>(x => x.Title)))
                 .OrderBy(x => x.Title).Asc;
@@ -372,7 +372,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .WhereRestrictionOn(() => projectAlias.Id).IsInG(projectIds)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
                 .Fetch(SelectMode.Fetch, x => x.Resource.Project)
-                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
                 .Future();
 
             if (fetchAuthors)
@@ -420,7 +420,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .WhereRestrictionOn(() => projectAlias.ExternalId).IsInG(projectExternalIds)
                 .And(() => projectAlias.ProjectType == projectType)
-                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
                 .List();
         }
 
@@ -436,7 +436,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .JoinAlias(() => projectAlias.Authors, () => projectOriginalAuthorAlias)
                 .JoinAlias(() => projectAlias.CreatedByUser, () => userAlias) // fetch user
-                .Where(x => x.Id == resourceAlias.LatestVersion.Id && projectOriginalAuthorAlias.OriginalAuthor.Id == authorId)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved && projectOriginalAuthorAlias.OriginalAuthor.Id == authorId)
                 .OrderBy(x => x.Title).Asc
                 .Take(count)
                 .Skip(start);
@@ -469,7 +469,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .JoinAlias(() => projectAlias.ResponsiblePersons, () => projectResponsiblePersonAlias)
                 .JoinAlias(() => projectAlias.CreatedByUser, () => userAlias) // fetch user
-                .Where(x => x.Id == resourceAlias.LatestVersion.Id && projectResponsiblePersonAlias.ResponsiblePerson.Id == responsiblePersonId)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved && projectResponsiblePersonAlias.ResponsiblePerson.Id == responsiblePersonId)
                 .OrderBy(x => x.Title).Asc
                 .Take(count)
                 .Skip(start);

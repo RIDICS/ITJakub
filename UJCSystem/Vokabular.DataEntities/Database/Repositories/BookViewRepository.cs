@@ -267,7 +267,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => projectAlias.Permissions, () => permissionAlias)
                 .JoinAlias(() => permissionAlias.UserGroup, () => userGroupAlias)
                 .JoinAlias(() => userGroupAlias.Users, () => userAlias)
-                .Where(() => headwordResourceAlias.Id == resourceAlias.LatestVersion.Id && userAlias.Id == userId && projectAlias.ProjectType == projectType)
+                .Where(() => headwordResourceAlias.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved && userAlias.Id == userId && projectAlias.ProjectType == projectType)
                 .AndRestrictionOn(x => x.Headword).IsLike(queryString, MatchMode.Start)
                 .Select(Projections.Distinct(Projections.Property<HeadwordItem>(x => x.Headword)))
                 .OrderBy(x => x.Headword).Asc;
