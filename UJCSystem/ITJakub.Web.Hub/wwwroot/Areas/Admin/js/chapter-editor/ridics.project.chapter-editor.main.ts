@@ -1,4 +1,4 @@
-﻿class ChapterEditorMain {
+class ChapterEditorMain {
     private editDialog: BootstrapDialogWrapper;
     private readonly gui: EditorsGui;
     private readonly util: EditorsApiClient;
@@ -20,11 +20,11 @@
             element: $("#project-chapters-dialog"),
             autoClearInputs: false
         });
-        
+
         $(".save-chapters-button").on("click", () => {
             this.position = 0;
             this.chaptersToSave = [];
-            this.getChaptersToSave($(".chapter-listing table > .sub-chapters"));
+            this.getChaptersToSave($(".table > .sub-chapters"));
             this.util.saveChapterList(projectId, this.chaptersToSave).done(() => {
                 $("#unsavedChanges").addClass("hide");
             }).fail((error) => {
@@ -32,17 +32,22 @@
             });
         });
 
-        this.initChapterRowClicks($($(".sub-chapters").get(0)));
+        this.initChapterRowClicks($(".table > .sub-chapters"));
 
         $("#project-chapters-edit-button").click(() => {
             this.editDialog.show();
-            
         });
 
         $(".chapter-list-editor-content").on("click",
             ".create-chapter",
             () => {
-                //TODO create chapter
+                const chapterName = String($(".project-chapters-dialog input[name=\"chapter-name\"]").val());
+                const selectedPageId = Number($(".project-chapters-dialog .select-page").find("option:selected").val());
+                const selectedPageName = `[${$(".project-chapters-dialog .select-page").find("option:selected").text()}]`;
+                const chapter = this.createChapterRow(chapterName, selectedPageId, selectedPageName);
+                this.initChapterRowClicks(chapter);
+                $(".table > .sub-chapters").append(chapter);
+                this.editDialog.hide();
             });
 
         $(".chapter-list-editor-content").on("click",
@@ -54,7 +59,7 @@
             }
         );
 
-        $("select[name=\"chapter-page\"]").selectpicker({
+        $(".project-chapters-dialog .select-page").selectpicker({
             liveSearch: true,
             maxOptions: 1
         });
@@ -116,6 +121,11 @@
             this.selectChapter($(event.currentTarget));
             this.moveEditor.checkMoveButtonsAvailability();
         });
+
+        subChapters.find("select[name=\"chapter-page\"]").selectpicker({
+            liveSearch: true,
+            maxOptions: 1
+        });
     }
 
     private editChapter(element: JQuery) {
@@ -145,9 +155,9 @@
                 this.showUnsavedChangesAlert();
             }
             
-            const newPageName = String(pageInput.find("option:selected").text());
+            const newPageName = `[${pageInput.find("option:selected").text()}]`;
             if (newPageName !== "" && String(pageElement.text()) !== newPageName) {
-                pageElement.text(`[${newPageName}]`);
+                pageElement.text(newPageName);
                 this.showUnsavedChangesAlert();
             }
 
@@ -219,7 +229,8 @@
         newChapter.find("input[name=\"chapter-name\"]").val(name);
         newChapter.find(".page-name").text(beginningPageName);
         newChapter.find("input[name=\"page-name\"]").val(beginningPageName);
-
+        newChapter.find(`input[name="page-name"] option[value="${beginningPageId}"]`).attr("selected", "selected");
+        
         return newChapter;
     }
 }

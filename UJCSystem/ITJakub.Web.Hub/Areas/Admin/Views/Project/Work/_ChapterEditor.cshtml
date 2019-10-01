@@ -105,15 +105,19 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-12 form-horizontal">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label>@Localizer.Translate("ChapterName", "Admin")</label>
-                            <input type="text" />
+                            <input type="text" name="chapter-name" class="form-control" />
                         </div>
                         <div class="form-group">
                             <label>@Localizer.Translate("StartsOnPage", "Admin")</label>
-                            @*TODO dropdown select?*@
-                            <input type="text" />
+                            <select name="chapter-page" class="form-control select-page selectpicker">
+                                @foreach (var pageItem in Model.Pages)
+                                {
+                                    <option value="@pageItem.Id">@pageItem.Name</option>
+                                }
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -144,7 +148,7 @@
     </div>
 </div>
 
-<div class="chapter-template">
+<div class="chapter-template hide">
     <div class="chapter-container">
         <div class="chapter-row">
             <div class="ridics-checkbox">
@@ -167,7 +171,7 @@
                 <select name="chapter-page" class="form-control select-page selectpicker hide">
                     @foreach (var pageItem in Model.Pages)
                     {
-                    <option value="@pageItem.Id">@pageItem.Name</option>
+                        <option value="@pageItem.Id">@pageItem.Name</option>
                     }
                 </select>
                 <a class="edit-chapter btn btn-sm btn-default" title="@Localizer.Translate("EditChapterName", "RidicsProject")">
