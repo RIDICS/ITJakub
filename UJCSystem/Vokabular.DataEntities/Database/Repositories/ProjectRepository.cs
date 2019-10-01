@@ -135,6 +135,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.Project.Id == projectId)
                 .Fetch(SelectMode.Fetch, x => x.ResponsiblePerson)
                 .Fetch(SelectMode.Fetch, x => x.ResponsibleType)
+                .OrderBy(x => x.Sequence).Asc
                 .List();
         }
 
