@@ -28,10 +28,10 @@
 
     saveChapterList(projectId: number, chapterList: IUpdateChapter[]): JQuery.jqXHR {
         return $.post(`${this.serverPath}Admin/ContentEditor/UpdateChapterList`,
-            {
+            JSON.stringify({
                 projectId: projectId,
                 chapterList: chapterList
-            } as JQuery.PlainObject);
+            }));
     }
 
     getServerAddress(): string {

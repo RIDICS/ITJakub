@@ -176,7 +176,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateChapterList(long projectId, IList<CreateOrUpdateChapterContract> chapterList)
+        public IActionResult UpdateChapterList(long projectId, [FromBody] IList<CreateOrUpdateChapterContract> chapterList)
         {
             var client = GetProjectClient();
             client.UpdateChapterList(projectId, chapterList);

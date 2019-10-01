@@ -17,7 +17,7 @@ class ChapterEditorMain {
     init(projectId: number) {
         this.moveEditor.init();
         this.editDialog = new BootstrapDialogWrapper({
-            element: $("#project-chapters-dialog"),
+            element: $("#projectChaptersDialog"),
             autoClearInputs: false
         });
 
@@ -38,50 +38,50 @@ class ChapterEditorMain {
             this.editDialog.show();
         });
 
-        $(".chapter-list-editor-content").on("click",
+        $("#projectChaptersDialog").on("click",
             ".create-chapter",
             () => {
-                const chapterName = String($(".project-chapters-dialog input[name=\"chapter-name\"]").val());
-                const selectedPageId = Number($(".project-chapters-dialog .select-page").find("option:selected").val());
-                const selectedPageName = `[${$(".project-chapters-dialog .select-page").find("option:selected").text()}]`;
+                const chapterName = String($("#projectChaptersDialog input[name=\"chapter-name\"]").val());
+                const selectedPageId = Number($("#projectChaptersDialog .select-page").find("option:selected").val());
+                const selectedPageName = `[${$("#projectChaptersDialog .select-page").find("option:selected").text()}]`;
                 const chapter = this.createChapterRow(chapterName, selectedPageId, selectedPageName);
                 this.initChapterRowClicks(chapter);
                 $(".table > .sub-chapters").append(chapter);
                 this.editDialog.hide();
             });
 
-        $(".chapter-list-editor-content").on("click",
+        $("#projectChaptersDialog").on("click",
             ".cancel-chapter",
             (event) => {
                 event.stopPropagation();
                 this.editDialog.hide();
-                $(".chapter-list-editor-content").off();
             }
         );
 
-        $(".project-chapters-dialog .select-page").selectpicker({
+        $("#projectChaptersDialog .select-page").selectpicker({
             liveSearch: true,
             maxOptions: 1
         });
     }
 
     private getChaptersToSave(subChaptersElements: JQuery<HTMLElement>, parentId: number = null): void {
-        const chapters = subChaptersElements.children(".chapter-container").children(".chapter-row");
-        const subChaptersEl = subChaptersElements.children(".chapter-container").children(".sub-chapters");
-
+        const chapters = subChaptersElements.children(".chapter-container");
+        
         for (let i = 0; i < chapters.length; i++) {
-            const id = Number($(chapters[i]).data("chapter-id"));
+            const chapterRow = $(chapters[i]).children(".chapter-row");
+            const id = Number(chapterRow.data("chapter-id"));
             const newChapter = {
                 id: id,
                 parentChapterId: parentId,
                 position: this.position + 1,
-                name: $(chapters[i]).find(".chapter-name").text().trim(), 
-                beginningPageId: Number($(chapters[i]).find("option:selected").val())
+                name: chapterRow.find(".chapter-name").text().trim(), 
+                beginningPageId: Number(chapterRow.find("option:selected").val())
             }
             this.position++;
 
             this.chaptersToSave.push(newChapter);
 
+            const subChaptersEl = $(chapters[i]).children(".sub-chapters");
             if (subChaptersEl.children(".chapter-container").length !== 0) {
                 this.getChaptersToSave(subChaptersEl, newChapter.id);
             }
@@ -222,7 +222,7 @@ class ChapterEditorMain {
     }
 
     private createChapterRow(name: string, beginningPageId: number, beginningPageName: string, levelOfHierarchy = 0): JQuery<HTMLElement> {
-        const newChapter = $(".chapter-template").children(".chapter-container").clone();
+        const newChapter = $("#chapterTemplate").children(".chapter-container").clone();
         newChapter.children(".chapter-row").data("level", levelOfHierarchy);
         newChapter.find(".ridics-checkbox").attr("style", `margin-left: ${levelOfHierarchy}em`);
         newChapter.find(".chapter-name").text(name);
