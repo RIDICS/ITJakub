@@ -124,7 +124,8 @@ class ChapterEditorMain {
 
         subChapters.find("select[name=\"chapter-page\"]").selectpicker({
             liveSearch: true,
-            maxOptions: 1
+            maxOptions: 1,
+            container: "body"
         });
     }
 
