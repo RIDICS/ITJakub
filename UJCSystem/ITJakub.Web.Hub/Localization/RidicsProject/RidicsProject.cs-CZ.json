@@ -11,11 +11,14 @@
     "MissingPublisherNameError": "Prosím vyplňte název nakladatele.",
     "CreatePublisherError": "Chyba při vytváření nového nakladatele došlo k neočekávané chybě.",
     "MissingName": "Prosím vyplńte název.",
-    "CreateLiteraryKind": "Pi vytváření nového literárního druhu  došlo k neočekávané chybě.",
-    "CreateLiteraryGenre": "Při vytváření nového literárního žánru  došlo k neočekávané chybě.",
+    "CreateLiteraryKind": "Pi vytváření nového literárního druhu došlo k neočekávané chybě.",
+    "CreateLiteraryGenre": "Při vytváření nového literárního žánru došlo k neočekávané chybě.",
     "CreateResourcesError": "Při načítání zdrojů k publikaci  došlo k neočekávané chybě.",
     "SelectedResources": "Vybráno {0}/{1} textů, {2}/{3} obrázků, {4}/{5} audio zdrojů.",
     "CreateSnapshotWithoutResources": "Nebyl vybrán žádný zdroj pro publikaci. Opravdu si přejete dílo publikovat?",
+
+    "Track": "Stopa",
+    "Chapter": "Kapitola",
 
     "Page": "Stránka",
     "PageName": "Stránka: {0}",

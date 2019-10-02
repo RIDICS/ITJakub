@@ -22,6 +22,7 @@ namespace ITJakub.Web.Hub
             services.AddScoped<FeedbacksManager>();
             services.AddScoped<RefreshUserManager>();
             services.AddScoped<PermissionLocalizer>();
+            services.AddScoped<ResourceTypeLocalizer>();
 
             // Area managers
             services.AddScoped<TextManager>();
