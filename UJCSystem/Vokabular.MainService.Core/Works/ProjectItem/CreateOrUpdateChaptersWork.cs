@@ -28,7 +28,7 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
         {
             var now = DateTime.UtcNow;
             var user = m_resourceRepository.Load<User>(m_userId);
-            var dbChapters = m_resourceRepository.GetProjectLatestPages(m_projectId);
+            var dbChapters = m_resourceRepository.GetProjectLatestChapters(m_projectId);
             var updatedChapterIds = new List<long>();
 
             foreach (var chapter in m_chapterData)

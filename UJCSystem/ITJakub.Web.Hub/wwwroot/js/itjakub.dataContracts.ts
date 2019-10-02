@@ -160,6 +160,7 @@ interface IUpdateChapter {
     beginningPageId: number;
     name: string;
     position: number;
+    comment: string;
 }
 
 interface IPageWithContext extends IPage {

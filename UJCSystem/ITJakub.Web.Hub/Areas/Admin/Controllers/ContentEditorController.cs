@@ -175,11 +175,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return Ok();
         }
 
+       
+        [RequestFormLimits(ValueLengthLimit = 32768, KeyLengthLimit = 32768, ValueCountLimit = 32768 * 32768)]
         [HttpPost]
-        public IActionResult UpdateChapterList(long projectId, [FromBody] IList<CreateOrUpdateChapterContract> chapterList)
+        public IActionResult UpdateChapterList([FromBody] UpdateChapterListRequest request)
         {
             var client = GetProjectClient();
-            client.UpdateChapterList(projectId, chapterList);
+            client.UpdateChapterList(request.ProjectId, request.ChapterList);
             return Ok();
         }
 

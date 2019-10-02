@@ -74,9 +74,10 @@ class ChapterEditorMain {
                 id: id,
                 parentChapterId: parentId,
                 position: this.position + 1,
-                name: chapterRow.find(".chapter-name").text().trim(), 
-                beginningPageId: Number(chapterRow.find("option:selected").val())
-            }
+                name: chapterRow.find(".chapter-name").text().trim(),
+                beginningPageId: Number(chapterRow.find("option:selected").val()),
+                comment: ""
+        }
             this.position++;
 
             this.chaptersToSave.push(newChapter);

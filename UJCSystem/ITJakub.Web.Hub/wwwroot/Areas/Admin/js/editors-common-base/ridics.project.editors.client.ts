@@ -27,11 +27,18 @@
     }
 
     saveChapterList(projectId: number, chapterList: IUpdateChapter[]): JQuery.jqXHR {
-        return $.post(`${this.serverPath}Admin/ContentEditor/UpdateChapterList`,
-            JSON.stringify({
+        return $.ajax({
+            url: `${this.serverPath}Admin/ContentEditor/UpdateChapterList`,
+            type: "POST",
+            data: JSON.stringify({
                 projectId: projectId,
                 chapterList: chapterList
-            }));
+            }),
+            contentType: "application/json; charset=utf-8",
+            cache: false,
+            async: true,
+            dataType: "json"
+        });
     }
 
     getServerAddress(): string {
