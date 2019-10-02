@@ -219,7 +219,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             var client = GetProjectClient();
             client.UpdateChapterList(request.ProjectId, request.ChapterList);
-            return Ok();
+            return AjaxOkResponse();
         }
 
         [HttpPost]
