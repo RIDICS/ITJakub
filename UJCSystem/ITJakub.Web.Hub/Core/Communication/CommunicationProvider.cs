@@ -22,7 +22,6 @@ namespace ITJakub.Web.Hub.Core.Communication
         private readonly MainServiceNewsClient m_newsClient;
         private readonly MainServicePermissionClient m_permissionClient;
         private readonly MainServiceProjectClient m_projectClient;
-        private readonly MainServiceResourceClient m_resourceClient;
         private readonly MainServiceRoleClient m_roleClient;
         private readonly MainServiceSessionClient m_sessionClient;
         private readonly MainServiceSnapshotClient m_snapshotClient;
@@ -37,7 +36,7 @@ namespace ITJakub.Web.Hub.Core.Communication
             MainServiceExternalRepositoryClient externalRepositoryClient, MainServiceFavoriteClient favoriteClient,
             MainServiceFeedbackClient feedbackClient, MainServiceFilteringExpressionSetClient filteringExpressionSetClient,
             MainServiceMetadataClient metadataClient, MainServiceNewsClient newsClient, MainServicePermissionClient permissionClient,
-            MainServiceProjectClient projectClient, MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient,
+            MainServiceProjectClient projectClient, MainServiceRoleClient roleClient,
             MainServiceSessionClient sessionClient, MainServiceSnapshotClient snapshotClient, MainServiceTermClient termClient,
             MainServiceUserClient userClient, IOptions<PortalOption> portalOption, IMapper mapper)
         {
@@ -53,7 +52,6 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_newsClient = newsClient;
             m_permissionClient = permissionClient;
             m_projectClient = projectClient;
-            m_resourceClient = resourceClient;
             m_roleClient = roleClient;
             m_sessionClient = sessionClient;
             m_snapshotClient = snapshotClient;
@@ -121,12 +119,7 @@ namespace ITJakub.Web.Hub.Core.Communication
         {
             return m_projectClient;
         }
-
-        public MainServiceResourceClient GetMainServiceResourceClient()
-        {
-            return m_resourceClient;
-        }
-
+        
         public MainServiceRoleClient GetMainServiceRoleClient()
         {
             return m_roleClient;

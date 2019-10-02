@@ -227,5 +227,11 @@ namespace Vokabular.MainService.Core.Managers
             var resourceId = new CreateEmptyTextResourceWork(m_resourceRepository, pageId, userId, fulltextStorage).Execute();
             return resourceId;
         }
+
+        public void RemoveResource(long resourceId)
+        {
+            var work = new RemoveResourceWork(m_resourceRepository, resourceId);
+            work.Execute();
+        }
     }
 }
