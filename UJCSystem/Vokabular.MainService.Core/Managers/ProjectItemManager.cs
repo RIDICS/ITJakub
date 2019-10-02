@@ -125,7 +125,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public IList<AudioContract> GetTrackRecordings(long trackId)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetRecordings(trackId));
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetAudioRecordingsByTrack(trackId));
             var result = m_mapper.Map<IList<AudioContract>>(dbResult);
             return result;
         }

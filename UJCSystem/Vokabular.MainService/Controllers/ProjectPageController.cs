@@ -65,7 +65,7 @@ namespace Vokabular.MainService.Controllers
             return Ok();
         }
 
-        [HttpGet("page/{pageId}/text")]
+        [HttpGet("page/{pageId}/text-content")]
         public IActionResult GetPageText(long pageId, [FromQuery] TextFormatEnumContract? format)
         {
             var formatValue = format ?? TextFormatEnumContract.Html;
@@ -76,7 +76,7 @@ namespace Vokabular.MainService.Controllers
             return Content(result);
         }
 
-        [HttpGet("page/{pageId}/image")]
+        [HttpGet("page/{pageId}/image-content")]
         public IActionResult GetPageImage(long pageId)
         {
             var result = m_projectItemManager.GetPageImage(pageId);

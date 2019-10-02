@@ -8,6 +8,17 @@
             autoProcessQueue: true,
             parallelUploads: 5,
             acceptedFiles: this.acceptedFiles,
+            previewTemplate: `<div class="dz-preview dz-file-preview">
+  <div class="dz-details">
+    <div class="dz-filename"><span data-dz-name></span></div>
+    <div class="dz-size" data-dz-size></div>
+    <img data-dz-thumbnail />
+  </div>
+  <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+  <div class="dz-success-mark"><span>✔</span></div>
+  <div class="dz-error-mark"><span>✘</span></div>
+  <div class="dz-error-message"><span data-dz-errormessage></span></div>
+</div>`,
 
             dictInvalidFileType: localization.translate("FormatNotSupported", "PluginsJs").value + this.acceptedFiles,
             dictDefaultMessage: localization.translate("DropFilesForUpload", "PluginsJs").value,
@@ -25,13 +36,13 @@
     }
 
     public static getErrorFunction(): (file: Dropzone.DropzoneFile, message: string|Error, xhr: XMLHttpRequest) => void {
-        var resultFunction = function (file, message, xhr) {
+        var resultFunction = function (file: Dropzone.DropzoneFile, message: string|Error, xhr: XMLHttpRequest) {
             var errorMessage = xhr
                 ? this.options.dictResponseError.replace("{{statusCode}}", xhr.status.toString())
                 : message;
             this.defaultOptions.error(file, errorMessage, xhr);
         }
-        return (resultFunction) as any; //HACK ohterwise ReSharper shows type error
+        return resultFunction;
     }
 
     public static getFullConfiguration(options: Dropzone.DropzoneOptions): Dropzone.DropzoneOptions {
@@ -95,6 +106,7 @@ class BootstrapDialogWrapper {
             $("textarea", this.$element).val("");
             $("select", this.$element).val("");
         }
+        this.setSubmitEnabled(true);
     }
 
     private showSaving() {
@@ -110,6 +122,10 @@ class BootstrapDialogWrapper {
 
         $(this.options.progressElementSelector, this.$element).hide();
         $error.show();
+    }
+
+    public setSubmitEnabled(enabled: boolean) {
+        $(this.options.submitElementSelector, this.$element).prop("disabled", !enabled);
     }
 }
 

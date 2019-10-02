@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Text;
+﻿using System.Text;
 using Vokabular.RestClient.Extensions;
 
 namespace Vokabular.RestClient
 {
-    public class UrlQueryBuilder
+    public class UrlQueryBuilder : BuilderBase<string>
     {
         private readonly StringBuilder m_stringBuilder;
         private bool m_containsParameters;
@@ -21,7 +19,7 @@ namespace Vokabular.RestClient
             return new UrlQueryBuilder(url);
         }
 
-        private void AppendParameter(string name, string value)
+        protected override void AppendParameter(string name, string value)
         {
             m_stringBuilder
                 .Append(m_containsParameters ? '&' : '?')
@@ -32,52 +30,7 @@ namespace Vokabular.RestClient
             m_containsParameters = true;
         }
 
-        public UrlQueryBuilder AddParameter(string name, string value)
-        {
-            if (value == null)
-                return this;
-
-            AppendParameter(name, value);
-            return this;
-        }
-
-        public UrlQueryBuilder AddParameter(string name, Enum value)
-        {
-            if (value == null)
-                return this;
-
-            AppendParameter(name, value.ToString());
-            return this;
-        }
-
-        public UrlQueryBuilder AddParameterList(string name, IEnumerable list)
-        {
-            if (list == null)
-                return this;
-
-            foreach (var item in list)
-            {
-                AppendParameter(name, item.ToString());
-            }
-            return this;
-        }
-
-        public UrlQueryBuilder AddParameter(string name, object value)
-        {
-            if (value == null)
-                return this;
-
-            AddParameter(name, value.ToString());
-            return this;
-        }
-
-        public UrlQueryBuilder AddParameter(string name, long value)
-        {
-            AppendParameter(name, value.ToString());
-            return this;
-        }
-
-        public string ToQuery()
+        public override string ToResult()
         {
             return m_stringBuilder.ToString();
         }

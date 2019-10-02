@@ -87,7 +87,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             var result = GetSession().QueryOver(() => pageResourceAlias)
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .WhereRestrictionOn(() => resourceAlias.Project.Id).IsInG(projectIdList)
-                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
                 .SelectList(list => list
                     .SelectGroup(() => resourceAlias.Project.Id).WithAlias(() => resultAlias.ProjectId)
                     .SelectCount(() => pageResourceAlias.Id).WithAlias(() => resultAlias.PageCount))
@@ -135,6 +135,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.Project.Id == projectId)
                 .Fetch(SelectMode.Fetch, x => x.ResponsiblePerson)
                 .Fetch(SelectMode.Fetch, x => x.ResponsibleType)
+                .OrderBy(x => x.Sequence).Asc
                 .List();
         }
 

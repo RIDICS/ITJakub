@@ -12,21 +12,21 @@
 
     init(projectId: number) {
         const util = new EditorsApiClient();
-        const projectAjax = util.getProjectContent(projectId);
-        projectAjax.done((data: ITextWithPage[]) => {
+        const projectAjax = util.getPagesList(projectId);
+        projectAjax.done((data) => {
             if (data.length) {
                 const connections = new Connections();
                 const commentArea = new CommentArea(util);
                 const commentInput = new CommentInput(commentArea, util);
                 const pageTextEditor = new Editor(commentInput, util, commentArea);
-                const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor);
+                const pageStructure = new PageStructure(commentArea, util, pageTextEditor);
                 const lazyLoad = new PageLazyLoading(pageStructure);
                 const pageNavigation = new TextEditorPageNavigation(this);
                 connections.init();
                 const numberOfPages = data.length;
                 this.numberOfPages = numberOfPages;
                 for (let i = 0; i < numberOfPages; i++) {
-                    const textProjectPage = data[i];
+                    const projectPage = data[i];
                     let commentAreaClass = "";
                     if (i % 2 === 0) {
                         commentAreaClass =
@@ -42,12 +42,19 @@
                     const pageToolbarDiv = `<div class="col-xs-12 page-toolbar">
                                                 <div class="row">
                                                     <div class="col-xs-4">
+                                                      <div class="page-toolbar-buttons">
+                                                        <button type="button" class="btn btn-default create-text hidden" title="${localization.translate("CreateTextPage", "RidicsProject").value}">
+                                                            <i class="fa fa-plus-circle"></i>
+                                                            ${localization.translate("CreateText", "RidicsProject").value}
+                                                        </button>
                                                         <button type="button" class="btn btn-default edit-page" title="${localization.translate("EditPage", "RidicsProject").value}">
                                                             <i class="fa fa-pencil"></i>
+                                                            ${localization.translate("Edit", "RidicsProject").value}
                                                         </button>
+                                                      </div>
                                                     </div>
                                                     <div class="col-xs-4 page-number text-center invisible">
-                                                        [${textProjectPage.parentPage.name}]
+                                                        [${projectPage.name}]
                                                     </div>
                                                     <div class="col-xs-4"></div>
                                                 </div>
@@ -55,19 +62,20 @@
                     $(".pages-start")
                         .append(
                             `<div class="page-splitter"></div>
-                            <div class="page-row row lazyload" data-page="${textProjectPage.id}" data-page-name="${textProjectPage.parentPage.name}">
+                            <div class="page-row row lazyload comment-never-loaded" data-page-id="${projectPage.id}" data-page-name="${projectPage.name}">
                                 ${pageToolbarDiv}
                                 ${compositionAreaDiv}
                                 ${commentAreaDiv}
                             </div>`);
                 }
-                pageTextEditor.init();
+                pageTextEditor.init(pageStructure);
                 lazyLoad.init();
                 pageNavigation.init(data);
                 this.attachEventShowPageCheckbox(pageNavigation);
                 commentInput.init();
                 commentArea.init();
-                
+                commentArea.initCommentsDeleting(pageTextEditor);
+
             } else {
                 const error = new AlertComponentBuilder(AlertType.Error)
                     .addContent(localization.translate("NoTextPages", "RidicsProject").value);

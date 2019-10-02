@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using ITJakub.Web.Hub.Areas.Admin.Models;
@@ -66,7 +67,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult VersionList(long resourceId)
         {
-            var client = GetResourceClient();
+            var client = GetProjectClient();
             var resourceVersionList = client.GetResourceVersionHistory(resourceId);
             var viewModel = Mapper.Map<List<ResourceVersionViewModel>>(resourceVersionList);
             return Json(viewModel);
@@ -98,25 +99,26 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
 
-        public IActionResult GetText(long textId)
+        public IActionResult GetText(long textVersionId)
         {
             var client = GetProjectClient();
-            var result = client.GetTextResourceVersion(textId, TextFormatEnumContract.Html);
+            var result = client.GetTextResourceVersion(textVersionId, TextFormatEnumContract.Html);
             return Json(result);
         }
 
-        public IActionResult GetImage(long imageId)
+        public IActionResult GetImage(long imageVersionId)
         {
             var client = GetProjectClient();
-            var result = client.GetImageResourceVersion(imageId);
+            var result = client.GetImageResourceVersion(imageVersionId);
             return new FileStreamResult(result.Stream, result.MimeType);
         }
 
-        public IActionResult GetRecordings(long trackId)
+        public IActionResult GetRecordings(long trackVersionId)
         {
-            var client = GetProjectClient();
-            var result = client.GetAudioTrackRecordings(trackId);
-            return PartialView("_AudioResourcePreview", result);
+            throw new InvalidOperationException("Wrong implementation: Resource and ResourceVersion identifier mismatch.");
+            //var client = GetProjectClient();
+            //var result = client.GetAudioTrackRecordings(trackId);
+            //return PartialView("_AudioResourcePreview", result);
         }
 
         public FileResult DownloadAudio(long audioId)

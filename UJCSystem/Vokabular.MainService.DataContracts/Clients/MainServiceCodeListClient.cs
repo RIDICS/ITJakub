@@ -457,7 +457,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                 var url = UrlQueryBuilder.Create("author/autocomplete")
                     .AddParameter("query", query)
                     .AddParameter("bookType", bookType)
-                    .ToQuery();
+                    .ToResult();
 
                 var result = m_client.Get<List<OriginalAuthorContract>>(url);
                 return result;

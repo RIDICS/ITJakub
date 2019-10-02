@@ -8,12 +8,12 @@ using Vokabular.MainService.DataContracts.Contracts;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/Project")]
-    public class ProjectAudio : BaseController
+    public class ProjectAudioController : BaseController
     {
         private readonly ProjectItemManager m_projectItemManager;
         private readonly ProjectContentManager m_projectContentManager;
 
-        public ProjectAudio(ProjectItemManager projectItemManager, ProjectContentManager projectContentManager)
+        public ProjectAudioController(ProjectItemManager projectItemManager, ProjectContentManager projectContentManager)
         {
             m_projectItemManager = projectItemManager;
             m_projectContentManager = projectContentManager;

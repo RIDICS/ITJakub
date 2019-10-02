@@ -3,7 +3,7 @@
         const util = new EditorsApiClient();
         const gui = new EditorsGui();
         const contentAddition = new ImageViewerContentAddition(util);
-        const upload = new ImageViewerUpload(projectId);
+        const upload = new ImageViewerUpload(contentAddition);
         const navigation = new ImageViewerPageNavigation(contentAddition, gui);
         const compositionPagesAjax = util.getPagesList(projectId);
         compositionPagesAjax.done((pages: IPage[]) => {
@@ -11,7 +11,8 @@
             upload.init();
         });
         compositionPagesAjax.fail(() => {
-            const error = new AlertComponentBuilder(AlertType.Error).addContent("Failed to load project info");
+            const error = new AlertComponentBuilder(AlertType.Error)
+                .addContent(localization.translate("ProjectLoadFailed", "RidicsProject").value);
             $("#project-resource-images").empty().append(error.buildElement());
         });
     }

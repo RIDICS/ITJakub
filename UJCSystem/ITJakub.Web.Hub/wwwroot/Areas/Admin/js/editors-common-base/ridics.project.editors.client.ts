@@ -9,13 +9,12 @@
         return pageListAjax;
     }
 
-    getImageUrlOnPage(pageId: number): string {
-        return `${this.serverPath}Admin/ContentEditor/GetPageImage?pageId=${pageId}`;
+    getImageResourceByPageId(pageId: number): JQuery.jqXHR<IImageContract> {
+        return $.get(`${this.serverPath}Admin/ContentEditor/GetImageResourceByPageId?pageId=${pageId}`);
     }
 
-
     getPageDetail(pageId: number): JQuery.jqXHR<string> {
-        return  $.get(`${this.serverPath}Admin/ContentEditor/GetPageDetail?pageId=${pageId}`);
+        return $.get(`${this.serverPath}Admin/ContentEditor/GetPageDetail?pageId=${pageId}`);
     }
 
     savePageList(projectId: number, pageList: IUpdatePage[]): JQuery.jqXHR {
@@ -45,16 +44,42 @@
         return this.serverPath;
     }
     
-    getProjectContent(projectId: number): JQuery.jqXHR<ITextWithPage[]> {
-        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetProjectContent`,
+    getTextPages(projectId: number): JQuery.jqXHR<ITextWithPage[]> {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextPages`,
             {
                 projectId: projectId
             } as JQuery.PlainObject);
         return ajax;
     }
 
-    deleteComment(commentId: number): JQueryXHR {
+    createComment(textId: number, comment: ICommentStructureReply): JQueryXHR {
+        return $.post(`${this.serverPath}Admin/ContentEditor/SaveComment`,
+            {
+                comment: comment,
+                textId: textId
+            } as JQuery.PlainObject
+        );
+    }
+
+    editComment(commentId: number, comment: ICommentStructureReply): JQueryXHR {
+        return $.post(`${this.serverPath}Admin/ContentEditor/UpdateComment`,
+            {
+                comment: comment,
+                commentId: commentId
+            } as JQuery.PlainObject
+        );
+    }
+
+    deleteComment(commentId: number): JQuery.jqXHR {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/DeleteComment`,
+            {
+                commentId: commentId
+            } as JQuery.PlainObject);
+        return ajax;
+    }
+
+    deleteRootComment(commentId: number): JQuery.jqXHR<IDeleteRootCommentResponse> {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/DeleteRootComment`,
             {
                 commentId: commentId
             } as JQuery.PlainObject);
@@ -63,23 +88,23 @@
 
     /**
 * Loads plain text with markdown from the server.
-* @param {Number} textId - Number of page for which to load plain text
+* @param {Number} pageId - Id of page for which to load plain text
 * @returns {JQueryXHR} Ajax containing page plain text
 */
-    loadPlainText(textId: number): JQuery.jqXHR<ITextWithContent> {
-        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResource`,
-            { textId: textId, format: TextFormatEnumContract.Raw } as JQuery.PlainObject);
+    loadPlainText(pageId: number): JQuery.jqXHR<ITextWithContent> {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResourceByPageId`,
+            { pageId: pageId, format: TextFormatEnumContract.Raw } as JQuery.PlainObject);
         return ajax;
     }
 
     /**
 * Loads markdown rendered to html from the server.
-* @param {Number} textId  - Id of page for which to load rendered text
+* @param {Number} pageId  - Id of page for which to load rendered text
 * @returns {JQueryXHR} Ajax query of rendered text
 */
-    loadRenderedText(textId: number): JQuery.jqXHR<ITextWithContent> {
-        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResource`,
-            { textId: textId, format: TextFormatEnumContract.Html } as JQuery.PlainObject);
+    loadRenderedText(pageId: number): JQuery.jqXHR<ITextWithContent> {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResourceByPageId`,
+            { pageId: pageId, format: TextFormatEnumContract.Html } as JQuery.PlainObject);
         return ajax;
     }
 
@@ -89,6 +114,14 @@
                 textId: textId,
                 request: request,
                 mode: mode,
+            } as JQuery.PlainObject);
+        return ajax;
+    }
+
+    createTextOnPage(pageId: number): JQuery.jqXHR<number> {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/CreateTextResource`,
+            {
+                pageId: pageId,
             } as JQuery.PlainObject);
         return ajax;
     }

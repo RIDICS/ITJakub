@@ -27,8 +27,8 @@ namespace Vokabular.MainService.Test
             {
                 FileName = "test.jpeg",
                 Comment = string.Empty,
+                ImageId = resourceId,
                 OriginalVersionId = 1,
-                ResourcePageId = 40,
             };
             fileSystemManager.FileInfo = new SaveResourceResult
             {
@@ -38,7 +38,7 @@ namespace Vokabular.MainService.Test
 
             try
             {
-                new CreateNewImageResourceVersionWork(repository, fileSystemManager, resourceId, data, Stream.Null, userId).Execute();
+                new CreateNewImageResourceVersionWork(repository, fileSystemManager, data, Stream.Null, userId).Execute();
                 Assert.Fail("Create new ImageResouce should fail, because version conflict");
             }
             catch (MainServiceException e)
@@ -50,7 +50,7 @@ namespace Vokabular.MainService.Test
             data.OriginalVersionId = latestImage.Id; // No conflict ID
 
 
-            var work = new CreateNewImageResourceVersionWork(repository, fileSystemManager, resourceId, data, Stream.Null, userId);
+            var work = new CreateNewImageResourceVersionWork(repository, fileSystemManager, data, Stream.Null, userId);
             work.Execute();
 
             Assert.AreEqual(1, repository.CreatedObjects.Count);
@@ -63,7 +63,6 @@ namespace Vokabular.MainService.Test
             Assert.AreEqual("image/jpeg", newImageResource.MimeType);
             Assert.AreEqual(latestImage.Resource.Id, newImageResource.Resource.Id);
             Assert.AreEqual(userId, newImageResource.CreatedByUser.Id);
-            Assert.AreEqual(data.ResourcePageId, newImageResource.ResourcePage.Id);
         }
 
         [TestMethod]

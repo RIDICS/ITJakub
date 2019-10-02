@@ -17,13 +17,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles
                 .ForMember(dest => dest.Created, opt => opt.MapFrom(src => src.LatestVersion.CreateDate))
                 .ForMember(dest => dest.VersionNumber, opt => opt.MapFrom(src => src.LatestVersion.VersionNumber))
                 .ForMember(dest => dest.IsSelected, opt => opt.Ignore());
-
-            CreateMap<ResourceMetadataContract, ProjectResourceMetadataViewModel>()
-                .ForMember(dest => dest.EditionNote, opt => opt.MapFrom(src => src.EditionNote))
-                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.Editor))
-                .ForMember(dest => dest.Editor2, opt => opt.MapFrom(src => src.Editor2))
-                .ForMember(dest => dest.LastModification, opt => opt.MapFrom(src => src.LastModification));
-
+            
             CreateMap<ResourceVersionContract, ResourceVersionViewModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author))

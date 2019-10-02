@@ -392,6 +392,11 @@ interface ICommentSctucture extends ICommentStructureBase {
     time: number;
 }
 
+interface IDeleteRootCommentResponse {
+    resourceVersionId: number;
+    newText: string;
+}
+
 interface ITextWithPage {
     bookVersionId: number;
     id: number;
@@ -418,6 +423,13 @@ interface ITextWithContent {
     versionNumber: number;
     bookVersionId: number;
     text: string;
+}
+
+interface IImageContract {
+    id: number;
+    versionId: number;
+    versionNumber: number;
+    imageUrl: string;
 }
 
 interface ILiteraryGenreContract {

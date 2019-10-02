@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
@@ -35,7 +36,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("projectType", projectType)
                     .AddParameter("filterByName", filterByName)
                     .AddParameter("fetchPageCount", fetchPageCount)
-                    .ToQuery();
+                    .ToResult();
                 var result = m_client.GetPagedList<ProjectDetailContract>(url);
                 return result;
             }
@@ -259,12 +260,27 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long ProcessUploadedResources(long projectId, NewResourceContract resourceInfo)
+        public void RemoveResource(long resourceId)
         {
             try
             {
-                var resourceId = m_client.Post<long>($"project/{projectId}/resource", resourceInfo);
-                return resourceId;
+                m_client.Delete($"project/resource/{resourceId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public IList<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
+        {
+            try
+            {
+                var result = m_client.Get<IList<ResourceVersionContract>>($"project/resource/{resourceId}/version");
+                return result;
             }
             catch (HttpRequestException e)
             {
@@ -283,7 +299,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("start", start)
                     .AddParameter("count", count)
                     .AddParameter("filterByComment", query)
-                    .ToQuery();
+                    .ToResult();
 
                 var result = m_client.GetPagedList<SnapshotAggregatedInfoContract>(url);
                 return result;
@@ -318,6 +334,38 @@ namespace Vokabular.MainService.DataContracts.Clients
             {
                 var result =
                     m_client.Get<List<TextWithPageContract>>($"project/{projectId}/text?resourceGroupId={resourceGroupId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public FullTextContract GetTextResourceByPageId(long pageId, TextFormatEnumContract? format)
+        {
+            try
+            {
+                var result = m_client.Get<FullTextContract>($"project/page/{pageId}/text?format={format.ToString()}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public ImageContract GetImageResourceByPageId(long pageId)
+        {
+            try
+            {
+                var result = m_client.Get<ImageContract>($"project/page/{pageId}/image");
                 return result;
             }
             catch (HttpRequestException e)
@@ -438,12 +486,52 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+        
+        public long CreateTextResource(long pageId)
+        {
+            try
+            {
+                var result = m_client.Post<long>($"project/page/{pageId}/text", null);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
 
         public long CreateTextResourceVersion(long textId, CreateTextRequestContract request)
         {
             try
             {
                 var result = m_client.Post<long>($"project/text/{textId}", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public NewResourceResultContract CreateImageResource(CreateImageContract data, Stream dataStream)
+        {
+            try
+            {
+                var formData = FormDataBuilder.Create()
+                    .AddParameter(nameof(CreateImageContract.ImageId), data.ImageId)
+                    .AddParameter(nameof(CreateImageContract.OriginalVersionId), data.OriginalVersionId)
+                    .AddParameter(nameof(CreateImageContract.ResourcePageId), data.ResourcePageId)
+                    .AddParameter(nameof(CreateImageContract.Comment), data.Comment)
+                    .AddParameter(nameof(CreateImageContract.FileName), data.FileName)
+                    .ToResult();
+                
+                var result = m_client.PostStreamAsForm<NewResourceResultContract>("project/image", dataStream, data.FileName, formData);
                 return result;
             }
             catch (HttpRequestException e)
@@ -463,7 +551,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("start", start)
                     .AddParameter("count", count)
                     .AddParameter("filterByName", query)
-                    .ToQuery();
+                    .ToResult();
 
                 var result = m_client.GetPagedList<RoleContract>(url);
                 return result;
@@ -524,26 +612,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        #region Text
-
-        public long CreateNewTextResourceVersion(long textId, TextContract request)
-        {
-            try
-            {
-                var result = m_client.Post<long>($"text/{textId}", request);
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        #endregion
-
         public SnapshotContract GetLatestPublishedSnapshot(long projectId)
         {
             try
@@ -564,7 +632,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.GetString($"project/page/{pageId}/text?format={format}");
+                var result = m_client.GetString($"project/page/{pageId}/text-content?format={format}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -580,7 +648,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.GetStream($"project/page/{pageId}/image");
+                var result = m_client.GetStream($"project/page/{pageId}/image-content");
                 return result;
             }
             catch (HttpRequestException e)
@@ -649,7 +717,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.GetStream($"project/image/{imageId}");
+                var result = m_client.GetStream($"project/image/{imageId}/content");
                 return result;
             }
             catch (HttpRequestException e)
@@ -665,7 +733,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.GetStream($"project/image/version/{imageVersionId}");
+                var result = m_client.GetStream($"project/image/version/{imageVersionId}/content");
                 return result;
             }
             catch (HttpRequestException e)

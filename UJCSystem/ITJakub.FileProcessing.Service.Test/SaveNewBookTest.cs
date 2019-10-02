@@ -137,6 +137,71 @@ namespace ITJakub.FileProcessing.Service.Test
         }
 
         [TestMethod]
+        public void TestUpdateResponsiblePersons()
+        {
+            var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
+            var bookData = new BookData
+            {
+                Responsibles = new List<ResponsibleData>
+                {
+                    new ResponsibleData
+                    {
+                        NameText = "Aaa Bbb",
+                        TypeText = "editor",
+                    },
+                    new ResponsibleData
+                    {
+                        NameText = "Aaa Bbb",
+                        TypeText = "production",
+                    },
+                    new ResponsibleData
+                    {
+                        NameText = "Ccc Ddd",
+                        TypeText = "editor",
+                    },
+                }
+            };
+
+
+            var personRepository = new MockPersonRepository(unitOfWorkProvider)
+            {
+                CanFindAuthorByName = true
+            };
+            var projectRepository = new MockProjectRepository(unitOfWorkProvider)
+            {
+                ProjectResponsiblePersons = new List<ProjectResponsiblePerson>
+                {
+                    new ProjectResponsiblePerson
+                    {
+                        ResponsiblePerson = new ResponsiblePerson {FirstName = "Eee", LastName = "Fff", Id = 30},
+                        ResponsibleType = new ResponsibleType{Text = "editor", Id = 10},
+                        Sequence = 1,
+                    },
+                    new ProjectResponsiblePerson
+                    {
+                        ResponsiblePerson = new ResponsiblePerson {FirstName = "Aaa", LastName = "Bbb", Id = 31},
+                        ResponsibleType = new ResponsibleType{Text = "editor", Id = 10},
+                        Sequence = 1,
+                    }
+                }
+            };
+            var subtask = new UpdateResponsiblePersonSubtask(projectRepository, personRepository);
+
+            subtask.UpdateResponsiblePersonList(41, bookData);
+
+            Assert.AreEqual(2, projectRepository.CreatedObjects.Count);
+            Assert.AreEqual(1, projectRepository.UpdatedObjects.Count);
+            Assert.AreEqual(1, projectRepository.DeletedObjects.Count);
+
+            var createdItem2 = projectRepository.CreatedObjects.OfType<ProjectResponsiblePerson>().Single(x => x.ResponsiblePerson.FirstName == "Aaa");
+            var createdItem3 = projectRepository.CreatedObjects.OfType<ProjectResponsiblePerson>().Single(x => x.ResponsiblePerson.FirstName == "Ccc");
+            var updatedItem = projectRepository.UpdatedObjects.OfType<ProjectResponsiblePerson>().Single();
+            Assert.AreEqual(1, updatedItem.Sequence);
+            Assert.AreEqual(2, createdItem2.Sequence);
+            Assert.AreEqual(3, createdItem3.Sequence);
+        }
+
+        [TestMethod]
         public void TestUpdateMetadata()
         {
             var unitOfWorkProvider = CreateMockUnitOfWorkProvider();

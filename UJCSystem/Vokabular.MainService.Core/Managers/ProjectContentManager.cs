@@ -85,27 +85,34 @@ namespace Vokabular.MainService.Core.Managers
         public FullTextContract GetTextResource(long textId, TextFormatEnumContract formatValue)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetTextResource(textId));
+            return GetTextResource(dbResult, formatValue);
+        }
+
+        public FullTextContract GetTextResourceByPageId(long pageId, TextFormatEnumContract formatValue)
+        {
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestPageText(pageId));
+            return GetTextResource(dbResult, formatValue);
+        }
+
+        private FullTextContract GetTextResource(TextResource dbResult, TextFormatEnumContract formatValue)
+        {
             var result = m_mapper.Map<FullTextContract>(dbResult);
 
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(dbResult.Resource.Project.ProjectType);
+            if (result != null)
+            {
+                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(dbResult.Resource.Project.ProjectType);
 
-            var text = fulltextStorage.GetPageText(dbResult, formatValue);
-            result.Text = text;
-
+                var text = fulltextStorage.GetPageText(dbResult, formatValue);
+                result.Text = text;
+            }
+            
             return result;
         }
 
         public FullTextContract GetTextResourceVersion(long textVersionId, TextFormatEnumContract formatValue)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetResourceVersion<TextResource>(textVersionId, true, true));
-            var result = m_mapper.Map<FullTextContract>(dbResult);
-
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(dbResult.Resource.Project.ProjectType);
-
-            var text = fulltextStorage.GetPageText(dbResult, formatValue);
-            result.Text = text;
-
-            return result;
+            return GetTextResource(dbResult, formatValue);
         }
 
         public List<GetTextCommentContract> GetCommentsForText(long textId)
@@ -144,6 +151,13 @@ namespace Vokabular.MainService.Core.Managers
             deleteCommentWork.Execute();
         }
 
+        public ImageContract GetImageResourceByPageId(long pageId)
+        {
+            var imageResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestPageImage(pageId));
+            var result = m_mapper.Map<ImageContract>(imageResource);
+            return result;
+        }
+
         public FileResultData GetImageResource(long imageId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<ImageResource>(imageId));
@@ -172,10 +186,10 @@ namespace Vokabular.MainService.Core.Managers
             };
         }
 
-        public long CreateNewImageVersion(long imageId, CreateImageContract data, Stream stream)
+        public NewResourceResultContract CreateNewImageVersion(CreateImageContract data, Stream stream)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
-            var resultVersionId = new CreateNewImageResourceVersionWork(m_resourceRepository, m_fileSystemManager, imageId,
+            var resultVersionId = new CreateNewImageResourceVersionWork(m_resourceRepository, m_fileSystemManager,
                 data, stream, userId).Execute();
 
             return resultVersionId;
@@ -201,6 +215,23 @@ namespace Vokabular.MainService.Core.Managers
             var createNewTextResourceWork = new CreateNewTextResourceWork(m_resourceRepository, request, userId, fulltextStorage);
             var resultId = createNewTextResourceWork.Execute();
             return resultId;
+        }
+
+        public long CreateTextResourceOnPage(long pageId)
+        {
+            var latestPage = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<PageResource>(pageId));
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(latestPage.Resource.Project.ProjectType);
+
+            var userId = m_authenticationManager.GetCurrentUserId();
+
+            var resourceId = new CreateEmptyTextResourceWork(m_resourceRepository, pageId, userId, fulltextStorage).Execute();
+            return resourceId;
+        }
+
+        public void RemoveResource(long resourceId)
+        {
+            var work = new RemoveResourceWork(m_resourceRepository, resourceId);
+            work.Execute();
         }
     }
 }

@@ -25,6 +25,23 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        [HttpGet("page/{pageId}/text")]
+        public FullTextContract GetTextResourceByPageId(long pageId, [FromQuery] TextFormatEnumContract? format)
+        {
+            if (format == null)
+                format = TextFormatEnumContract.Html;
+
+            var result = m_projectContentManager.GetTextResourceByPageId(pageId, format.Value);
+            return result;
+        }
+
+        [HttpPost("page/{pageId}/text")]
+        public long CreateTextResource(long pageId)
+        {
+            var resultResourceId = m_projectContentManager.CreateTextResourceOnPage(pageId);
+            return resultResourceId;
+        }
+
         [HttpGet("text/{textId}")]
         public FullTextContract GetTextResource(long textId, [FromQuery] TextFormatEnumContract? format)
         {
