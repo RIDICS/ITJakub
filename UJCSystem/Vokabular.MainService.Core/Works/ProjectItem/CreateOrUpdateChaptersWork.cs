@@ -80,11 +80,11 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
             {
                 if (!updatedChapterIds.Contains(dbChapter.Id))
                 {
-                    //TODO remove chapter
-                    //m_resourceRepository.Delete(dbChapter);
+                    var resource = dbChapter.Resource;
+                    resource.IsRemoved = true;
+                    m_resourceRepository.Update(resource);
                 }
             }
         }
-
     }
 }

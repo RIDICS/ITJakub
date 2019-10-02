@@ -103,8 +103,8 @@ class ChapterEditorMain {
         subChapters.find(".chapter-row .remove-chapter").off();
         subChapters.find(".chapter-row .remove-chapter").click((event) => {
             event.stopPropagation();
-            const chapterRow = $(event.currentTarget).parents(".chapter-row");
-            chapterRow.remove();
+            const chapterContainer = $(event.currentTarget).parent(".buttons").parent(".chapter-row").parent(".chapter-container");
+            chapterContainer.remove();
             this.showUnsavedChangesAlert();
             this.moveEditor.checkMoveButtonsAvailability();
         });
