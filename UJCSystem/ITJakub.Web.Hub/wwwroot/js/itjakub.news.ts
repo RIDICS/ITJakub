@@ -14,6 +14,7 @@
         this.newsContainer = document.getElementById("news-container");
 
         this.sendGetNewsRequest(0, response => {
+            console.log(response);
             this.paginator.make(response.totalCount, this.newsOnPage);
             this.showNews(response.list);
         });
@@ -32,14 +33,14 @@
             dataType: "json",
             contentType: "application/json",
             success: callback,
-            error: function() {
-                this.clearLoading();
-                var errorMessage = document.createElement('div');
-                $(errorMessage).addClass("no-messages");
-                $(errorMessage).text("Chyba při načítání zpráv");
-                $(this.newsContainer).append(errorMessage);
+            error: function(error) {
+                $("#news-container").empty();
+                var emptyElement = document.createElement('div');
+                $(emptyElement).addClass("bib-listing-empty");
+                emptyElement.innerHTML = localization.translate("LoadingError", "News").value;
+                $("#news-container").append(emptyElement);
             }
-        });
+    });
     }
 
     private paginatorClickedCallback(pageNumber: number) {
@@ -56,11 +57,11 @@
     };
 
     private showNews(items: Array<INewsSyndicationItemContract>) {
-        this.clearLoading();
+        $(this.newsContainer).empty();
         if (items.length === 0) {
             var noNews = document.createElement('div');
             $(noNews).addClass("no-messages");
-            $(noNews).text("Žádné zprávy k zobrazení");
+            noNews.innerHTML = localization.translate("NoResultsToShow", "PluginsJs").value;
             $(this.newsContainer).append(noNews);
         } else {
             for (var i = 0; i < items.length; i++) {
@@ -89,10 +90,6 @@
                 $(this.newsContainer).append(itemDiv);
             }
         }
-    }
-
-    private clearLoading() {
-        $(this.newsContainer).empty();
     }
 
     private showLoading() {

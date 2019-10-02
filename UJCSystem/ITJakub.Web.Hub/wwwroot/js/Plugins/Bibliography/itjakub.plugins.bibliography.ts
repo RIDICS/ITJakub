@@ -176,11 +176,16 @@ class BibliographyModule {
     }
 
     public clearLoading() {
-        $(this.booksContainer).empty();
+        $("#loader").remove();
     }
 
     public showLoading() {
-        $(this.booksContainer).append('<div class="lv-circles md lv-mid lvt-5"></div>');
+        if ($("#loader").length == 0) {
+            var loader = document.createElement("div");
+            $(loader).addClass("lv-circles md lv-mid lvt-5");
+            $(loader).attr('id', "#loading");
+            $(this.booksContainer).append(loader);
+        }
     }
 
     public showSearchError() {

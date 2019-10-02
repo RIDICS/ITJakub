@@ -2,6 +2,7 @@
   "culture": "en",
   "scope": "News",
   "dictionary": {
+    "LoadingError":  "Error occured while loading news", 
     "NewsManagementTitle": "Administration - Add news",
     "AddNews": "Add news",
     "NewsTextPlaceholder": "Write the news here...",
