@@ -51,19 +51,48 @@ namespace Vokabular.MainService.Core.Managers
             var userCache = new Dictionary<int, string>();
             foreach (var resource in dbResult)
             {
+                var latestResourceVersion = resource.LatestVersion;
                 var resourceContract = m_mapper.Map<ResourceWithLatestVersionContract>(resource);
-                var userId = resource.LatestVersion.CreatedByUser.Id;
+                var userId = latestResourceVersion.CreatedByUser.Id;
                 if (!userCache.TryGetValue(userId, out var userName))
                 {
-                     userCache.Add(userId, m_userDetailManager.GetUserFullName(resource.LatestVersion.CreatedByUser));
+                     userCache.Add(userId, m_userDetailManager.GetUserFullName(latestResourceVersion.CreatedByUser));
                      userCache.TryGetValue(userId, out userName);
                 }
 
                 resourceContract.LatestVersion.Author = userName;
+                resourceContract.LatestVersion.RelatedResource = GetRelatedResourceContract(latestResourceVersion);
                 resultList.Add(resourceContract);
             }
             
             return resultList;
+        }
+
+        private ResourceContract GetRelatedResourceContract(ResourceVersion resourceVersion)
+        {
+            Resource relatedResource = null;
+            switch (resourceVersion)
+            {
+                case TextResource textResource:
+                    relatedResource = textResource.ResourcePage;
+                    break;
+                case ImageResource imageResource:
+                    relatedResource = imageResource.ResourcePage;
+                    break;
+                case AudioResource audioResource:
+                    relatedResource = audioResource.ResourceTrack;
+                    break;
+            }
+
+            if (relatedResource != null)
+            {
+                var relatedResourceId = relatedResource.Id;
+                relatedResource = m_resourceRepository.InvokeUnitOfWork(x => x.FindById<Resource>(relatedResourceId));
+                var result = m_mapper.Map<ResourceContract>(relatedResource);
+                return result;
+            }
+
+            return null;
         }
 
         public List<TextWithPageContract> GetTextResourceList(long projectId, long? resourceGroupId)

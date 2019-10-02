@@ -19,7 +19,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
     public class SnapshotDetailContract : SnapshotContract
     {
-        public IList<ResourceVersionDetailContract> ResourceVersions { get; set; }
+        public IList<ResourceVersionContract> ResourceVersions { get; set; }
     }
 
     public class CreateSnapshotContract
