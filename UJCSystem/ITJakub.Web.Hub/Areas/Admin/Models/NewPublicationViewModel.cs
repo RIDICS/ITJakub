@@ -26,6 +26,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public DateTime Created { get; set; }
         public string Author { get; set; }
         public string Comment { get; set; }
+        public string RelatedResourceName { get; set; }
         public bool IsSelected { get; set; }
     }
 

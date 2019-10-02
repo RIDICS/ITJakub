@@ -44,7 +44,7 @@ namespace Vokabular.MainService.Core.Works.Text
             var newResource = new Resource
             {
                 Project = latestPageVersion.Resource.Project,
-                Name = latestPageVersion.Name,
+                Name = $"{latestPageVersion.Name}.md",
                 ContentType = ContentTypeEnum.Page,
                 NamedResourceGroup = null,
                 ResourceType = ResourceTypeEnum.Text,
