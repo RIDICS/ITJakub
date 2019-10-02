@@ -68,27 +68,39 @@ namespace Vokabular.MainService.Core.Managers
             return resultList;
         }
 
-        private ResourceContract GetRelatedResourceContract(ResourceVersion resourceVersion)
+        private RelatedResourceContract GetRelatedResourceContract(ResourceVersion resourceVersion)
         {
             Resource relatedResource = null;
             switch (resourceVersion)
             {
                 case TextResource textResource:
-                    relatedResource = textResource.ResourcePage;
+                    relatedResource = m_resourceRepository
+                        .InvokeUnitOfWork(x => x.GetLatestResourceVersion<PageResource>(textResource.ResourcePage.Id)).Resource;
                     break;
                 case ImageResource imageResource:
-                    relatedResource = imageResource.ResourcePage;
+                    relatedResource = m_resourceRepository
+                        .InvokeUnitOfWork(x => x.GetLatestResourceVersion<PageResource>(imageResource.ResourcePage.Id)).Resource;
                     break;
                 case AudioResource audioResource:
-                    relatedResource = audioResource.ResourceTrack;
+                    relatedResource = m_resourceRepository
+                        .InvokeUnitOfWork(x => x.GetLatestResourceVersion<TrackResource>(audioResource.ResourceTrack.Id)).Resource;
                     break;
             }
 
             if (relatedResource != null)
             {
-                var relatedResourceId = relatedResource.Id;
-                relatedResource = m_resourceRepository.InvokeUnitOfWork(x => x.FindById<Resource>(relatedResourceId));
-                var result = m_mapper.Map<ResourceContract>(relatedResource);
+                var result = m_mapper.Map<RelatedResourceContract>(relatedResource);
+
+                switch (relatedResource.LatestVersion)
+                {
+                    case PageResource pageResource:
+                        result.Sequence = pageResource.Position;
+                        break;
+                    case TrackResource trackResource:
+                        result.Sequence = trackResource.Position;
+                        break;
+                }
+
                 return result;
             }
 

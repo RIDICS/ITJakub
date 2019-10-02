@@ -17,6 +17,6 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
     public class ResourceVersionWithRelatedInfoContract : ResourceVersionContract
     {
-        public ResourceContract RelatedResource { get; set; }
+        public RelatedResourceContract RelatedResource { get; set; }
     }
 }
