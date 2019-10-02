@@ -223,7 +223,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public virtual IList<AudioResource> GetRecordings(long trackId)
+        public virtual IList<AudioResource> GetAudioRecordingsByTrack(long trackId)
         {
             Resource resourceAlias = null;
 
