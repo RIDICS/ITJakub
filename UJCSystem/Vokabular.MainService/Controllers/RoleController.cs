@@ -8,7 +8,6 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
-using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -80,17 +79,18 @@ namespace Vokabular.MainService.Controllers
         }
 
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
-        [HttpPost("{roleId}/permission/book")]
-        public void AddBooksToRole(int roleId, [FromBody] AddBookToRoleRequestContract request)
+        [HttpPost("{roleId}/book/{bookId}/permission")]
+        public void AddBooksToRole(int roleId, long bookId, [FromBody] PermissionDataContract data)
         {
-            m_permissionManager.AddBooksToRole(roleId, request.BookIdList);
+            // TODO propagate permission flags
+            m_permissionManager.AddBooksToRole(roleId, new List<long> {bookId});
         }
 
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
-        [HttpDelete("{roleId}/permission/book")]
-        public void RemoveBooksFromRole(int roleId, [FromBody] AddBookToRoleRequestContract request)
+        [HttpDelete("{roleId}/book/{bookId}/permission")]
+        public void RemoveBooksFromRole(int roleId, long bookId)
         {
-            m_permissionManager.RemoveBooksFromRole(roleId, request.BookIdList);
+            m_permissionManager.RemoveBooksFromRole(roleId, new List<long> {bookId});
         }
 
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
