@@ -5,6 +5,7 @@ using System.Net;
 using AutoMapper;
 using Vokabular.DataEntities.Database.ConditionCriteria;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
@@ -37,7 +38,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<PageContract> SearchPage(long projectId, SearchPageRequestContract request)
         {
-            m_authorizationManager.AuthorizeBook(projectId);
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ShowPublished);
 
             var termConditions = new List<SearchCriteriaContract>();
             var fulltextConditions = new List<SearchCriteriaContract>();
@@ -141,7 +142,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<PageResultContextContract> SearchHitsWithPageContext(long projectId, SearchHitsRequestContract request)
         {
-            m_authorizationManager.AuthorizeBook(projectId);
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ShowPublished);
 
             var fulltextConditions = ExtractFulltextConditions(request.ConditionConjunction);
             if (fulltextConditions.Count == 0)
@@ -171,7 +172,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long SearchHitsResultCount(long projectId, SearchHitsRequestContract request)
         {
-            m_authorizationManager.AuthorizeBook(projectId);
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ShowPublished);
 
             var fulltextConditions = ExtractFulltextConditions(request.ConditionConjunction);
             if (fulltextConditions.Count == 0)

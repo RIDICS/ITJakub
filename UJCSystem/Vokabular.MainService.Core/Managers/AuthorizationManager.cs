@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using log4net;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
@@ -85,7 +86,7 @@ namespace Vokabular.MainService.Core.Managers
                 .ToList();
         }
 
-        public void FilterProjectIdList(ref IList<long> projectIds)
+        public void FilterProjectIdList(ref IList<long> projectIds, PermissionFlag permission)
         {
             if (projectIds == null || projectIds.Count == 0)
             {
@@ -97,25 +98,25 @@ namespace Vokabular.MainService.Core.Managers
 
             if (user != null)
             {
-                filtered = m_permissionRepository.GetFilteredBookIdListByUserPermissions(user.Id, projectIds);
+                filtered = m_permissionRepository.GetFilteredBookIdListByUserPermissions(user.Id, projectIds, permission);
             }
             else
             {
                 var role = m_authenticationManager.GetUnregisteredRole();
                 var group = m_permissionRepository.FindGroupByExternalIdOrCreate(role.Id, role.Name);
-                filtered = m_permissionRepository.GetFilteredBookIdListByGroupPermissions(group.Id, projectIds);
+                filtered = m_permissionRepository.GetFilteredBookIdListByGroupPermissions(group.Id, projectIds, permission);
             }
 
             projectIds = filtered;
         }
 
-        public void AuthorizeBook(long projectId)
+        public void AuthorizeBook(long projectId, PermissionFlag permission)
         {
             var user = m_authenticationManager.GetCurrentUser();
             if (user != null)
             {
                 var filtered = m_permissionRepository.InvokeUnitOfWork(x =>
-                    x.GetFilteredBookIdListByUserPermissions(user.Id, new List<long> {projectId}));
+                    x.GetFilteredBookIdListByUserPermissions(user.Id, new List<long> {projectId}, permission));
                 if (filtered == null || filtered.Count == 0)
                 {
                     throw new MainServiceException(
@@ -130,7 +131,7 @@ namespace Vokabular.MainService.Core.Managers
                 var role = m_authenticationManager.GetUnregisteredRole();
                 var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(role.Id, role.Name));
                 var filtered = m_permissionRepository.InvokeUnitOfWork(x =>
-                    x.GetFilteredBookIdListByGroupPermissions(group.Id, new List<long> {projectId}));
+                    x.GetFilteredBookIdListByGroupPermissions(group.Id, new List<long> {projectId}, permission));
 
                 if (filtered == null || filtered.Count == 0)
                 {
@@ -143,12 +144,12 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
-        public void AuthorizeResource(long resourceId)
+        public void AuthorizeResource(long resourceId, PermissionFlag permission = PermissionFlag.ShowPublished)
         {
             var user = m_authenticationManager.GetCurrentUser();
             if (user != null)
             {
-                var filtered = m_permissionRepository.InvokeUnitOfWork(x => x.GetResourceByUserPermissions(user.Id, resourceId));
+                var filtered = m_permissionRepository.InvokeUnitOfWork(x => x.GetResourceByUserPermissions(user.Id, resourceId, permission));
 
                 if (filtered == null)
                 {
@@ -163,7 +164,7 @@ namespace Vokabular.MainService.Core.Managers
             {
                 var role = m_authenticationManager.GetUnregisteredRole();
                 var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(role.Id, role.Name));
-                var filtered = m_permissionRepository.InvokeUnitOfWork(x => x.GetResourceByUserGroupPermissions(group.Id, resourceId));
+                var filtered = m_permissionRepository.InvokeUnitOfWork(x => x.GetResourceByUserGroupPermissions(group.Id, resourceId, permission));
 
                 if (filtered == null)
                 {

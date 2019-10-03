@@ -7,6 +7,7 @@ using NHibernate.SqlCommand;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
+using Vokabular.DataEntities.Database.Utils;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -135,6 +136,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => userGroupAlias.Users, () => userAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved && bookTypeAlias.Type == bookTypeEnum)
                 .And(() => userAlias.Id == userId && projectAlias.ProjectType == projectType)
+                .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(PermissionFlag.ShowPublished))
                 .OrderBy(x => x.Title).Asc
                 .Fetch(SelectMode.Fetch, x => x.Resource.Project.Categories)
                 .List();
@@ -330,6 +332,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => permissionAlias.UserGroup, () => userGroupAlias)
                 .JoinAlias(() => userGroupAlias.Users, () => userAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved && userAlias.Id == userId)
+                .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(PermissionFlag.ShowPublished))
                 .AndRestrictionOn(x => x.Title).IsLike(queryString, MatchMode.Anywhere)
                 .Select(Projections.Distinct(Projections.Property<MetadataResource>(x => x.Title)))
                 .OrderBy(x => x.Title).Asc;

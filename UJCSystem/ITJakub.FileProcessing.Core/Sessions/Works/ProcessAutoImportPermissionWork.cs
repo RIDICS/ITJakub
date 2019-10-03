@@ -52,7 +52,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             var newPermissions = groups.Select(group => new Permission
             {
                 Project = project,
-                UserGroup = group
+                UserGroup = group,
+                Flags = PermissionFlag.ShowPublished,
             });
 
             foreach (var newPermission in newPermissions)

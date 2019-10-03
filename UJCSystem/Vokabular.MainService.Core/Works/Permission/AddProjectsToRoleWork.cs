@@ -3,6 +3,7 @@ using System.Data;
 using System.Reflection;
 using log4net;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -46,7 +47,8 @@ namespace Vokabular.MainService.Core.Works.Permission
                 permissionsList.Add(new DataEntities.Database.Entities.Permission
                 {
                     Project = book,
-                    UserGroup = group
+                    UserGroup = group,
+                    Flags = PermissionFlag.ShowPublished, // TODO specify flags by parameter
                 });
             }
 
