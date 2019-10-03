@@ -1,4 +1,5 @@
 ﻿class AudioBooksModulInicializator extends ListModulInicializator {
+    protected notInitLoad: boolean = false;
     protected configuration: IAudioBooksModulInicializatorConfiguration;
     
     constructor(configuration: IAudioBooksModulInicializatorConfiguration) {
@@ -48,8 +49,11 @@
         const sortAsc = this.bibliographyModule.isSortedAsc();
         const sortingEnum = this.bibliographyModule.getSortCriteria();
 
-        this.bibliographyModule.clearBooks();
-        this.bibliographyModule.showLoading();
+        if (this.notInitLoad) {
+            this.bibliographyModule.clearBooks();
+            this.bibliographyModule.showLoading();
+        }
+        this.notInitLoad = true;
 
         $.ajax({
             type: "GET",

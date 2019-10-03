@@ -22,6 +22,8 @@ class BibliographiesSearch {
     private notInitialized = true;
     private initPage: number = null;
 
+    private notInitLoad: boolean = false;
+
     constructor(bookCountPerPage: number) {
         this.bookCountPerPage = bookCountPerPage;
 
@@ -92,8 +94,11 @@ class BibliographiesSearch {
         var sortAsc = this.bibliographyModule.isSortedAsc();
         var sortingEnum = this.bibliographyModule.getSortCriteria();
 
-        this.bibliographyModule.clearBooks();
-        this.bibliographyModule.showLoading();
+        if (this.notInitLoad) {
+            this.bibliographyModule.clearBooks();
+            this.bibliographyModule.showLoading();
+        }
+        this.notInitLoad = true;
 
         $.ajax({
             type: "GET",
@@ -121,8 +126,11 @@ class BibliographiesSearch {
         var sortAsc = this.bibliographyModule.isSortedAsc();
         var sortingEnum = this.bibliographyModule.getSortCriteria();
 
-        this.bibliographyModule.clearBooks();
-        this.bibliographyModule.showLoading();
+        if (this.notInitLoad) {
+            this.bibliographyModule.clearBooks();
+            this.bibliographyModule.showLoading();
+        }
+        this.notInitLoad = true;
 
         $.ajax({
             type: "GET",
