@@ -1,4 +1,5 @@
 using System;
+using Vokabular.DataEntities.Database.Entities.Enums;
 
 namespace Vokabular.DataEntities.Database.Entities
 {
@@ -9,6 +10,8 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual UserGroup UserGroup { get; set; }
 
         public virtual Project Project { get; set; }
+
+        public virtual PermissionFlag Flags { get; set; }
 
 
         public virtual bool Equals(Permission other)
