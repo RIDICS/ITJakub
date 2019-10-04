@@ -79,11 +79,18 @@ namespace Vokabular.MainService.Controllers
         }
 
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
-        [HttpPost("{roleId}/book/{bookId}/permission")]
-        public void AddBooksToRole(int roleId, long bookId, [FromBody] PermissionDataContract data)
+        [HttpGet("{roleId}/book/{bookId}/permission")]
+        public PermissionDataContract GetPermissionsForRoleAndBook(int roleId, long bookId)
         {
-            // TODO propagate permission flags
-            m_permissionManager.AddBooksToRole(roleId, new List<long> {bookId});
+            var result = m_permissionManager.GetPermissionsForRoleAndBook(roleId, bookId);
+            return result;
+        }
+
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
+        [HttpPut("{roleId}/book/{bookId}/permission")]
+        public void UpdateOrAddBooksToRole(int roleId, long bookId, [FromBody] PermissionDataContract data)
+        {
+            m_permissionManager.UpdateOrAddBooksToRole(roleId, new List<long> {bookId}, data);
         }
 
         [Authorize(PermissionNames.AssignPermissionsToRoles)]

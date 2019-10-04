@@ -8,6 +8,7 @@ using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Managers.Fulltext;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.Shared.Container;
 using Vokabular.TextConverter;
 
@@ -56,6 +57,8 @@ namespace Vokabular.MainService.Core
             services.AddScoped<IFulltextStorage, ElasticSearchStorage>();
             services.AddScoped<PortalTypeProvider>();
 
+            services.AddScoped<ProjectPermissionConverter>();
+
             services.AddSingleton<Profile, AuthUserProfile>();
             services.AddSingleton<Profile, RoleProfile>();
             services.AddSingleton<Profile, PermissionProfile>();
@@ -82,6 +85,7 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, OriginalAuthorProfile>();
             services.AddSingleton<Profile, PageProfile>();
             services.AddSingleton<Profile, ProjectProfile>();
+            services.AddSingleton<Profile, ProjectPermissionProfile>();
             services.AddSingleton<Profile, ResourceProfile>();
             services.AddSingleton<Profile, ResourceVersionProfile>();
             services.AddSingleton<Profile, ResponsiblePersonProfile>();

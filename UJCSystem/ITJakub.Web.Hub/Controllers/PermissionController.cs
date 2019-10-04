@@ -360,7 +360,14 @@ namespace ITJakub.Web.Hub.Controllers
         public IActionResult AddProjectsToRole([FromBody] AddProjectsToRoleRequest request)
         {
             var client = GetRoleClient();
-            client.AddBooksToRole(request.RoleId, request.BookId);
+            client.UpdateOrAddBooksToRole(request.RoleId, request.BookId, new PermissionDataContract
+            {
+                // TODO these values must be specified by user in GUI
+                ShowPublished = true,
+                ReadProject = true,
+                AdminProject = true,
+                EditProject = true,
+            });
             return AjaxOkResponse();
         }
 
