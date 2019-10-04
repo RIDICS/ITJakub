@@ -9,6 +9,7 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Search;
+using Vokabular.DataEntities.Database.Utils;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -268,6 +269,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => permissionAlias.UserGroup, () => userGroupAlias)
                 .JoinAlias(() => userGroupAlias.Users, () => userAlias)
                 .Where(() => headwordResourceAlias.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved && userAlias.Id == userId && projectAlias.ProjectType == projectType)
+                .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(PermissionFlag.ShowPublished))
                 .AndRestrictionOn(x => x.Headword).IsLike(queryString, MatchMode.Start)
                 .Select(Projections.Distinct(Projections.Property<HeadwordItem>(x => x.Headword)))
                 .OrderBy(x => x.Headword).Asc;
@@ -415,6 +417,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => permissionAlias.UserGroup, () => userGroupAlias)
                 .JoinAlias(() => userGroupAlias.Users, () => userAlias)
                 .And(() => bookTypeAlias.Type == bookType && userAlias.Id == userId && projectAlias.ProjectType == projectType)
+                .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(PermissionFlag.ShowPublished))
                 .Select(Projections.Distinct(Projections.Property(() => projectAlias.Id)));
 
             if (projectIds != null && categoryIds != null)

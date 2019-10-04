@@ -3,24 +3,28 @@ using System.Data;
 using System.Reflection;
 using log4net;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Permission
 {
-    public class AddProjectsToRoleWork : UnitOfWorkBase
+    public class UpdateOrAddProjectsToRoleWork : UnitOfWorkBase
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly PermissionRepository m_permissionRepository;
         private readonly int m_roleId;
         private readonly IList<long> m_bookIds;
+        private readonly PermissionFlag m_permissionFlags;
 
-        public AddProjectsToRoleWork(PermissionRepository permissionRepository, int roleId, IList<long> bookIds) : base(permissionRepository)
+        public UpdateOrAddProjectsToRoleWork(PermissionRepository permissionRepository, int roleId, IList<long> bookIds,
+            PermissionFlag permissionFlags) : base(permissionRepository)
         {
             m_permissionRepository = permissionRepository;
             m_roleId = roleId;
             m_bookIds = bookIds;
+            m_permissionFlags = permissionFlags;
         }
 
         protected override void ExecuteWorkImplementation()
@@ -46,7 +50,8 @@ namespace Vokabular.MainService.Core.Works.Permission
                 permissionsList.Add(new DataEntities.Database.Entities.Permission
                 {
                     Project = book,
-                    UserGroup = group
+                    UserGroup = group,
+                    Flags = m_permissionFlags,
                 });
             }
 

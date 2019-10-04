@@ -9,8 +9,10 @@ using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
+using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.Const;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
 using AuthPermissionContract = Ridics.Authentication.DataContracts.PermissionContract;
 using PermissionContract = Vokabular.MainService.DataContracts.Contracts.Permission.PermissionContract;
@@ -22,14 +24,16 @@ namespace Vokabular.MainService.Core.Managers
         private readonly PermissionRepository m_permissionRepository;
         private readonly CommunicationProvider m_communicationProvider;
         private readonly DefaultUserProvider m_defaultUserProvider;
+        private readonly ProjectPermissionConverter m_permissionConverter;
         private readonly IMapper m_mapper;
 
         public PermissionManager(PermissionRepository permissionRepository, CommunicationProvider communicationProvider,
-            DefaultUserProvider defaultUserProvider, IMapper mapper)
+            DefaultUserProvider defaultUserProvider, ProjectPermissionConverter permissionConverter, IMapper mapper)
         {
             m_permissionRepository = permissionRepository;
             m_communicationProvider = communicationProvider;
             m_defaultUserProvider = defaultUserProvider;
+            m_permissionConverter = permissionConverter;
             m_mapper = mapper;
         }
 
@@ -103,16 +107,26 @@ namespace Vokabular.MainService.Core.Managers
             client.AssignPermissionsToRoleAsync(roleId, permissionsId).GetAwaiter().GetResult();
         }
 
-        public void AddBooksToRole(int roleId, IList<long> bookIds)
+        public void UpdateOrAddBooksToRole(int roleId, IList<long> bookIds, PermissionDataContract data)
         {
+            var permissionFlags = m_permissionConverter.GetFlags(data);
+
             new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
-            new AddProjectsToRoleWork(m_permissionRepository, roleId, bookIds).Execute();
+            new UpdateOrAddProjectsToRoleWork(m_permissionRepository, roleId, bookIds, permissionFlags).Execute();
         }
 
         public void RemoveBooksFromRole(int roleId, IList<long> bookIds)
         {
             new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
             new RemoveProjectsFromRoleWork(m_permissionRepository, roleId, bookIds).Execute();
+        }
+
+        public PermissionDataContract GetPermissionsForRoleAndBook(int roleId, long bookId)
+        {
+            new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
+            var dbResult = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionByBookAndGroup(bookId, roleId));
+            var result = m_mapper.Map<PermissionDataContract>(dbResult);
+            return result;
         }
 
         public PagedResultList<PermissionContract> GetPermissions(int? start, int? count, string filterByName)

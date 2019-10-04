@@ -39,7 +39,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public SnapshotContract GetLatestPublishedSnapshot(long projectId)
         {
-            m_authorizationManager.AuthorizeBook(projectId);
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ShowPublished);
 
             var latestSnapshot = m_snapshotRepository.InvokeUnitOfWork(x => x.GetLatestPublishedSnapshot(projectId));
             var snapshotContract = m_mapper.Map<SnapshotContract>(latestSnapshot);
