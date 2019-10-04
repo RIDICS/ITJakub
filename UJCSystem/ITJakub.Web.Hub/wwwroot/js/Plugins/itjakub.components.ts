@@ -105,6 +105,10 @@ class BootstrapDialogWrapper {
             $("input", this.$element).val("");
             $("textarea", this.$element).val("");
             $("select", this.$element).val("");
+
+            if (this.options.elementsToClearSelector) {
+
+            }
         }
         this.setSubmitEnabled(true);
     }
@@ -137,6 +141,7 @@ interface IBootstrapDialogWrapperOptions {
     errorElementSelector?: string;
     progressElementSelector?: string;
     submitElementSelector?: string;
+    elementsToClearSelector?: string;
 }
 
 class AlertComponentBuilder {
