@@ -421,7 +421,7 @@
                                                             <select size="1" class="form-control" id="add-editor-type">
                                                                 @foreach (var responsibleType in Model.AllResponsibleTypeList)
                                                                 {
-                                                                    <option value="@responsibleType.Id" @(Model.AllResponsibleTypeList.IndexOf(responsibleType) == 0 ? "selected" : null)>@responsibleType.Text (@responsibleType.Type.GetDisplayAttributeValue())</option>
+                                                                    <option value="@responsibleType.Id">@responsibleType.Text (@responsibleType.Type.GetDisplayAttributeValue())</option>
                                                                 }
                                                             </select>
                                                         </div>

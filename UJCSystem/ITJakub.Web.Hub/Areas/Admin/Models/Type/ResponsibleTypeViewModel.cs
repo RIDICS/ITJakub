@@ -1,4 +1,6 @@
-﻿namespace ITJakub.Web.Hub.Areas.Admin.Models.Type
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ITJakub.Web.Hub.Areas.Admin.Models.Type
 {
     public class ResponsibleTypeViewModel
     {
@@ -9,13 +11,13 @@
 
     public enum ResponsibleTypeEnumViewModel
     {
-        //[Display(Name = "Neznámý")] // TODO determine why attribute usage cause exception in CSHTML
+        [Display(Name = "Neznámý")]
         Unknown = 0,
 
-        //[Display(Name = "Editor")]
+        [Display(Name = "Editor")]
         Editor = 1,
 
-        //[Display(Name = "Kolace")]
+        [Display(Name = "Kolace")]
         Kolace = 2,
     }
 }

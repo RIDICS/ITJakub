@@ -189,6 +189,7 @@
 
         $("#add-editor-button").click(() => {
             $addResponsibleTypeButton.prop("disabled", false);
+            $("#add-editor-type").val(null);
             this.addEditorDialog.show();
         });
 
