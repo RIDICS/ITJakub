@@ -56,9 +56,6 @@ class ProjectModule {
         case "project-navigation-audio":
             this.currentModule = null;
             break;
-        case "project-navigation-video":
-            this.currentModule = null;
-            break;
         default:
             this.currentModule = new ProjectWorkModule(this.projectId);
         }
