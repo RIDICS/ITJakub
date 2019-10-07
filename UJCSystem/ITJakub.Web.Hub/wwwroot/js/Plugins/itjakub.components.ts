@@ -74,7 +74,7 @@ class BootstrapDialogWrapper {
     }
 
     private bindEvents() {
-        this.$element.on("hidden.bs.modal", () => {
+        this.$element.on("show.bs.modal", () => {
             this.clear();
         });
 

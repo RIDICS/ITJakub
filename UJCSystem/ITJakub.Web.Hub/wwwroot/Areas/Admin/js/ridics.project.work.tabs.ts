@@ -581,6 +581,7 @@
         var lastName: string;
 
         const finishAddingAuthor = () => {
+            $("#no-author-info").hide();
             var element = MetadataUiHelper.addPerson($("#work-metadata-authors"), firstName, lastName, id);
             element.addClass("author-item");
             this.addRemovePersonEvent($(".remove-button", element));
@@ -613,6 +614,7 @@
         var lastName: string;
 
         const finishAddingEditor = () => {
+            $("#no-responsible-person-info").hide();
             var element = MetadataUiHelper.addPerson($("#work-metadata-editors"),
                 firstName,
                 `${lastName} - ${responsibilityText}`,
@@ -645,7 +647,14 @@
 
     private addRemovePersonEvent($removeButton: JQuery) {
         $removeButton.click((event) => {
-            $(event.currentTarget).closest(".author-item, .editor-item").remove();
+            const $item = $(event.currentTarget).closest(".author-item, .editor-item");
+            
+            const remainingCount = $item.siblings(".author-item, .editor-item").length;
+            if (remainingCount === 0) {
+                $item.siblings("#no-responsible-person-info, #no-author-info").show();
+            }
+
+            $item.remove();
         });
     }
 
