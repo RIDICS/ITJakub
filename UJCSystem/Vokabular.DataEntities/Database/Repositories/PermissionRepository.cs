@@ -217,5 +217,35 @@ namespace Vokabular.DataEntities.Database.Repositories
                 Count = totalCount.Value
             };
         }
+
+        public virtual Permission FindPermissionForSnapshotByUserId(long snapshotId, int userId)
+        {
+            UserGroup userGroupAlias = null;
+            User userAlias = null;
+            Project projectAlias = null;
+            Snapshot snapshotAlias = null;
+
+            return GetSession().QueryOver<Permission>()
+                .JoinAlias(x => x.UserGroup, () => userGroupAlias)
+                .JoinAlias(() => userGroupAlias.Users, () => userAlias)
+                .JoinAlias(x => x.Project, () => projectAlias)
+                .JoinAlias(() => projectAlias.Snapshots, () => snapshotAlias)
+                .Where(() => snapshotAlias.Id == snapshotId && userAlias.Id == userId)
+                .SingleOrDefault();
+        }
+
+        public virtual Permission FindPermissionForSnapshotByGroupId(long snapshotId, int userGroupId)
+        {
+            UserGroup userGroupAlias = null;
+            Project projectAlias = null;
+            Snapshot snapshotAlias = null;
+
+            return GetSession().QueryOver<Permission>()
+                .JoinAlias(x => x.UserGroup, () => userGroupAlias)
+                .JoinAlias(x => x.Project, () => projectAlias)
+                .JoinAlias(() => projectAlias.Snapshots, () => snapshotAlias)
+                .Where(() => snapshotAlias.Id == snapshotId && userGroupAlias.Id == userGroupId)
+                .SingleOrDefault();
+        }
     }
 }

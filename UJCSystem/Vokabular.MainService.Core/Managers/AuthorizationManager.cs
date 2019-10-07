@@ -144,6 +144,38 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
+        public void AuthorizeSnapshot(long snapshotId)
+        {
+            var user = m_authenticationManager.GetCurrentUser();
+            if (user != null)
+            {
+                var permission = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionForSnapshotByUserId(snapshotId, user.Id));
+                if (permission == null || !permission.Flags.HasFlag(PermissionFlag.ShowPublished))
+                {
+                    throw new MainServiceException(
+                        MainServiceErrorCode.UserBookAccessForbidden,
+                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with Snapshot ID '{snapshotId}'",
+                        HttpStatusCode.Forbidden
+                    );
+                }
+            }
+            else
+            {
+                var role = m_authenticationManager.GetUnregisteredRole();
+                var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(role.Id, role.Name));
+                var permission = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionForSnapshotByGroupId(snapshotId, group.Id));
+
+                if (permission == null || !permission.Flags.HasFlag(PermissionFlag.ShowPublished))
+                {
+                    throw new MainServiceException(
+                        MainServiceErrorCode.UnregisteredUserBookAccessForbidden,
+                        $"Unregistered user does not have permission on book with Snapshot ID '{snapshotId}'",
+                        HttpStatusCode.Forbidden
+                    );
+                }
+            }
+        }
+
         public void AuthorizeResource(long resourceId, PermissionFlag permission = PermissionFlag.ShowPublished)
         {
             var user = m_authenticationManager.GetCurrentUser();
