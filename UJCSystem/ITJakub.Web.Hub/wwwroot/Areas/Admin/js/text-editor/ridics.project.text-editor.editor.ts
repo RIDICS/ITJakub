@@ -151,13 +151,6 @@
                         title: localization.translate("Warning", "RidicsProject").value,
                         message: localization.translateFormat("CloseEditedPage", [editorPageName], "RidicsProject").value,
                         buttons: {
-                            confirm: {
-                                label: localization.translate("CloseWithoutSaving", "RidicsProject").value,
-                                className: "btn-default",
-                                callback: () => {
-                                    this.editorChangePage(previousPageEl, selectedPageRow);
-                                }
-                            },
                             cancel: {
                                 label: localization.translate("Cancel", "RidicsProject").value,
                                 className: "btn-default",
@@ -166,6 +159,13 @@
                                         .children(".textarea-plain-text");
                                     textareaEl.trigger("blur");
                                     this.simplemde.codemirror.focus();
+                                }
+                            },
+                            confirm: {
+                                label: localization.translate("CloseWithoutSaving", "RidicsProject").value,
+                                className: "btn-default",
+                                callback: () => {
+                                    this.editorChangePage(previousPageEl, selectedPageRow);
                                 }
                             },
                             save: {
@@ -198,6 +198,13 @@
                     title: localization.translate("Warning", "RidicsProject").value,
                     message: localization.translateFormat("CloseEditedPage", [editorPageName], "RidicsProject").value,
                     buttons: {
+                        cancel: {
+                            label: localization.translate("Cancel", "RidicsProject").value,
+                            className: "btn-default",
+                            callback: () => { //Switch back to editing mode on cancel
+                                pageRows.data(this.editModeSelector, true);
+                            }
+                        },
                         confirm: {
                             label: localization.translate("CloseWithoutSaving", "RidicsProject").value,
                             className: "btn-default",
@@ -205,13 +212,6 @@
                                 this.simplemde.toTextArea();
                                 this.simplemde = null;
                                 this.togglePageRows(pageRows);
-                            }
-                        },
-                        cancel: {
-                            label: localization.translate("Cancel", "RidicsProject").value,
-                            className: "btn-default",
-                            callback: () => { //Switch back to editing mode on cancel
-                                pageRows.data(this.editModeSelector, true);
                             }
                         },
                         save: {
