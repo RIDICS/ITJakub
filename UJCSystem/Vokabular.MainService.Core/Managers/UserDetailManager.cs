@@ -154,7 +154,7 @@ namespace Vokabular.MainService.Core.Managers
         private AuthUserContract GetDetailUserFromAuthService(int userExternalId)
         {
             var client = m_communicationProvider.GetAuthUserApiClient();
-            var result = client.HttpClient.GetItemAsync<AuthUserContract>(userExternalId).GetAwaiter().GetResult();
+            var result = client.GetUserAsync(userExternalId).GetAwaiter().GetResult();
 
             return result;
         }
