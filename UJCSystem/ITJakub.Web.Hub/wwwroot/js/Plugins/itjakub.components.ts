@@ -107,7 +107,7 @@ class BootstrapDialogWrapper {
             $("select", this.$element).val("");
 
             if (this.options.elementsToClearSelector) {
-
+                $(this.options.elementsToClearSelector).empty();
             }
         }
         this.setSubmitEnabled(true);

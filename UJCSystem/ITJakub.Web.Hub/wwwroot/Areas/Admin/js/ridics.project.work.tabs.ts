@@ -25,12 +25,14 @@
         this.addAuthorDialog = new BootstrapDialogWrapper({
             element: $("#add-author-dialog"),
             autoClearInputs: true,
+            elementsToClearSelector: ".works-produced .works-list-items, .works-produced .number-of-works-value",
             submitCallback: this.addAuthor.bind(this)
         });
 
         this.addEditorDialog = new BootstrapDialogWrapper({
             element: $("#add-editor-dialog"),
             autoClearInputs: true,
+            elementsToClearSelector: ".works-participated .works-list-items, .works-participated .number-of-works-value",
             submitCallback: this.addEditor.bind(this)
         });
 
@@ -462,6 +464,7 @@
         const numberOfWorksEl = worksProducedEl.find(".number-of-works-value");
         tableBodyEl.empty();
         tableBodyEl.addClass("loading");
+        numberOfWorksEl.empty();
         projectInfoAjax.done((data: IPagedResult<IProjectDetailContract>) => {
             this.generateWorkAuthorTableItem(data.list);
             numberOfWorksEl.text(data.totalCount);
@@ -513,6 +516,7 @@
         const numberOfWorksEl = worksParticipatedEl.find(".number-of-works-value");
         tableBodyEl.empty();
         tableBodyEl.addClass("loading");
+        numberOfWorksEl.empty();
         projectInfoAjax.done((data: IPagedResult<IProjectDetailContract>) => {
             this.generateWorkResponsiblePersonItem(data.list, responsiblePersonId);
             numberOfWorksEl.text(data.totalCount);
