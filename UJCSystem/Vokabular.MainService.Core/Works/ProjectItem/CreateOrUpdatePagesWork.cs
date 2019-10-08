@@ -73,8 +73,9 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
             {
                 if (!updatedPageIds.Contains(dbPage.Id))
                 {
-                    //TODO remove page
-                    //m_resourceRepository.Delete(dbPage);
+                    var resource = dbPage.Resource;
+                    resource.IsRemoved = true;
+                    m_resourceRepository.Update(resource);
                 }
             }
         }
