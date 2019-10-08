@@ -88,6 +88,10 @@
                 }
                 this.util.savePageList(projectId, pageListArray).done(() => {
                     $("#unsavedChanges").addClass("hide");
+                    const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("PageListSaveSuccess","RidicsProject").value).buildElement();
+                    const alertHolder = $(".save-alert-holder");
+                    alertHolder.append(alert);
+                    alertHolder.delay(3000).fadeOut(2000);
                 }).fail((error) => {
                     this.gui.showInfoDialog(localization.translate("Error").value,
                         this.errorHandler.getErrorMessage(error));
@@ -217,15 +221,17 @@
         const nameInput = pageRow.find("input[name=\"page-name\"]");
         if (editButton.hasClass("fa-pencil")) {
             editButton.switchClass("fa-pencil", "fa-check");
+            nameElement.addClass("hide");
             nameInput.removeClass("hide");
         } else {
             nameInput.addClass("hide");
             editButton.switchClass("fa-check", "fa-pencil");
             const newName = String(nameInput.val());
-            if (String(nameElement.text()) !== newName) {
+            if (newName !== "" && String(nameElement.text().trim()) !== newName) {
                 nameElement.text(newName);
                 this.showUnsavedChangesAlert();
             }
+            nameElement.removeClass("hide");
         }
     }
 
