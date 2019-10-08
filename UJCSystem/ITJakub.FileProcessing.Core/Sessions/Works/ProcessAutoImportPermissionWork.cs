@@ -27,22 +27,22 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
 
         protected override void ExecuteWorkImplementation()
         {
-            var roles = new List<RoleFromAuthContract>();
+            var roleExternalIds = new List<int>();
 
             foreach (var bookType in m_bookTypes)
             {
-                foreach (var permission in m_autoImportPermissions.Where(x => x.Name == VokabularPermissionNames.AutoImport + (int) bookType).ToList())
+                foreach (var permission in m_autoImportPermissions.Where(x => x.Name == VokabularPermissionNames.AutoImport + (int) bookType))
                 {
-                    roles.AddRange(permission.Roles);
+                    roleExternalIds.AddRange(permission.RoleExternalIds);
                 }
             }
-            
+
             var project = m_permissionRepository.Load<Project>(m_projectId);
 
             var groups = new List<UserGroup>();
-            foreach (var role in roles)
+            foreach (var roleExternalId in roleExternalIds.Distinct())
             {
-                var permission = m_permissionRepository.FindGroupByExternalIdOrCreate(role.Id, role.Name);
+                var permission = m_permissionRepository.FindGroupByExternalId(roleExternalId);
                 if (permission != null)
                 {
                     groups.Add(permission);

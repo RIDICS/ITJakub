@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks.Dataflow;
 using Microsoft.Extensions.DependencyInjection;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -121,14 +120,8 @@ namespace Vokabular.ProjectImport.ImportPipeline
         {
             var bookTypeId = m_projectRepository.InvokeUnitOfWork(x => x.GetBookTypeByEnum(BookTypeEnum.BibliographicalItem)).Id;
 
-            var permission = m_permissionsProvider.GetPermissionByName($"{VokabularPermissionNames.AutoImport}{(int)BookTypeEnum.BibliographicalItem}");
-
-            IList<int> roleIds = new List<int>();
-            if (permission != null)
-            {
-                var roleExternalIds = permission.Roles.Select(x => x.Id);
-                roleIds = m_permissionRepository.InvokeUnitOfWork(x => x.GetGroupIdsByExternalIds(roleExternalIds));
-            }
+            var roleIds = m_permissionsProvider.GetRoleIdsByPermissionName($"{VokabularPermissionNames.AutoImport}{(int)BookTypeEnum.BibliographicalItem}") ??
+                          new List<int>();
 
             return new ActionBlock<ImportedRecord>(importedRecord =>
                 {

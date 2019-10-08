@@ -67,7 +67,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var client = m_communicationProvider.GetAuthUserApiClient();
 
-            var authUser = client.HttpClient.GetItemAsync<AuthUserContract>(user.ExternalId.Value).GetAwaiter().GetResult();
+            var authUser = client.GetUserAsync(user.ExternalId.Value).GetAwaiter().GetResult();
 
             authUser.FirstName = data.FirstName;
             authUser.LastName = data.LastName;
@@ -79,12 +79,12 @@ namespace Vokabular.MainService.Core.Managers
         {
             var userExternalId = GetUserExternalId(userId);
             var client = m_communicationProvider.GetAuthUserApiClient();
-            var authUser = client.HttpClient.GetItemAsync<AuthUserContract>(userExternalId).GetAwaiter().GetResult();
+            var authUser = client.GetUserAsync(userExternalId).GetAwaiter().GetResult();
 
             authUser.FirstName = data.FirstName;
             authUser.LastName = data.LastName;
 
-            client.HttpClient.EditItemAsync(userExternalId, authUser).GetAwaiter().GetResult();
+            client.EditUserAsync(userExternalId, authUser).GetAwaiter().GetResult();
         }
 
         public void UpdateUserContact(int userId, UpdateUserContactContract data)
@@ -123,7 +123,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var client = m_communicationProvider.GetAuthUserApiClient();
 
-            var result = client.HttpClient.GetListAsync<AuthUserContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
+            var result = client.GetUserListAsync(startValue, countValue, filterByName).GetAwaiter().GetResult();
             var userDetailContracts = m_mapper.Map<List<UserDetailContract>>(result.Items);
             m_userDetailManager.AddIdForExternalUsers(userDetailContracts);
 
@@ -143,7 +143,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var client = m_communicationProvider.GetAuthUserApiClient();
 
-            var result = client.HttpClient.GetListAsync<AuthUserContract>(0, countValue, query).GetAwaiter().GetResult();
+            var result = client.GetUserListAsync(0, countValue, query).GetAwaiter().GetResult();
             var userDetailContracts = m_mapper.Map<List<UserDetailContract>>(result.Items);
             m_userDetailManager.AddIdForExternalUsers(userDetailContracts);
             return userDetailContracts;
