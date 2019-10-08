@@ -68,6 +68,11 @@
     "AddProjectPermissionToGroup": "Add project permission to a group",
     "SelectedProject": "Selected project",
     "AddPermissionToGroup": "Add permission to group",
-    "ResetPassword": "Reset password"
+    "ResetPassword": "Reset password",
+
+    "ReadProjectPermission": "Permission to read the project",
+    "ReadPublishedProjectPermission": "Permission to read the published project",
+    "EditProjectPermission": "Permission to edit the project",
+    "AdminProjectPermission": "Permission to admin the project"
   }
 }

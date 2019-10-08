@@ -57,7 +57,7 @@ class ProjectManager {
 
         this.client.getRolesByProject(projectId).done(response => {
             container.html(response as string);
-            this.initRemoveRoleFromProjectButton();
+            this.initRoleClicks();
         }).fail((error) => {
             const errorAlert = new AlertComponentBuilder(AlertType.Error)
                 .addContent(this.errorHandler.getErrorMessage(error, localization.translate("ListError", "PermissionJs").value));
@@ -68,7 +68,7 @@ class ProjectManager {
                 ViewType.Widget,
                 false,
                 false,
-                this.initRemoveRoleFromProjectButton,
+                this.initRoleClicks,
                 this);
             this.roleList.init();
             this.roleList.setSearchFormDisabled(false);
@@ -92,6 +92,25 @@ class ProjectManager {
                 alert.show();
             });
         });
+    }
+
+    private initRoleClicks(): void {
+        $(".role-row").click((event) => {
+            const roleRow = $(event.currentTarget as Node as Element);
+            const roleId = roleRow.data("role-id");
+            const projectId = $(".project-row.active").data("project-id");
+            const body = $("#project-permission-section .panel-body");
+            body.empty().append(`<div class="loader"></div>`);
+
+            $("#project-permission-section .section").removeClass("hide");
+            this.client.getPermissionForRoleAndBook(projectId, roleId).done((result) => {
+                body.html(result);
+            }).fail((error) => {
+                body.text(this.errorHandler.getErrorMessage(error));
+            });
+        });
+
+        this.initRemoveRoleFromProjectButton();
     }
 
     private initSearchBox() {
@@ -139,7 +158,15 @@ class ProjectManager {
                 }
                 else {
                     const roleId = this.currentRoleSelectedItem.id;
-                    this.client.addProjectToRole(projectId, roleId).done(() => {
+                    const addProjectToRole = {
+                        bookId: projectId,
+                        roleId: roleId,
+                        showPublished: $(`input[name="show-published"]`).is(":checked"), 
+                        readProject: $(`input[name="read-project"]`).is(":checked"), 
+                        adminProject: $(`input[name="admin-project"]`).is(":checked"), 
+                        editProject: $(`input[name="edit-project"]`).is(":checked"), 
+                    }
+                    this.client.addProjectToRole(addProjectToRole).done(() => {
                         this.roleList.reloadPage();
                         addProjectPermissionModal.modal("hide");
                     }).fail((error) => {
