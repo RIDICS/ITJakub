@@ -3,6 +3,7 @@ using AutoMapper;
 using ITJakub.Lemmatization.Shared.Contracts;
 using ITJakub.Web.Hub.Options;
 using Microsoft.Extensions.Options;
+using Scalesoft.Localization.AspNetCore;
 using Vokabular.MainService.DataContracts.Clients;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 
@@ -38,7 +39,7 @@ namespace ITJakub.Web.Hub.Core.Communication
             MainServiceMetadataClient metadataClient, MainServiceNewsClient newsClient, MainServicePermissionClient permissionClient,
             MainServiceProjectClient projectClient, MainServiceRoleClient roleClient,
             MainServiceSessionClient sessionClient, MainServiceSnapshotClient snapshotClient, MainServiceTermClient termClient,
-            MainServiceUserClient userClient, IOptions<PortalOption> portalOption, IMapper mapper)
+            MainServiceUserClient userClient, IOptions<PortalOption> portalOption, IMapper mapper, ILocalizationService localizationService)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_bookClient = bookClient;
@@ -59,11 +60,14 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_userClient = userClient;
             m_portalOption = portalOption;
             Mapper = mapper;
+            Localizer = localizationService;
         }
 
         public PortalTypeContract PortalType => Mapper.Map<PortalTypeContract>(m_portalOption.Value.PortalType);
 
         public IMapper Mapper { get; }
+
+        public ILocalizationService Localizer { get; }
 
         public MainServiceBookClient GetMainServiceBookClient()
         {

@@ -158,7 +158,8 @@ namespace ITJakub.Web.Hub.Controllers
         {
             if (exception.ValidationErrors == null)
             {
-                ModelState.AddModelError(string.Empty, exception.Message);
+                // All errors with description should be propagated by MainServiceException so this is fallback:
+                ModelState.AddModelError(string.Empty, m_communication.Localizer.Translate("unknown-error-msg", "Error"));
                 return;
             }
 
