@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using AutoMapper;
 using ITJakub.Web.Hub.Converters;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -16,7 +15,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 {
     public class ReaderController : BaseController
     {
-        public ReaderController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public ReaderController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
 

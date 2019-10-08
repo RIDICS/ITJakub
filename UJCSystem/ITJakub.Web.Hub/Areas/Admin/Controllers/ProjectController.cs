@@ -9,7 +9,7 @@ using ITJakub.Web.Hub.Areas.Admin.Models.Response;
 using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -28,7 +28,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         private readonly ILocalizationService m_localization;
 
-        public ProjectController(CommunicationProvider communicationProvider, ILocalizationService localization) : base(communicationProvider)
+        public ProjectController(ControllerDataProvider controllerDataProvider, ILocalizationService localization) : base(controllerDataProvider)
         {
             m_localization = localization;
         }

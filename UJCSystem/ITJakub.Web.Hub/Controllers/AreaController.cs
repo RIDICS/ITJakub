@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ITJakub.Web.Hub.Converters;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
@@ -17,7 +17,7 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public abstract class AreaController : BaseController
     {
-        protected AreaController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        protected AreaController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
 

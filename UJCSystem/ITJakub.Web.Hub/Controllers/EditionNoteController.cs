@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.RestClient.Errors;
@@ -9,7 +9,7 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public class EditionNoteController : BaseController
     {
-        public EditionNoteController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public EditionNoteController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
 
