@@ -4,18 +4,30 @@ class ChapterEditorMain {
     private readonly util: EditorsApiClient;
     private readonly errorHandler: ErrorHandler;
     private readonly moveEditor: ChapterMoveEditor;
+    private readonly pagerDisplayPages: number;
     private position = 0;
     private chaptersToSave: IUpdateChapter[];
+    private bookPages: Array<BookPage>;
+    private actualPageIndex = 0;
 
     constructor() {
         this.gui = new EditorsGui();
         this.errorHandler = new ErrorHandler();
         this.util = new EditorsApiClient();
         this.moveEditor = new ChapterMoveEditor();
+        this.pagerDisplayPages = 5;
     }
 
     init(projectId: number) {
         this.moveEditor.init();
+        this.bookPages = [];
+        this.util.getPagesList(projectId).done((pages) => {
+            for (let page of pages) {
+                const bookPageItem = new BookPage(page.id, page.name, page.position);
+                this.bookPages.push(bookPageItem);    
+            }
+        });
+
         this.editDialog = new BootstrapDialogWrapper({
             element: $("#projectChaptersDialog"),
             autoClearInputs: false
@@ -174,11 +186,12 @@ class ChapterEditorMain {
 
         const pageId = chapterRow.data("beginning-page-id");
         const pageDetail = $("#page-detail");
-        const alertHolder = pageDetail.find(".alert-holder");
+        
         const content = pageDetail.find(".body-content");
         const textIcon = pageDetail.find(".fa-file-text-o");
         const imageIcon = pageDetail.find(".fa-image");
-        alertHolder.empty();
+        const alertHolder = pageDetail.find(".alert-holder");
+        
 
         if (typeof pageId == "undefined") {
             textIcon.addClass("hide");
@@ -191,11 +204,27 @@ class ChapterEditorMain {
             return;
         }
 
-        content.empty().html("<div class=\"sub-content\"></div>");
-        const subcontent = content.find(".sub-content");
-        subcontent.addClass("loader");
+        const pagination = this.createPagination(this.bookPages);
+        content.empty().html("<div class=\"page-navigation\"></div><div class=\"sub-content\"></div>");
+        const paginationEl = content.find(".page-navigation");
+        paginationEl.append(pagination);
+        this.moveToPageNumber(0);
         pageDetail.removeClass("hide");
-        
+
+        this.loadPageDetail(pageId);
+    }
+
+    private loadPageDetail(pageId: number) {
+        const pageDetail = $("#page-detail");
+        const textIcon = pageDetail.find(".fa-file-text-o");
+        const imageIcon = pageDetail.find(".fa-image");
+        const alertHolder = pageDetail.find(".alert-holder");
+        alertHolder.empty();
+
+        const content = pageDetail.find(".body-content");
+        const subcontent = content.find(".sub-content");
+        subcontent.empty().addClass("loader");
+
         this.util.getPageDetail(pageId).done((response) => {
             subcontent.removeClass("loader");
             subcontent.html(response);
@@ -234,5 +263,169 @@ class ChapterEditorMain {
         newChapter.find(`input[name="page-name"] option[value="${beginningPageId}"]`).attr("selected", "selected");
         
         return newChapter;
+    }
+
+    private createPagination(pages: Array<BookPage>): HTMLElement {
+    
+        var paginationUl: HTMLUListElement = document.createElement("ul");
+        paginationUl.classList.add("pagination", "pagination-sm");
+
+        var toLeft = document.createElement("ul");
+        toLeft.classList.add("page-navigation-container", "page-navigation-container-left");
+
+        var liElement: HTMLLIElement = document.createElement("li");
+        $(liElement).addClass("page-navigation page-navigation-left");
+        var anchor: HTMLAnchorElement = document.createElement("a");
+        anchor.href = "#";
+        anchor.innerHTML = "|<";
+        $(anchor).click((event: JQuery.Event) => {
+            event.stopPropagation();
+            this.moveToPageNumber(0);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        toLeft.appendChild(liElement);
+
+        liElement = document.createElement("li");
+        $(liElement).addClass("page-navigation page-navigation-left");
+        anchor = document.createElement("a");
+        anchor.href = "#";
+        anchor.innerHTML = "<<";
+        $(anchor).click((event: JQuery.Event) => {
+            event.stopPropagation();
+            this.moveToPageNumber(this.actualPageIndex - 5);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        toLeft.appendChild(liElement);
+
+        var toRight = document.createElement("ul");
+        toRight.classList.add("page-navigation-container", "page-navigation-container-right");
+
+        liElement = document.createElement("li");
+        $(liElement).addClass("page-navigation page-navigation-right");
+        anchor = document.createElement("a");
+        anchor.href = "#";
+        anchor.innerHTML = ">>";
+        $(anchor).click((event: JQuery.Event) => {
+            event.stopPropagation();
+           this.moveToPageNumber(this.actualPageIndex + 5);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        toRight.appendChild(liElement);
+
+        liElement = document.createElement("li");
+        $(liElement).addClass("page-navigation page-navigation-right");
+        anchor = document.createElement("a");
+        anchor.href = "#";
+        anchor.innerHTML = ">|";
+        $(anchor).click((event: JQuery.Event) => {
+            event.stopPropagation();
+            this.moveToPageNumber(this.bookPages.length - 1);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        toRight.appendChild(liElement);
+
+        liElement = document.createElement("li");
+        $(liElement).addClass("more-pages more-pages-left");
+        liElement.innerHTML = "...";
+        paginationUl.appendChild(liElement);
+
+        $.each(pages, (index, page) => {
+            liElement = document.createElement("li");
+            $(liElement).addClass("page");
+            $(liElement).data("page-index", index);
+            anchor = document.createElement("a");
+            anchor.href = "#";
+            anchor.innerHTML = page.text;
+            $(anchor).click((event: JQuery.Event) => {
+                event.stopPropagation();
+                this.moveToPage(page.pageId);
+                return false;
+            });
+            liElement.appendChild(anchor);
+            paginationUl.appendChild(liElement);
+        });
+
+        liElement = document.createElement("li");
+        $(liElement).addClass("more-pages more-pages-right");
+        liElement.innerHTML = "...";
+        paginationUl.appendChild(liElement);
+
+        var listingContainer = document.createElement("div");
+        listingContainer.classList.add("page-navigation-container-helper");
+        listingContainer.appendChild(toLeft);
+        listingContainer.appendChild(paginationUl);
+        listingContainer.appendChild(toRight);
+
+        return listingContainer;
+    }
+
+    moveToPageNumber(pageIndex: number) {
+        if (pageIndex < 0) {
+            pageIndex = 0;
+        } else if (pageIndex >= this.bookPages.length) {
+            pageIndex = this.bookPages.length - 1;
+        }
+
+        this.actualPageIndex = pageIndex;
+        this.actualizePagination(pageIndex);
+        this.loadPageDetail(this.bookPages[pageIndex].pageId);
+    }
+
+    actualizePagination(pageIndex: number) {
+        const pager = $("#page-detail").find("ul.pagination");
+        pager.find("li.page-navigation").css("visibility", "visible");
+        pager.find("li.more-pages").css("visibility", "visible");
+        if (pageIndex === 0) {
+            pager.find("li.page-navigation-left").css("visibility", "hidden");
+            pager.find("li.more-pages-left").css("visibility", "hidden");
+        } else if (pageIndex === this.bookPages.length - 1) {
+            pager.find("li.page-navigation-right").css("visibility", "hidden");
+            pager.find("li.more-pages-right").css("visibility", "hidden");
+        }
+
+        const pages = $(pager).find(".page");
+        $(pages).css("display", "none");
+        $(pages).removeClass("page-active");
+        const actualPage = $(pages).filter(function (index) {
+            return $(this).data("page-index") === pageIndex;
+        });
+
+        const displayPagesOnEachSide = (this.pagerDisplayPages - 1) / 2;
+        let displayOnRight = displayPagesOnEachSide;
+        let displayOnLeft = displayPagesOnEachSide;
+        const pagesOnLeft = pageIndex;
+        const pagesOnRight = this.bookPages.length - (pageIndex + 1);
+        if (pagesOnLeft <= displayOnLeft) {
+            displayOnRight += displayOnLeft - pagesOnLeft;
+            pager.find("li.more-pages-left").css("visibility", "hidden");
+        } else if (pagesOnRight <= displayOnRight) {
+            displayOnLeft += displayOnRight - pagesOnRight;
+            pager.find("li.more-pages-right").css("visibility", "hidden");
+        }
+
+        const displayedPages = $(pages).filter(function (index) {
+            const itemPageIndex = $(this).data("page-index");
+            return (itemPageIndex >= pageIndex - displayOnLeft && itemPageIndex <= pageIndex + displayOnRight);
+        });
+        $(displayedPages).css("display", "inline-block");
+        $(actualPage).addClass("page-active");
+
+    }
+
+    moveToPage(pageId: number) {
+        let pageIndex = -1;
+        for (let i = 0; i < this.bookPages.length; i++) {
+            if (this.bookPages[i].pageId === pageId) {
+                pageIndex = i;
+                break;
+            }
+        }
+        if (pageIndex >= 0 && pageIndex < this.bookPages.length) {
+            this.moveToPageNumber(pageIndex);
+        }
     }
 }
