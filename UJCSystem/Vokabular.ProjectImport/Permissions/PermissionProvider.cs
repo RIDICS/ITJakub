@@ -26,7 +26,7 @@ namespace Vokabular.ProjectImport.Permissions
                 return null;
             }
 
-            var roleExternalIds = m_permissionApiClient.GetRoleIdsByPermission(permission.Id).GetAwaiter().GetResult();
+            var roleExternalIds = m_permissionApiClient.GetRoleIdsByPermissionAsync(permission.Id).GetAwaiter().GetResult();
             var roleIds = m_permissionRepository.InvokeUnitOfWork(x => x.GetGroupIdsByExternalIds(roleExternalIds));
 
             return roleIds;

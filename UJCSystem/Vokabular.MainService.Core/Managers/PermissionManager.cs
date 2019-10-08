@@ -52,7 +52,7 @@ namespace Vokabular.MainService.Core.Managers
             foreach (var permissionFromAuthContract in result)
             {
                 permissionFromAuthContract.RoleExternalIds =
-                    client.GetRoleIdsByPermission(permissionFromAuthContract.Id).GetAwaiter().GetResult();
+                    client.GetRoleIdsByPermissionAsync(permissionFromAuthContract.Id).GetAwaiter().GetResult();
             }
 
             return result;
