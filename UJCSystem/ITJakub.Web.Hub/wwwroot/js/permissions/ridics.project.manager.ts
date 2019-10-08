@@ -96,6 +96,7 @@ class ProjectManager {
 
     private initRoleClicks(): void {
         $(".role-row").click((event) => {
+            $(event.currentTarget as Node as Element).addClass("active").siblings().removeClass("active");
             const roleRow = $(event.currentTarget as Node as Element);
             const roleId = roleRow.data("role-id");
             const projectId = $(".project-row.active").data("project-id");
