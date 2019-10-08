@@ -13,8 +13,6 @@ using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataEntities.UnitOfWork;
-using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
-using AuthPermissionContract = Ridics.Authentication.DataContracts.PermissionContract;
 using PermissionContract = Vokabular.MainService.DataContracts.Contracts.Permission.PermissionContract;
 
 namespace Vokabular.MainService.Core.Managers
@@ -48,12 +46,14 @@ namespace Vokabular.MainService.Core.Managers
                 {
                     Id = p.Id,
                     Name = p.Name,
-                    Roles = p.Roles.Select(r => new RoleFromAuthContract
-                    {
-                        Id = r.Id,
-                        Name = r.Name,
-                    }).ToList()
+                    RoleExternalIds = null, // Loaded by additional requests
                 }).ToList();
+
+            foreach (var permissionFromAuthContract in result)
+            {
+                permissionFromAuthContract.RoleExternalIds =
+                    client.GetRoleIdsByPermission(permissionFromAuthContract.Id).GetAwaiter().GetResult();
+            }
 
             return result;
         }
