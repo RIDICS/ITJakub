@@ -295,7 +295,7 @@ namespace ITJakub.Web.Hub.Controllers
                         Description = roleViewModel.Description
                     };
                     var client = GetRoleClient();
-                    client.UpdateRole(roleContract.Id, roleContract);
+                    client.CreateRole(roleContract);
                     roleViewModel.SuccessfulUpdate = true;
                 }
                 catch (HttpErrorCodeException e)
