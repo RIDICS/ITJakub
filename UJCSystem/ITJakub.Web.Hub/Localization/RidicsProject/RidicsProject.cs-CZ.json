@@ -39,6 +39,7 @@
     "DeletePage": "Smazat stránku",
     "EditChapterName": "Upravit název kapitoly",
     "DeleteChapter": "Smazat kapitolu",
+    "ChapterNameRequired": "Název kapitoly je povinný.",
 
     "Fail": "Chyba",
     "Success": "Úspěch",

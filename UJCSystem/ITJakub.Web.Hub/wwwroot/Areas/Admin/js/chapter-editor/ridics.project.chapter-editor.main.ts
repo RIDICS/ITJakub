@@ -53,7 +53,14 @@ class ChapterEditorMain {
         $("#projectChaptersDialog").on("click",
             ".create-chapter",
             () => {
+                $("#projectChaptersDialog .alert-holder").empty()
                 const chapterName = String($("#projectChaptersDialog input[name=\"chapter-name\"]").val());
+                if (chapterName === "") {
+                    const alert = new AlertComponentBuilder(AlertType.Error)
+                        .addContent(localization.translate("ChapterNameRequired", "RidicsProject").value).buildElement();
+                    $("#projectChaptersDialog .alert-holder").append(alert);
+                    return;
+                }
                 const selectedPageId = Number($("#projectChaptersDialog .select-page").find("option:selected").val());
                 const selectedPageName = `[${$("#projectChaptersDialog .select-page").find("option:selected").text()}]`;
                 const chapter = this.createChapterRow(chapterName, selectedPageId, selectedPageName);
@@ -164,7 +171,7 @@ class ChapterEditorMain {
             pageInput.addClass("hide");
            
             const newName = String(nameInput.val());
-            if (String(nameElement.text()) !== newName) {
+            if (newName !== "" && String(nameElement.text()) !== newName) {
                 nameElement.text(newName);
                 this.showUnsavedChangesAlert();
             }
@@ -223,10 +230,9 @@ class ChapterEditorMain {
 
         const content = pageDetail.find(".body-content");
         const subcontent = content.find(".sub-content");
-        subcontent.empty().addClass("loader");
+        subcontent.empty().append(`<div class="loader"></div>`);
 
         this.util.getPageDetail(pageId).done((response) => {
-            subcontent.removeClass("loader");
             subcontent.html(response);
 
             if (content.find(".page-text").length > 0) {
@@ -244,7 +250,7 @@ class ChapterEditorMain {
             const alert = new AlertComponentBuilder(AlertType.Error)
                 .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
             alertHolder.empty().append(alert);
-            subcontent.removeClass("loader").empty();
+            subcontent.empty();
         });
     }
 

@@ -39,6 +39,7 @@
     "DeletePage": "Delete page",
     "EditChapterName": "Edit chapter name",
     "DeleteChapter": "Delete chapter",
+    "ChapterNameRequired": "Chapter name is required",
 
     "Fail": "Fail",
     "Success": "Success",
