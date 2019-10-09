@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
@@ -202,6 +203,22 @@ namespace Vokabular.MainService.Core.Managers
                 Stream = imageStream,
                 FileSize = imageStream.Length,
             };
+        }
+
+        public void GenerateChapters(long projectId)
+        {
+            var textResources = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestTexts(projectId, null, true));
+            var sortedTextResources = textResources.OrderBy(x => ((PageResource)x.ResourcePage.LatestVersion).Position);
+
+            foreach (var textResource in sortedTextResources)
+            {
+                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(textResource.Resource.Project.ProjectType);
+                var text = fulltextStorage.GetPageText(textResource, TextFormatEnumContract.Html);
+
+                // TODO parse HTML or Markdown to get Chapter list
+            }
+
+            throw new System.NotImplementedException();
         }
     }
 }
