@@ -43,6 +43,7 @@
     "EditChapterName": "Edit chapter name",
     "DeleteChapter": "Delete chapter",
     "ChapterNameRequired": "Chapter name is required",
+    "PageListSaveSuccess": "Pages saved successfully.",
 
     "Fail": "Fail",
     "Success": "Success",

@@ -43,6 +43,7 @@
     "EditChapterName": "Upravit název kapitoly",
     "DeleteChapter": "Smazat kapitolu",
     "ChapterNameRequired": "Název kapitoly je povinný.",
+    "PageListSaveSuccess": "Stránky byly úspěšně uloženy.",
 
     "Fail": "Chyba",
     "Success": "Úspěch",
