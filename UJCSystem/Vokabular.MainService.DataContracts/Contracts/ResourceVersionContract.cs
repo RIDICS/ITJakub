@@ -10,11 +10,13 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public string Comment { get; set; }
         public DateTime CreateDate { get; set; }
         public string Author { get; set; }
-    }
 
-    public class ResourceVersionDetailContract : ResourceVersionContract
-    {
         public long ResourceId { get; set; }
         public ResourceTypeEnumContract ResourceType { get; set; }
+    }
+
+    public class ResourceVersionWithRelatedInfoContract : ResourceVersionContract
+    {
+        public RelatedResourceContract RelatedResource { get; set; }
     }
 }

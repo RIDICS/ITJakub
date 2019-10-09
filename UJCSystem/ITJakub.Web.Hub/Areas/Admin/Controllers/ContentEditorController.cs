@@ -8,12 +8,11 @@ using ITJakub.Web.Hub.Areas.Admin.Models.Response;
 using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Types;
 using ITJakub.Web.Hub.Options;
-using Microsoft.AspNetCore.Http;
 using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
@@ -24,7 +23,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     {
         private readonly TextManager m_textManager;
 
-        public ContentEditorController(CommunicationProvider communicationProvider, TextManager textManager) : base(communicationProvider)
+        public ContentEditorController(ControllerDataProvider controllerDataProvider, TextManager textManager) : base(controllerDataProvider)
         {
             m_textManager = textManager;
         }

@@ -74,7 +74,7 @@ class BootstrapDialogWrapper {
     }
 
     private bindEvents() {
-        this.$element.on("hidden.bs.modal", () => {
+        this.$element.on("show.bs.modal", () => {
             this.clear();
         });
 
@@ -105,6 +105,10 @@ class BootstrapDialogWrapper {
             $("input", this.$element).val("");
             $("textarea", this.$element).val("");
             $("select", this.$element).val("");
+
+            if (this.options.elementsToClearSelector) {
+                $(this.options.elementsToClearSelector).empty();
+            }
         }
         this.setSubmitEnabled(true);
     }
@@ -137,6 +141,7 @@ interface IBootstrapDialogWrapperOptions {
     errorElementSelector?: string;
     progressElementSelector?: string;
     submitElementSelector?: string;
+    elementsToClearSelector?: string;
 }
 
 class AlertComponentBuilder {

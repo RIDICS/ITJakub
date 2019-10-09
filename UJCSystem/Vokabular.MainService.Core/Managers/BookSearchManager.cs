@@ -336,6 +336,14 @@ namespace Vokabular.MainService.Core.Managers
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
 
             var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectType);
+            if (projectIdentificatorList.Count == 0)
+            {
+                return new CorpusSearchSnapshotsResultContract
+                {
+                    TotalCount = 0,
+                    SnapshotList = new List<CorpusSearchSnapshotContract>(),
+                };
+            }
             
             // Search in fulltext DB
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);
@@ -349,6 +357,8 @@ namespace Vokabular.MainService.Core.Managers
         
         public List<CorpusSearchResultContract> SearchCorpusInSnapshotByCriteria(long snapshotId, BookPagedCorpusSearchInSnapshotRequestContract request)
         {
+            m_authorizationManager.AuthorizeSnapshot(snapshotId);
+
             var processedCriterias = GetAuthorizatedProcessedCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
             
@@ -377,6 +387,10 @@ namespace Vokabular.MainService.Core.Managers
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
 
             var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectType);
+            if (projectIdentificatorList.Count == 0)
+            {
+                return 0;
+            }
 
             //Search in fulltext DB
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);

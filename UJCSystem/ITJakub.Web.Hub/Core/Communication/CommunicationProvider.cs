@@ -1,10 +1,6 @@
 using System.ServiceModel;
-using AutoMapper;
 using ITJakub.Lemmatization.Shared.Contracts;
-using ITJakub.Web.Hub.Options;
-using Microsoft.Extensions.Options;
 using Vokabular.MainService.DataContracts.Clients;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Core.Communication
 {
@@ -27,7 +23,6 @@ namespace ITJakub.Web.Hub.Core.Communication
         private readonly MainServiceSnapshotClient m_snapshotClient;
         private readonly MainServiceTermClient m_termClient;
         private readonly MainServiceUserClient m_userClient;
-        private readonly IOptions<PortalOption> m_portalOption;
 
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
 
@@ -38,7 +33,7 @@ namespace ITJakub.Web.Hub.Core.Communication
             MainServiceMetadataClient metadataClient, MainServiceNewsClient newsClient, MainServicePermissionClient permissionClient,
             MainServiceProjectClient projectClient, MainServiceRoleClient roleClient,
             MainServiceSessionClient sessionClient, MainServiceSnapshotClient snapshotClient, MainServiceTermClient termClient,
-            MainServiceUserClient userClient, IOptions<PortalOption> portalOption, IMapper mapper)
+            MainServiceUserClient userClient)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_bookClient = bookClient;
@@ -57,14 +52,8 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_snapshotClient = snapshotClient;
             m_termClient = termClient;
             m_userClient = userClient;
-            m_portalOption = portalOption;
-            Mapper = mapper;
         }
-
-        public PortalTypeContract PortalType => Mapper.Map<PortalTypeContract>(m_portalOption.Value.PortalType);
-
-        public IMapper Mapper { get; }
-
+        
         public MainServiceBookClient GetMainServiceBookClient()
         {
             return m_bookClient;

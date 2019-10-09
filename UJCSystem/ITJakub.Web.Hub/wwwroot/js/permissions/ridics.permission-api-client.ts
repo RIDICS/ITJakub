@@ -79,12 +79,12 @@
 
     public removeProjectFromRole(projectId: number, roleId: number): JQuery.jqXHR<string> {
         return this.post(this.getPermissionControllerUrl() + "RemoveProjectsFromRole",
-            JSON.stringify({ roleId: roleId, bookIds: [projectId] }));
+            JSON.stringify({ roleId: roleId, bookId: projectId }));
     }
 
     public addProjectToRole(projectId: number, roleId: number): JQuery.jqXHR<string> {
         return this.post(this.getPermissionControllerUrl() + "AddProjectsToRole",
-            JSON.stringify({ roleId: roleId, bookIds: [projectId] }));
+            JSON.stringify({ roleId: roleId, bookId: projectId }));
     }
 
     public resetUserPassword(userId: number): JQuery.jqXHR  {

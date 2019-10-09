@@ -374,7 +374,8 @@ namespace Vokabular.ProjectImport.Works
             var newPermissions = m_roleIds.Select(groupId => new Permission
             {
                 Project = project,
-                UserGroup = m_projectRepository.Load<UserGroup>(groupId)
+                UserGroup = m_projectRepository.Load<UserGroup>(groupId),
+                Flags = PermissionFlag.ShowPublished,
             });
 
             foreach (var newPermission in newPermissions)

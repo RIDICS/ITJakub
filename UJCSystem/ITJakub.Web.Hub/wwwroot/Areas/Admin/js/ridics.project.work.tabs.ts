@@ -25,12 +25,14 @@
         this.addAuthorDialog = new BootstrapDialogWrapper({
             element: $("#add-author-dialog"),
             autoClearInputs: true,
+            elementsToClearSelector: ".works-produced .works-list-items, .works-produced .number-of-works-value",
             submitCallback: this.addAuthor.bind(this)
         });
 
         this.addEditorDialog = new BootstrapDialogWrapper({
             element: $("#add-editor-dialog"),
             autoClearInputs: true,
+            elementsToClearSelector: ".works-participated .works-list-items, .works-participated .number-of-works-value",
             submitCallback: this.addEditor.bind(this)
         });
 
@@ -187,6 +189,7 @@
 
         $("#add-editor-button").click(() => {
             $addResponsibleTypeButton.prop("disabled", false);
+            $("#add-editor-type").val(null);
             this.addEditorDialog.show();
         });
 
@@ -462,6 +465,7 @@
         const numberOfWorksEl = worksProducedEl.find(".number-of-works-value");
         tableBodyEl.empty();
         tableBodyEl.addClass("loading");
+        numberOfWorksEl.empty();
         projectInfoAjax.done((data: IPagedResult<IProjectDetailContract>) => {
             this.generateWorkAuthorTableItem(data.list);
             numberOfWorksEl.text(data.totalCount);
@@ -513,6 +517,7 @@
         const numberOfWorksEl = worksParticipatedEl.find(".number-of-works-value");
         tableBodyEl.empty();
         tableBodyEl.addClass("loading");
+        numberOfWorksEl.empty();
         projectInfoAjax.done((data: IPagedResult<IProjectDetailContract>) => {
             this.generateWorkResponsiblePersonItem(data.list, responsiblePersonId);
             numberOfWorksEl.text(data.totalCount);
@@ -576,6 +581,7 @@
         var lastName: string;
 
         const finishAddingAuthor = () => {
+            $("#no-author-info").hide();
             var element = MetadataUiHelper.addPerson($("#work-metadata-authors"), firstName, lastName, id);
             element.addClass("author-item");
             this.addRemovePersonEvent($(".remove-button", element));
@@ -608,6 +614,7 @@
         var lastName: string;
 
         const finishAddingEditor = () => {
+            $("#no-responsible-person-info").hide();
             var element = MetadataUiHelper.addPerson($("#work-metadata-editors"),
                 firstName,
                 `${lastName} - ${responsibilityText}`,
@@ -640,7 +647,14 @@
 
     private addRemovePersonEvent($removeButton: JQuery) {
         $removeButton.click((event) => {
-            $(event.currentTarget).closest(".author-item, .editor-item").remove();
+            const $item = $(event.currentTarget).closest(".author-item, .editor-item");
+            
+            const remainingCount = $item.siblings(".author-item, .editor-item").length;
+            if (remainingCount === 0) {
+                $item.siblings("#no-responsible-person-info, #no-author-info").show();
+            }
+
+            $item.remove();
         });
     }
 

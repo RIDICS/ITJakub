@@ -5,7 +5,7 @@ using System.Net;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
@@ -22,7 +22,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     {
         private readonly ILocalizationService m_localization;
 
-        public PublicationController(CommunicationProvider communicationProvider, ILocalizationService localization) : base(communicationProvider)
+        public PublicationController(ControllerDataProvider controllerDataProvider, ILocalizationService localization) : base(controllerDataProvider)
         {
             m_localization = localization;
         }
@@ -170,19 +170,19 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 {
                     new ResourceTypeViewModel
                     {
-                        ResourceList = Mapper.Map<IList<ResourceViewModel>>(text),
+                        ResourceList = Mapper.Map<IList<ResourceViewModel>>(text.OrderBy(x => x.LatestVersion.RelatedResource.Sequence)),
                         ResourceType = ResourceTypeEnumContract.Text,
                         Title = m_localization.Translate("TextSources", "Admin"),
                     },
                     new ResourceTypeViewModel
                     {
-                        ResourceList = Mapper.Map<IList<ResourceViewModel>>(images),
+                        ResourceList = Mapper.Map<IList<ResourceViewModel>>(images.OrderBy(x => x.LatestVersion.RelatedResource.Sequence)),
                         ResourceType = ResourceTypeEnumContract.Image,
                         Title = m_localization.Translate("ImageSources", "Admin"),
                     },
                     new ResourceTypeViewModel
                     {
-                        ResourceList = Mapper.Map<IList<ResourceViewModel>>(audio),
+                        ResourceList = Mapper.Map<IList<ResourceViewModel>>(audio.OrderBy(x => x.LatestVersion.RelatedResource.Sequence)),
                         ResourceType = ResourceTypeEnumContract.Audio,
                         Title = m_localization.Translate("AudioSources", "Admin"),
                     }

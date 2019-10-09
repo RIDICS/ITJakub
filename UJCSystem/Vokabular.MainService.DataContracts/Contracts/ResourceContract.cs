@@ -11,6 +11,11 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
     public class ResourceWithLatestVersionContract : ResourceContract
     {
-        public ResourceVersionContract LatestVersion { get; set; }
+        public ResourceVersionWithRelatedInfoContract LatestVersion { get; set; }
+    }
+
+    public class RelatedResourceContract : ResourceContract
+    {
+        public int Sequence { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Constants;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Models.Requests.Permission;
 using ITJakub.Web.Hub.Models.User;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -23,8 +23,8 @@ namespace ITJakub.Web.Hub.Controllers
         private readonly ILocalizationService m_localizationService;
         private readonly RefreshUserManager m_refreshUserManager;
 
-        public AccountController(CommunicationProvider communicationProvider, ILocalizationService localizationService,
-            RefreshUserManager refreshUserManager) : base(communicationProvider)
+        public AccountController(ControllerDataProvider controllerDataProvider, ILocalizationService localizationService,
+            RefreshUserManager refreshUserManager) : base(controllerDataProvider)
         {
             m_localizationService = localizationService;
             m_refreshUserManager = refreshUserManager;

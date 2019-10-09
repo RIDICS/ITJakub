@@ -13,6 +13,8 @@
     <many-to-one name="Project">
       <column name="Project" not-null="true" />
     </many-to-one>
-    
+
+    <property name="Flags" not-null="true" />
+
   </class>
 </hibernate-mapping>

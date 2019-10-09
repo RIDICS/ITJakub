@@ -51,19 +51,60 @@ namespace Vokabular.MainService.Core.Managers
             var userCache = new Dictionary<int, string>();
             foreach (var resource in dbResult)
             {
+                var latestResourceVersion = resource.LatestVersion;
                 var resourceContract = m_mapper.Map<ResourceWithLatestVersionContract>(resource);
-                var userId = resource.LatestVersion.CreatedByUser.Id;
+                var userId = latestResourceVersion.CreatedByUser.Id;
                 if (!userCache.TryGetValue(userId, out var userName))
                 {
-                     userCache.Add(userId, m_userDetailManager.GetUserFullName(resource.LatestVersion.CreatedByUser));
+                     userCache.Add(userId, m_userDetailManager.GetUserFullName(latestResourceVersion.CreatedByUser));
                      userCache.TryGetValue(userId, out userName);
                 }
 
                 resourceContract.LatestVersion.Author = userName;
+                resourceContract.LatestVersion.RelatedResource = GetRelatedResourceContract(latestResourceVersion);
                 resultList.Add(resourceContract);
             }
             
             return resultList;
+        }
+
+        private RelatedResourceContract GetRelatedResourceContract(ResourceVersion resourceVersion)
+        {
+            Resource relatedResource = null;
+            switch (resourceVersion)
+            {
+                case TextResource textResource:
+                    relatedResource = m_resourceRepository
+                        .InvokeUnitOfWork(x => x.GetLatestResourceVersion<PageResource>(textResource.ResourcePage.Id)).Resource;
+                    break;
+                case ImageResource imageResource:
+                    relatedResource = m_resourceRepository
+                        .InvokeUnitOfWork(x => x.GetLatestResourceVersion<PageResource>(imageResource.ResourcePage.Id)).Resource;
+                    break;
+                case AudioResource audioResource:
+                    relatedResource = m_resourceRepository
+                        .InvokeUnitOfWork(x => x.GetLatestResourceVersion<TrackResource>(audioResource.ResourceTrack.Id)).Resource;
+                    break;
+            }
+
+            if (relatedResource != null)
+            {
+                var result = m_mapper.Map<RelatedResourceContract>(relatedResource);
+
+                switch (relatedResource.LatestVersion)
+                {
+                    case PageResource pageResource:
+                        result.Sequence = pageResource.Position;
+                        break;
+                    case TrackResource trackResource:
+                        result.Sequence = trackResource.Position;
+                        break;
+                }
+
+                return result;
+            }
+
+            return null;
         }
 
         public List<TextWithPageContract> GetTextResourceList(long projectId, long? resourceGroupId)

@@ -4,7 +4,9 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
+using Vokabular.DataEntities.Database.Utils;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -74,7 +76,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return (int) GetSession().Save(group);
         }
 
-        public virtual IList<long> GetFilteredBookIdListByUserPermissions(int userId, IEnumerable<long> bookIds)
+        public virtual IList<long> GetFilteredBookIdListByUserPermissions(int userId, IEnumerable<long> bookIds, PermissionFlag permission)
         {
             Project projectAlias = null;
             Permission permissionAlias = null;
@@ -88,12 +90,13 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Select(Projections.Distinct(Projections.Property(() => projectAlias.Id)))
                 .Where(() => userAlias.Id == userId)
                 .AndRestrictionOn(() => projectAlias.Id).IsInG(bookIds)
+                .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(permission))
                 .List<long>();
 
             return filteredBookIds;
         }
 
-        public virtual IList<long> GetFilteredBookIdListByGroupPermissions(int groupId, IEnumerable<long> bookIds)
+        public virtual IList<long> GetFilteredBookIdListByGroupPermissions(int groupId, IEnumerable<long> bookIds, PermissionFlag permission)
         {
             Project projectAlias = null;
             Permission permissionAlias = null;
@@ -105,12 +108,13 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Select(Projections.Distinct(Projections.Property(() => projectAlias.Id)))
                 .Where(() => groupAlias.Id == groupId)
                 .AndRestrictionOn(() => projectAlias.Id).IsInG(bookIds)
+                .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(permission))
                 .List<long>();
 
             return filteredBookIds;
         }
 
-        public virtual Resource GetResourceByUserPermissions(int userId, long resourceId)
+        public virtual Resource GetResourceByUserPermissions(int userId, long resourceId, PermissionFlag permission)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -124,12 +128,13 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinQueryOver(x => x.UserGroup, () => groupAlias)
                 .JoinQueryOver(x => x.Users, () => userAlias)
                 .Where(() => userAlias.Id == userId && resourceAlias.Id == resourceId)
+                .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(permission))
                 .SingleOrDefault();
 
             return filteredResource;
         }
 
-        public virtual Resource GetResourceByUserGroupPermissions(int groupId, long resourceId)
+        public virtual Resource GetResourceByUserGroupPermissions(int groupId, long resourceId, PermissionFlag permission)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -141,6 +146,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinQueryOver(x => x.Permissions, () => permissionAlias)
                 .JoinQueryOver(x => x.UserGroup, () => groupAlias)
                 .Where(() => groupAlias.Id == groupId && resourceAlias.Id == resourceId)
+                .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(permission))
                 .SingleOrDefault();
 
             return filteredResource;
@@ -210,6 +216,36 @@ namespace Vokabular.DataEntities.Database.Repositories
                 List = list.ToList(),
                 Count = totalCount.Value
             };
+        }
+
+        public virtual Permission FindPermissionForSnapshotByUserId(long snapshotId, int userId)
+        {
+            UserGroup userGroupAlias = null;
+            User userAlias = null;
+            Project projectAlias = null;
+            Snapshot snapshotAlias = null;
+
+            return GetSession().QueryOver<Permission>()
+                .JoinAlias(x => x.UserGroup, () => userGroupAlias)
+                .JoinAlias(() => userGroupAlias.Users, () => userAlias)
+                .JoinAlias(x => x.Project, () => projectAlias)
+                .JoinAlias(() => projectAlias.Snapshots, () => snapshotAlias)
+                .Where(() => snapshotAlias.Id == snapshotId && userAlias.Id == userId)
+                .SingleOrDefault();
+        }
+
+        public virtual Permission FindPermissionForSnapshotByGroupId(long snapshotId, int userGroupId)
+        {
+            UserGroup userGroupAlias = null;
+            Project projectAlias = null;
+            Snapshot snapshotAlias = null;
+
+            return GetSession().QueryOver<Permission>()
+                .JoinAlias(x => x.UserGroup, () => userGroupAlias)
+                .JoinAlias(x => x.Project, () => projectAlias)
+                .JoinAlias(() => projectAlias.Snapshots, () => snapshotAlias)
+                .Where(() => snapshotAlias.Id == snapshotId && userGroupAlias.Id == userGroupId)
+                .SingleOrDefault();
         }
     }
 }

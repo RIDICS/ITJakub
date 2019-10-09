@@ -53,6 +53,7 @@ namespace Vokabular.MainService.Core.Works.Text
                 VersionNumber = latestVersion.VersionNumber + 1,
             };
             newVersion.Resource.LatestVersion = newVersion;
+            newVersion.Resource.Name = $"{newVersion.ResourcePage.Name}.md";
 
             var result = (long) m_resourceRepository.Create(newVersion);
 

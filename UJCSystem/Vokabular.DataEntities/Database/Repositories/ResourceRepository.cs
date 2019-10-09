@@ -43,6 +43,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return GetSession().QueryOver<ResourceVersion>()
                 .Where(x => x.Resource.Id == resourceId)
                 .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
+                .Fetch(SelectMode.Fetch, x => x.Resource)
                 .OrderBy(x => x.VersionNumber).Desc
                 .List();
         }

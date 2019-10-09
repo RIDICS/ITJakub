@@ -36,7 +36,7 @@ namespace Vokabular.MainService.Core.Works.Permission
         {
             if (m_roleContract == null)
             {
-                m_roleContract = m_communicationProvider.GetAuthRoleApiClient().HttpClient.GetItemAsync<AuthRoleContract>(m_roleId).GetAwaiter()
+                m_roleContract = m_communicationProvider.GetAuthRoleApiClient().GetRoleAsync(m_roleId).GetAwaiter()
                     .GetResult();
             }
             var group = m_permissionRepository.FindGroupByExternalIdOrCreate(m_roleContract.Id);

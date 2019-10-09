@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Works.ProjectItem;
@@ -34,7 +35,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public EditionNoteContract GetPublishedEditionNote(long projectId, TextFormatEnumContract format)
         {
-            m_authorizationManager.AuthorizeBook(projectId);
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ShowPublished);
 
             var editionNoteResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetPublishedEditionNote(projectId));
 
@@ -43,7 +44,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public EditionNoteContract GetLatestEditionNote(long projectId, TextFormatEnumContract format)
         {
-            m_authorizationManager.AuthorizeBook(projectId);
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ReadProject);
 
             var editionNoteResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestEditionNote(projectId));
 

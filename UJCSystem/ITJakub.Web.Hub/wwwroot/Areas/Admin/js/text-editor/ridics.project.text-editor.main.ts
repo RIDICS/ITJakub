@@ -1,13 +1,12 @@
 ﻿class TextEditorMain {
     private numberOfPages: number = 0;
-    private showPageNumber = false;
 
     getNumberOfPages(): number {
         return this.numberOfPages;
     }
 
-    getShowPageNumbers(): boolean {
-        return this.showPageNumber;
+    isShowPageNumbers(): boolean {
+        return $("#project-resource-preview .display-page-checkbox").is(":checked");
     }
 
     init(projectId: number) {
@@ -71,6 +70,7 @@
                 pageTextEditor.init(pageStructure);
                 lazyLoad.init();
                 pageNavigation.init(data);
+                pageNavigation.togglePageNumbers(this.isShowPageNumbers());
                 this.attachEventShowPageCheckbox(pageNavigation);
                 commentInput.init();
                 commentArea.init();
@@ -93,8 +93,7 @@
         $("#project-resource-preview").on("click",
             ".display-page-checkbox",
             () => {
-                const isChecked = $(".display-page-checkbox").prop("checked");
-                this.showPageNumber = isChecked;
+                const isChecked = this.isShowPageNumbers();
                 pageNavigation.togglePageNumbers(isChecked);
             });
     }

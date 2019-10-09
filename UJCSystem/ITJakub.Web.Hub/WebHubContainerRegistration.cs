@@ -3,6 +3,7 @@ using ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles;
 using ITJakub.Web.Hub.Areas.Admin.Core;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.AutoMapperProfiles;
+using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Helpers;
@@ -16,12 +17,14 @@ namespace ITJakub.Web.Hub
     {
         public void Install(IServiceCollection services)
         {
+            services.AddScoped<ControllerDataProvider>();
             services.AddScoped<CommunicationProvider>();
             services.AddScoped<CommunicationConfigurationProvider>();
             services.AddScoped<StaticTextManager>();
             services.AddScoped<FeedbacksManager>();
             services.AddScoped<RefreshUserManager>();
             services.AddScoped<PermissionLocalizer>();
+            services.AddScoped<ResourceTypeLocalizer>();
 
             // Area managers
             services.AddScoped<TextManager>();

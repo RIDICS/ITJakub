@@ -166,14 +166,12 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void AddBooksToRole(int roleId, IList<long> bookIds)
+        public PermissionDataContract GetPermissionsForRoleAndBook(int roleId, long bookId)
         {
             try
             {
-                m_client.Post<object>($"role/{roleId}/permission/book", new AddBookToRoleRequestContract
-                {
-                    BookIdList = bookIds
-                });
+                var result = m_client.Get<PermissionDataContract>($"role/{roleId}/book/{bookId}/permission");
+                return result;
             }
             catch (HttpRequestException e)
             {
@@ -184,14 +182,26 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void RemoveBooksFromRole(int roleId, IList<long> bookIds)
+        public void UpdateOrAddBooksToRole(int roleId, long bookId, PermissionDataContract data)
         {
             try
             {
-                m_client.Delete($"role/{roleId}/permission/book", new AddBookToRoleRequestContract
-                {
-                    BookIdList = bookIds
-                });
+                m_client.Put<object>($"role/{roleId}/book/{bookId}/permission", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void RemoveBooksFromRole(int roleId, long bookId)
+        {
+            try
+            {
+                m_client.Delete($"role/{roleId}/book/{bookId}/permission");
             }
             catch (HttpRequestException e)
             {

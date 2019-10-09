@@ -75,6 +75,7 @@ namespace Vokabular.MainService.Core.Works.Content
                 VersionNumber = latestImage.VersionNumber + 1,
             };
             newImageResource.Resource.LatestVersion = newImageResource;
+            newImageResource.Resource.Name = m_data.FileName;
 
             m_resourceRepository.Create(newImageResource);
 

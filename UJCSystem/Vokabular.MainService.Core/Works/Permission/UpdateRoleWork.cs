@@ -39,11 +39,11 @@ namespace Vokabular.MainService.Core.Works.Permission
             m_permissionRepository.Flush();
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
-            var authRole = client.HttpClient.GetItemAsync<AuthRoleContract>(m_data.Id).GetAwaiter().GetResult();
+            var authRole = client.GetRoleAsync(m_data.Id).GetAwaiter().GetResult();
             authRole.Name = m_data.Name;
             authRole.Description = m_data.Description;
 
-            client.HttpClient.EditItemAsync(m_data.Id, authRole).GetAwaiter().GetResult();
+            client.EditRoleAsync(m_data.Id, authRole).GetAwaiter().GetResult();
         }
 
         private void CheckRoleForUpdating(RoleContractBase defaultRole)

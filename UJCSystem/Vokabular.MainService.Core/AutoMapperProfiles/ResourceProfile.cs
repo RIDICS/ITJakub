@@ -19,6 +19,10 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .IncludeBase<Resource, ResourceContract>()
                 .ForMember(dest => dest.LatestVersion, opt => opt.MapFrom(src => src.LatestVersion));
 
+            CreateMap<Resource, RelatedResourceContract>()
+                .IncludeBase<Resource, ResourceContract>()
+                .ForMember(dest => dest.Sequence, opt => opt.Ignore());
+
             CreateMap<ResourceTypeEnum, ResourceTypeEnumContract>().ReverseMap();
         }
     }
