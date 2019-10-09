@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using ITJakub.Web.Hub.Areas.Admin.Core;
 using ITJakub.Web.Hub.Areas.Admin.Models;
@@ -217,7 +218,17 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult UpdateChapterList([FromBody] UpdateChapterListRequest request)
         {
             var client = GetProjectClient();
-            client.UpdateChapterList(request.ProjectId, request.ChapterList);
+            var chapters = request.ChapterList.Select(chapter => new CreateOrUpdateChapterContract
+                {
+                    Id = chapter.Id,
+                    BeginningPageId = chapter.BeginningPageId,
+                    Comment = chapter.Comment,
+                    Name = chapter.Name,
+                    ParentChapterId = chapter.ParentChapterId,
+                    Position = chapter.Position
+                })
+                .ToList();
+            client.UpdateChapterList(request.ProjectId, chapters);
             return AjaxOkResponse();
         }
 

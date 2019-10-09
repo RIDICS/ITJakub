@@ -77,7 +77,7 @@ namespace Vokabular.MainService.Core.Managers
         public List<ChapterHierarchyDetailContract> GetChapterList(long projectId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestChapters(projectId));
-            var result = ChaptersHelper.ChapterToHierarchyContracts<ChapterHierarchyDetailContract>(dbResult, m_mapper);
+            var result = ChaptersHelper.ChapterToHierarchyDetailContracts(dbResult, m_mapper);
             return result;
         }
 
