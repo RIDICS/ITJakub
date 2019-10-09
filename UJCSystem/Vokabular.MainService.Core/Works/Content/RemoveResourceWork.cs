@@ -1,5 +1,4 @@
 ﻿using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.MainService.Core.Works.ProjectItem;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Content
@@ -17,7 +16,7 @@ namespace Vokabular.MainService.Core.Works.Content
 
         protected override void ExecuteWorkImplementation()
         {
-            new RemoveResourceSubWork(m_resourceRepository, m_resourceId).RemovePageResource();
+            new RemoveResourceSubwork(m_resourceRepository).RemoveResource(m_resourceId);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.Core.Works.Content;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -68,12 +69,12 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
                 m_resourceRepository.Save(pageResource);
             }
 
-
+            var removeResourceSubwork = new RemoveResourceSubwork(m_resourceRepository);
             foreach (var dbPage in dbPages)
             {
                 if (!updatedPageIds.Contains(dbPage.Id))
                 {
-                    new RemoveResourceSubWork(m_resourceRepository, dbPage.Resource.Id).RemovePageResource();
+                    removeResourceSubwork.RemoveResource(dbPage.Resource.Id);
                 }
             }
         }

@@ -2,40 +2,38 @@
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 
-namespace Vokabular.MainService.Core.Works.ProjectItem
+namespace Vokabular.MainService.Core.Works.Content
 {
-    public class RemoveResourceSubWork
+    public class RemoveResourceSubwork
     {
         private readonly ResourceRepository m_resourceRepository;
-        private readonly long m_resourceId;
 
-        public RemoveResourceSubWork(ResourceRepository resourceRepository, long resourceId)
+        public RemoveResourceSubwork(ResourceRepository resourceRepository)
         {
             m_resourceRepository = resourceRepository;
-            m_resourceId = resourceId;
         }
 
-        public void RemovePageResource()
+        public void RemoveResource(long resourceId)
         {
-            var resource = m_resourceRepository.FindById<Resource>(m_resourceId);
-            var pageResource = m_resourceRepository.GetLatestResourceVersion<PageResource>(m_resourceId);
-            var trackResource = m_resourceRepository.GetLatestResourceVersion<TrackResource>(m_resourceId);
+            var resource = m_resourceRepository.FindById<Resource>(resourceId);
+            var pageResource = m_resourceRepository.GetLatestResourceVersion<PageResource>(resourceId);
+            var trackResource = m_resourceRepository.GetLatestResourceVersion<TrackResource>(resourceId);
 
             resource.IsRemoved = true;
             m_resourceRepository.Update(resource);
 
             if (pageResource != null)
             {
-                var textResourceVersion = m_resourceRepository.GetLatestPageText(m_resourceId);
+                var textResourceVersion = m_resourceRepository.GetLatestPageText(resourceId);
                 TryRemoveResource(textResourceVersion);
 
-                var imageResourceVersion = m_resourceRepository.GetLatestPageImage(m_resourceId);
+                var imageResourceVersion = m_resourceRepository.GetLatestPageImage(resourceId);
                 TryRemoveResource(imageResourceVersion);
             }
 
             if (trackResource != null)
             {
-                var audioResourceVersion = m_resourceRepository.GetAudioRecordingsByTrack(m_resourceId);
+                var audioResourceVersion = m_resourceRepository.GetAudioRecordingsByTrack(resourceId);
                 TryRemoveResources(audioResourceVersion);
             }
         }
