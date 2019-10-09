@@ -5,7 +5,8 @@
 @import "@editors-common-variables.less";
 @import "@image-viewer-variables.less";
 
-@box-border: 1px solid #ddd;
+@border-color: #ddd;
+@box-border: 1px solid @border-color;
 @even-table-row-colour: #eee;
 @odd-table-row-colour: white;
 @selected-row-color: #FFDAB9;
@@ -1333,7 +1334,7 @@ table {
 
             .active {
                 td {
-                    background-color: @selected-row-color;
+                    background-color: @border-color;
                 }
             }
         }
