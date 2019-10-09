@@ -74,10 +74,10 @@ namespace Vokabular.MainService.Core.Managers
             new SetPageTermsWork(m_resourceRepository, pageId, termIdList).Execute();
         }
 
-        public List<ChapterHierarchyContract> GetChapterList(long projectId)
+        public List<ChapterHierarchyDetailContract> GetChapterList(long projectId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestChapters(projectId));
-            var result = ChaptersHelper.ChapterToHierarchyContracts(dbResult, m_mapper);
+            var result = ChaptersHelper.ChapterToHierarchyContracts<ChapterHierarchyDetailContract>(dbResult, m_mapper);
             return result;
         }
 

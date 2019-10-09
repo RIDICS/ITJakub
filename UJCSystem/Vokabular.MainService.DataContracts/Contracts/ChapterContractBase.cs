@@ -16,9 +16,19 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public long? ParentChapterId { get; set; }
     }
 
-    public class ChapterHierarchyContract : ChapterContractBase
+    public interface IChapterHierarchyContract
     {
-        public List<ChapterHierarchyContract> SubChapters { get; set; }
+        List<IChapterHierarchyContract> SubChapters { get; set; }    
+    }
+    
+    public class ChapterHierarchyContract : ChapterContractBase, IChapterHierarchyContract
+    {
+        public List<IChapterHierarchyContract> SubChapters { get; set; }
+    }
+    
+    public class ChapterHierarchyDetailContract : ChapterContractBase, IChapterHierarchyContract
+    {
+        public List<IChapterHierarchyContract> SubChapters { get; set; }
         public string BeginningPageName { get; set; }
     }
 

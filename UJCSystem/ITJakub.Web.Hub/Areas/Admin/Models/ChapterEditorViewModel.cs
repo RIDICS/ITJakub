@@ -5,13 +5,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
 {
     public class ChapterEditorViewModel
     {
-        public IList<ChapterHierarchyContract> Chapters { get; set; }
+        public IList<ChapterHierarchyDetailContract> Chapters { get; set; }
         public IList<PageContract> Pages { get; set; }
     }
 
     public class ChapterEditorRowViewModel
     {
-        public ChapterHierarchyContract Chapter { get; set; }
+        public ChapterHierarchyDetailContract Chapter { get; set; }
         public IList<PageContract> Pages { get; set; }
     }
 }

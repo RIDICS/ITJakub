@@ -7,15 +7,15 @@ namespace Vokabular.MainService.Core.Utils
 {
     public class ChaptersHelper
     {
-        public static List<ChapterHierarchyContract> ChapterToHierarchyContracts(IList<ChapterResource> dbResult, IMapper mapper)
+        public static List<T> ChapterToHierarchyContracts<T>(IList<ChapterResource> dbResult, IMapper mapper) where T : ChapterContractBase, IChapterHierarchyContract
         {
-            var resultList = new List<ChapterHierarchyContract>(dbResult.Count);
-            var chaptersDictionary = new Dictionary<long, ChapterHierarchyContract>();
+            var resultList = new List<T>(dbResult.Count);
+            var chaptersDictionary = new Dictionary<long, T>();
 
             foreach (var chapterResource in dbResult)
             {
-                var resultChapter = mapper.Map<ChapterHierarchyContract>(chapterResource);
-                resultChapter.SubChapters = new List<ChapterHierarchyContract>();
+                var resultChapter = mapper.Map<T>(chapterResource);
+                resultChapter.SubChapters = new List<IChapterHierarchyContract>();
                 chaptersDictionary.Add(resultChapter.Id, resultChapter);
 
                 if (chapterResource.ParentResource == null)

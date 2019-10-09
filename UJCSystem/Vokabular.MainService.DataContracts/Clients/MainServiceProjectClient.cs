@@ -811,11 +811,11 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         #region Chapters
 
-        public IList<ChapterHierarchyContract> GetChapterList(long projectId)
+        public IList<ChapterHierarchyDetailContract> GetChapterList(long projectId)
         {
             try
             {
-                var result = m_client.Get<IList<ChapterHierarchyContract>>($"project/{projectId}/chapter");
+                var result = m_client.Get<IList<ChapterHierarchyDetailContract>>($"project/{projectId}/chapter");
                 return result;
             }
             catch (HttpRequestException e)
@@ -827,11 +827,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public ChapterHierarchyContract GetChapter(long chapterId)
+        public GetChapterContract GetChapter(long chapterId)
         {
             try
             {
-                var result = m_client.Get<ChapterHierarchyContract>($"project/chapter/{chapterId}");
+                var result = m_client.Get<GetChapterContract>($"project/chapter/{chapterId}");
                 return result;
             }
             catch (HttpRequestException e)

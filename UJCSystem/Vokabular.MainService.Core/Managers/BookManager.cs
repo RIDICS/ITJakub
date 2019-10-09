@@ -158,7 +158,7 @@ namespace Vokabular.MainService.Core.Managers
             m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ShowPublished);
 
             var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetChapterList(projectId));
-            var resultList = ChaptersHelper.ChapterToHierarchyContracts(dbResult, m_mapper);
+            var resultList = ChaptersHelper.ChapterToHierarchyContracts<ChapterHierarchyContract>(dbResult, m_mapper);
 
             return resultList;
         }
