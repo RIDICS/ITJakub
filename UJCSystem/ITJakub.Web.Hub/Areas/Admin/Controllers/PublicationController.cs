@@ -5,7 +5,7 @@ using System.Net;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
@@ -22,7 +22,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     {
         private readonly ILocalizationService m_localization;
 
-        public PublicationController(CommunicationProvider communicationProvider, ILocalizationService localization) : base(communicationProvider)
+        public PublicationController(ControllerDataProvider controllerDataProvider, ILocalizationService localization) : base(controllerDataProvider)
         {
             m_localization = localization;
         }

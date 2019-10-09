@@ -1,9 +1,9 @@
-﻿using Ridics.Authentication.DataContracts;
+﻿using System.Collections.Generic;
 
 namespace Vokabular.ProjectImport.Permissions
 {
     public interface IPermissionsProvider
     {
-        PermissionContract GetPermissionByName(string name);
+        IList<int> GetRoleIdsByPermissionName(string name);
     }
 }

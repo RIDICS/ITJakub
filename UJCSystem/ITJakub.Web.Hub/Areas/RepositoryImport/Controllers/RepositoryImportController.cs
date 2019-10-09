@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using ITJakub.Web.Hub.Areas.RepositoryImport.Models;
 using ITJakub.Web.Hub.Controllers;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts;
@@ -15,7 +15,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
     {
         private readonly IMainServiceClientLocalization m_mainServiceLocalization;
 
-        public RepositoryImportController(CommunicationProvider communicationProvider, IMainServiceClientLocalization serviceClientLocalization) : base(communicationProvider)
+        public RepositoryImportController(ControllerDataProvider controllerDataProvider, IMainServiceClientLocalization serviceClientLocalization) : base(controllerDataProvider)
         {
             m_mainServiceLocalization = serviceClientLocalization;
         }

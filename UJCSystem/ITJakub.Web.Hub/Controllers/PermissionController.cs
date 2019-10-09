@@ -2,7 +2,7 @@
 using System.Linq;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Constants;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests.Permission;
 using ITJakub.Web.Hub.Models.User;
@@ -24,7 +24,7 @@ namespace ITJakub.Web.Hub.Controllers
         private const int PermissionListPageSize = 10;
         private const int BookListPageSize = 10;
 
-        public PermissionController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public PermissionController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
 
@@ -295,7 +295,7 @@ namespace ITJakub.Web.Hub.Controllers
                         Description = roleViewModel.Description
                     };
                     var client = GetRoleClient();
-                    client.UpdateRole(roleContract.Id, roleContract);
+                    client.CreateRole(roleContract);
                     roleViewModel.SuccessfulUpdate = true;
                 }
                 catch (HttpErrorCodeException e)

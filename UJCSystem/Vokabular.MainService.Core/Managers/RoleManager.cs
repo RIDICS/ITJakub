@@ -102,7 +102,7 @@ namespace Vokabular.MainService.Core.Managers
         {
             var client = m_communicationProvider.GetAuthRoleApiClient();
 
-            var role = client.HttpClient.GetItemAsync<AuthRoleContract>(roleId).GetAwaiter().GetResult();
+            var role = client.GetRoleAsync(roleId, true).GetAwaiter().GetResult();
             if (role == null)
                 return null;
 
@@ -135,7 +135,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
 
-            var result = client.HttpClient.GetListAsync<AuthRoleContract>(0, countValue, query).GetAwaiter().GetResult();
+            var result = client.GetRoleListAsync(0, countValue, query).GetAwaiter().GetResult();
             return m_mapper.Map<List<RoleContract>>(result.Items);
         }
 
@@ -146,7 +146,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
 
-            var result = client.HttpClient.GetListAsync<AuthRoleContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
+            var result = client.GetRoleListAsync(startValue, countValue, filterByName).GetAwaiter().GetResult();
 
             foreach (var roleContract in result.Items)
             {

@@ -1,6 +1,6 @@
 ﻿using System;
 using ITJakub.Web.Hub.Controllers;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -9,7 +9,7 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
     [Area("BookReader")]
     public class BookReaderController : BaseController
     {
-        public BookReaderController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public BookReaderController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
 

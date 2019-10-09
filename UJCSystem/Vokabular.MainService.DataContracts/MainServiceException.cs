@@ -17,6 +17,7 @@ namespace Vokabular.MainService.DataContracts
         {
             Code = code;
             StatusCode = statusCode;
+            Description = message;
             DescriptionParams = descriptionParams;
         }
     }

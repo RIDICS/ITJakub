@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +12,7 @@ namespace ITJakub.Web.Hub.Controllers
     [Authorize(VokabularPermissionNames.ManageFeedbacks)]
     public class FeedbackController : BaseController
     {
-        public FeedbackController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public FeedbackController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
 
