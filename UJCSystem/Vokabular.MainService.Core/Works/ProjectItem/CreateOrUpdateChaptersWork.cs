@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.Core.Works.Content;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -76,13 +77,12 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
                 m_resourceRepository.Save(chapterResource);
             }
 
+            var removeResourceSubwork = new RemoveResourceSubwork(m_resourceRepository); 
             foreach (var dbChapter in dbChapters)
             {
                 if (!updatedChapterIds.Contains(dbChapter.Id))
                 {
-                    var resource = dbChapter.Resource;
-                    resource.IsRemoved = true;
-                    m_resourceRepository.Update(resource);
+                    removeResourceSubwork.RemoveResource(dbChapter.Resource.Id);
                 }
             }
         }
