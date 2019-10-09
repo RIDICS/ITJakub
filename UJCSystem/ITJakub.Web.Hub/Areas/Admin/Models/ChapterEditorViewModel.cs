@@ -13,5 +13,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
     {
         public ChapterHierarchyDetailContract Chapter { get; set; }
         public IList<PageContract> Pages { get; set; }
+        
+        public int LevelOfHierarchy { get; set; }
     }
 }

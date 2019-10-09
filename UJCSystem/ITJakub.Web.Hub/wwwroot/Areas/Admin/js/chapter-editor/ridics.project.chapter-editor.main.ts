@@ -1,6 +1,5 @@
 class ChapterEditorMain {
     private editDialog: BootstrapDialogWrapper;
-    private readonly gui: EditorsGui;
     private readonly util: EditorsApiClient;
     private readonly errorHandler: ErrorHandler;
     private readonly moveEditor: ChapterMoveEditor;
@@ -11,7 +10,6 @@ class ChapterEditorMain {
     private actualPageIndex = 0;
 
     constructor() {
-        this.gui = new EditorsGui();
         this.errorHandler = new ErrorHandler();
         this.util = new EditorsApiClient();
         this.moveEditor = new ChapterMoveEditor();
@@ -40,7 +38,15 @@ class ChapterEditorMain {
             this.util.saveChapterList(projectId, this.chaptersToSave).done(() => {
                 $("#unsavedChanges").addClass("hide");
             }).fail((error) => {
-                this.gui.showInfoDialog(localization.translate("Error").value, this.errorHandler.getErrorMessage(error));
+                bootbox.alert({
+                    title: localization.translate("Error").value,
+                    message: this.errorHandler.getErrorMessage(error),
+                    buttons: {
+                        ok: {
+                            className: "btn-default"
+                        }
+                    }
+                });
             });
         });
 
@@ -283,7 +289,7 @@ class ChapterEditorMain {
         $(liElement).addClass("page-navigation page-navigation-left");
         var anchor: HTMLAnchorElement = document.createElement("a");
         anchor.href = "#";
-        anchor.innerHTML = "|<";
+        anchor.text = "|<";
         $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(0);
@@ -296,7 +302,7 @@ class ChapterEditorMain {
         $(liElement).addClass("page-navigation page-navigation-left");
         anchor = document.createElement("a");
         anchor.href = "#";
-        anchor.innerHTML = "<<";
+        anchor.text = "<<";
         $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(this.actualPageIndex - 5);
@@ -312,7 +318,7 @@ class ChapterEditorMain {
         $(liElement).addClass("page-navigation page-navigation-right");
         anchor = document.createElement("a");
         anchor.href = "#";
-        anchor.innerHTML = ">>";
+        anchor.text = ">>";
         $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
            this.moveToPageNumber(this.actualPageIndex + 5);
@@ -325,7 +331,7 @@ class ChapterEditorMain {
         $(liElement).addClass("page-navigation page-navigation-right");
         anchor = document.createElement("a");
         anchor.href = "#";
-        anchor.innerHTML = ">|";
+        anchor.text = ">|";
         $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(this.bookPages.length - 1);

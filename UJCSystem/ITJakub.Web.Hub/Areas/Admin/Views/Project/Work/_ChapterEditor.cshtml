@@ -36,12 +36,12 @@
                             <div class="table table-hover">
                                 <div class="sub-chapters">
                                     @{
-                                        ViewData.Add("levelOfHierarchy", 0);
                                         foreach (var chapter in Model.Chapters)
                                         {
                                             @await Html.PartialAsync("Work/SubView/_ChapterRow", new ChapterEditorRowViewModel{
                                                 Chapter = chapter,
-                                                Pages = Model.Pages
+                                                Pages = Model.Pages,
+                                                LevelOfHierarchy = 0
                                             }, ViewData)
                                         }
                                     }

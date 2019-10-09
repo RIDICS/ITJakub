@@ -3,12 +3,9 @@
 @model ITJakub.Web.Hub.Areas.Admin.Models.ChapterEditorRowViewModel
 @inject ILocalizationService Localizer
 
-@{
-    int levelOfHierarchy = (int)ViewData["levelOfHierarchy"];
-}
 <div class="chapter-container">
-    <div class="chapter-row" data-chapter-id="@Model.Chapter.Id" data-beginning-page-id="@Model.Chapter.BeginningPageId" data-position="@Model.Chapter.Position" data-level="@levelOfHierarchy">
-        <div class="ridics-checkbox" style="margin-left: @(levelOfHierarchy)em">
+    <div class="chapter-row" data-chapter-id="@Model.Chapter.Id" data-beginning-page-id="@Model.Chapter.BeginningPageId" data-position="@Model.Chapter.Position" data-level="@Model.LevelOfHierarchy">
+        <div class="ridics-checkbox" style="margin-left: @(Model.LevelOfHierarchy)em">
             <label>
                 <input type="checkbox" class="selection-checkbox" />
                 <span class="cr cr-black">
@@ -49,17 +46,15 @@
     <div class="sub-chapters">
         @if (Model.Chapter.SubChapters.Count > 0)
         {
-            levelOfHierarchy++;
-            ViewData["levelOfHierarchy"] = levelOfHierarchy;
+            
             foreach (var chapter in Model.Chapter.SubChapters)
             {
                 @await Html.PartialAsync("Work/SubView/_ChapterRow", new ChapterEditorRowViewModel{
                     Chapter = (Vokabular.MainService.DataContracts.Contracts.ChapterHierarchyDetailContract) chapter,
-                    Pages = Model.Pages
+                    Pages = Model.Pages,
+                    LevelOfHierarchy = Model.LevelOfHierarchy + 1
                 }, ViewData)
             }
-            levelOfHierarchy--;
-            ViewData["levelOfHierarchy"] = levelOfHierarchy;
         }
     </div>
 </div>
