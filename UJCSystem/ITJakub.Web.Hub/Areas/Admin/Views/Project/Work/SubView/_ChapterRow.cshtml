@@ -50,7 +50,7 @@
             foreach (var chapter in Model.Chapter.SubChapters)
             {
                 @await Html.PartialAsync("Work/SubView/_ChapterRow", new ChapterEditorRowViewModel{
-                    Chapter = (Vokabular.MainService.DataContracts.Contracts.ChapterHierarchyDetailContract) chapter,
+                    Chapter = chapter,
                     Pages = Model.Pages,
                     LevelOfHierarchy = Model.LevelOfHierarchy + 1
                 }, ViewData)

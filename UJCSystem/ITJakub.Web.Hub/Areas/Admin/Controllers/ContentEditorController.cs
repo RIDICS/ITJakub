@@ -154,7 +154,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     return NotFound();
                 }
 
-                result.ImageUrl = Url.Action("GetPageImage", "ContentEditor", new {Area = "Admin", pageId = pageId});
+                result.ImageUrl = Url.Action("GetPageImage", "ContentEditor", new {Area = "Admin", pageId});
                 return Json(result);
             }
             catch (HttpErrorCodeException e)
@@ -170,7 +170,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult GetPageDetail(long pageId)
         {
             var client = GetProjectClient();
-            var model = new PageDetailViewModel();
+            var model = new PageContentViewModel();
             try
             {
                 model.Text = client.GetPageText(pageId, TextFormatEnumContract.Html);

@@ -134,8 +134,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     var pageList = projectClient.GetAllPageList(projectId.Value);
                     var chapterEditorViewModel = new ChapterEditorViewModel
                     {
-                        Chapters = chapterList,
-                        Pages = pageList
+                        Chapters = Mapper.Map<List<ChapterHierarchyViewModel>>(chapterList),
+                        Pages = Mapper.Map<List<PageViewModel>>(pageList)
                     };
                     return PartialView("Work/_ChapterEditor", chapterEditorViewModel);
                 case ProjectModuleTabType.WorkHistory:
