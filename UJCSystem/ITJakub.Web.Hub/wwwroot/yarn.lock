@@ -114,10 +114,10 @@ lazysizes@4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/lazysizes/-/lazysizes-4.0.1.tgz#428fe9561d7ff5c3b2b2787b78ed54080986420b"
 
-loading-visualization@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/loading-visualization/-/loading-visualization-1.2.0.tgz#ff36a96cbff394cb31e5aa5db809ac41d29d4c75"
-  integrity sha512-Z4LDBE7BIxUKai0sDYm6tO7KsFknJZ/Xvj9FVdi0dsPA5Be3XY4S8R84NfrRy+wEg5+ayp1kFEcm0DYmis6Q+A==
+loading-visualization@1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/loading-visualization/-/loading-visualization-1.2.3.tgz#c550317eecc21e065b2c4043992c11a82910240c"
+  integrity sha512-UTAIGlXdfUjyvbAK04PdQBmD3cuPkZ7hwW1mtWo1mmj3eB8JKdzF/1r34Xds46KMfrUgOgp8nfqesJkE1rkjgA==
 
 marked@*:
   version "0.6.2"

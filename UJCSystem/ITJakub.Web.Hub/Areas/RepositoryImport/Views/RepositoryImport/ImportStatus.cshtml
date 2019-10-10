@@ -37,13 +37,14 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-10">
+                            <div class="col-md-1" id="extra-spinner"></div>
+                            <div class="col-md-9">
                                 <div id="alert-@repository.Id" class="alert alert-info import-alert" role="alert">
                                     @Localizer.Translate("ImportStatusLoading", "RepositoryImport", LocTranslationSource.File)
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <a class="btn btn-default cancel-import-button" data-id="@repository.Id">
+                                <a class="btn btn-default cancel-import-button lvt-1" data-id="@repository.Id">
                                     @Localizer.Translate("CancelImportTask", "RepositoryImport", LocTranslationSource.File)
                                 </a>
                             </div>

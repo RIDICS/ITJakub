@@ -20,6 +20,10 @@ class ImportStatusManager {
         $("#progress_bar").append(loadingBar);
         const progressBar = lv.create(loadingBar);
         progressBar.setLabel("0%");
+        const spinner = document.createElement('div');
+        $(spinner).addClass("lv-bars sm lvl-3");
+        $("#extra-spinner").append(spinner);
+        const spinnerElement = lv.create(spinner);
 
         this.timer = setInterval(() => {
                 this.client.getImportStatus().done((data) => {
@@ -31,7 +35,7 @@ class ImportStatusManager {
 
                             let processed = 0;
                             if (data[key].totalProjectsCount > 0) {
-                                processed = Math.round((data[key].processedProjectsCount / data[key].totalProjectsCount) * 100);
+                                processed = Math.round((data[key].processedProjectsCount / data[key].totalProjectsCount) * 1000) / 10;
                             }
 
                             progressBar.set(processed, 100);
@@ -42,16 +46,13 @@ class ImportStatusManager {
                             if (data[key].isCompleted) {
                                 if (data[key].faultedMessage != null) {
                                     alertElement.addClass("alert-danger");
-                                    loadingBar.style.borderColor = "#d9534f";
-                                    $(".lv-determinate_bordered_line > div").css("background", "#d9534f");
-                                    $(".lv-determinate_bordered_line[data-label]").css("color", "#d9534f");
-                                    progressBar.removeLabel();
+                                    $(loadingBar).addClass("cancel_import");
+                                    spinnerElement.remove();
                                     alertElement.html(data[key].faultedMessage);
                                 } else {
                                     alertElement.addClass("alert-success");
-                                    loadingBar.style.borderColor = "#5cb85c";
-                                    $(".lv-determinate_bordered_line > div").css("background", "#5cb85c");
-                                    $(".lv-determinate_bordered_line[data-label]").css("color", "#5cb85c");
+                                    $(loadingBar).addClass("success_import");
+                                    spinnerElement.remove();
                                 }
 
                                 alertElement.removeClass("alert-info");
