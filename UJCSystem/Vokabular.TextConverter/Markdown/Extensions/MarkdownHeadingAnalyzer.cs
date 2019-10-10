@@ -3,11 +3,11 @@ using System.IO;
 
 namespace Vokabular.TextConverter.Markdown.Extensions
 {
-    public class MarkdownHeaderAnalyzer
+    public class MarkdownHeadingAnalyzer
     {
-        public IList<MarkdownHeaderData> FindAllHeaders(string text)
+        public IList<MarkdownHeadingData> FindAllHeadings(string text)
         {
-            var resultList = new List<MarkdownHeaderData>();
+            var resultList = new List<MarkdownHeadingData>();
 
             using (var stringReader = new StringReader(text))
             {
@@ -29,10 +29,10 @@ namespace Vokabular.TextConverter.Markdown.Extensions
                         
                         if (char.IsWhiteSpace(line[i]))
                         {
-                            var headerData = new MarkdownHeaderData
+                            var headerData = new MarkdownHeadingData
                             {
                                 Level = i,
-                                Header = line.Substring(i).Trim(),
+                                Heading = line.Substring(i).Trim(),
                             };
                             resultList.Add(headerData);
                         }
@@ -46,9 +46,9 @@ namespace Vokabular.TextConverter.Markdown.Extensions
         }
     }
 
-    public class MarkdownHeaderData
+    public class MarkdownHeadingData
     {
         public int Level { get; set; }
-        public string Header { get; set; }
+        public string Heading { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Vokabular.Core.Storage;
@@ -11,6 +12,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
+using Vokabular.TextConverter.Markdown.Extensions;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -209,16 +211,19 @@ namespace Vokabular.MainService.Core.Managers
         {
             var textResources = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestTexts(projectId, null, true));
             var sortedTextResources = textResources.OrderBy(x => ((PageResource)x.ResourcePage.LatestVersion).Position);
+            var pageWithHeadingsList = new List<Tuple<PageResource, IList<MarkdownHeadingData>>>();
 
             foreach (var textResource in sortedTextResources)
             {
                 var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(textResource.Resource.Project.ProjectType);
-                var text = fulltextStorage.GetPageText(textResource, TextFormatEnumContract.Html);
+                var headings = fulltextStorage.GetHeadingsFromPageText(textResource);
 
-                // TODO parse HTML or Markdown to get Chapter list
+                var pageResource = (PageResource) textResource.ResourcePage.LatestVersion;
+                pageWithHeadingsList.Add(new Tuple<PageResource, IList<MarkdownHeadingData>>(pageResource, headings));
             }
 
-            throw new System.NotImplementedException();
+            var userId = m_authenticationManager.GetCurrentUserId();
+            new GenerateChaptersWork(projectId, userId, pageWithHeadingsList, m_resourceRepository).Execute();
         }
     }
 }
