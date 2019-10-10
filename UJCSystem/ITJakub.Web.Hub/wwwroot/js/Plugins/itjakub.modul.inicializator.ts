@@ -13,7 +13,7 @@
     protected readyForInit = false;
     protected notInitialized = true;
 
-    protected notInitLoad: boolean = false;
+    protected firstLoad: boolean = true;
 
     protected configuration: IModulInicializatorConfiguration;
     protected defaultConfiguration = {
@@ -174,11 +174,11 @@
         const sortAsc = bibliographyModule.isSortedAsc();
         const sortingEnum = bibliographyModule.getSortCriteria();
 
-        if (this.notInitLoad) {
+        if (!this.firstLoad) {
             bibliographyModule.clearBooks();
             bibliographyModule.showLoading();
         }
-        this.notInitLoad = true;
+        this.firstLoad = false;
 
         $.ajax({
             type: "GET",
@@ -211,11 +211,11 @@
             const sortAsc = bibliographyModule.isSortedAsc();
             const sortingEnum = bibliographyModule.getSortCriteria();
 
-            if (this.notInitLoad) {
+            if (!this.firstLoad) {
                 bibliographyModule.clearBooks();
                 bibliographyModule.showLoading();
             }
-            this.notInitLoad = true;
+            this.firstLoad = false;
 
             $.ajax({
                 type: "GET",

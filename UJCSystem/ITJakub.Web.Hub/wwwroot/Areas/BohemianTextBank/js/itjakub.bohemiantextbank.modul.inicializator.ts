@@ -1,6 +1,6 @@
 ﻿class BohemiaTextBankModulInicializator extends ListModulInicializator {
     protected configuration: IBohemiaTextBankModulInicializatorConfiguration;
-    protected notInitLoad: boolean = false;
+    protected firstLoad: boolean = true;
 
     constructor(configuration: IBohemiaTextBankModulInicializatorConfiguration) {
         super(configuration);
@@ -49,11 +49,11 @@
         const sortAsc = this.bibliographyModule.isSortedAsc();
         const sortingEnum = this.bibliographyModule.getSortCriteria();
 
-        if (this.notInitLoad) {
+        if (!this.firstLoad) {
             this.bibliographyModule.clearBooks();
             this.bibliographyModule.showLoading();
         }
-        this.notInitLoad = true;
+        this.firstLoad = false;
 
         $.ajax({
             type: "GET",
