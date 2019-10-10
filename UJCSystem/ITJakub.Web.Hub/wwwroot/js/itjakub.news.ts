@@ -3,6 +3,7 @@
     private newsOnPage = 5;
     private newsContainer: HTMLElement;
     private loaderElement: string = '<div class="lv-dots md lv-mid lvt-3 lvb-3"></div>';
+    private errorHandler: ErrorHandler;
 
     public initNews() {
         this.paginator = new Pagination({
@@ -11,10 +12,11 @@
             callPageClickCallbackOnInit: false
         });
 
+        this.errorHandler = new ErrorHandler();
+
         this.newsContainer = document.getElementById("news-container");
 
         this.sendGetNewsRequest(0, response => {
-            console.log(response);
             this.paginator.make(response.totalCount, this.newsOnPage);
             this.showNews(response.list);
         });
@@ -22,6 +24,7 @@
 
     private sendGetNewsRequest(start: number, callback: (response: IPagedResultArray<INewsSyndicationItemContract>) => void) {
         this.showLoading();
+        var self = this;
         $.ajax({
             type: "GET",
             traditional: true,
@@ -37,7 +40,7 @@
                 $("#news-container").empty();
                 var emptyElement = document.createElement('div');
                 $(emptyElement).addClass("bib-listing-empty");
-                emptyElement.innerHTML = localization.translate("LoadingError", "News").value;
+                $(emptyElement).text(self.errorHandler.getErrorMessage(error));
                 $("#news-container").append(emptyElement);
             }
     });
@@ -61,7 +64,7 @@
         if (items.length === 0) {
             var noNews = document.createElement('div');
             $(noNews).addClass("no-messages");
-            noNews.innerHTML = localization.translate("NoResultsToShow", "PluginsJs").value;
+            $(noNews).text(localization.translate("NoResultsToShow", "PluginsJs").value);
             $(this.newsContainer).append(noNews);
         } else {
             for (var i = 0; i < items.length; i++) {
