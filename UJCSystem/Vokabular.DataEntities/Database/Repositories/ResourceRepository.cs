@@ -340,6 +340,17 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .AndRestrictionOn(() => resourceAlias.Id).IsInG(resourceIds)
                 .List();
         }
+        
+        public virtual IList<ChapterResource> GetLatestChaptersByPages(IEnumerable<long> resourcePageIds)
+        {
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<ChapterResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
+                .AndRestrictionOn(x => x.ResourceBeginningPage.Id).IsInG(resourcePageIds)
+                .List();
+        }
 
         public virtual TextResource GetTextResource(long resourceId)
         {

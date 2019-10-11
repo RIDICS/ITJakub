@@ -65,11 +65,11 @@ namespace Vokabular.MainService.Core.Works.Snapshot
             var trackResourceVersions = GetTrackResourceVersions(audioResourceVersions);
             resourceVersions.AddRange(trackResourceVersions);
 
-            var chapterResourceVersions = GetChapterResourceVersions(trackResourceVersions);
-            resourceVersions.AddRange(chapterResourceVersions);
-
-            var pageResourceVersions = GetPageResourceVersions(textResourceVersions, imageResourceVersions, chapterResourceVersions, trackResourceVersions);
+            var pageResourceVersions = GetPageResourceVersions(textResourceVersions, imageResourceVersions, trackResourceVersions);
             resourceVersions.AddRange(pageResourceVersions);
+
+            var chapterResourceVersions = GetChapterResourceVersions(pageResourceVersions);
+            resourceVersions.AddRange(chapterResourceVersions);
 
             // Get all required resources
 
@@ -141,12 +141,11 @@ namespace Vokabular.MainService.Core.Works.Snapshot
             return resultList;
         }
 
-        private IList<PageResource> GetPageResourceVersions(IList<TextResource> textResources, IList<ImageResource> imageResources, IList<ChapterResource> chapterResources, IList<TrackResource> trackResources)
+        private IList<PageResource> GetPageResourceVersions(IList<TextResource> textResources, IList<ImageResource> imageResources, IList<TrackResource> trackResources)
         {
             var allResourceIds = new List<long>();
             allResourceIds.AddRange(textResources.Select(x => x.ResourcePage.Id));
             allResourceIds.AddRange(imageResources.Select(x => x.ResourcePage.Id));
-            allResourceIds.AddRange(chapterResources.Select(x => x.ResourceBeginningPage.Id));
             allResourceIds.AddRange(trackResources.Where(x => x.ResourceBeginningPage != null).Select(x => x.ResourceBeginningPage.Id));
             var resourceIds = allResourceIds.Distinct().ToList();
 
@@ -155,10 +154,11 @@ namespace Vokabular.MainService.Core.Works.Snapshot
             return resultList;
         }
 
-        private IList<ChapterResource> GetChapterResourceVersions(IList<TrackResource> trackResources)
+        private IList<ChapterResource> GetChapterResourceVersions(IList<PageResource> pageResources)
         {
-            var trackIds = trackResources.Where(x => x.ResourceChapter != null).Select(x => x.ResourceChapter.Id);
-            var chapterResourceVersions = m_resourceRepository.GetLatestResourceVersions<ChapterResource>(trackIds);
+            var resourcePageIds = pageResources.Select(x => x.Resource.Id);
+            var chapterResourceVersions = m_resourceRepository.GetLatestChaptersByPages(resourcePageIds);
+
             return chapterResourceVersions;
         }
 
