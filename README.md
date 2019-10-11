@@ -249,4 +249,7 @@ Ensure that JAVA_HOME environment variable is set to correct Java installation f
 **eXist-db installed as service won't start with error "The eXist-db Native XML Database service terminated unexpectedly"**
 The problem may be caused by wrong path to Java installation folder. Ensure that JAVA_HOME environment variable is set and also ensure that correct path is specified in C:\eXist-db\tools\wrapper\conf\wrapper.conf configuration file.
 
+**`gulp default` fails when building ITJakub.Web.Hub**
+Ensure that correct node modules has been installed (run `yarn install`). Then ensure that gulpfile.js was loaded successfully (output in Task Runner Explored window in Visual Studio).
+
 > You can also check Troubleshooting section in Readme file of Authentication Service
