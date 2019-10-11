@@ -17,6 +17,7 @@ using Vokabular.Shared.DataContracts.Types;
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
     [LimitedAccess(PortalType.CommunityPortal)]
+    [RequestFormLimits(ValueCountLimit = 20000)]
     [Area("Admin")]
     public class PublicationController : BaseController
     {
