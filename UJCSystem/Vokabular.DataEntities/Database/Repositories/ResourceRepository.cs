@@ -79,6 +79,10 @@ namespace Vokabular.DataEntities.Database.Repositories
                     .Future();
             }
 
+            session.QueryOver<Project>()
+                .Where(x => x.Id == projectId)
+                .FutureValue();
+
             var query = session.QueryOver<TextResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(() => resourceAlias.Project.Id == projectId)

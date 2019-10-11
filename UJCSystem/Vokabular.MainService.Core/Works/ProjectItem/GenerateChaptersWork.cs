@@ -4,6 +4,7 @@ using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.Core.Works.Content;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.TextConverter.Markdown.Extensions;
 
@@ -53,12 +54,13 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
             
             foreach (var pageWithHeadings in m_pageWithHeadingsList)
             {
-                position++;
                 var headings = pageWithHeadings.Item2;
                 var resourcePage = m_resourceRepository.Load<Resource>(pageWithHeadings.Item1.Resource.Id);
 
                 foreach (var markdownHeadingData in headings)
                 {
+                    position++;
+
                     // Find original Resource
                     ChapterResource originalChapterResource = null;
                     var originalChapters = chapters.Where(x => x.Name == markdownHeadingData.Heading).ToList();
@@ -83,7 +85,7 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
                         CreateTime = now,
                         CreatedByUser = user,
                         Name = markdownHeadingData.Heading,
-                        ParentResource = currentChapterByLevel[markdownHeadingData.Level - 1].Resource,
+                        ParentResource = currentChapterByLevel[markdownHeadingData.Level - 1]?.Resource,
                         Position = position,
                         Resource = null, // is updated below
                         ResourceBeginningPage = resourcePage,
@@ -117,14 +119,13 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
             }
 
             // Remove unused chapters
+            var removeResourceSubwork = new RemoveResourceSubwork(m_resourceRepository);
             foreach (var chapterResource in chapters)
             {
-                var resource = chapterResource.ParentResource;
+                var resource = chapterResource.Resource;
                 if (!updatedResourceChapters.Contains(resource))
                 {
-                    // TODO update using specific method for removing resources
-                    resource.IsRemoved = true;
-                    m_resourceRepository.Update(resource);
+                    removeResourceSubwork.RemoveResource(resource.Id);
                 }
             }
         }
