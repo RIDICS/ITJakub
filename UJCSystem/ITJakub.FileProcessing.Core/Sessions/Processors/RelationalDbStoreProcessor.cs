@@ -19,19 +19,19 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
         private readonly ResourceRepository m_resourceRepository;
-        private readonly IFulltextResourceProcessor m_fulltextResourceProcessor;
+        private readonly FulltextStoreProcessorProvider m_fulltextStoreProcessorProvider;
         private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly PersonRepository m_personRepository;
         private readonly PermissionRepository m_permissionRepository;
 
         public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository,
-            ResourceRepository resourceRepository, IFulltextResourceProcessor fulltextResourceProcessor, CatalogValueRepository catalogValueRepository, PersonRepository personRepository, 
+            ResourceRepository resourceRepository, FulltextStoreProcessorProvider fulltextStoreProcessorProvider, CatalogValueRepository catalogValueRepository, PersonRepository personRepository, 
             PermissionRepository permissionRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_resourceRepository = resourceRepository;
-            m_fulltextResourceProcessor = fulltextResourceProcessor;
+            m_fulltextStoreProcessorProvider = fulltextStoreProcessorProvider;
             m_catalogValueRepository = catalogValueRepository;
             m_personRepository = personRepository;
             m_permissionRepository = permissionRepository;
@@ -39,6 +39,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceDirector)
         {
+            var storeType = resourceDirector.GetSessionInfoValue<FulltextStoreTypeContract>(SessionInfo.StoreType);
             var autoImportPermissions = resourceDirector.GetSessionInfoValue<IList<PermissionFromAuthContract>>(SessionInfo.AutoImportPermissions);
             var bookData = resourceDirector.GetSessionInfoValue<BookData>(SessionInfo.BookData);
             bookData.FileNameMapping = new Dictionary<string, FileResource>();
@@ -61,7 +62,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             var createNewSnapshot = new CreateSnapshotForImportedDataWork(m_projectRepository, projectId, userId, resourceVersionIds, bookData, message, bookVersionId);
             createNewSnapshot.Execute();
 
-            PublishSnapshotToExternalDatabase(createNewSnapshot.SnapshotId, projectId, bookData.Pages);
+            PublishSnapshotToExternalDatabase(createNewSnapshot.SnapshotId, projectId, bookData.Pages, storeType);
 
             //var bookVersionId = m_bookVersionRepository.Create(bookData);
             //var bookVersion = m_bookVersionRepository.FindById<BookVersion>(bookVersionId);
@@ -104,7 +105,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             resourceDirector.SetSessionInfoValue(SessionInfo.ProjectId, projectId);
         }
 
-        private void PublishSnapshotToExternalDatabase(long snapshotId, long projectId, List<BookPageData> bookDataPages)
+        private void PublishSnapshotToExternalDatabase(long snapshotId, long projectId, List<BookPageData> bookDataPages, FulltextStoreTypeContract storeType)
         {
             var externalIds = bookDataPages?.Select(x => x.XmlId)
                 .Where(x => x != null) // the page doesn't exist in fulltext database when ID is null
@@ -113,7 +114,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
             if (externalIds != null && externalIds.Count > 0)
             {
-                m_fulltextResourceProcessor.PublishSnapshot(snapshotId, projectId, externalIds, metadata);
+                var fulltextResourceProcessor = m_fulltextStoreProcessorProvider.GetByStoreType(storeType);
+                fulltextResourceProcessor.PublishSnapshot(snapshotId, projectId, externalIds, metadata);
             }
             else
             {

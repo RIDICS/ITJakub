@@ -4,6 +4,7 @@ using System.Threading.Tasks.Dataflow;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.ProjectImport.ImportPipeline;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Model;

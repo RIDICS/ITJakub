@@ -22,7 +22,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var uriPath = $"session/{sessionId}/resource";
+                var uriPath = $"ProjectImportSession/{sessionId}/resource";
                 m_client.PostStreamAsForm<object>(uriPath, data, fileName);
             }
             catch (HttpRequestException e)
@@ -39,7 +39,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var requestTimeout = new TimeSpan(0, 10, 0); // Import is long running operation
-                m_client.Post<object>($"session/{sessionId}", request, requestTimeout);
+                m_client.Post<object>($"ProjectImportSession/{sessionId}", request, requestTimeout);
             }
             catch (HttpRequestException e)
             {

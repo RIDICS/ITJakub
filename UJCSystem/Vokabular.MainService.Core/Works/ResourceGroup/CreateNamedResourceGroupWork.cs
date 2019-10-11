@@ -12,18 +12,20 @@ namespace Vokabular.MainService.Core.Works.ResourceGroup
         private readonly ResourceRepository m_resourceRepository;
         private readonly long m_projectId;
         private readonly NamedResourceGroupContract m_newResourceGroup;
+        private readonly IMapper m_mapper;
 
-        public CreateNamedResourceGroupWork(ResourceRepository resourceRepository, long projectId, NamedResourceGroupContract newResourceGroup) : base(resourceRepository)
+        public CreateNamedResourceGroupWork(ResourceRepository resourceRepository, long projectId, NamedResourceGroupContract newResourceGroup, IMapper mapper) : base(resourceRepository)
         {
             m_resourceRepository = resourceRepository;
             m_projectId = projectId;
             m_newResourceGroup = newResourceGroup;
+            m_mapper = mapper;
         }
 
         protected override long ExecuteWorkImplementation()
         {
             var project = m_resourceRepository.Load<Project>(m_projectId);
-            var textType = Mapper.Map<TextTypeEnum>(m_newResourceGroup.TextType);
+            var textType = m_mapper.Map<TextTypeEnum>(m_newResourceGroup.TextType);
             var newNamedResourceGroup = new NamedResourceGroup
             {
                 Project = project,

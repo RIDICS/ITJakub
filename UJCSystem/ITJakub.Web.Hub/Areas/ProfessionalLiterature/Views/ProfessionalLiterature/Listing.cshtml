@@ -1,6 +1,9 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Options
+@using Microsoft.Extensions.Options
+@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Models.BookListingModel
 @inject ILocalizationService Localizer
+@inject IOptions<PortalOption> PortalOption
 
 @{
     ViewBag.Title = @Localizer.Translate("ProfessionalLiteratureListing", "ProfessionalLiterature");
@@ -14,6 +17,7 @@
 }
 
 
+<div id="allowedSearchOptions" class="hide" data-options="@Html.Encode(Json.Serialize(PortalOption.Value.AllowedSearchOptions.ToArray()))"></div>
 <div id="SearchDiv">
 
 </div>

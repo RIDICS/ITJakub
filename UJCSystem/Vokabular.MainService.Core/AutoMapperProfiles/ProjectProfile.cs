@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace Vokabular.MainService.Core.AutoMapperProfiles
 {
@@ -10,7 +12,8 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
         {
             CreateMap<Project, ProjectContract>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.ProjectType, opt => opt.MapFrom(src => src.ProjectType));
                 //.ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.ExternalId));
 
             CreateMap<Project, GetProjectContract>()
@@ -22,6 +25,9 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .IncludeBase<Project, ProjectContract>()
                 .ForMember(dest => dest.Authors, opt => opt.Ignore())
                 .ForMember(dest => dest.ResponsiblePersons, opt => opt.Ignore());
+
+
+            CreateMap<ProjectTypeEnum, ProjectTypeContract>().ReverseMap();
         }
     }
 }

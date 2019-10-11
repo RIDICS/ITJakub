@@ -2,7 +2,6 @@
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Models.User.UserDetailViewModel>
 @inject ILocalizationService Localizer
 
-<div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
 @foreach (var user in Model.List)
 {
     <tr data-user-id="@user.Id" class="user-row">

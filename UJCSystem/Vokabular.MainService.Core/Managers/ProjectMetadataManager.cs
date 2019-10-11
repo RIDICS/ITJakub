@@ -7,6 +7,7 @@ using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.ProjectMetadata;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -18,15 +19,17 @@ namespace Vokabular.MainService.Core.Managers
         private readonly AuthenticationManager m_authenticationManager;
         private readonly AuthorizationManager m_authorizationManager;
         private readonly CategoryRepository m_categoryRepository;
+        private readonly IMapper m_mapper;
 
         public ProjectMetadataManager(MetadataRepository metadataRepository,
             AuthenticationManager authenticationManager, AuthorizationManager authorizationManager,
-            CategoryRepository categoryRepository)
+            CategoryRepository categoryRepository, IMapper mapper)
         {
             m_metadataRepository = metadataRepository;
             m_authenticationManager = authenticationManager;
             m_authorizationManager = authorizationManager;
             m_categoryRepository = categoryRepository;
+            m_mapper = mapper;
         }
 
         public ProjectMetadataResultContract GetProjectMetadata(long projectId, GetProjectMetadataParameter parameters)
@@ -34,7 +37,7 @@ namespace Vokabular.MainService.Core.Managers
             var work = new GetLatestProjectMetadataWork(m_metadataRepository, projectId, parameters);
             var result = work.Execute();
             var resultContract = result != null
-                ? Mapper.Map<ProjectMetadataResultContract>(result)
+                ? m_mapper.Map<ProjectMetadataResultContract>(result)
                 : new ProjectMetadataResultContract();
 
             if (result != null && parameters.IsAnyAdditionalParameter())
@@ -43,31 +46,31 @@ namespace Vokabular.MainService.Core.Managers
 
                 if (parameters.IncludeAuthor)
                 {
-                    resultContract.AuthorList = Mapper.Map<List<OriginalAuthorContract>>(project.Authors);
+                    resultContract.AuthorList = m_mapper.Map<List<OriginalAuthorContract>>(project.Authors);
                 }
                 if (parameters.IncludeResponsiblePerson)
                 {
-                    resultContract.ResponsiblePersonList = Mapper.Map<List<ProjectResponsiblePersonContract>>(project.ResponsiblePersons);
+                    resultContract.ResponsiblePersonList = m_mapper.Map<List<ProjectResponsiblePersonContract>>(project.ResponsiblePersons);
                 }
                 if (parameters.IncludeKind)
                 {
-                    resultContract.LiteraryKindList = Mapper.Map<List<LiteraryKindContract>>(project.LiteraryKinds);
+                    resultContract.LiteraryKindList = m_mapper.Map<List<LiteraryKindContract>>(project.LiteraryKinds);
                 }
                 if (parameters.IncludeGenre)
                 {
-                    resultContract.LiteraryGenreList = Mapper.Map<List<LiteraryGenreContract>>(project.LiteraryGenres);
+                    resultContract.LiteraryGenreList = m_mapper.Map<List<LiteraryGenreContract>>(project.LiteraryGenres);
                 }
                 if (parameters.IncludeOriginal)
                 {
-                    resultContract.LiteraryOriginalList = Mapper.Map<List<LiteraryOriginalContract>>(project.LiteraryOriginals);
+                    resultContract.LiteraryOriginalList = m_mapper.Map<List<LiteraryOriginalContract>>(project.LiteraryOriginals);
                 }
                 if (parameters.IncludeKeyword)
                 {
-                    resultContract.KeywordList = Mapper.Map<List<KeywordContract>>(project.Keywords);
+                    resultContract.KeywordList = m_mapper.Map<List<KeywordContract>>(project.Keywords);
                 }
                 if (parameters.IncludeCategory)
                 {
-                    resultContract.CategoryList = Mapper.Map<List<CategoryContract>>(project.Categories);
+                    resultContract.CategoryList = m_mapper.Map<List<CategoryContract>>(project.Categories);
                 }
             }
 
@@ -98,16 +101,18 @@ namespace Vokabular.MainService.Core.Managers
             return result.ToList();
         }
 
-        public List<string> GetTitleAutocomplete(string query, BookTypeEnumContract? bookType, List<int> selectedCategoryIds, List<long> selectedProjectIds)
+        public List<string> GetTitleAutocomplete(string query, BookTypeEnumContract? bookType, ProjectTypeContract? projectType,
+            List<int> selectedCategoryIds, List<long> selectedProjectIds)
         {
             var userId = m_authorizationManager.GetCurrentUserId();
-            var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
+            var bookTypeEnum = m_mapper.Map<BookTypeEnum?>(bookType);
+            var projectTypeEnum = m_mapper.Map<ProjectTypeEnum?>(projectType);
             var result = m_metadataRepository.InvokeUnitOfWork(x =>
             {
                 var allCategoryIds = selectedCategoryIds.Count > 0
                     ? m_categoryRepository.GetAllSubcategoryIds(selectedCategoryIds)
                     : selectedCategoryIds;
-                return x.GetTitleAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount, userId);
+                return x.GetTitleAutocomplete(query, bookTypeEnum, projectTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteCount, userId);
             });
             return result.ToList();
         }

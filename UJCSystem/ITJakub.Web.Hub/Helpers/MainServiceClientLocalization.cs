@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging;
 using Scalesoft.Localization.AspNetCore;
 using Scalesoft.Localization.Core.Exception;
+using Scalesoft.Localization.Core.Manager;
+using Scalesoft.Localization.Core.Util;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Clients;
 using Vokabular.Shared;
@@ -12,30 +14,60 @@ namespace ITJakub.Web.Hub.Helpers
     {
         private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<MainServiceRestClient>();
         private readonly ILocalizationService m_localization;
+        private readonly IAutoLocalizationManager m_localizationManager;
+        private const string Scope = "MainServiceErrorCode";
 
-        public MainServiceClientLocalization(ILocalizationService localizationService)
+        public MainServiceClientLocalization(ILocalizationService localization, IAutoLocalizationManager localizationService)
         {
-            m_localization = localizationService;
+            m_localization = localization;
+            m_localizationManager = localizationService;
         }
 
         public void LocalizeApiException(MainServiceException ex)
         {
+            if (TryLocalizeErrorCode(ex.Code, out var localizedDescription, ex.DescriptionParams))
+            {
+                ex.Description = localizedDescription;
+            }
+            //if translation is not defined, propagate original description
+        }
+
+        private string LocalizeErrorCode(string text)
+        {
             try
             {
-                if (!string.IsNullOrEmpty(ex.Code))
+                return m_localization.Translate(text, Scope);
+            }
+            catch (Exception e) when (e is LocalizationLibraryException || e is TranslateException)
+            {
+                //if translation is not defined, propagate original text
+                return text;
+            }
+        }
+
+        public bool TryLocalizeErrorCode(string code, out string localizedString, params object[] codeParams)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(code))
                 {
-                    if (ex.DescriptionParams == null)
+                    if (codeParams == null)
                     {
-                        ex.Description = m_localization.Translate(ex.Code, "MainServiceErrorCode");
+                        var localizeResult = m_localizationManager.Translate(LocTranslationSource.File, m_localization.GetRequestCulture(), Scope, code);
+                        localizedString = localizeResult.Value;
+                        return !localizeResult.ResourceNotFound;
                     }
                     else
                     {
-                        for (var i = 0; i < ex.DescriptionParams.Length; i++)
+                        var localizationParams = new object[codeParams.Length];
+                        for (var i = 0; i < codeParams.Length; i++)
                         {
-                            ex.DescriptionParams[i] = TryLocalize(ex.DescriptionParams[i].ToString());
+                            localizationParams[i] = LocalizeErrorCode(codeParams[i].ToString());
                         }
 
-                        ex.Description = m_localization.TranslateFormat(ex.Code, "MainServiceErrorCode", ex.DescriptionParams);
+                        var localizeResult = m_localizationManager.TranslateFormat(LocTranslationSource.File, m_localization.GetRequestCulture(), Scope, code, localizationParams);
+                        localizedString = localizeResult.Value;
+                        return !localizeResult.ResourceNotFound;
                     }
                 }
             }
@@ -43,24 +75,12 @@ namespace ITJakub.Web.Hub.Helpers
             {
                 if (m_logger.IsEnabled(LogLevel.Warning))
                 {
-                    m_logger.LogWarning("Translation for main service code '{0}' not found", ex.Code);
+                    m_logger.LogWarning("Translation for main service code '{0}' not found", code);
                 }
+            }
 
-                //if translation is not defined, propagate original description
-            }
-        }
-
-        private string TryLocalize(string text)
-        {
-            try
-            {
-                return m_localization.Translate(text, "MainServiceErrorCode");
-            }
-            catch (Exception e) when (e is LocalizationLibraryException || e is TranslateException)
-            {
-                //if translation is not defined, propagate original text
-                return text;
-            }
+            localizedString = code;
+            return false;
         }
     }
 }

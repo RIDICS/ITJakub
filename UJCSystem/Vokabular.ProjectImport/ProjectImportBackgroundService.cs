@@ -57,15 +57,21 @@ namespace Vokabular.ProjectImport
                 catch (AggregateException e)
                 {
                     if (m_logger.IsErrorEnabled())
-                        m_logger.LogError(e, e.Message);
-
-                    m_logger.LogDebug("Separate exceptions:");
-
-                    foreach (var exception in e.InnerExceptions)
                     {
-                        if (m_logger.IsErrorEnabled())
+                        m_logger.LogError(e, e.Message);
+                        m_logger.LogDebug("Separate exceptions:");
+
+                        foreach (var exception in e.InnerExceptions)
+                        {
                             m_logger.LogError(exception, exception.Message);
+                        }
                     }
+                }
+                catch (Exception e)
+                {
+                    if (m_logger.IsErrorEnabled())
+                        m_logger.LogError(e, "Unknown error occured in BackgroundService");
+                    throw;
                 }
                 finally
                 {

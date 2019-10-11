@@ -8,6 +8,7 @@ using ITJakub.BatchImport.Client.BusinessLogic.Communication;
 using ITJakub.BatchImport.Client.ServiceClient;
 using Microsoft.Extensions.DependencyInjection;
 using Vokabular.MainService.DataContracts;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.WcfService;
 
 namespace ITJakub.BatchImport.Client
@@ -18,6 +19,7 @@ namespace ITJakub.BatchImport.Client
         {
             var mainServiceConfiguration = new MainServiceClientConfiguration
             {
+                PortalType = PortalTypeContract.Research,
                 Url = new Uri(ConfigurationManager.AppSettings["MainService"])
             };
 

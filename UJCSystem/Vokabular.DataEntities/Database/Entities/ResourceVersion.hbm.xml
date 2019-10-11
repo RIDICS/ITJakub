@@ -137,7 +137,7 @@
     <joined-subclass table="EditionNoteResource" name="EditionNoteResource" >
       <key column="ResourceVersionId" />
 
-      <property name="ExternalId" />
+      <property name="Text" not-null="false" />
       <many-to-one name="BookVersion" class="BookVersionResource" lazy="proxy" />
     </joined-subclass>
 

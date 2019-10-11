@@ -218,11 +218,11 @@ class AccountManager {
 
             const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization
                 .translateFormat("SuccessContactUpdate", [this.newEmailValue], "Account").value).buildElement();
-            alertHolder.append(alert);
+            alertHolder.empty().append(alert);
         }).fail((response) => {
             const alert = new AlertComponentBuilder(AlertType.Error)
                 .addContent(this.errorHandler.getErrorMessage(response)).buildElement();
-            alertHolder.append(alert);
+            alertHolder.empty().append(alert);
         });
     }
 

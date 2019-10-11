@@ -25,7 +25,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         public List<long> ImportedResourceVersionIds => m_allImportedResourceVersionIds;
 
-        public void UpdatePages(long projectId, long bookVersionId, int userId, string comment, BookData bookData, Dictionary<string, Term> dbTermCache)
+        public void UpdatePages(long projectId, long bookVersionId, int userId, BookData bookData, Dictionary<string, Term> dbTermCache)
         {
             m_allImportedResourceVersionIds = new List<long>();
             if (bookData.Pages == null)
@@ -40,7 +40,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var project = m_resourceRepository.Load<Project>(projectId);
             var user = m_resourceRepository.Load<User>(userId);
             var bookVersion = m_resourceRepository.Load<BookVersionResource>(bookVersionId);
-            var dbPages = m_resourceRepository.GetProjectPages(projectId);
+            var dbPages = m_resourceRepository.GetProjectLatestPages(projectId);
             var dbPagesDict = dbPages.ToDictionaryMultipleValues(x => x.Name);
 
             // Update page list
@@ -68,7 +68,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     {
                         Resource = newResource,
                         Name = page.Text,
-                        Comment = comment,
+                        Comment = string.Empty,
                         CreateTime = now,
                         CreatedByUser = user,
                         Position = page.Position,
@@ -88,7 +88,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         dbPageResource.Position = page.Position;
                         dbPageResource.CreateTime = now;
                         dbPageResource.CreatedByUser = user;
-                        dbPageResource.Comment = comment;
+                        dbPageResource.Comment = string.Empty;
                         dbPageResource.Terms = PrepareTermList(page.TermXmlIds, dbTermCache);
                         // Update resource name is not required (PageResources are distinguish by name)
 
@@ -102,7 +102,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     var newTextResource = new TextResource
                     {
                         Resource = null,
-                        Comment = comment,
+                        Comment = string.Empty,
                         CreateTime = now,
                         CreatedByUser = user,
                         ExternalId = page.XmlId,
@@ -124,7 +124,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     var newImageResource = new ImageResource
                     {
                         Resource = null,
-                        Comment = comment,
+                        Comment = string.Empty,
                         CreateTime = now,
                         CreatedByUser = user,
                         FileName = page.Image,
@@ -170,7 +170,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             var projectId = project.Id;
             var resourceGroup = GetOrCreateNamedResourceGroup(projectId, TextTypeEnum.Transcribed, DefaultImportResourceGroupName);
-            var dbTexts = m_resourceRepository.GetProjectTexts(projectId, resourceGroup.Id, false);
+            var dbTexts = m_resourceRepository.GetProjectLatestTexts(projectId, resourceGroup.Id, false);
             var dbTextsByPageResId = new Dictionary<long, List<TextResource>>();
             foreach (var textResourceByPageGroup in dbTexts.GroupBy(x => x.ResourcePage.Id))
             {
@@ -222,7 +222,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             var projectId = project.Id;
             var imageResourceGroup = GetOrCreateNamedResourceGroup(projectId, TextTypeEnum.Original, DefaultImportResourceGroupName);
-            var dbImages = m_resourceRepository.GetProjectImages(projectId, imageResourceGroup.Id, false);
+            var dbImages = m_resourceRepository.GetProjectLatestImages(projectId, imageResourceGroup.Id, false);
             var dbImagesByPageResId = new Dictionary<long, List<ImageResource>>();
             foreach (var imageResourceByPageGroup in dbImages.GroupBy(x => x.ResourcePage.Id))
             {

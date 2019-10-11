@@ -63,6 +63,7 @@ namespace Vokabular.ProjectImport.Works
 
             CreateSnapshot();
             ProcessExternalImportPermission();
+            m_projectRepository.UnitOfWork.CurrentSession.Flush();
             m_projectRepository.UnitOfWork.CurrentSession.Evict(project); //because of unit tests - unit test is running in one session
         }
 
@@ -90,6 +91,7 @@ namespace Vokabular.ProjectImport.Works
             var project = new Project
             {
                 Name = m_importedRecord.ImportedProject.ProjectMetadata.Title,
+                ProjectType = ProjectTypeEnum.Bibliography,
                 CreateTime = now,
                 CreatedByUser = user,
                 OriginalUrl = string.Format(externalRepository.UrlTemplate, m_importedRecord.ImportedProject.Id)
@@ -372,7 +374,8 @@ namespace Vokabular.ProjectImport.Works
             var newPermissions = m_roleIds.Select(groupId => new Permission
             {
                 Project = project,
-                UserGroup = m_projectRepository.Load<UserGroup>(groupId)
+                UserGroup = m_projectRepository.Load<UserGroup>(groupId),
+                Flags = PermissionFlag.ShowPublished,
             });
 
             foreach (var newPermission in newPermissions)

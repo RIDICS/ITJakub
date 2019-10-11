@@ -1,0 +1,34 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model IList<Vokabular.MainService.DataContracts.Contracts.AudioContract>
+@inject ILocalizationService Localization
+
+<div class="audio">
+    @*<div class="audio-text"></div>*@
+    <audio controls="controls" preload="none">
+        @foreach (var audio in Model)
+        {
+            <source src=@Url.Action("DownloadAudio" ,"Publication", new {area = "Admin", audioId = audio.Id, audioType = audio.AudioType})
+                    type="@audio.MimeType">
+        }
+        @Localization.Translate("BrowserDoesNotSupportHtmlAudio", "BibliographyModule")
+        <code>audio</code>
+    </audio>
+    @{
+        var firstRecord = Model.FirstOrDefault();
+        if (firstRecord != null && firstRecord.Duration.HasValue)
+        {
+            <div class="audio-length">
+                @Localization.Translate("Length", "BibliographyModule")
+                <div class="audio-length-value">@firstRecord.Duration.Value</div>
+            </div>
+        }
+    }
+    <div class="audio-download">
+        @Localization.Translate("DownloadChapter", "BibliographyModule")
+        @foreach (var audio in Model)
+        {
+            <a href=@Url.Action("DownloadAudio" ,"Publication", new {area = "Admin", audioId = audio.Id, audioType = audio.AudioType})
+               class="audio-download-href">@audio.AudioType</a>
+        }
+    </div>
+</div>

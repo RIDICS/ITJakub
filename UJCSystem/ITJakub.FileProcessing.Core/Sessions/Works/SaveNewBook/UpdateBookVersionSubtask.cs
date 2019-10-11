@@ -15,7 +15,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             m_resourceRepository = resourceRepository;
         }
 
-        public long UpdateBookVersion(long projectId, int userId, string comment, BookData bookData)
+        public long UpdateBookVersion(long projectId, int userId, BookData bookData)
         {
             var now = DateTime.UtcNow;
             var project = m_resourceRepository.Load<Project>(projectId);
@@ -31,22 +31,22 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     ResourceType = ResourceTypeEnum.BookVersion,
                     Project = project,
                 };
-                return CreateBookVersionResource(newDbResource, 1, bookData.VersionXmlId, comment, user, now);
+                return CreateBookVersionResource(newDbResource, 1, bookData.VersionXmlId, user, now);
             }
             else
             {
-                return CreateBookVersionResource(dbBookVersionResource.Resource, dbBookVersionResource.VersionNumber + 1, bookData.VersionXmlId, comment, user, now);
+                return CreateBookVersionResource(dbBookVersionResource.Resource, dbBookVersionResource.VersionNumber + 1, bookData.VersionXmlId, user, now);
             }
         }
 
-        private long CreateBookVersionResource(Resource resource, int version, string versionExternalId, string comment, User user, DateTime now)
+        private long CreateBookVersionResource(Resource resource, int version, string versionExternalId, User user, DateTime now)
         {
             var newDbBookVersion = new BookVersionResource
             {
                 Resource = resource,
                 ExternalId = versionExternalId,
                 VersionNumber = version,
-                Comment = comment,
+                Comment = string.Empty,
                 CreateTime = now,
                 CreatedByUser = user,
             };

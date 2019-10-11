@@ -4,13 +4,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.RestClient.Errors;
 
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class CorpusController : Controller
+    public class CorpusController : BaseController
     {
         private readonly BookSearchManager m_bookSearchManager;
 
@@ -41,14 +42,20 @@ namespace Vokabular.MainService.Controllers
         /// <param name="request">
         /// Request contains list of search criteria with different data types described in method description
         /// </param>
+        /// <param name="projectType">Target project database for searching</param>
         /// <returns></returns>
         [HttpPost("search")]
         [ProducesResponseType(typeof(List<CorpusSearchResultContract>), StatusCodes.Status200OK)]
-        public IActionResult SearchCorpus([FromBody] CorpusSearchRequestContract request)
+        public IActionResult SearchCorpus([FromBody] CorpusSearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             try
             {
-                var result = m_bookSearchManager.SearchCorpusByCriteria(request);
+                var result = m_bookSearchManager.SearchCorpusByCriteria(request, projectType.Value);
                 return Ok(result);
             }
             catch (ArgumentException exception)
@@ -61,19 +68,25 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        
+
         /// <summary>
         /// Search in corpus, return count
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="projectType"></param>
         /// <returns></returns>
         [HttpPost("search-count")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult SearchCorpusResultCount([FromBody] CorpusSearchRequestContract request)
+        public IActionResult SearchCorpusResultCount([FromBody] CorpusSearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             try
             {
-                var result = m_bookSearchManager.SearchCorpusByCriteriaCount(request);
+                var result = m_bookSearchManager.SearchCorpusByCriteriaCount(request, projectType.Value);
                 return Ok(result);
             }
             catch (ArgumentException exception)

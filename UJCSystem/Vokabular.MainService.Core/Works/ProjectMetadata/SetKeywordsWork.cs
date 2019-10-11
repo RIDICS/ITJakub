@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -20,12 +21,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
 
         protected override void ExecuteWorkImplementation()
         {
-            var keywordList = new List<Keyword>();
-            foreach (var id in m_keywordIdList)
-            {
-                var keyword = m_projectRepository.Load<Keyword>(id);
-                keywordList.Add(keyword);
-            }
+            var keywordList = m_keywordIdList.Distinct().Select(id => m_projectRepository.Load<Keyword>(id)).ToList();
 
             var project = m_projectRepository.Load<Project>(m_projectId);
             project.Keywords = keywordList;

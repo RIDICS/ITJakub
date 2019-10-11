@@ -21,7 +21,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         public List<long> ImportedResourceVersionIds => m_allImportedResourceVersionIds;
 
-        public void UpdateChapters(long projectId, int userId, string comment, BookData bookData, List<PageResource> dbPageResources)
+        public void UpdateChapters(long projectId, int userId, BookData bookData, List<PageResource> dbPageResources)
         {
             m_allImportedResourceVersionIds = new List<long>();
             if (bookData.BookContentItems == null)
@@ -32,7 +32,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var user = m_resourceRepository.Load<User>(userId);
             var project = m_resourceRepository.Load<Project>(projectId);
 
-            var dbChapters = m_resourceRepository.GetProjectChapters(projectId);
+            var dbChapters = m_resourceRepository.GetProjectLatestChapters(projectId);
             var dbChaptersByName = dbChapters.ToDictionaryMultipleValues(x => x.Name);
             var dbPagesByPosition = dbPageResources != null
                 ? dbPageResources.ToDictionary(x => x.Position)
@@ -46,7 +46,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 Project = project,
                 User = user,
                 Now = now,
-                Comment = comment
             };
 
             UpdateChapterList(bookData.BookContentItems, null, chapterRecursionData);
@@ -70,7 +69,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var project = data.Project;
             var user = data.User;
             var now = data.Now;
-            var comment = data.Comment;
 
             foreach (var bookContentItem in bookContentItems)
             {
@@ -104,7 +102,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         Resource = newResource,
                         Name = bookContentItem.Text,
                         ResourceBeginningPage = dbPage.Resource,
-                        Comment = comment,
+                        Comment = string.Empty,
                         CreateTime = now,
                         CreatedByUser = user,
                         Position = bookContentItem.ItemOrder,
@@ -150,7 +148,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             public Project Project { get; set; }
             public User User { get; set; }
             public DateTime Now { get; set; }
-            public string Comment { get; set; }
         }
     }
 }

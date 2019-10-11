@@ -1,5 +1,5 @@
 ﻿{
-  "PortalType": "ResearchPortal",
+  "PortalType": "CommunityPortal",
   "SecretSettingsPath": "C:\\Pool\\itjakub-secrets\\",
   "EnvironmentConfiguration": "LocalDebug"
 }

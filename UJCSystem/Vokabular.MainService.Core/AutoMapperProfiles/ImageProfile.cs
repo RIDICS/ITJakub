@@ -13,6 +13,12 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.VersionId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.VersionNumber, opt => opt.MapFrom(src => src.VersionNumber))
                 .ForMember(dest => dest.ParentPage, opt => opt.MapFrom(src => src.ResourcePage.LatestVersion));
+
+            CreateMap<ImageResource, ImageContract>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Resource.Id))
+                .ForMember(dest => dest.VersionId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.VersionNumber, opt => opt.MapFrom(src => src.VersionNumber))
+                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
         }
     }
 }

@@ -6,7 +6,6 @@ using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Extensions;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
-using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.Extensions;
 
 namespace Vokabular.MainService.DataContracts.Clients
@@ -167,11 +166,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<BookContract> GetBooksForRole(int roleId, BookTypeEnumContract bookType)
+        public PermissionDataContract GetPermissionsForRoleAndBook(int roleId, long bookId)
         {
             try
             {
-                var result = m_client.Get<List<BookContract>>($"role/{roleId}/book?filterByBookType={bookType}");
+                var result = m_client.Get<PermissionDataContract>($"role/{roleId}/book/{bookId}/permission");
                 return result;
             }
             catch (HttpRequestException e)
@@ -183,14 +182,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void AddBooksToRole(int roleId, IList<long> bookIds)
+        public void UpdateOrAddBooksToRole(int roleId, long bookId, PermissionDataContract data)
         {
             try
             {
-                m_client.Post<object>($"role/{roleId}/permission/book", new AddBookToRoleRequestContract
-                {
-                    BookIdList = bookIds
-                });
+                m_client.Put<object>($"role/{roleId}/book/{bookId}/permission", data);
             }
             catch (HttpRequestException e)
             {
@@ -201,14 +197,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void RemoveBooksFromRole(int roleId, IList<long> bookIds)
+        public void RemoveBooksFromRole(int roleId, long bookId)
         {
             try
             {
-                m_client.Delete($"role/{roleId}/permission/book", new AddBookToRoleRequestContract
-                {
-                    BookIdList = bookIds
-                });
+                m_client.Delete($"role/{roleId}/book/{bookId}/permission");
             }
             catch (HttpRequestException e)
             {

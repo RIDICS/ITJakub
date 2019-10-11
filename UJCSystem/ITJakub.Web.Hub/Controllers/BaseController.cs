@@ -1,24 +1,53 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using AutoMapper;
 using ITJakub.Lemmatization.Shared.Contracts;
+using ITJakub.Web.Hub.Areas.Admin.Models;
+using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.DataContracts;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Scalesoft.Localization.AspNetCore;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Clients;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Errors;
+using Vokabular.RestClient.Results;
 
 namespace ITJakub.Web.Hub.Controllers
 {
     public abstract class BaseController : Controller
     {
+        private readonly ControllerDataProvider m_controllerDataProvider;
         private readonly CommunicationProvider m_communication;
 
-        protected BaseController(CommunicationProvider communicationProvider)
+        protected BaseController(ControllerDataProvider controllerDataProvider)
         {
-            m_communication = communicationProvider;
+            m_controllerDataProvider = controllerDataProvider;
+            m_communication = controllerDataProvider.CommunicationProvider;
+        }
+
+        protected PortalTypeContract PortalTypeValue => m_controllerDataProvider.PortalType;
+
+        protected IMapper Mapper => m_controllerDataProvider.Mapper;
+
+        protected ILocalizationService Localizer => m_controllerDataProvider.Localizer;
+
+        public ProjectTypeContract GetDefaultProjectType()
+        {
+            switch (PortalTypeValue)
+            {
+                case PortalTypeContract.Research:
+                    return ProjectTypeContract.Research;
+                case PortalTypeContract.Community:
+                    return ProjectTypeContract.Community;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public MainServiceBookClient GetBookClient()
@@ -76,11 +105,6 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceProjectClient();
         }
 
-        public MainServiceResourceClient GetResourceClient()
-        {
-            return m_communication.GetMainServiceResourceClient();
-        }
-
         public MainServiceRoleClient GetRoleClient()
         {
             return m_communication.GetMainServiceRoleClient();
@@ -89,6 +113,11 @@ namespace ITJakub.Web.Hub.Controllers
         public MainServiceSessionClient GetSessionClient()
         {
             return m_communication.GetMainServiceSessionClient();
+        }
+
+        public MainServiceSnapshotClient GetSnapshotClient()
+        {
+            return m_communication.GetMainServiceSnapshotClient();
         }
 
         public MainServiceTermClient GetTermClient()
@@ -135,7 +164,8 @@ namespace ITJakub.Web.Hub.Controllers
         {
             if (exception.ValidationErrors == null)
             {
-                ModelState.AddModelError(string.Empty, exception.Message);
+                // All errors with description should be propagated by MainServiceException so this is fallback:
+                ModelState.AddModelError(string.Empty, Localizer.Translate("unknown-error-msg", "Error"));
                 return;
             }
 
@@ -165,6 +195,19 @@ namespace ITJakub.Web.Hub.Controllers
             return new JsonResult(result)
             {
                 StatusCode = (int)httpStatusCode
+            };
+        }
+
+        protected ListViewModel<TTarget> CreateListViewModel<TTarget, TSource>(PagedResultList<TSource> data, int start, int pageSize,
+            string search)
+        {
+            return new ListViewModel<TTarget>
+            {
+                TotalCount = data.TotalCount,
+                List = Mapper.Map<List<TTarget>>(data.List),
+                PageSize = pageSize,
+                Start = start,
+                SearchQuery = search
             };
         }
     }

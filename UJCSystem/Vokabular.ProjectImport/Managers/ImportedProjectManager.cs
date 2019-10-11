@@ -17,7 +17,7 @@ namespace Vokabular.ProjectImport.Managers
         private readonly MetadataRepository m_metadataRepository;
         private readonly PermissionRepository m_permissionRepository;
         private readonly ImportedRecordMetadataManager m_importedRecordMetadataManager;
-        private ILogger<ImportedProjectManager> m_logger;
+        private readonly ILogger<ImportedProjectManager> m_logger;
 
         public ImportedProjectManager(ProjectRepository projectRepository, CatalogValueRepository catalogValueRepository,
             PersonRepository personRepository, MetadataRepository metadataRepository, PermissionRepository permissionRepository,

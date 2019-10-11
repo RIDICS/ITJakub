@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Types;
@@ -12,19 +13,23 @@ using Vokabular.Shared.DataContracts.Types;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class BookController : Controller
+    public class BookController : BaseController
     {
         private readonly BookManager m_bookManager;
         private readonly BookSearchManager m_bookSearchManager;
         private readonly BookHitSearchManager m_bookHitSearchManager;
+        private readonly EditionNoteManager m_editionNoteManager;
 
-        public BookController(BookManager bookManager, BookSearchManager bookSearchManager, BookHitSearchManager bookHitSearchManager)
+        public BookController(BookManager bookManager, BookSearchManager bookSearchManager, BookHitSearchManager bookHitSearchManager,
+            EditionNoteManager editionNoteManager)
         {
             m_bookManager = bookManager;
             m_bookSearchManager = bookSearchManager;
             m_bookHitSearchManager = bookHitSearchManager;
+            m_editionNoteManager = editionNoteManager;
         }
 
+        [Obsolete("This method will be replaced by paged variant")] // TODO replace this method with paged variant
         [HttpGet("type/{bookType}")]
         [ProducesResponseType(typeof(List<BookWithCategoriesContract>), StatusCodes.Status200OK)]
         public IActionResult GetBooksByType(BookTypeEnumContract? bookType)
@@ -33,17 +38,6 @@ namespace Vokabular.MainService.Controllers
                 return NotFound();
 
             var result = m_bookManager.GetBooksByTypeForUser(bookType.Value);
-            return Ok(result);
-        }
-
-        [HttpGet("type/{bookType}/all")]
-        [ProducesResponseType(typeof(List<BookContract>), StatusCodes.Status200OK)]
-        public IActionResult GetAllBooksByType(BookTypeEnumContract? bookType)
-        {
-            if (bookType == null)
-                return NotFound();
-
-            var result = m_bookManager.GetAllBooksByType(bookType.Value);
             return Ok(result);
         }
 
@@ -76,15 +70,21 @@ namespace Vokabular.MainService.Controllers
         /// <param name="request">
         /// Request contains list of search criteria with different data types described in method description
         /// </param>
+        /// <param name="projectType">Target project database for searching</param>
         /// <returns></returns>
         [HttpPost("search")]
         [ProducesResponseType(typeof(List<SearchResultContract>), StatusCodes.Status200OK)]
-        public IActionResult SearchBook([FromBody] SearchRequestContract request)
+        public IActionResult SearchBook([FromBody] AdvancedSearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
             // TODO possible switch SearchResultContract to BookContract
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             try
             {
-                var result = m_bookSearchManager.SearchByCriteria(request);
+                var result = m_bookSearchManager.SearchByCriteria(request, projectType.Value);
                 return Ok(result);
             }
             catch (ArgumentException exception)
@@ -93,7 +93,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -101,14 +101,21 @@ namespace Vokabular.MainService.Controllers
         /// Search books, return count
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="projectType"></param>
         /// <returns></returns>
         [HttpPost("search-count")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult SearchBookResultCount([FromBody] SearchRequestContract request)
+        public IActionResult SearchBookResultCount([FromBody] AdvancedSearchRequestContract request,
+            [FromQuery] ProjectTypeContract? projectType)
         {
+            if (projectType == null)
+            {
+                return Error($"Required parameter {nameof(projectType)} is not specified");
+            }
+
             try
             {
-                var result = m_bookSearchManager.SearchByCriteriaCount(request);
+                var result = m_bookSearchManager.SearchByCriteriaCount(request, projectType.Value);
                 return Ok(result);
             }
             catch (ArgumentException exception)
@@ -117,7 +124,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -160,7 +167,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -179,7 +186,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -198,7 +205,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -234,14 +241,14 @@ namespace Vokabular.MainService.Controllers
         public IActionResult HasBookAnyText(long projectId)
         {
             var hasAny = m_bookManager.HasBookAnyText(projectId);
-            return hasAny ? (IActionResult)Ok() : NotFound();
+            return hasAny ? (IActionResult) Ok() : NotFound();
         }
 
         [HttpHead("{projectId}/image")]
         public IActionResult HasBookAnyImage(long projectId)
         {
             var hasAny = m_bookManager.HasBookAnyImage(projectId);
-            return hasAny ? (IActionResult)Ok() : NotFound();
+            return hasAny ? (IActionResult) Ok() : NotFound();
         }
 
         [HttpGet("page/{pageId}/term")]
@@ -271,7 +278,7 @@ namespace Vokabular.MainService.Controllers
             var result = m_bookManager.GetPageText(pageId, formatValue);
             if (result == null)
                 return NotFound();
-            
+
             return Content(result);
         }
 
@@ -299,7 +306,8 @@ namespace Vokabular.MainService.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("page/{pageId}/text/search")]
-        public IActionResult GetPageTextFromSearch(long pageId, [FromQuery] TextFormatEnumContract? format, [FromBody] SearchPageRequestContract request)
+        public IActionResult GetPageTextFromSearch(long pageId, [FromQuery] TextFormatEnumContract? format,
+            [FromBody] SearchPageRequestContract request)
         {
             try
             {
@@ -316,7 +324,7 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
@@ -390,7 +398,8 @@ namespace Vokabular.MainService.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("headword/{headwordId}/text/search")]
-        public IActionResult GetHeadwordTextFromSearch(long headwordId, [FromQuery] TextFormatEnumContract? format, [FromBody] SearchPageRequestContract request)
+        public IActionResult GetHeadwordTextFromSearch(long headwordId, [FromQuery] TextFormatEnumContract? format,
+            [FromBody] SearchPageRequestContract request)
         {
             try
             {
@@ -407,29 +416,32 @@ namespace Vokabular.MainService.Controllers
             }
             catch (HttpErrorCodeException exception)
             {
-                return StatusCode((int)exception.StatusCode, exception.Message);
+                return StatusCode((int) exception.StatusCode, exception.Message);
             }
         }
 
-        [HttpGet("{projectId}/edition-note")]
-        public IActionResult GetEditionNote(long projectId, [FromQuery] TextFormatEnumContract? format)
+        [HttpGet("{projectId}/edition-note/text")]
+        public IActionResult GetEditionNoteText(long projectId, [FromQuery] TextFormatEnumContract? format)
         {
             var formatValue = format ?? TextFormatEnumContract.Html;
-            var result = m_bookManager.GetEditionNote(projectId, formatValue);
+            var result = m_editionNoteManager.GetPublishedEditionNote(projectId, formatValue)?.Text;
             if (result == null)
                 return NotFound();
 
             return Content(result);
         }
-
+        
         [HttpGet("info")]
         [ProducesResponseType(typeof(BookContract), StatusCodes.Status200OK)]
-        public IActionResult GetBookByExternalId([FromQuery] string externalId)
+        public IActionResult GetBookByExternalId([FromQuery] string externalId, [FromQuery] ProjectTypeContract? projectType)
         {
             if (string.IsNullOrEmpty(externalId))
                 return BadRequest("Required ExternalId parameter is null");
 
-            var result = m_bookManager.GetBookInfoByExternalId(externalId);
+            if (projectType == null)
+                return BadRequest("Required ProjectType parameter is null");
+
+            var result = m_bookManager.GetBookInfoByExternalId(externalId, projectType.Value);
             return result != null ? (IActionResult) Ok(result) : NotFound();
         }
     }

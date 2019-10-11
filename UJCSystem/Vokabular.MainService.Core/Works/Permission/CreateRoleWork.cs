@@ -29,13 +29,13 @@ namespace Vokabular.MainService.Core.Works.Permission
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
 
-            var roleContract = new RoleContract
+            var roleContract = new RoleContractBase
             {
                 Description = m_description,
                 Name = m_roleName,
             };
 
-            var response = client.HttpClient.CreateItemAsync(roleContract).GetAwaiter().GetResult();
+            var response = client.CreateRoleAsync(roleContract).GetAwaiter().GetResult();
             var externalRoleId = response.Content.ReadAsInt();
 
             var group = new UserGroup

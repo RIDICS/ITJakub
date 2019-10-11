@@ -13,6 +13,6 @@ namespace ITJakub.FileProcessing.DataContracts
         public string Name { get; set; }
 
         [DataMember]
-        public List<RoleFromAuthContract> Roles { get; set; }
+        public IList<int> RoleExternalIds { get; set; }
     }
 }

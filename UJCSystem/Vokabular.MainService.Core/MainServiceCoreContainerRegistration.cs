@@ -8,7 +8,9 @@ using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Managers.Fulltext;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.Shared.Container;
+using Vokabular.TextConverter;
 
 namespace Vokabular.MainService.Core
 {
@@ -25,6 +27,7 @@ namespace Vokabular.MainService.Core
             services.AddScoped<CatalogValueManager>();
             services.AddScoped<CategoryManager>();
             services.AddScoped<CorpusSearchManager>();
+            services.AddScoped<EditionNoteManager>();
             services.AddScoped<FavoriteManager>();
             services.AddScoped<FeedbackManager>();
             services.AddScoped<ForumSiteManager>();
@@ -39,6 +42,7 @@ namespace Vokabular.MainService.Core
             services.AddScoped<ProjectManager>();
             services.AddScoped<ProjectMetadataManager>();
             services.AddScoped<ProjectResourceManager>();
+            services.AddScoped<ResourceManager>();
             services.AddScoped<RoleManager>();
             services.AddScoped<SnapshotManager>();
             services.AddScoped<TermManager>();
@@ -51,6 +55,9 @@ namespace Vokabular.MainService.Core
             services.AddScoped<FulltextStorageProvider>();
             services.AddScoped<IFulltextStorage, ExistDbStorage>();
             services.AddScoped<IFulltextStorage, ElasticSearchStorage>();
+            services.AddScoped<PortalTypeProvider>();
+
+            services.AddScoped<ProjectPermissionConverter>();
 
             services.AddSingleton<Profile, AuthUserProfile>();
             services.AddSingleton<Profile, RoleProfile>();
@@ -59,17 +66,12 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, AudioProfile>();
             services.AddSingleton<Profile, BookProfile>();
             services.AddSingleton<Profile, BookTypeProfile>();
-            services.AddSingleton<Profile, BibliographicFormatProfile>();
             services.AddSingleton<Profile, CategoryProfile>();
             services.AddSingleton<Profile, ChapterProfile>();
             services.AddSingleton<Profile, EditionNoteProfile>();
-            services.AddSingleton<Profile, ExternalRepositoryProfile>();
-            services.AddSingleton<Profile, ExternalRepositoryTypeProfile>();
             services.AddSingleton<Profile, FavoriteLabelProfile>();
             services.AddSingleton<Profile, FavoriteProfile>();
             services.AddSingleton<Profile, FeedbackProfile>();
-            services.AddSingleton<Profile, FilteringExpressionProfile>();
-            services.AddSingleton<Profile, FilteringExpressionSetProfile>();
             services.AddSingleton<Profile, ForumProfile>();
             services.AddSingleton<Profile, HeadwordProfile>();
             services.AddSingleton<Profile, ImageProfile>();
@@ -83,7 +85,9 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, OriginalAuthorProfile>();
             services.AddSingleton<Profile, PageProfile>();
             services.AddSingleton<Profile, ProjectProfile>();
+            services.AddSingleton<Profile, ProjectPermissionProfile>();
             services.AddSingleton<Profile, ResourceProfile>();
+            services.AddSingleton<Profile, ResourceVersionProfile>();
             services.AddSingleton<Profile, ResponsiblePersonProfile>();
             services.AddSingleton<Profile, SnapshotProfile>();
             services.AddSingleton<Profile, TermProfile>();
@@ -98,9 +102,11 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, BucketShortContractProfile>();
             services.AddSingleton<Profile, CardContractProfile>();
             services.AddSingleton<Profile, CardFileContractProfile>();
+            services.AddSingleton<Profile, CardImageContractProfile>();
             services.AddSingleton<Profile, CardShortContractProfile>();
 
             new CoreContainerRegistration().Install(services);
+            services.AddTextConverterServices();
         }
     }
 }

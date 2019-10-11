@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using ITJakub.Web.Hub.Areas.Admin.Core;
+using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
+using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Types;
 using ITJakub.Web.Hub.Options;
+using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
@@ -16,18 +21,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     [Area("Admin")]
     public class ContentEditorController : BaseController
     {
-        public ContentEditorController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        private readonly TextManager m_textManager;
+
+        public ContentEditorController(ControllerDataProvider controllerDataProvider, TextManager textManager) : base(controllerDataProvider)
         {
+            m_textManager = textManager;
         }
 
-        [HttpPost]
-        public IActionResult GetGuid()
-        {
-            var guid = Guid.NewGuid();
-            return Json(guid);
-        }
-
-        [HttpPost]
         public IActionResult LoadCommentFile(long textId)
         {
             var parts = new List<CommentStructureResponse>();
@@ -98,16 +98,97 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             client.DeleteComment(commentId);
         }
 
-        [HttpGet]
-        public IActionResult GetPageImage(long pageId)
+        [HttpPost]
+        public IActionResult DeleteRootComment(long commentId)
         {
-            var client = GetBookClient();
-            var result = client.GetPageImage(pageId);
-            return new FileStreamResult(result.Stream, result.MimeType);
+            var result = m_textManager.DeleteRootComment(commentId);
+            return Json(result);
         }
 
         [HttpPost]
-        public IActionResult GetProjectContent(long projectId, long? resourceGroupId)
+        public IActionResult GenerateCommentId(long textId)
+        {
+            var client = GetProjectClient();
+            var comments = client.GetCommentsForText(textId);
+            var maxId = 0;
+            foreach (var comment in comments)
+            {
+                var isNumber = int.TryParse(comment.TextReferenceId.Split('-')[1], out var value);
+                if (isNumber && value > maxId)
+                {
+                    maxId = value;
+                }
+            }
+
+            return Json(maxId + 1);
+        }
+
+        [HttpGet]
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult GetPageImage(long pageId)
+        {
+            var client = GetProjectClient();
+            try
+            {
+                var result = client.GetPageImage(pageId);
+                return new FileStreamResult(result.Stream, result.MimeType);
+            }
+            catch (HttpErrorCodeException e)
+            {
+                if (e.StatusCode == HttpStatusCode.NotFound)
+                    return NotFound();
+
+                throw;
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetImageResourceByPageId(long pageId)
+        {
+            var client = GetProjectClient();
+            try
+            {
+                var result = client.GetImageResourceByPageId(pageId);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                result.ImageUrl = Url.Action("GetPageImage", "ContentEditor", new {Area = "Admin", pageId = pageId});
+                return Json(result);
+            }
+            catch (HttpErrorCodeException e)
+            {
+                if (e.StatusCode == HttpStatusCode.NotFound)
+                    return NotFound();
+
+                throw;
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetPageDetail(long pageId)
+        {
+            var client = GetProjectClient();
+            var model = new PageDetailViewModel();
+            try
+            {
+                model.Text = client.GetPageText(pageId, TextFormatEnumContract.Html);
+            }
+            catch (HttpErrorCodeException e) 
+            {
+                if(e.StatusCode != HttpStatusCode.NotFound)
+                    throw;
+            }
+
+            model.HasImage = client.HasPageImage(pageId);
+            model.PageId = pageId;
+            
+            return PartialView("../Project/Work/SubView/_PageListDetail", model);
+        }
+
+        [HttpPost]
+        public IActionResult GetTextPages(long projectId, long? resourceGroupId)
         {
             var client = GetProjectClient();
             var result = client.GetAllTextResourceList(projectId, resourceGroupId);
@@ -123,43 +204,96 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult SavePageList(string[] pageList)
+        public IActionResult SavePageList(long projectId, IList<CreateOrUpdatePageContract> pageList)
         {
             var client = GetProjectClient();
-            var result = client.SetAllPageList(pageList);
+            client.SetAllPageList(projectId, pageList);
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult GetTextResourceByPageId(long pageId, TextFormatEnumContract? format)
+        {
+            var client = GetProjectClient();
+            var result = client.GetTextResourceByPageId(pageId, format);
             return Json(result);
         }
 
         [HttpPost]
-        public IActionResult GetTextResource(long textId, TextFormatEnumContract? format)
+        public IActionResult SetTextResource(long textId, CreateTextRequestContract request, SaveTextModeType mode)
         {
-            var client = GetProjectClient();
-            var result = client.GetTextResource(textId, format);
-            return Json(result);
+            SaveTextResponse response;
+            switch (mode)
+            {
+                case SaveTextModeType.FullValidateOrDeny:
+                    response = m_textManager.SaveTextFullValidate(textId, request);
+                    break;
+                case SaveTextModeType.FullValidateAndRepair:
+                    response = m_textManager.SaveTextFullValidateAndRepair(textId, request);
+                    break;
+                case SaveTextModeType.ValidateOnlySyntax:
+                    response = m_textManager.SaveTextValidateSyntax(textId, request);
+                    break;
+                case SaveTextModeType.NoValidation:
+                    response = m_textManager.SaveWithoutValidation(textId, request);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+            }
+
+            return Json(response);
         }
 
         [HttpPost]
-        public IActionResult SetTextResource(long textId, CreateTextRequestContract request)
+        public IActionResult CreateTextResource(long pageId)
         {
             var client = GetProjectClient();
-            var result = client.CreateTextResourceVersion(textId, request);
-            return Json(result);
+            var resourceId = client.CreateTextResource(pageId);
+            return Json(resourceId);
+        }
+
+        [HttpPost]
+        public IActionResult CreateImageResource([FromForm] SaveImageResourceRequest request)
+        {
+            var client = GetProjectClient();
+            var data = new CreateImageContract
+            {
+                ImageId = request.ImageId,
+                OriginalVersionId = request.ResourceVersionId,
+                ResourcePageId = request.PageId,
+                Comment = request.Comment,
+                FileName = request.File.FileName,
+            };
+            var result = client.CreateImageResource(data, request.File.OpenReadStream());
+
+            return Json(new ImageContract
+            {
+                Id = result.ResourceId,
+                VersionId = result.ResourceVersionId,
+                VersionNumber = result.VersionNumber,
+                ImageUrl = Url.Action("GetPageImage", "ContentEditor", new { Area = "Admin", pageId = request.PageId }),
+            });
         }
 
         [HttpGet]
         public IActionResult GetEditionNote(long projectId, TextFormatEnumContract format)
         {
-            var client = GetBookClient();
-            var result = client.GetEditionNote(projectId, format);
+            var client = GetProjectClient();
+            var result = client.GetLatestEditionNote(projectId, format);
             return Json(result);
         }
 
         [HttpPost]
-        public IActionResult SetEditionNote([FromBody] CreateEditionNoteRequest request)
+        public IActionResult SetEditionNote(CreateEditionNoteRequest request)
         {
-            //var result = client.
-            var result = "TODO"; //TODO add logic
-            return Json(result);
+            var client = GetProjectClient();
+            var data = new CreateEditionNoteContract
+            {
+                Text = request.Content,
+                OriginalVersionId = request.OriginalVersionId
+            };
+            var resourceVersionId = client.CreateEditionNote(request.ProjectId, data);
+            return Json(resourceVersionId);
         }
     }
 }

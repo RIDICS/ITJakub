@@ -42,5 +42,12 @@ namespace Vokabular.MainService.Controllers
             m_projectItemManager.UpdateChapterResource(chapterId, chapterData);
             return Ok();
         }
+
+        [HttpPost("{projectId}/chapter/generator")]
+        public IActionResult GenerateChapters(long projectId)
+        {
+            m_projectItemManager.GenerateChapters(projectId);
+            return Ok();
+        }
     }
 }

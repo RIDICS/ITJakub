@@ -1,6 +1,6 @@
 ﻿@using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
-@model IList<Vokabular.MainService.DataContracts.Contracts.FilteringExpressionSetContract>
+@model IList<Vokabular.MainService.DataContracts.Contracts.ExternalBibliography.FilteringExpressionSetContract>
 
 @inject ILocalizationService Localizer
 
@@ -31,7 +31,7 @@
                 <div class="col-xs-12">
                     <div class="alert alert-info">
                         <i class="fa fa-info-circle"></i>
-                            @Localizer.TranslateFormat("EmptyFilteringExpressionList", "RepositoryImport")
+                            @Localizer.Translate("EmptyFilteringExpressionList", "RepositoryImport")
                     </div>
                 </div>
             }

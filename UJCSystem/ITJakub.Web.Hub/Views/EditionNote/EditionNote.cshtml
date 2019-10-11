@@ -1,5 +1,5 @@
-﻿@using Microsoft.AspNetCore.Html
-@using Scalesoft.Localization.AspNetCore
+﻿@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Models.EditionNoteViewModel
 
 @inject ILocalizationService Localizer
 
@@ -9,8 +9,18 @@
 
 <div id="edition-note-content" class="content-container top-offset-without-submenu">
     <h1>@ViewBag.Title</h1>
-
-    <p>
-    @(new HtmlString(ViewData["noteText"].ToString()))
-    </p>
+    
+    @if (Model.NoteText != null)
+    {
+        <p>
+            @Html.Raw(Model.NoteText)
+        </p>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            @Localizer.Translate("NotFound", "EditionNote")
+        </div>
+    }
+    
 </div>

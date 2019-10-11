@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.DataContracts.Contracts
 {
@@ -7,6 +9,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
     {
         public long Id { get; set; }
         public string Name { get; set; }
+        public ProjectTypeContract ProjectType { get; set; }
         //public string ExternalId { get; set; }
     }
 

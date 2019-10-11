@@ -1,7 +1,7 @@
 ﻿using ITJakub.Lemmatization.Shared.Contracts;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.Shared.Const;
@@ -13,7 +13,7 @@ namespace ITJakub.Web.Hub.Areas.Derivation.Controllers
     [Area("Derivation")]
     public class DerivationController : BaseController
     {
-        public DerivationController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public DerivationController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
 

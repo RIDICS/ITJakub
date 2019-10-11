@@ -12,11 +12,11 @@ namespace Vokabular.MainService.Core.Works.Search
     public class SearchByCriteriaWork : UnitOfWorkBase<IList<MetadataResource>>
     {
         private readonly MetadataRepository m_metadataRepository;
-        private readonly BookRepository m_bookRepository;
+        private readonly BookViewRepository m_bookRepository;
         private readonly SearchCriteriaQueryCreator m_queryCreator;
         private readonly TermCriteriaPageConditionCreator m_termCriteriaCreator;
 
-        public SearchByCriteriaWork(MetadataRepository metadataRepository, BookRepository bookRepository,
+        public SearchByCriteriaWork(MetadataRepository metadataRepository, BookViewRepository bookRepository,
             SearchCriteriaQueryCreator queryCreator, TermCriteriaPageConditionCreator termCriteriaCreator) : base(
             metadataRepository)
         {
@@ -34,13 +34,13 @@ namespace Vokabular.MainService.Core.Works.Search
             m_metadataRepository.GetMetadataWithFetchForBiblModule(metadataIdList);
 
             var projectIdList = metadataList.Select(x => x.Resource.Project.Id).ToList();
-            PageCounts = m_metadataRepository.GetPageCount(projectIdList);
+            PageCounts = m_bookRepository.GetPublishedPageCount(projectIdList);
             
             if (m_termCriteriaCreator != null)
             {
                 m_termCriteriaCreator.SetProjectIds(projectIdList);
                 TermHits = projectIdList.Count > 0
-                    ? m_metadataRepository.GetPagesWithTerms(m_termCriteriaCreator)
+                    ? m_bookRepository.GetPagesWithTerms(m_termCriteriaCreator)
                     : new List<PageResource>();
             }
 

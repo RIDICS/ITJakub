@@ -13,12 +13,14 @@ namespace Vokabular.MainService.Core.Works.CatalogValues
         private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly int? m_responsibleTypeId;
         private readonly ResponsibleTypeContract m_data;
+        private readonly IMapper m_mapper;
 
-        public CreateOrUpdateResponsibleTypeWork(CatalogValueRepository catalogValueRepository, int? responsibleTypeId, ResponsibleTypeContract data) : base(catalogValueRepository)
+        public CreateOrUpdateResponsibleTypeWork(CatalogValueRepository catalogValueRepository, int? responsibleTypeId, ResponsibleTypeContract data, IMapper mapper) : base(catalogValueRepository)
         {
             m_catalogValueRepository = catalogValueRepository;
             m_responsibleTypeId = responsibleTypeId;
             m_data = data;
+            m_mapper = mapper;
         }
 
         protected override int ExecuteWorkImplementation()
@@ -30,7 +32,7 @@ namespace Vokabular.MainService.Core.Works.CatalogValues
             if (responsibleType == null)
                 throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
 
-            var typeEnum = Mapper.Map<ResponsibleTypeEnum>(m_data.Type);
+            var typeEnum = m_mapper.Map<ResponsibleTypeEnum>(m_data.Type);
             responsibleType.Text = m_data.Text;
             responsibleType.Type = typeEnum;
             

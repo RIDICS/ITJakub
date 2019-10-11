@@ -11,9 +11,11 @@ using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
+using Vokabular.Shared.AspNetCore.Middleware;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Options;
+using Vokabular.TextConverter.Options;
 
 namespace Vokabular.FulltextService
 {
@@ -57,6 +59,9 @@ namespace Vokabular.FulltextService
                 options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
             });
 
+            // AutoMapper
+            services.AddAutoMapper();
+
             // IoC
             var container = new DryIocContainerWrapper();
             container.Install<FulltextServiceContainerRegistration>();
@@ -70,12 +75,12 @@ namespace Vokabular.FulltextService
         {
             ApplicationLogging.LoggerFactory = loggerFactory;
 
+            app.UseMiddleware<Log4NetPropertiesMiddleware>();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.ConfigureAutoMapper();
 
             app.UseMvc();
 

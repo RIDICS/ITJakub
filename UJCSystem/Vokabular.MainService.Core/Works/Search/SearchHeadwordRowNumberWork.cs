@@ -9,24 +9,29 @@ namespace Vokabular.MainService.Core.Works.Search
 {
     public class SearchHeadwordRowNumberWork : UnitOfWorkBase<long>
     {
-        private readonly BookRepository m_bookRepository;
+        private readonly BookViewRepository m_bookRepository;
         private readonly CategoryRepository m_categoryRepository;
         private readonly HeadwordRowNumberSearchRequestContract m_request;
         private readonly int m_userId;
+        private readonly ProjectTypeEnum m_projectType;
+        private readonly IMapper m_mapper;
 
-        public SearchHeadwordRowNumberWork(BookRepository bookRepository, CategoryRepository categoryRepository, HeadwordRowNumberSearchRequestContract request, int userId) : base(bookRepository)
+        public SearchHeadwordRowNumberWork(BookViewRepository bookRepository, CategoryRepository categoryRepository,
+            HeadwordRowNumberSearchRequestContract request, int userId, ProjectTypeEnum projectType, IMapper mapper) : base(bookRepository)
         {
             m_bookRepository = bookRepository;
             m_categoryRepository = categoryRepository;
             m_request = request;
             m_userId = userId;
+            m_projectType = projectType;
+            m_mapper = mapper;
         }
 
         protected override long ExecuteWorkImplementation()
         {
             var projectIds = m_request.Category.SelectedBookIds ?? new List<long>();
             var categoryIds = m_request.Category.SelectedCategoryIds ?? new List<int>();
-            var bookTypeEnum = Mapper.Map<BookTypeEnum>(m_request.Category.BookType);
+            var bookTypeEnum = m_mapper.Map<BookTypeEnum>(m_request.Category.BookType);
 
             if (projectIds.Count > 0 || categoryIds.Count > 0)
             {
@@ -35,11 +40,11 @@ namespace Vokabular.MainService.Core.Works.Search
                     categoryIds = m_categoryRepository.GetAllSubcategoryIds(categoryIds);
                 }
 
-                projectIds = m_bookRepository.GetProjectIds(bookTypeEnum, m_userId, projectIds, categoryIds);
+                projectIds = m_bookRepository.GetProjectIds(bookTypeEnum, m_userId, m_projectType, projectIds, categoryIds);
             }
             else
             {
-                projectIds = m_bookRepository.GetProjectIds(bookTypeEnum, m_userId, null, null);
+                projectIds = m_bookRepository.GetProjectIds(bookTypeEnum, m_userId, m_projectType, null, null);
             }
 
             return m_bookRepository.GetHeadwordRowNumber(m_request.Query, projectIds);

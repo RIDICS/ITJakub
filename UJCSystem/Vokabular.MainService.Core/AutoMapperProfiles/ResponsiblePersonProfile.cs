@@ -27,6 +27,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ResponsiblePerson.Id))
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.ResponsiblePerson.FirstName))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.ResponsiblePerson.LastName))
+                .ForMember(dest => dest.Sequence, opt => opt.MapFrom(src => src.Sequence))
                 .ForMember(dest => dest.ResponsibleType, opt => opt.MapFrom(src => src.ResponsibleType));
         }
     }

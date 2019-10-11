@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ITJakub.FileProcessing.Core.Communication;
+using ITJakub.FileProcessing.DataContracts;
 using ITJakub.SearchService.DataContracts.Contracts;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.FulltextService.DataContracts.Contracts;
@@ -19,6 +20,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
             m_communicationProvider = communicationProvider;
             m_converter = converter;
         }
+
+        public FulltextStoreTypeContract StoreType => FulltextStoreTypeContract.ElasticSearch;
 
         public void UploadFullbookToBookVersion(VersionResourceUploadContract resourceUploadContract)
         {

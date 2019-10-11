@@ -5,6 +5,7 @@ using System.Net;
 using AutoMapper;
 using Vokabular.DataEntities.Database.ConditionCriteria;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
@@ -24,20 +25,20 @@ namespace Vokabular.MainService.Core.Managers
         private readonly CriteriaKey[] m_supportedSearchPageCriteria = { CriteriaKey.Fulltext, CriteriaKey.Heading, CriteriaKey.Sentence, CriteriaKey.Term, CriteriaKey.TokenDistance };
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly AuthorizationManager m_authorizationManager;
-        private readonly BookRepository m_bookRepository;
-        private readonly MetadataRepository m_metadataRepository;
+        private readonly BookViewRepository m_bookRepository;
+        private readonly IMapper m_mapper;
 
-        public BookHitSearchManager(FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager, BookRepository bookRepository, MetadataRepository metadataRepository)
+        public BookHitSearchManager(FulltextStorageProvider fulltextStorageProvider, AuthorizationManager authorizationManager, BookViewRepository bookRepository, IMapper mapper)
         {
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_authorizationManager = authorizationManager;
             m_bookRepository = bookRepository;
-            m_metadataRepository = metadataRepository;
+            m_mapper = mapper;
         }
 
         public List<PageContract> SearchPage(long projectId, SearchPageRequestContract request)
         {
-            m_authorizationManager.AuthorizeBook(projectId);
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ShowPublished);
 
             var termConditions = new List<SearchCriteriaContract>();
             var fulltextConditions = new List<SearchCriteriaContract>();
@@ -68,7 +69,7 @@ namespace Vokabular.MainService.Core.Managers
                 termConditionCreator.AddCriteria(termConditions);
                 termConditionCreator.SetProjectIds(new[] { projectId });
 
-                pagesByMetadata = m_metadataRepository.InvokeUnitOfWork(x => x.GetPagesWithTerms(termConditionCreator));
+                pagesByMetadata = m_bookRepository.InvokeUnitOfWork(x => x.GetPagesWithTerms(termConditionCreator));
             }
 
             IList<PageResource> pagesByFulltext = null;
@@ -76,7 +77,7 @@ namespace Vokabular.MainService.Core.Managers
             {
                 var projectIdentification = m_bookRepository.InvokeUnitOfWork(x => x.GetProjectIdentification(projectId));
 
-                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectIdentification.ProjectType);
                 var fulltextResult = fulltextStorage.SearchPageByCriteria(fulltextConditions, projectIdentification);
 
                 switch (fulltextResult.SearchResultType)
@@ -114,7 +115,7 @@ namespace Vokabular.MainService.Core.Managers
                 );
             }
 
-            var result = Mapper.Map<List<PageContract>>(resultPages);
+            var result = m_mapper.Map<List<PageContract>>(resultPages);
             return result;
         }
 
@@ -141,7 +142,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<PageResultContextContract> SearchHitsWithPageContext(long projectId, SearchHitsRequestContract request)
         {
-            m_authorizationManager.AuthorizeBook(projectId);
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ShowPublished);
 
             var fulltextConditions = ExtractFulltextConditions(request.ConditionConjunction);
             if (fulltextConditions.Count == 0)
@@ -153,7 +154,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var projectIdentification = m_bookRepository.InvokeUnitOfWork(x => x.GetProjectIdentification(projectId));
 
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectIdentification.ProjectType);
             var start = PagingHelper.GetStart(request.Start);
             var count = PagingHelper.GetCount(request.Count);
             var fulltextResult = fulltextStorage.SearchHitsWithPageContext(start, count, request.ContextLength, fulltextConditions, projectIdentification);
@@ -171,7 +172,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long SearchHitsResultCount(long projectId, SearchHitsRequestContract request)
         {
-            m_authorizationManager.AuthorizeBook(projectId);
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ShowPublished);
 
             var fulltextConditions = ExtractFulltextConditions(request.ConditionConjunction);
             if (fulltextConditions.Count == 0)
@@ -183,7 +184,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var projectIdentification = m_bookRepository.InvokeUnitOfWork(x => x.GetProjectIdentification(projectId));
 
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectIdentification.ProjectType);
             var fulltextResultCount = fulltextStorage.SearchHitsResultCount(fulltextConditions, projectIdentification);
 
             return fulltextResultCount;

@@ -1,13 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
+using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.ProjectItem;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
+using Vokabular.TextConverter.Markdown.Extensions;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -15,28 +20,32 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly AuthenticationManager m_authenticationManager;
         private readonly ResourceRepository m_resourceRepository;
-        private readonly BookRepository m_bookRepository;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
+        private readonly IFileSystemManager m_fileSystemManager;
+        private readonly IMapper m_mapper;
 
-        public ProjectItemManager(AuthenticationManager authenticationManager, ResourceRepository resourceRepository, BookRepository bookRepository, FulltextStorageProvider fulltextStorageProvider)
+        public ProjectItemManager(AuthenticationManager authenticationManager, ResourceRepository resourceRepository,
+            FulltextStorageProvider fulltextStorageProvider, IFileSystemManager fileSystemManager,
+            IMapper mapper)
         {
             m_authenticationManager = authenticationManager;
             m_resourceRepository = resourceRepository;
-            m_bookRepository = bookRepository;
             m_fulltextStorageProvider = fulltextStorageProvider;
+            m_fileSystemManager = fileSystemManager;
+            m_mapper = mapper;
         }
 
         public List<PageContract> GetPageList(long projectId)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectPages(projectId));
-            var result = Mapper.Map<List<PageContract>>(dbResult);
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestPages(projectId));
+            var result = m_mapper.Map<List<PageContract>>(dbResult);
             return result;
         }
 
         public PageContract GetPage(long pageId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<PageResource>(pageId));
-            var result = Mapper.Map<PageContract>(dbResult);
+            var result = m_mapper.Map<PageContract>(dbResult);
             return result;
         }
 
@@ -58,8 +67,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<TermContract> GetPageTermList(long pageId)
         {
-            var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetPageTermList(pageId));
-            var result = Mapper.Map<List<TermContract>>(dbResult);
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestPageTermList(pageId));
+            var result = m_mapper.Map<List<TermContract>>(dbResult);
             return result;
         }
 
@@ -70,15 +79,15 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<ChapterHierarchyContract> GetChapterList(long projectId)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectChapters(projectId));
-            var result = ChaptersHelper.ChapterToHierarchyContracts(dbResult);
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestChapters(projectId));
+            var result = ChaptersHelper.ChapterToHierarchyContracts(dbResult, m_mapper);
             return result;
         }
 
         public GetChapterContract GetChapterResource(long chapterId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<ChapterResource>(chapterId));
-            var result = Mapper.Map<GetChapterContract>(dbResult);
+            var result = m_mapper.Map<GetChapterContract>(dbResult);
             return result;
         }
 
@@ -99,16 +108,43 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<TrackContract> GetTrackList(long projectId)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectTracks(projectId));
-            var result = Mapper.Map<List<TrackContract>>(dbResult);
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestTracks(projectId));
+            var result = m_mapper.Map<List<TrackContract>>(dbResult);
             return result;
         }
 
         public TrackContract GetTrackResource(long trackId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<TrackResource>(trackId));
-            var result = Mapper.Map<TrackContract>(dbResult);
+            var result = m_mapper.Map<TrackContract>(dbResult);
             return result;
+        }
+
+        public IList<AudioContract> GetTrackRecordings(long trackId)
+        {
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetAudioRecordingsByTrack(trackId));
+            var result = m_mapper.Map<IList<AudioContract>>(dbResult);
+            return result;
+        }
+
+        public FileResultData GetAudio(long audioId)
+        {
+            var audioResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetResourceVersion<AudioResource>(audioId, true, true));
+            if (audioResource == null)
+            {
+                return null;
+            }
+
+            var fileStream =
+                m_fileSystemManager.GetResource(audioResource.Resource.Project.Id, null, audioResource.FileId, ResourceType.Audio);
+
+            return new FileResultData
+            {
+                FileName = audioResource.FileName,
+                MimeType = audioResource.MimeType,
+                Stream = fileStream,
+                FileSize = fileStream.Length,
+            };
         }
 
         public long CreateTrackResource(long projectId, CreateTrackContract trackData)
@@ -125,30 +161,69 @@ namespace Vokabular.MainService.Core.Managers
             var userId = m_authenticationManager.GetCurrentUserId();
             new CreateOrUpdateTrackWork(m_resourceRepository, trackData, null, trackId, userId).Execute();
         }
-
-        public EditionNoteContract GetEditionNote(long projectId, TextFormatEnumContract format)
+        
+        public void UpdatePages(long projectId, List<CreateOrUpdatePageContract> data)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestEditionNote(projectId));
-            var result = Mapper.Map<EditionNoteContract>(dbResult);
+            var userId = m_authenticationManager.GetCurrentUserId();
+            var work = new CreateOrUpdatePagesWork(m_resourceRepository, data, projectId, userId);
+            work.Execute();
+        }
 
-            if (result == null)
+        public string GetPageText(long resourcePageId, TextFormatEnumContract format)
+        {
+            var textResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestPageText(resourcePageId));
+            if (textResource == null)
             {
                 return null;
             }
 
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
-            var editionNoteText = fulltextStorage.GetEditionNote(dbResult, format);
-
-            result.Text = editionNoteText;
-            return result;
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(textResource.Resource.Project.ProjectType);
+            return fulltextStorage.GetPageText(textResource, format);
         }
 
-        public long CreateEditionNoteVersion(long projectId, CreateEditionNoteContract data)
+        public bool HasBookPageImage(long resourcePageId)
         {
+            var imageResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestPageImage(resourcePageId));
+            return imageResource != null;
+        }
+
+
+        public FileResultData GetPageImage(long resourcePageId)
+        {
+            var imageResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestPageImage(resourcePageId));
+            if (imageResource == null)
+            {
+                return null;
+            }
+
+            var imageStream =
+                m_fileSystemManager.GetResource(imageResource.Resource.Project.Id, null, imageResource.FileId, ResourceType.Image);
+            return new FileResultData
+            {
+                FileName = imageResource.FileName,
+                MimeType = imageResource.MimeType,
+                Stream = imageStream,
+                FileSize = imageStream.Length,
+            };
+        }
+
+        public void GenerateChapters(long projectId)
+        {
+            var textResources = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestTexts(projectId, null, true));
+            var sortedTextResources = textResources.OrderBy(x => ((PageResource)x.ResourcePage.LatestVersion).Position);
+            var pageWithHeadingsList = new List<Tuple<PageResource, IList<MarkdownHeadingData>>>();
+
+            foreach (var textResource in sortedTextResources)
+            {
+                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(textResource.Resource.Project.ProjectType);
+                var headings = fulltextStorage.GetHeadingsFromPageText(textResource);
+
+                var pageResource = (PageResource) textResource.ResourcePage.LatestVersion;
+                pageWithHeadingsList.Add(new Tuple<PageResource, IList<MarkdownHeadingData>>(pageResource, headings));
+            }
+
             var userId = m_authenticationManager.GetCurrentUserId();
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
-            var resourceVersionId = new CreateEditionNoteVersionWork(m_resourceRepository, projectId, data, userId, fulltextStorage).Execute();
-            return resourceVersionId;
+            new GenerateChaptersWork(projectId, userId, pageWithHeadingsList, m_resourceRepository).Execute();
         }
     }
 }

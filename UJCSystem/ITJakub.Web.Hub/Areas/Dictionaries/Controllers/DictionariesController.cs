@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
+using System.Net;
 using ITJakub.Web.Hub.Areas.Dictionaries.Models;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
-using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
@@ -24,6 +23,7 @@ using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 using ITJakub.Web.Hub.Options;
+using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 {
@@ -35,7 +35,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         private readonly FeedbacksManager m_feedbacksManager;
 
         public DictionariesController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager,
-            CommunicationProvider communicationProvider) : base(communicationProvider)
+            ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
             m_staticTextManager = staticTextManager;
             m_feedbacksManager = feedbacksManager;
@@ -58,21 +58,31 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
-        public ActionResult Listing(string xmlId, string externalId) // string[] books - this parameter is used in JavaScript
+        public ActionResult Listing(string externalId /*, string books*/) // the books parameter is used in JavaScript
         {
-            // xmlId paramater is for already existing hyperlinks, new parameter is externalId
-            externalId = externalId ?? xmlId;
+            if (string.IsNullOrEmpty(externalId))
+            {
+                // show all dictionaries
+                return View();
+            }
 
-            if (!string.IsNullOrEmpty(externalId)) // request to one specific book using externalId
+            // if externalId is specified, redirect to loading only one book by projectId:
+            try
             {
                 var client = GetBookClient();
-                var book = client.GetBookInfoByExternalId(externalId);
+                var book = client.GetBookInfoByExternalId(externalId, GetDefaultProjectType());
                 var bookArrId = $"[{book.Id}]";
 
                 return RedirectToAction("Listing", "Dictionaries", new {books = bookArrId});
             }
-
-            return View();
+            catch (HttpErrorCodeException exception)
+            {
+                if (exception.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return NotFound();
+                }
+                throw;
+            }
         }
 
         public ActionResult Help()
@@ -170,7 +180,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 ConditionConjunction = searchContractBasic,
             };
             var client = GetBookClient();
-            var resultCount = client.SearchHeadwordCount(newRequest);
+            var resultCount = client.SearchHeadwordCount(newRequest, GetDefaultProjectType());
             return Json(resultCount);
         }
 
@@ -185,7 +195,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 ConditionConjunction = searchContractFulltext,
             };
             var client = GetBookClient();
-            var resultCount = client.SearchHeadwordCount(newRequest);
+            var resultCount = client.SearchHeadwordCount(newRequest, GetDefaultProjectType());
             return Json(resultCount);
         }
 
@@ -223,7 +233,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 ConditionConjunction = listSearchCriteriaContracts,
             };
             var client = GetBookClient();
-            var resultCount = client.SearchHeadwordCount(newRequest);
+            var resultCount = client.SearchHeadwordCount(newRequest, GetDefaultProjectType());
             return Json(resultCount);
         }
 
@@ -249,7 +259,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 Start = start,
                 Count = count,
             };
-            var resultHeadwords = client.SearchHeadword(newRequest);
+            var resultHeadwords = client.SearchHeadword(newRequest, GetDefaultProjectType());
 
             // Load info about dictionaries/books
             var bookListDictionary = new Dictionary<long, BookContract>();
@@ -343,7 +353,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             };
 
             var client = GetBookClient();
-            var resultCount = client.SearchHeadwordCount(newRequest);
+            var resultCount = client.SearchHeadwordCount(newRequest, GetDefaultProjectType());
             return Json(resultCount);
         }
 
@@ -370,7 +380,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 }
             };
             var client = GetBookClient();
-            var rowNumber = client.SearchHeadwordRowNumber(request);
+            var rowNumber = client.SearchHeadwordRowNumber(request, GetDefaultProjectType());
 
             var resultPageNumber = (rowNumber - 1) / pageSize + 1;
 
@@ -420,19 +430,20 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         public ActionResult GetTypeaheadDictionaryHeadword(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             var client = GetBookClient();
-            var result = client.GetHeadwordAutocomplete(query, AreaBookType, selectedCategoryIds, selectedBookIds);
+            var result = client.GetHeadwordAutocomplete(query, GetDefaultProjectType(), AreaBookType, selectedCategoryIds, selectedBookIds);
             return Json(result);
         }
 
-        //public FileResult GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName) // Original signature
         public ActionResult GetHeadwordImage(long pageId)
         {
-            return NotFound();
-            //using (var client = GetMainServiceClient())
-            //{
-            //    var resultStream = client.GetHeadwordImage(bookXmlId, bookVersionXmlId, fileName);
-            //    return File(resultStream, MediaTypeNames.Image.Jpeg); //TODO resolve content type properly
-            //}
+            var client = GetBookClient();
+            var image = client.GetPageImage(pageId);
+            if (image == null)
+            {
+                return NotFound();
+            }
+
+            return File(image.Stream, image.MimeType, image.FileName, image.FileSize);
         }
 
         private void AddHeadwordFeedback(string content, long headwordVersionId, string name, string email)

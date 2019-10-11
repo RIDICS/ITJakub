@@ -1,30 +1,6 @@
 ﻿@import "ITJakub.Images.less";
 @import "ITJakub.Colors.less";
-
-.reset-search {
-    padding-bottom: 0.5em;
-    padding-top: 0.5em;
-    margin-left: 0px;
-    margin-right: 0px;
-    justify-content: center !important;
-    text-align: center;
-
-    .query, .reset-search-form {
-        display: inline-block
-    }
-
-    .reset-search-form {
-        padding-left: 1em;
-    }
-
-    .searched-query {
-        font-weight: 600;
-    }
-
-    .text-nowrap {
-        white-space: nowrap !important;
-    }
-}
+@import "ridics.list.less";
 
 .list-container {
     &.selectable {
@@ -150,29 +126,6 @@
                     border: none;
                 }
             }
-        }
-    }
-}
-
-.search-form,
-.user-search-form,
-.role-search-form,
-.permission-search-form {
-    text-align: right;
-
-    .form-group {
-        width: 100%;
-
-        .search-button {
-            float: right;
-            margin-left: 0.4em;
-        }
-
-        .search-value {
-            display: inline-block;
-            width: 55%;
-            vertical-align: middle;
-            margin-left: 0.2em;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Vokabular.MainService.DataContracts;
 using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectImport.Model.Exceptions;
 using Vokabular.ProjectImport.Shared.Options;
@@ -151,7 +152,12 @@ namespace Vokabular.OaiPmhImportManager
 
                     if (currentRetry > m_retryCount)
                     {
-                        throw new ImportFailedException($"Error while requesting: {m_url}, verb: {verbType.ListRecords}, resumptionToken: {resumptionToken}. Error message: {e.Message}", e);
+                        throw new ImportFailedException(
+                            MainServiceErrorCode.OaiPmhCommunicationFailed,
+                            $"Error while requesting: {m_url}, verb: {verbType.ListRecords}, resumptionToken: {resumptionToken}. Error message: {e.Message}", 
+                            e,
+                            m_url
+                        );
                     }
                 }
             }

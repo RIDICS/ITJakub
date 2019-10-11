@@ -45,6 +45,8 @@ namespace Vokabular.DataEntities.Database.Entities
             }
         }
 
+        public virtual int Sequence { get; set; }
+
         public virtual bool Equals(ProjectResponsiblePerson other)
         {
             if (ReferenceEquals(null, other)) return false;

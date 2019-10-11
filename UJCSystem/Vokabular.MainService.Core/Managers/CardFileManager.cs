@@ -13,18 +13,20 @@ namespace Vokabular.MainService.Core.Managers
     public class CardFileManager
     {
         private readonly AuthorizationManager m_authorizationManager;
+        private readonly IMapper m_mapper;
         private readonly CardFilesClient m_cardFileClient;
 
-        public CardFileManager(AuthorizationManager authorizationManager, CommunicationProvider communicationProvider)
+        public CardFileManager(AuthorizationManager authorizationManager, CommunicationProvider communicationProvider, IMapper mapper)
         {
             m_authorizationManager = authorizationManager;
+            m_mapper = mapper;
             m_cardFileClient = communicationProvider.GetCardFilesClient();
         }
         
         public IList<CardFileContract> GetCardFiles()
         {
             var cardFiles = m_cardFileClient.GetFiles();
-            var cardFilesContracts = Mapper.Map<file[], IList<CardFileContract>>(cardFiles.file);
+            var cardFilesContracts = m_mapper.Map<file[], IList<CardFileContract>>(cardFiles.file);
             m_authorizationManager.FilterCardFileList(ref cardFilesContracts);
             return cardFilesContracts;
         }
@@ -33,7 +35,7 @@ namespace Vokabular.MainService.Core.Managers
         {
             m_authorizationManager.CheckUserCanViewCardFile(cardFileId);
             var buckets = m_cardFileClient.GetBuckets(cardFileId);
-            return Mapper.Map<bucket[], IList<BucketShortContract>>(buckets.bucket);
+            return m_mapper.Map<bucket[], IList<BucketShortContract>>(buckets.bucket);
         }
 
         public IList<BucketShortContract> GetBucketsByHeadword(string cardFileId, string headword)
@@ -41,7 +43,7 @@ namespace Vokabular.MainService.Core.Managers
             m_authorizationManager.CheckUserCanViewCardFile(cardFileId);
             var buckets = m_cardFileClient.GetBucketsByHeadword(cardFileId, headword);
             return buckets.bucket != null
-                ? Mapper.Map<bucket[], IList<BucketShortContract>>(buckets.bucket)
+                ? m_mapper.Map<bucket[], IList<BucketShortContract>>(buckets.bucket)
                 : null;
         }
 
@@ -49,7 +51,7 @@ namespace Vokabular.MainService.Core.Managers
         {
             m_authorizationManager.CheckUserCanViewCardFile(cardFileId);
             var buckets = m_cardFileClient.GetCardsFromBucket(cardFileId, bucketId);
-            var bucketContracts = Mapper.Map<bucket[], IList<BucketContract>>(buckets.bucket);
+            var bucketContracts = m_mapper.Map<bucket[], IList<BucketContract>>(buckets.bucket);
             var cards = bucketContracts.First().Cards;
             return cards;
         }
@@ -57,7 +59,7 @@ namespace Vokabular.MainService.Core.Managers
         {
             m_authorizationManager.CheckUserCanViewCardFile(cardFileId);
             var buckets = m_cardFileClient.GetCardsFromBucket(cardFileId, bucketId);
-            var bucketContracts = Mapper.Map<bucket[], IList<BucketShortContract>>(buckets.bucket);
+            var bucketContracts = m_mapper.Map<bucket[], IList<BucketShortContract>>(buckets.bucket);
             var cards = bucketContracts.First().Cards;
             return cards;
         }
@@ -66,7 +68,7 @@ namespace Vokabular.MainService.Core.Managers
         {
             m_authorizationManager.CheckUserCanViewCardFile(cardFileId);
             var card = m_cardFileClient.GetCardFromBucket(cardFileId, bucketId,cardId);
-            return Mapper.Map<card, CardContract>(card);
+            return m_mapper.Map<card, CardContract>(card);
         }
 
         public FileResultData GetImage(string cardFileId, string bucketId, string cardId, string imageId, CardImageSizeEnumContract imageSize)

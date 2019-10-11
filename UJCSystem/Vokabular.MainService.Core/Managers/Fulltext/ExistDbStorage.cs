@@ -10,25 +10,27 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
-using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataEntities.UnitOfWork;
+using Vokabular.TextConverter.Markdown.Extensions;
 
 namespace Vokabular.MainService.Core.Managers.Fulltext
 {
     public class ExistDbStorage : IFulltextStorage
     {
         private readonly CommunicationProvider m_communicationProvider;
-        private readonly BookRepository m_bookRepository;
+        private readonly BookViewRepository m_bookRepository;
+        private readonly IMapper m_mapper;
 
-        public ExistDbStorage(CommunicationProvider communicationProvider, BookRepository bookRepository)
+        public ExistDbStorage(CommunicationProvider communicationProvider, BookViewRepository bookRepository, IMapper mapper)
         {
             m_communicationProvider = communicationProvider;
             m_bookRepository = bookRepository;
+            m_mapper = mapper;
         }
 
         private OutputFormatEnum ConvertOutputTextFormat(TextFormatEnumContract format)
@@ -88,7 +90,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         {
             var outputFormat = ConvertOutputTextFormat(format);
             var dbTtransformation = m_bookRepository.InvokeUnitOfWork(x => x.GetDefaultTransformation(outputFormat, bookType));
-            var transformation = Mapper.Map<TransformationData>(dbTtransformation);
+            var transformation = m_mapper.Map<TransformationData>(dbTtransformation);
             if (transformation == null)
             {
                 transformation = new TransformationData
@@ -101,7 +103,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             return transformation;
         }
 
-        public ProjectType ProjectType => ProjectType.Research;
+        public FulltextStorageType StorageType => FulltextStorageType.ExistDb;
 
         public string GetPageText(TextResource textResource, TextFormatEnumContract format)
         {
@@ -291,14 +293,15 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
-        public CorpusSearchResultDataList SearchCorpusByCriteria(int start, int count, int contextLength, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        public CorpusSearchResultDataList SearchCorpusByCriteria(int start, int count, int contextLength, SortTypeEnumContract? sort,
+            SortDirectionEnumContract? sortDirection, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithBookVersionRestriction(criteria, projects);
 
             criteria.Add(new ResultCriteriaContract
             {
-                Sorting = SortEnum.Title, // TODO use sorting from method parameter
-                Direction = ListSortDirection.Ascending,
+                Sorting = ConvertSortType(sort),
+                Direction = ConvertSortDirection(sortDirection),
                 HitSettingsContract = new HitSettingsContract
                 {
                     Start = start,
@@ -389,7 +392,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
-        public string CreateNewTextVersion(TextResource textResource)
+        public string CreateNewTextVersion(TextResource textResource, string text)
         {
             throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
         }
@@ -399,17 +402,12 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
         }
 
-        public string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource)
-        {
-            throw new NotSupportedException("Saving resources to eXist-db isn't supported. eXist-db storage supports only full book import.");
-        }
-
         public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(int start, int count, SortTypeEnumContract? sort, SortDirectionEnumContract? sortDirection, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects, bool fetchNumberOfResults)
         {
             throw new NotSupportedException("Paged search in corpus in eXist-db isn't supported.");
         }
 
-        public CorpusSearchResultDataList SearchCorpusInSnapshotByCriteria(long projectId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria)
+        public CorpusSearchResultDataList SearchCorpusInSnapshotByCriteria(long snapshotId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria)
         {
             throw new NotSupportedException("Paged search in corpus in eXist-db isn't supported.");
         }
@@ -417,6 +415,16 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         public long SearchCorpusTotalResultCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             throw new NotSupportedException("Paged search in corpus in eXist-db isn't supported.");
+        }
+
+        public void CreateSnapshot(Snapshot snapshot, IList<TextResource> textResources, MetadataResource metadata)
+        {
+            throw new NotSupportedException("Snapshot creating is not supported in eXist-db.");
+        }
+
+        public IList<MarkdownHeadingData> GetHeadingsFromPageText(TextResource textResource)
+        {
+            throw new NotSupportedException("Getting headings from text in eXist-db isn't supported.");
         }
     }
 }

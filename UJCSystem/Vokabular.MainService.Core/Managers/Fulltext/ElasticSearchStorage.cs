@@ -1,26 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
+using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Request;
+using Vokabular.TextConverter.Markdown.Extensions;
 
 namespace Vokabular.MainService.Core.Managers.Fulltext
 {
     public class ElasticSearchStorage : IFulltextStorage
     {
         private readonly CommunicationProvider m_communicationProvider;
+        private readonly MarkdownHeadingAnalyzer m_markdownHeadingAnalyzer;
 
-        public ElasticSearchStorage(CommunicationProvider communicationProvider)
+        public ElasticSearchStorage(CommunicationProvider communicationProvider, MarkdownHeadingAnalyzer markdownHeadingAnalyzer)
         {
             m_communicationProvider = communicationProvider;
+            m_markdownHeadingAnalyzer = markdownHeadingAnalyzer;
         }
 
-        public ProjectType ProjectType => ProjectType.Community;
+        public FulltextStorageType StorageType => FulltextStorageType.ElasticSearch;
 
         public string GetPageText(TextResource textResource, TextFormatEnumContract format)
         {
@@ -39,13 +44,13 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
 
         public string GetHeadwordText(HeadwordResource headwordResource, TextFormatEnumContract format)
         {
-            throw new System.NotImplementedException();
+            throw new NotSupportedException("Headwords/dictionaries are not supported in ElasticSearch storage.");
         }
 
         public string GetHeadwordTextFromSearch(HeadwordResource headwordResource, TextFormatEnumContract format,
             SearchPageRequestContract searchRequest)
         {
-            throw new System.NotImplementedException();
+            throw new NotSupportedException("Headwords/dictionaries are not supported in ElasticSearch storage.");
         }
 
         private void UpdateCriteriaWithSnapshotRestriction(List<SearchCriteriaContract> criteria,
@@ -131,13 +136,14 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             return result;
         }
 
-        public CorpusSearchResultDataList SearchCorpusByCriteria(int start, int count, int contextLength,
-            List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        public CorpusSearchResultDataList SearchCorpusByCriteria(int start, int count, int contextLength, SortTypeEnumContract? sort,
+            SortDirectionEnumContract? sortDirection, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithSnapshotRestriction(criteria, projects);
 
             var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient();
             var result = fulltextServiceClient.SearchCorpusByCriteria(start, count, contextLength, criteria);
+            // sorting is currently not used
 
             var resultList = result.Select(x => new CorpusSearchResultData
             {
@@ -206,36 +212,76 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             return result;
         }
 
+        public void CreateSnapshot(Snapshot snapshot, IList<TextResource> textResources, MetadataResource metadata)
+        {
+            var snapshotResource = new SnapshotPageIdsResourceContract
+            {
+                PageIds = textResources.Select(x => x.ExternalId).ToList(),
+                SnapshotId = snapshot.Id,
+                ProjectId = snapshot.Project.Id,
+                MetadataResource = new SnapshotMetadataResourceContract
+                {
+                    Title = metadata.Title,
+                    SubTitle = metadata.SubTitle,
+                    AuthorsLabel = metadata.AuthorsLabel,
+                    RelicAbbreviation = metadata.RelicAbbreviation,
+                    SourceAbbreviation = metadata.SourceAbbreviation,
+                    PublishPlace = metadata.PublishPlace,
+                    PublishDate = metadata.PublishDate,
+                    PublisherText = metadata.PublisherText,
+                    PublisherEmail = metadata.PublisherEmail,
+                    Copyright = metadata.Copyright,
+                    BiblText = metadata.BiblText,
+                    OriginDate = metadata.OriginDate,
+                    NotBefore = metadata.NotBefore,
+                    NotAfter = metadata.NotAfter,
+                    ManuscriptIdno = metadata.ManuscriptIdno,
+                    ManuscriptSettlement = metadata.ManuscriptSettlement,
+                    ManuscriptCountry = metadata.ManuscriptCountry,
+                    ManuscriptRepository = metadata.ManuscriptRepository,
+                    ManuscriptExtent = metadata.ManuscriptExtent,
+                    ManuscriptTitle = metadata.ManuscriptTitle
+                }
+            };
+
+            var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient();
+            fulltextServiceClient.CreateSnapshot(snapshotResource);
+        }
+
+        public IList<MarkdownHeadingData> GetHeadingsFromPageText(TextResource textResource)
+        {
+            var text = GetPageText(textResource, TextFormatEnumContract.Raw);
+            var result = m_markdownHeadingAnalyzer.FindAllHeadings(text);
+            return result;
+        }
+
         public long SearchHeadwordByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
-            throw new System.NotImplementedException();
+            throw new NotSupportedException("Headwords/dictionaries are not supported in ElasticSearch storage.");
         }
 
         public HeadwordSearchResultDataList SearchHeadwordByCriteria(int start, int count, List<SearchCriteriaContract> criteria,
             IList<ProjectIdentificationResult> projects)
         {
-            throw new System.NotImplementedException();
+            throw new NotSupportedException("Headwords/dictionaries are not supported in ElasticSearch storage.");
         }
 
         public string GetEditionNote(EditionNoteResource editionNoteResource, TextFormatEnumContract format)
         {
-            throw new System.NotImplementedException();
+            // ElasticSearch storage doesn't support edition notes
+            return null;
         }
 
-        public string CreateNewTextVersion(TextResource textResource)
+        public string CreateNewTextVersion(TextResource textResource, string text)
         {
-            // TODO implement and change usage in CreateNewTextResourceWork
-            throw new System.NotImplementedException();
+            var fulltextClient = m_communicationProvider.GetFulltextServiceClient();
+            var externalTextId = fulltextClient.CreateTextResource(text, textResource.VersionNumber);
+            return externalTextId;
         }
 
         public string CreateNewHeadwordVersion(HeadwordResource headwordResource)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public string CreateNewEditionNoteVersion(EditionNoteResource editionNoteResource)
-        {
-            throw new System.NotImplementedException();
+            throw new NotSupportedException("Headwords/dictionaries are not supported in ElasticSearch storage.");
         }
     }
 }

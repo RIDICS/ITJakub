@@ -10,10 +10,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.OaiPmhImportManager;
 using Vokabular.OaiPmhImportManager.Model;
 using Vokabular.ProjectImport.Managers;
@@ -54,7 +53,7 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
                     {
                         if (config == ThrowExc)
                         {
-                            throw new ImportFailedException("ImportFailed");
+                            throw new ImportFailedException("ImportFailed", "ImportFailed");
                         }
                         else if (config == ImportTwoRecords)
                         {
@@ -71,7 +70,7 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
                 .Returns(Task.CompletedTask);
 
             var permissionProviderMock = mockFactory.Create<IPermissionsProvider>();
-            permissionProviderMock.Setup(x => x.GetPermissionByName(It.IsAny<string>())).Returns((PermissionContract) null);
+            permissionProviderMock.Setup(x => x.GetRoleIdsByPermissionName(It.IsAny<string>())).Returns((IList<int>) null);
 
             var mockIoc = new MockIocContainer(true);
             mockIoc.ServiceCollection.Replace(new ServiceDescriptor(typeof(IProjectImportManager),
@@ -138,7 +137,7 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
             Assert.AreEqual(null, importHistory.Message);
             Assert.AreEqual(ImportStatusEnum.Completed, importHistory.Status);
 
-            var projects = m_projectRepository.GetProjectList(0, 5);
+            var projects = m_projectRepository.GetProjectList(0, 5, ProjectTypeEnum.Bibliography);
             Assert.AreEqual(1, projects.Count);
         }
 
@@ -177,7 +176,7 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
             Assert.AreEqual(null, importHistory.Message);
             Assert.AreEqual(ImportStatusEnum.Completed, importHistory.Status);
 
-            var projects = m_projectRepository.GetProjectList(0, 5);
+            var projects = m_projectRepository.GetProjectList(0, 5, ProjectTypeEnum.Bibliography);
             Assert.AreEqual(2, projects.Count);
         }
 
@@ -222,7 +221,7 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
                 Assert.AreEqual(ImportStatusEnum.Completed, importHistory.Status);
             }
 
-            var projects = m_projectRepository.GetProjectList(0, 5);
+            var projects = m_projectRepository.GetProjectList(0, 5, ProjectTypeEnum.Bibliography);
             Assert.AreEqual(2, projects.Count);
         }
 
@@ -279,7 +278,7 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
             Assert.AreNotEqual(null, importHistory2.Message);
             Assert.AreEqual(ImportStatusEnum.Failed, importHistory2.Status);
 
-            var projects = m_projectRepository.GetProjectList(0, 5);
+            var projects = m_projectRepository.GetProjectList(0, 5, ProjectTypeEnum.Bibliography);
             Assert.AreEqual(1, projects.Count);
         }
 

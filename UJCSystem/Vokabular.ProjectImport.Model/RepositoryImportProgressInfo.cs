@@ -20,6 +20,7 @@ namespace Vokabular.ProjectImport.Model
         public string ExternalRepositoryName { get; }
         public bool IsCompleted { get; set; }
         public string FaultedMessage { get; set; }
+        public object[] FaultedMessageParams { get; set; }
         public int ProcessedProjectsCount => m_processedProjectsCount;
         public int FailedProjectsCount => m_failedProjectsCount;
 

@@ -37,7 +37,7 @@ namespace Vokabular.MainService.Core.Works.Permission
             }
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
-            client.HttpClient.DeleteItemAsync<RoleContract>(m_roleId).GetAwaiter().GetResult();
+            client.DeleteRoleAsync(m_roleId).GetAwaiter().GetResult();
         }
 
         private void CheckRoleForDeleting(RoleContractBase defaultRole)

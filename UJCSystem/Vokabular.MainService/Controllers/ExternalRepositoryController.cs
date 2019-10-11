@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.MainService.DataContracts.Contracts.OaiPmh;
 using Vokabular.ProjectImport;
 using Vokabular.ProjectImport.Managers;
@@ -16,7 +17,7 @@ using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/bibliography/repository")]
     [Authorize(VokabularPermissionNames.ManageBibliographyImport)]
     public class ExternalRepositoryController : BaseController
     {
@@ -102,14 +103,14 @@ namespace Vokabular.MainService.Controllers
             return result.List;
         }
 
-        [HttpGet("allExternalRepositories")]
+        [HttpGet("all")]
         public IList<ExternalRepositoryContract> GetAllExternalRepositories()
         {
             var result = m_externalRepositoryManager.GetAllExternalRepositories();
             return result;
         }
 
-        [HttpDelete("{externalRepositoryId}/importStatus")]
+        [HttpDelete("{externalRepositoryId}/import-status")]
         public IActionResult CancelImportTask(int externalRepositoryId)
         {
             try
@@ -123,7 +124,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpGet("allExternalRepositoryTypes")]
+        [HttpGet("type")]
         public IList<ExternalRepositoryTypeContract> GetAllExternalRepositoryTypes()
         {
             return m_externalRepositoryManager.GetAllExternalRepositoryTypes();
@@ -131,7 +132,7 @@ namespace Vokabular.MainService.Controllers
 
         #region OAI-PMH
 
-        [HttpGet("oaiPmhRepositoryInfo")]
+        [HttpGet("external-info/oai-pmh")]
         public async Task<OaiPmhRepositoryInfoContract> GetOaiPmhRepositoryInfoAsync([FromQuery] string url)
         {
             return await m_externalRepositoryManager.GetOaiPmhRepositoryInfo(url);

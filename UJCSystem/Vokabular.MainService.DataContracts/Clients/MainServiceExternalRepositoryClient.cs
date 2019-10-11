@@ -2,6 +2,7 @@
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.MainService.DataContracts.Contracts.OaiPmh;
 using Vokabular.RestClient.Extensions;
 using Vokabular.RestClient.Results;
@@ -24,7 +25,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.Get<IList<ExternalRepositoryContract>>($"externalRepository/allExternalRepositories");
+                var result = m_client.Get<IList<ExternalRepositoryContract>>($"bibliography/repository/all");
                 return result;
             }
             catch (HttpRequestException e)
@@ -42,7 +43,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             {
                 var result =
                     m_client.GetPagedList<ExternalRepositoryContract>(
-                        $"externalRepository?start={start}&count={count}&fetchPageCount={fetchPageCount}");
+                        $"bibliography/repository?start={start}&count={count}&fetchPageCount={fetchPageCount}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -58,7 +59,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.Get<ExternalRepositoryDetailContract>($"externalRepository/{externalRepositoryId}");
+                var result = m_client.Get<ExternalRepositoryDetailContract>($"bibliography/repository/{externalRepositoryId}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -74,7 +75,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.Get<ExternalRepositoryStatisticsContract>($"externalRepository/{externalRepositoryId}/statistics");
+                var result = m_client.Get<ExternalRepositoryStatisticsContract>($"bibliography/repository/{externalRepositoryId}/statistics");
                 return result;
             }
             catch (HttpRequestException e)
@@ -90,7 +91,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var externalRepositoryId = m_client.Post<int>("externalRepository", externalRepository);
+                var externalRepositoryId = m_client.Post<int>("bibliography/repository", externalRepository);
                 return externalRepositoryId;
             }
             catch (HttpRequestException e)
@@ -106,7 +107,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                m_client.Delete($"externalRepository/{externalRepositoryId}");
+                m_client.Delete($"bibliography/repository/{externalRepositoryId}");
             }
             catch (HttpRequestException e)
             {
@@ -121,7 +122,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                m_client.Put<object>($"externalRepository/{externalRepositoryId}", externalRepository);
+                m_client.Put<object>($"bibliography/repository/{externalRepositoryId}", externalRepository);
             }
             catch (HttpRequestException e)
             {
@@ -136,7 +137,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                m_client.Delete($"externalRepository/{externalRepositoryId}/importStatus");
+                m_client.Delete($"bibliography/repository/{externalRepositoryId}/import-status");
             }
             catch (HttpRequestException e)
             {
@@ -151,7 +152,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                return m_client.Get<IList<ExternalRepositoryTypeContract>>($"externalRepository/allExternalRepositoryTypes");
+                return m_client.Get<IList<ExternalRepositoryTypeContract>>($"bibliography/repository/type");
             }
             catch (HttpRequestException e)
             {
@@ -166,7 +167,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                return m_client.Get<OaiPmhRepositoryInfoContract>($"externalRepository/oaiPmhRepositoryInfo?url={url.EncodeQueryString()}");
+                return m_client.Get<OaiPmhRepositoryInfoContract>($"bibliography/repository/external-info/oai-pmh?url={url.EncodeQueryString()}");
             }
             catch (HttpRequestException e)
             {
@@ -184,7 +185,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                m_client.Post<object>($"repositoryImport", externalRepositoryIds);
+                m_client.Post<object>($"bibliography/import", externalRepositoryIds);
             }
             catch (HttpRequestException e)
             {
@@ -199,7 +200,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                return m_client.Get<IList<RepositoryImportProgressInfoContract>>($"repositoryImport/importStatus");
+                return m_client.Get<IList<RepositoryImportProgressInfoContract>>($"bibliography/import/status");
             }
             catch (HttpRequestException e)
             {

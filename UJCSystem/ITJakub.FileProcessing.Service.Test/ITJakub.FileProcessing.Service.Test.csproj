@@ -44,7 +44,7 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NHibernate, Version=5.2.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\packages\NHibernate.5.2.5\lib\net461\NHibernate.dll</HintPath>
+      <HintPath>..\packages\NHibernate.5.2.6\lib\net461\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\packages\Remotion.Linq.2.2.0\lib\net45\Remotion.Linq.dll</HintPath>
@@ -83,6 +83,10 @@
     <ProjectReference Include="..\ITJakub.FileProcessing.Core\ITJakub.FileProcessing.Core.csproj">
       <Project>{5cef4267-5e27-4acb-b832-74852be6ce1e}</Project>
       <Name>ITJakub.FileProcessing.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.FileProcessing.DataContracts\ITJakub.FileProcessing.DataContracts.csproj">
+      <Project>{56512CDC-6912-49B3-8AC4-CE96A0340165}</Project>
+      <Name>ITJakub.FileProcessing.DataContracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vokabular.Core\Vokabular.Core.csproj">
       <Project>{88ef00d2-ce46-4054-a764-9093ba9dde4e}</Project>

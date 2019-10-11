@@ -13,6 +13,11 @@ namespace Vokabular.ProjectImport
     {
         public static void AddProjectImportServices(this IServiceCollection container)
         {
+            container.AddSingleton<Profile, BibliographicFormatProfile>();
+            container.AddSingleton<Profile, ExternalRepositoryProfile>();
+            container.AddSingleton<Profile, ExternalRepositoryTypeProfile>();
+            container.AddSingleton<Profile, FilteringExpressionProfile>();
+            container.AddSingleton<Profile, FilteringExpressionSetProfile>();
             container.AddSingleton<Profile, RepositoryImportProgressProfile>();
 
             container.AddScoped<ExternalRepositoryManager>();

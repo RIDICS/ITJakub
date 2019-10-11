@@ -17,7 +17,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
-    <PackageReference Include="NHibernate" Version="5.2.5" />
+    <PackageReference Include="NHibernate" Version="5.2.6" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj" />

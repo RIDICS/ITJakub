@@ -96,6 +96,24 @@ interface IBookPageBookmark extends IFavoriteBaseInfo {
     favoriteLabel: IFavoriteLabel;
 }
 
+interface IResourceInfo {
+    id: number;
+    name: string;
+    versionNumber: string;
+    resourceVersionId: number;
+    author: string;
+    created: string;
+    comment: string;
+}
+
+interface IResourceVersion {
+    id: number;
+    versionNumber: string;
+    author: string;
+    createDate: string;
+    comment: string;
+}
+
 interface IOriginalAuthor {
     id: number;
     firstName: string;
@@ -126,6 +144,12 @@ interface ISaveProjectResponsiblePerson {
 interface IPage {
     id: number;
     versionId: number;
+    name: string;
+    position: number;
+}
+
+interface IUpdatePage {
+    id?: number;
     name: string;
     position: number;
 }
@@ -304,21 +328,27 @@ interface IChapterHieararchyContract {
 }
 
 interface IOnlySaveMetadataResource {
-    keywordIdList: Array<number>;
-    categoryIdList: Array<number>;
-    literaryKindIdList: Array<number>;
-    literaryGenreIdList: Array<number>;
     authorIdList: Array<number>;
     projectResponsiblePersonIdList: Array<ISaveProjectResponsiblePerson>;
 }
 
-interface ISaveMetadataResource extends IMetadataResource {
+interface IOnlySaveCategorization {
     keywordIdList: Array<number>;
     categoryIdList: Array<number>;
     literaryKindIdList: Array<number>;
     literaryGenreIdList: Array<number>;
+}
+
+interface ISaveMetadataResource extends IMetadataResource {
     authorIdList: Array<number>;
     projectResponsiblePersonIdList: Array<ISaveProjectResponsiblePerson>;
+}
+
+interface ISaveCategorization {
+    keywordIdList: Array<number>;
+    categoryIdList: Array<number>;
+    literaryKindIdList: Array<number>;
+    literaryGenreIdList: Array<number>;
 }
 
 interface IGetMetadataResource extends IMetadataResource {
@@ -408,6 +438,11 @@ interface ICommentSctucture extends ICommentStructureBase {
     time: number;
 }
 
+interface IDeleteRootCommentResponse {
+    resourceVersionId: number;
+    newText: string;
+}
+
 interface ITextWithPage {
     bookVersionId: number;
     id: number;
@@ -419,7 +454,13 @@ interface ITextWithPage {
 interface ICreateTextVersion {
     text: string;
     id: number;
-    versionNumber: number;
+    resourceVersionId: number;
+}
+
+interface ISaveTextResponse {
+    resourceVersionId?: number;
+    isValidationSuccess: boolean;
+    newText: string;
 }
 
 interface ITextWithContent {
@@ -428,6 +469,13 @@ interface ITextWithContent {
     versionNumber: number;
     bookVersionId: number;
     text: string;
+}
+
+interface IImageContract {
+    id: number;
+    versionId: number;
+    versionNumber: number;
+    imageUrl: string;
 }
 
 interface ILiteraryGenreContract {
@@ -463,8 +511,16 @@ interface ICategoryTreeContract {
     children?: ICategoryTreeContract[];
 }
 
-interface IEditionNote { //TODO expand after server functionality is done
+interface IEditionNoteContract {
+    id: number;
+    versionId: number;
+    versionNumber: number;
+    text: string;
+}
+
+interface ICreateEditionNote {
     projectId: number;
+    originalVersionId: number;
     content: string;
 }
 
@@ -582,6 +638,13 @@ enum TextFormatEnumContract {
 //    Editor = "Editor",
 //    Kolace = "Kolace",
 //}
+
+enum SaveTextModeType {
+    FullValidateOrDeny = 0,
+    FullValidateAndRepair = 1,
+    ValidateOnlySyntax = 2,
+    NoValidation = 3,
+}
 
 interface IForumViewModel {
     name: string;

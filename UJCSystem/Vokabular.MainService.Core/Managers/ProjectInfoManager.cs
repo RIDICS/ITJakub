@@ -12,11 +12,13 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly ForumSiteManager m_forumSiteManager;
+        private readonly IMapper m_mapper;
 
-        public ProjectInfoManager(ProjectRepository projectRepository, ForumSiteManager forumSiteManager)
+        public ProjectInfoManager(ProjectRepository projectRepository, ForumSiteManager forumSiteManager, IMapper mapper)
         {
             m_projectRepository = projectRepository;
             m_forumSiteManager = forumSiteManager;
+            m_mapper = mapper;
         }
 
         public void SetLiteraryKinds(long projectId, IntegerIdListContract kindIdList)
@@ -59,49 +61,49 @@ namespace Vokabular.MainService.Core.Managers
         public List<LiteraryKindContract> GetLiteraryKinds(long projectId)
         {
             var dbResult = m_projectRepository.InvokeUnitOfWork(x => x.GetProjectLiteraryKinds(projectId));
-            var result = Mapper.Map<List<LiteraryKindContract>>(dbResult);
+            var result = m_mapper.Map<List<LiteraryKindContract>>(dbResult);
             return result;
         }
 
         public List<LiteraryGenreContract> GetLiteraryGenres(long projectId)
         {
             var dbResult = m_projectRepository.InvokeUnitOfWork(x => x.GetProjectLiteraryGenres(projectId));
-            var result = Mapper.Map<List<LiteraryGenreContract>>(dbResult);
+            var result = m_mapper.Map<List<LiteraryGenreContract>>(dbResult);
             return result;
         }
 
         public List<LiteraryOriginalContract> GetLiteraryOriginals(long projectId)
         {
             var dbResult = m_projectRepository.InvokeUnitOfWork(x => x.GetProjectLiteraryOriginals(projectId));
-            var result = Mapper.Map<List<LiteraryOriginalContract>>(dbResult);
+            var result = m_mapper.Map<List<LiteraryOriginalContract>>(dbResult);
             return result;
         }
 
         public List<KeywordContract> GetKeywords(long projectId)
         {
             var dbProject = m_projectRepository.InvokeUnitOfWork(x => x.GetProjectWithKeywords(projectId));
-            var result = Mapper.Map<List<KeywordContract>>(dbProject.Keywords);
+            var result = m_mapper.Map<List<KeywordContract>>(dbProject.Keywords);
             return result;
         }
 
         public List<CategoryContract> GetCategories(long projectId)
         {
             var dbResult = m_projectRepository.InvokeUnitOfWork(x => x.GetProjectCategories(projectId));
-            var result = Mapper.Map<List<CategoryContract>>(dbResult);
+            var result = m_mapper.Map<List<CategoryContract>>(dbResult);
             return result;
         }
 
         public List<OriginalAuthorContract> GetAuthors(long projectId)
         {
             var dbResult = m_projectRepository.InvokeUnitOfWork(x => x.GetProjectOriginalAuthorList(projectId, true));
-            var result = Mapper.Map<List<OriginalAuthorContract>>(dbResult);
+            var result = m_mapper.Map<List<OriginalAuthorContract>>(dbResult);
             return result;
         }
 
         public List<ProjectResponsiblePersonContract> GetProjectResponsiblePersons(long projectId)
         {
             var dbResult = m_projectRepository.InvokeUnitOfWork(x => x.GetProjectResponsibleList(projectId));
-            var result = Mapper.Map<List<ProjectResponsiblePersonContract>>(dbResult);
+            var result = m_mapper.Map<List<ProjectResponsiblePersonContract>>(dbResult);
             return result;
         }
     }

@@ -26,7 +26,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = m_client.Get<List<FavoriteLabelContract>>(UrlQueryBuilder.Create("favorite/label").AddParameter("count", count)
-                    .ToQuery());
+                    .ToResult());
                 return result;
             }
             catch (HttpRequestException e)
@@ -96,7 +96,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("filterByType", filterByType)
                     .AddParameter("filterByTitle", filterByTitle)
                     .AddParameter("sort", sort)
-                    .ToQuery();
+                    .ToResult();
 
                 var result = m_client.GetPagedList<FavoriteBaseInfoContract>(url);
                 return result;
@@ -122,7 +122,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("bookType", bookType)
                     .AddParameter("queryType", queryType)
                     .AddParameter("filterByTitle", filterByTitle)
-                    .ToQuery();
+                    .ToResult();
 
                 var result = m_client.GetPagedList<FavoriteQueryContract>(url);
                 return result;
@@ -205,7 +205,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                 var url = UrlQueryBuilder.Create("favorite/book/grouped")
                     .AddParameterList("projectIds", projectIds)
                     .AddParameter("bookType", bookType)
-                    .ToQuery();
+                    .ToResult();
 
                 var result = m_client.Get<List<FavoriteBookGroupedContract>>(url);
                 return result;

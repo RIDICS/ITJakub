@@ -42,7 +42,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             return dbPagesByImage;
         }
 
-        public void UpdateHeadwords(long projectId, long bookVersionId, int userId, string message, BookData bookData, List<PageResource> dbPageResources)
+        public void UpdateHeadwords(long projectId, long bookVersionId, int userId, BookData bookData, List<PageResource> dbPageResources)
         {
             m_importedResourceVersionIds = new List<long>();
             if (bookData.BookHeadwords == null)

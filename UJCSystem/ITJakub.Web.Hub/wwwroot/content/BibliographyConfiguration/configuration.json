@@ -163,15 +163,12 @@
         },
         "$forumLink": {
           "type": "basic",
-          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "pattern": "<a href='{ForumUrl}'>{@Link}</a>",
           "printIfNullValue": false
         }
       }
     },
     "right-panel": {
-      "info-button": {
-        "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
-      },
       "read-button": {
         "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
       },
@@ -220,9 +217,6 @@
       }
     },
     "right-panel": {
-      "info-button": {
-        "url": "Dictionaries\\Dictionaries\\List?bookId={BookId}"
-      },
       "read-button": {
         "url": "Dictionaries\\Dictionaries\\Listing?books=[{BookId}]"
       },
@@ -395,15 +389,12 @@
         },
         "$forumLink": {
           "type": "basic",
-          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "pattern": "<a href='{ForumUrl}'>{@Link}</a>",
           "printIfNullValue": false
         }
       }
     },
     "right-panel": {
-      "info-button": {
-        "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
-      },
       "read-button": {
         "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
       },
@@ -512,9 +503,6 @@
       }
     },
     "right-panel": {
-      "info-button": {
-        "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
-      },
       "read-button": {
         "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
       },
@@ -734,15 +722,12 @@
         },
         "$forumLink": {
           "type": "basic",
-          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "pattern": "<a href='{ForumUrl}'>{@Link}</a>",
           "printIfNullValue": false
         }
       }
     },
     "right-panel": {
-      "info-button": {
-        "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
-      },
       "read-button": {
         "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
       },
@@ -922,15 +907,12 @@
         },
         "$forumLink": {
           "type": "basic",
-          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "pattern": "<a href='{ForumUrl}'>{@Link}</a>",
           "printIfNullValue": false
         }
       }
     },
     "right-panel": {
-      "info-button": {
-        "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
-      },
       "read-button": {
         "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
       },
@@ -949,7 +931,7 @@
   "BibliographicalItem": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> {@NumberOfPages}: {PageCount}",
+      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript}",
       "favorites": {
         "maxCount": 5
       },
@@ -1019,7 +1001,7 @@
       }
     },
     "bottom-panel": {
-      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
+      "body": "{$printSearchResultsCondition}{$editionTable}{@Copyright}: {Copyright}",
       "variables": {
         "$editionTable": {
           "type": "table",
@@ -1119,18 +1101,12 @@
         },
         "$forumLink": {
           "type": "basic",
-          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "pattern": "<a href='{ForumUrl}'>{@Link}</a>",
           "printIfNullValue": false
         }
       }
     },
     "right-panel": {
-      "info-button": {
-        "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
-      },
-      "read-button": {
-        "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
-      },
       "favorite-button": {},
       "load-detail-url": "Bibliography/GetBookDetailInfo?bookId={BookId}",
       "variables": {

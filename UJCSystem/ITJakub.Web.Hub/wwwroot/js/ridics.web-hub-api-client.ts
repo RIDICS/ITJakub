@@ -23,4 +23,8 @@
             url: url
         });
     }
+
+    public getHtmlPageByUrl(url: string): JQuery.jqXHR<string> {
+        return this.get(url);
+    }
 }

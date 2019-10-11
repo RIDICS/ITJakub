@@ -1,7 +1,6 @@
-using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
-using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.Repositories.BibliographyImport;
 using Vokabular.MainService.DataContracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 

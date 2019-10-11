@@ -26,5 +26,24 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
 
             return null;
         }
+
+        public override ResponsiblePerson GetResponsiblePersonByName(string firstName, string lastName)
+        {
+            return new ResponsiblePerson
+            {
+                Id = 501,
+                FirstName = firstName,
+                LastName = lastName,
+            };
+        }
+
+        public override ResponsibleType GetResponsibleTypeByName(string text)
+        {
+            return new ResponsibleType
+            {
+                Id = 12,
+                Text = text,
+            };
+        }
     }
 }

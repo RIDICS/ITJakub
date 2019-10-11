@@ -3,6 +3,7 @@ using System.Net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.RestClient.Contracts;
 using Vokabular.RestClient.Headers;
 
 namespace Vokabular.MainService.Controllers
@@ -24,6 +25,14 @@ namespace Vokabular.MainService.Controllers
         protected ObjectResult StatusCode(HttpStatusCode statusCode, object value)
         {
             return base.StatusCode((int) statusCode, value);
+        }
+
+        protected BadRequestObjectResult Error(string description)
+        {
+            return base.BadRequest(new ErrorContract
+            {
+                Description = description
+            });
         }
     }
 }

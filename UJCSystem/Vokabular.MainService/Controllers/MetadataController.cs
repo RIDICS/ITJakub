@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class MetadataController : Controller
+    public class MetadataController : BaseController
     {
         private readonly ProjectMetadataManager m_projectMetadataManager;
 
@@ -38,9 +39,10 @@ namespace Vokabular.MainService.Controllers
 
         [HttpGet("title/autocomplete")]
         public List<string> GetTitleAutocomplete([FromQuery] string query, [FromQuery] BookTypeEnumContract? bookType,
+            [FromQuery] ProjectTypeContract? projectType,
             [FromQuery] List<int> selectedCategoryIds, [FromQuery] List<long> selectedProjectIds)
         {
-            var result = m_projectMetadataManager.GetTitleAutocomplete(query, bookType, selectedCategoryIds, selectedProjectIds);
+            var result = m_projectMetadataManager.GetTitleAutocomplete(query, bookType, projectType, selectedCategoryIds, selectedProjectIds);
             return result;
         }
     }

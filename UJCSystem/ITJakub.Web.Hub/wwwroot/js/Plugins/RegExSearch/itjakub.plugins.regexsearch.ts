@@ -17,7 +17,7 @@
     public static createButton(label: string): HTMLButtonElement {
         var button = document.createElement("button");
         button.type = "button";
-        button.innerHTML = label;
+        $(button).text(label);
         $(button).addClass("btn");
         $(button).addClass("btn-default");
         $(button).addClass("regexsearch-button");
@@ -97,7 +97,7 @@ class Search {
         
         var searchButton = document.createElement("button");
         searchButton.type = "button";
-        searchButton.innerHTML = localization.translate("Search", "Home").value;
+        $(searchButton).text(localization.translate("Search", "Home").value);
         searchButton.classList.add("btn");
         searchButton.classList.add("btn-default");
         searchButton.classList.add("searchbar-button");
@@ -109,7 +109,7 @@ class Search {
        
             var advancedButton = document.createElement("button");
             advancedButton.type = "button";
-            advancedButton.innerHTML = localization.translate("Advanced", "PluginsJs").value;
+            $(advancedButton).text(localization.translate("Advanced", "PluginsJs").value);
             advancedButton.classList.add("btn");
             advancedButton.classList.add("btn-default");
             advancedButton.classList.add("searchbar-button");
@@ -563,7 +563,7 @@ class RegExConditionListItem {
 
     private createTextDelimeter(): HTMLDivElement {
         var delimeterDiv = document.createElement("div");
-        delimeterDiv.innerHTML = localization.translate("And", "PluginsJs").value;
+        $(delimeterDiv).text(localization.translate("And", "PluginsJs").value);
 
         var trashButton = document.createElement("button");
         $(trashButton).addClass("regexsearch-delimiter-remove-button");
@@ -616,7 +616,7 @@ class RegExConditionListItem {
         mainSearchDiv.appendChild(searchDestinationDiv);
 
         var searchDestinationSpan = document.createElement("span");
-        searchDestinationSpan.innerHTML = localization.translate("ChooseSearchFiled", "PluginsJs").value;
+        $(searchDestinationSpan).text(localization.translate("ChooseSearchFiled", "PluginsJs").value);
         $(searchDestinationSpan).addClass("regexsearch-upper-select-label");
         searchDestinationDiv.appendChild(searchDestinationSpan);
 
@@ -894,12 +894,9 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
     private minCenturyValue: number = 8;
     private maxCenturyValue: number = 21;
 
-    private selectedCenturyLowerValue: number;
-    private selectedCenturyHigherValue: number;
-    private selectedPeriodLowerValue: number;
-    private selectedPeriodHigherValue: number;
-    private selectedDecadeLowerValue: number;
-    private selectedDecadeHigherValue: number;
+    private selectedCentury: DatingSliderValue;
+    private selectedPeriod: DatingSliderValue;
+    private selectedDecade: DatingSliderValue;
 
 
     private centurySliderValues: Array<DatingSliderValue>;
@@ -908,9 +905,13 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
     private lowerValue: number;
     private higherValue: number;
+    private textValue: string;
 
     private periodEnabled: boolean;
     private decadeEnabled: boolean;
+
+    private periodEnabledCheckbox: HTMLInputElement;
+    private decadeEnabledCheckbox: HTMLInputElement;
 
     private dateDisplayDiv: HTMLDivElement;
 
@@ -927,14 +928,14 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         $(centuryCheckboxDiv).addClass("regex-dating-checkbox-div");
 
         var centuryNameSpan: HTMLSpanElement = window.document.createElement("span");
-        centuryNameSpan.innerHTML = localization.translate("Century", "PluginsJs").value;
+        $(centuryNameSpan).text(localization.translate("Century", "PluginsJs").value);
         centuryCheckboxDiv.appendChild(centuryNameSpan);
         centurySliderDiv.appendChild(centuryCheckboxDiv);
         precisionInputDiv.appendChild(centurySliderDiv);
 
         var centuryArray = new Array<DatingSliderValue>();
         for (var century = this.minCenturyValue; century <= this.maxCenturyValue; century++) {
-            centuryArray.push(new DatingSliderValue(century.toString(), century * 100 - 100, century * 100 - 1)); //calculate century low and high values (i.e 18. century is 1700 - 1799)
+            centuryArray.push(new DatingSliderValue(century.toString(), century * 100 - 99, century * 100)); //calculate century low and high values (i.e 18. century is 1701 - 1800)
         }
 
         this.centurySliderValues = centuryArray;
@@ -952,6 +953,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         $(periodCheckboxDiv).addClass("regex-dating-checkbox-div");
         var periodValueCheckbox: HTMLInputElement = window.document.createElement("input");
         periodValueCheckbox.type = "checkbox";
+        this.periodEnabledCheckbox = periodValueCheckbox;
         $(periodValueCheckbox).change((eventData) => {
             var currentTarget: HTMLInputElement = eventData.currentTarget as Node as HTMLInputElement;
             const targetEl = $(eventData.target as Node as HTMLElement);
@@ -971,20 +973,29 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         });
 
         var periodNameSpan: HTMLSpanElement = window.document.createElement("span");
-        periodNameSpan.innerHTML = localization.translate("ApproxTime", "PluginsJs").value;
+        $(periodNameSpan).text(localization.translate("ApproxTime", "PluginsJs").value);
+        $(periodNameSpan).click((event) => {
+            this.changeCheckbox(event.currentTarget);
+        });
         periodCheckboxDiv.appendChild(periodValueCheckbox);
         periodCheckboxDiv.appendChild(periodNameSpan);
         periodSliderDiv.appendChild(periodCheckboxDiv);
         precisionInputDiv.appendChild(periodSliderDiv);
 
         this.periodSliderValues = new Array<DatingSliderValue>(
+            new DatingSliderValue(localization.translate("CenturyTurn", "PluginsJs").value, -9, -90),
             new DatingSliderValue(localization.translate("Start", "PluginsJs").value, 0, -85),
-            new DatingSliderValue(localization.translate("Quarter", "PluginsJs").value, 0, -75),
-            new DatingSliderValue(localization.translate("Third", "PluginsJs").value, 0, -66),
-            new DatingSliderValue(localization.translate("Half", "PluginsJs").value, 0, -50),
-            new DatingSliderValue("3. třetina", 66, 0), // TODO add localization
-            new DatingSliderValue("4. čtvrtina", 75, 0), // TODO add localization
-            new DatingSliderValue(localization.translate("end", "PluginsJs").value, 85, 0));
+            new DatingSliderValue(localization.translateFormat("SpecifiedQuarter", ["1"], "PluginsJs").value, 0, -75),
+            new DatingSliderValue(localization.translateFormat("SpecifiedThird", ["1"], "PluginsJs").value, 0, -66),
+            new DatingSliderValue(localization.translateFormat("SpecifiedHalf", ["1"], "PluginsJs").value, 0, -50),
+            new DatingSliderValue(localization.translateFormat("SpecifiedQuarter", ["2"], "PluginsJs").value, 25, -50),
+            new DatingSliderValue(localization.translate("Half", "PluginsJs").value, 28, -29),
+            new DatingSliderValue(localization.translateFormat("SpecifiedQuarter", ["3"], "PluginsJs").value, 50, -25),
+            new DatingSliderValue(localization.translateFormat("SpecifiedHalf", ["2"], "PluginsJs").value, 50, 0),
+            new DatingSliderValue(localization.translateFormat("SpecifiedThird", ["3"], "PluginsJs").value, 66, 0), 
+            new DatingSliderValue(localization.translateFormat("SpecifiedQuarter", ["4"], "PluginsJs").value, 75, 0),
+            new DatingSliderValue(localization.translate("End", "PluginsJs").value, 85, 0),
+            new DatingSliderValue(localization.translate("CenturyTurn", "PluginsJs").value, 90, 9));
 
         var sliderPeriod = this.makeSlider(this.periodSliderValues, "",(selectedValue: DatingSliderValue) => { this.periodChanged(selectedValue) });
         $(sliderPeriod).slider("option", "disabled", true);
@@ -1002,6 +1013,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
         var decadesCheckbox: HTMLInputElement = window.document.createElement("input");
         decadesCheckbox.type = "checkbox";
+        this.decadeEnabledCheckbox = decadesCheckbox;
         $(decadesCheckbox).change((eventData) => {
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node as HTMLElement);
             const targetEl = $(eventData.target as Node as HTMLElement);
@@ -1021,7 +1033,10 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         });
 
         var decadesNameSpan: HTMLSpanElement = window.document.createElement("span");
-        decadesNameSpan.innerHTML = localization.translate("Decades", "PluginsJs").value;
+        $(decadesNameSpan).text(localization.translate("Decades", "PluginsJs").value);
+        $(decadesNameSpan).click((event) => {
+            this.changeCheckbox(event.currentTarget);
+        });
         decadeCheckboxDiv.appendChild(decadesCheckbox);
         decadeCheckboxDiv.appendChild(decadesNameSpan);
         decadesSliderDiv.appendChild(decadeCheckboxDiv);
@@ -1029,7 +1044,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
         var decadesArray = new Array<DatingSliderValue>();
         for (var decades = 0; decades <= 90; decades += 10) {
-            decadesArray.push(new DatingSliderValue(decades.toString(), decades, -(100 - (decades + 10)))); //calculate decades low and high values (i.e 20. decades of 18. century is 1720-1729)
+            decadesArray.push(new DatingSliderValue(decades.toString(), decades -1, -(100 - (decades + 9)))); //calculate decades low and high values (i.e 20. decades of 18. century is 1720-1729)
         }
 
         this.decadeSliderValues = decadesArray;
@@ -1042,50 +1057,80 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
         this.decadesSlider = sliderDecades;
 
+        const datingDiv: HTMLDivElement = window.document.createElement("div");
+        $(datingDiv).addClass("regex-slider-div");
+        precisionInputDiv.appendChild(datingDiv);
+
+        const datingLabelDiv: HTMLDivElement = window.document.createElement("div");
+        $(datingLabelDiv).addClass("regex-dating-checkbox-div");
+
+        var decadesNameSpan: HTMLSpanElement = window.document.createElement("span");
+        $(decadesNameSpan).text(localization.translate("VerbalDescription", "PluginsJs").value);
+        datingLabelDiv.appendChild(decadesNameSpan);
+        datingDiv.appendChild(datingLabelDiv);
+
         var datingDisplayedValueDiv = document.createElement('div');
         $(datingDisplayedValueDiv).addClass("regex-dating-condition-displayed-value");
         this.dateDisplayDiv = datingDisplayedValueDiv;
-        precisionInputDiv.appendChild(datingDisplayedValueDiv);
-
+        datingDiv.appendChild(datingDisplayedValueDiv);
         this.changedValue();
     }
 
+    private changeCheckbox(targetElement: HTMLElement) {
+        var checkbox = $(targetElement).parent().find("input");
+        checkbox.prop("checked", !checkbox.prop("checked"));
+        checkbox.change();
+    }
+
     private centuryChanged(sliderValue: DatingSliderValue) {
-        this.selectedCenturyLowerValue = sliderValue.lowNumberValue;
-        this.selectedCenturyHigherValue = sliderValue.highNumberValue;
+        this.selectedCentury = sliderValue;
         this.changedValue();
     }
 
     private periodChanged(sliderValue: DatingSliderValue) {
-        this.selectedPeriodLowerValue = sliderValue.lowNumberValue;
-        this.selectedPeriodHigherValue = sliderValue.highNumberValue;
+        this.selectedPeriod = sliderValue;
         this.changedValue();
     }
 
     private decadeChanged(sliderValue: DatingSliderValue) {
-        this.selectedDecadeLowerValue = sliderValue.lowNumberValue;
-        this.selectedDecadeHigherValue = sliderValue.highNumberValue;
+        this.selectedDecade = sliderValue;
         this.changedValue();
     }
 
     private changedValue() {
         $(this.dateDisplayDiv).empty();
-        var lower = this.selectedCenturyLowerValue;
-        var higher = this.selectedCenturyHigherValue;
+        var lower = this.selectedCentury.lowNumberValue;
+        var higher = this.selectedCentury.highNumberValue;
+        let text = "";
 
         if (this.periodEnabled) {
-            lower += this.selectedPeriodLowerValue;
-            higher += this.selectedPeriodHigherValue;
+            lower += this.selectedPeriod.lowNumberValue;
+            higher += this.selectedPeriod.highNumberValue;
+            text = this.selectedPeriod.name;
         }
 
         if (this.decadeEnabled) {
-            lower += this.selectedDecadeLowerValue;
-            higher += this.selectedDecadeHigherValue;
+            lower += this.selectedDecade.lowNumberValue;
+            higher += this.selectedDecade.highNumberValue;
+            text = this.selectedDecade.name + localization.translate(".Decades", "PluginsJs").value; 
+        }
+
+        if (lower < this.selectedCentury.lowNumberValue) {
+            const previousCentury = Number(this.selectedCentury.name) - 1;
+            text = localization.translateFormat("SpecifiedCenturyTurn", [previousCentury.toString(), this.selectedCentury.name], "PluginsJs").value;
+        } else if (higher > this.selectedCentury.highNumberValue) {
+            const nextCentury = Number(this.selectedCentury.name) + 1;
+            text = localization.translateFormat("SpecifiedCenturyTurn", [this.selectedCentury.name, nextCentury.toString()], "PluginsJs").value;
+        }
+        else {
+            text += " " + this.selectedCentury.name + localization.translate(".Century", "PluginsJs").value;
         }
 
         this.lowerValue = lower;
         this.higherValue = higher;
-        $(this.dateDisplayDiv).html("(" + lower + "-" + higher + ")");
+        this.textValue = text;
+
+        $(this.dateDisplayDiv).html(`${text} (${lower}-${higher})`);
     }
 
     private makeSlider(valuesArray: Array<DatingSliderValue>, nameEnding: string, callbackFunction: (selectedValue: DatingSliderValue) => void) {
@@ -1128,6 +1173,8 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
     getHigherValue(): number { return this.higherValue; }
 
+    getTextValue(): string { return this.textValue; }
+
     setValues(lower?: number, higher?: number) {
         var century: number = lower !== null ? Math.floor(lower/100) : Math.floor(higher/100);
         var centuryIndex: number = 0;
@@ -1148,6 +1195,8 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
             if ((lower === null || (periodSliderValue.lowNumberValue + importedCentury.lowNumberValue) === lower) && (higher === null || (periodSliderValue.highNumberValue + importedCentury.highNumberValue) === higher)) {
                 $(this.periodSlider).slider("value", i);
                 periodIndex = i;
+                this.periodEnabledCheckbox.checked = true;
+                $(this.periodEnabledCheckbox).change();
                 break;
             }
         }
@@ -1157,6 +1206,8 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
                 var decadeSliderValue = this.decadeSliderValues[i];
                 if ((lower === null || (decadeSliderValue.lowNumberValue + importedCentury.lowNumberValue) === lower) && (higher === null || (decadeSliderValue.highNumberValue + importedCentury.highNumberValue) === higher)) {
                     $(this.decadesSlider).slider("value", i);
+                    this.decadeEnabledCheckbox.checked = true;
+                    $(this.decadeEnabledCheckbox).change();
                     break;
                 }
             }
@@ -1202,7 +1253,7 @@ class RegExDatingConditionRangeYearView implements IRegExDatingConditionView {
 
         var spanInput: HTMLSpanElement = document.createElement("span");
         $(spanInput).addClass("regex-dating-input-span");
-        spanInput.innerHTML = localization.translate("Year:", "PluginsJs").value;
+        $(spanInput).text(localization.translate("Year:", "PluginsJs").value);
         
         precisionInpuDiv.appendChild(spanInput);
         precisionInpuDiv.appendChild(textInput);
@@ -1399,7 +1450,7 @@ class RegExDatingCondition implements IRegExConditionItemBase{
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
         $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = localization.translate("+Or", "PluginsJs").value;
+        $(addWordSpan).text(localization.translate("+Or", "PluginsJs").value);
         $(addWordSpan).click(() => {
             this.parent.addItem();
         });
@@ -1423,7 +1474,7 @@ class RegExDatingCondition implements IRegExConditionItemBase{
 
     private createTextDelimeter(): HTMLDivElement {
         var delimeterDiv = document.createElement("div");
-        delimeterDiv.innerHTML = localization.translate("Or", "PluginsJs").value;
+        $(delimeterDiv).text(localization.translate("Or", "PluginsJs").value);
         $(delimeterDiv).addClass(this.delimeterClass);
 
         var trashButton = document.createElement("button");
@@ -1543,7 +1594,7 @@ class RegExDatingCondition implements IRegExConditionItemBase{
 
         if (this.datingRange === DatingRangeEnum.Between) {
             var delimeter = document.createElement("div");
-            delimeter.innerHTML = localization.translate("Till", "PluginsJs").value;
+            $(delimeter).text(localization.translate("Till", "PluginsJs").value);
             this.precisionInputDiv.appendChild(delimeter);
 
             var oldSecondView = this.secondDateView;
@@ -1680,7 +1731,7 @@ class RegExWordCondition implements IRegExConditionItemBase{
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
         $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = localization.translate("+Or", "PluginsJs").value;
+        $(addWordSpan).text(localization.translate("+Or", "PluginsJs").value);
         $(addWordSpan).click(() => {
             this.parent.addItem();
         });
@@ -1704,7 +1755,7 @@ class RegExWordCondition implements IRegExConditionItemBase{
 
     private createTextDelimeter(): HTMLDivElement {
         var delimeterDiv = document.createElement("div");
-        delimeterDiv.innerHTML = localization.translate("Or", "PluginsJs").value;
+        $(delimeterDiv).text(localization.translate("Or", "PluginsJs").value);
         $(delimeterDiv).addClass(this.delimeterClass);
 
         var trashButton = document.createElement("button");
@@ -1886,7 +1937,7 @@ class RegExWordInput {
         this.editorDiv = editorDiv;
 
         var conditionTitleDiv = document.createElement("div");
-        conditionTitleDiv.innerHTML = localization.translate("Constraint", "PluginsJs").value;
+        $(conditionTitleDiv).text(localization.translate("Constraint", "PluginsJs").value);
         editorDiv.appendChild(conditionTitleDiv);
         
         var conditionTypeDivEl = $(document.createElement("div"));
@@ -2199,7 +2250,7 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
         $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = localization.translate("+Or", "PluginsJs").value;
+        $(addWordSpan).text(localization.translate("+Or", "PluginsJs").value);
         $(addWordSpan).click(() => {
             this.parent.addItem();
         });
@@ -2223,7 +2274,7 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
 
     private createTextDelimeter(): HTMLDivElement {
         var delimeterDiv = document.createElement("div");
-        delimeterDiv.innerHTML = localization.translate("Or", "PluginsJs").value;
+        $(delimeterDiv).text(localization.translate("Or", "PluginsJs").value);
         $(delimeterDiv).addClass(this.delimeterClass);
 
         var trashButton = document.createElement("button");
@@ -2259,7 +2310,7 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
 
         var inputTextSpan = document.createElement("span");
         $(inputTextSpan).addClass("regexsearch-token-distance-condition-input-text");
-        inputTextSpan.innerHTML = localization.translate("Distance:", "PluginsJs").value;
+        $(inputTextSpan).text(localization.translate("Distance:", "PluginsJs").value);
         inputTextDiv.appendChild(inputTextSpan);
 
         var tokenDistanceInput = document.createElement("input");

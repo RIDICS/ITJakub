@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using AutoMapper;
 using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.Core.Resources;
@@ -18,6 +19,7 @@ using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Old;
 using Vokabular.Shared.DataContracts.Types;
+using Mapper = ITJakub.ITJakubService.Core.Mapper;
 
 namespace ITJakub.ITJakubService.Services
 {
@@ -37,6 +39,7 @@ namespace ITJakub.ITJakubService.Services
 
         public ItJakubServiceManager()
         {
+            Mapper.MapperInstance = m_container.Resolve<IMapper>();
             m_bookManager = m_container.Resolve<BookManager>();
             m_authorManager = m_container.Resolve<AuthorManager>();
             m_resourceManager = m_container.Resolve<ResourceManager>();

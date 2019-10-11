@@ -13,12 +13,14 @@ namespace Vokabular.MainService.Core.Works.Portal
         private readonly PortalRepository m_portalRepository;
         private readonly CreateNewsSyndicationItemContract m_data;
         private readonly int m_userId;
+        private readonly IMapper m_mapper;
 
-        public CreateNewsWork(PortalRepository portalRepository, CreateNewsSyndicationItemContract data, int userId) : base(portalRepository)
+        public CreateNewsWork(PortalRepository portalRepository, CreateNewsSyndicationItemContract data, int userId, IMapper mapper) : base(portalRepository)
         {
             m_portalRepository = portalRepository;
             m_data = data;
             m_userId = userId;
+            m_mapper = mapper;
         }
 
         protected override long ExecuteWorkImplementation()
@@ -30,7 +32,7 @@ namespace Vokabular.MainService.Core.Works.Portal
 
             var now = DateTime.UtcNow;
             var user = m_portalRepository.Load<User>(m_userId);
-            var itemType = Mapper.Map<SyndicationItemType>(m_data.ItemType);
+            var itemType = m_mapper.Map<SyndicationItemType>(m_data.ItemType);
 
             var syndicationItem = new NewsSyndicationItem
             {

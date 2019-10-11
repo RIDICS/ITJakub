@@ -19,6 +19,18 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.ProjectId, opt => opt.MapFrom(src => src.Project.Id))
                 .ForMember(dest => dest.PublishTime, opt => opt.MapFrom(src => src.PublishTime))
                 .ForMember(dest => dest.VersionNumber, opt => opt.MapFrom(src => src.VersionNumber));
+
+            CreateMap<Snapshot, SnapshotDetailContract>()
+                .IncludeBase<Snapshot, SnapshotContract>()
+                .ForMember(dest => dest.ResourceVersions, opt => opt.MapFrom(src => src.ResourceVersions));
+
+
+            CreateMap<Snapshot, SnapshotAggregatedInfoContract>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Author, opt => opt.Ignore())
+                .ForMember(dest => dest.PublishDate, opt => opt.MapFrom(src => src.PublishTime))
+                .ForMember(dest => dest.ResourcesInfo, opt => opt.Ignore())
+                .ForMember(dest => dest.Comment, opt => opt.MapFrom(src => src.Comment));
         }
     }
 }

@@ -14,4 +14,11 @@
         public int Position { get; set; }
         public string Comment { get; set; }
     }
+
+    public class CreateOrUpdatePageContract
+    {
+        public long? Id { get; set; }
+        public string Name { get; set; }
+        public int Position { get; set; }
+    }
 }

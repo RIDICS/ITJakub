@@ -1,3 +1,5 @@
+using Vokabular.DataEntities.Database.Entities.Enums;
+
 namespace Vokabular.DataEntities.Database.Entities.SelectResults
 {
     public class ProjectIdentificationResult
@@ -9,5 +11,7 @@ namespace Vokabular.DataEntities.Database.Entities.SelectResults
         public long SnapshotId { get; set; }
 
         public string BookVersionExternalId { get; set; }
+
+        public ProjectTypeEnum ProjectType { get; set; }
     }
 }

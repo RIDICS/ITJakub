@@ -77,7 +77,7 @@
         "$editionTable": {
           "type": "table",
           "printRowIfNullValue": true,
-          "replaceNullValueBy": "&lt;{@Nezadáno}&gt;",
+          "replaceNullValueBy": "NotFilled",
           "rows": [
             {
               "label": "Editor",
@@ -163,15 +163,12 @@
         },
         "$forumLink": {
           "type": "basic",
-          "pattern": "<a href='{ForumUrl}'>Link</a>",
+          "pattern": "<a href='{ForumUrl}'>{@Link}</a>",
           "printIfNullValue": false
         }
       }
     },
     "right-panel": {
-      "info-button": {
-        "onclick-callable": "listProfLitBookReadClicked(this)"
-      },
       "read-button": {
         "onclick-callable": "listProfLitBookReadClicked(this)"
       },

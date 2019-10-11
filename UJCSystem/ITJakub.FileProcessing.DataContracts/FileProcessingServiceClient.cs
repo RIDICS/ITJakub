@@ -35,11 +35,16 @@ namespace ITJakub.FileProcessing.DataContracts
             }
         }
 
-        public ImportResultContract ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage, IList<PermissionFromAuthContract> autoImportPermissions)
+        public ImportResultContract ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage,
+            ProjectTypeContract projectType, FulltextStoreTypeContract storeType, IList<PermissionFromAuthContract> autoImportPermissions)
         {
             try
             {
-                return Channel.ProcessSession(sessionId, projectId, userId, uploadMessage, autoImportPermissions);
+                return Channel.ProcessSession(sessionId, projectId, userId, uploadMessage, projectType, storeType, autoImportPermissions);
+            }
+            catch (FaultException ex)
+            {
+                throw new FileProcessingImportFailedException("File processing failed. See inner exception.", ex);
             }
             catch (TimeoutException ex)
             {
@@ -60,6 +65,13 @@ namespace ITJakub.FileProcessing.DataContracts
     {
         public FileProcessingException(string message,Exception innerException):base(message, innerException)
         {            
+        }
+    }
+
+    public class FileProcessingImportFailedException : Exception
+    {
+        public FileProcessingImportFailedException(string message, Exception innerException) : base(message, innerException)
+        {
         }
     }
 }

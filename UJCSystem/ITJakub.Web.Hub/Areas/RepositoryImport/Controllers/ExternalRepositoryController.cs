@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using ITJakub.Web.Hub.Areas.RepositoryImport.Models;
 using ITJakub.Web.Hub.Controllers;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.MainService.DataContracts.Contracts.OaiPmh;
 using Vokabular.ProjectImport.Shared.Const;
 
@@ -20,7 +20,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
     [Area("RepositoryImport")]
     public class ExternalRepositoryController : BaseController
     {
-        public ExternalRepositoryController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public ExternalRepositoryController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
 
@@ -143,6 +143,12 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
 
             var client = GetExternalRepositoryClient();
             var config = GetConfiguration(Request.Form);
+
+            var filteringExpressionSets = model.FilteringExpressionSets == null
+                ? new List<FilteringExpressionSetContract>()
+                : model.FilteringExpressionSets.Where(x => x.IsChecked)
+                    .Select(x => new FilteringExpressionSetContract { Id = x.Id }).ToList();
+
             client.UpdateExternalRepository(model.Id, new ExternalRepositoryDetailContract
             {
                 Name = model.Name,
@@ -153,8 +159,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
                 Configuration = string.IsNullOrEmpty(config) ? model.Configuration : config,
                 BibliographicFormat = new BibliographicFormatContract {Id = model.BibliographicFormatId},
                 ExternalRepositoryType = new ExternalRepositoryTypeContract {Id = model.ExternalRepositoryTypeId},
-                FilteringExpressionSets = model.FilteringExpressionSets.Where(x => x.IsChecked)
-                    .Select(x => new FilteringExpressionSetContract {Id = x.Id}).ToList()
+                FilteringExpressionSets = filteringExpressionSets
             });
             return RedirectToAction("List");
         }

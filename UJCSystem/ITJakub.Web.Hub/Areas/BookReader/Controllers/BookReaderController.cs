@@ -2,7 +2,7 @@
 using AutoMapper;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +18,7 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
     [Area("BookReader")]
     public class BookReaderController : AreaController
     {
-        public BookReaderController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public BookReaderController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
 

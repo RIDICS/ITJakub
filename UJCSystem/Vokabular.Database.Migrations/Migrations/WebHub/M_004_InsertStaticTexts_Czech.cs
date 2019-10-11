@@ -228,16 +228,17 @@ Pokud si přejete, abychom na Vaši připomínku odpověděli, uveďte tuto skut
 V oddílu *Slovníky* Vokabuláře webového poskytujeme zájemcům o historickou češtinu informace o její slovní zásobě. Tvoří jej různorodé lexikální zdroje, které umožňují jednotné [vyhledávání](/Dictionaries/Dictionaries/Search) a [listování](/Dictionaries/Dictionaries/Listing), tj. procházení slovníkovými zdroji „po listech“. Poučení o způsobech, jakými lze dotaz formulovat, najde uživatel v [Nápovědě](/Dictionaries/Dictionaries/Help).
 
 Základ oddílu tvoří tato novodobá lexikografická díla pojednávající zejména o staročeské slovní zásobě:
-[Elektronický slovník staré češtiny (ESSČ)](/Dictionaries/Dictionaries/Listing?xmlId=%7B08BE3E56-77D0-46C1-80BB-C1346B757BE5%7D),
-[Malý staročeský slovník (MSS)](#), [pracovní heslář k lístkové kartotéce Staročeského slovníku (HesStčS)](#),
-[Slovník staročeský Jana Gebauera (GbSlov)](#),
-[Staročeský slovník (StčS)](/Dictionaries/Dictionaries/Listing?xmlId=%7B1ADA5193-4375-4269-8222-D8BE81D597DB%7D),
-[Slovníček staré češtiny Františka Šimka (ŠimekSlov)](#)
-a [Index Slovníku staročeských osobních jmen Jana Svobody (IndexSvob)](#).
+[Elektronický slovník staré češtiny (ESSČ)](/Dictionaries/Dictionaries/Listing?externalId=%7B08BE3E56-77D0-46C1-80BB-C1346B757BE5%7D),
+[Malý staročeský slovník (MSS)](/Dictionaries/Dictionaries/Listing?externalId=%7B585EE6E5-20B2-4B1C-BA08-4BBA6E85EC19%7D),
+[pracovní heslář k lístkové kartotéce Staročeského slovníku (HesStčS)](#),
+[Slovník staročeský Jana Gebauera (GbSlov)](/Dictionaries/Dictionaries/Listing?externalId=%7BA60FF9E4-36F0-4770-89AB-E710121B8D4E%7D),
+[Staročeský slovník (StčS)](/Dictionaries/Dictionaries/Listing?externalId=%7B1ADA5193-4375-4269-8222-D8BE81D597DB%7D),
+[Slovníček staré češtiny Františka Šimka (ŠimekSlov)](/Dictionaries/Dictionaries/Listing?externalId=%7BED3882E9-80D2-4DE6-BFE9-D2042039A023%7D)
+a [Index Slovníku staročeských osobních jmen Jana Svobody (IndexSvob)](/Dictionaries/Dictionaries/Listing?externalId=%7B7A5AB5C5-1481-4AAF-9239-793ABDE1D45B%7D).
 
 Jsou zde však též dostupné elektronické verze historických slovníků a podobných lexikografických příruček z období 16. až 19. století. Jedná se např. o [Česko-německý slovnář](#) Jana Václava Pohla, jehož elektronickou edici vytvořil se svými kolegy prof. Tilman Berger z univerzity v Tubinkách; dále [Dodavky ke slovníku Josefa Jungmanna](#) od F. L. Čelakovského; [Slovář český](#) Jana Františka Josefa Ryvoly a [Deutsch-böhmisches Wörterbuch](#) Josefa Dobrovského, [Thesaurus Linguae Bohemicae](#) Václava Jana Rosy a další [slovníky](#), jejichž elektronické verze vznikají v oddělení vývoje jazyka ÚJČ a které primárně poskytují transliterovaný text, doplněný v některých případech o transkripci české jazykové části.
 
-Formou digitalizovaných obrazů doplněných o metainformace (soupis hesel a podheslí) zveřejňujeme [Slovník česko-německý](/Dictionaries/Dictionaries/Listing?xmlId=%7B7AC74E21-53E9-4E4D-A7CC-CA739A962E58%7D) Josefa Jungmanna. Jedná se o fotokopie archivního exempláře, v němž sám autor označoval opravy a doplňky textu pro zamýšlené druhé vydání slovníku. Digitální kopii lze prohlížet dvěma způsoby: pomocí listování a vyhledávání v heslových slovech a podheslích, a to podle transliterované i transkribované podoby.
+Formou digitalizovaných obrazů doplněných o metainformace (soupis hesel a podheslí) zveřejňujeme [Slovník česko-německý](/Dictionaries/Dictionaries/Listing?externalId=%7B7AC74E21-53E9-4E4D-A7CC-CA739A962E58%7D) Josefa Jungmanna. Jedná se o fotokopie archivního exempláře, v němž sám autor označoval opravy a doplňky textu pro zamýšlené druhé vydání slovníku. Digitální kopii lze prohlížet dvěma způsoby: pomocí listování a vyhledávání v heslových slovech a podheslích, a to podle transliterované i transkribované podoby.
 
 Informace získané vyhledáváním či listováním se liší v závislosti na zdroji, z něhož jsou čerpány – slovníky poskytnou heslovou stať, heslář ke kartotéce Staročeského slovníku pochopitelně pouze samotný výraz bez dalšího lexikografického zpracování apod. Získané údaje lze archivovat v tiskové verzi.
 

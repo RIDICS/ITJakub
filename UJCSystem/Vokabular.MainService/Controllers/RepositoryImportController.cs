@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.ProjectImport;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/bibliography/import")]
     [Authorize(VokabularPermissionNames.ManageBibliographyImport)]
     public class RepositoryImportController : BaseController
     {
@@ -36,7 +37,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
        
-        [HttpGet("importStatus")]
+        [HttpGet("status")]
         public IList<RepositoryImportProgressInfoContract> GetActualProgress()
         {
             return m_mainImportManager.GetActualProgressInfo();

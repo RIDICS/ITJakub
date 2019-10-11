@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Vokabular.DataEntities.Database.Entities.Enums;
 
 namespace Vokabular.DataEntities.Database.Entities
 {
@@ -20,6 +21,8 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual Snapshot LatestPublishedSnapshot { get; set; }
 
         public virtual int? ForumId { get; set; }
+
+        public virtual ProjectTypeEnum ProjectType { get; set; }
 
         public virtual IList<Resource> Resources { get; set; }
 

@@ -13,13 +13,15 @@ namespace Vokabular.MainService.Core.Works.Favorite
         private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly CreateFavoriteQueryContract m_data;
         private readonly int m_userId;
+        private readonly IMapper m_mapper;
 
-        public CreateFavoriteQueryWork(FavoritesRepository favoritesRepository, CatalogValueRepository catalogValueRepository, CreateFavoriteQueryContract data, int userId) : base(favoritesRepository)
+        public CreateFavoriteQueryWork(FavoritesRepository favoritesRepository, CatalogValueRepository catalogValueRepository, CreateFavoriteQueryContract data, int userId, IMapper mapper) : base(favoritesRepository)
         {
             m_favoritesRepository = favoritesRepository;
             m_catalogValueRepository = catalogValueRepository;
             m_data = data;
             m_userId = userId;
+            m_mapper = mapper;
         }
 
         protected override long ExecuteWorkImplementation()
@@ -27,8 +29,8 @@ namespace Vokabular.MainService.Core.Works.Favorite
             var now = DateTime.UtcNow;
             var user = m_favoritesRepository.Load<User>(m_userId);
 
-            var bookTypeEnum = Mapper.Map<BookTypeEnum>(m_data.BookType);
-            var queryTypeEnum = Mapper.Map<QueryTypeEnum>(m_data.QueryType);
+            var bookTypeEnum = m_mapper.Map<BookTypeEnum>(m_data.BookType);
+            var queryTypeEnum = m_mapper.Map<QueryTypeEnum>(m_data.QueryType);
 
             var bookTypeEntity = m_catalogValueRepository.GetBookType(bookTypeEnum);
             var label = GetFavoriteLabelAndCheckAuthorization(m_data.FavoriteLabelId, user.Id);

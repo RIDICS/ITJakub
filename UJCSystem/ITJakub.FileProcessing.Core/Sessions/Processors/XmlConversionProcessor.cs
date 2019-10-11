@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using ITJakub.FileProcessing.DataContracts;
 using Ujc.Ovj.Ooxml.Conversion;
 using Vokabular.Core.Storage.Resources;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -57,8 +59,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
             var message = resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.Message);
             var createTime = resourceSessionDirector.GetSessionInfoValue<DateTime>(SessionInfo.CreateTime);
+            var projectType = (ProjectTypeEnum) resourceSessionDirector.GetSessionInfoValue<ProjectTypeContract>(SessionInfo.ProjectType);
 
-            var versionProviderHelper = new VersionProviderHelper(message, createTime, m_projectRepository, m_versionIdGenerator);
+            var versionProviderHelper = new VersionProviderHelper(message, createTime, m_projectRepository, m_versionIdGenerator, projectType);
 
             var settings = new DocxToTeiConverterSettings
             {
@@ -125,19 +128,21 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         private readonly ProjectRepository m_projectRepository;
         private readonly string m_message;
         private readonly VersionIdGenerator m_versionIdGenerator;
+        private readonly ProjectTypeEnum m_projectType;
 
         public VersionProviderHelper(string message, DateTime createTime, ProjectRepository projectRepository,
-            VersionIdGenerator versionIdGenerator)
+            VersionIdGenerator versionIdGenerator, ProjectTypeEnum projectType)
         {
             m_message = message;
             m_createTime = createTime;
             m_projectRepository = projectRepository;
             m_versionIdGenerator = versionIdGenerator;
+            m_projectType = projectType;
         }
 
         public List<VersionInfoSkeleton> GetVersionsByBookXmlId(string bookXmlId)
         {
-            var importLogs = m_projectRepository.InvokeUnitOfWork(x => x.GetAllImportLogByExternalId(bookXmlId));
+            var importLogs = m_projectRepository.InvokeUnitOfWork(x => x.GetAllImportLogByExternalId(bookXmlId, m_projectType));
             var vers = importLogs.Select(x => new VersionInfoSkeleton(x.AdditionalDescription, x.CreateTime)).ToList();
             vers.Add(new VersionInfoSkeleton(m_message, m_createTime, m_versionIdGenerator.Generate(m_createTime)));
             return vers;

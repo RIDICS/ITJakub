@@ -3,15 +3,15 @@
   "scope": "NewsSyndicationItemViewModel",
   "dictionary": {
     "Name:": "Name: ",
-	"Text:": "Text: ",
-	"Url:": "Url: ",
-	"Type": "Type: ",
+    "Text:": "Text: ",
+    "Url:": "Url: ",
+    "Type": "Type: ",
     "NameNotEmpty": "The Name cannot be empty.",
-	"TextNotEmpty": "The Text cannot be empty.",
-	"UrlNotEmpty": "The URL cannot be empty.",
+    "TextNotEmpty": "The Text cannot be empty.",
+    "UrlNotEmpty": "The URL cannot be empty.",
     "UrlNotValid": "Filled URL is not valid. It must be in correct format e.g. http://example.com",
-	"WebAndMobileApp": "Web and mobile application",
-	"OnlyWeb": "Only web",
-	"OnlyMobileApp":"Only mobile application"
+    "WebAndMobileApp": "Web and mobile application",
+    "OnlyWeb": "Only web",
+    "OnlyMobileApp": "Only mobile application"
   }
 }

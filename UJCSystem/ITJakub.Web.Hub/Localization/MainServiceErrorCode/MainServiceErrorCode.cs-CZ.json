@@ -8,13 +8,15 @@
     "category-has-sub-categories": "Kategorie má podkategorie.",
     "repository-contains-history": "Externí repozitář nemůže být odstraněn, jelikož obsahuje historii.",
     "comments-to-second-level": "Komentáře jsou povoleny pouze do druhé úrovně.",
-    "edition-note-conflict": "Nezle uložit ediční poznámku. Ediční poznámka byla změněna jiným uživatelem.",
+    "edition-note-conflict": "Nelze uložit ediční poznámku. Ediční poznámka byla změněna jiným uživatelem.",
     "resource-version-id-null": "ResourceVersionId nemůže být prázdné pro připomínky k heslu.",
     "cannot-move-category-to-subcategory": "Nelze přesunout kategorii do její vlastní podkategorie",
-    "unallowed-authorization-criteria": "Vyhledácí kritérium obsahuje nepovolené autorizační kritérium. Autorizační kritérium je generováno automaticky.",
+    "unallowed-authorization-criteria":
+      "Vyhledácí kritérium obsahuje nepovolené autorizační kritérium. Autorizační kritérium je generováno automaticky.",
     "unregistered-user-cardfile-access": "Neregistrovaní uživatelé nemají přístup ke čtení této kartotéky",
     "unregistered-user-book-access-forbidden": "Neregistrovaní uživatelé nemají přístup ke čtétní této knihy",
-    "unregistered-user-resource-access-forbidden": "Neregistrovaní uživatelé nemají přístup ke knize s tímto zdrojem",
+    "unregistered-user-resource-access-forbidden":
+      "Neregistrovaní uživatelé nemají přístup ke knize s tímto zdrojem",
     "user-cardfile-access-forbidden": "Nemáte přístup ke čtení kartotéky",
     "user-book-access-forbidden": "Nemáte přístup ke čtení této knihy",
     "user-resource-access-forbidden": "Nemáte přístup ke knize s tímto zdrojem",
@@ -25,6 +27,7 @@
     "no-supported-search": "Nebylo specifikováno žádné podporované vyhledávací kritérium",
     "null-book-type-not-supported": "Není nastaven validní typ díla",
     "import-failed": "Import selhal",
+    "import-failed-with-error": "Import selhal. {0}",
     "import-succeed-forum-failed": "Import proběhl úspěšně. Vytvoření fóra selhalo. {0}",
     "project-not-exist": "Projekt neexistuje.",
     "forum-already-created": "Fórum je již vytvořeno.",
@@ -43,6 +46,13 @@
     "delete-default-role": "Výchozí skupina {0} nemůže být odstraněna.",
     "resource-modified": "Nelze uložit zdroj. Zdroj byl změněn jiným uživatelem.",
     "user-has-not-permission-to-manipulate": "Nemáte právo manipulovat s touto položkou.",
+    "repository-import-manager-not-found": "Importní manažer nebyl nalezen pro typ externí databáze {0}.",
+    "repository-import-cancelled": "Import z externí databáze {0} byl zrušen.",
+    "repository-import-failed": "Nastala neočekávaná chyba při importu z externí databáze {0}.",
+    "oai-pmh-communication-error": "Chyba při získávání dat z: {0}. {1} : {2}",
+    "oai-pmh-communication-failed": "Chyba při získávání dat z: {0}.",
+    "project-parser-not-found": "Konvertor pro bibilografický formát {0} nebyl nalezen.",
+    "change-in-conflict": "Nelze uložit provedné změny, protože konfliktní změny už byly provedeny jiným uživatelem.",
 
     //Auth service codes
     "generic-error": "Operace se nezdařila",
@@ -56,10 +66,13 @@
     "create-user-error-generate-verification-code": "Vytvoření uživatele selhalo z důvodu vytváření ověřovacího kódu",
     "create-user-error": "Vytvoření uživatele selhalo",
     "create-user-error-user-data": "Vytvoření uživatele selhalo z důvodu nevalidních zadaných údajů",
-    "create-user-error-user-contact-email": "Vytvoření uživatele selhalo z důvodu vyplnění již používané e-mailové adresy",
-    "create-user-error-user-contact-phone": "Vytvoření uživatele selhalo z důvodu vyplnění již používaného telefonního čísla",
+    "create-user-error-user-contact-email":
+      "Vytvoření uživatele selhalo z důvodu vyplnění již používané e-mailové adresy",
+    "create-user-error-user-contact-phone":
+      "Vytvoření uživatele selhalo z důvodu vyplnění již používaného telefonního čísla",
     "create-user-error-user-contact-email-not-valid": "Vytvoření uživatele selhalo z důvodu nevalidní e-mailové adresy",
-    "create-user-error-user-contact-phone-not-valid": "Vytvoření uživatele selhalo z důvodu nevalidního telefonního čísla (telefonní číslo musí obsahovat mezinárodní předvolbu a začínat znaménkem plus)",
+    "create-user-error-user-contact-phone-not-valid":
+      "Vytvoření uživatele selhalo z důvodu nevalidního telefonního čísla (telefonní číslo musí obsahovat mezinárodní předvolbu a začínat znaménkem plus)",
     "create-user-error-external-identity": "Vytvoření uživatele selhalo z důvodu externího účtu",
     "generate-verification-code": "Vytváření ověřovacího kódu selhalo",
     "generate-username": "Vytváření uživatelského jména selhalo",
@@ -81,23 +94,33 @@
     "insurance-number-not-unique": "Číslo pojištěnce již existuje",
     "password-mismatch": "Nesprávné heslo",
     "email-not-valid": "Nevalidní e-mailová adresa",
-    "phone-not-valid": "Nevalidní telefonní číslo (telefonní číslo musí obsahovat mezinárodní předvolbu a začínat znaménkem plus)",
+    "phone-not-valid":
+      "Nevalidní telefonní číslo (telefonní číslo musí obsahovat mezinárodní předvolbu a začínat znaménkem plus)",
     "save-user-error-user-contact-email-not-valid": "Uložení uživatele selhalo z důvodu nevalidní e-mailové adresy",
-    "save-user-error-user-contact-phone-not-valid": "Uložení uživatele selhalo z důvodu nevalidního telefonního čísla (telefonní číslo musí obsahovat mezinárodní předvolbu a začínat znaménkem plus)",
+    "save-user-error-user-contact-phone-not-valid":
+      "Uložení uživatele selhalo z důvodu nevalidního telefonního čísla (telefonní číslo musí obsahovat mezinárodní předvolbu a začínat znaménkem plus)",
     "save-user-error-user-contact-email": "Uložení uživatele selhalo z důvodu vyplnění již používané e-mailové adresy",
-    "save-user-error-user-contact-phone": "Uložení uživatele selhalo z důvodu vyplnění již používaného telefonního čísla",
+    "save-user-error-user-contact-phone":
+      "Uložení uživatele selhalo z důvodu vyplnění již používaného telefonního čísla",
     "email-not-unique": "E-mail je již používán",
     "phone-not-unique": "Telefonní číslo je již používáno",
     "generate-password": "Vytváření hesla selhalo",
     //Code generated by identity during password change
     "PasswordMismatch": "Nesprávné heslo",
     //Auth service status codes
-    "bad-request-code-400": "Chyba při komunikaci s externí službou. Služba vrátila stav: 400 Bad request",
-    "unauthorized-code-401": "Chyba při komunikaci s externí službou. Služba vrátila stav: 401 Unauthorized",
-    "forbidden-code-403": "Chyba při komunikaci s externí službou. Služba vrátila stav: 403 Forbidden",
-    "not-found-code-404": "Chyba při komunikaci s externí službou. Služba vrátila stav: 404 Not found",
-    "internal-server-error-code-500": "Chyba při komunikaci s externí službou. Služba vrátila stav: 500 Internal server error",
-    "bad-gateway-code-502": "Chyba při komunikaci s externí službou. Služba vrátila stav: 502 Bad gateway",
-    "gateway-timeout-code-504": "Chyba při komunikaci s externí službou. Služba vrátila stav: 504 Gateway timeout"
+    "bad-request-code-400":
+      "Chyba při komunikaci s externí službou. Služba vrátila stav: 400 Bad request",
+    "unauthorized-code-401":
+      "Chyba při komunikaci s externí službou. Služba vrátila stav: 401 Unauthorized",
+    "forbidden-code-403":
+      "Chyba při komunikaci s externí službou. Služba vrátila stav: 403 Forbidden",
+    "not-found-code-404":
+      "Chyba při komunikaci s externí službou. Služba vrátila stav: 404 Not found",
+    "internal-server-error-code-500":
+      "Chyba při komunikaci s externí službou. Služba vrátila stav: 500 Internal server error",
+    "bad-gateway-code-502":
+      "Chyba při komunikaci s externí službou. Služba vrátila stav: 502 Bad gateway",
+    "gateway-timeout-code-504":
+      "Chyba při komunikaci s externí službou. Služba vrátila stav: 504 Gateway timeout"
   }
 }

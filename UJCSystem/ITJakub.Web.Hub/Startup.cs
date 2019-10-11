@@ -31,13 +31,15 @@ using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Util;
 using Scalesoft.Localization.Database.NHibernate;
 using Vokabular.MainService.DataContracts;
-using Vokabular.RestClient;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
 using Vokabular.Shared.AspNetCore.Extensions;
+using Vokabular.Shared.AspNetCore.Middleware;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.Options;
+using Vokabular.TextConverter.Options;
 
 namespace ITJakub.Web.Hub
 {
@@ -168,6 +170,7 @@ namespace ITJakub.Web.Hub
 
             services.RegisterMainServiceClientComponents<AuthTokenProvider, MainServiceClientLocalization>(new MainServiceClientConfiguration
             {
+                PortalType = (PortalTypeContract) portalConfig.PortalType,
                 Url = new Uri(endpointsConfiguration.Addresses["MainService"]),
                 CreateCustomHandler = false
             });
@@ -181,6 +184,7 @@ namespace ITJakub.Web.Hub
             services.Configure<PortalOption>(Configuration.GetSection("PortalConfig"));
             services.Configure<AutoLoginCookieConfiguration>(Configuration.GetSection("AutoLoginCookie"));
             services.Configure<ForumOption>(Configuration.GetSection("Forum"));
+            services.Configure<SpecialCharsOption>(Configuration.GetSection("SpecialChars"));
             services.PostConfigure<AutoLoginCookieConfiguration>(config =>
             {
                 config.CookieName = $"{AutoLoginCookieConfiguration.CookieNamePrefix}{portalConfig.PortalType}";
@@ -192,6 +196,8 @@ namespace ITJakub.Web.Hub
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddLocalizationService(localizationConfiguration, new NHibernateDatabaseConfiguration());
 
+            // Core configuration
+            services.AddAutoMapper();
             services.AddMvc()
                 .AddDataAnnotationsLocalization(options =>
                 {
@@ -219,6 +225,8 @@ namespace ITJakub.Web.Hub
         {
             ApplicationLogging.LoggerFactory = loggerFactory;
 
+            app.UseMiddleware<Log4NetPropertiesMiddleware>();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -232,8 +240,6 @@ namespace ITJakub.Web.Hub
             app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
             app.UseAuthentication();
-
-            app.ConfigureAutoMapper();
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
 

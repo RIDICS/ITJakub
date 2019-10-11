@@ -2,6 +2,7 @@
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
+using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
@@ -15,10 +16,16 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
-        public virtual ListWithTotalCountResult<Project> GetProjectList(int start, int count, string filterByName = null)
+        public virtual ListWithTotalCountResult<Project> GetProjectList(int start, int count, ProjectTypeEnum? projectType,
+            string filterByName = null)
         {
             var query = GetSession().QueryOver<Project>()
                 .Fetch(SelectMode.Fetch, x => x.CreatedByUser);
+
+            if (projectType != null)
+            {
+                query.Where(x => x.ProjectType == projectType.Value);
+            }
 
             if (!string.IsNullOrEmpty(filterByName))
             {
@@ -47,20 +54,20 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public virtual IList<FullProjectImportLog> GetAllImportLogByExternalId(string projectExternalId)
+        public virtual IList<FullProjectImportLog> GetAllImportLogByExternalId(string projectExternalId, ProjectTypeEnum projectType)
         {
             Project projectAlias = null;
 
             return GetSession().QueryOver<FullProjectImportLog>()
                 .JoinAlias(x => x.Project, () => projectAlias)
-                .Where(x => projectAlias.ExternalId == projectExternalId)
+                .Where(x => projectAlias.ExternalId == projectExternalId && projectAlias.ProjectType == projectType)
                 .List();
         }
 
-        public virtual Project GetProjectByExternalId(string externalId)
+        public virtual Project GetProjectByExternalId(string externalId, ProjectTypeEnum projectType)
         {
             return GetSession().QueryOver<Project>()
-                .Where(x => x.ExternalId == externalId)
+                .Where(x => x.ExternalId == externalId && x.ProjectType == projectType)
                 .SingleOrDefault();
         }
 
@@ -69,6 +76,25 @@ namespace Vokabular.DataEntities.Database.Repositories
             return GetSession().QueryOver<BookType>()
                 .Where(x => x.Type == bookTypeEnum)
                 .SingleOrDefault();
+        }
+
+        public virtual IList<PageCountResult> GetAllPageCount(IEnumerable<long> projectIdList)
+        {
+            PageResource pageResourceAlias = null;
+            Resource resourceAlias = null;
+            PageCountResult resultAlias = null;
+
+            var result = GetSession().QueryOver(() => pageResourceAlias)
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .WhereRestrictionOn(() => resourceAlias.Project.Id).IsInG(projectIdList)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
+                .SelectList(list => list
+                    .SelectGroup(() => resourceAlias.Project.Id).WithAlias(() => resultAlias.ProjectId)
+                    .SelectCount(() => pageResourceAlias.Id).WithAlias(() => resultAlias.PageCount))
+                .TransformUsing(Transformers.AliasToBean<PageCountResult>())
+                .List<PageCountResult>();
+
+            return result;
         }
 
         public virtual Snapshot GetLatestSnapshot(long projectId)
@@ -109,6 +135,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.Project.Id == projectId)
                 .Fetch(SelectMode.Fetch, x => x.ResponsiblePerson)
                 .Fetch(SelectMode.Fetch, x => x.ResponsibleType)
+                .OrderBy(x => x.Sequence).Asc
                 .List();
         }
 

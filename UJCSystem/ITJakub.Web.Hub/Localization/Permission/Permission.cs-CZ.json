@@ -1,6 +1,6 @@
 {
-	"culture":"cs-CZ",
-	"scope":"Permission",
+  "culture": "cs-CZ",
+  "scope": "Permission",
   "dictionary": {
     "GroupPermissionManagementTitle": "Administrace - Správa skupin",
     "GroupManagementHeadline": "Správa skupin",
@@ -58,6 +58,7 @@
     "User": "Uživatel",
     "ManagePermissions": "Spravovat práva",
     "Permissions": "Oprávnění",
+    "SuccessGroupCreate": "Skupina úspěšně vytvořena.",
     "SuccessGroupUpdate": "Úprava skupiny proběhla úspěšně.",
     "SuccessUserUpdate": "Úprava uživatele proběhla úspěšně.",
     "GroupEditTitle": "Úprava skupiny",
@@ -68,6 +69,6 @@
     "AddProjectPermissionToGroup": "Přidat právo na projekt skupině",
     "SelectedProject": "Vybraný projekt",
     "AddPermissionToGroup": "Přidat oprávnění skupině",
-    "ResetPassword":  "Resetovat heslo"
+    "ResetPassword": "Resetovat heslo"
   }
 }

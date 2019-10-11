@@ -24,7 +24,9 @@ using Vokabular.ForumSite.Core.Options;
 using Vokabular.FulltextService.DataContracts;
 using Vokabular.MainService.Authorization;
 using Vokabular.MainService.Core;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.Middleware;
 using Vokabular.MainService.Options;
 using Vokabular.MainService.Utils;
@@ -34,9 +36,11 @@ using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore;
 using Vokabular.Shared.AspNetCore.Container;
 using Vokabular.Shared.AspNetCore.Container.Extensions;
+using Vokabular.Shared.AspNetCore.Middleware;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Options;
+using Vokabular.TextConverter.Options;
 
 namespace Vokabular.MainService
 {
@@ -65,6 +69,7 @@ namespace Vokabular.MainService
             services.Configure<PathConfiguration>(Configuration.GetSection("PathConfiguration"));
             services.Configure<OaiPmhClientOption>(Configuration.GetSection("OaiPmhClientOption"));
             services.Configure<ForumOption>(Configuration.GetSection("ForumOptions"));
+            services.Configure<SpecialCharsOption>(Configuration.GetSection("SpecialChars"));
 
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
 
@@ -86,6 +91,12 @@ namespace Vokabular.MainService
                 options.IncludeXmlComments(ServiceUtils.GetAppXmlDocumentationPath(typeof(BookContract)));
                 options.OperationFilter<AddResponseHeadersFilter>();
                 options.OperationFilter<FileOperationFilter>();
+                options.OperationFilter<AddGlobalHeaderFilter>(new GlobalHeaderValues
+                {
+                    Name = MainServiceHeaders.PortalTypeHeader,
+                    Values = Enum.GetNames(typeof(PortalTypeContract)).ToList<object>(),
+                    DefaultValue = PortalTypeContract.Research.ToString(),
+                });
 
                 options.DocumentFilter<PolymorphismDocumentFilter<SearchCriteriaContract>>();
                 options.SchemaFilter<PolymorphismSchemaFilter<SearchCriteriaContract>>();
@@ -179,6 +190,8 @@ namespace Vokabular.MainService
 
             services.AddProjectImportServices();
 
+            services.AddAutoMapper();
+
             // IoC
             var container = new DryIocContainerWrapper();
             container.RegisterLogger();
@@ -199,9 +212,9 @@ namespace Vokabular.MainService
         {
             ApplicationLogging.LoggerFactory = loggerFactory;
 
-            app.ConfigureAutoMapper();
-
+            app.UseMiddleware<Log4NetPropertiesMiddleware>();
             app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<PortalTypeMiddleware>();
 
             app.UseAuthentication();
 

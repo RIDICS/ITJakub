@@ -4,6 +4,7 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.ProjectImport.Managers;
 using Vokabular.ProjectImport.Shared.Const;
 using Vokabular.Shared.DataEntities.UnitOfWork;

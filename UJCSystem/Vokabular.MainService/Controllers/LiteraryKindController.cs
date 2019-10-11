@@ -10,7 +10,7 @@ using Vokabular.Shared.Const;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class LiteraryKindController : Controller
+    public class LiteraryKindController : BaseController
     {
         private readonly CatalogValueManager m_catalogValueManager;
 

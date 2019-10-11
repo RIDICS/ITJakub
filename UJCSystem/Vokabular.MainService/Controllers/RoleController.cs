@@ -8,7 +8,6 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
-using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -80,17 +79,25 @@ namespace Vokabular.MainService.Controllers
         }
 
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
-        [HttpPost("{roleId}/permission/book")]
-        public void AddBooksToRole(int roleId, [FromBody] AddBookToRoleRequestContract request)
+        [HttpGet("{roleId}/book/{bookId}/permission")]
+        public PermissionDataContract GetPermissionsForRoleAndBook(int roleId, long bookId)
         {
-            m_permissionManager.AddBooksToRole(roleId, request.BookIdList);
+            var result = m_permissionManager.GetPermissionsForRoleAndBook(roleId, bookId);
+            return result;
         }
 
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
-        [HttpDelete("{roleId}/permission/book")]
-        public void RemoveBooksFromRole(int roleId, [FromBody] AddBookToRoleRequestContract request)
+        [HttpPut("{roleId}/book/{bookId}/permission")]
+        public void UpdateOrAddBooksToRole(int roleId, long bookId, [FromBody] PermissionDataContract data)
         {
-            m_permissionManager.RemoveBooksFromRole(roleId, request.BookIdList);
+            m_permissionManager.UpdateOrAddBooksToRole(roleId, new List<long> {bookId}, data);
+        }
+
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
+        [HttpDelete("{roleId}/book/{bookId}/permission")]
+        public void RemoveBooksFromRole(int roleId, long bookId)
+        {
+            m_permissionManager.RemoveBooksFromRole(roleId, new List<long> {bookId});
         }
 
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
@@ -106,23 +113,6 @@ namespace Vokabular.MainService.Controllers
         {
             m_roleManager.AddUserToRole(userId, roleId);
         }
-
-        [Authorize]
-        [HttpGet("{roleId}/book")] //TODO categoryId -> bookTypeId as filtering query parameter
-        [ProducesResponseType(typeof(List<BookContract>), StatusCodes.Status200OK)]
-        public IActionResult GetBooksForRole(int roleId, [FromQuery] BookTypeEnumContract? filterByBookType)
-        //public CategoryContentContract GetCategoryContentForGroup(int groupId, int categoryId) // TODO use correct return type
-        {
-            if (filterByBookType == null)
-                return BadRequest();
-
-            var result = m_bookManager.GetBooksForRole(roleId, filterByBookType.Value);
-            return Ok(result);
-        }
-
-        //public CategoryContentContract GetAllCategoryContent(int categoryId) // TODO this method belongs to different controller
-        //{
-        //}
 
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpPost("{roleId}/permission/special")]

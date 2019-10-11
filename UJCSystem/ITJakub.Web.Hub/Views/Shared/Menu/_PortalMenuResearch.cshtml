@@ -1,0 +1,285 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.Core.Util
+
+@inject ILocalizationService Localizer
+
+<div class="navbar-collapse collapse">
+    <div id="main-plugins-menu" class="main-plugins-menu">
+        <ul>
+            <li id="dictionaries-menu" class="has-sub">
+                <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'>
+                    <span>@Localizer.Translate("Dictionaries", "layout")</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href='@Url.Action("Information", "Dictionaries", new {area = "Dictionaries"})'>
+                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("List", "Dictionaries", new {area = "Dictionaries"})'>
+                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'>
+                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Listing", "Dictionaries", new {area = "Dictionaries"})'>
+                            <span>@Localizer.Translate("Listing", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Help", "Dictionaries", new {area = "Dictionaries"})'>
+                            <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Feedback", "Dictionaries", new {area = "Dictionaries"})'>
+                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li id="editions-menu" class="has-sub">
+                <a href='@Url.Action("List", "Editions", new {area = "Editions"})'>
+                    <span>@Localizer.Translate("Editions", "layout", LocTranslationSource.File)</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href='@Url.Action("Information", "Editions", new {area = "Editions"})'>
+                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("List", "Editions", new {area = "Editions"})'>
+                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Search", "Editions", new {area = "Editions"})'>
+                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("EditionPrinciples", "Editions", new {area = "Editions"})'>
+                            <span>@Localizer.Translate("EditionPrinciples", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Help", "Editions", new {area = "Editions"})'>
+                            <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Feedback", "Editions", new {area = "Editions"})'>
+                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li id="corpus-menu" class="has-sub">
+                <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                    <span>@Localizer.Translate("Corpora", "layout", LocTranslationSource.File)</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href='@Url.Action("Information", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Search", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Help", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                            <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Feedback", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li id="grammars-menu" class="has-sub">
+                <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'>
+                    <span>@Localizer.Translate("Grammar", "layout", LocTranslationSource.File)</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href='@Url.Action("Information", "OldGrammar", new {area = "OldGrammar"})'>
+                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'>
+                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Search", "OldGrammar", new {area = "OldGrammar"})'>
+                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("ListTerms", "OldGrammar", new {area = "OldGrammar"})'>
+                            <span>@Localizer.Translate("ListTerms", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Help", "OldGrammar", new {area = "OldGrammar"})'>
+                            <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Feedback", "OldGrammar", new {area = "OldGrammar"})'>
+                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li id="professional-menu" class="has-sub">
+                <a href='@Url.Action("List", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+                    <span>@Localizer.Translate("ProfessionalLiterature", "layout", LocTranslationSource.File)</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href='@Url.Action("Information", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("List", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Search", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Help", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+                            <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Feedback", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li id="bibliographies-menu" class="has-sub">
+                <a href='@Url.Action("Search", "Bibliographies", new {area = "Bibliographies"})'>
+                    <span>@Localizer.Translate("Bibliographies", "layout", LocTranslationSource.File)</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href='@Url.Action("Information", "Bibliographies", new {area = "Bibliographies"})'>
+                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Search", "Bibliographies", new {area = "Bibliographies"})'>
+                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Feedback", "Bibliographies", new {area = "Bibliographies"})'>
+                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li id="cardifiles-menu" class="has-sub">
+                <a href='@Url.Action("List", "CardFiles", new {area = "CardFiles"})'>
+                    <span>@Localizer.Translate("CardFiles", "layout", LocTranslationSource.File)</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href='@Url.Action("Information", "CardFiles", new {area = "CardFiles"})'>
+                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("List", "CardFiles", new {area = "CardFiles"})'>
+                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Search", "CardFiles", new {area = "CardFiles"})'>
+                            <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Listing", "CardFiles", new {area = "CardFiles"})'>
+                            <span>@Localizer.Translate("Listing", "layout", LocTranslationSource.File)</span>
+                        </a> @*TODO delete from menu*@
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Feedback", "CardFiles", new {area = "CardFiles"})'>
+                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li id="audio-menu" class="has-sub">
+                <a href='@Url.Action("List", "AudioBooks", new {area = "AudioBooks"})'>
+                    <span>@Localizer.Translate("AudioBooks", "layout", LocTranslationSource.File)</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href='@Url.Action("Information", "AudioBooks", new {area = "AudioBooks"})'>
+                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("List", "AudioBooks", new {area = "AudioBooks"})'>
+                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Feedback", "AudioBooks", new {area = "AudioBooks"})'>
+                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li id="tools-menu" class="has-sub">
+                <a href='@Url.Action("List", "Tools", new {area = "Tools"})'>
+                    <span>@Localizer.Translate("Tools", "layout", LocTranslationSource.File)</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href='@Url.Action("Information", "Tools", new {area = "Tools"})'>
+                            <span>@Localizer.Translate("Information", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("List", "Tools", new {area = "Tools"})'>
+                            <span>@Localizer.Translate("List", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='@Url.Action("Feedback", "Tools", new {area = "Tools"})'>
+                            <span>@Localizer.Translate("Feedback", "layout", LocTranslationSource.File)</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            @await Html.PartialAsync("Menu/_AdminMenuItems")
+        </ul>
+    </div>
+</div>

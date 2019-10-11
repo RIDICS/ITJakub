@@ -27,7 +27,11 @@
     "Edit": "Edit",
     "Cancel": "Cancel",
     "Error": "Error",
+    "Warning": "Warning",
+    "Info": "Info",
     "Back": "Back",
+    "Yes": "Yes",
+    "No": "No",
     "DefaultTitle": "Default title",
 
     "SortBy": "Sort by",
@@ -39,43 +43,44 @@
     "SignUp": "Sign up",
     "EditText": "Edit text",
     "CreateText": "Create text",
-    "EmailIsNotConfirmedAlertDescription": "If e-mail is not confirmed, it is not possible to change the password, neither secure account with two-phase authentication. "
+    "EmailIsNotConfirmedAlertDescription":
+      "If e-mail is not confirmed, it is not possible to change the password, neither secure account with two-phase authentication. "
   },
   "plural": {
     "Characters": {
       "characters": [
-        [ null, -2, "characters" ],
-        [ -1, -1, "character" ],
-        [ 0, 0, "characters" ],
-        [ 1, 1, "character" ],
-        [ 2, null, "characters" ]
+        [null, -2, "characters"],
+        [-1, -1, "character"],
+        [0, 0, "characters"],
+        [1, 1, "character"],
+        [2, null, "characters"]
       ]
     },
     "Years": {
       "years": [
-        [ null, -2, "years" ],
-        [ -1, -1, "year" ],
-        [ 0, 0, "years" ],
-        [ 1, 1, "year" ],
-        [ 2, null, "years" ]
+        [null, -2, "years"],
+        [-1, -1, "year"],
+        [0, 0, "years"],
+        [1, 1, "year"],
+        [2, null, "years"]
       ]
     },
     "Months": {
       "months": [
-        [ null, -2, "months" ],
-        [ -1, -1, "month" ],
-        [ 0, 0, "months" ],
-        [ 1, 1, "month" ],
-        [ 2, null, "months" ]
+        [null, -2, "months"],
+        [-1, -1, "month"],
+        [0, 0, "months"],
+        [1, 1, "month"],
+        [2, null, "months"]
       ]
     },
     "Days": {
       "days": [
-        [ null, -2, "days" ],
-        [ -1, -1, "day" ],
-        [ 0, 0, "days" ],
-        [ 1, 1, "day" ],
-        [ 2, null, "days" ]
+        [null, -2, "days"],
+        [-1, -1, "day"],
+        [0, 0, "days"],
+        [1, 1, "day"],
+        [2, null, "days"]
       ]
     }
   }
