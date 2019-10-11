@@ -16,6 +16,7 @@ using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataEntities.UnitOfWork;
+using Vokabular.TextConverter.Markdown.Extensions;
 
 namespace Vokabular.MainService.Core.Managers.Fulltext
 {
@@ -419,6 +420,11 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         public void CreateSnapshot(Snapshot snapshot, IList<TextResource> textResources, MetadataResource metadata)
         {
             throw new NotSupportedException("Snapshot creating is not supported in eXist-db.");
+        }
+
+        public IList<MarkdownHeadingData> GetHeadingsFromPageText(TextResource textResource)
+        {
+            throw new NotSupportedException("Getting headings from text in eXist-db isn't supported.");
         }
     }
 }
