@@ -2,7 +2,7 @@
     const modulInicializator = new ProfessionalLiteratureModulInicializator({
         bibliographyModule: {
             forcedBookType: BookTypeEnum.ProfessionalLiterature,
-            customConfigurationPath: "ProfessionalLiterature/ProfessionalLiterature/GetListConfiguration"
+            customConfigurationPath: $("#bibliography-configuration-url").data("url")
         },
         search: {
             enabledOptions: [

@@ -36,20 +36,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         {
             return new FeedbackFormIdentification {Area = "Editions", Controller = "Editions"};
         }
-
-        public ActionResult GetListConfiguration()
-        {
-            var fullPath = "~/Areas/Editions/content/BibliographyPlugin/list_configuration.json";
-            return File(fullPath, "application/json", fullPath);
-        }
-
-        public ActionResult GetSearchConfiguration()
-        {
-            var fullPath = "~/Areas/Editions/content/BibliographyPlugin/search_configuration.json";
-            return File(fullPath, "application/json", fullPath);
-        }
-
-
+        
         #region Views and Feedback
 
         // GET: Editions/Editions

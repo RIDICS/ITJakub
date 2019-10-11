@@ -1,5 +1,6 @@
 ﻿@using Scalesoft.Localization.AspNetCore
 @inject ILocalizationService Localizer
+@inject IFileVersionProvider FileVersionProvider
 
 @{
     ViewBag.Title = Localizer.Translate("EditionsSearch", "Editions");
@@ -11,5 +12,7 @@
     <script asp-append-version="true" src="~/Areas/Editions/js/itjakub.editions.js"></script>
     <script asp-append-version="true" src="~/Areas/Editions/js/itjakub.editions.search.js"></script>
 }
+
+<div id="bibliography-configuration-url" data-url="@FileVersionProvider.AddFileVersionToPath(Context.Request.PathBase, Url.Content("~/Areas/Editions/content/BibliographyPlugin/search_configuration.json"))"></div>
 
 @await Html.PartialAsync("_BibliographySearch")

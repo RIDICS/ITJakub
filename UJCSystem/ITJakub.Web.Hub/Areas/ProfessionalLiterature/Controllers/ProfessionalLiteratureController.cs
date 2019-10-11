@@ -68,19 +68,7 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
                         JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                 });
         }
-
-        public ActionResult GetListConfiguration()
-        {
-            var fullPath = "~/Areas/ProfessionalLiterature/content/BibliographyPlugin/list_configuration.json";
-            return File(fullPath, "application/json", fullPath);
-        }
-
-        public ActionResult GetSearchConfiguration()
-        {
-            var fullPath = "~/Areas/ProfessionalLiterature/content/BibliographyPlugin/search_configuration.json";
-            return File(fullPath, "application/json", fullPath);
-        }
-
+        
         public ActionResult List()
         {
             return View();

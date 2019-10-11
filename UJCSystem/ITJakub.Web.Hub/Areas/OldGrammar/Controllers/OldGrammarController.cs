@@ -115,19 +115,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                         JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                 });
         }
-
-        public ActionResult GetListConfiguration()
-        {
-            var fullPath = "~/Areas/OldGrammar/Content/BibliographyPlugin/list_configuration.json";
-            return File(fullPath, "application/json", fullPath);
-        }
-
-        public ActionResult GetSearchConfiguration()
-        {
-            var fullPath = "~/Areas/OldGrammar/Content/BibliographyPlugin/search_configuration.json";
-            return File(fullPath, "application/json", fullPath);
-        }
-
+        
         public ActionResult GetGrammarsWithCategories()
         {
             var result = GetBooksAndCategories();

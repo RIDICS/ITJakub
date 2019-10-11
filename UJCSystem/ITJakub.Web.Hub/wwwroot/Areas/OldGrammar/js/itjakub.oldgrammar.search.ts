@@ -3,7 +3,7 @@
         const modulInicializator = new SearchModulInicializator({
             bibliographyModule: {
                 forcedBookType: BookTypeEnum.Grammar,
-                customConfigurationPath: "OldGrammar/OldGrammar/GetSearchConfiguration"
+                customConfigurationPath: $("#bibliography-configuration-url").data("url")
             },
             search: {
                 enabledOptions: [
