@@ -5,7 +5,6 @@
 
 @inject ILocalizationService Localizer
 @inject IOptions<PortalOption> PortalOption
-@inject IFileVersionProvider FileVersionProvider
 
 <div id="listHeader">
     <div id="listSearchDiv" class="list-search-div">
@@ -16,8 +15,6 @@
         </div>
     </div>
 </div>
-
-<div id="bibliography-configuration-default-url" data-url="@FileVersionProvider.AddFileVersionToPath(Context.Request.PathBase, Url.Content("~/content/BibliographyConfiguration/configuration.json"))"></div>
 
 <div id="allowedSearchOptions" class="hide" data-options="@Html.Encode(Json.Serialize(PortalOption.Value.AllowedSearchOptions.ToArray()))"></div>
 
