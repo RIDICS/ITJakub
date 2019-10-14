@@ -302,16 +302,16 @@ namespace ITJakub.FileProcessing.Service.Test
             var subtask = new UpdatePagesSubtask(resourceRepository);
             subtask.UpdatePages(40, 3, 1, bookData, GetTestTermCache());
 
-            Assert.AreEqual(1, resourceRepository.CreatedObjects.Count);
-            Assert.AreEqual(2, resourceRepository.UpdatedObjects.Count);
+            Assert.AreEqual(2, resourceRepository.CreatedObjects.Count);
+            Assert.AreEqual(1, resourceRepository.UpdatedObjects.Count);
 
-            var firstPage = resourceRepository.CreatedObjects.Cast<PageResource>().First();
-            var secondPage = resourceRepository.UpdatedObjects.Cast<PageResource>().First(x => x.Name == "40r");
-            var removedPage = resourceRepository.UpdatedObjects.Cast<PageResource>().First(x => x.Name == "40v");
+            var firstPage = resourceRepository.CreatedObjects.Cast<PageResource>().First(x => x.Name == "39v");
+            var secondPage = resourceRepository.CreatedObjects.Cast<PageResource>().First(x => x.Name == "40r");
+            var removedResourcePage = resourceRepository.UpdatedObjects.Cast<Resource>().First();
 
             Assert.AreEqual(1, firstPage.Position);
             Assert.AreEqual(2, secondPage.Position);
-            Assert.AreEqual(0, removedPage.Position);
+            Assert.IsTrue(removedResourcePage.IsRemoved);
 
             // Test term assignment
             Assert.IsNull(firstPage.Terms);
@@ -345,9 +345,11 @@ namespace ITJakub.FileProcessing.Service.Test
 
             var createdTexts = resourceRepository.CreatedObjects.OfType<TextResource>().ToList();
             var updatedTexts = resourceRepository.UpdatedObjects.OfType<TextResource>().ToList();
+            var updatedResources = resourceRepository.UpdatedObjects.OfType<Resource>().ToList();
 
             Assert.AreEqual(2, createdTexts.Count);
             Assert.AreEqual(0, updatedTexts.Count);
+            Assert.AreEqual(1, updatedResources.Count);
 
             var firstText = createdTexts.First(x => x.ExternalId == "xml-39-v");
             var secondText = createdTexts.First(x => x.ExternalId == "xml-40-r");
@@ -355,6 +357,8 @@ namespace ITJakub.FileProcessing.Service.Test
             Assert.AreEqual(1, firstText.VersionNumber);
             Assert.AreEqual(2, secondText.VersionNumber);
             Assert.AreEqual(900, secondText.Resource.Id);
+
+            Assert.IsTrue(updatedResources[0].IsRemoved);
         }
 
         [TestMethod]
@@ -389,9 +393,11 @@ namespace ITJakub.FileProcessing.Service.Test
 
             var createdImages = resourceRepository.CreatedObjects.OfType<ImageResource>().ToList();
             var updatedImages = resourceRepository.UpdatedObjects.OfType<ImageResource>().ToList();
+            var updatedResources = resourceRepository.UpdatedObjects.OfType<Resource>().ToList();
 
             Assert.AreEqual(2, createdImages.Count);
             Assert.AreEqual(0, updatedImages.Count);
+            Assert.AreEqual(1, updatedResources.Count);
 
             var firstImage = createdImages.First(x => x.FileName == "image_39v.jpg");
             var secondImage = createdImages.First(x => x.FileName == "image_40r.jpg");
@@ -402,6 +408,7 @@ namespace ITJakub.FileProcessing.Service.Test
 
             Assert.IsNotNull(firstImage.FileId);
             Assert.IsNotNull(firstImage.FileId);
+            Assert.IsTrue(updatedResources[0].IsRemoved);
         }
 
         [TestMethod]
@@ -449,18 +456,18 @@ namespace ITJakub.FileProcessing.Service.Test
             subtask.UpdateChapters(41, 2, bookData, pageResources);
 
             var createdChapters = resourceRepository.CreatedObjects.OfType<ChapterResource>().ToList();
-            var updatedChapters = resourceRepository.UpdatedObjects.OfType<ChapterResource>().ToList();
+            var updatedResources = resourceRepository.UpdatedObjects.OfType<Resource>().ToList();
 
-            Assert.AreEqual(1, createdChapters.Count);
-            Assert.AreEqual(2, updatedChapters.Count);
+            Assert.AreEqual(2, createdChapters.Count);
+            Assert.AreEqual(1, updatedResources.Count);
 
-            var firstChapter = updatedChapters.First(x => x.Name == "Chapter 40");
-            var secondChapter = createdChapters.First();
-            var deletedChapter = updatedChapters.First(x => x.Name != "Chapter 40");
+            var firstChapter = createdChapters.First(x => x.Name == "Chapter 40");
+            var secondChapter = createdChapters.First(x => x.Name == "Chapter 41");
+            var deletedChapter = updatedResources.First();
 
             Assert.AreEqual(2, firstChapter.Position);
             Assert.AreEqual(1, secondChapter.Position);
-            Assert.AreEqual(0, deletedChapter.Position);
+            Assert.IsTrue(deletedChapter.IsRemoved);
 
             Assert.IsNotNull(firstChapter.ParentResource);
             Assert.IsNull(secondChapter.ParentResource);
