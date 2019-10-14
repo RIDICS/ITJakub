@@ -62,7 +62,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
         private void UpdateChapterList(IList<BookContentItemData> bookContentItems, ChapterResource parentChapter, ChapterRecursionData data)
         {
             var parentChapterResourceResource = parentChapter?.Resource;
-            var parentChapterResourceResourceId = parentChapterResourceResource?.Id;
 
             var updatedChapterResourceIds = data.UpdatedChapterResourceIds;
             var dbPagesByPosition = data.DbPagesByPosition;
@@ -120,16 +119,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     newDbChapter.Resource = dbChapter.Resource;
                     newDbChapter.VersionNumber = dbChapter.VersionNumber + 1;
 
-                    //if (IsChapterChanged(dbChapter, bookContentItem, dbPage.Resource.Id, parentChapterResourceResourceId))
-                    //{
-                    //    dbChapter.Name = bookContentItem.Text;
-                    //    dbChapter.Position = bookContentItem.ItemOrder;
-                    //    dbChapter.ResourceBeginningPage = dbPage.Resource;
-                    //    dbChapter.ParentResource = parentChapterResourceResource;
-                    //    // Update resource name is not required (ChapterResources are distinguish by name)
-
-                    //    m_resourceRepository.Update(dbChapter);
-                    //}
                     updatedChapterResourceIds.Add(dbChapter.Id);
                 }
 
