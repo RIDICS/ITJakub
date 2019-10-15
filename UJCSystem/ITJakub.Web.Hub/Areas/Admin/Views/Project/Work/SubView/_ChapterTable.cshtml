@@ -1,0 +1,21 @@
+﻿@using ITJakub.Web.Hub.Areas.Admin.Models
+@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Areas.Admin.Models.ChapterEditorViewModel
+@inject ILocalizationService Localizer
+
+<div class="table-responsive">
+    <div class="table table-hover selectable">
+        <div class="sub-chapters">
+            @{
+                foreach (var chapter in Model.Chapters)
+                {
+                    @await Html.PartialAsync("Work/SubView/_ChapterRow", new ChapterEditorRowViewModel{
+                        Chapter = chapter,
+                        Pages = Model.Pages,
+                        LevelOfHierarchy = 0
+                    }, ViewData)
+                }
+            }
+        </div>
+    </div>
+</div>

@@ -25,6 +25,10 @@
             } as JQuery.PlainObject);
     }
 
+    getChapterList(projectId: number): JQuery.jqXHR<string> {
+        return $.get(`${this.serverPath}Admin/Project/GetChapterList?projectId=${projectId}`);
+    }
+
     saveChapterList(projectId: number, chapterList: IUpdateChapter[]): JQuery.jqXHR {
         return $.ajax({
             url: `${this.serverPath}Admin/ContentEditor/UpdateChapterList`,

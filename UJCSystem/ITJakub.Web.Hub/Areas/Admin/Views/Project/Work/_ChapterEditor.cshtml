@@ -32,22 +32,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="list-container selectable chapter-listing">
-                        <div class="table-responsive">
-                            <div class="table table-hover">
-                                <div class="sub-chapters">
-                                    @{
-                                        foreach (var chapter in Model.Chapters)
-                                        {
-                                            @await Html.PartialAsync("Work/SubView/_ChapterRow", new ChapterEditorRowViewModel{
-                                                Chapter = chapter,
-                                                Pages = Model.Pages,
-                                                LevelOfHierarchy = 0
-                                            }, ViewData)
-                                        }
-                                    }
-                                </div>
-                            </div>
-                        </div>
+                        @await Html.PartialAsync("Work/SubView/_ChapterTable", Model)
                     </div>
                     <div class="panel-bottom-buttons text-right">
                         <button type="button" class="btn btn-default move-chapter-left" title="@Localizer.Translate("ShiftChapterUp", "RidicsProject")">

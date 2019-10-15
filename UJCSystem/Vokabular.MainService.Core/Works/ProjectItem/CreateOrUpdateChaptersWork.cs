@@ -80,7 +80,7 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
             var removeResourceSubwork = new RemoveResourceSubwork(m_resourceRepository); 
             foreach (var dbChapter in dbChapters)
             {
-                if (!updatedChapterIds.Contains(dbChapter.Id))
+                if (!updatedChapterIds.Contains(dbChapter.Resource.Id))
                 {
                     removeResourceSubwork.RemoveResource(dbChapter.Resource.Id);
                 }

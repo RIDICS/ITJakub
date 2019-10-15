@@ -32,11 +32,33 @@ class ChapterEditorMain {
         });
 
         $(".save-chapters-button").on("click", () => {
+            if($(".edit-chapter i.fa-check").length > 0) {
+                bootbox.alert({
+                        title: localization.translate("Error").value,
+                        message: localization.translate("ConfirmOrDiscardChapterChanges", "RidicsProject").value,
+                        buttons: {
+                            ok: {
+                                className: "btn-default"
+                            }
+                        }
+                    });
+                return;
+            }
+            
             this.position = 0;
             this.chaptersToSave = [];
             this.getChaptersToSave($(".table > .sub-chapters"));
+            const listing = $(".chapter-listing");
+            listing.empty().append(`<div class="loader"></div>`);
             this.util.saveChapterList(projectId, this.chaptersToSave).done(() => {
                 $("#unsavedChanges").addClass("hide");
+                this.util.getChapterList(projectId).done((data) => {
+                    listing.html(data);
+                    this.initChapterRowClicks($(".table > .sub-chapters"));
+                }).fail((error) => {
+                    const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                    listing.empty().append(alert);
+                });                
             }).fail((error) => {
                 bootbox.alert({
                     title: localization.translate("Error").value,
@@ -70,9 +92,10 @@ class ChapterEditorMain {
                 const selectedPageId = Number($("#projectChaptersDialog .select-page").find("option:selected").val());
                 const selectedPageName = `[${$("#projectChaptersDialog .select-page").find("option:selected").text()}]`;
                 const chapter = this.createChapterRow(chapterName, selectedPageId, selectedPageName);
-                this.initChapterRowClicks(chapter);
                 $(".table > .sub-chapters").append(chapter);
+                this.initChapterRowClicks(chapter);
                 this.editDialog.hide();
+                this.showUnsavedChangesAlert();
             });
 
         $("#projectChaptersDialog").on("click",
@@ -271,13 +294,15 @@ class ChapterEditorMain {
 
     private createChapterRow(name: string, beginningPageId: number, beginningPageName: string, levelOfHierarchy = 0): JQuery<HTMLElement> {
         const newChapter = $("#chapterTemplate").children(".chapter-container").clone();
-        newChapter.children(".chapter-row").data("level", levelOfHierarchy);
+        const chapterRow = newChapter.children(".chapter-row");
+        chapterRow.data("level", levelOfHierarchy);
+        chapterRow.data("beginning-page-id", beginningPageId);
         newChapter.find(".ridics-checkbox").attr("style", `margin-left: ${levelOfHierarchy}em`);
         newChapter.find(".chapter-name").text(name);
         newChapter.find("input[name=\"chapter-name\"]").val(name);
         newChapter.find(".page-name").text(beginningPageName);
-        newChapter.find("input[name=\"page-name\"]").val(beginningPageName);
-        newChapter.find(`input[name="page-name"] option[value="${beginningPageId}"]`).attr("selected", "selected");
+        newChapter.find("select[name=\"chapter-page\"]").val(beginningPageName);
+        newChapter.find(`select[name="chapter-page"] option[value="${beginningPageId}"]`).attr("selected", "selected");
         
         return newChapter;
     }

@@ -44,7 +44,8 @@
     "DeleteChapter": "Delete chapter",
     "ChapterNameRequired": "Chapter name is required",
     "PageListSaveSuccess": "Pages saved successfully.",
-
+    "ConfirmOrDiscardChapterChanges": "Please confirm or discard changes in chapter names and their pages.",
+    
     "Fail": "Fail",
     "Success": "Success",
     "Warning": "Warning",

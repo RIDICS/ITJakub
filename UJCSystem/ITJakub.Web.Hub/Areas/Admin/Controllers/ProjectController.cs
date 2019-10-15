@@ -166,6 +166,20 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return PartialView("Resource/_Preview");
         }
 
+        public IActionResult GetChapterList(long projectId)
+        {
+            var projectClient = GetProjectClient();
+            var chapterList = projectClient.GetChapterList(projectId);
+            var pageList = projectClient.GetAllPageList(projectId);
+            var chapterEditorViewModel = new ChapterEditorViewModel
+            {
+                Chapters = Mapper.Map<List<ChapterHierarchyViewModel>>(chapterList),
+                Pages = Mapper.Map<List<PageViewModel>>(pageList)
+            };
+            
+            return PartialView("Work/SubView/_ChapterTable", chapterEditorViewModel);
+        }
+        
         public IActionResult SnapshotList(long projectId, string search, int start, int count = SnapshotListPageSize)
         {
             var client = GetProjectClient();

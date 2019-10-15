@@ -44,6 +44,7 @@
     "DeleteChapter": "Smazat kapitolu",
     "ChapterNameRequired": "Název kapitoly je povinný.",
     "PageListSaveSuccess": "Stránky byly úspěšně uloženy.",
+    "ConfirmOrDiscardChapterChanges": "Prosím potvrďte nebo zrušte změny názvů kapitol a jejich stran.",
 
     "Fail": "Chyba",
     "Success": "Úspěch",
