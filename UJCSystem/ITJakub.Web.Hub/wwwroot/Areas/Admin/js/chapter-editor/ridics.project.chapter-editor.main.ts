@@ -221,7 +221,7 @@ class ChapterEditorMain {
         content.empty().html("<div class=\"page-navigation\"></div><div class=\"sub-content\"></div>");
         const paginationEl = content.find(".page-navigation");
         paginationEl.append(pagination);
-        this.moveToPageNumber(0);
+        this.moveToPage(pageId);
         pageDetail.removeClass("hide");
 
         this.loadPageDetail(pageId);
