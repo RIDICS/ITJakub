@@ -64,7 +64,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual IList<TextResource> GetProjectLatestTexts(long projectId, long? namedResourceGroupId, bool fetchParentPage)
+        public virtual IList<TextResource> GetProjectLatestTexts(long projectId, long? namedResourceGroupId, bool fetchParentPage, bool fetchPageLatestVersion = false)
         {
             Resource resourceAlias = null;
 
@@ -91,6 +91,10 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             if (namedResourceGroupId != null)
                 query.And(() => resourceAlias.NamedResourceGroup.Id == namedResourceGroupId.Value);
+
+            if (fetchPageLatestVersion)
+                query.Fetch(SelectMode.Fetch, x => x.ResourcePage)
+                    .Fetch(SelectMode.Fetch, x => x.ResourcePage.LatestVersion);
 
             var result = query.Future();
             return result.ToList();

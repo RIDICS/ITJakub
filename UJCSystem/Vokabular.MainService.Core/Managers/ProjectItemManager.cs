@@ -215,7 +215,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public void GenerateChapters(long projectId)
         {
-            var textResources = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestTexts(projectId, null, true));
+            var textResources = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestTexts(projectId, null, true, true));
             var sortedTextResources = textResources.OrderBy(x => ((PageResource)x.ResourcePage.LatestVersion).Position);
             var pageWithHeadingsList = new List<Tuple<PageResource, IList<MarkdownHeadingData>>>();
 
