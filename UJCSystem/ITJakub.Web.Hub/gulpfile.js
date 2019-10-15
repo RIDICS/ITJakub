@@ -170,6 +170,7 @@ gulp.task("bundle:itjakub_plugins", function () {
             paths.webroot + "js/Plugins/itjakub.modul.inicializator.js",
             paths.webroot + "js/Plugins/itjakub.list.modul.inicializator.js",
             paths.webroot + "js/Plugins/itjakub.search.modul.inicializator.js",
+            paths.webroot + "js/Plugins/Reader/itjakub.plugins.reader-pagination.js",
             paths.webroot + "js/Plugins/Reader/itjakub.plugins.reader.js",
             paths.webroot + "js/Plugins/Bibliography/itjakub.plugins.bibliography.variableInterpreter.js",
             paths.webroot + "js/Plugins/Bibliography/itjakub.plugins.bibliography.factories.js",
