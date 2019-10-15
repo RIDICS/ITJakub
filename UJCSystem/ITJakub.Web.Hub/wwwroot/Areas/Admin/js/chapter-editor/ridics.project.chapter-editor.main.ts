@@ -102,7 +102,8 @@ class ChapterEditorMain {
                 name: chapterRow.find(".chapter-name").text().trim(),
                 beginningPageId: Number(chapterRow.find("option:selected").val()),
                 comment: ""
-        }
+            };
+            
             this.position++;
 
             this.chaptersToSave.push(newChapter);
@@ -142,16 +143,22 @@ class ChapterEditorMain {
 
         subChapters.find(".chapter-row").off();
         subChapters.find(".chapter-row").on("click", (event) => {
-            const checkbox = $(event.currentTarget).find(".selection-checkbox");
-            checkbox.prop("checked", !checkbox.is(":checked"));
-            this.selectChapter($(event.currentTarget));
-            this.moveEditor.checkMoveButtonsAvailability();
+            if($(event.target).parents(".buttons").length === 0) {
+                const checkbox = $(event.currentTarget).find(".selection-checkbox");
+                checkbox.prop("checked", !checkbox.is(":checked"));
+                this.selectChapter($(event.currentTarget));
+                this.moveEditor.checkMoveButtonsAvailability();
+            }
         });
-
+        
         subChapters.find("select[name=\"chapter-page\"]").selectpicker({
             liveSearch: true,
             maxOptions: 1,
             container: "body"
+        });
+        
+        subChapters.find(".chapter-row input[name=\"chapter-name\"]").on("click", (event) => {
+            event.stopPropagation();
         });
     }
 
@@ -223,8 +230,6 @@ class ChapterEditorMain {
         paginationEl.append(pagination);
         this.moveToPage(pageId);
         pageDetail.removeClass("hide");
-
-        this.loadPageDetail(pageId);
     }
 
     private loadPageDetail(pageId: number) {
