@@ -14,7 +14,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.BeginningPageId, opt => opt.MapFrom(src => src.BeginningPageId))
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.BeginningPageName))
+                .ForMember(dest => dest.BeginningPageName, opt => opt.MapFrom(src => src.BeginningPageName))
                 .ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.Position))
                 .ForMember(dest => dest.SubChapters, opt => opt.MapFrom(src => src.SubChapters));
         }
