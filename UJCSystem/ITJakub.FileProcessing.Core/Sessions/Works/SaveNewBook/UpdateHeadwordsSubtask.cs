@@ -48,6 +48,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             if (bookData.BookHeadwords == null)
                 return;
 
+            var existingHeadwordResourceIds = new List<long>();
             var now = DateTime.UtcNow;
             var project = m_resourceRepository.Load<Project>(projectId);
             var user = m_resourceRepository.Load<User>(userId);
@@ -93,11 +94,21 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 else if (IsHeadwordChanged(dbHeadword, headwordDataList, bookVersionId))
                 {
                     CreateHeadwordResource(dbHeadword.VersionNumber + 1, dbHeadword.Resource, headwordDataList, user, now, bookVersion, dbPagesByImage);
+                    existingHeadwordResourceIds.Add(dbHeadword.Id);
                 }
                 else
                 {
                     m_importedResourceVersionIds.Add(dbHeadword.Id); // no new ResourceVersion, but imported
+                    existingHeadwordResourceIds.Add(dbHeadword.Id);
                 }
+            }
+
+            var unusedDbHeadwords = dbHeadwords.Select(x => x.Value).Where(x => !existingHeadwordResourceIds.Contains(x.Id));
+            foreach (var unusedDbHeadword in unusedDbHeadwords)
+            {
+                var resourceToRemove = unusedDbHeadword.Resource;
+                resourceToRemove.IsRemoved = true;
+                m_resourceRepository.Update(resourceToRemove);
             }
         }
 

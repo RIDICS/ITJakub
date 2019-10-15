@@ -536,10 +536,14 @@ namespace ITJakub.FileProcessing.Service.Test
             
             var createdHeadwordResources = resourceRepository.CreatedObjects.OfType<HeadwordResource>().ToList();
             var createdHeadwordItems = resourceRepository.CreatedObjects.OfType<HeadwordItem>().ToList();
+            var updatedResources = resourceRepository.UpdatedObjects.OfType<Resource>().ToList();
             
-            Assert.AreEqual(0, resourceRepository.UpdatedObjects.Count); // No updates
+            Assert.AreEqual(0, resourceRepository.UpdatedObjects.Count - updatedResources.Count); // No updates except the removed resources
             Assert.AreEqual(2, createdHeadwordResources.Count);
             Assert.AreEqual(3, createdHeadwordItems.Count);
+            Assert.AreEqual(1, updatedResources.Count);
+
+            Assert.IsTrue(updatedResources[0].IsRemoved);
 
             var newHeadword = createdHeadwordResources.First(x => x.ExternalId == "null");
             var updatedHeadword = createdHeadwordResources.First(x => x.ExternalId == "id-2");

@@ -421,6 +421,20 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                         Id = HeadwordBookVersionId
                     }
                 },
+                new HeadwordResource // for removing
+                {
+                    HeadwordItems = new List<HeadwordItem>(),
+                    DefaultHeadword = "eee",
+                    ExternalId = "id-REMOVE",
+                    Resource = new Resource(),
+                    Sorting = "eee-s",
+                    VersionNumber = 1,
+                    Id = 103,
+                    BookVersion = new BookVersionResource
+                    {
+                        Id = HeadwordBookVersionId
+                    }
+                }
             };
         }
 
