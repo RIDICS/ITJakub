@@ -31,6 +31,43 @@ class ChapterEditorMain {
             autoClearInputs: false
         });
 
+        const listing = $(".chapter-listing");
+        
+        $("#generateChapters").on("click", (event) => {
+            bootbox.confirm({
+                title: localization.translate("Warning").value,
+                message: localization.translate("GenerateChaptersWarning", "Admin").value,
+                buttons: {
+                    confirm: {
+                        label: localization.translate("Generate", "Admin").value,
+                        className: "btn-default"
+                    },
+                    cancel: {
+                        label: localization.translate("Cancel").value
+                    }
+                },
+                callback: (result => {
+                    if(result)
+                    {
+                        $("#unsavedChanges").addClass("hide");
+                        listing.empty().append(`<div class="loader"></div>`);
+                        this.util.generateChapterList(projectId).done(() => {
+                            this.util.getChapterList(projectId).done((data) => {
+                                listing.html(data);
+                                this.initChapterRowClicks($(".table > .sub-chapters"));
+                            }).fail((error) => {
+                                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                                listing.empty().append(alert);
+                            });
+                        }).fail((error) => {
+                            const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                            listing.empty().append(alert);
+                        });
+                    }
+                })
+            });
+        });
+
         $(".save-chapters-button").on("click", () => {
             if($(".edit-chapter i.fa-check").length > 0) {
                 bootbox.alert({
@@ -48,7 +85,6 @@ class ChapterEditorMain {
             this.position = 0;
             this.chaptersToSave = [];
             this.getChaptersToSave($(".table > .sub-chapters"));
-            const listing = $(".chapter-listing");
             listing.empty().append(`<div class="loader"></div>`);
             this.util.saveChapterList(projectId, this.chaptersToSave).done(() => {
                 $("#unsavedChanges").addClass("hide");

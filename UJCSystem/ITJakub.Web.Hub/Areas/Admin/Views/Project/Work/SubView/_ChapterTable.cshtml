@@ -6,7 +6,7 @@
 <div class="table-responsive">
     <div class="table table-hover selectable">
         <div class="sub-chapters">
-            @{
+            @if(Model.Chapters.Count != 0) {
                 foreach (var chapter in Model.Chapters)
                 {
                     @await Html.PartialAsync("Work/SubView/_ChapterRow", new ChapterEditorRowViewModel{
@@ -15,6 +15,10 @@
                         LevelOfHierarchy = 0
                     }, ViewData)
                 }
+            }
+            else
+            {
+                <div class="alert alert-info">@Localizer.Translate("NoChapters", "Admin")</div>
             }
         </div>
     </div>

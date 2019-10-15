@@ -29,6 +29,13 @@
         return $.get(`${this.serverPath}Admin/Project/GetChapterList?projectId=${projectId}`);
     }
 
+    generateChapterList(projectId: number): JQuery.jqXHR<ITextWithPage[]> {
+        return  $.post(`${this.serverPath}Admin/ContentEditor/GenerateChapters`,
+            {
+                projectId: projectId
+            } as JQuery.PlainObject);
+    }
+    
     saveChapterList(projectId: number, chapterList: IUpdateChapter[]): JQuery.jqXHR {
         return $.ajax({
             url: `${this.serverPath}Admin/ContentEditor/UpdateChapterList`,

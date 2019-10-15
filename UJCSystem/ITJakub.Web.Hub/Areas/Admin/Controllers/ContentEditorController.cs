@@ -212,7 +212,14 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return Ok();
         }
 
-       
+        [HttpPost]
+        public IActionResult GenerateChapters(long projectId)
+        {
+            var client = GetProjectClient();
+            client.GenerateChapters(projectId);
+            return AjaxOkResponse();
+        }
+        
         [RequestFormLimits(ValueLengthLimit = 32768, KeyLengthLimit = 32768, ValueCountLimit = 32768 * 32768)]
         [HttpPost]
         public IActionResult UpdateChapterList([FromBody] UpdateChapterListRequest request)
