@@ -40,7 +40,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             var chapterRecursionData = new ChapterRecursionData
             {
-                ImportedChapterResourceIds = importedChapterResourceIds,
+                UpdatedChapterResourceIds = importedChapterResourceIds,
                 DbChaptersByName = dbChaptersByName,
                 DbPagesByPosition = dbPagesByPosition,
                 Project = project,
@@ -53,17 +53,17 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var unusedDbChapters = dbChapters.Where(x => !importedChapterResourceIds.Contains(x.Id));
             foreach (var unusedDbChapter in unusedDbChapters)
             {
-                unusedDbChapter.Position = 0;
-                m_resourceRepository.Update(unusedDbChapter);
+                var resourceToRemove = unusedDbChapter.Resource;
+                resourceToRemove.IsRemoved = true;
+                m_resourceRepository.Update(resourceToRemove);
             }
         }
 
         private void UpdateChapterList(IList<BookContentItemData> bookContentItems, ChapterResource parentChapter, ChapterRecursionData data)
         {
             var parentChapterResourceResource = parentChapter?.Resource;
-            var parentChapterResourceResourceId = parentChapterResourceResource?.Id;
 
-            var importedChapterResourceIds = data.ImportedChapterResourceIds;
+            var updatedChapterResourceIds = data.UpdatedChapterResourceIds;
             var dbPagesByPosition = data.DbPagesByPosition;
             var dbChaptersByName = data.DbChaptersByName;
             var project = data.Project;
@@ -87,6 +87,19 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         : dbChapters.FirstOrDefault(x => x.Position == bookContentItem.ItemOrder); // If multiple chapters have the same name, try identify chapter by Position
                 }
 
+                var newDbChapter = new ChapterResource
+                {
+                    Resource = null,
+                    Name = bookContentItem.Text,
+                    ResourceBeginningPage = dbPage.Resource,
+                    Comment = string.Empty,
+                    CreateTime = now,
+                    CreatedByUser = user,
+                    Position = bookContentItem.ItemOrder,
+                    VersionNumber = 0,
+                    ParentResource = parentChapterResourceResource
+                };
+
                 if (dbChapter == null)
                 {
                     var newResource = new Resource
@@ -97,38 +110,23 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         LatestVersion = null,
                         ResourceType = ResourceTypeEnum.Chapter
                     };
-                    dbChapter = new ChapterResource
-                    {
-                        Resource = newResource,
-                        Name = bookContentItem.Text,
-                        ResourceBeginningPage = dbPage.Resource,
-                        Comment = string.Empty,
-                        CreateTime = now,
-                        CreatedByUser = user,
-                        Position = bookContentItem.ItemOrder,
-                        VersionNumber = 1,
-                        ParentResource = parentChapterResourceResource
-                    };
-                    newResource.LatestVersion = dbChapter;
-                    m_resourceRepository.Create(dbChapter);
+
+                    newDbChapter.Resource = newResource;
+                    newDbChapter.VersionNumber = 1;
                 }
                 else
                 {
-                    if (IsChapterChanged(dbChapter, bookContentItem, dbPage.Resource.Id, parentChapterResourceResourceId))
-                    {
-                        dbChapter.Name = bookContentItem.Text;
-                        dbChapter.Position = bookContentItem.ItemOrder;
-                        dbChapter.ResourceBeginningPage = dbPage.Resource;
-                        dbChapter.ParentResource = parentChapterResourceResource;
-                        // Update resource name is not required (ChapterResources are distinguish by name)
+                    newDbChapter.Resource = dbChapter.Resource;
+                    newDbChapter.VersionNumber = dbChapter.VersionNumber + 1;
 
-                        m_resourceRepository.Update(dbChapter);
-                    }
-                    importedChapterResourceIds.Add(dbChapter.Id);
+                    updatedChapterResourceIds.Add(dbChapter.Id);
                 }
 
-                m_allImportedResourceVersionIds.Add(dbChapter.Id);
-                UpdateChapterList(bookContentItem.SubContentItems, dbChapter, data);
+                newDbChapter.Resource.LatestVersion = newDbChapter;
+                m_resourceRepository.Create(newDbChapter);
+
+                m_allImportedResourceVersionIds.Add(newDbChapter.Id);
+                UpdateChapterList(bookContentItem.SubContentItems, newDbChapter, data);
             }
         }
 
@@ -142,7 +140,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         private class ChapterRecursionData
         {
-            public HashSet<long> ImportedChapterResourceIds { get; set; }
+            public HashSet<long> UpdatedChapterResourceIds { get; set; }
             public Dictionary<string, List<ChapterResource>> DbChaptersByName { get; set; }
             public Dictionary<int, PageResource> DbPagesByPosition { get; set; }
             public Project Project { get; set; }
