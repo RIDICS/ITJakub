@@ -123,8 +123,8 @@ class ChapterEditorMain {
                 parentChapterId: parentId,
                 position: this.position + 1,
                 name: chapterRow.find(".chapter-name").text().trim(),
-                beginningPageId: Number(chapterRow.find("option:selected").val()),
-                comment: ""
+                beginningPageId: Number(chapterRow.data("beginning-page-id")),
+                comment: ""                
             };
             
             this.position++;
@@ -164,6 +164,12 @@ class ChapterEditorMain {
             this.editChapter($(event.currentTarget));
         });
 
+        subChapters.find(".chapter-row .dismiss-chapter-changes").off();
+        subChapters.find(".chapter-row .dismiss-chapter-changes").on("click", (event) => {
+            event.stopPropagation();
+            this.discardChapterChanges($(event.currentTarget));
+        });
+
         subChapters.find(".chapter-row").off();
         subChapters.find(".chapter-row").on("click", (event) => {
             if($(event.target).parents(".buttons").length === 0) {
@@ -190,22 +196,25 @@ class ChapterEditorMain {
         const chapterRow = editButton.parents(".chapter-row");
         const nameElement = chapterRow.find(".chapter-name");
         const pageElement = chapterRow.find(".page-name");
+        const discardButton = chapterRow.find(".discard-chapter-changes");
         
         const nameInput = chapterRow.find("input[name=\"chapter-name\"]");
         const pageInput = chapterRow.find(".select-page.bootstrap-select");
         
-
         if (editButton.hasClass("fa-pencil")) {
             editButton.switchClass("fa-pencil", "fa-check");
             nameElement.addClass("hide");
             pageElement.addClass("hide");
             nameInput.removeClass("hide");
             pageInput.removeClass("hide");
+            discardButton.removeClass("hide");
         } else {
             editButton.switchClass("fa-check", "fa-pencil");
             nameInput.addClass("hide");
             pageInput.addClass("hide");
-           
+            discardButton.addClass("hide");
+            
+            
             const newName = String(nameInput.val());
             if (newName !== "" && String(nameElement.text()) !== newName) {
                 nameElement.text(newName);
@@ -214,6 +223,7 @@ class ChapterEditorMain {
             
             const newPageName = `[${pageInput.find("option:selected").text()}]`;
             if (newPageName !== "" && String(pageElement.text()) !== newPageName) {
+                chapterRow.data("beginning-page-id", Number(pageInput.find("option:selected").val()));
                 pageElement.text(newPageName);
                 this.showUnsavedChangesAlert();
             }
@@ -221,6 +231,27 @@ class ChapterEditorMain {
             nameElement.removeClass("hide");
             pageElement.removeClass("hide");
         }
+    }
+
+    private discardChapterChanges(discardButton: JQuery) {        
+        const chapterRow = discardButton.parents(".chapter-row");
+        const nameElement = chapterRow.find(".chapter-name");
+        const pageElement = chapterRow.find(".page-name");
+        const editButton = chapterRow.find(".edit-chapter i");
+        
+        const nameInput = chapterRow.find("input[name=\"chapter-name\"]");
+        const pageInput = chapterRow.find(".select-page.bootstrap-select");
+
+        editButton.switchClass("fa-check", "fa-pencil");
+        nameInput.addClass("hide");
+        pageInput.addClass("hide");
+        discardButton.addClass("hide");
+        nameElement.removeClass("hide");
+        pageElement.removeClass("hide");
+        nameInput.val(nameElement.text());
+
+        const oldPageId = chapterRow.data("beginning-page-id");
+        pageInput.find(".selectpicker").selectpicker('val', oldPageId);        
     }
 
     private selectChapter(chapterRow: JQuery) {
