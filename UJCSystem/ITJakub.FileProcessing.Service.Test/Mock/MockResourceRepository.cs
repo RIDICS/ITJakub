@@ -452,6 +452,17 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                     Position = 2,
                     VersionNumber = 1,
                     Name = "track-2"
+                },
+                new TrackResource
+                {
+                    Id = 11001,
+                    Resource = new Resource
+                    {
+                        Id = 81
+                    },
+                    Position = 3,
+                    VersionNumber = 1,
+                    Name = "track-to-remove"
                 }
             };
         }
@@ -465,6 +476,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             {
                 new AudioResource
                 {
+                    Id = 2001,
                     Resource = new Resource
                     {
                         Id = 3,
@@ -478,6 +490,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                 },
                 new AudioResource
                 {
+                    Id = 2002,
                     Resource = new Resource
                     {
                         Id = 3,
@@ -491,6 +504,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                 },
                 new AudioResource
                 {
+                    Id = 2003,
                     Resource = new Resource
                     {
                         Id = 3,
@@ -501,6 +515,16 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                     {
                         Id = 2
                     }
+                },
+                new AudioResource
+                {
+                    Id = 2004,
+                    Resource = new Resource
+                    {
+                        Id = 4,
+                    },
+                    FileName = "file-full.mp3",
+                    VersionNumber = 1,
                 },
             };
         }
@@ -514,6 +538,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             {
                 new AudioResource
                 {
+                    Id = 2101,
                     Resource = new Resource
                     {
                         Id = 3,
@@ -523,6 +548,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                 },
                 new AudioResource
                 {
+                    Id = 2102,
                     Resource = new Resource
                     {
                         Id = 3,
@@ -532,6 +558,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                 },
                 new AudioResource
                 {
+                    Id = 2103,
                     Resource = new Resource
                     {
                         Id = 3,

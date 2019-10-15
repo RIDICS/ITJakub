@@ -740,10 +740,17 @@ namespace ITJakub.FileProcessing.Service.Test
             var updatedTracks = resourceRepository.UpdatedObjects.OfType<TrackResource>().ToList();
             var createdRecordings = resourceRepository.CreatedObjects.OfType<AudioResource>().ToList();
             var updatedRecordings = resourceRepository.UpdatedObjects.OfType<AudioResource>().ToList();
+            var updatedResources = resourceRepository.UpdatedObjects.OfType<Resource>().ToList();
 
-            Assert.AreEqual(1, createdTracks.Count);
-            Assert.AreEqual(1, updatedTracks.Count);
+            Assert.AreEqual(3, createdTracks.Count);
+            Assert.AreEqual(0, updatedTracks.Count);
+            Assert.AreEqual(3, updatedResources.Count);
 
+            // Remove one Track and two Audio resources
+            Assert.IsTrue(updatedResources[0].IsRemoved);
+            Assert.IsTrue(updatedResources[1].IsRemoved);
+            Assert.IsTrue(updatedResources[2].IsRemoved);
+            
             Assert.AreEqual(0, updatedRecordings.Count);
             Assert.AreEqual(2, createdRecordings.Count);
 
@@ -791,9 +798,14 @@ namespace ITJakub.FileProcessing.Service.Test
 
             var createdRecordings = resourceRepository.CreatedObjects.OfType<AudioResource>().ToList();
             var updatedRecordings = resourceRepository.UpdatedObjects.OfType<AudioResource>().ToList();
+            var updatedResources = resourceRepository.UpdatedObjects.OfType<Resource>().ToList();
 
             Assert.AreEqual(0, updatedRecordings.Count);
             Assert.AreEqual(2, createdRecordings.Count);
+            Assert.AreEqual(2, updatedResources.Count);
+
+            Assert.IsTrue(updatedResources[0].IsRemoved);
+            Assert.IsTrue(updatedResources[1].IsRemoved);
 
             var recording2 = createdRecordings.FirstOrDefault(x => x.FileName == "file-2.mp3");
             var recording8 = createdRecordings.FirstOrDefault(x => x.FileName == "file-8.mp3");
