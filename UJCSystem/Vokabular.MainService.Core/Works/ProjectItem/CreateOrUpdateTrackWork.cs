@@ -41,37 +41,48 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
                 throw new MainServiceException(MainServiceErrorCode.ProjectIdOrResourceId, "Exactly one parameter (ProjectId or ResourceId) has to be specified");
             }
 
-            var trackResource = m_resourceId != null
-                ? m_resourceRepository.GetLatestResourceVersion<TrackResource>(m_resourceId.Value)
-                : new TrackResource
+            var trackResource = new TrackResource
+            {
+                Name = m_trackData.Name,
+                Text = m_trackData.Text,
+                Comment = m_trackData.Comment,
+                Position = m_trackData.Position,
+                ResourceChapter = resourceChapter,
+                ResourceBeginningPage = resourceBeginningPage,
+                Resource = null,
+                VersionNumber = 0,
+                CreateTime = now,
+                CreatedByUser = user,
+            };
+
+            if (m_resourceId != null)
+            {
+                var latestTrackResource = m_resourceRepository.GetLatestResourceVersion<TrackResource>(m_resourceId.Value);
+                if (latestTrackResource == null)
                 {
-                    VersionNumber = 0,
-                    Resource = new Resource
-                    {
-                        ContentType = ContentTypeEnum.AudioTrack,
-                        ResourceType = ResourceTypeEnum.AudioTrack,
-                        Project = m_resourceRepository.Load<Project>(m_projectId),
-                    }
+                    throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
+                }
+
+                trackResource.Resource = latestTrackResource.Resource;
+                trackResource.VersionNumber = latestTrackResource.VersionNumber + 1;
+            }
+            else
+            {
+                var resource = new Resource
+                {
+                    ContentType = ContentTypeEnum.AudioTrack,
+                    ResourceType = ResourceTypeEnum.AudioTrack,
+                    Project = m_resourceRepository.Load<Project>(m_projectId),
                 };
 
-            if (trackResource == null)
-            {
-                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
+                trackResource.Resource = resource;
+                trackResource.VersionNumber = 1;
             }
-
-            trackResource.Name = m_trackData.Name;
-            trackResource.Text = m_trackData.Text;
-            trackResource.Comment = m_trackData.Comment;
-            trackResource.Position = m_trackData.Position;
-            trackResource.ResourceChapter = resourceChapter;
-            trackResource.ResourceBeginningPage = resourceBeginningPage;
+            
             trackResource.Resource.Name = m_trackData.Name;
             trackResource.Resource.LatestVersion = trackResource;
-            trackResource.VersionNumber++;
-            trackResource.CreateTime = now;
-            trackResource.CreatedByUser = user;
-
-            m_resourceRepository.Save(trackResource);
+            
+            m_resourceRepository.Create(trackResource);
 
             ResourceId = trackResource.Resource.Id;
             VersionId = trackResource.Id;
