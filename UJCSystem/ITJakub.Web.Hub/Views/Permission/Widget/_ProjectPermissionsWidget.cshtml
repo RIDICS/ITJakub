@@ -1,40 +1,30 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Models
+@using Scalesoft.Localization.AspNetCore
 @model Vokabular.MainService.DataContracts.Contracts.Permission.PermissionDataContract
 @inject ILocalizationService Localizer
 
-<div class="ridics-checkbox">
-    <label>
-        <input type="checkbox" name="read-project" @(Model != null && Model.ReadProject ? "checked=\"checked\"" : "")/>
-        <span class="cr cr-black">
-            <i class="cr-icon glyphicon glyphicon-ok"></i>
-        </span>
-        <span class="checkbox-label">@Localizer.Translate("ReadProjectPermission", "Permission")</span>
-    </label>
-</div>
-<div class="ridics-checkbox">
-    <label>
-        <input type="checkbox" name="edit-project" @(Model != null && Model.EditProject ? "checked=\"checked\"" : "")/>
-        <span class="cr cr-black">
-            <i class="cr-icon glyphicon glyphicon-ok"></i>
-        </span>
-        <span class="checkbox-label">@Localizer.Translate("EditProjectPermission", "Permission")</span>
-    </label>
-</div>
-<div class="ridics-checkbox">
-    <label>
-        <input type="checkbox" name="show-published" @(Model != null && Model.ShowPublished ? "checked=\"checked\"" : "")/>
-        <span class="cr cr-black">
-            <i class="cr-icon glyphicon glyphicon-ok"></i>
-        </span>
-        <span class="checkbox-label">@Localizer.Translate("ReadPublishedProjectPermission", "Permission")</span>
-    </label>
-</div>
-<div class="ridics-checkbox">
-    <label>
-        <input type="checkbox" name="admin-project" @(Model != null && Model.AdminProject ? "checked=\"checked\"" : "")/>
-        <span class="cr cr-black">
-            <i class="cr-icon glyphicon glyphicon-ok"></i>
-        </span>
-        <span class="checkbox-label">@Localizer.Translate("AdminProjectPermission", "Permission")</span>
-    </label>
-</div>
+
+@await Html.PartialAsync("_RidicsCheckbox", new RidicsCheckboxViewModel
+{
+    IsChecked = Model.ReadProject,
+    Label = Localizer.Translate("ReadProjectPermission", "Permission"),
+    Name = "read-project"
+})
+@await Html.PartialAsync("_RidicsCheckbox", new RidicsCheckboxViewModel
+{
+    IsChecked = Model.EditProject,
+    Label = Localizer.Translate("EditProjectPermission", "Permission"),
+    Name = "edit-project"
+})
+@await Html.PartialAsync("_RidicsCheckbox", new RidicsCheckboxViewModel
+{
+    IsChecked = Model.ShowPublished,
+    Label = Localizer.Translate("ReadPublishedProjectPermission", "Permission"),
+    Name = "show-published"
+})
+@await Html.PartialAsync("_RidicsCheckbox", new RidicsCheckboxViewModel
+{
+    IsChecked = Model.AdminProject,
+    Label = Localizer.Translate("AdminProjectPermission", "Permission"),
+    Name = "admin-project"
+})
