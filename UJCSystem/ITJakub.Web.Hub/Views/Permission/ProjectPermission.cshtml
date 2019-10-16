@@ -98,6 +98,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">@Localizer.Translate("AddProjectPermissionToGroup", "Permission", LocTranslationSource.File)</h4>
+                <h5 id="specificProjectName" class="modal-title"></h5>
             </div>
             <div class="modal-body">
                 <div class="permission-search">
@@ -106,16 +107,13 @@
 
                 <div class="content">
                     <div class="item-details">
-                        <div class="detail-item">
-                            <span class="detail-item-title">@Localizer.Translate("SelectedProject", "Permission", LocTranslationSource.File): </span>
-                            <span id="specificProjectName"></span>
-                        </div>
-                        <div class="detail-item top-separation-line">
-                            <span class="detail-item-title">@Localizer.Translate("SelectedGroup", "Permission", LocTranslationSource.File): </span>
-                            <span id="selectedRole">@Localizer.Translate("RoleIsNotSelected", "PermissionJs")</span>
-                        </div>
-                        <div class="detail-item top-separation-line">
-                            @await Html.PartialAsync("Widget/_ProjectPermissionsWidget", new PermissionDataContract())
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <span id="selectedRole">@Localizer.Translate("RoleIsNotSelected", "PermissionJs")</span>
+                            </div>
+                            <div class="panel-body">
+                                @await Html.PartialAsync("Widget/_ProjectPermissionsWidget", new PermissionDataContract())
+                            </div>
                         </div>
                     </div>
                     <div id="addProjectToRoleError"></div>
