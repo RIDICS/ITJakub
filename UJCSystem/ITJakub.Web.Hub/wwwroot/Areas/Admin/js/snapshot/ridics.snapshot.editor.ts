@@ -4,7 +4,7 @@
 });
 
 class SnapshotEditor {
-    private readonly pageSize = 5;
+    private readonly pageSize = 50; // must be greater than data-size on Bootstrap Select
     private readonly client: SnapshotApiClient;
     private readonly imageViewer: ImageViewerContentAddition;
     private readonly errorHandler: ErrorHandler;
@@ -16,7 +16,9 @@ class SnapshotEditor {
     }
 
     init() {
-        $(".selectpicker").selectpicker();
+        $(".selectpicker")
+            .attr("data-size", 15)
+            .selectpicker();
 
         $(".include-all-checkbox").click((event) => {
             const checkbox = $(event.currentTarget);
@@ -190,9 +192,15 @@ class SnapshotEditor {
         const resourceId = this.getResourceIdFromSelect(selectBox);
 
         this.client.getVersionList(resourceId, null, selectedVersion).done((data) => {
+            const selectedValue = Number(selectBox.val());
             selectBox.empty();
-            this.appendNewResourceVersions(selectBox, data);
+            this.appendNewResourceVersions(selectBox, data, selectedValue);
             selectBox.data("loaded", true);
+
+            const minLoadedItems = this.pageSize;
+            if (data.length < minLoadedItems) {
+                this.loadResourceVersionsNextPage(selectBox);
+            }
 
         }).fail((error) => {
             dropdownContainer.empty()
@@ -221,7 +229,7 @@ class SnapshotEditor {
                 dropdownContainer.parent().off("scroll");
             }
 
-            this.appendNewResourceVersions(selectBox, data);
+            this.appendNewResourceVersions(selectBox, data, null);
             selectBox.data("loading", false);
 
         }).fail((error) => {
@@ -238,8 +246,7 @@ class SnapshotEditor {
         return Number(selectBox.parents(".resource-row").data("id"));
     }
 
-    private appendNewResourceVersions(selectBox: JQuery, data: IResourceVersion[]) {
-        const selectedValue = Number(selectBox.val());
+    private appendNewResourceVersions(selectBox: JQuery, data: IResourceVersion[], selectedValue: number) {
         for (let i = 0; i < data.length; i++) {
             const resource = data[i];
             const checked = selectedValue === resource.id;
