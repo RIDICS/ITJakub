@@ -326,7 +326,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var response = new SaveMetadataResponse
             {
                 NewResourceVersionId = newResourceVersionId,
-                LastModificationText = DateTime.Now.ToString(CultureInfo.CurrentCulture),
+                LastModificationText = DateTime.Now.ToString(m_localization.GetRequestCulture()),
                 LiteraryOriginalText =
                     LiteraryOriginalTextConverter.GetLiteraryOriginalText(request.ManuscriptCountry,
                         request.ManuscriptSettlement,
