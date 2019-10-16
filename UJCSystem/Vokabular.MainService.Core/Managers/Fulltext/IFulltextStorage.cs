@@ -6,6 +6,7 @@ using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Request;
+using Vokabular.TextConverter.Markdown.Extensions;
 
 namespace Vokabular.MainService.Core.Managers.Fulltext
 {
@@ -32,5 +33,6 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         CorpusSearchResultDataList SearchCorpusInSnapshotByCriteria(long snapshotId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria);
         long SearchCorpusTotalResultCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects);
         void CreateSnapshot(Snapshot snapshot, IList<TextResource> textResources, MetadataResource metadata);
+        IList<MarkdownHeadingData> GetHeadingsFromPageText(TextResource textResource);
     }
 }

@@ -24,7 +24,7 @@ namespace Vokabular.MainService.Middleware
             }
             catch (AuthServiceApiException exception)
             {
-                await FillResponse(context, exception.StatusCode,JsonConvert.SerializeObject(new ErrorContract{Code = exception.Code, Description = exception.Message}));
+                await FillResponse(context, exception.StatusCode,JsonConvert.SerializeObject(new ErrorContract{Code = exception.Code, Description = exception.Description}));
             }
             catch (AuthServiceException exception)
             {
@@ -32,7 +32,7 @@ namespace Vokabular.MainService.Middleware
             }
             catch (MainServiceException exception)
             {
-                await FillResponse(context, (int)exception.StatusCode, JsonConvert.SerializeObject(new ErrorContract { Code = exception.Code, Description = exception.Message, DescriptionParams = exception.DescriptionParams}));
+                await FillResponse(context, (int)exception.StatusCode, JsonConvert.SerializeObject(new ErrorContract { Code = exception.Code, Description = exception.Description, DescriptionParams = exception.DescriptionParams}));
             }
         }
 

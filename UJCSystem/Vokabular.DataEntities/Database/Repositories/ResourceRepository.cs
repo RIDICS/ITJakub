@@ -79,6 +79,10 @@ namespace Vokabular.DataEntities.Database.Repositories
                     .Future();
             }
 
+            session.QueryOver<Project>()
+                .Where(x => x.Id == projectId)
+                .FutureValue();
+
             var query = session.QueryOver<TextResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(() => resourceAlias.Project.Id == projectId)
@@ -334,6 +338,17 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
                 .AndRestrictionOn(() => resourceAlias.Id).IsInG(resourceIds)
+                .List();
+        }
+        
+        public virtual IList<ChapterResource> GetLatestChaptersByPages(IEnumerable<long> resourcePageIds)
+        {
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<ChapterResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
+                .AndRestrictionOn(x => x.ResourceBeginningPage.Id).IsInG(resourcePageIds)
                 .List();
         }
 

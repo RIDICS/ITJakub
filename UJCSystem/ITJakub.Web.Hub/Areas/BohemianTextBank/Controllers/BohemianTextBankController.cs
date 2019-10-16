@@ -5,7 +5,6 @@ using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
-using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Models;
@@ -29,7 +28,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         private readonly FeedbacksManager m_feedbacksManager;
 
         public BohemianTextBankController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager,
-            CommunicationProvider communicationProvider) : base(communicationProvider)
+            ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
             m_staticTextManager = staticTextManager;
             m_feedbacksManager = feedbacksManager;

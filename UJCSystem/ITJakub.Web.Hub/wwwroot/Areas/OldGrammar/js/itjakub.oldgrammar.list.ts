@@ -2,7 +2,7 @@
     const modulInicializator = new ListModulInicializator({
         bibliographyModule: {
             forcedBookType: BookTypeEnum.Grammar,
-            customConfigurationPath: "OldGrammar/OldGrammar/GetListConfiguration"
+            customConfigurationPath: $("#bibliography-configuration-url").data("url")
         },
         search: {
             enabledOptions: [

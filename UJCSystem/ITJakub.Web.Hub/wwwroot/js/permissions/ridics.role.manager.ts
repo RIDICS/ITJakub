@@ -397,15 +397,15 @@ class RoleManager {
     }
 
     private initCreateRoleModal() {
-        const createRoleModal = $("#createRoleModal");
-        const roleError = $("#create-role-error");
-
+        const createRoleModal = $("#createRoleDialog");
+        
         $("#createRoleButton").click(() => {
             createRoleModal.modal();
         });
 
         createRoleModal.on("hidden.bs.modal", () => {
-            roleError.empty();
+            $("input[type=text]", createRoleModal).val("");
+            $(".error-container", createRoleModal).empty();
         });
     }
 

@@ -58,6 +58,7 @@
     "User": "Uživatel",
     "ManagePermissions": "Spravovat práva",
     "Permissions": "Oprávnění",
+    "SuccessGroupCreate": "Skupina úspěšně vytvořena.",
     "SuccessGroupUpdate": "Úprava skupiny proběhla úspěšně.",
     "SuccessUserUpdate": "Úprava uživatele proběhla úspěšně.",
     "GroupEditTitle": "Úprava skupiny",

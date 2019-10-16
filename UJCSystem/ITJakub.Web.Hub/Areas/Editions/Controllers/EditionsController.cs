@@ -2,7 +2,6 @@
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
-using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
@@ -25,7 +24,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         private readonly FeedbacksManager m_feedbacksManager;
 
         public EditionsController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager,
-            CommunicationProvider communicationProvider) : base(communicationProvider)
+            ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
             m_staticTextManager = staticTextManager;
             m_feedbacksManager = feedbacksManager;
@@ -37,20 +36,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         {
             return new FeedbackFormIdentification {Area = "Editions", Controller = "Editions"};
         }
-
-        public ActionResult GetListConfiguration()
-        {
-            var fullPath = "~/Areas/Editions/content/BibliographyPlugin/list_configuration.json";
-            return File(fullPath, "application/json", fullPath);
-        }
-
-        public ActionResult GetSearchConfiguration()
-        {
-            var fullPath = "~/Areas/Editions/content/BibliographyPlugin/search_configuration.json";
-            return File(fullPath, "application/json", fullPath);
-        }
-
-
+        
         #region Views and Feedback
 
         // GET: Editions/Editions

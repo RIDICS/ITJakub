@@ -6,7 +6,6 @@ using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
-using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
@@ -24,7 +23,6 @@ using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 using ITJakub.Web.Hub.Options;
-using Vokabular.MainService.DataContracts;
 using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
@@ -37,7 +35,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         private readonly FeedbacksManager m_feedbacksManager;
 
         public DictionariesController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager,
-            CommunicationProvider communicationProvider) : base(communicationProvider)
+            ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
             m_staticTextManager = staticTextManager;
             m_feedbacksManager = feedbacksManager;

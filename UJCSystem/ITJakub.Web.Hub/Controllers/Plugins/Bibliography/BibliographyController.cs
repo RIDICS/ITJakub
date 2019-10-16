@@ -1,21 +1,14 @@
-﻿using ITJakub.Web.Hub.Core.Communication;
+﻿using ITJakub.Web.Hub.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers.Plugins.Bibliography
 {
     public class BibliographyController : BaseController
     {
-        public BibliographyController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public BibliographyController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
-
-        // GET: Bibliography
-        public ActionResult GetConfiguration()
-        {
-            string fullPath = "~/content/BibliographyConfiguration/configuration.json";
-            return File(fullPath, "application/json", fullPath);
-        }
-
+        
         public ActionResult GetBookDetailInfo(long bookId)
         {
             var client = GetBookClient();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ITJakub.Web.Hub.Areas.RepositoryImport.Models;
 using ITJakub.Web.Hub.Controllers;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +20,7 @@ namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
     [Area("RepositoryImport")]
     public class ExternalRepositoryController : BaseController
     {
-        public ExternalRepositoryController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public ExternalRepositoryController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
 

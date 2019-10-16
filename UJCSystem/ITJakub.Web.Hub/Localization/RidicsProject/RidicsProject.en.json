@@ -38,6 +38,7 @@
     "ShiftPageDown": "Shift selected pages down",
     "EditPageName": "Edit page name",
     "DeletePage": "Delete page",
+    "PageListSaveSuccess": "Pages saved successfully.",
 
     "Fail": "Fail",
     "Success": "Success",

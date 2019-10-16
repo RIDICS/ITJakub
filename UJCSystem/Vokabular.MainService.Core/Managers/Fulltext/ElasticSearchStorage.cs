@@ -10,16 +10,19 @@ using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Request;
+using Vokabular.TextConverter.Markdown.Extensions;
 
 namespace Vokabular.MainService.Core.Managers.Fulltext
 {
     public class ElasticSearchStorage : IFulltextStorage
     {
         private readonly CommunicationProvider m_communicationProvider;
+        private readonly MarkdownHeadingAnalyzer m_markdownHeadingAnalyzer;
 
-        public ElasticSearchStorage(CommunicationProvider communicationProvider)
+        public ElasticSearchStorage(CommunicationProvider communicationProvider, MarkdownHeadingAnalyzer markdownHeadingAnalyzer)
         {
             m_communicationProvider = communicationProvider;
+            m_markdownHeadingAnalyzer = markdownHeadingAnalyzer;
         }
 
         public FulltextStorageType StorageType => FulltextStorageType.ElasticSearch;
@@ -243,6 +246,13 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
 
             var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient();
             fulltextServiceClient.CreateSnapshot(snapshotResource);
+        }
+
+        public IList<MarkdownHeadingData> GetHeadingsFromPageText(TextResource textResource)
+        {
+            var text = GetPageText(textResource, TextFormatEnumContract.Raw);
+            var result = m_markdownHeadingAnalyzer.FindAllHeadings(text);
+            return result;
         }
 
         public long SearchHeadwordByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)

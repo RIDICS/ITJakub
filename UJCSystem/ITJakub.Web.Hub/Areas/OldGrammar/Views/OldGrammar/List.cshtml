@@ -1,5 +1,6 @@
 ﻿@using Scalesoft.Localization.AspNetCore
 @inject ILocalizationService Localizer
+@inject IFileVersionProvider FileVersionProvider
 
 @section styles{
     <link asp-append-version="true" href="~/Areas/OldGrammar/css/itjakub.oldgrammar.css" rel="stylesheet" />
@@ -12,5 +13,7 @@
 @{
     ViewBag.Title = @Localizer.Translate("OldGrammarList", "OldGrammar");
 }
+
+<div id="bibliography-configuration-url" data-url="@FileVersionProvider.AddFileVersionToPath(Context.Request.PathBase, Url.Content("~/Areas/OldGrammar/content/BibliographyPlugin/list_configuration.json"))"></div>
 
 @await Html.PartialAsync("_BibliographySearch")

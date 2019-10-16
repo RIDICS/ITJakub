@@ -3,7 +3,7 @@
         const modulInicializator = new SearchModulInicializator({
             bibliographyModule: {
                 forcedBookType: BookTypeEnum.Edition,
-                customConfigurationPath: "Editions/Editions/GetSearchConfiguration"
+                customConfigurationPath: $("#bibliography-configuration-url").data("url")
             },
             search: {
                 enabledOptions: [

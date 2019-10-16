@@ -58,6 +58,7 @@
     "User": "User",
     "ManagePermissions": "Manage permissions",
     "Permissions": "Permissions",
+    "SuccessGroupCreate": "Group successfully created.",
     "SuccessGroupUpdate": "Group update was successful.",
     "SuccessUserUpdate": "User update was successful.",
     "GroupEditTitle": "Edit group",
