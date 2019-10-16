@@ -31,7 +31,7 @@ class ChapterEditorMain {
 
         const createChapterDialog = $("#projectChaptersDialog");
         this.editDialog = new BootstrapDialogWrapper({
-            element: $("#projectChaptersDialog"),
+            element: createChapterDialog,
             autoClearInputs: false
         });
 
@@ -118,19 +118,21 @@ class ChapterEditorMain {
             this.editDialog.show();
         });
 
-        $("#projectChaptersDialog").on("click",
+        createChapterDialog.on("click",
             ".create-chapter",
             () => {
-                $("#projectChaptersDialog .alert-holder").empty()
-                const chapterName = String($("#projectChaptersDialog input[name=\"chapter-name\"]").val());
+                const alertHolder = createChapterDialog.find(".alert-holder");
+                alertHolder.empty();
+                const chapterName = String(createChapterDialog.find("input[name=\"chapter-name\"]").val());
                 if (chapterName === "") {
                     const alert = new AlertComponentBuilder(AlertType.Error)
                         .addContent(localization.translate("ChapterNameRequired", "RidicsProject").value).buildElement();
-                    $("#projectChaptersDialog .alert-holder").append(alert);
+                    alertHolder.append(alert);
                     return;
                 }
-                const selectedPageId = Number($("#projectChaptersDialog .select-page").find("option:selected").val());
-                const selectedPageName = `[${$("#projectChaptersDialog .select-page").find("option:selected").text()}]`;
+                const selectedOption = createChapterDialog.find(".select-page option:selected");
+                const selectedPageId = Number(selectedOption.val());
+                const selectedPageName = `[${selectedOption.text()}]`;
                 const chapter = this.createChapterRow(chapterName, selectedPageId, selectedPageName);
                 $(".table > .sub-chapters").append(chapter);
                 this.initChapterRowClicks(chapter);
@@ -138,7 +140,7 @@ class ChapterEditorMain {
                 this.showUnsavedChangesAlert();
             });
 
-        $("#projectChaptersDialog").on("click",
+        createChapterDialog.on("click",
             ".cancel-chapter",
             (event) => {
                 event.stopPropagation();
@@ -146,7 +148,7 @@ class ChapterEditorMain {
             }
         );
 
-        $("#projectChaptersDialog .select-page").selectpicker({
+        createChapterDialog.find(".select-page").selectpicker({
             liveSearch: true,
             maxOptions: 1
         });
