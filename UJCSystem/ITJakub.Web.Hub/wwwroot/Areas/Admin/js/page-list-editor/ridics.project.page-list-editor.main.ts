@@ -214,6 +214,13 @@
                 event.stopPropagation();
                 this.editPage($(event.currentTarget));
             });
+        
+        $(".page-row .discard-changes").off();
+        $(".page-row .discard-changes").on("click",
+            (event) => {
+                event.stopPropagation();
+                this.discardChanges($(event.currentTarget));
+            });
 
         $(".page-row").off();
         $(".page-row").on("click",
@@ -229,12 +236,16 @@
         const pageRow = editButton.parents(".page-row");
         const nameElement = pageRow.find(".name");
         const nameInput = pageRow.find("input[name=\"page-name\"]");
+        const discardButton = pageRow.find(".discard-changes");
+
         if (editButton.hasClass("fa-pencil")) {
             editButton.switchClass("fa-pencil", "fa-check");
             nameElement.addClass("hide");
             nameInput.removeClass("hide");
+            discardButton.removeClass("hide");
         } else {
             nameInput.addClass("hide");
+            discardButton.addClass("hide");
             editButton.switchClass("fa-check", "fa-pencil");
             const newName = String(nameInput.val());
             if (newName !== "" && String(nameElement.text().trim()) !== newName) {
@@ -243,6 +254,19 @@
             }
             nameElement.removeClass("hide");
         }
+    }
+
+    private discardChanges(discardButton: JQuery) {
+        const pageRow = discardButton.parents(".page-row");
+        const editButton = pageRow.find(".edit-page i.fa");
+        const nameElement = pageRow.find(".name");
+        const nameInput = pageRow.find("input[name=\"page-name\"]");
+        
+        nameInput.addClass("hide");
+        discardButton.addClass("hide");
+        editButton.switchClass("fa-check", "fa-pencil");
+        nameInput.val(nameElement.text().trim());
+        nameElement.removeClass("hide");
     }
 
     private selectPage(pageRow: JQuery) {
@@ -502,12 +526,15 @@
                         <div class="alert alert-danger"></div>
                     </td>
                     <td class="buttons">
-                        <a class="edit-page btn btn-sm btn-default">
+                        <button type="button"  class="edit-page btn btn-sm btn-default">
                             <i class="fa fa-pencil"></i>
-                        </a>
-                        <a class="remove-page btn btn-sm btn-default">
+                        </button>
+                        <button type="button" class="discard-changes btn btn-sm btn-default hide">
+                            <i class="fa fa-times"></i>
+                        </button>
+                        <button type="button" class="remove-page btn btn-sm btn-default">
                             <i class="fa fa-trash"></i>
-                        </a>
+                        </button>
                     </td>
                 </tr>`;
     }

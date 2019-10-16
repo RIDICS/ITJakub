@@ -32,12 +32,15 @@
                             <div class="alert alert-danger"></div>
                         </td>
                         <td class="buttons">
-                            <a class="edit-page btn btn-sm btn-default" title="@Localizer.Translate("EditPageName", "RidicsProject")">
+                            <button type="button"  class="edit-page btn btn-sm btn-default" title="@Localizer.Translate("EditPageName", "RidicsProject")">
                                 <i class="fa fa-pencil"></i>
-                            </a>
-                            <a class="remove-page btn btn-sm btn-default" title="@Localizer.Translate("DeletePage", "RidicsProject")">
+                            </button>
+                            <button type="button" class="discard-changes btn btn-sm btn-default hide">
+                                <i class="fa fa-times"></i>
+                            </button>
+                            <button type="button" class="remove-page btn btn-sm btn-default" title="@Localizer.Translate("DeletePage", "RidicsProject")">
                                 <i class="fa fa-trash"></i>
-                            </a>
+                            </button>
                         </td>
                     </tr>
                 }
