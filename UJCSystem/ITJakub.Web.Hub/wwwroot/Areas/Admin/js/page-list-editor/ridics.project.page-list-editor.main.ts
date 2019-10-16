@@ -77,6 +77,7 @@
 
         $(".save-pages-button").on("click",
             () => {
+                const listing = $(".page-listing");
                 const pages = $(".page-row").toArray();
                 const pageListArray: IUpdatePage[] = [];
                 for (let i = 0; i < pages.length; i++) {
@@ -86,15 +87,24 @@
                         name: $(pages[i]).find(".name").text().trim()
                     });
                 }
+                listing.empty().append(`<div class="loader"></div>`);
                 this.util.savePageList(projectId, pageListArray).done(() => {
                     $("#unsavedChanges").addClass("hide");
                     const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("PageListSaveSuccess","RidicsProject").value).buildElement();
                     const alertHolder = $(".save-alert-holder");
                     alertHolder.append(alert);
                     alertHolder.delay(3000).fadeOut(2000);
+                    
+                    this.util.getPageList(projectId).done((data) => {
+                        listing.html(data);
+                        this.initPageRowClicks();
+                    }).fail((error) => {
+                        const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                        listing.empty().append(alert);
+                    });
                 }).fail((error) => {
-                    this.gui.showInfoDialog(localization.translate("Error").value,
-                        this.errorHandler.getErrorMessage(error));
+                    const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                    listing.empty().append(alert);
                 });
             });
 
@@ -373,8 +383,8 @@
     }
 
     private startGeneration() {
-        const fromFieldValue = ($("#project-pages-generate-from").val() as string).replace(" ", "");;
-        const toFieldValue = ($("#project-pages-generate-to").val() as string).replace(" ", "");;
+        const fromFieldValue = ($("#project-pages-generate-from").val() as string).replace(" ", "");
+        const toFieldValue = ($("#project-pages-generate-to").val() as string).replace(" ", "");
         const listGenerator = PageListGeneratorFactory.createPageListGenerator(this.getSelectedFormat());
 
         if (!listGenerator.checkInputValue(fromFieldValue) || !listGenerator.checkInputValue(toFieldValue)) {
@@ -399,6 +409,8 @@
         if (listContainerEl.children().length) {
             this.gui.showInfoDialog(localization.translate("Info").value,
                 localization.translate("AddingGeneratedNames", "RidicsProject").value);
+        } else {
+            $("#noPagesAlert").remove();
         }
 
         for (let page of pageList) {
