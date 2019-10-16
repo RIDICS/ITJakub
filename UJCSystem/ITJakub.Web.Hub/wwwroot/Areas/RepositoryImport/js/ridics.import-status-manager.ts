@@ -15,15 +15,12 @@ class ImportStatusManager {
     }
 
     init() {
-        const loadingBar = document.createElement('div');
-        $(loadingBar).addClass("lv-determinate_bordered_line lv-mid lvb-2");
-        $("#progress_bar").append(loadingBar);
-        const progressBar = lv.create(loadingBar);
+        const progressBar = lv.create(null, "lv-determinate_bordered_line lv-mid lvb-2");
+        $("#progress_bar").append(progressBar.getElement());
         progressBar.setLabel("0%");
-        const spinner = document.createElement('div');
-        $(spinner).addClass("lv-bars sm lvl-3");
-        $("#extra-spinner").append(spinner);
-        const spinnerElement = lv.create(spinner);
+
+        const spinner = lv.create(null, "lv-bars sm lvl-2");
+        $("#extra-spinner").append(spinner.getElement());
 
         this.timer = setInterval(() => {
                 this.client.getImportStatus().done((data) => {
@@ -46,13 +43,13 @@ class ImportStatusManager {
                             if (data[key].isCompleted) {
                                 if (data[key].faultedMessage != null) {
                                     alertElement.addClass("alert-danger");
-                                    $(loadingBar).addClass("cancel_import");
-                                    spinnerElement.remove();
+                                    progressBar.addClass("cancel_import");
+                                    spinner.remove();
                                     alertElement.html(data[key].faultedMessage);
                                 } else {
                                     alertElement.addClass("alert-success");
-                                    $(loadingBar).addClass("success_import");
-                                    spinnerElement.remove();
+                                    progressBar.addClass("success_import");
+                                    spinner.remove();
                                 }
 
                                 alertElement.removeClass("alert-info");
