@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DryIoc.dll" Version="4.0.7" />
+    <PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="3.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vokabular.AppAuthentication.Shared\Vokabular.AppAuthentication.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
