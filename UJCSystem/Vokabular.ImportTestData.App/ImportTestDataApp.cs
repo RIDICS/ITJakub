@@ -8,13 +8,16 @@ namespace Vokabular.ImportTestData.App
         private readonly DataProvider m_dataProvider;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly AuthenticationOptions m_authOptions;
+        private readonly ImportTestProjectManager m_importTestProjectManager;
         public const string Separator = "------------------------------------------------------------------------------";
 
-        public ImportTestDataApp(DataProvider dataProvider, AuthenticationManager authenticationManager, AuthenticationOptions authOptions)
+        public ImportTestDataApp(DataProvider dataProvider, AuthenticationManager authenticationManager, AuthenticationOptions authOptions,
+            ImportTestProjectManager importTestProjectManager)
         {
             m_dataProvider = dataProvider;
             m_authenticationManager = authenticationManager;
             m_authOptions = authOptions;
+            m_importTestProjectManager = importTestProjectManager;
         }
 
         public void Run()
@@ -50,6 +53,7 @@ namespace Vokabular.ImportTestData.App
             for (int i = firstNumber; i <= lastNumber; i++)
             {
                 output.WriteLine($"Importing testing project {i}");
+                m_importTestProjectManager.Import(i);
             }
             output.WriteLine(Separator);
             output.WriteLine();
