@@ -1,7 +1,7 @@
 ﻿using System;
 using Vokabular.MainService.DataContracts;
 
-namespace ITJakub.BatchImport.Client.ServiceClient
+namespace Vokabular.AppAuthentication.Shared.ServiceClient
 {
     public class MainServiceClientLocalization : IMainServiceClientLocalization
     {
