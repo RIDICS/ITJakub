@@ -1,5 +1,6 @@
 ﻿@using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
+@using Vokabular.MainService.DataContracts.Contracts.Permission
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.ProjectDetailContract>
 @inject ILocalizationService Localizer
 
@@ -10,6 +11,7 @@
 @section styles{
     <link asp-append-version="true" href="~/css/ridics.list.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/css/ridics.permissions.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/css/ridics.checkbox.css" rel="stylesheet" />
 }
 
 @section scripts{
@@ -81,12 +83,13 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <div id="roleListContainer" class="list-container"></div>
+                    <div id="roleListContainer" class="list-container selectable"></div>
                     <div id="rolePagination" class="text-center"></div>
                 </div>
             </div>
         </div>
     </div>
+    @await Html.PartialAsync("Widget/_ProjectPermissionsPanel")
 </div>
 
 <div id="addProjectPermissionToRoleDialog" class="modal fade" role="dialog">
@@ -95,25 +98,27 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">@Localizer.Translate("AddProjectPermissionToGroup", "Permission", LocTranslationSource.File)</h4>
+                <h5 id="specificProjectName" class="modal-title"></h5>
             </div>
             <div class="modal-body">
-                <div class="permission-search">
+                <div class="form-group">
+                    <label for="roleSearchInput">@Localizer.Translate("SearchGroupLabel", "Permission", LocTranslationSource.File)</label>
                     <input type="text" class="form-control role-search-input" id="roleSearchInput" placeholder="@Localizer.Translate("SearchGroup", "Permission", LocTranslationSource.File)" />
                 </div>
 
-                <div class="content">
-                    <div class="item-details">
-                        <div class="detail-item">
-                            <span class="detail-item-title">@Localizer.Translate("SelectedProject", "Permission", LocTranslationSource.File): </span>
-                            <span id="specificProjectName"></span>
-                        </div>
-                        <div class="detail-item top-separation-line">
-                            <span class="detail-item-title">@Localizer.Translate("SelectedGroup", "Permission", LocTranslationSource.File): </span>
-                            <span id="selectedRole">@Localizer.Translate("RoleIsNotSelected", "PermissionJs")</span>
-                        </div>
-                    </div>
-                    <div id="addProjectToRoleError"></div>
+                <div class="form-group">
+                    <label for="selectedRole">@Localizer.Translate("SelectedGroup", "Permission")</label>
+                    <p class="form-control-static" id="selectedRole">@Localizer.Translate("RoleIsNotSelected", "PermissionJs")</p>
                 </div>
+                
+                <fieldset class="form-group">
+                    <label>@Localizer.Translate("Permissions", "Permission")</label>
+                    <div>
+                        @await Html.PartialAsync("Widget/_ProjectPermissionsWidget", new PermissionDataContract())
+                    </div>
+                </fieldset>
+
+                <div id="addProjectToRoleError"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>

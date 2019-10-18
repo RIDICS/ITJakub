@@ -36,6 +36,15 @@ interface IUserDetail extends IUser {
     createTime: string;
 }
 
+interface IAddProjectToRoleRequest {
+    bookId: number;
+    roleId: number;
+    showPublished: boolean;
+    readProject: boolean;
+    adminProject: boolean;
+    editProject: boolean;
+}
+
 interface INewsSyndicationItemContract {
     id: number;
     title: string;

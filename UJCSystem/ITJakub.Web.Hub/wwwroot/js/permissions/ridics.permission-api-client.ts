@@ -82,9 +82,16 @@
             JSON.stringify({ roleId: roleId, bookId: projectId }));
     }
 
-    public addProjectToRole(projectId: number, roleId: number): JQuery.jqXHR<string> {
+    getPermissionForRoleAndBook(projectId: number, roleId: number): JQuery.jqXHR<string> {
+        return this.get(URI(this.getPermissionControllerUrl() + "GetPermissionsForRoleAndBook").search(query => {
+            query.roleId = roleId;
+            query.bookId = projectId;
+        }).toString());
+    }
+
+    addProjectToRole(data: IAddProjectToRoleRequest): JQuery.jqXHR<string> {
         return this.post(this.getPermissionControllerUrl() + "AddProjectsToRole",
-            JSON.stringify({ roleId: roleId, bookId: projectId }));
+            JSON.stringify(data));
     }
 
     public resetUserPassword(userId: number): JQuery.jqXHR  {

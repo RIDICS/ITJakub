@@ -362,13 +362,19 @@ namespace ITJakub.Web.Hub.Controllers
             var client = GetRoleClient();
             client.UpdateOrAddBooksToRole(request.RoleId, request.BookId, new PermissionDataContract
             {
-                // TODO these values must be specified by user in GUI
-                ShowPublished = true,
-                ReadProject = true,
-                AdminProject = true,
-                EditProject = true,
+                ShowPublished = request.ShowPublished,
+                ReadProject = request.ReadProject,
+                AdminProject = request.AdminProject,
+                EditProject = request.EditProject,
             });
             return AjaxOkResponse();
+        }
+
+        public IActionResult GetPermissionsForRoleAndBook(int roleId, long bookId)
+        {
+            var client = GetRoleClient();
+            var result = client.GetPermissionsForRoleAndBook(roleId, bookId);
+            return PartialView("Widget/_ProjectPermissionsWidget", result);
         }
 
         [HttpPost]
