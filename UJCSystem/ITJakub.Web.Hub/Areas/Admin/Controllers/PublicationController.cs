@@ -61,11 +61,17 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return View("PublicationsNew", model);
         }
 
-        public IActionResult VersionList(long resourceId)
+        public IActionResult VersionList(long resourceId, int? higherVersion, int? lowerVersion)
         {
+            if (lowerVersion == null)
+            {
+                return BadRequest();
+            }
+
             var client = GetProjectClient();
-            var resourceVersionList = client.GetResourceVersionHistory(resourceId);
+            var resourceVersionList = client.GetResourceVersionHistory(resourceId, higherVersion, lowerVersion.Value);
             var viewModel = Mapper.Map<List<ResourceVersionViewModel>>(resourceVersionList);
+            
             return Json(viewModel);
         }
         

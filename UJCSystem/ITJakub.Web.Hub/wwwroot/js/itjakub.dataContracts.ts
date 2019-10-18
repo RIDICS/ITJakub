@@ -120,6 +120,7 @@ interface IResourceVersion {
     versionNumber: string;
     author: string;
     createDate: string;
+    createDateString: string;
     comment: string;
 }
 

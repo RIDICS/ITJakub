@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.Models;
+using Scalesoft.Localization.AspNetCore;
 using Vokabular.MainService.DataContracts.Contracts;
 
 namespace ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles
 {
     public class ResourceProfile : Profile
     {
-        public ResourceProfile()
+        public ResourceProfile(ILocalizationService localization)
         {
             CreateMap<ResourceWithLatestVersionContract, ResourceViewModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -24,6 +25,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles
                 .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author))
                 .ForMember(dest => dest.Comment, opt => opt.MapFrom(src => src.Comment))
                 .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateDate))
+                .ForMember(dest => dest.CreateDateString, opt => opt.MapFrom(src => 
+                    src.CreateDate.ToLocalTime().ToString(localization.GetRequestCulture())))
                 .ForMember(dest => dest.VersionNumber, opt => opt.MapFrom(src => src.VersionNumber));
         }
     }

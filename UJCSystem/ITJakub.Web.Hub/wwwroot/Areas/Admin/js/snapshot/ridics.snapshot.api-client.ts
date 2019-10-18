@@ -1,8 +1,10 @@
 ﻿class SnapshotApiClient extends WebHubApiClient {
 
-    getVersionList(resourceId: number): JQuery.jqXHR<IResourceVersion[]> {
+    getVersionList(resourceId: number, higherVersion: number, lowerVersion: number): JQuery.jqXHR<IResourceVersion[]> {
         return this.get(URI(this.getSnapshotControllerUrl() + "VersionList").search((query) => {
             query.resourceId = resourceId;
+            query.higherVersion = higherVersion;
+            query.lowerVersion = lowerVersion;
         }).toString());
     }
 
