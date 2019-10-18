@@ -30,7 +30,7 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
             var now = DateTime.UtcNow;
             var user = m_resourceRepository.Load<User>(m_userId);
             var dbChapters = m_resourceRepository.GetProjectLatestChapters(m_projectId);
-            var updatedChapterIds = new List<long>();
+            var updatedResourceChapterIds = new List<long>();
 
             foreach (var chapter in m_chapterData)
             {
@@ -60,7 +60,7 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
                     {
                         throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
                     }
-                    updatedChapterIds.Add(chapter.Id.Value);
+                    updatedResourceChapterIds.Add(chapter.Id.Value);
                 }
 
                 chapterResource.Name = chapter.Name;
@@ -80,7 +80,7 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
             var removeResourceSubwork = new RemoveResourceSubwork(m_resourceRepository); 
             foreach (var dbChapter in dbChapters)
             {
-                if (!updatedChapterIds.Contains(dbChapter.Resource.Id))
+                if (!updatedResourceChapterIds.Contains(dbChapter.Resource.Id))
                 {
                     removeResourceSubwork.RemoveResource(dbChapter.Resource.Id);
                 }

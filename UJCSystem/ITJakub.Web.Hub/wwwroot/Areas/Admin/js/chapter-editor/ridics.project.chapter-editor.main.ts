@@ -56,7 +56,7 @@ class ChapterEditorMain {
                         $("#unsavedChanges").addClass("hide");
                         listing.empty().append(`<div class="loader"></div>`);
                         this.util.generateChapterList(projectId).done(() => {
-                            this.util.getChapterList(projectId).done((data) => {
+                            this.util.getChapterListView(projectId).done((data) => {
                                 listing.html(data);
                                 this.initChapterRowClicks($(".table > .sub-chapters"));
                             }).fail((error) => {
@@ -92,7 +92,7 @@ class ChapterEditorMain {
             listing.empty().append(`<div class="loader"></div>`);
             this.util.saveChapterList(projectId, this.chaptersToSave).done(() => {
                 $("#unsavedChanges").addClass("hide");
-                this.util.getChapterList(projectId).done((data) => {
+                this.util.getChapterListView(projectId).done((data) => {
                     listing.html(data);
                     this.initChapterRowClicks($(".table > .sub-chapters"));
                 }).fail((error) => {

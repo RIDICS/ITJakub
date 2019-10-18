@@ -29,8 +29,8 @@
             } as JQuery.PlainObject);
     }
 
-    getChapterList(projectId: number): JQuery.jqXHR<string> {
-        return $.get(`${this.serverPath}Admin/Project/GetChapterList?projectId=${projectId}`);
+    getChapterListView(projectId: number): JQuery.jqXHR<string> {
+        return $.get(`${this.serverPath}Admin/Project/ChapterList?projectId=${projectId}`);
     }
 
     generateChapterList(projectId: number): JQuery.jqXHR<ITextWithPage[]> {

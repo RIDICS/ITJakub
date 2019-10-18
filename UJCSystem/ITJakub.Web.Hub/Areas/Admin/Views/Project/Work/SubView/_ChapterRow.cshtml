@@ -3,6 +3,7 @@
 @model ITJakub.Web.Hub.Areas.Admin.Models.ChapterEditorRowViewModel
 @inject ILocalizationService Localizer
 
+@*chapter-container has duplicate definition in _ChapterEditor.cshtml*@
 <div class="chapter-container">
     <div class="chapter-row" data-chapter-id="@Model.Chapter.Id" data-beginning-page-id="@Model.Chapter.BeginningPageId" data-level="@Model.LevelOfHierarchy">
         <div class="ridics-checkbox" style="margin-left: @(Model.LevelOfHierarchy)em">
@@ -49,7 +50,6 @@
     <div class="sub-chapters">
         @if (Model.Chapter.SubChapters.Count > 0)
         {
-            
             foreach (var chapter in Model.Chapter.SubChapters)
             {
                 @await Html.PartialAsync("Work/SubView/_ChapterRow", new ChapterEditorRowViewModel{

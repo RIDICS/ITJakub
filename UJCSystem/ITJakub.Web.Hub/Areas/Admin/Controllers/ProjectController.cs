@@ -173,7 +173,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return PartialView("Work/Subview/_PageTable", pages);
         }
 
-        public IActionResult GetChapterList(long projectId)
+        public IActionResult ChapterList(long projectId)
         {
             var projectClient = GetProjectClient();
             var chapterList = projectClient.GetChapterList(projectId);
