@@ -506,6 +506,7 @@
         $("#unsavedChanges").removeClass("hide");
     }
 
+    // page-row has duplicate definition in _PageTable.cshtml
     private createPageRow(name: string): string {
         return `<tr class="page-row">
                     <td class="ridics-checkbox">
