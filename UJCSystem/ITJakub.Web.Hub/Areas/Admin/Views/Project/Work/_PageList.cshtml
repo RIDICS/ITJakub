@@ -32,42 +32,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="list-container selectable page-listing">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <tbody>
-                                @foreach (var pageItem in Model)
-                                {
-                                    <tr class="page-row" data-page-id="@pageItem.Id" data-position="@pageItem.Position">
-                                        <td class="ridics-checkbox">
-                                            <label>
-                                                <input type="checkbox" class="selection-checkbox" />
-                                                <span class="cr cr-black">
-                                                    <i class="cr-icon glyphicon glyphicon-ok"></i>
-                                                </span>
-                                            </label>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <input type="text" name="page-name" class="form-control hide" value="@pageItem.Name" />
-                                                <div class="name">
-                                                    @pageItem.Name
-                                                </div>
-                                            </div>
-                                            <div class="alert alert-danger"></div>
-                                        </td>
-                                        <td class="buttons">
-                                            <a class="edit-page btn btn-sm btn-default" title="@Localizer.Translate("EditPageName", "RidicsProject")">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                            <a class="remove-page btn btn-sm btn-default" title="@Localizer.Translate("DeletePage", "RidicsProject")">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                }
-                                </tbody>
-                            </table>
-                        </div>
+                        @await Html.PartialAsync("Work/SubView/_PageTable", Model)
                     </div>
                     <div class="panel-bottom-buttons text-right">
                         <label for="pageMoveDistance">@Localizer.Translate("Shift", "RidicsProject")</label>
