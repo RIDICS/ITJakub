@@ -1,0 +1,21 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@inject ILocalizationService Localizer
+
+<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 project-permission-section" id="project-permission-section">
+    <div class="section hide">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="panel-title col col-xs-12 col-sm-2">
+                        @Localizer.Translate("Permissions", "Permission")
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="alert-holder"></div>
+                <div class="sub-content"></div>
+                <button id="saveProjectPermissions" type="button" class="btn btn-default">@Localizer.Translate("Save", "Permission")</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -8,14 +8,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Bibliography
         public BibliographyController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
-
-        // GET: Bibliography
-        public ActionResult GetConfiguration()
-        {
-            string fullPath = "~/content/BibliographyConfiguration/configuration.json";
-            return File(fullPath, "application/json", fullPath);
-        }
-
+        
         public ActionResult GetBookDetailInfo(long bookId)
         {
             var client = GetBookClient();

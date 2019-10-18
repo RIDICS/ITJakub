@@ -33,6 +33,9 @@ ipch/
 [Aa]rtifacts/
 Ankh.NoLoad
 
+#Rider files
+.idea/
+
 #MonoDevelop
 *.pidb
 *.userprefs

@@ -166,6 +166,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return PartialView("Resource/_Preview");
         }
 
+        public IActionResult PageList(long projectId)
+        {
+            var client = GetProjectClient();
+            var pages = client.GetAllPageList(projectId);
+            return PartialView("Work/Subview/_PageTable", pages);
+        }
+
         public IActionResult GetChapterList(long projectId)
         {
             var projectClient = GetProjectClient();
@@ -349,7 +356,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var response = new SaveMetadataResponse
             {
                 NewResourceVersionId = newResourceVersionId,
-                LastModificationText = DateTime.Now.ToString(CultureInfo.CurrentCulture),
+                LastModificationText = DateTime.Now.ToString(m_localization.GetRequestCulture()),
                 LiteraryOriginalText =
                     LiteraryOriginalTextConverter.GetLiteraryOriginalText(request.ManuscriptCountry,
                         request.ManuscriptSettlement,

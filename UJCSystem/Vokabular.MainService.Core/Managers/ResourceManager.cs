@@ -19,9 +19,9 @@ namespace Vokabular.MainService.Core.Managers
             m_mapper = mapper;
         }
 
-        public IList<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
+        public IList<ResourceVersionContract> GetResourceVersionHistory(long resourceId, int? higherVersion, int lowerVersion)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetResourceVersionHistory(resourceId));
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetResourceVersionHistory(resourceId, higherVersion, lowerVersion));
 
             var resultList = new List<ResourceVersionContract>();
             var userCache = new Dictionary<int, string>();

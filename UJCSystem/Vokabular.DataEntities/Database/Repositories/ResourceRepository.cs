@@ -38,12 +38,20 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual IList<ResourceVersion> GetResourceVersionHistory(long resourceId)
+        public virtual IList<ResourceVersion> GetResourceVersionHistory(long resourceId, int? higherVersion, int lowerVersion)
         {
-            return GetSession().QueryOver<ResourceVersion>()
+            var query = GetSession().QueryOver<ResourceVersion>()
                 .Where(x => x.Resource.Id == resourceId)
                 .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
+                .Where(x => x.VersionNumber >= lowerVersion);
+
+            if (higherVersion != null)
+            {
+                query.And(x => x.VersionNumber < higherVersion.Value);
+            }
+
+            return query
                 .OrderBy(x => x.VersionNumber).Desc
                 .List();
         }

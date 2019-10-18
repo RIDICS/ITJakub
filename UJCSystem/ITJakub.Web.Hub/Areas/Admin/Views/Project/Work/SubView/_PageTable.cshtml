@@ -1,0 +1,50 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model IList<Vokabular.MainService.DataContracts.Contracts.PageContract>
+@inject ILocalizationService Localizer
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <tbody>
+            @if (Model.Count == 0)
+            {
+                <div id="noPagesAlert" class="alert alert-info">@Localizer.Translate("NoPages", "RidicsProject")</div>
+            }
+            else
+            {
+                foreach (var pageItem in Model)
+                {
+                    <tr class="page-row" data-page-id="@pageItem.Id" data-position="@pageItem.Position">
+                        <td class="ridics-checkbox">
+                            <label>
+                                <input type="checkbox" class="selection-checkbox"/>
+                                <span class="cr cr-black">
+                                    <i class="cr-icon glyphicon glyphicon-ok"></i>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <div>
+                                <input type="text" name="page-name" class="form-control hide" value="@pageItem.Name"/>
+                                <div class="name">
+                                    @pageItem.Name
+                                </div>
+                            </div>
+                            <div class="alert alert-danger"></div>
+                        </td>
+                        <td class="buttons">
+                            <button type="button"  class="edit-page btn btn-sm btn-default" title="@Localizer.Translate("EditPageName", "RidicsProject")">
+                                <i class="fa fa-pencil"></i>
+                            </button>
+                            <button type="button" class="discard-changes btn btn-sm btn-default hide" title="@Localizer.Translate("DiscardChanges", "RidicsProject")">
+                                <i class="fa fa-times"></i>
+                            </button>
+                            <button type="button" class="remove-page btn btn-sm btn-default" title="@Localizer.Translate("DeletePage", "RidicsProject")">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

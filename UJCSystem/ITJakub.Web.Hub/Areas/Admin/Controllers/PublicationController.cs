@@ -31,7 +31,10 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     
         public IActionResult NewSnapshot(long projectId)
         {
-            var model = CreateNewPublicationViewModel(projectId);
+            var client = GetProjectClient();
+            var snapshot = client.GetLatestPublishedSnapshot(projectId);
+
+            var model = CreateNewPublicationViewModel(projectId, snapshot);
             return View("PublicationsNew", model);
         }
 
@@ -39,15 +42,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             var client = GetSnapshotClient();
             var snapshot = client.GetSnapshot(snapshotId);
-            var model = CreateNewPublicationViewModel(snapshot.ProjectId);
-
-            model.DefaultBookType = snapshot.DefaultBookType;
-            model.Comment = snapshot.Comment;
-
-            foreach (var selectableBookType in model.PublishBookTypes)
-            {
-                selectableBookType.IsSelected = snapshot.BookTypes.Any(x => x == selectableBookType.BookType);
-            }
+            var model = CreateNewPublicationViewModel(snapshot.ProjectId, snapshot);
 
             foreach (var resourceList in model.ResourceTypes)
             {
@@ -66,11 +61,17 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return View("PublicationsNew", model);
         }
 
-        public IActionResult VersionList(long resourceId)
+        public IActionResult VersionList(long resourceId, int? higherVersion, int? lowerVersion)
         {
+            if (lowerVersion == null)
+            {
+                return BadRequest();
+            }
+
             var client = GetProjectClient();
-            var resourceVersionList = client.GetResourceVersionHistory(resourceId);
+            var resourceVersionList = client.GetResourceVersionHistory(resourceId, higherVersion, lowerVersion.Value);
             var viewModel = Mapper.Map<List<ResourceVersionViewModel>>(resourceVersionList);
+            
             return Json(viewModel);
         }
         
@@ -130,11 +131,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return File(fileData.Stream, fileData.MimeType, fileData.FileName);
         }
         
-        private NewPublicationViewModel CreateNewPublicationViewModel(long projectId)
+        private NewPublicationViewModel CreateNewPublicationViewModel(long projectId, SnapshotContract snapshot)
         {
             var client = GetProjectClient();
             var project = client.GetProject(projectId);
-            var audio = client.GetResourceList(projectId, ResourceTypeEnumContract.Audio);
+            //var audio = client.GetResourceList(projectId, ResourceTypeEnumContract.Audio);
             var images = client.GetResourceList(projectId, ResourceTypeEnumContract.Image);
             var text = client.GetResourceList(projectId, ResourceTypeEnumContract.Text);
             EditionNoteContract editionNote;
@@ -160,9 +161,9 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 BookTypeEnumContract.Edition,
                 BookTypeEnumContract.TextBank,
                 BookTypeEnumContract.Grammar,
-                BookTypeEnumContract.AudioBook
+                //BookTypeEnumContract.AudioBook,
             };
-
+            
             return new NewPublicationViewModel
             {
                 ProjectId = projectId,
@@ -181,16 +182,21 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         ResourceType = ResourceTypeEnumContract.Image,
                         Title = m_localization.Translate("ImageSources", "Admin"),
                     },
-                    new ResourceTypeViewModel
-                    {
-                        ResourceList = Mapper.Map<IList<ResourceViewModel>>(audio.OrderBy(x => x.LatestVersion.RelatedResource.Sequence)),
-                        ResourceType = ResourceTypeEnumContract.Audio,
-                        Title = m_localization.Translate("AudioSources", "Admin"),
-                    }
+                    //new ResourceTypeViewModel
+                    //{
+                    //    ResourceList = Mapper.Map<IList<ResourceViewModel>>(audio.OrderBy(x => x.LatestVersion.RelatedResource.Sequence)),
+                    //    ResourceType = ResourceTypeEnumContract.Audio,
+                    //    Title = m_localization.Translate("AudioSources", "Admin"),
+                    //},
                 },
                 AvailableBookTypes = availableBookTypes,
-                PublishBookTypes = availableBookTypes.Select(x => new SelectableBookType { BookType = x }).ToList(),
-                EditionNoteText = editionNote?.Text
+                PublishBookTypes = availableBookTypes.Select(availableBookType => new SelectableBookType
+                {
+                    BookType = availableBookType,
+                    IsSelected = snapshot != null && snapshot.BookTypes.Any(y => y == availableBookType),
+                }).ToList(),
+                EditionNoteText = editionNote?.Text,
+                DefaultBookType = snapshot?.DefaultBookType ?? BookTypeEnumContract.Edition,
              };
         }
     }

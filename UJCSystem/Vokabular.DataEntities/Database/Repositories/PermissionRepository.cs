@@ -188,6 +188,20 @@ namespace Vokabular.DataEntities.Database.Repositories
                     .SingleOrDefault<Permission>();
         }
 
+        public virtual Permission FindPermissionByBookAndGroupExternalId(long projectId, int externalId)
+        {
+            UserGroup groupAlias = null;
+
+            return
+                GetSession().QueryOver<Permission>()
+                    .JoinAlias(x => x.UserGroup, () => groupAlias)
+                    .Where(
+                        permission =>
+                            permission.Project.Id == projectId &&
+                            groupAlias.ExternalId == externalId)
+                    .SingleOrDefault<Permission>();
+        }
+
         public virtual ListWithTotalCountResult<UserGroup> FindGroupsByBook(long bookId, int start, int count, string filterByName)
         {
             Project projectAlias = null;

@@ -1,0 +1,11 @@
+﻿@model ITJakub.Web.Hub.Models.RidicsCheckboxViewModel
+
+<div class="ridics-checkbox">
+    <label>
+        <input type="checkbox" name="@Model.Name" @(Model != null && Model.IsChecked ? "checked=\"checked\"" : "")/>
+        <span class="cr cr-black">
+            <i class="cr-icon glyphicon glyphicon-ok"></i>
+        </span>
+        <span class="checkbox-label">@Model.Label</span>
+    </label>
+</div>

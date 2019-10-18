@@ -31,9 +31,15 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("resource/{resourceId}/version")]
-        public IList<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
+        public ActionResult<IList<ResourceVersionContract>> GetResourceVersionHistory(long resourceId, int? higherVersion, int? lowerVersion)
         {
-            return m_resourceManager.GetResourceVersionHistory(resourceId);
+            if (lowerVersion == null)
+            {
+                return BadRequest($"{nameof(lowerVersion)} parameter is required");
+            }
+            
+            var result = m_resourceManager.GetResourceVersionHistory(resourceId, higherVersion, lowerVersion.Value);
+            return Ok(result);
         }
     }
 }

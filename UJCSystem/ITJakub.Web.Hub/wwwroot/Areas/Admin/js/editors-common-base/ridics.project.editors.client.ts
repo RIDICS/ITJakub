@@ -17,6 +17,10 @@
         return $.get(`${this.serverPath}Admin/ContentEditor/GetPageDetail?pageId=${pageId}`);
     }
 
+    getPageListView(projectId: number): JQuery.jqXHR<string> {
+        return $.get(`${this.serverPath}Admin/Project/PageList?projectId=${projectId}`);
+    }
+    
     savePageList(projectId: number, pageList: IUpdatePage[]): JQuery.jqXHR {
         return $.post(`${this.serverPath}Admin/ContentEditor/SavePageList`,
             {
