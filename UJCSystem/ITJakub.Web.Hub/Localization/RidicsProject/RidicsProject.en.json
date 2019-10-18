@@ -68,6 +68,7 @@
     "Close": "Close",
     "CloseWithoutSaving": "Close without saving",
     "Cancel": "Cancel",
+    "DiscardChanges": "Discard changes",
     "SaveAndClose": "Save and close",
     "Save": "Save",
     "SaveWithErrors": "Save with errors",
