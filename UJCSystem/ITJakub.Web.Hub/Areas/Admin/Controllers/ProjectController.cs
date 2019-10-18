@@ -157,7 +157,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return PartialView("Resource/_Preview");
         }
 
-        public IActionResult GetPageList(long projectId)
+        public IActionResult PageList(long projectId)
         {
             var client = GetProjectClient();
             var pages = client.GetAllPageList(projectId);

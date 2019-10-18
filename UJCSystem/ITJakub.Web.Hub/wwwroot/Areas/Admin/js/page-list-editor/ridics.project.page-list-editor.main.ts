@@ -95,7 +95,7 @@
                     alertHolder.append(alert);
                     alertHolder.delay(3000).fadeOut(2000);
                     
-                    this.util.getPageList(projectId).done((data) => {
+                    this.util.getPageListView(projectId).done((data) => {
                         listing.html(data);
                         this.initPageRowClicks();
                     }).fail((error) => {
