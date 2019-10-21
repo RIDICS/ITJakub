@@ -9,6 +9,7 @@ using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Favorite;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Types.Favorite;
@@ -83,7 +84,8 @@ namespace Vokabular.MainService.Core.Managers
         //    m_favoritesRepository.DeleteHeadwordBookmark(bookXmlId, entryXmlId, userName);
         //}
 
-        public List<FavoriteBookGroupedContract> GetFavoriteLabeledBooks(IList<long> projectIds, BookTypeEnumContract? bookType)
+        public List<FavoriteBookGroupedContract> GetFavoriteLabeledBooks(IList<long> projectIds, BookTypeEnumContract? bookType,
+            ProjectTypeContract? projectType)
         {
             if (projectIds == null)
             {
@@ -91,7 +93,8 @@ namespace Vokabular.MainService.Core.Managers
             }
             var user = TryGetUser();
             var bookTypeEnum = m_mapper.Map<BookTypeEnum?>(bookType);
-            var dbResult = m_favoritesRepository.InvokeUnitOfWork(x => x.GetFavoriteLabeledBooks(projectIds, bookTypeEnum, user.Id));
+            var projectTypeEnum = m_mapper.Map<ProjectTypeEnum?>(projectType);
+            var dbResult = m_favoritesRepository.InvokeUnitOfWork(x => x.GetFavoriteLabeledBooks(projectIds, bookTypeEnum, projectTypeEnum, user.Id));
 
             var resultList = new List<FavoriteBookGroupedContract>();
             foreach (var favoriteBookGroup in dbResult.GroupBy(x => x.Project.Id))
@@ -216,7 +219,8 @@ namespace Vokabular.MainService.Core.Managers
             };
         }
 
-        public List<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType)
+        public List<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType,
+            ProjectTypeContract? projectType)
         {
             IList<FavoriteProject> booksDbResult = null;
             IList<FavoriteCategory> categoriesDbResult = null;
@@ -224,10 +228,11 @@ namespace Vokabular.MainService.Core.Managers
 
             var user = TryGetUser();
             var bookTypeEnum = m_mapper.Map<BookTypeEnum>(bookType);
+            var projectTypeEnum = m_mapper.Map<ProjectTypeEnum?>(projectType);
             
             m_favoritesRepository.InvokeUnitOfWork(repository =>
             {
-                booksDbResult = repository.GetFavoriteBooksWithLabel(bookTypeEnum, user.Id);
+                booksDbResult = repository.GetFavoriteBooksWithLabel(bookTypeEnum, projectTypeEnum, user.Id);
                 categoriesDbResult = repository.GetFavoriteCategoriesWithLabel(user.Id);
             });
 

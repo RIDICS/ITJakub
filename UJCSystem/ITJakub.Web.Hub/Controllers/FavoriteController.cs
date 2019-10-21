@@ -175,10 +175,8 @@ namespace ITJakub.Web.Hub.Controllers
                 return Json(new List<object>());
             }
 
-            // TODO add missing ProjectType
-
             var client = GetFavoriteClient();
-            var result = client.GetFavoriteLabeledBooks(request.BookIds, request.BookType);
+            var result = client.GetFavoriteLabeledBooks(request.BookIds, request.BookType, GetDefaultProjectType());
             return Json(result);
         }
 
@@ -193,7 +191,7 @@ namespace ITJakub.Web.Hub.Controllers
         public ActionResult GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType)
         {
             var client = GetFavoriteClient();
-            var result = client.GetFavoriteLabelsWithBooksAndCategories(bookType); // TODO add missing ProjectType
+            var result = client.GetFavoriteLabelsWithBooksAndCategories(bookType, GetDefaultProjectType());
             return Json(result);
         }
 

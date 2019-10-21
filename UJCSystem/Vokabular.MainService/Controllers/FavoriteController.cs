@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.DataContracts.Types;
@@ -125,10 +126,11 @@ namespace Vokabular.MainService.Controllers
         /// </summary>
         /// <param name="projectIds">List of project ID (disjunction with BookType)</param>
         /// <param name="bookType">BookType (disjunction with ProjectIds)</param>
+        /// <param name="projectType">Type of project (another AND condition)</param>
         /// <returns></returns>
         [HttpGet("book/grouped")]
         [ProducesResponseType(typeof(List<FavoriteBookGroupedContract>), StatusCodes.Status200OK)]
-        public IActionResult GetFavoriteLabeledBooks([FromQuery] IList<long> projectIds, [FromQuery] BookTypeEnumContract? bookType)
+        public IActionResult GetFavoriteLabeledBooks([FromQuery] IList<long> projectIds, [FromQuery] BookTypeEnumContract? bookType, [FromQuery] ProjectTypeContract? projectType)
         {
             if (bookType == null && projectIds.Count == 0)
             {
@@ -139,7 +141,7 @@ namespace Vokabular.MainService.Controllers
                 return BadRequest($"Max ProjectIds count is limited to {MaxProjectIdsCount}");
             }
 
-            var result = m_favoriteManager.GetFavoriteLabeledBooks(projectIds, bookType);
+            var result = m_favoriteManager.GetFavoriteLabeledBooks(projectIds, bookType, projectType);
             return Ok(result);
         }
 
@@ -152,14 +154,14 @@ namespace Vokabular.MainService.Controllers
 
         [HttpGet("label/with-books-and-categories")]
         [ProducesResponseType(typeof(List<FavoriteLabelWithBooksAndCategories>), StatusCodes.Status200OK)]
-        public IActionResult GetFavoriteLabelsWithBooksAndCategories([FromQuery] BookTypeEnumContract? bookType)
+        public IActionResult GetFavoriteLabelsWithBooksAndCategories([FromQuery] BookTypeEnumContract? bookType, [FromQuery] ProjectTypeContract? projectType)
         {
             if (bookType == null)
             {
                 return BadRequest("Missing required parameter BookType");
             }
 
-            var result = m_favoriteManager.GetFavoriteLabelsWithBooksAndCategories(bookType.Value);
+            var result = m_favoriteManager.GetFavoriteLabelsWithBooksAndCategories(bookType.Value, projectType);
             return Ok(result);
         }
         
