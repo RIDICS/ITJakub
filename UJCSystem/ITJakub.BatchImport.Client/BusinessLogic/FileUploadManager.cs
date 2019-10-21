@@ -14,13 +14,13 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
     public class FileUploadManager
     {
         private readonly CommunicationProvider m_communicationProvider;
-        private readonly AuthenticationManager m_authenticationManager;
+        private readonly AuthManager m_authenticationManager;
 
         private const string DefaultUploadMessage = "Uploaded by BatchImport client";
 
         private ConcurrentQueue<FileModel> m_files = new ConcurrentQueue<FileModel>();
 
-        public FileUploadManager(CommunicationProvider communicationProvider, AuthenticationManager authenticationManager)
+        public FileUploadManager(CommunicationProvider communicationProvider, AuthManager authenticationManager)
         {
             m_communicationProvider = communicationProvider;
             m_authenticationManager = authenticationManager;

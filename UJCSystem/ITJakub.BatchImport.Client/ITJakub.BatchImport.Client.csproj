@@ -269,15 +269,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviors\FolderDialogBehavior.cs" />
-    <Compile Include="BusinessLogic\AuthenticationManager.cs" />
+    <Compile Include="BusinessLogic\AuthManager.cs" />
     <Compile Include="BusinessLogic\Communication\CommunicationProvider.cs" />
     <Compile Include="ComponentInstaller.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="DataService\DataService.cs" />
     <Compile Include="BusinessLogic\FileUploadManager.cs" />
     <Compile Include="DataService\IDataService.cs" />
-    <Compile Include="ServiceClient\MainServiceAuthTokenProvider.cs" />
-    <Compile Include="ServiceClient\MainServiceClientLocalization.cs" />
     <Compile Include="ViewModel\FileViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
@@ -347,6 +345,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vokabular.AppAuthentication.Shared\Vokabular.AppAuthentication.Shared.csproj">
+      <Project>{a4aee19e-b148-484d-aa40-b50a0d269003}</Project>
+      <Name>Vokabular.AppAuthentication.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vokabular.Log4Net\Vokabular.Log4Net.csproj">
       <Project>{105904c3-ab87-4bdd-ada3-c16ca61d7147}</Project>
       <Name>Vokabular.Log4Net</Name>
