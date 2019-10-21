@@ -1,4 +1,5 @@
-﻿using Vokabular.AppAuthentication.Shared;
+﻿using System.Threading.Tasks;
+using Vokabular.AppAuthentication.Shared;
 
 namespace Vokabular.ImportTestData.App
 {
@@ -19,7 +20,7 @@ namespace Vokabular.ImportTestData.App
             m_importTestProjectManager = importTestProjectManager;
         }
 
-        public void Run()
+        public async Task Run()
         {
             var output = m_dataProvider.Output;
 
@@ -52,8 +53,8 @@ namespace Vokabular.ImportTestData.App
             for (int i = firstNumber; i <= lastNumber; i++)
             {
                 output.WriteLine($"Importing testing project {i}");
-                var result = m_importTestProjectManager.Import(i);
-                output.WriteLine($"Project {i} imported. ProjectId {result.ProjectId}, PageCount {result.PageCount}, TextLength {result.TextLength}");
+                var result = await m_importTestProjectManager.ImportAsync(i);
+                output.WriteLine($"Project {i} imported in {result.Time.TotalSeconds} seconds. ProjectId {result.ProjectId}, PageCount {result.PageCount}, TextLength {result.TextLength}");
             }
             output.WriteLine(Separator);
             output.WriteLine();

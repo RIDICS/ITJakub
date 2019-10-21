@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using DryIoc;
 using DryIoc.Microsoft.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,7 +36,7 @@ namespace Vokabular.ImportTestData.App
             container.Populate(services);
 
             var app = container.Resolve<ImportTestDataApp>();
-            app.Run();
+            app.Run().GetAwaiter().GetResult();
         }
     }
 }

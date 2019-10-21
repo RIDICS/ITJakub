@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using NLipsum.Core;
 using Vokabular.MainService.DataContracts.Clients;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -36,8 +37,15 @@ namespace Vokabular.ImportTestData.App
             m_random = new Random();
         }
 
+        public Task<ImportResult> ImportAsync(int index)
+        {
+            return Task.Run(() => Import(index));
+        }
+
         public ImportResult Import(int index)
         {
+            var startTime = DateTime.UtcNow;
+
             var projectId = m_projectClient.CreateProject(new ProjectContract
             {
                 Name = $"Test project {index}",
@@ -59,12 +67,12 @@ namespace Vokabular.ImportTestData.App
             // Pages
             var pageCount = m_random.Next(10, 150);
             var createPageList = new List<CreateOrUpdatePageContract>();
-            for (int i = 0; i < pageCount; i++)
+            for (int i = 1; i <= pageCount; i++)
             {
                 createPageList.Add(new CreateOrUpdatePageContract
                 {
                     Name = i.ToString(),
-                    Position = i + 1,
+                    Position = i,
                 });
             }
 
@@ -101,6 +109,7 @@ namespace Vokabular.ImportTestData.App
                 ProjectId = projectId,
                 PageCount = pageCount,
                 TextLength = totalTextLength,
+                Time = DateTime.UtcNow - startTime,
             };
         }
     }
@@ -110,5 +119,6 @@ namespace Vokabular.ImportTestData.App
         public long ProjectId { get; set; }
         public int PageCount { get; set; }
         public long TextLength { get; set; }
+        public TimeSpan Time { get; set; }
     }
 }
