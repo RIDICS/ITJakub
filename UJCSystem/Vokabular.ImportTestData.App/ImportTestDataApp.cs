@@ -50,12 +50,18 @@ namespace Vokabular.ImportTestData.App
                 return;
             }
 
-            for (int i = firstNumber; i <= lastNumber; i++)
+            var parallelOptions = new ParallelOptions
             {
-                output.WriteLine($"Importing testing project {i}");
-                var result = await m_importTestProjectManager.ImportAsync(i);
-                output.WriteLine($"Project {i} imported in {result.Time.TotalSeconds} seconds. ProjectId {result.ProjectId}, PageCount {result.PageCount}, TextLength {result.TextLength}");
-            }
+                MaxDegreeOfParallelism = 10
+            };
+            Parallel.For(firstNumber, lastNumber + 1, parallelOptions, index =>
+            {
+                output.WriteLine($"Importing testing project {index}");
+                var result = m_importTestProjectManager.Import(index);
+                output.WriteLine(
+                    $"Project {index} imported in {result.Time.TotalSeconds} seconds. ProjectId {result.ProjectId}, PageCount {result.PageCount}, TextLength {result.TextLength}");
+            });
+            
             output.WriteLine(Separator);
             output.WriteLine();
 
