@@ -11,6 +11,7 @@
     private isLoaded: boolean;
     private favoriteBook: FavoriteBook;
     private bookType: BookTypeEnum;
+    private overrideSelectedBookCountVal: number;
 
     private static selectedBookUrlKey = "selectedBookIds";
     private static selectedCategoryUrlKey = "selectedCategoryIds";
@@ -44,6 +45,7 @@
             return this.books[item].name;
         };
         this.isLoaded = false;
+        this.overrideSelectedBookCountVal = null;
     }
 
     makeAndRestore(categoryIds: Array<number>, bookIds: Array<number>) {
@@ -174,7 +176,7 @@
             }
         });
 
-        this.favoriteManager.getFavoritesForBooks(this.bookType, this.bookIdList, (favoriteBooks) => {
+        this.favoriteManager.getFavoritesForBooks(null, this.bookIdList, (favoriteBooks) => {
             loadedFavoriteBooks = favoriteBooks;
 
             if (isAllLoaded()) {
@@ -292,6 +294,10 @@
         if (!this.rootCategory.checkBox.indeterminate) {
             categoriesCountString = localization.translate("All1", "PluginsJs").value;
             booksCountString = localization.translate("All2", "PluginsJs").value;
+        }
+
+        if (this.overrideSelectedBookCountVal != null) {
+            booksCountString = this.overrideSelectedBookCountVal.toString();
         }
         
         var infoDiv = document.createElement("div");
@@ -474,6 +480,14 @@
     restoreFromSerializedState(serializedState: string) {
         var state: DropDownSelected = JSON.parse(serializedState);
         this.restore(state.selectedCategoryIds, state.selectedBookIds);
+    }
+
+    getFavoriteBookComponent(): FavoriteBook {
+        return this.favoriteBook;
+    }
+
+    overrideSelectedBookCount(newCount: number) {
+        this.overrideSelectedBookCountVal = newCount;
     }
 }
 

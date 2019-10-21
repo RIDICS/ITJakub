@@ -230,7 +230,8 @@
 
     protected actualizeSelectedBooksAndCategoriesInQuery() {
         var selectedIds = this.dropDownSelect.getSelectedIds();
-        this.bookIdsInQuery = selectedIds.selectedBookIds;
+        //this.bookIdsInQuery = selectedIds.selectedBookIds; // Don't use bookIds from Dropdown select but only from FavoriteBook component
+        this.bookIdsInQuery = this.dropDownSelect.getFavoriteBookComponent().getLastSelectedBookIds(); // Get booksIds only from FavoriteBook
         this.categoryIdsInQuery = selectedIds.selectedCategoryIds;
     }
 
