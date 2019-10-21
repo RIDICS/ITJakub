@@ -65,7 +65,7 @@ namespace Vokabular.ImportTestData.App
             });
 
             // Pages
-            var pageCount = m_random.Next(10, 150);
+            var pageCount = m_random.Next(10, 120);
             var createPageList = new List<CreateOrUpdatePageContract>();
             for (int i = 1; i <= pageCount; i++)
             {

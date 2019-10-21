@@ -36,7 +36,7 @@ namespace Vokabular.ImportTestData.App
             container.Populate(services);
 
             var app = container.Resolve<ImportTestDataApp>();
-            app.Run().GetAwaiter().GetResult();
+            app.Run();
         }
     }
 }

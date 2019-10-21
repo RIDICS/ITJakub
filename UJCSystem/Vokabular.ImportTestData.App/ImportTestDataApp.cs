@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Vokabular.AppAuthentication.Shared;
 
 namespace Vokabular.ImportTestData.App
@@ -20,7 +22,7 @@ namespace Vokabular.ImportTestData.App
             m_importTestProjectManager = importTestProjectManager;
         }
 
-        public async Task Run()
+        public void Run()
         {
             var output = m_dataProvider.Output;
 
@@ -50,6 +52,8 @@ namespace Vokabular.ImportTestData.App
                 return;
             }
 
+            var totalCount = lastNumber - firstNumber + 1;
+            var finishedCount = 0;
             var parallelOptions = new ParallelOptions
             {
                 MaxDegreeOfParallelism = 10
@@ -57,9 +61,12 @@ namespace Vokabular.ImportTestData.App
             Parallel.For(firstNumber, lastNumber + 1, parallelOptions, index =>
             {
                 output.WriteLine($"Importing testing project {index}");
+
                 var result = m_importTestProjectManager.Import(index);
+                var currentCount = Interlocked.Increment(ref finishedCount);
+
                 output.WriteLine(
-                    $"Project {index} imported in {result.Time.TotalSeconds} seconds. ProjectId {result.ProjectId}, PageCount {result.PageCount}, TextLength {result.TextLength}");
+                    $"Project {index} imported in {result.Time.TotalSeconds} seconds. ProjectId {result.ProjectId}, PageCount {result.PageCount}, TextLength {result.TextLength}{Environment.NewLine}  Progress {currentCount}/{totalCount}");
             });
             
             output.WriteLine(Separator);
