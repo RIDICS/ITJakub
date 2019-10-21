@@ -1,5 +1,4 @@
-﻿using System;
-using Vokabular.AppAuthentication.Shared;
+﻿using Vokabular.AppAuthentication.Shared;
 
 namespace Vokabular.ImportTestData.App
 {
@@ -25,7 +24,7 @@ namespace Vokabular.ImportTestData.App
             var output = m_dataProvider.Output;
 
             output.WriteLine(Separator);
-            output.WriteLine("Import test data to Vokabulář app");
+            output.WriteLine("Import test data to Vokabular app");
             output.WriteLine("> The main purpose of this app is testing performance of whole solution when it contains large amount of projects");
             output.WriteLine(Separator);
             output.WriteLine();
@@ -53,7 +52,8 @@ namespace Vokabular.ImportTestData.App
             for (int i = firstNumber; i <= lastNumber; i++)
             {
                 output.WriteLine($"Importing testing project {i}");
-                m_importTestProjectManager.Import(i);
+                var result = m_importTestProjectManager.Import(i);
+                output.WriteLine($"Project {i} imported. ProjectId {result.ProjectId}, PageCount {result.PageCount}, TextLength {result.TextLength}");
             }
             output.WriteLine(Separator);
             output.WriteLine();
