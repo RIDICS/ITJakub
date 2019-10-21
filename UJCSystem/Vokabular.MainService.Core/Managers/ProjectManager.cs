@@ -7,6 +7,7 @@ using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works;
 using Vokabular.MainService.Core.Works.Permission;
@@ -27,11 +28,13 @@ namespace Vokabular.MainService.Core.Managers
         private readonly AuthenticationManager m_authenticationManager;
         private readonly UserDetailManager m_userDetailManager;
         private readonly CommunicationProvider m_communicationProvider;
+        private readonly DefaultUserProvider m_defaultUserProvider;
         private readonly IMapper m_mapper;
 
         public ProjectManager(ProjectRepository projectRepository, MetadataRepository metadataRepository,
             PermissionRepository permissionRepository, AuthenticationManager authenticationManager,
-            UserDetailManager userDetailManager, CommunicationProvider communicationProvider, IMapper mapper)
+            UserDetailManager userDetailManager, CommunicationProvider communicationProvider, DefaultUserProvider defaultUserProvider,
+            IMapper mapper)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
@@ -39,13 +42,14 @@ namespace Vokabular.MainService.Core.Managers
             m_authenticationManager = authenticationManager;
             m_userDetailManager = userDetailManager;
             m_communicationProvider = communicationProvider;
+            m_defaultUserProvider = defaultUserProvider;
             m_mapper = mapper;
         }
 
         public long CreateProject(ProjectContract projectData)
         {
             var currentUserId = m_authenticationManager.GetCurrentUserId();
-            var work = new CreateProjectWork(m_projectRepository, projectData, currentUserId, m_mapper);
+            var work = new CreateProjectWork(m_projectRepository, projectData, currentUserId, m_defaultUserProvider, m_mapper);
 
             var resultId = work.Execute();
             return resultId;
