@@ -245,27 +245,27 @@ namespace Vokabular.MainService.Core.Managers
             return resultVersionId;
         }
 
-        public long CreateNewTextResourceVersion(CreateTextRequestContract request)
+        public long CreateNewTextResourceVersion(long textId, CreateTextVersionRequestContract request)
         {
-            var latestText = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<TextResource>(request.Id));
+            var latestText = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<TextResource>(textId));
             var project = latestText.Resource.Project;
 
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(project.ProjectType);
 
             var userId = m_authenticationManager.GetCurrentUserId();
-            var createNewTextResourceWork = new CreateNewTextResourceWork(m_resourceRepository, request, userId, fulltextStorage);
+            var createNewTextResourceWork = new CreateNewTextResourceWork(m_resourceRepository, textId, request, userId, fulltextStorage);
             var resultId = createNewTextResourceWork.Execute();
             return resultId;
         }
 
-        public long CreateTextResourceOnPage(long pageId)
+        public long CreateTextResourceOnPage(long pageId, CreateTextRequestContract request)
         {
             var latestPage = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<PageResource>(pageId));
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(latestPage.Resource.Project.ProjectType);
 
             var userId = m_authenticationManager.GetCurrentUserId();
 
-            var resourceId = new CreateEmptyTextResourceWork(m_resourceRepository, pageId, userId, fulltextStorage).Execute();
+            var resourceId = new CreateEmptyTextResourceWork(m_resourceRepository, pageId, request, userId, fulltextStorage).Execute();
             return resourceId;
         }
 

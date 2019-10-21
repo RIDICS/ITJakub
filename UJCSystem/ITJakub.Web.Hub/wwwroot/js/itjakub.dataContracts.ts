@@ -398,7 +398,6 @@ interface ITextWithPage {
 
 interface ICreateTextVersion {
     text: string;
-    id: number;
     resourceVersionId: number;
 }
 

@@ -220,7 +220,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult SetTextResource(long textId, CreateTextRequestContract request, SaveTextModeType mode)
+        public IActionResult SetTextResource(long textId, CreateTextVersionRequestContract request, SaveTextModeType mode)
         {
             SaveTextResponse response;
             switch (mode)
@@ -248,7 +248,10 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult CreateTextResource(long pageId)
         {
             var client = GetProjectClient();
-            var resourceId = client.CreateTextResource(pageId);
+            var resourceId = client.CreateTextResource(pageId, new CreateTextRequestContract
+            {
+                Text = string.Empty,
+            });
             return Json(resourceId);
         }
 

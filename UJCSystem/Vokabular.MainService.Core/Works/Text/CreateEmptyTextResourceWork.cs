@@ -4,6 +4,7 @@ using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.DataContracts;
+using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Text
@@ -12,13 +13,16 @@ namespace Vokabular.MainService.Core.Works.Text
     {
         private readonly ResourceRepository m_resourceRepository;
         private readonly long m_pageId;
+        private readonly CreateTextRequestContract m_data;
         private readonly int m_userId;
         private readonly IFulltextStorage m_fulltextStorage;
 
-        public CreateEmptyTextResourceWork(ResourceRepository resourceRepository, long pageId, int userId, IFulltextStorage fulltextStorage) : base(resourceRepository)
+        public CreateEmptyTextResourceWork(ResourceRepository resourceRepository, long pageId, CreateTextRequestContract data,
+            int userId, IFulltextStorage fulltextStorage) : base(resourceRepository)
         {
             m_resourceRepository = resourceRepository;
             m_pageId = pageId;
+            m_data = data;
             m_userId = userId;
             m_fulltextStorage = fulltextStorage;
         }
@@ -62,7 +66,7 @@ namespace Vokabular.MainService.Core.Works.Text
 
             m_resourceRepository.Create(newVersion);
 
-            var externalTextId = m_fulltextStorage.CreateNewTextVersion(newVersion, string.Empty);
+            var externalTextId = m_fulltextStorage.CreateNewTextVersion(newVersion, m_data.Text);
 
             newVersion.ExternalId = externalTextId;
             m_resourceRepository.Update(newVersion);
