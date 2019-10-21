@@ -32,7 +32,8 @@
     "ProjectIsNotSelected": "Není vybrán projekt.",
     "RemoveProjectFromRoleError": "Nastala neočekávaná chyba při odstraňování práva na projekt ze skupiny.",
     "AddProjectToRoleError": "Nastala neočekávaná chyba při přidávání práva na projekt skupině.",
-
+    "ChangesSavedSuccessfully": "Změny byly úspěšně uloženy.",
+    
     "PasswordResetSuccess": "Odkaz pro resetování hesla byl odeslán na email uživatele.",
 
     "Cancel": "Zrušit",

@@ -30,7 +30,7 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
             var now = DateTime.UtcNow;
             var user = m_resourceRepository.Load<User>(m_userId);
             var dbPages = m_resourceRepository.GetProjectLatestPages(m_projectId);
-            var updatedPageIds = new List<long>();
+            var updatedResourcePageIds = new List<long>();
 
             foreach (var newPage in m_newPages)
             {
@@ -55,7 +55,7 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
                     {
                         throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
                     }
-                    updatedPageIds.Add(newPage.Id.Value);
+                    updatedResourcePageIds.Add(newPage.Id.Value);
                 }
 
                 pageResource.Name = newPage.Name;
@@ -72,7 +72,7 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
             var removeResourceSubwork = new RemoveResourceSubwork(m_resourceRepository);
             foreach (var dbPage in dbPages)
             {
-                if (!updatedPageIds.Contains(dbPage.Id))
+                if (!updatedResourcePageIds.Contains(dbPage.Resource.Id))
                 {
                     removeResourceSubwork.RemoveResource(dbPage.Resource.Id);
                 }

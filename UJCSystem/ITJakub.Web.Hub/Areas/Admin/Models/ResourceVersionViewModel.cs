@@ -8,6 +8,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public int VersionNumber { get; set; }
         public string Comment { get; set; }
         public DateTime CreateDate { get; set; }
+        public string CreateDateString { get; set; }
         public string Author { get; set; }
     }
 }

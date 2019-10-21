@@ -77,6 +77,7 @@
 
         $(".save-pages-button").on("click",
             () => {
+                const listing = $(".page-listing");
                 const pages = $(".page-row").toArray();
                 const pageListArray: IUpdatePage[] = [];
                 for (let i = 0; i < pages.length; i++) {
@@ -86,15 +87,24 @@
                         name: $(pages[i]).find(".name").text().trim()
                     });
                 }
+                listing.empty().append(`<div class="loader"></div>`);
                 this.util.savePageList(projectId, pageListArray).done(() => {
                     $("#unsavedChanges").addClass("hide");
                     const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("PageListSaveSuccess","RidicsProject").value).buildElement();
                     const alertHolder = $(".save-alert-holder");
                     alertHolder.append(alert);
                     alertHolder.delay(3000).fadeOut(2000);
+                    
+                    this.util.getPageListView(projectId).done((data) => {
+                        listing.html(data);
+                        this.initPageRowClicks();
+                    }).fail((error) => {
+                        const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                        listing.empty().append(alert);
+                    });
                 }).fail((error) => {
-                    this.gui.showInfoDialog(localization.translate("Error").value,
-                        this.errorHandler.getErrorMessage(error));
+                    const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                    listing.empty().append(alert);
                 });
             });
 
@@ -204,6 +214,13 @@
                 event.stopPropagation();
                 this.editPage($(event.currentTarget));
             });
+        
+        $(".page-row .discard-changes").off();
+        $(".page-row .discard-changes").on("click",
+            (event) => {
+                event.stopPropagation();
+                this.discardChanges($(event.currentTarget));
+            });
 
         $(".page-row").off();
         $(".page-row").on("click",
@@ -219,12 +236,16 @@
         const pageRow = editButton.parents(".page-row");
         const nameElement = pageRow.find(".name");
         const nameInput = pageRow.find("input[name=\"page-name\"]");
+        const discardButton = pageRow.find(".discard-changes");
+
         if (editButton.hasClass("fa-pencil")) {
             editButton.switchClass("fa-pencil", "fa-check");
             nameElement.addClass("hide");
             nameInput.removeClass("hide");
+            discardButton.removeClass("hide");
         } else {
             nameInput.addClass("hide");
+            discardButton.addClass("hide");
             editButton.switchClass("fa-check", "fa-pencil");
             const newName = String(nameInput.val());
             if (newName !== "" && String(nameElement.text().trim()) !== newName) {
@@ -233,6 +254,19 @@
             }
             nameElement.removeClass("hide");
         }
+    }
+
+    private discardChanges(discardButton: JQuery) {
+        const pageRow = discardButton.parents(".page-row");
+        const editButton = pageRow.find(".edit-page i.fa");
+        const nameElement = pageRow.find(".name");
+        const nameInput = pageRow.find("input[name=\"page-name\"]");
+        
+        nameInput.addClass("hide");
+        discardButton.addClass("hide");
+        editButton.switchClass("fa-check", "fa-pencil");
+        nameInput.val(nameElement.text().trim());
+        nameElement.removeClass("hide");
     }
 
     private selectPage(pageRow: JQuery) {
@@ -373,8 +407,8 @@
     }
 
     private startGeneration() {
-        const fromFieldValue = ($("#project-pages-generate-from").val() as string).replace(" ", "");;
-        const toFieldValue = ($("#project-pages-generate-to").val() as string).replace(" ", "");;
+        const fromFieldValue = ($("#project-pages-generate-from").val() as string).replace(" ", "");
+        const toFieldValue = ($("#project-pages-generate-to").val() as string).replace(" ", "");
         const listGenerator = PageListGeneratorFactory.createPageListGenerator(this.getSelectedFormat());
 
         if (!listGenerator.checkInputValue(fromFieldValue) || !listGenerator.checkInputValue(toFieldValue)) {
@@ -399,6 +433,8 @@
         if (listContainerEl.children().length) {
             this.gui.showInfoDialog(localization.translate("Info").value,
                 localization.translate("AddingGeneratedNames", "RidicsProject").value);
+        } else {
+            $("#noPagesAlert").remove();
         }
 
         for (let page of pageList) {
@@ -470,6 +506,7 @@
         $("#unsavedChanges").removeClass("hide");
     }
 
+    // page-row has duplicate definition in _PageTable.cshtml
     private createPageRow(name: string): string {
         return `<tr class="page-row">
                     <td class="ridics-checkbox">
@@ -490,12 +527,15 @@
                         <div class="alert alert-danger"></div>
                     </td>
                     <td class="buttons">
-                        <a class="edit-page btn btn-sm btn-default">
+                        <button type="button"  class="edit-page btn btn-sm btn-default">
                             <i class="fa fa-pencil"></i>
-                        </a>
-                        <a class="remove-page btn btn-sm btn-default">
+                        </button>
+                        <button type="button" class="discard-changes btn btn-sm btn-default hide">
+                            <i class="fa fa-times"></i>
+                        </button>
+                        <button type="button" class="remove-page btn btn-sm btn-default">
                             <i class="fa fa-trash"></i>
-                        </a>
+                        </button>
                     </td>
                 </tr>`;
     }

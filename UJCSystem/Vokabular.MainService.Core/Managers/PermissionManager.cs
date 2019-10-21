@@ -125,7 +125,7 @@ namespace Vokabular.MainService.Core.Managers
         public PermissionDataContract GetPermissionsForRoleAndBook(int roleId, long bookId)
         {
             new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
-            var dbResult = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionByBookAndGroup(bookId, roleId));
+            var dbResult = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionByBookAndGroupExternalId(bookId, roleId));
             var result = m_mapper.Map<PermissionDataContract>(dbResult);
             return result;
         }

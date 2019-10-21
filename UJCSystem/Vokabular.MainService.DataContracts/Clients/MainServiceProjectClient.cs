@@ -275,11 +275,15 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public IList<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
+        public IList<ResourceVersionContract> GetResourceVersionHistory(long resourceId, int? higherVersion, int lowerVersion)
         {
             try
             {
-                var result = m_client.Get<IList<ResourceVersionContract>>($"project/resource/{resourceId}/version");
+                var url = UrlQueryBuilder.Create($"project/resource/{resourceId}/version")
+                    .AddParameter("higherVersion", higherVersion)
+                    .AddParameter("lowerVersion", lowerVersion)
+                    .ToResult();
+                var result = m_client.Get<IList<ResourceVersionContract>>(url);
                 return result;
             }
             catch (HttpRequestException e)

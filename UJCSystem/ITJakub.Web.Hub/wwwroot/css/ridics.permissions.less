@@ -108,7 +108,8 @@
 .user-section,
 .role-section,
 .permission-section,
-.project-section {
+.project-section,
+.project-permission-section {
     margin: 1.5em 0;
 
     .panel {
@@ -127,6 +128,17 @@
                 }
             }
         }
+    }
+}
+
+#addProjectPermissionToRoleDialog .content,
+.project-permission-section { 
+     .ridics-checkbox {
+         padding: 0.2em 0.8em;
+     }
+    
+    button {
+        margin-left: 0.8em;
     }
 }
 
@@ -152,9 +164,9 @@
             }
 
             .top-separation-line {
-                margin-top: 0.3em;
+                margin-top: 0.5em;
                 border-top: 1px solid @separation-line-color;
-                padding-top: 0.3em;
+                padding-top: 0.5em;
             }
 
             #selectedUser,
@@ -162,6 +174,16 @@
                 font-weight: bold;
             }
         }
+    }
+}
+
+#addProjectPermissionToRoleDialog {
+    h5 {
+        font-size: 16px;
+    }
+
+    fieldset > div {
+        margin-left: 0.5rem;
     }
 }
 
