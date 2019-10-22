@@ -5,16 +5,14 @@
     public pages: Array<BookPage>;
     public actualPageIndex = 0;
     private pageChangedCallback: (pageId: number, pageIndex: number, scrollTo: boolean) => void;
-    private contextForCallback;
-    
+
     constructor(readerContainer: HTMLElement) {
         this.pagerDisplayPages = 5;
         this.readerContainer = readerContainer;
     }
     
-    init(pageChangedCallback: (pageId: number, pageIndex: number, scrollTo: boolean) => void, contextForCallback) {
+    init(pageChangedCallback: (pageId: number, pageIndex: number, scrollTo: boolean) => void) {
         this.pageChangedCallback = pageChangedCallback;
-        this.contextForCallback = contextForCallback;
     }
     
     createPagination(stepByOneArrows = false): HTMLElement {
@@ -28,7 +26,7 @@
         $(liElement).addClass("page-navigation page-navigation-left");
         let anchor: HTMLAnchorElement = document.createElement("a");
         anchor.href = "#";
-        anchor.text = "|<";
+        $(anchor).text("|<");
         $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(0, true);
@@ -41,7 +39,7 @@
         $(liElement).addClass("page-navigation page-navigation-left");
         anchor = document.createElement("a");
         anchor.href = "#";
-        anchor.text = "<<";
+        $(anchor).text("<<");
         $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(this.actualPageIndex - 5, true);
@@ -58,7 +56,7 @@
             $(liElement).addClass("page-navigation page-navigation-left");
             anchor = document.createElement("a");
             anchor.href = "#";
-            anchor.innerHTML = "<";
+            $(anchor).text("<");
             $(anchor).click((event: JQuery.Event) => {
                 event.stopPropagation();
                 this.moveToPageNumber(this.actualPageIndex - 1, true);
@@ -74,7 +72,7 @@
             $(liElement).addClass("page-navigation page-navigation-right");
             anchor = document.createElement("a");
             anchor.href = "#";
-            anchor.innerHTML = ">";
+            $(anchor).text(">");
             $(anchor).click((event: JQuery.Event) => {
                 event.stopPropagation();
                 this.moveToPageNumber(this.actualPageIndex + 1, true);
@@ -91,7 +89,7 @@
         $(liElement).addClass("page-navigation page-navigation-right");
         anchor = document.createElement("a");
         anchor.href = "#";
-        anchor.text = ">>";
+        $(anchor).text(">>");
         $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(this.actualPageIndex + 5, true);
@@ -104,7 +102,7 @@
         $(liElement).addClass("page-navigation page-navigation-right");
         anchor = document.createElement("a");
         anchor.href = "#";
-        anchor.text = ">|";
+        $(anchor).text(">|");
         $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
             this.moveToPageNumber(this.pages.length - 1, true);
@@ -115,7 +113,7 @@
 
         liElement = document.createElement("li");
         $(liElement).addClass("more-pages more-pages-left");
-        liElement.innerHTML = "...";
+        $(liElement).text("...");
         paginationUl.appendChild(liElement);
 
         $.each(this.pages, (index, page) => {
@@ -124,7 +122,7 @@
             $(liElement).data("page-index", index);
             anchor = document.createElement("a");
             anchor.href = "#";
-            anchor.innerHTML = page.text;
+            $(anchor).text(page.text);
             $(anchor).click((event: JQuery.Event) => {
                 event.stopPropagation();
                 this.moveToPage(page.pageId);
@@ -136,7 +134,7 @@
 
         liElement = document.createElement("li");
         $(liElement).addClass("more-pages more-pages-right");
-        liElement.innerHTML = "...";
+        $(liElement).text("...");
         paginationUl.appendChild(liElement);
 
         var listingContainer = document.createElement("div");
@@ -163,7 +161,7 @@
         this.actualizePagination(pageIndex);
 
         const pageId = this.pages[pageIndex].pageId;
-        this.pageChangedCallback.call(this.contextForCallback, pageId, pageIndex, scrollTo);
+        this.pageChangedCallback.call(null, pageId, pageIndex, scrollTo);
     }
 
     actualizePagination(pageIndex: number) {

@@ -19,7 +19,7 @@ class ChapterEditorMain {
         this.moveEditor.init();
         this.readerPagination.init(((pageId, pageIndex, scrollTo) => {
             this.loadPageDetail(pageId);
-        }), this);
+        }));
         this.bookPages = [];
         this.util.getPagesList(projectId).done((pages) => {
             for (let page of pages) {

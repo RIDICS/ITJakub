@@ -50,7 +50,7 @@
         this.showMainPanelsButtonList = showMainPanelsButtonList;
         this.favoriteManager = new FavoriteManager();
         this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
-        this.init(this.pageChanged, this);
+        this.init(this.pageChanged);
     }
 
     public pageChanged(pageId: number, pageIndex: number, scrollTo: boolean) {
