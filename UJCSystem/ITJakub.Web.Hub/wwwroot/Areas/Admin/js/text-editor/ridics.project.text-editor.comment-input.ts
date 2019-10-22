@@ -83,13 +83,12 @@
 
             let mainCommentContentEl: JQuery<HTMLElement>;
             let editedCommentBody: JQuery<HTMLElement>;
+            editedCommentBody = commentActionsRowEl.parent(".media-body");
             if (target.hasClass("edit-root-comment"))
             {
-                editedCommentBody = commentActionsRowEl.parents(".media-body");
                 mainCommentContentEl = editedCommentBody;
             }
             else {
-                editedCommentBody = commentActionsRowEl.siblings(".media-body");
                 mainCommentContentEl = editedCommentBody.parents(".media-body");
             }
 
@@ -99,9 +98,9 @@
             const textId = mainCommentLeftHeader.parents(".page-row").data("text-id");
             const commentTextEl = editedCommentBody.children(".comment-body");
             const commentText = commentTextEl.text();
+            commentActionsRowEl.after(`<textarea cols="40" rows="3" class="textarea-no-resize edit-comment-textarea">${commentText}</textarea>`);
             commentActionsRowEl.hide();
             commentTextEl.hide();
-            editedCommentBody.append(`<textarea cols="40" rows="3" class="textarea-no-resize edit-comment-textarea">${commentText}</textarea>`);
             const jTextareaEl = $(".edit-comment-textarea");
             jTextareaEl.focus();
             const commentId = parseInt(editedCommentBody.attr("data-comment-id"));
@@ -229,13 +228,7 @@
                 if (commentText === commentTextOriginal) {
                     const actionsRow = jEl.parents(".comment-actions-row");
                     actionsRow.show();
-
-                    if (jEl.hasClass("edit-root-comment")) {
-                        actionsRow.siblings(".comment-body").show();
-                    } else {
-                        actionsRow.siblings(".media-body").find(".comment-body").show();
-                    }
-                    
+                    actionsRow.siblings(".comment-body").show();                    
                     textAreaEl.remove();
                 } else {
                     const comment: ICommentStructureReply = {

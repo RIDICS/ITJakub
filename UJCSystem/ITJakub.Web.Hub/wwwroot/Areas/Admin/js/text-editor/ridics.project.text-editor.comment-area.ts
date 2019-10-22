@@ -127,17 +127,17 @@
                     areaContent += commentName;
                     areaContent += `<p class="replied-on text-muted">On ${timeUtc.toDateString()} at ${timeUtc
                         .toTimeString().split(" ")[0]}</p>`; //only date and time, no timezone
+                    nestedCommentBody += 
+                        `<div class="row comment-actions-row">
+                            <div class="col-xs-12">
+                                <div class="btn-group">
+                                    <button type="button" class="edit-comment">${localization.translate("Edit", "RidicsProject").value}</button>
+                                    <button type="button" class="delete-comment">${localization.translate("Delete", "RidicsProject").value}</button>
+                                </div>
+                            </div>
+                        </div>`;
                     areaContent += nestedCommentBody;
                     areaContent += nestedCommentBodyEnd;
-                    areaContent += `<div class="row comment-actions-row">
-                                        <div class="col-xs-8"></div>
-                                        <div class="col-xs-4">
-                                            <div class="btn-group">
-                                                <button type="button" class="edit-comment">${localization.translate("Edit", "RidicsProject").value}</button>
-                                                <button type="button" class="delete-comment">${localization.translate("Delete", "RidicsProject").value}</button>
-                                            </div>
-                                        </div>
-                                    </div>`;
                     areaContent += nestedCommentEnd;
                 }
             }
@@ -380,23 +380,17 @@
             const commentActionsRowEl = target.parents(".comment-actions-row");
 
             let confirmMessage = localization.translate("DeleteCommentConfirm", "RidicsProject").value;
-            let commentId: number;
-
-            if (target.hasClass("delete-root-comment")) {
-                commentId = parseInt(commentActionsRowEl.parents(".media-body").attr("data-comment-id"));
-
-                if (isEditingModeEnabled) {
-                    confirmMessage = `<div class="alert alert-warning">
-                                        <i class="fa fa-warning"></i> ${localization.translate("DeleteCommentWarning", "RidicsProject").value}
-                                    </div>
+            const commentId = parseInt(commentActionsRowEl.parents(".media-body").attr("data-comment-id"));
+            
+            if (target.hasClass("delete-root-comment") && isEditingModeEnabled) {
+                confirmMessage = `<div class="alert alert-warning">
+                                    <i class="fa fa-warning"></i> ${localization.translate("DeleteCommentWarning", "RidicsProject").value}
+                                  </div>
                                     <div class="bootbox-body">
                                        ${localization.translate("DeleteCommentConfirm", "RidicsProject").value}
-                                    </div>`;
-                }
-            } else {
-                commentId = parseInt(commentActionsRowEl.siblings(".media-body").attr("data-comment-id"));
-            }
-
+                                  </div>`;
+            } 
+            
             bootbox.confirm({
                 title: localization.translate("ConfirmTitle", "RidicsProject").value,
                 message: confirmMessage,
