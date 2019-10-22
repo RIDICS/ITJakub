@@ -138,7 +138,6 @@
             (event) => {
                 event.stopPropagation();
                 this.editDialog.hide();
-                $(".page-list-editor-content").off();
             }
         );
     }
