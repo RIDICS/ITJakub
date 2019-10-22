@@ -15,7 +15,7 @@
         this.pageChangedCallback = pageChangedCallback;
     }
     
-    createPagination(stepByOneArrows = false): HTMLElement {
+    createPagination(multiStepArrow = false): HTMLElement {
         const paginationUl: HTMLUListElement = document.createElement("ul");
         paginationUl.classList.add("pagination", "pagination-sm");
 
@@ -35,69 +35,67 @@
         liElement.appendChild(anchor);
         toLeft.appendChild(liElement);
 
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-left");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        $(anchor).text("<<");
-        $(anchor).click((event: JQuery.Event) => {
-            event.stopPropagation();
-            this.moveToPageNumber(this.actualPageIndex - 5, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toLeft.appendChild(liElement);
-
-
-        let toRight;
-        
-        if(stepByOneArrows) {
+        if(multiStepArrow) {
             liElement = document.createElement("li");
             $(liElement).addClass("page-navigation page-navigation-left");
             anchor = document.createElement("a");
             anchor.href = "#";
-            $(anchor).text("<");
+            $(anchor).text("<<");
             $(anchor).click((event: JQuery.Event) => {
                 event.stopPropagation();
-                this.moveToPageNumber(this.actualPageIndex - 1, true);
+                this.moveToPageNumber(this.actualPageIndex - 5, true);
                 return false;
             });
             liElement.appendChild(anchor);
             toLeft.appendChild(liElement);
+        }
+        
+        
+        let toRight = document.createElement("ul");
+        toRight.classList.add("page-navigation-container", "page-navigation-container-right");
+        
+        liElement = document.createElement("li");
+        $(liElement).addClass("page-navigation page-navigation-left");
+        anchor = document.createElement("a");
+        anchor.href = "#";
+        $(anchor).text("<");
+        $(anchor).click((event: JQuery.Event) => {
+            event.stopPropagation();
+            this.moveToPageNumber(this.actualPageIndex - 1, true);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        toLeft.appendChild(liElement);
+        
+        liElement = document.createElement("li");
+        $(liElement).addClass("page-navigation page-navigation-right");
+        anchor = document.createElement("a");
+        anchor.href = "#";
+        $(anchor).text(">");
+        $(anchor).click((event: JQuery.Event) => {
+            event.stopPropagation();
+            this.moveToPageNumber(this.actualPageIndex + 1, true);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        toRight.appendChild(liElement);
 
-            toRight = document.createElement("ul");
-            toRight.classList.add("page-navigation-container", "page-navigation-container-right");
 
+        if(multiStepArrow) {
             liElement = document.createElement("li");
             $(liElement).addClass("page-navigation page-navigation-right");
             anchor = document.createElement("a");
             anchor.href = "#";
-            $(anchor).text(">");
+            $(anchor).text(">>");
             $(anchor).click((event: JQuery.Event) => {
                 event.stopPropagation();
-                this.moveToPageNumber(this.actualPageIndex + 1, true);
+                this.moveToPageNumber(this.actualPageIndex + 5, true);
                 return false;
             });
             liElement.appendChild(anchor);
             toRight.appendChild(liElement);
         }
         
-        toRight = document.createElement("ul");
-        toRight.classList.add("page-navigation-container", "page-navigation-container-right");
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-right");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        $(anchor).text(">>");
-        $(anchor).click((event: JQuery.Event) => {
-            event.stopPropagation();
-            this.moveToPageNumber(this.actualPageIndex + 5, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toRight.appendChild(liElement);
-
         liElement = document.createElement("li");
         $(liElement).addClass("page-navigation page-navigation-right");
         anchor = document.createElement("a");
