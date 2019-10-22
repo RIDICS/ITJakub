@@ -215,7 +215,9 @@ class BohemianTextbankSearch {
 
     private actualizeSelectedBooksAndCategoriesInQuery() {
         const selectedIds = this.booksSelector.getSelectedIds();
-        this.bookIdsInQuery = selectedIds.selectedBookIds;
+        this.bookIdsInQuery = this.booksSelector.hasBooksLoaded()
+            ? selectedIds.selectedBookIds
+            : this.booksSelector.getFavoriteBookComponent().getLastSelectedBookIds();
         this.categoryIdsInQuery = selectedIds.selectedCategoryIds;
     }
 
