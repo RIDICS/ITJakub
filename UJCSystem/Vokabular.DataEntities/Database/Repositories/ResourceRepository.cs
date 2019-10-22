@@ -151,6 +151,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .And(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
                 .Fetch(SelectMode.Fetch, x => x.ResourceBeginningPage)
+                .Fetch(SelectMode.Fetch, x => x.ResourceBeginningPage.LatestVersion)
                 .OrderBy(x => x.Position).Asc
                 .List();
         }
