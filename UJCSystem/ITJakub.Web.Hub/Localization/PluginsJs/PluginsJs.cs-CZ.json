@@ -32,6 +32,7 @@
     "ViewOptions": "Možnosti zobrazení",
     "AllBookmarks": "Všechny záložky",
     "NoTitle": "{0}bez názvu{1}",
+    "CancelBookFilter": "Zrušit filtrování knih",
 
     "LoadingContentError": "Chyba při načítání obsahu",
     "Pictures": "Obrázky",

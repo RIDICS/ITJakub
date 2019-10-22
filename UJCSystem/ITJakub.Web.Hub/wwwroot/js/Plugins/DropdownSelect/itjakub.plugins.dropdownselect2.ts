@@ -8,6 +8,7 @@
     private restoreCategoryIds: Array<number>;
     private restoreBookIds: Array<number>;
     private descriptionDiv: HTMLDivElement;
+    private cancelDiv: HTMLDivElement;
     private isLoaded: boolean;
     private favoriteBook: FavoriteBook;
     private bookType: BookTypeEnum;
@@ -63,7 +64,14 @@
         $(this.descriptionDiv).addClass("dropdown-description");
         $(this.dropDownSelectContainer).append(this.descriptionDiv);
 
+        this.cancelDiv = document.createElement("div");
+        $(this.cancelDiv).addClass("dropdown-cancel");
+        $(this.dropDownSelectContainer).append(this.cancelDiv);
+        
         if (this.showStar) {
+            var cancelButton = this.createCancelButton();
+            $(this.cancelDiv).append(cancelButton);
+
             var favoriteDropdownDiv = document.createElement("div");
             this.favoriteBook = new FavoriteBook($(favoriteDropdownDiv), this.bookType, this);
             this.favoriteBook.make();
@@ -72,7 +80,19 @@
         }
     }
 
+    private createCancelButton(): HTMLElement {
+        const elem = $(`<a href="#" class="btn btn-sm btn-default" title="${localization.translate("CancelBookFilter", "PluginsJs").value}"><span class="glyphicon glyphicon-remove"></span></a>`);
+        elem.click(() => {
+            this.favoriteBook.resetSelected();
+        });
+        return elem.get(0);
+    }
+
     setSelected(categoryIds: Array<number>, bookIds: Array<number>) {
+        if (categoryIds.length === 0 && bookIds.length === 0) {
+            this.rootCategory.checkBox.checked = false;
+            this.rootCategory.checkBox.indeterminate = false;
+        }
         $("input[type=checkbox]", this.dropDownBodyDiv).prop("checked", false);
         this.restore(categoryIds, bookIds);
     }

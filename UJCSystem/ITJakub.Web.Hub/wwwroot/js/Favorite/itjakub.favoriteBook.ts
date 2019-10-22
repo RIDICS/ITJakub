@@ -164,6 +164,17 @@
         setTimeout(() => this.dropdownSelect.showBody(), 0);
     }
 
+    public resetSelected() {
+        this.bookIdList = [];
+        this.categoryIdList = [];
+
+        if (!this.dropdownSelect.hasBooksLoaded()) {
+            this.dropdownSelect.overrideSelectedBookCount(null);
+        }
+
+        this.dropdownSelect.setSelected(this.categoryIdList, this.bookIdList);
+    }
+
     public getLastSelectedBookIds(): number[] {
         return this.bookIdList;
     }
