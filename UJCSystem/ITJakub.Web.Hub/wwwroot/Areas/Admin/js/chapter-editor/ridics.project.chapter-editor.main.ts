@@ -206,8 +206,8 @@ class ChapterEditorMain {
             this.editChapter($(event.currentTarget));
         });
 
-        subChapters.find(".chapter-row .dismiss-chapter-changes").off();
-        subChapters.find(".chapter-row .dismiss-chapter-changes").on("click", (event) => {
+        subChapters.find(".chapter-row .discard-chapter-changes").off();
+        subChapters.find(".chapter-row .discard-chapter-changes").on("click", (event) => {
             event.stopPropagation();
             this.discardChapterChanges($(event.currentTarget));
         });
