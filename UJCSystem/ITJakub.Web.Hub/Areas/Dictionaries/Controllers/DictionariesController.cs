@@ -93,7 +93,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetDictionariesWithCategories()
         {
-            var result = GetBooksAndCategories();
+            var result = GetBooksAndCategories(true);
             return Json(result);
         }
 

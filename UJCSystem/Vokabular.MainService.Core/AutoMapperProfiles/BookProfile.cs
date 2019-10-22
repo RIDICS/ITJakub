@@ -16,10 +16,6 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .IncludeBase<MetadataResource, ProjectMetadataContract>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Resource.Project.Id));
 
-            CreateMap<MetadataResource, BookWithCategoriesContract>()
-                .IncludeBase<MetadataResource, BookContract>()
-                .ForMember(dest => dest.CategoryList, opt => opt.MapFrom(src => src.Resource.Project.Categories));
-
             CreateMap<MetadataResource, SearchResultContract>()
                 .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.Resource.Project.Id)) // TODO try convert property from BookId to ProjectId (including TypeScript)
                 .ForMember(dest => dest.BookXmlId, opt => opt.MapFrom(src => src.Resource.Project.ExternalId))
