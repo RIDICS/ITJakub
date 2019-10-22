@@ -59,6 +59,7 @@ class ChapterEditorMain {
                             this.util.getChapterListView(projectId).done((data) => {
                                 listing.html(data);
                                 this.initChapterRowClicks($(".table > .sub-chapters"));
+                                this.showUnsavedChangesAlert();
                             }).fail((error) => {
                                 const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
                                 listing.empty().append(alert);
@@ -134,7 +135,12 @@ class ChapterEditorMain {
                 const selectedPageId = Number(selectedOption.val());
                 const selectedPageName = `[${selectedOption.text()}]`;
                 const chapter = this.createChapterRow(chapterName, selectedPageId, selectedPageName);
-                $(".table > .sub-chapters").append(chapter);
+                const listing = $(".table > .sub-chapters");
+                if(listing.children(".alert").length)
+                {
+                    listing.empty();
+                }
+                listing.append(chapter);                
                 this.initChapterRowClicks(chapter);
                 this.editDialog.hide();
                 this.showUnsavedChangesAlert();
