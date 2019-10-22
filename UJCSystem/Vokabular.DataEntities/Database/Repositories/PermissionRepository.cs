@@ -232,7 +232,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             };
         }
 
-        public virtual Permission FindPermissionForSnapshotByUserId(long snapshotId, int userId)
+        public virtual IList<Permission> FindPermissionsForSnapshotByUserId(long snapshotId, int userId)
         {
             UserGroup userGroupAlias = null;
             User userAlias = null;
@@ -245,7 +245,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Project, () => projectAlias)
                 .JoinAlias(() => projectAlias.Snapshots, () => snapshotAlias)
                 .Where(() => snapshotAlias.Id == snapshotId && userAlias.Id == userId)
-                .SingleOrDefault();
+                .List();
         }
 
         public virtual Permission FindPermissionForSnapshotByGroupId(long snapshotId, int userGroupId)
