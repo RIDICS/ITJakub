@@ -17,6 +17,8 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public abstract class AreaController : BaseController
     {
+        private const int FetchBookCount = 200;
+
         protected AreaController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
@@ -66,7 +68,7 @@ namespace ITJakub.Web.Hub.Controllers
             if (fetchBooks)
             {
                 var bookClient = GetBookClient();
-                var books = bookClient.GetBooksByType(AreaBookType);
+                var books = bookClient.GetBooksByType(AreaBookType, 0, FetchBookCount);
 
                 foreach (var book in books)
                 {

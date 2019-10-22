@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
@@ -115,8 +114,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .FutureValue().Value;
         }
 
-        [Obsolete]
-        public virtual IList<MetadataResource> GetMetadataByBookType(BookTypeEnum bookTypeEnum, int userId, ProjectTypeEnum projectType)
+        public virtual IList<MetadataResource> GetMetadataByBookTypeWithCategories(BookTypeEnum bookTypeEnum, int userId, ProjectTypeEnum projectType,
+            int start, int count)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
@@ -126,7 +125,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             UserGroup userGroupAlias = null;
             User userAlias = null;
 
-            return GetSession().QueryOver<MetadataResource>()
+            var resultList = GetSession().QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias)
@@ -140,8 +139,16 @@ namespace Vokabular.DataEntities.Database.Repositories
                     .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(PermissionFlag.ShowPublished))
                     .Select(x => x.Id))
                 .OrderBy(x => x.Title).Asc
-                .Fetch(SelectMode.Fetch, x => x.Resource.Project.Categories)
+                .Skip(start)
+                .Take(count)
                 .List();
+
+            GetSession().QueryOver<Project>()
+                .WhereRestrictionOn(x => x.Id).IsInG(resultList.Select(x => x.Resource.Project.Id))
+                .Fetch(SelectMode.Fetch, x => x.Categories)
+                .List();
+
+            return resultList;
         }
 
         public virtual IList<MetadataResource> GetMetadataWithFetchForBiblModule(IEnumerable<long> metadataVersionIdList)
