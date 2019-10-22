@@ -43,8 +43,7 @@
 
 
     constructor(readerContainer: HTMLDivElement, pageChangedCallback: (pageId: number) => void, showPanelList: Array<ReaderPanelEnum>, showLeftSidePanelsButtonList: Array<PanelButtonEnum>, showMainPanelsButtonList: Array<PanelButtonEnum>) {
-        super();
-        this.readerContainer = readerContainer;
+        super(readerContainer);
         this.pageChangeCallback = pageChangedCallback;
         this.showPanelList = showPanelList;
         this.showLeftSidePanelsButtonList = showLeftSidePanelsButtonList;

@@ -1,13 +1,15 @@
 ﻿class ReaderPagination {
     protected readonly pagerDisplayPages: number;
     protected clickedMoveToPage: boolean;
+    public readerContainer: HTMLElement;
     public pages: Array<BookPage>;
     public actualPageIndex = 0;
     private pageChangedCallback: (pageId: number, pageIndex: number, scrollTo: boolean) => void;
     private contextForCallback;
     
-    constructor() {
+    constructor(readerContainer: HTMLElement) {
         this.pagerDisplayPages = 5;
+        this.readerContainer = readerContainer;
     }
     
     init(pageChangedCallback: (pageId: number, pageIndex: number, scrollTo: boolean) => void, contextForCallback) {
@@ -165,7 +167,7 @@
     }
 
     actualizePagination(pageIndex: number) {
-        const pager = $("#page-detail").find("ul.pagination");
+        const pager = $(this.readerContainer).find("ul.pagination");
         pager.find("li.page-navigation").css("visibility", "visible");
         pager.find("li.more-pages").css("visibility", "visible");
         if (pageIndex === 0) {

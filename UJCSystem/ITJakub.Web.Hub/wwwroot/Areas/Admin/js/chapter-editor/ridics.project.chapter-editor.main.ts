@@ -12,7 +12,7 @@ class ChapterEditorMain {
         this.errorHandler = new ErrorHandler();
         this.util = new EditorsApiClient();
         this.moveEditor = new ChapterMoveEditor();
-        this.readerPagination = new ReaderPagination();
+        this.readerPagination = new ReaderPagination($("#page-detail")[0]);
     }
 
     init(projectId: number) {
