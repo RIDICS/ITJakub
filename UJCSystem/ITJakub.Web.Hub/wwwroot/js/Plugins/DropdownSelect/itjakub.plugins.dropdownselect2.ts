@@ -489,6 +489,10 @@
     overrideSelectedBookCount(newCount: number) {
         this.overrideSelectedBookCountVal = newCount;
     }
+
+    hasBooksLoaded(): boolean {
+        return this.bookIdList && this.bookIdList.length > 0;
+    }
 }
 
 class DropDownSelected {

@@ -156,7 +156,10 @@
         this.bookIdList = <number[]>linkJquery.data("bookIdList");
         this.categoryIdList = <number[]>linkJquery.data("categoryIdList");
 
-        this.dropdownSelect.overrideSelectedBookCount(this.bookIdList.length);
+        if (!this.dropdownSelect.hasBooksLoaded()) {
+            this.dropdownSelect.overrideSelectedBookCount(this.bookIdList.length);
+        }
+        
         this.dropdownSelect.setSelected(this.categoryIdList, this.bookIdList);
         setTimeout(() => this.dropdownSelect.showBody(), 0);
     }
