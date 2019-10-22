@@ -293,11 +293,10 @@
 
         content.empty().html("<div class=\"sub-content\"></div>");
         const subcontent = content.find(".sub-content");
-        subcontent.addClass("loader");
+        subcontent.html("<div class=\"loader\"></div>");
         pageDetail.removeClass("hide");
 
         this.util.getPageDetail(pageId).done((response) => {
-            subcontent.removeClass("loader");
             subcontent.html(response);
 
             if (content.find(".page-text").length > 0) {
@@ -315,7 +314,7 @@
             const alert = new AlertComponentBuilder(AlertType.Error)
                 .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
             alertHolder.empty().append(alert);
-            subcontent.removeClass("loader").empty();
+            subcontent.empty();
         });
     }
 
