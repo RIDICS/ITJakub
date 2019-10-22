@@ -1,11 +1,12 @@
 ﻿class PageListEditorMain {
-    private editDialog: BootstrapDialogWrapper;
+    private generatePagesDialog: BootstrapDialogWrapper;
     private readonly gui: EditorsGui;
     private readonly util: EditorsApiClient;
     private readonly errorHandler: ErrorHandler;
     private readonly fsPageName = "FS";
     private readonly fcPageName = "FC";
-
+    private projectId: number;
+    
     constructor() {
         this.gui = new EditorsGui();
         this.errorHandler = new ErrorHandler();
@@ -62,11 +63,8 @@
     }
 
     init(projectId: number) {
-        this.editDialog = new BootstrapDialogWrapper({
-            element: $("#project-pages-dialog"),
-            autoClearInputs: false
-        });
-
+        this.projectId = projectId;
+        
         $(".panel-bottom-buttons .move-page-down").click(() => {
             this.moveList(true, $(".pages"));
         });
@@ -75,43 +73,48 @@
             this.moveList(false, $(".pages"));
         });
 
-        $(".save-pages-button").on("click",
-            () => {
-                const listing = $(".page-listing");
-                const pages = $(".page-row").toArray();
-                const pageListArray: IUpdatePage[] = [];
-                for (let i = 0; i < pages.length; i++) {
-                    pageListArray.push({
-                        id: $(pages[i]).data("page-id"),
-                        position: i + 1,
-                        name: $(pages[i]).find(".name").text().trim()
-                    });
-                }
-                listing.empty().append(`<div class="loader"></div>`);
-                this.util.savePageList(projectId, pageListArray).done(() => {
-                    $("#unsavedChanges").addClass("hide");
-                    const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("PageListSaveSuccess","RidicsProject").value).buildElement();
-                    const alertHolder = $(".save-alert-holder");
-                    alertHolder.append(alert);
-                    alertHolder.delay(3000).fadeOut(2000);
-                    
-                    this.util.getPageListView(projectId).done((data) => {
-                        listing.html(data);
-                        this.initPageRowClicks();
-                    }).fail((error) => {
-                        const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
-                        listing.empty().append(alert);
-                    });
-                }).fail((error) => {
-                    const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
-                    listing.empty().append(alert);
-                });
-            });
-
+        $(".save-pages-button").on("click", () => {
+            this.savePages();
+        });
+        
         this.initPageRowClicks();
+        this.initGeneratePagesDialog();
+        this.initAddPageDialog();
+    }
 
+    private initAddPageDialog() {
+        const dialog =  $("#addPageDialog");
+        
+        $(".add-page-button").click((event) => {
+           dialog.modal("show");
+        });
+
+        $("#addPage").click((event) => {
+            dialog.modal("hide");
+            const listContainerEl = $(".page-listing tbody");
+            if (!listContainerEl.children().length) {
+                $("#noPagesAlert").remove();
+            }
+
+            const newPageName = String(dialog.find("input[name=\"page-name\"]").val());
+            if(newPageName !== "") {
+                const html = this.createPageRow(newPageName);
+                listContainerEl.append(html);
+
+                this.showUnsavedChangesAlert();
+                this.initPageRowClicks();
+            }            
+        });
+    }
+    
+    private initGeneratePagesDialog() {
+        this.generatePagesDialog = new BootstrapDialogWrapper({
+            element: $("#project-pages-dialog"),
+            autoClearInputs: false
+        });
+        
         $("#project-pages-edit-button").click(() => {
-            this.editDialog.show();
+            this.generatePagesDialog.show();
             this.enableCheckboxes();
             const pages = $(".page-row").toArray();
             for (let page of pages) {
@@ -137,11 +140,43 @@
             ".cancel-page-list",
             (event) => {
                 event.stopPropagation();
-                this.editDialog.hide();
+                this.generatePagesDialog.hide();
             }
-        );
+        );        
     }
 
+    private savePages() {
+        const listing = $(".page-listing");
+        const pages = $(".page-row").toArray();
+        const pageListArray: IUpdatePage[] = [];
+        for (let i = 0; i < pages.length; i++) {
+            pageListArray.push({
+                id: $(pages[i]).data("page-id"),
+                position: i + 1,
+                name: $(pages[i]).find(".name").text().trim()
+            });
+        }
+        listing.empty().append(`<div class="loader"></div>`);
+        this.util.savePageList(this.projectId, pageListArray).done(() => {
+            $("#unsavedChanges").addClass("hide");
+            const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("PageListSaveSuccess","RidicsProject").value).buildElement();
+            const alertHolder = $(".save-alert-holder");
+            alertHolder.append(alert);
+            alertHolder.delay(3000).fadeOut(2000);
+
+            this.util.getPageListView(this.projectId).done((data) => {
+                listing.html(data);
+                this.initPageRowClicks();
+            }).fail((error) => {
+                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                listing.empty().append(alert);
+            });
+        }).fail((error) => {
+            const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+            listing.empty().append(alert);
+        });
+    }
+    
     private getSelectedFormat(): number {
         const formatString = $("#project-pages-format").find(":selected").data("format-value") as string;
         return PageListFormat[formatString] as number;
