@@ -50,15 +50,13 @@
         this.showMainPanelsButtonList = showMainPanelsButtonList;
         this.favoriteManager = new FavoriteManager();
         this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
-        this.init(this.pageChanged);
+        this.init((pageId, pageIndex, scrollTo) => {
+            this.actualizeSlider(pageIndex);
+            this.notifyPanelsMovePage(pageIndex, scrollTo);
+            this.pageChangeCallback(pageId);        
+        });
     }
-
-    public pageChanged(pageId: number, pageIndex: number, scrollTo: boolean) {
-        this.actualizeSlider(pageIndex);
-        this.notifyPanelsMovePage(pageIndex, scrollTo);
-        this.pageChangeCallback(pageId);
-    }
-    
+        
     public makeReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: IPage[]) {
         this.bookId = bookXmlId;
         this.versionId = versionXmlId;
