@@ -2,7 +2,11 @@
     private readonly util: EditorsApiClient;
     private readonly adminApiClient = new AdminApiClient();
     private editor: Editor;
-
+    private defaultImage = `<div><i class="fa fa-4x fa-user media-object"></i></div>`;
+    private signedInUserFirstName: string;
+    private signedInUserLastName: string;
+    private signedInUserImage: string = null;
+    
     constructor(util: EditorsApiClient) {
         this.util = util;
     }
@@ -73,12 +77,11 @@
             var commentBodyStart = `<div class="media-body" data-comment-id=${id}>`;
             let commentImage;
             if (picture == null) {
-                commentImage =
-                    `<div><i class="fa fa-4x fa-user media-object"></i></div>`;
+                commentImage = this.defaultImage;
             } else {
                 commentImage =
                     `<a href="#"><img alt="48x48" class="media-object" src="${picture
-                        }" style="width: 48px; height: 48px;"></a>`;
+                    }" style="width: 48px; height: 48px;"></a>`;
             }
 
             var mainCommentLeftPartStart =
@@ -149,6 +152,28 @@
         var html = $.parseHTML(areaContent);
         return html;
     }
+
+    public constructCommentInputAreaHtml() {
+        let commentImage;
+        if (this.signedInUserImage == null) {
+            commentImage =
+                commentImage = this.defaultImage;
+        } else {
+            commentImage =
+                `<a href="#"><img alt="48x48" class="media-object" src="${this.signedInUserImage}" style="width: 48px; height: 48px;"></a>`;
+        }
+
+        return `<div class="media">
+                    <div class="media-left nested-comment">
+                        ${commentImage}
+                    </div>
+                    <div class="media-body">
+                        <h5 class="media-heading">${this.signedInUserFirstName} ${this.signedInUserLastName}</h5>
+                        <textarea class="respond-to-comment-textarea textarea-no-resize"></textarea>
+                    </div>
+                </div>`;
+    }
+
 
     /**
      * Collapses comment area, adds buttons to enlarge

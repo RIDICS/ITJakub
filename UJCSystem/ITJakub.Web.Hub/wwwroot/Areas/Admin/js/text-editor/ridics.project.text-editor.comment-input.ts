@@ -205,7 +205,7 @@
         id: number,
         parentCommentId: number,
         buttonEl: JQuery) {
-        const elm = `<textarea class="respond-to-comment-textarea textarea-no-resize"></textarea>`;
+        const elm = this.commentArea.constructCommentInputAreaHtml();
         buttonEl.parents(".comment-actions-row").hide();
         buttonEl.parents(".media-body").append(elm);
         const textareaEl = $(".respond-to-comment-textarea");
@@ -224,12 +224,18 @@
         textAreaEl.on("focusout",
             (event: JQuery.Event) => {
                 event.stopImmediatePropagation();
-                var commentText = textAreaEl.val() as string;
+                const commentText = textAreaEl.val() as string;
                 if (commentText === commentTextOriginal) {
                     const actionsRow = jEl.parents(".comment-actions-row");
                     actionsRow.show();
-                    actionsRow.siblings(".comment-body").show();                    
-                    textAreaEl.remove();
+                    actionsRow.siblings(".comment-body").show();
+                    
+                    if (commentId === 0) {
+                        textAreaEl.parent(".media-body").parent(".media").remove();
+                    }
+                    else {
+                        textAreaEl.remove();   
+                    }
                 } else {
                     const comment: ICommentStructureReply = {
                         id: commentId,
