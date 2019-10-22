@@ -207,7 +207,7 @@
         buttonEl: JQuery) {
         const elm = `<textarea class="respond-to-comment-textarea textarea-no-resize"></textarea>`;
         buttonEl.parents(".comment-actions-row").hide();
-        buttonEl.parents(".comment-actions-row").after(elm);
+        buttonEl.parents(".media-body").append(elm);
         const textareaEl = $(".respond-to-comment-textarea");
         textareaEl.focus();
         this.processCommentReply(textId, textReferenceId, id, parentCommentId, textareaEl, buttonEl);
