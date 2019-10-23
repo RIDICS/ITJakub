@@ -237,7 +237,7 @@
     }
 
     private showUnsavedChangesAlert() {
-        $("#unsavedChanges").removeClass("hide");
+        $("#chaptersUnsavedChanges").removeClass("hide");
     }
 }
 

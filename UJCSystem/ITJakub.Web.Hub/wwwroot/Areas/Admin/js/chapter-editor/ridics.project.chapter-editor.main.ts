@@ -92,7 +92,7 @@ class ChapterEditorMain {
             this.getChaptersToSave($(".table > .sub-chapters"));
             listing.empty().append(`<div class="loader"></div>`);
             this.util.saveChapterList(projectId, this.chaptersToSave).done(() => {
-                $("#unsavedChanges").addClass("hide");
+                $("#chaptersUnsavedChanges").addClass("hide");
                 this.util.getChapterListView(projectId).done((data) => {
                     listing.html(data);
                     this.initChapterRowClicks($(".table > .sub-chapters"));
@@ -367,7 +367,7 @@ class ChapterEditorMain {
     }
 
     private showUnsavedChangesAlert() {
-        $("#unsavedChanges").removeClass("hide");
+        $("#chaptersUnsavedChanges").removeClass("hide");
     }
 
     private createChapterRow(name: string, beginningPageId: number, beginningPageName: string, levelOfHierarchy = 0): JQuery<HTMLElement> {
