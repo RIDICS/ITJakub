@@ -8,7 +8,7 @@
     protected categoryIdsInQuery = new Array();
     
     protected initPage: number = null;
-    protected booksCountOnPage = 5;
+    protected booksCountOnPage = 20;
 
     protected readyForInit = false;
     protected notInitialized = true;
