@@ -60,7 +60,6 @@ class ChapterEditorMain {
                             this.util.getChapterListView(projectId).done((data) => {
                                 listing.html(data);
                                 this.initChapterRowClicks($(".table > .sub-chapters"));
-                                this.showUnsavedChangesAlert();
                             }).fail((error) => {
                                 const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
                                 listing.empty().append(alert);
