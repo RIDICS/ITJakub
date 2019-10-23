@@ -76,7 +76,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 
         public ActionResult GetAudioWithCategories()
         {
-            var result = GetBooksAndCategories();
+            var result = GetBooksAndCategories(true);
             return Json(result);
         }
 

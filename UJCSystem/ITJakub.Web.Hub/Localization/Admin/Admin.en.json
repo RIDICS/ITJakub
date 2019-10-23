@@ -63,6 +63,15 @@
     "DiscussionPosts": "translate[Příspěvky v diskuzi]",
     "Snapshots": "Publications",
     "ResourcesHistory": "translate[Změny zdrojů]",
+    "Chapters": "Chapters",
+
+    "CreateChapter": "Create chapter",
+    "GenerateChapters": "Generate chapters",
+    "GenerateChaptersWarning": "Chapters generating will remove all existing chapters. Do you want to start generating?",
+    "ChapterName": "Chapter name",
+    "NewChapter": "New chapter",
+    "StartsOnPage": "Starts on page",
+    "NoChapters": "Project does not contain chapters.",
 
     "CommonInformation": "translate[Obecné informace]",
     "ProjectName": "translate[Název díla]",
@@ -133,6 +142,8 @@
     "SelectTimePeriod": "Select time period",
 
     "EditPageList": "translate[Upravit seznam stránek]",
+    "AddPage": "Add page",
+    "PageName": "Page name",
     "NewPages": "New pages",
     "Pair": "translate[Spárovat]",
     "Split": "translate[Rozdělit]",

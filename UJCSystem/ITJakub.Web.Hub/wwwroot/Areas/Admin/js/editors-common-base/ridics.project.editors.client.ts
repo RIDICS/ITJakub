@@ -17,12 +17,42 @@
         return $.get(`${this.serverPath}Admin/ContentEditor/GetPageDetail?pageId=${pageId}`);
     }
 
+    getPageListView(projectId: number): JQuery.jqXHR<string> {
+        return $.get(`${this.serverPath}Admin/Project/PageList?projectId=${projectId}`);
+    }
+    
     savePageList(projectId: number, pageList: IUpdatePage[]): JQuery.jqXHR {
         return $.post(`${this.serverPath}Admin/ContentEditor/SavePageList`,
             {
                 projectId: projectId,
                 pageList: pageList
             } as JQuery.PlainObject);
+    }
+
+    getChapterListView(projectId: number): JQuery.jqXHR<string> {
+        return $.get(`${this.serverPath}Admin/Project/ChapterList?projectId=${projectId}`);
+    }
+
+    generateChapterList(projectId: number): JQuery.jqXHR<ITextWithPage[]> {
+        return  $.post(`${this.serverPath}Admin/ContentEditor/GenerateChapters`,
+            {
+                projectId: projectId
+            } as JQuery.PlainObject);
+    }
+    
+    saveChapterList(projectId: number, chapterList: IUpdateChapter[]): JQuery.jqXHR {
+        return $.ajax({
+            url: `${this.serverPath}Admin/ContentEditor/UpdateChapterList`,
+            type: "POST",
+            data: JSON.stringify({
+                projectId: projectId,
+                chapterList: chapterList
+            }),
+            contentType: "application/json; charset=utf-8",
+            cache: false,
+            async: true,
+            dataType: "json"
+        });
     }
 
     getServerAddress(): string {

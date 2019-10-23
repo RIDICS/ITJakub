@@ -275,11 +275,15 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public IList<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
+        public IList<ResourceVersionContract> GetResourceVersionHistory(long resourceId, int? higherVersion, int lowerVersion)
         {
             try
             {
-                var result = m_client.Get<IList<ResourceVersionContract>>($"project/resource/{resourceId}/version");
+                var url = UrlQueryBuilder.Create($"project/resource/{resourceId}/version")
+                    .AddParameter("higherVersion", higherVersion)
+                    .AddParameter("lowerVersion", lowerVersion)
+                    .ToResult();
+                var result = m_client.Get<IList<ResourceVersionContract>>(url);
                 return result;
             }
             catch (HttpRequestException e)
@@ -487,11 +491,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
         
-        public long CreateTextResource(long pageId)
+        public long CreateTextResource(long pageId, CreateTextRequestContract request)
         {
             try
             {
-                var result = m_client.Post<long>($"project/page/{pageId}/text", null);
+                var result = m_client.Post<long>($"project/page/{pageId}/text", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -503,7 +507,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long CreateTextResourceVersion(long textId, CreateTextRequestContract request)
+        public long CreateTextResourceVersion(long textId, CreateTextVersionRequestContract request)
         {
             try
             {
@@ -809,6 +813,86 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        #region Chapters
+
+        public IList<ChapterHierarchyDetailContract> GetChapterList(long projectId)
+        {
+            try
+            {
+                var result = m_client.Get<IList<ChapterHierarchyDetailContract>>($"project/{projectId}/chapter");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public GetChapterContract GetChapter(long chapterId)
+        {
+            try
+            {
+                var result = m_client.Get<GetChapterContract>($"project/chapter/{chapterId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long CreateChapter(long projectId, CreateChapterContract request)
+        {
+            try
+            {
+                var result = m_client.Post<long>($"project/{projectId}/chapter", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateChapter(long chapterId, CreateChapterContract request)
+        {
+            try
+            {
+                m_client.Put<object>($"project/chapter/{chapterId}", request);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateChapterList(long projectId, IList<CreateOrUpdateChapterContract> request)
+        {
+            try
+            {
+                m_client.Put<object>($"project/{projectId}/chapter", request);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public void GenerateChapters(long projectId)
         {
             try
@@ -823,5 +907,8 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        #endregion
+
     }
 }

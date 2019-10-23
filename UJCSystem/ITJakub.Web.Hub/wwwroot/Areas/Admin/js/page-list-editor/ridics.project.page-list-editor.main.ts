@@ -1,11 +1,12 @@
 ﻿class PageListEditorMain {
-    private editDialog: BootstrapDialogWrapper;
+    private generatePagesDialog: BootstrapDialogWrapper;
     private readonly gui: EditorsGui;
     private readonly util: EditorsApiClient;
     private readonly errorHandler: ErrorHandler;
     private readonly fsPageName = "FS";
     private readonly fcPageName = "FC";
-
+    private projectId: number;
+    
     constructor() {
         this.gui = new EditorsGui();
         this.errorHandler = new ErrorHandler();
@@ -62,11 +63,8 @@
     }
 
     init(projectId: number) {
-        this.editDialog = new BootstrapDialogWrapper({
-            element: $("#project-pages-dialog"),
-            autoClearInputs: false
-        });
-
+        this.projectId = projectId;
+        
         $(".panel-bottom-buttons .move-page-down").click(() => {
             this.moveList(true, $(".pages"));
         });
@@ -75,33 +73,48 @@
             this.moveList(false, $(".pages"));
         });
 
-        $(".save-pages-button").on("click",
-            () => {
-                const pages = $(".page-row").toArray();
-                const pageListArray: IUpdatePage[] = [];
-                for (let i = 0; i < pages.length; i++) {
-                    pageListArray.push({
-                        id: $(pages[i]).data("page-id"),
-                        position: i + 1,
-                        name: $(pages[i]).find(".name").text().trim()
-                    });
-                }
-                this.util.savePageList(projectId, pageListArray).done(() => {
-                    $("#unsavedChanges").addClass("hide");
-                    const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("PageListSaveSuccess","RidicsProject").value).buildElement();
-                    const alertHolder = $(".save-alert-holder");
-                    alertHolder.append(alert);
-                    alertHolder.delay(3000).fadeOut(2000);
-                }).fail((error) => {
-                    this.gui.showInfoDialog(localization.translate("Error").value,
-                        this.errorHandler.getErrorMessage(error));
-                });
-            });
-
+        $(".save-pages-button").on("click", () => {
+            this.savePages();
+        });
+        
         this.initPageRowClicks();
+        this.initGeneratePagesDialog();
+        this.initAddPageDialog();
+    }
 
+    private initAddPageDialog() {
+        const dialog =  $("#addPageDialog");
+        
+        $(".add-page-button").click((event) => {
+           dialog.modal("show");
+        });
+
+        $("#addPage").click((event) => {
+            dialog.modal("hide");
+            const listContainerEl = $(".page-listing tbody");
+            if (!listContainerEl.children().length) {
+                $("#noPagesAlert").remove();
+            }
+
+            const newPageName = String(dialog.find("input[name=\"page-name\"]").val());
+            if(newPageName !== "") {
+                const html = this.createPageRow(newPageName);
+                listContainerEl.append(html);
+
+                this.showUnsavedChangesAlert();
+                this.initPageRowClicks();
+            }            
+        });
+    }
+    
+    private initGeneratePagesDialog() {
+        this.generatePagesDialog = new BootstrapDialogWrapper({
+            element: $("#project-pages-dialog"),
+            autoClearInputs: false
+        });
+        
         $("#project-pages-edit-button").click(() => {
-            this.editDialog.show();
+            this.generatePagesDialog.show();
             this.enableCheckboxes();
             const pages = $(".page-row").toArray();
             for (let page of pages) {
@@ -127,12 +140,43 @@
             ".cancel-page-list",
             (event) => {
                 event.stopPropagation();
-                this.editDialog.hide();
-                $(".page-list-editor-content").off();
+                this.generatePagesDialog.hide();
             }
-        );
+        );        
     }
 
+    private savePages() {
+        const listing = $(".page-listing");
+        const pages = $(".page-row").toArray();
+        const pageListArray: IUpdatePage[] = [];
+        for (let i = 0; i < pages.length; i++) {
+            pageListArray.push({
+                id: $(pages[i]).data("page-id"),
+                position: i + 1,
+                name: $(pages[i]).find(".name").text().trim()
+            });
+        }
+        listing.empty().append(`<div class="loader"></div>`);
+        this.util.savePageList(this.projectId, pageListArray).done(() => {
+            $("#unsavedChanges").addClass("hide");
+            const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("PageListSaveSuccess","RidicsProject").value).buildElement();
+            const alertHolder = $(".save-alert-holder");
+            alertHolder.append(alert);
+            alertHolder.delay(3000).fadeOut(2000);
+
+            this.util.getPageListView(this.projectId).done((data) => {
+                listing.html(data);
+                this.initPageRowClicks();
+            }).fail((error) => {
+                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                listing.empty().append(alert);
+            });
+        }).fail((error) => {
+            const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+            listing.empty().append(alert);
+        });
+    }
+    
     private getSelectedFormat(): number {
         const formatString = $("#project-pages-format").find(":selected").data("format-value") as string;
         return PageListFormat[formatString] as number;
@@ -204,6 +248,13 @@
                 event.stopPropagation();
                 this.editPage($(event.currentTarget));
             });
+        
+        $(".page-row .discard-changes").off();
+        $(".page-row .discard-changes").on("click",
+            (event) => {
+                event.stopPropagation();
+                this.discardChanges($(event.currentTarget));
+            });
 
         $(".page-row").off();
         $(".page-row").on("click",
@@ -219,12 +270,16 @@
         const pageRow = editButton.parents(".page-row");
         const nameElement = pageRow.find(".name");
         const nameInput = pageRow.find("input[name=\"page-name\"]");
+        const discardButton = pageRow.find(".discard-changes");
+
         if (editButton.hasClass("fa-pencil")) {
             editButton.switchClass("fa-pencil", "fa-check");
             nameElement.addClass("hide");
             nameInput.removeClass("hide");
+            discardButton.removeClass("hide");
         } else {
             nameInput.addClass("hide");
+            discardButton.addClass("hide");
             editButton.switchClass("fa-check", "fa-pencil");
             const newName = String(nameInput.val());
             if (newName !== "" && String(nameElement.text().trim()) !== newName) {
@@ -233,6 +288,19 @@
             }
             nameElement.removeClass("hide");
         }
+    }
+
+    private discardChanges(discardButton: JQuery) {
+        const pageRow = discardButton.parents(".page-row");
+        const editButton = pageRow.find(".edit-page i.fa");
+        const nameElement = pageRow.find(".name");
+        const nameInput = pageRow.find("input[name=\"page-name\"]");
+        
+        nameInput.addClass("hide");
+        discardButton.addClass("hide");
+        editButton.switchClass("fa-check", "fa-pencil");
+        nameInput.val(nameElement.text().trim());
+        nameElement.removeClass("hide");
     }
 
     private selectPage(pageRow: JQuery) {
@@ -260,11 +328,10 @@
 
         content.empty().html("<div class=\"sub-content\"></div>");
         const subcontent = content.find(".sub-content");
-        subcontent.addClass("loader");
+        subcontent.html("<div class=\"loader\"></div>");
         pageDetail.removeClass("hide");
 
         this.util.getPageDetail(pageId).done((response) => {
-            subcontent.removeClass("loader");
             subcontent.html(response);
 
             if (content.find(".page-text").length > 0) {
@@ -282,7 +349,7 @@
             const alert = new AlertComponentBuilder(AlertType.Error)
                 .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
             alertHolder.empty().append(alert);
-            subcontent.removeClass("loader").empty();
+            subcontent.empty();
         });
     }
 
@@ -373,8 +440,8 @@
     }
 
     private startGeneration() {
-        const fromFieldValue = ($("#project-pages-generate-from").val() as string).replace(" ", "");;
-        const toFieldValue = ($("#project-pages-generate-to").val() as string).replace(" ", "");;
+        const fromFieldValue = ($("#project-pages-generate-from").val() as string).replace(" ", "");
+        const toFieldValue = ($("#project-pages-generate-to").val() as string).replace(" ", "");
         const listGenerator = PageListGeneratorFactory.createPageListGenerator(this.getSelectedFormat());
 
         if (!listGenerator.checkInputValue(fromFieldValue) || !listGenerator.checkInputValue(toFieldValue)) {
@@ -399,6 +466,8 @@
         if (listContainerEl.children().length) {
             this.gui.showInfoDialog(localization.translate("Info").value,
                 localization.translate("AddingGeneratedNames", "RidicsProject").value);
+        } else {
+            $("#noPagesAlert").remove();
         }
 
         for (let page of pageList) {
@@ -470,6 +539,7 @@
         $("#unsavedChanges").removeClass("hide");
     }
 
+    // page-row has duplicate definition in _PageTable.cshtml
     private createPageRow(name: string): string {
         return `<tr class="page-row">
                     <td class="ridics-checkbox">
@@ -490,12 +560,15 @@
                         <div class="alert alert-danger"></div>
                     </td>
                     <td class="buttons">
-                        <a class="edit-page btn btn-sm btn-default">
+                        <button type="button"  class="edit-page btn btn-sm btn-default">
                             <i class="fa fa-pencil"></i>
-                        </a>
-                        <a class="remove-page btn btn-sm btn-default">
+                        </button>
+                        <button type="button" class="discard-changes btn btn-sm btn-default hide">
+                            <i class="fa fa-times"></i>
+                        </button>
+                        <button type="button" class="remove-page btn btn-sm btn-default">
                             <i class="fa fa-trash"></i>
-                        </a>
+                        </button>
                     </td>
                 </tr>`;
     }

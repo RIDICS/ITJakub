@@ -28,6 +28,7 @@ try {
 }
 catch {
     Write-Error "Java is not installed"
+	exit 1
 }
 
 # Verify Elasticsearch is installed with required plugin
@@ -61,7 +62,7 @@ if(Test-Path $elasticSearchInstallationPath)
     }
 
     $elasticSearchPlugins = & .\bin\elasticsearch-plugin list    
-    if($elasticSearchPlugins.Contains("experimental-highlighter"))
+    if(($elasticSearchPlugins -ne $null) -and ($elasticSearchPlugins.Contains("experimental-highlighter")))
     {
         "experimental-highlighter-elasticsearch-plugin is installed"
     }

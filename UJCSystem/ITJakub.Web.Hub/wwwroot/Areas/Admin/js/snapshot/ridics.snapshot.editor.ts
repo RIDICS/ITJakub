@@ -4,6 +4,7 @@
 });
 
 class SnapshotEditor {
+    private readonly pageSize = 50; // must be greater than data-size on Bootstrap Select
     private readonly client: SnapshotApiClient;
     private readonly imageViewer: ImageViewerContentAddition;
     private readonly errorHandler: ErrorHandler;
@@ -15,7 +16,9 @@ class SnapshotEditor {
     }
 
     init() {
-        $(".selectpicker").selectpicker();
+        $(".selectpicker")
+            .attr("data-size", 15)
+            .selectpicker();
 
         $(".include-all-checkbox").click((event) => {
             const checkbox = $(event.currentTarget);
@@ -35,6 +38,10 @@ class SnapshotEditor {
             this.loadResourceVersions(selectBox);
         });
 
+        $(".select-version")
+            .data("loading", false)
+            .data("loaded", false);
+
         $(".select-version").on("change",
             (event) => {
                 const selectBox = $(event.currentTarget);
@@ -45,6 +52,17 @@ class SnapshotEditor {
                 resourceRow.find(".created").text(selectedVersion.data("created"));
                 resourceRow.find(".resource-version-id").val(selectedVersion.val());
             });
+
+        $(".select-version .dropdown-menu.inner").parent().on("scroll", event => {
+            const container = $(event.currentTarget);
+            var lasto = container.find("li:last");
+            var s = container.position().top + container.height();
+            var o = lasto.height() + lasto.position().top - 4;
+            if (o < s) {
+                const selectElement = container.parents(".select-version").find("select");
+                this.loadResourceVersionsNextPage(selectElement);
+            }
+        });
 
         $(".resource-preview").click((event) => {
             const resourceRow = $(event.currentTarget).parents(".resource-row");
@@ -164,30 +182,83 @@ class SnapshotEditor {
 
     private loadResourceVersions(selectBox: JQuery) {
         const dataLoaded = selectBox.data("loaded");
-        if (!dataLoaded) {
-            selectBox.parent(".dropdown").find(".dropdown-menu.inner")
-                .append(`<li><a><i class="fa fa-refresh fa-spin"></i></a></li>`);
-            const resourceId = selectBox.parents(".resource-row").data("id");
-            this.client.getVersionList(resourceId).done((data) => {
-                const selectedValue = Number(selectBox.val());
-                selectBox.empty();
-                for (let i = 0; i < data.length; i++) {
-                    const resource = data[i];
-                    const checked = selectedValue === resource.id;
-                    const option = new Option(resource.versionNumber, String(resource.id), checked, checked);
-                    $(option).html(resource.versionNumber);
-                    $(option).data("author", resource.author);
-                    $(option).data("comment", resource.comment);
-                    $(option).data("created", new Date(resource.createDate).toLocaleString());
-                    selectBox.append(option);
-                }
-                selectBox.selectpicker("refresh");
-                selectBox.data("loaded", true);
-            }).fail((error) => {
-                console.log(this.errorHandler.getErrorMessage(error));
-                //TODO error, where to place it? Gui.something
-            });
+        if (dataLoaded)
+            return;
+
+        const selectedVersion = Number(selectBox.find("option[selected]").text());
+
+        const dropdownContainer = this.getDropdownContainerFromSelect(selectBox);
+        dropdownContainer.append(`<li><a><i class="fa fa-refresh fa-spin"></i></a></li>`);
+        const resourceId = this.getResourceIdFromSelect(selectBox);
+
+        this.client.getVersionList(resourceId, null, selectedVersion).done((data) => {
+            const selectedValue = Number(selectBox.val());
+            selectBox.empty();
+            this.appendNewResourceVersions(selectBox, data, selectedValue);
+            selectBox.data("loaded", true);
+
+            const minLoadedItems = this.pageSize;
+            if (data.length < minLoadedItems) {
+                this.loadResourceVersionsNextPage(selectBox);
+            }
+
+        }).fail((error) => {
+            dropdownContainer.empty()
+                .append(`<li><a>${this.errorHandler.getErrorMessage(error)}</a></li>`);
+        });
+    }
+
+    private loadResourceVersionsNextPage(selectBox: JQuery) {
+        const dataLoaded = selectBox.data("loaded");
+        const isLoading = selectBox.data("loading");
+
+        if (!dataLoaded || isLoading) {
+            return;
         }
+
+        const lastLi = selectBox.find("option:last");
+        const lastLoadedVersion = Number(lastLi.text());
+
+        const dropdownContainer = this.getDropdownContainerFromSelect(selectBox);
+        dropdownContainer.append(`<li><a><i class="fa fa-refresh fa-spin"></i></a></li>`);
+        const resourceId = this.getResourceIdFromSelect(selectBox);
+
+        selectBox.data("loading", true);
+        this.client.getVersionList(resourceId, lastLoadedVersion, lastLoadedVersion - this.pageSize).done((data) => {
+            if (data.length === 0) {
+                dropdownContainer.parent().off("scroll");
+            }
+
+            this.appendNewResourceVersions(selectBox, data, null);
+            selectBox.data("loading", false);
+
+        }).fail((error) => {
+            dropdownContainer.empty()
+                .append(`<li><a>${this.errorHandler.getErrorMessage(error)}</a></li>`);
+        });
+    }
+
+    private getDropdownContainerFromSelect(selectBox: JQuery): JQuery {
+        return selectBox.parent(".dropdown").find(".dropdown-menu.inner");
+    }
+
+    private getResourceIdFromSelect(selectBox: JQuery): number {
+        return Number(selectBox.parents(".resource-row").data("id"));
+    }
+
+    private appendNewResourceVersions(selectBox: JQuery, data: IResourceVersion[], selectedValue: number) {
+        for (let i = 0; i < data.length; i++) {
+            const resource = data[i];
+            const checked = selectedValue === resource.id;
+            const option = new Option(resource.versionNumber, String(resource.id), checked, checked);
+            $(option).text(resource.versionNumber);
+            $(option).attr("data-subtext", ` (${resource.createDateString})`);
+            $(option).data("author", resource.author);
+            $(option).data("comment", resource.comment);
+            $(option).data("created", resource.createDateString);
+            selectBox.append(option);
+        }
+        selectBox.selectpicker("refresh");
     }
 
     private selectDefaultBookType(bookType: string) {

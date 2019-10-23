@@ -1,6 +1,13 @@
 ﻿namespace ITJakub.Web.Hub.Areas.Admin.Models
 {
-    public class PageDetailViewModel
+    public class PageViewModel
+    {
+        public long Id { get; set; }
+
+        public string Name { get; set; }
+    }
+    
+    public class PageContentViewModel
     {
         public long PageId { get; set; }
 

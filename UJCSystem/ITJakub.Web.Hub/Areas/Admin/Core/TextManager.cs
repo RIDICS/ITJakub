@@ -67,14 +67,14 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
             };
         }
 
-        public SaveTextResponse SaveTextFullValidate(long textId, CreateTextRequestContract request)
+        public SaveTextResponse SaveTextFullValidate(long textId, CreateTextVersionRequestContract request)
         {
             var isValid = HasOnlyValidCommentsWithValues(request.Text, textId);
 
             return !isValid ? ValidationFailResponse() : SaveWithoutValidation(textId, request);
         }
 
-        public SaveTextResponse SaveTextFullValidateAndRepair(long textId, CreateTextRequestContract request)
+        public SaveTextResponse SaveTextFullValidateAndRepair(long textId, CreateTextVersionRequestContract request)
         {
             var client = m_communicationProvider.GetMainServiceProjectClient();
             var commentContracts = client.GetCommentsForText(textId);
@@ -118,14 +118,14 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
             return SaveWithoutValidation(textId, request);
         }
 
-        public SaveTextResponse SaveTextValidateSyntax(long textId, CreateTextRequestContract request)
+        public SaveTextResponse SaveTextValidateSyntax(long textId, CreateTextVersionRequestContract request)
         {
             var isValidSyntax = HasOnlyValidCommentSyntax(request.Text);
 
             return !isValidSyntax ? ValidationFailResponse() : SaveWithoutValidation(textId, request);
         }
 
-        public SaveTextResponse SaveWithoutValidation(long textId, CreateTextRequestContract request)
+        public SaveTextResponse SaveWithoutValidation(long textId, CreateTextVersionRequestContract request)
         {
             var client = m_communicationProvider.GetMainServiceProjectClient();
             var resourceVersionId = client.CreateTextResourceVersion(textId, request);
@@ -165,9 +165,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Core
 
                 try
                 {
-                    var resourceVersionId = client.CreateTextResourceVersion(text.Id, new CreateTextRequestContract
+                    var resourceVersionId = client.CreateTextResourceVersion(text.Id, new CreateTextVersionRequestContract
                     {
-                        Id = text.Id,
                         ResourceVersionId = text.VersionId,
                         Text = newText,
                     });

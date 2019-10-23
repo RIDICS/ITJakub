@@ -32,6 +32,7 @@
     "ViewOptions": "translate[Možnosti zobrazení]",
     "AllBookmarks": "translate[Všechny záložky]",
     "NoTitle": "translate[{0}bez názvu{1}]",
+    "CancelBookFilter": "translate[Zrušit filtrování knih]",
 
     "LoadingContentError": "translate[Chyba při načítání obsahu]",
     "Pictures": "translate[Obrázky]",

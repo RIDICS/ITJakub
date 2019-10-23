@@ -5,6 +5,7 @@
     "GroupPermissionManagementTitle": "Administrace - Správa skupin",
     "GroupManagementHeadline": "Správa skupin",
     "GroupPermissionManagementHeadline": "Správa oprávnění skupin",
+    "SearchGroupLabel": "Vyhledat skupinu",
     "SearchGroup": "Hledat skupinu...",
     "SelectedGroup": "Vybraná skupina",
     "Name": "Název",
@@ -66,9 +67,14 @@
 
     "ProjectPermissionManagementHeadline": "Správa práv projektů",
     "Projects": "Projekty",
-    "AddProjectPermissionToGroup": "Přidat právo na projekt skupině",
+    "AddProjectPermissionToGroup": "Přidat skupině právo na projekt",
     "SelectedProject": "Vybraný projekt",
     "AddPermissionToGroup": "Přidat oprávnění skupině",
-    "ResetPassword": "Resetovat heslo"
+    "ResetPassword": "Resetovat heslo",
+
+    "ReadProjectPermission": "Právo číst projekt",
+    "ReadPublishedProjectPermission": "Právo číst publikovaný projekt",
+    "EditProjectPermission": "Právo editovat projekt",
+    "AdminProjectPermission": "Právo spravovat projekt"
   }
 }

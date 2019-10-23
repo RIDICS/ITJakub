@@ -15,6 +15,7 @@ namespace Vokabular.MainService.Controllers
     [Route("api/[controller]")]
     public class BookController : BaseController
     {
+        private const int DefaultCount = 200;
         private readonly BookManager m_bookManager;
         private readonly BookSearchManager m_bookSearchManager;
         private readonly BookHitSearchManager m_bookHitSearchManager;
@@ -29,15 +30,14 @@ namespace Vokabular.MainService.Controllers
             m_editionNoteManager = editionNoteManager;
         }
 
-        [Obsolete("This method will be replaced by paged variant")] // TODO replace this method with paged variant
         [HttpGet("type/{bookType}")]
         [ProducesResponseType(typeof(List<BookWithCategoriesContract>), StatusCodes.Status200OK)]
-        public IActionResult GetBooksByType(BookTypeEnumContract? bookType)
+        public IActionResult GetBooksByType(BookTypeEnumContract? bookType, int start = 0, int count = DefaultCount)
         {
             if (bookType == null)
                 return NotFound();
 
-            var result = m_bookManager.GetBooksByTypeForUser(bookType.Value);
+            var result = m_bookManager.GetBooksByTypeForUser(bookType.Value, start, count);
             return Ok(result);
         }
 

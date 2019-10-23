@@ -90,7 +90,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual IList<FavoriteProject> GetFavoriteLabeledBooks(IList<long> projectIds, BookTypeEnum? bookType, int userId)
+        public virtual IList<FavoriteProject> GetFavoriteLabeledBooks(IList<long> projectIds, BookTypeEnum? bookType,
+            ProjectTypeEnum? projectType, int userId)
         {
             FavoriteProject favoriteItemAlias = null;
             FavoriteLabel favoriteLabelAlias = null;
@@ -108,15 +109,21 @@ namespace Vokabular.DataEntities.Database.Repositories
                 restriction.Add(() => bookTypeAlias.Type == bookType.Value);
             }
 
-            return GetSession().QueryOver(() => favoriteItemAlias)
+            var query = GetSession().QueryOver(() => favoriteItemAlias)
                 .JoinAlias(() => favoriteItemAlias.FavoriteLabel, () => favoriteLabelAlias)
                 .JoinAlias(() => favoriteItemAlias.Project, () => projectAlias)
                 .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => latestSnapshotAlias)
                 .JoinAlias(() => latestSnapshotAlias.BookTypes, () => bookTypeAlias)
                 .Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
                 .Where(restriction)
-                .And(() => favoriteLabelAlias.User.Id == userId)
-                .OrderBy(() => favoriteLabelAlias.Name).Asc
+                .And(() => favoriteLabelAlias.User.Id == userId);
+
+            if (projectType != null)
+            {
+                query.And(() => projectAlias.ProjectType == projectType.Value);
+            }
+
+            return query.OrderBy(() => favoriteLabelAlias.Name).Asc
                 .OrderBy(() => favoriteItemAlias.Title).Asc
                 .TransformUsing(Transformers.DistinctRootEntity)
                 .List();
@@ -286,20 +293,26 @@ namespace Vokabular.DataEntities.Database.Repositories
             };
         }
 
-        public virtual IList<FavoriteProject> GetFavoriteBooksWithLabel(BookTypeEnum bookType, int userId)
+        public virtual IList<FavoriteProject> GetFavoriteBooksWithLabel(BookTypeEnum bookType, ProjectTypeEnum? projectType, int userId)
         {
             FavoriteLabel favoriteLabelAlias = null;
             Project projectAlias = null;
             Snapshot latestSnapshotAlias = null;
             BookType bookTypeAlias = null;
             
-            return GetSession().QueryOver<FavoriteProject>()
+            var query = GetSession().QueryOver<FavoriteProject>()
                 .JoinAlias(x => x.FavoriteLabel, () => favoriteLabelAlias)
                 .JoinAlias(x => x.Project, () => projectAlias)
                 .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => latestSnapshotAlias)
                 .JoinAlias(() => latestSnapshotAlias.BookTypes, () => bookTypeAlias)
-                .Where(() => favoriteLabelAlias.User.Id == userId && bookTypeAlias.Type == bookType)
-                .Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
+                .Where(() => favoriteLabelAlias.User.Id == userId && bookTypeAlias.Type == bookType);
+
+            if (projectType != null)
+            {
+                query.And(() => projectAlias.ProjectType == projectType.Value);
+            }
+
+            return query.Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
                 .OrderBy(x => x.Title).Asc
                 .List();
         }
