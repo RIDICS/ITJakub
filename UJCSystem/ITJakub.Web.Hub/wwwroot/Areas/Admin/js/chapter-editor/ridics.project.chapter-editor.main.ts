@@ -7,12 +7,13 @@ class ChapterEditorMain {
     private chaptersToSave: IUpdateChapter[];
     private bookPages: Array<BookPage>;
     private position = 0;
-
+    private pageDetail = $("#chaptersPageDetail")
+    
     constructor() {
         this.errorHandler = new ErrorHandler();
         this.util = new EditorsApiClient();
         this.moveEditor = new ChapterMoveEditor();
-        this.readerPagination = new ReaderPagination($("#page-detail")[0]);
+        this.readerPagination = new ReaderPagination(this.pageDetail[0]);
     }
 
     init(projectId: number) {
@@ -307,12 +308,11 @@ class ChapterEditorMain {
         chapterRow.addClass("active");
 
         const pageId = chapterRow.data("beginning-page-id");
-        const pageDetail = $("#page-detail");
-        
-        const content = pageDetail.find(".body-content");
-        const textIcon = pageDetail.find(".fa-file-text-o");
-        const imageIcon = pageDetail.find(".fa-image");
-        const alertHolder = pageDetail.find(".alert-holder");
+               
+        const content = this.pageDetail.find(".body-content");
+        const textIcon = this.pageDetail.find(".fa-file-text-o");
+        const imageIcon = this.pageDetail.find(".fa-image");
+        const alertHolder = this.pageDetail.find(".alert-holder");
         
 
         if (typeof pageId == "undefined") {
@@ -322,7 +322,7 @@ class ChapterEditorMain {
                 .addContent(localization.translate("EmptyPage", "RidicsProject").value).buildElement();
             alertHolder.empty().append(alert);
             content.empty();
-            pageDetail.removeClass("hide");
+            this.pageDetail.removeClass("hide");
             return;
         }
 
@@ -332,17 +332,16 @@ class ChapterEditorMain {
         const paginationEl = content.find(".page-navigation");
         paginationEl.append(pagination);
         this.readerPagination.moveToPage(pageId);
-        pageDetail.removeClass("hide");
+        this.pageDetail.removeClass("hide");
     }
 
     private loadPageDetail(pageId: number) {
-        const pageDetail = $("#page-detail");
-        const textIcon = pageDetail.find(".fa-file-text-o");
-        const imageIcon = pageDetail.find(".fa-image");
-        const alertHolder = pageDetail.find(".alert-holder");
+        const textIcon = this.pageDetail.find(".fa-file-text-o");
+        const imageIcon = this.pageDetail.find(".fa-image");
+        const alertHolder = this.pageDetail.find(".alert-holder");
         alertHolder.empty();
 
-        const content = pageDetail.find(".body-content");
+        const content = this.pageDetail.find(".body-content");
         const subcontent = content.find(".sub-content");
         subcontent.empty().append(`<div class="loader"></div>`);
 
