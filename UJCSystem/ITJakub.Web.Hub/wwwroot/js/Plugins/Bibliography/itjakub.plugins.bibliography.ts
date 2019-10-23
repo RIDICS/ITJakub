@@ -245,9 +245,8 @@ class BibliographyModule {
             if (bibFactory.configuration.containsBottomPanel()) {
                 $(hiddenContent).addClass("not-loaded");
 
-                var loadingDiv = document.createElement("div");
-                $(loadingDiv).addClass("loading");
-                hiddenContent.appendChild(loadingDiv);
+                var loadingDiv = lv.create(null, "lv-circles lv-mid sm lvt-2 lvb-2");
+                hiddenContent.appendChild(loadingDiv.getElement());
             }
 
             $(liElement).append(hiddenContent);
