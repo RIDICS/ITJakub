@@ -28,37 +28,37 @@
     
     checkMoveButtonsAvailability() {
         if (this.checkSameSubChapter()) {
-            if (this.checkVerticalMoving(true)) {
-                this.moveChapterUpButton.removeAttr("disabled");
+            if (this.checkVerticalMoving(ChapterVerticalMoveDirection.Up)) {
+                this.moveChapterUpButton.prop("disabled", false);
             } else {
-                this.moveChapterUpButton.attr("disabled", "disabled");
+                this.moveChapterUpButton.prop("disabled", true);
             }
 
-            if (this.checkVerticalMoving(false)) {
-                this.moveChapterDownButton.removeAttr("disabled");
+            if (this.checkVerticalMoving(ChapterVerticalMoveDirection.Down)) {
+                this.moveChapterDownButton.prop("disabled", false);
             } else {
-                this.moveChapterDownButton.attr("disabled", "disabled");
+                this.moveChapterDownButton.prop("disabled", true);
             }
         } else {
-            this.moveChapterDownButton.attr("disabled", "disabled");
-            this.moveChapterUpButton.attr("disabled", "disabled");
+            this.moveChapterDownButton.prop("disabled", true);
+            this.moveChapterUpButton.prop("disabled", true);
         }
 
         if (this.checkHierarchyMoving()) {
             if (this.checkHierarchyMovingToLeft()) {
-                this.moveChapterLeftButton.removeAttr("disabled");
+                this.moveChapterLeftButton.prop("disabled", false);
             } else {
-                this.moveChapterLeftButton.attr("disabled", "disabled");
+                this.moveChapterLeftButton.prop("disabled", true);
             }
 
             if (this.checkHierarchyMovingToRight()) {
-                this.moveChapterRightButton.removeAttr("disabled");
+                this.moveChapterRightButton.prop("disabled", false);
             } else {
-                this.moveChapterRightButton.attr("disabled", "disabled");
+                this.moveChapterRightButton.prop("disabled", true);
             }
         } else {
-            this.moveChapterLeftButton.attr("disabled", "disabled");
-            this.moveChapterRightButton.attr("disabled", "disabled");
+            this.moveChapterLeftButton.prop("disabled", true);
+            this.moveChapterRightButton.prop("disabled", true);
         }
     }
 
@@ -151,14 +151,14 @@
         return chapterContainerBefore.length > 0;
     }
     
-    private checkVerticalMoving(up: boolean): boolean {
+    private checkVerticalMoving(direction: ChapterVerticalMoveDirection): boolean {
         const selectedCheckboxes = $(".chapter-row .selection-checkbox:checked");
         if (selectedCheckboxes.length === 0)
             return true;
 
         
         let containerSelector = "div";        
-        if(up) {
+        if (direction === ChapterVerticalMoveDirection.Up) {
             containerSelector += ":first-of-type";
         }
         else {
@@ -239,4 +239,9 @@
     private showUnsavedChangesAlert() {
         $("#unsavedChanges").removeClass("hide");
     }
+}
+
+enum ChapterVerticalMoveDirection {
+    Down,
+    Up,
 }
