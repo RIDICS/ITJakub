@@ -117,9 +117,9 @@
                 var textId = $(pageRow).data("text-id") as number;
                 const textReferenceId = target.parents(".media-body").siblings(".main-comment").data("text-reference-id");
                 const parentCommentId = target.parents(".media-body").siblings(".main-comment").data("parent-comment-id") as number;
-                const id = 0; //creating comment
+                //creating comment (commentId = null)
                 if (textReferenceId !== null && typeof textReferenceId !== "undefined") {
-                    this.addCommentFromCommentArea(textReferenceId, textId, id, parentCommentId, target);
+                    this.addCommentFromCommentArea(textReferenceId, textId, null, parentCommentId, target);
                 } else {
                     console.log("Something is wrong. This comment doesn't have an id.");
                 }
@@ -169,8 +169,8 @@
                             return;
                         }
 
-                        const id = 0; //creating comment
-                        this.processCommentSendClick(textId, textReferenceId, id, null, commentText);
+                        //creating comment (commentId = null)
+                        this.processCommentSendClick(textId, textReferenceId, null, null, commentText);
                         codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
                             { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
                     }).fail(() => {
@@ -230,7 +230,7 @@
                     actionsRow.show();
                     actionsRow.siblings(".comment-body").show();
                     
-                    if (commentId === 0) {
+                    if (commentId == null) {
                         textAreaEl.parent(".media-body").parent(".media").remove();
                     }
                     else {
@@ -243,7 +243,7 @@
                         parentCommentId: parentCommentId,
                         textReferenceId: textReferenceId
                     };
-                    if (commentId === 0) {
+                    if (commentId == null) {
                         const sendAjax = this.util.createComment(textId, comment);
                         this.onCommentSendRequest(sendAjax, textAreaEl, textId);
                     } else {
