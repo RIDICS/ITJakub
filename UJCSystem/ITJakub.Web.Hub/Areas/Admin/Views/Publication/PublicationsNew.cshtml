@@ -22,7 +22,7 @@
     <div class="snapshot-layout">
         <div id="new-snapshot-container">
             <div class="col-xs-12 back-button">
-                <a asp-action="Project" asp-controller="Project" asp-route-id="@Model.ProjectId" class="btn btn-default">@Localizer.Translate("Back")</a>
+                <a asp-action="Project" asp-controller="Project" asp-route-id="@Model.ProjectId" class="btn btn-default">@Localizer.Translate("BackToProject", "RidicsProject")</a>
             </div>
             <form id="createSnapshot" asp-controller="Publication" asp-action="NewSnapshot" method="post">
                 <div asp-validation-summary="All" class="alert alert-danger"></div>
