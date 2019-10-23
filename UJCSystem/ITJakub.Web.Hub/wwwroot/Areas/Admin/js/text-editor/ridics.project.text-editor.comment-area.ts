@@ -3,12 +3,16 @@
     private readonly adminApiClient = new AdminApiClient();
     private editor: Editor;
     private defaultImage = `<div><i class="fa fa-4x fa-user media-object"></i></div>`;
-    private signedInUserFirstName: string;
-    private signedInUserLastName: string;
-    private signedInUserImage: string = null;
+    private readonly signedInUserFirstName: string;
+    private readonly signedInUserLastName: string;
+    private readonly signedInUserImage: string;
     
     constructor(util: EditorsApiClient) {
         this.util = util;
+        this.signedInUserImage = null;
+        const userInfo = $("#userInfo");
+        this.signedInUserFirstName = userInfo.data("first-name");
+        this.signedInUserLastName = userInfo.data("last-name");
     }
 
     init() {
