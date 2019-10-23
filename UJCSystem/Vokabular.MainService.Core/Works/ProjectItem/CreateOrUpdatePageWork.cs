@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
@@ -35,34 +36,47 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
                 throw new MainServiceException(MainServiceErrorCode.ProjectIdOrResourceId, "Exactly one parameter (ProjectId or ResourceId) has to be specified");
             }
 
-            var pageResource = m_resourceId != null
-                ? m_resourceRepository.GetLatestResourceVersion<PageResource>(m_resourceId.Value)
-                : new PageResource
+            var pageResource = new PageResource
+            {
+                Name = m_pageData.Name,
+                Comment = m_pageData.Comment,
+                Position = m_pageData.Position,
+                Resource = null,
+                VersionNumber = 0,
+                CreateTime = now,
+                CreatedByUser = user,
+                Terms = null, // Terms must be also updated
+            };
+
+            if (m_resourceId != null)
+            {
+                var latestPageResource = m_resourceRepository.GetLatestResourceVersion<PageResource>(m_resourceId.Value);
+                if (latestPageResource == null)
                 {
-                    VersionNumber = 0,
-                    Resource = new Resource
-                    {
-                        ContentType = ContentTypeEnum.Page,
-                        ResourceType = ResourceTypeEnum.Page,
-                        Project = m_resourceRepository.Load<Project>(m_projectId),
-                    }
+                    throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
+                }
+
+                pageResource.Resource = latestPageResource.Resource;
+                pageResource.VersionNumber = latestPageResource.VersionNumber + 1;
+                pageResource.Terms = new List<Term>(latestPageResource.Terms); // Lazy fetch
+            }
+            else
+            {
+                var resource = new Resource
+                {
+                    ContentType = ContentTypeEnum.Page,
+                    ResourceType = ResourceTypeEnum.Page,
+                    Project = m_resourceRepository.Load<Project>(m_projectId),
                 };
 
-            if (pageResource == null)
-            {
-                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
+                pageResource.Resource = resource;
+                pageResource.VersionNumber = 1;
             }
 
-            pageResource.Name = m_pageData.Name;
-            pageResource.Comment = m_pageData.Comment;
-            pageResource.Position = m_pageData.Position;
             pageResource.Resource.Name = m_pageData.Name;
             pageResource.Resource.LatestVersion = pageResource;
-            pageResource.VersionNumber++;
-            pageResource.CreateTime = now;
-            pageResource.CreatedByUser = user;
-
-            m_resourceRepository.Save(pageResource);
+            
+            m_resourceRepository.Create(pageResource);
 
             ResourceId = pageResource.Resource.Id;
             VersionId = pageResource.Id;

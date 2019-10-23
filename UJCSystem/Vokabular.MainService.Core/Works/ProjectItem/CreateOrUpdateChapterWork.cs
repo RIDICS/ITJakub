@@ -39,36 +39,47 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
                 throw new MainServiceException(MainServiceErrorCode.ProjectIdOrResourceId, "Exactly one parameter (ProjectId or ResourceId) has to be specified");
             }
 
-            var chapterResource = m_resourceId != null
-                ? m_resourceRepository.GetLatestResourceVersion<ChapterResource>(m_resourceId.Value)
-                : new ChapterResource
+            var chapterResource = new ChapterResource
+            {
+                Name = m_chapterData.Name,
+                Comment = m_chapterData.Comment,
+                Position = m_chapterData.Position,
+                ParentResource = resourceParentChapter,
+                ResourceBeginningPage = resourceBeginningPage,
+                Resource = null,
+                VersionNumber = 0,
+                CreateTime = now,
+                CreatedByUser = user,
+            };
+
+            if (m_resourceId != null)
+            {
+                var latestChapterResource = m_resourceRepository.GetLatestResourceVersion<ChapterResource>(m_resourceId.Value);
+                if (latestChapterResource == null)
                 {
-                    VersionNumber = 0,
-                    Resource = new Resource
-                    {
-                        ContentType = ContentTypeEnum.Chapter,
-                        ResourceType = ResourceTypeEnum.Chapter,
-                        Project = m_resourceRepository.Load<Project>(m_projectId),
-                    }
+                    throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
+                }
+
+                chapterResource.Resource = latestChapterResource.Resource;
+                chapterResource.VersionNumber = latestChapterResource.VersionNumber + 1;
+            }
+            else
+            {
+                var resource = new Resource
+                {
+                    ContentType = ContentTypeEnum.Chapter,
+                    ResourceType = ResourceTypeEnum.Chapter,
+                    Project = m_resourceRepository.Load<Project>(m_projectId),
                 };
 
-            if (chapterResource == null)
-            {
-                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
+                chapterResource.Resource = resource;
+                chapterResource.VersionNumber = 1;
             }
 
-            chapterResource.Name = m_chapterData.Name;
-            chapterResource.Comment = m_chapterData.Comment;
-            chapterResource.Position = m_chapterData.Position;
-            chapterResource.ParentResource = resourceParentChapter;
-            chapterResource.ResourceBeginningPage = resourceBeginningPage;
             chapterResource.Resource.Name = m_chapterData.Name;
             chapterResource.Resource.LatestVersion = chapterResource;
-            chapterResource.VersionNumber++;
-            chapterResource.CreateTime = now;
-            chapterResource.CreatedByUser = user;
 
-            m_resourceRepository.Save(chapterResource);
+            m_resourceRepository.Create(chapterResource);
 
             ResourceId = chapterResource.Resource.Id;
             VersionId = chapterResource.Id;
