@@ -13,6 +13,7 @@
             {
                 foreach (var pageItem in Model)
                 {
+                    @*page-row has duplicate definition in PageListEditorMain.createPageRow() (file: ridics.project.page-list-editor.main.ts)*@
                     <tr class="page-row" data-page-id="@pageItem.Id" data-position="@pageItem.Position">
                         <td class="ridics-checkbox">
                             <label>
@@ -32,7 +33,7 @@
                             <div class="alert alert-danger"></div>
                         </td>
                         <td class="buttons">
-                            <button type="button"  class="edit-page btn btn-sm btn-default" title="@Localizer.Translate("EditPageName", "RidicsProject")">
+                            <button type="button" class="edit-page btn btn-sm btn-default" title="@Localizer.Translate("EditPageName", "RidicsProject")">
                                 <i class="fa fa-pencil"></i>
                             </button>
                             <button type="button" class="discard-changes btn btn-sm btn-default hide" title="@Localizer.Translate("DiscardChanges", "RidicsProject")">

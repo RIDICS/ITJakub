@@ -149,8 +149,8 @@ namespace Vokabular.MainService.Core.Managers
             var user = m_authenticationManager.GetCurrentUser();
             if (user != null)
             {
-                var permission = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionForSnapshotByUserId(snapshotId, user.Id));
-                if (permission == null || !permission.Flags.HasFlag(PermissionFlag.ShowPublished))
+                var permissions = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionsForSnapshotByUserId(snapshotId, user.Id));
+                if (permissions == null || !permissions.Any(x => x.Flags.HasFlag(PermissionFlag.ShowPublished)))
                 {
                     throw new MainServiceException(
                         MainServiceErrorCode.UserBookAccessForbidden,

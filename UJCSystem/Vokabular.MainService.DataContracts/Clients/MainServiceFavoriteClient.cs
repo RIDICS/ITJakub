@@ -2,6 +2,7 @@
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
@@ -198,7 +199,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<FavoriteBookGroupedContract> GetFavoriteLabeledBooks(IList<long> projectIds, BookTypeEnumContract? bookType)
+        public List<FavoriteBookGroupedContract> GetFavoriteLabeledBooks(IList<long> projectIds, BookTypeEnumContract? bookType, ProjectTypeContract? projectType)
         {
             try
             {
@@ -235,12 +236,15 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType)
+        public List<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType, ProjectTypeContract? projectType)
         {
             try
             {
-                var result = m_client.Get<List<FavoriteLabelWithBooksAndCategories>>(
-                    $"favorite/label/with-books-and-categories?bookType={bookType.ToString()}");
+                var url = UrlQueryBuilder.Create("favorite/label/with-books-and-categories")
+                    .AddParameter("bookType", bookType)
+                    .AddParameter("projectType", projectType)
+                    .ToResult();
+                var result = m_client.Get<List<FavoriteLabelWithBooksAndCategories>>(url);
                 return result;
             }
             catch (HttpRequestException e)

@@ -491,11 +491,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
         
-        public long CreateTextResource(long pageId)
+        public long CreateTextResource(long pageId, CreateTextRequestContract request)
         {
             try
             {
-                var result = m_client.Post<long>($"project/page/{pageId}/text", null);
+                var result = m_client.Post<long>($"project/page/{pageId}/text", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -507,7 +507,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long CreateTextResourceVersion(long textId, CreateTextRequestContract request)
+        public long CreateTextResourceVersion(long textId, CreateTextVersionRequestContract request)
         {
             try
             {

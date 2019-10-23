@@ -273,11 +273,10 @@
         const id = compositionArea.data("id");
         const versionId = compositionArea.data("version-id");
         const request: ICreateTextVersion = {
-            id: id,
             text: contents,
             resourceVersionId: versionId
         };
-        const ajax = this.apiClient.savePlainText(textId, request, mode);
+        const ajax = this.apiClient.savePlainText(id, request, mode);
         ajax.done((response) => {
             if (response.isValidationSuccess) {
                 this.originalContent = contents;

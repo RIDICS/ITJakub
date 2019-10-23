@@ -373,12 +373,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        [Obsolete("This method will be replaced by paged variant")]
-        public List<BookWithCategoriesContract> GetBooksByType(BookTypeEnumContract bookTypeEnum)
+        public List<BookWithCategoriesContract> GetBooksByType(BookTypeEnumContract bookTypeEnum, int start, int count)
         {
             try
             {
-                var result = m_client.Get<List<BookWithCategoriesContract>>($"book/type/{bookTypeEnum}");
+                var result = m_client.Get<List<BookWithCategoriesContract>>($"book/type/{bookTypeEnum}?start={start}&count={count}");
                 return result;
             }
             catch (HttpRequestException e)

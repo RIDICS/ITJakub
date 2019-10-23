@@ -36,9 +36,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPost("page/{pageId}/text")]
-        public long CreateTextResource(long pageId)
+        public long CreateTextResource(long pageId, [FromBody] CreateTextRequestContract request)
         {
-            var resultResourceId = m_projectContentManager.CreateTextResourceOnPage(pageId);
+            var resultResourceId = m_projectContentManager.CreateTextResourceOnPage(pageId, request);
             return resultResourceId;
         }
 
@@ -64,9 +64,9 @@ namespace Vokabular.MainService.Controllers
 
         [HttpPost("text/{textId}")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult CreateNewTextResourceVersion([FromBody] CreateTextRequestContract request)
+        public IActionResult CreateNewTextResourceVersion(long textId, [FromBody] CreateTextVersionRequestContract request)
         {
-            var result = m_projectContentManager.CreateNewTextResourceVersion(request);
+            var result = m_projectContentManager.CreateNewTextResourceVersion(textId, request);
             return Ok(result);
         }
 
