@@ -265,8 +265,8 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                 TextType = textType
             };
         }
-
-        public override IList<ChapterResource> GetProjectLatestChapters(long projectId)
+        
+        public override IList<ChapterResource> GetProjectLatestChapters(long projectId, bool fetchBeginningPage = false)
         {
             return new List<ChapterResource>
             {
