@@ -170,13 +170,16 @@ class RoleManager {
         alert.hide();
         const specialPermissionId = permissionRow.data("permission-id");
         const roleId = $(".role-row.active").data("role-id");
-        const spinnerContainer = permissionRow.children(".status");
+        const spinnerContainer = permissionRow.find(".hidden-xs");
+        const hiddenSpinnerContainer = permissionRow.find("td").find(".visible-xs");
+        const spinner = lv.create(null, "lv-circles tiniest lv-right");
+        const spinnerWrapped = lv.create(null, "lv-circles tiniest lv-left");
 
-        const spinner = lv.create(null, "lv-circles lv-right tiny");
         if (spinnerContainer.children(".lv-circles").length === 0) {
             spinnerContainer.append(spinner.getElement());
+            hiddenSpinnerContainer.append(spinnerWrapped.getElement());
         }
-        
+
         const successLabel = permissionRow.find(".success");
         successLabel.hide();
 
@@ -200,6 +203,7 @@ class RoleManager {
         }).always(() => {
             setTimeout(() => {
                 spinner.remove();
+                spinnerWrapped.remove();
             }, this.delayForShowResponse);
         });
     }
