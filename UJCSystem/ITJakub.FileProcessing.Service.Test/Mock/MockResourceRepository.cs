@@ -170,7 +170,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             };
         }
 
-        public IList<TextResource> GetProjectLatestTexts(long projectId, long? namedResourceGroupId, bool fetchParentPage)
+        public override IList<TextResource> GetProjectLatestTexts(long projectId, long? namedResourceGroupId, bool fetchParentPage)
         {
             return new List<TextResource>
             {
