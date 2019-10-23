@@ -39,9 +39,21 @@ namespace Vokabular.MainService.Core.Managers.Authentication
                 : m_userRepository.GetDefaultGroupOrCreate(Unregistered, GetUnregisteredRoleExternalId);
         }
 
+        public UserGroup GetDefaultRegisteredUserGroup()
+        {
+            return m_userRepository.UnitOfWork.CurrentSession == null
+                ? m_userRepository.InvokeUnitOfWork(x => x.GetDefaultGroupOrCreate(RegisteredUser, GetRegisteredUserRoleExternalId))
+                : m_userRepository.GetDefaultGroupOrCreate(RegisteredUser, GetRegisteredUserRoleExternalId);
+        }
+
         private int GetUnregisteredRoleExternalId()
         {
             return GetDefaultUnregisteredRole().Id;
+        }
+
+        private int GetRegisteredUserRoleExternalId()
+        {
+            return GetDefaultRegisteredRole().Id;
         }
 
         public IList<Claim> GetDefaultUserPermissions()

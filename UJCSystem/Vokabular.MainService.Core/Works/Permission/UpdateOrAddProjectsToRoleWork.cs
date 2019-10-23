@@ -43,16 +43,21 @@ namespace Vokabular.MainService.Core.Works.Permission
             foreach (var bookId in allBookIds)
             {
                 var dbPermission = m_permissionRepository.FindPermissionByBookAndGroup(bookId, group.Id);
-                if (dbPermission != null)
-                    continue; // Permission already exists
-
-                var book = m_permissionRepository.Load<Project>(bookId);
-                permissionsList.Add(new DataEntities.Database.Entities.Permission
+                if (dbPermission != null) // Permission already exists
                 {
-                    Project = book,
-                    UserGroup = group,
-                    Flags = m_permissionFlags,
-                });
+                    dbPermission.Flags = m_permissionFlags;
+                    m_permissionRepository.Update(dbPermission);
+                }
+                else
+                {
+                    var book = m_permissionRepository.Load<Project>(bookId);
+                    permissionsList.Add(new DataEntities.Database.Entities.Permission
+                    {
+                        Project = book,
+                        UserGroup = group,
+                        Flags = m_permissionFlags,
+                    });
+                }
             }
 
             foreach (var permission in permissionsList)

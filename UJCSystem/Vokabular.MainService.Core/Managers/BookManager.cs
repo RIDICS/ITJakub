@@ -55,14 +55,14 @@ namespace Vokabular.MainService.Core.Managers
             m_filterBookType = new[] {BookTypeEnum.CardFile};
         }
 
-        [Obsolete]
-        public List<BookWithCategoriesContract> GetBooksByTypeForUser(BookTypeEnumContract bookType)
+        public List<BookWithCategoriesContract> GetBooksByTypeForUser(BookTypeEnumContract bookType, int start, int count)
         {
+            count = PagingHelper.GetCount(count);
             var projectType = m_portalTypeProvider.GetDefaultProjectType();
             var projectTypeEnum = m_mapper.Map<ProjectTypeEnum>(projectType);
             var bookTypeEnum = m_mapper.Map<BookTypeEnum>(bookType);
             var user = m_authenticationManager.GetCurrentUser(true);
-            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum, user.Id, projectTypeEnum));
+            var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookTypeWithCategories(bookTypeEnum, user.Id, projectTypeEnum, start, count));
             var resultList = m_mapper.Map<List<BookWithCategoriesContract>>(dbMetadataList);
             return resultList;
         }

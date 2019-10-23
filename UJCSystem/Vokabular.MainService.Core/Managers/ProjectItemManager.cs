@@ -77,10 +77,10 @@ namespace Vokabular.MainService.Core.Managers
             new SetPageTermsWork(m_resourceRepository, pageId, termIdList).Execute();
         }
 
-        public List<ChapterHierarchyContract> GetChapterList(long projectId)
+        public List<ChapterHierarchyDetailContract> GetChapterList(long projectId)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestChapters(projectId));
-            var result = ChaptersHelper.ChapterToHierarchyContracts(dbResult, m_mapper);
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestChapters(projectId, true));
+            var result = ChaptersHelper.ChapterToHierarchyDetailContracts(dbResult, m_mapper);
             return result;
         }
 
@@ -104,6 +104,12 @@ namespace Vokabular.MainService.Core.Managers
         {
             var userId = m_authenticationManager.GetCurrentUserId();
             new CreateOrUpdateChapterWork(m_resourceRepository, chapterData, null, chapterId, userId).Execute();
+        }
+
+        public void UpdateChapters(long projectId, IList<CreateOrUpdateChapterContract> chapterData)
+        {
+            var userId = m_authenticationManager.GetCurrentUserId();
+            new CreateOrUpdateChaptersWork(m_resourceRepository, chapterData, projectId, userId).Execute();
         }
 
         public List<TrackContract> GetTrackList(long projectId)

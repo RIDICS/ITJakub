@@ -188,6 +188,20 @@ namespace Vokabular.DataEntities.Database.Repositories
                     .SingleOrDefault<Permission>();
         }
 
+        public virtual Permission FindPermissionByBookAndGroupExternalId(long projectId, int externalId)
+        {
+            UserGroup groupAlias = null;
+
+            return
+                GetSession().QueryOver<Permission>()
+                    .JoinAlias(x => x.UserGroup, () => groupAlias)
+                    .Where(
+                        permission =>
+                            permission.Project.Id == projectId &&
+                            groupAlias.ExternalId == externalId)
+                    .SingleOrDefault<Permission>();
+        }
+
         public virtual ListWithTotalCountResult<UserGroup> FindGroupsByBook(long bookId, int start, int count, string filterByName)
         {
             Project projectAlias = null;
@@ -218,7 +232,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             };
         }
 
-        public virtual Permission FindPermissionForSnapshotByUserId(long snapshotId, int userId)
+        public virtual IList<Permission> FindPermissionsForSnapshotByUserId(long snapshotId, int userId)
         {
             UserGroup userGroupAlias = null;
             User userAlias = null;
@@ -231,7 +245,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Project, () => projectAlias)
                 .JoinAlias(() => projectAlias.Snapshots, () => snapshotAlias)
                 .Where(() => snapshotAlias.Id == snapshotId && userAlias.Id == userId)
-                .SingleOrDefault();
+                .List();
         }
 
         public virtual Permission FindPermissionForSnapshotByGroupId(long snapshotId, int userGroupId)

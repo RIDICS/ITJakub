@@ -36,6 +36,15 @@ interface IUserDetail extends IUser {
     createTime: string;
 }
 
+interface IAddProjectToRoleRequest {
+    bookId: number;
+    roleId: number;
+    showPublished: boolean;
+    readProject: boolean;
+    adminProject: boolean;
+    editProject: boolean;
+}
+
 interface INewsSyndicationItemContract {
     id: number;
     title: string;
@@ -111,6 +120,7 @@ interface IResourceVersion {
     versionNumber: string;
     author: string;
     createDate: string;
+    createDateString: string;
     comment: string;
 }
 
@@ -152,6 +162,15 @@ interface IUpdatePage {
     id?: number;
     name: string;
     position: number;
+}
+
+interface IUpdateChapter {
+    id?: number;
+    parentChapterId?: number;
+    beginningPageId: number;
+    name: string;
+    position: number;
+    comment: string;
 }
 
 interface IPageWithContext extends IPage {
@@ -453,7 +472,6 @@ interface ITextWithPage {
 
 interface ICreateTextVersion {
     text: string;
-    id: number;
     resourceVersionId: number;
 }
 

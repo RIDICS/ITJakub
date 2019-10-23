@@ -21,6 +21,10 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
 
             CreateMap<ChapterResource, ChapterHierarchyContract>()
                 .IncludeBase<ChapterResource, ChapterContractBase>();
+
+            CreateMap<ChapterResource, ChapterHierarchyDetailContract>()
+                .IncludeBase<ChapterResource, ChapterContractBase>()
+                .ForMember(dest => dest.BeginningPage, opt => opt.MapFrom(src => (PageResource)src.ResourceBeginningPage.LatestVersion));
         }
     }
 }

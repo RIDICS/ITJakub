@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -8,25 +7,22 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using IdentityModel.OidcClient;
-using ITJakub.BatchImport.Client.ServiceClient;
 using Microsoft.Net.Http.Server;
+using Vokabular.AppAuthentication.Shared.ServiceClient;
 using Vokabular.MainService.DataContracts;
 
-namespace ITJakub.BatchImport.Client.BusinessLogic
+namespace Vokabular.AppAuthentication.Shared
 {
     public class AuthenticationManager
     {
         private readonly MainServiceAuthTokenProvider m_authTokenProvider;
-        private const string OidcUrl = "OIDCUrl";
-        private const string OidcClientId = "OIDCClientId";
-        private const string OidcClientSecret = "OIDCClientSecret";
 
         public AuthenticationManager(IMainServiceAuthTokenProvider authTokenProvider)
         {
-            m_authTokenProvider = (MainServiceAuthTokenProvider) authTokenProvider;
+            m_authTokenProvider = (MainServiceAuthTokenProvider)authTokenProvider;
         }
 
-        public async Task SignInAsync()
+        public async Task SignInAsync(AuthenticationOptions authOptions)
         {
             // create a redirect URI using an available port on the loopback address.
             var redirectUri = "http://127.0.0.1:7890/";
@@ -40,9 +36,9 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
 
                 var options = new OidcClientOptions
                 {
-                    Authority = ConfigurationManager.AppSettings[OidcUrl],
-                    ClientId = ConfigurationManager.AppSettings[OidcClientId],
-                    ClientSecret = ConfigurationManager.AppSettings[OidcClientSecret],
+                    Authority = authOptions.Url,
+                    ClientId = authOptions.ClientId,
+                    ClientSecret = authOptions.ClientSecret,
                     RedirectUri = redirectUri,
                     Scope = "openid profile auth_api.Internal",
                     FilterClaims = true,
@@ -71,6 +67,7 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
                 {
                     throw new AuthenticationException(result.Error);
                 }
+
                 m_authTokenProvider.AuthToken = result.AccessToken;
             }
         }

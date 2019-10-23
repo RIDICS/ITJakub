@@ -170,6 +170,7 @@ gulp.task("bundle:itjakub_plugins", function () {
             paths.webroot + "js/Plugins/itjakub.modul.inicializator.js",
             paths.webroot + "js/Plugins/itjakub.list.modul.inicializator.js",
             paths.webroot + "js/Plugins/itjakub.search.modul.inicializator.js",
+            paths.webroot + "js/Plugins/Reader/itjakub.plugins.reader-pagination.js",
             paths.webroot + "js/Plugins/Reader/itjakub.plugins.reader.js",
             paths.webroot + "js/Plugins/Bibliography/itjakub.plugins.bibliography.variableInterpreter.js",
             paths.webroot + "js/Plugins/Bibliography/itjakub.plugins.bibliography.factories.js",
@@ -445,6 +446,18 @@ gulp.task("bundle:ridics_admin-snapshot-editor", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js/snapshot"));
 });
 
+gulp.task("bundle:ridics_admin-chapter-editor", function () {
+    return gulp.src([
+        paths.webroot + "Areas/Admin/js/chapter-editor/ridics.project.*.js",
+        "!" + paths.webroot + "Areas/Admin/js/chapter-editor/ridics.project.chapter-editor.bundle.js",
+        ])
+        .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(concat("ridics.project.chapter-editor.bundle.js"))
+        //.pipe(uglify())
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest(paths.webroot + "Areas/Admin/js/chapter-editor"));
+});
+
 gulp.task("bundlejs_areas", gulp.parallel
 (
     "bundle:itjakub_audiobooks",
@@ -462,7 +475,8 @@ gulp.task("bundlejs_areas", gulp.parallel
     "bundle:ridics_admin_page-image-viewer",
     "bundle:ridics_admin_page-list-editor",
     "bundle:ridics_admin_composition-key-table-editor",
-    "bundle:ridics_admin-snapshot-editor"
+    "bundle:ridics_admin-snapshot-editor",
+    "bundle:ridics_admin-chapter-editor"
 ));
 
 gulp.task("build_bundle:ts", gulp.series("build:ts", gulp.parallel("bundlejs", "bundlejs_areas")));

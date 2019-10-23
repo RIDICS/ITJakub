@@ -38,12 +38,20 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual IList<ResourceVersion> GetResourceVersionHistory(long resourceId)
+        public virtual IList<ResourceVersion> GetResourceVersionHistory(long resourceId, int? higherVersion, int lowerVersion)
         {
-            return GetSession().QueryOver<ResourceVersion>()
+            var query = GetSession().QueryOver<ResourceVersion>()
                 .Where(x => x.Resource.Id == resourceId)
                 .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
+                .Where(x => x.VersionNumber >= lowerVersion);
+
+            if (higherVersion != null)
+            {
+                query.And(x => x.VersionNumber < higherVersion.Value);
+            }
+
+            return query
                 .OrderBy(x => x.VersionNumber).Desc
                 .List();
         }
@@ -133,17 +141,29 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public virtual IList<ChapterResource> GetProjectLatestChapters(long projectId)
+        public virtual IList<ChapterResource> GetProjectLatestChapters(long projectId, bool fetchBeginningPage = false)
         {
             Resource resourceAlias = null;
 
-            return GetSession().QueryOver<ChapterResource>()
+            var result = GetSession().QueryOver<ChapterResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(() => resourceAlias.Project.Id == projectId)
                 .And(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
                 .Fetch(SelectMode.Fetch, x => x.Resource)
                 .OrderBy(x => x.Position).Asc
                 .List();
+
+            if (fetchBeginningPage)
+            {
+                GetSession().QueryOver<PageResource>()
+                    .JoinAlias(x => x.Resource, () => resourceAlias)
+                    .WhereRestrictionOn(x => x.Resource.Id).IsInG(result.Select(x => x.ResourceBeginningPage.Id))
+                    .And(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
+                    .Fetch(SelectMode.Fetch, x => x.Resource)
+                    .List();
+            }
+
+            return result;
         }
 
         public virtual IList<Term> GetLatestPageTermList(long resourcePageId)

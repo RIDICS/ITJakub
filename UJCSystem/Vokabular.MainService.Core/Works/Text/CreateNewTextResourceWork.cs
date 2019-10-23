@@ -12,13 +12,16 @@ namespace Vokabular.MainService.Core.Works.Text
     public class CreateNewTextResourceWork : UnitOfWorkBase<long>
     {
         private readonly ResourceRepository m_resourceRepository;
-        private readonly CreateTextRequestContract m_newTextContract;
+        private readonly long m_textId;
+        private readonly CreateTextVersionRequestContract m_newTextContract;
         private readonly int m_userId;
         private readonly IFulltextStorage m_fulltextStorage;
 
-        public CreateNewTextResourceWork(ResourceRepository resourceRepository, CreateTextRequestContract newTextContract, int userId, IFulltextStorage fulltextStorage) : base(resourceRepository)
+        public CreateNewTextResourceWork(ResourceRepository resourceRepository, long textId,
+            CreateTextVersionRequestContract newTextContract, int userId, IFulltextStorage fulltextStorage) : base(resourceRepository)
         {
             m_resourceRepository = resourceRepository;
+            m_textId = textId;
             m_newTextContract = newTextContract;
             m_userId = userId;
             m_fulltextStorage = fulltextStorage;
@@ -27,11 +30,11 @@ namespace Vokabular.MainService.Core.Works.Text
         protected override long ExecuteWorkImplementation()
         {
             var timeNow = DateTime.UtcNow;
-            var latestVersion = m_resourceRepository.GetTextResource(m_newTextContract.Id);
+            var latestVersion = m_resourceRepository.GetTextResource(m_textId);
 
             if (latestVersion == null)
             {
-                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, $"TextResource with ResourceId={m_newTextContract.Id} was not found");
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, $"TextResource with ResourceId={m_textId} was not found");
             }
 
             if (latestVersion.Id != m_newTextContract.ResourceVersionId)
