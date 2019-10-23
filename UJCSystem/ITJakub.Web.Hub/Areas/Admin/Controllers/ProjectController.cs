@@ -129,6 +129,15 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     workCategorizationViewModel.AllLiteraryGenreList = literaryGenres;
                     workCategorizationViewModel.AllCategoryList = categories;
                     return PartialView("Work/_Categorization", workCategorizationViewModel);
+                case ProjectModuleTabType.WorkChapters:
+                    var chapterList = projectClient.GetChapterList(projectId.Value);
+                    var pageList = projectClient.GetAllPageList(projectId.Value);
+                    var chapterEditorViewModel = new ChapterEditorViewModel
+                    {
+                        Chapters = Mapper.Map<List<ChapterHierarchyViewModel>>(chapterList),
+                        Pages = Mapper.Map<List<PageViewModel>>(pageList)
+                    };
+                    return PartialView("Work/_ChapterEditor", chapterEditorViewModel);
                 case ProjectModuleTabType.WorkHistory:
                     return PartialView("Work/_History");
                 case ProjectModuleTabType.WorkNote:
@@ -164,6 +173,20 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return PartialView("Work/Subview/_PageTable", pages);
         }
 
+        public IActionResult ChapterList(long projectId)
+        {
+            var projectClient = GetProjectClient();
+            var chapterList = projectClient.GetChapterList(projectId);
+            var pageList = projectClient.GetAllPageList(projectId);
+            var chapterEditorViewModel = new ChapterEditorViewModel
+            {
+                Chapters = Mapper.Map<List<ChapterHierarchyViewModel>>(chapterList),
+                Pages = Mapper.Map<List<PageViewModel>>(pageList)
+            };
+            
+            return PartialView("Work/SubView/_ChapterTable", chapterEditorViewModel);
+        }
+        
         public IActionResult SnapshotList(long projectId, string search, int start, int count = SnapshotListPageSize)
         {
             var client = GetProjectClient();

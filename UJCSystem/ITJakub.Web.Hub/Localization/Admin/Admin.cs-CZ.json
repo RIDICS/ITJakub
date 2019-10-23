@@ -63,6 +63,15 @@
     "DiscussionPosts": "Příspěvky v diskuzi",
     "Snapshots": "Publikace",
     "ResourcesHistory": "Změny zdrojů",
+    "Chapters": "Kapitoly",
+
+    "CreateChapter": "Vytvořit kapitolu",
+    "GenerateChapters": "Generovat kapitoly",
+    "GenerateChaptersWarning": "Generování kapitol odstraní všechny stávájící kapitoly. Chcete spustit generování?",
+    "ChapterName": "Název kapitoly",
+    "NewChapter": "Nová kapitola",
+    "StartsOnPage": "Začíná na stránce",
+    "NoChapters": "Projekt neobsahuje kapitoly.",
 
     "CommonInformation": "Obecné informace",
     "ProjectName": "Název díla",

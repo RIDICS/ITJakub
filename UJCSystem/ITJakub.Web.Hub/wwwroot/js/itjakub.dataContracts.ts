@@ -164,6 +164,15 @@ interface IUpdatePage {
     position: number;
 }
 
+interface IUpdateChapter {
+    id?: number;
+    parentChapterId?: number;
+    beginningPageId: number;
+    name: string;
+    position: number;
+    comment: string;
+}
+
 interface IPageWithContext extends IPage {
     contextStructure: IKwicStructure;
 }

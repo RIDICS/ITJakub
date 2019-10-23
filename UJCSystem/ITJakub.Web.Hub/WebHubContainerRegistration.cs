@@ -49,6 +49,8 @@ namespace ITJakub.Web.Hub
             services.AddSingleton<Profile, LiteraryKindProfile>();
             services.AddSingleton<Profile, LiteraryOriginalProfile>();
             services.AddSingleton<Profile, CategoryProfile>();
+            services.AddSingleton<Profile, ChapterProfile>();
+            services.AddSingleton<Profile, PageProfile>();
             services.AddSingleton<Profile, ProjectProfile>();
             services.AddSingleton<Profile, ResourceProfile>();
             services.AddSingleton<Profile, ResponsibleTypeProfile>();

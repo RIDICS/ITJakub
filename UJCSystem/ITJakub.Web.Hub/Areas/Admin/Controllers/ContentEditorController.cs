@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using ITJakub.Web.Hub.Areas.Admin.Core;
 using ITJakub.Web.Hub.Areas.Admin.Models;
@@ -154,7 +155,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     return NotFound();
                 }
 
-                result.ImageUrl = Url.Action("GetPageImage", "ContentEditor", new {Area = "Admin", pageId = pageId});
+                result.ImageUrl = Url.Action("GetPageImage", "ContentEditor", new {Area = "Admin", pageId});
                 return Json(result);
             }
             catch (HttpErrorCodeException e)
@@ -170,7 +171,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult GetPageDetail(long pageId)
         {
             var client = GetProjectClient();
-            var model = new PageDetailViewModel();
+            var model = new PageContentViewModel();
             try
             {
                 model.Text = client.GetPageText(pageId, TextFormatEnumContract.Html);
@@ -209,6 +210,33 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var client = GetProjectClient();
             client.SetAllPageList(projectId, pageList);
             return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult GenerateChapters(long projectId)
+        {
+            var client = GetProjectClient();
+            client.GenerateChapters(projectId);
+            return AjaxOkResponse();
+        }
+        
+        [RequestFormLimits(ValueLengthLimit = 32768, KeyLengthLimit = 32768, ValueCountLimit = 32768 * 32768)]
+        [HttpPost]
+        public IActionResult UpdateChapterList([FromBody] UpdateChapterListRequest request)
+        {
+            var client = GetProjectClient();
+            var chapters = request.ChapterList.Select(chapter => new CreateOrUpdateChapterContract
+                {
+                    Id = chapter.Id,
+                    BeginningPageId = chapter.BeginningPageId,
+                    Comment = chapter.Comment,
+                    Name = chapter.Name,
+                    ParentChapterId = chapter.ParentChapterId,
+                    Position = chapter.Position
+                })
+                .ToList();
+            client.UpdateChapterList(request.ProjectId, chapters);
+            return AjaxOkResponse();
         }
 
         [HttpPost]

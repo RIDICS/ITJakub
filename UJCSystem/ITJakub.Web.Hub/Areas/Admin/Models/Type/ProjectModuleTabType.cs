@@ -9,6 +9,7 @@
         WorkHistory = 4,
         WorkNote = 5,
         WorkCategorization = 6,
+        WorkChapters = 7,
         ResourceDiscussion = 102,
         ResourceMetadata = 103,
         Forum = 200,

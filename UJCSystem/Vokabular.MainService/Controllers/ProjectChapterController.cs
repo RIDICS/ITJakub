@@ -16,7 +16,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{projectId}/chapter")]
-        public List<ChapterHierarchyContract> GetChapterList(long projectId)
+        public IList<ChapterHierarchyDetailContract> GetChapterList(long projectId)
         {
             var result = m_projectItemManager.GetChapterList(projectId);
             return result;
@@ -40,6 +40,13 @@ namespace Vokabular.MainService.Controllers
         public IActionResult UpdateChapterResource(long chapterId, [FromBody] CreateChapterContract chapterData)
         {
             m_projectItemManager.UpdateChapterResource(chapterId, chapterData);
+            return Ok();
+        }
+
+        [HttpPut("{projectId}/chapter")]
+        public IActionResult UpdateChapterList(long projectId, [FromBody] IList<CreateOrUpdateChapterContract> chapterData)
+        {
+            m_projectItemManager.UpdateChapters(projectId, chapterData);
             return Ok();
         }
 

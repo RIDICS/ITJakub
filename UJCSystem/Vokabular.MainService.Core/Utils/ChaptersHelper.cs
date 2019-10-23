@@ -31,5 +31,31 @@ namespace Vokabular.MainService.Core.Utils
 
             return resultList;
         }
+        
+        public static List<ChapterHierarchyDetailContract> ChapterToHierarchyDetailContracts(IList<ChapterResource> dbResult, IMapper mapper)
+        {
+            var resultList = new List<ChapterHierarchyDetailContract>(dbResult.Count);
+            var chaptersDictionary = new Dictionary<long, ChapterHierarchyDetailContract>();
+
+            foreach (var chapterResource in dbResult)
+            {
+                var resultChapter = mapper.Map<ChapterHierarchyDetailContract>(chapterResource);
+                resultChapter.SubChapters = new List<ChapterHierarchyDetailContract>();    
+                
+                chaptersDictionary.Add(resultChapter.Id, resultChapter);
+
+                if (chapterResource.ParentResource == null)
+                {
+                    resultList.Add(resultChapter);
+                }
+                else
+                {
+                    var parentChapter = chaptersDictionary[chapterResource.ParentResource.Id];
+                    parentChapter.SubChapters.Add(resultChapter);
+                }
+            }
+
+            return resultList;
+        }
     }
 }

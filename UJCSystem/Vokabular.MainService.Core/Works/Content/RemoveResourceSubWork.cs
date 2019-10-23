@@ -29,6 +29,9 @@ namespace Vokabular.MainService.Core.Works.Content
 
                 var imageResourceVersion = m_resourceRepository.GetLatestPageImage(resourceId);
                 TryRemoveResource(imageResourceVersion);
+
+                var chapterResourcesVersion = m_resourceRepository.GetLatestChaptersByPages(new[] {resourceId});
+                TryRemoveResources(chapterResourcesVersion);
             }
 
             if (trackResource != null)
