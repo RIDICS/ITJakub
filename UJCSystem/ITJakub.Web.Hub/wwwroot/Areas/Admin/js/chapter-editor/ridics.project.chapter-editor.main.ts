@@ -166,13 +166,13 @@ class ChapterEditorMain {
         for (let i = 0; i < chapters.length; i++) {
             const chapterRow = $(chapters[i]).children(".chapter-row");
             const id = Number(chapterRow.data("chapter-id"));
-            const newChapter = {
+            const newChapter: IUpdateChapter = {
                 id: id,
                 parentChapterId: parentId,
                 position: this.position + 1,
                 name: chapterRow.find(".chapter-name").text().trim(),
                 beginningPageId: Number(chapterRow.data("beginning-page-id")),
-                comment: ""                
+                comment: null
             };
             
             this.position++;
