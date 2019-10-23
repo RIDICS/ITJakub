@@ -170,9 +170,13 @@ class RoleManager {
         alert.hide();
         const specialPermissionId = permissionRow.data("permission-id");
         const roleId = $(".role-row.active").data("role-id");
+        const spinnerContainer = permissionRow.children(".status");
 
-        const spinner = permissionRow.find(".lv-circles");
-        spinner.show();
+        const spinner = lv.create(null, "lv-circles lv-right tiny");
+        if (spinnerContainer.children(".lv-circles").length === 0) {
+            spinnerContainer.append(spinner.getElement());
+        }
+        
         const successLabel = permissionRow.find(".success");
         successLabel.hide();
 
@@ -195,7 +199,7 @@ class RoleManager {
             }, this.delayForShowResponse);
         }).always(() => {
             setTimeout(() => {
-                spinner.hide();
+                spinner.remove();
             }, this.delayForShowResponse);
         });
     }
