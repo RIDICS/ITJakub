@@ -28,8 +28,17 @@
     
     checkMoveButtonsAvailability() {
         if (this.checkSameSubChapter()) {
-            this.moveChapterDownButton.removeAttr("disabled");
-            this.moveChapterUpButton.removeAttr("disabled");
+            if (this.checkVerticalMoving(true)) {
+                this.moveChapterUpButton.removeAttr("disabled");
+            } else {
+                this.moveChapterUpButton.attr("disabled", "disabled");
+            }
+
+            if (this.checkVerticalMoving(false)) {
+                this.moveChapterDownButton.removeAttr("disabled");
+            } else {
+                this.moveChapterDownButton.attr("disabled", "disabled");
+            }
         } else {
             this.moveChapterDownButton.attr("disabled", "disabled");
             this.moveChapterUpButton.attr("disabled", "disabled");
@@ -109,8 +118,7 @@
         for (let chapter of chapters) {
             if (selectedLevel !== $(chapter).data("level")) {
                 return false;
-            }
-            else if ($(chapter).children(".chapter-row").children(".ridics-checkbox").find(".selection-checkbox")
+            } else if ($(chapter).children(".chapter-row").children(".ridics-checkbox").find(".selection-checkbox")
                 .is(":checked")) {
                 selectedChapters++;
                 if (selectedChapters === selectedCheckboxes.length) {
@@ -142,7 +150,36 @@
         const chapterContainerBefore = $(chapterRow).parent(".chapter-container").prev();
         return chapterContainerBefore.length > 0;
     }
+    
+    private checkVerticalMoving(up: boolean): boolean {
+        const selectedCheckboxes = $(".chapter-row .selection-checkbox:checked");
+        if (selectedCheckboxes.length === 0)
+            return true;
 
+        
+        let containerSelector = "div";        
+        if(up) {
+            containerSelector += ":first-of-type";
+        }
+        else {
+            containerSelector += ":last-of-type";
+        }
+
+        const subChaptersElement = selectedCheckboxes.parents(".sub-chapters").get(0);
+        const firstCheckbox = $(subChaptersElement).children(containerSelector)
+            .children("div:first-of-type")
+            .find(".selection-checkbox")[0];
+                
+        for (let selectedCheckbox of selectedCheckboxes.toArray()) {
+            if((firstCheckbox == selectedCheckbox))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
     private moveList(down: boolean, context: JQuery) {
         if ($(".chapter-row .selection-checkbox:checked").length === 0 || !this.checkSameSubChapter()) {
             return;
