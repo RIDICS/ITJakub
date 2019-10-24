@@ -437,8 +437,9 @@ class RoleManager {
     }
 
     private clearSections() {
-        this.userList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
-        this.permissionList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
+        if (this.userList) this.userList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
+        if (this.permissionList) this.permissionList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
+
         $("#addRoleButton").addClass("disabled");
     }
 }
