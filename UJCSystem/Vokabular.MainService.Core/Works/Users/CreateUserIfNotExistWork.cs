@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -29,7 +28,8 @@ namespace Vokabular.MainService.Core.Works.Users
             
             if (m_roles != null)
             {
-                dbUserGroups = UpdateAndGetUserGroups(now);
+                var userGroupSubwork = new UserGroupSubwork(m_userRepository);
+                dbUserGroups = userGroupSubwork.UpdateAndGetUserGroups(m_roles);
             }
 
             var user = m_userRepository.GetUserByExternalId(m_userExternalId);
@@ -59,32 +59,6 @@ namespace Vokabular.MainService.Core.Works.Users
 
             var userId = (int) m_userRepository.Create(dbUser);
             return userId;
-        }
-
-        private IList<UserGroup> UpdateAndGetUserGroups(DateTime now)
-        {
-            var dbUserGroups = m_userRepository.GetUserGroupsByExternalIds(m_roles.Select(x => x.Id));
-
-            foreach (var roleContract in m_roles)
-            {
-                var dbRole = dbUserGroups.FirstOrDefault(x => x.ExternalId == roleContract.Id);
-                if (dbRole == null)
-                {
-                    var newDbRole = new UserGroup
-                    {
-                        ExternalId = roleContract.Id,
-                        Name = roleContract.Name,
-                        CreateTime = now,
-                        LastChange = now,
-                    };
-
-                    m_userRepository.Create(newDbRole);
-
-                    dbUserGroups.Add(newDbRole);
-                }
-            }
-
-            return dbUserGroups;
         }
     }
 }

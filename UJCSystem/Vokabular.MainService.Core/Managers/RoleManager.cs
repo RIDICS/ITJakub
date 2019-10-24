@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using AutoMapper;
@@ -8,6 +9,7 @@ using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
+using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
@@ -70,7 +72,19 @@ namespace Vokabular.MainService.Core.Managers
             var client = m_communicationProvider.GetAuthUserApiClient();
 
             var authUser = client.GetUserForRoleAssignmentAsync(user.ExternalId.Value).GetAwaiter().GetResult();
-            return m_mapper.Map<List<RoleContract>>(authUser.Roles);
+            var localDbRoles = new GetOrCreateUserGroupsWork(m_userRepository, authUser.Roles).Execute();
+
+            var resultList = new List<RoleContract>();
+
+            foreach (var authRole in authUser.Roles)
+            {
+                var resultRole = m_mapper.Map<RoleContract>(authRole);
+                resultRole.Id = localDbRoles.First(x => x.ExternalId == resultRole.ExternalId).Id;
+
+                resultList.Add(resultRole);
+            }
+            
+            return resultList;
         }
 
 
