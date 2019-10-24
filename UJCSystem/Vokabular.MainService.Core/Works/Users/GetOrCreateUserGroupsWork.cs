@@ -6,12 +6,12 @@ using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Users
 {
-    public class GetOrCreateUserGroupsWork : UnitOfWorkBase<IList<UserGroup>>
+    public class GetOrCreateUserGroupsWork<T> : UnitOfWorkBase<IList<UserGroup>> where T : RoleContractBase
     {
         private readonly UserRepository m_userRepository;
-        private readonly IList<RoleContractBase> m_authRoles;
+        private readonly IList<T> m_authRoles;
 
-        public GetOrCreateUserGroupsWork(UserRepository userRepository, IList<RoleContractBase> authRoles) : base(userRepository)
+        public GetOrCreateUserGroupsWork(UserRepository userRepository, IList<T> authRoles) : base(userRepository)
         {
             m_userRepository = userRepository;
             m_authRoles = authRoles;

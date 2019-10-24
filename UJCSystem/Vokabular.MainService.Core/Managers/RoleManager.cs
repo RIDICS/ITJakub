@@ -17,6 +17,7 @@ using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
+using AuthRoleContractBase = Ridics.Authentication.DataContracts.RoleContractBase;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -73,7 +74,7 @@ namespace Vokabular.MainService.Core.Managers
             var client = m_communicationProvider.GetAuthUserApiClient();
 
             var authUser = client.GetUserForRoleAssignmentAsync(user.ExternalId.Value).GetAwaiter().GetResult();
-            var localDbRoles = new GetOrCreateUserGroupsWork(m_userRepository, authUser.Roles).Execute();
+            var localDbRoles = new GetOrCreateUserGroupsWork<AuthRoleContractBase>(m_userRepository, authUser.Roles).Execute();
 
             var resultList = new List<RoleContract>();
 
@@ -138,13 +139,13 @@ namespace Vokabular.MainService.Core.Managers
 
         public void RemoveUserFromRole(int userId, int roleId)
         {
-            new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
+            //new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
             new RemoveUserFromRoleWork(m_permissionRepository, m_communicationProvider, userId, roleId).Execute();
         }
 
         public void AddUserToRole(int userId, int roleId)
         {
-            new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
+            //new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
             new AddUserToRoleWork(m_permissionRepository, m_defaultUserProvider, m_communicationProvider, userId, roleId).Execute();
         }
 
@@ -156,9 +157,19 @@ namespace Vokabular.MainService.Core.Managers
             var countValue = PagingHelper.GetAutocompleteCount(count);
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
+            var authResultList = client.GetRoleListAsync(0, countValue, query).GetAwaiter().GetResult();
+            
+            var dbUserGroups = new GetOrCreateUserGroupsWork<AuthRoleContract>(m_userRepository, authResultList.Items).Execute();
 
-            var result = client.GetRoleListAsync(0, countValue, query).GetAwaiter().GetResult();
-            return m_mapper.Map<List<RoleContract>>(result.Items);
+            var resultList = new List<RoleContract>();
+            foreach (var authRole in authResultList.Items)
+            {
+                var resultRole = m_mapper.Map<RoleContract>(authRole);
+                resultRole.Id = dbUserGroups.First(x => x.ExternalId == resultRole.ExternalId).Id;
+                resultList.Add(resultRole);
+            }
+
+            return resultList;
         }
 
         public PagedResultList<RoleContract> GetRoleList(int? start, int? count, string filterByName)

@@ -4,6 +4,7 @@ using System.Linq;
 using AutoMapper;
 using ITJakub.FileProcessing.DataContracts;
 using Ridics.Authentication.DataContracts;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Authentication;
@@ -65,10 +66,12 @@ namespace Vokabular.MainService.Core.Managers
                 return;
             }
 
+            var userGroup = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<UserGroup>(roleId));
+
             var roleClient = m_communicationProvider.GetAuthRoleApiClient();
             var permissionClient = m_communicationProvider.GetAuthPermissionApiClient();
             var defaultUnregisteredRole = m_defaultUserProvider.GetDefaultUnregisteredRole();
-            var permissions = roleClient.GetRoleAsync(roleId, true).GetAwaiter().GetResult().Permissions;
+            var permissions = roleClient.GetRoleAsync(userGroup.ExternalId, true).GetAwaiter().GetResult().Permissions;
             var permissionsId = permissions.Select(x => x.Id).ToList();
             foreach (var permissionToAdd in specialPermissionsIds)
             {
@@ -77,7 +80,7 @@ namespace Vokabular.MainService.Core.Managers
                     var permission = permissionClient.GetPermissionAsync(permissionToAdd).GetAwaiter().GetResult();
 
                     // Deny assigning special permissions to Unregistered user (not logged in)
-                    if (defaultUnregisteredRole.Id == roleId && !permission.Name.Contains(VokabularPermissionNames.AutoImport) &&
+                    if (defaultUnregisteredRole.Id == userGroup.ExternalId && !permission.Name.Contains(VokabularPermissionNames.AutoImport) &&
                         !permission.Name.Contains(VokabularPermissionNames.CardFile))
                     {
                         throw new ArgumentException($"Special permissions cannot be added to the default role {defaultUnregisteredRole.Name}.");
@@ -86,7 +89,7 @@ namespace Vokabular.MainService.Core.Managers
                 }
             }
 
-            roleClient.AssignPermissionsToRoleAsync(roleId, permissionsId).GetAwaiter().GetResult();
+            roleClient.AssignPermissionsToRoleAsync(userGroup.ExternalId, permissionsId).GetAwaiter().GetResult();
         }
 
         public void RemoveSpecialPermissionsFromRole(int roleId, IList<int> specialPermissionsIds)
@@ -96,36 +99,37 @@ namespace Vokabular.MainService.Core.Managers
                 return;
             }
 
-            var client = m_communicationProvider.GetAuthRoleApiClient();
+            var userGroup = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<UserGroup>(roleId));
 
-            var permissions = client.GetRoleAsync(roleId, true).GetAwaiter().GetResult().Permissions;
+            var client = m_communicationProvider.GetAuthRoleApiClient();
+            var permissions = client.GetRoleAsync(userGroup.ExternalId, true).GetAwaiter().GetResult().Permissions;
             var permissionsId = permissions.Select(x => x.Id).ToList();
             foreach (var permissionToRemove in specialPermissionsIds)
             {
                 permissionsId.Remove(permissionToRemove);
             }
 
-            client.AssignPermissionsToRoleAsync(roleId, permissionsId).GetAwaiter().GetResult();
+            client.AssignPermissionsToRoleAsync(userGroup.ExternalId, permissionsId).GetAwaiter().GetResult();
         }
 
         public void UpdateOrAddBooksToRole(int roleId, IList<long> bookIds, PermissionDataContract data)
         {
             var permissionFlags = m_permissionConverter.GetFlags(data);
 
-            new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
+            //new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
             new UpdateOrAddProjectsToRoleWork(m_permissionRepository, roleId, bookIds, permissionFlags).Execute();
         }
 
         public void RemoveBooksFromRole(int roleId, IList<long> bookIds)
         {
-            new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
+            //new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
             new RemoveProjectsFromRoleWork(m_permissionRepository, roleId, bookIds).Execute();
         }
 
         public PermissionDataContract GetPermissionsForRoleAndBook(int roleId, long bookId)
         {
-            new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
-            var dbResult = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionByBookAndGroupExternalId(bookId, roleId));
+            //new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
+            var dbResult = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionByBookAndGroup(bookId, roleId));
             var result = m_mapper.Map<PermissionDataContract>(dbResult);
             return result;
         }

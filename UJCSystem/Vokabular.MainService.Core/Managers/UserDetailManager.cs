@@ -9,6 +9,7 @@ using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
+using AuthRoleContractBase = Ridics.Authentication.DataContracts.RoleContractBase;
 using AuthUserContract = Ridics.Authentication.DataContracts.User.UserContract;
 
 namespace Vokabular.MainService.Core.Managers
@@ -84,7 +85,7 @@ namespace Vokabular.MainService.Core.Managers
 
         private UserDetailContract GetUserDetailContractForUser(AuthUserContract authUser, int localUserId)
         {
-            var localDbRoles = new GetOrCreateUserGroupsWork(m_userRepository, authUser.Roles).Execute();
+            var localDbRoles = new GetOrCreateUserGroupsWork<AuthRoleContractBase>(m_userRepository, authUser.Roles).Execute();
 
             var userDetailContract = m_mapper.Map<UserDetailContract>(authUser);
             userDetailContract.Id = localUserId;

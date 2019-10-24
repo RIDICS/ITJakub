@@ -16,7 +16,7 @@ namespace Vokabular.MainService.Core.Works.Users
             m_userRepository = userRepository;
         }
 
-        public IList<UserGroup> UpdateAndGetUserGroups(IList<RoleContractBase> roles)
+        public IList<UserGroup> UpdateAndGetUserGroups<T>(IList<T> roles) where T : RoleContractBase
         {
             var now = DateTime.UtcNow;
             var dbUserGroups = m_userRepository.GetUserGroupsByExternalIds(roles.Select(x => x.Id));
