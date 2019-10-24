@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
@@ -8,6 +9,7 @@ using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
+using AuthRoleContractBase = Ridics.Authentication.DataContracts.RoleContractBase;
 using AuthUserContract = Ridics.Authentication.DataContracts.User.UserContract;
 
 namespace Vokabular.MainService.Core.Managers
@@ -69,9 +71,7 @@ namespace Vokabular.MainService.Core.Managers
             if (authUser == null)
                 return null;
 
-            var userDetailContract = m_mapper.Map<UserDetailContract>(authUser);
-            userDetailContract.Id = user.Id;
-            return userDetailContract;
+            return GetUserDetailContractForUser(authUser, user.Id);
         }
 
         public UserDetailContract GetUserDetailContractForUser(UserDetailContract user)
@@ -80,8 +80,20 @@ namespace Vokabular.MainService.Core.Managers
             if (authUser == null)
                 return user;
 
+            return GetUserDetailContractForUser(authUser, user.Id);
+        }
+
+        private UserDetailContract GetUserDetailContractForUser(AuthUserContract authUser, int localUserId)
+        {
+            var localDbRoles = new GetOrCreateUserGroupsWork<AuthRoleContractBase>(m_userRepository, authUser.Roles).Execute();
+
             var userDetailContract = m_mapper.Map<UserDetailContract>(authUser);
-            userDetailContract.Id = user.Id;
+            userDetailContract.Id = localUserId;
+            foreach (var resultRole in userDetailContract.Roles)
+            {
+                resultRole.Id = localDbRoles.First(x => x.ExternalId == resultRole.ExternalId).Id;
+            }
+
             return userDetailContract;
         }
 

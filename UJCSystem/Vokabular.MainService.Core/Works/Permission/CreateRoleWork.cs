@@ -46,8 +46,8 @@ namespace Vokabular.MainService.Core.Works.Permission
                 ExternalId = externalRoleId,
             };
 
-            m_permissionRepository.CreateGroup(group);
-            return externalRoleId;
+            var roleId = m_permissionRepository.CreateGroup(group);
+            return roleId;
         }
     }
 }

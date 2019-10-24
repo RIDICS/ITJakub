@@ -16,13 +16,11 @@ namespace Vokabular.MainService.Controllers
     {
         private readonly RoleManager m_roleManager;
         private readonly PermissionManager m_permissionManager;
-        private readonly BookManager m_bookManager;
 
-        public RoleController(RoleManager roleManager, PermissionManager permissionManager, BookManager bookManager)
+        public RoleController(RoleManager roleManager, PermissionManager permissionManager)
         {
             m_roleManager = roleManager;
             m_permissionManager = permissionManager;
-            m_bookManager = bookManager;
         }
 
         [Authorize(PermissionNames.ListUsers)]

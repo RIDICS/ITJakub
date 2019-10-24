@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Reflection;
 using log4net;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 using Vokabular.MainService.Core.Communication;
@@ -28,7 +29,7 @@ namespace Vokabular.MainService.Core.Works.Permission
 
         protected override void ExecuteWorkImplementation()
         {
-            var group = m_permissionRepository.FindGroupByExternalIdOrCreate(m_roleId);
+            var group = m_permissionRepository.FindById<UserGroup>(m_roleId);
             var user = m_permissionRepository.GetUserWithGroups(m_userId);
             if (user.ExternalId == null)
             {
@@ -58,7 +59,7 @@ namespace Vokabular.MainService.Core.Works.Permission
 
 
             var client = m_communicationProvider.GetAuthUserApiClient();
-            client.RemoveRoleFromUserAsync(user.ExternalId.Value, m_roleId).GetAwaiter().GetResult();
+            client.RemoveRoleFromUserAsync(user.ExternalId.Value, group.ExternalId).GetAwaiter().GetResult();
         }
     }
 }

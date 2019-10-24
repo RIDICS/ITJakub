@@ -194,19 +194,22 @@ namespace Vokabular.MainService.Core.Managers
                 return null;
             }
 
-            var authRoles = new List<AuthRoleContract>();
+            var resultRoles = new List<RoleContract>();
             foreach (var group in result.List)
             {
                 var work = new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, group.ExternalId);
                 work.Execute();
-                authRoles.Add(work.GetRoleContract());
-            }
+                var authRoleContract = work.GetRoleContract();
+                
+                var roleContract = m_mapper.Map<RoleContract>(authRoleContract);
+                roleContract.Id = group.Id;
 
-            var roles = m_mapper.Map<List<RoleContract>>(authRoles);
+                resultRoles.Add(roleContract);
+            }
 
             return new PagedResultList<RoleContract>
             {
-                List = roles,
+                List = resultRoles,
                 TotalCount = result.Count,
             };
         }
