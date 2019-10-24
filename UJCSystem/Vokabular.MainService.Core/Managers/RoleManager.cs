@@ -4,6 +4,7 @@ using System.Net;
 using System.Reflection;
 using AutoMapper;
 using log4net;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Authentication;
@@ -90,8 +91,10 @@ namespace Vokabular.MainService.Core.Managers
 
         public PagedResultList<UserContract> GetUsersByRole(int roleId, int? start, int? count, string filterByName)
         {
+            var role = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<UserGroup>(roleId));
+
             var client = m_communicationProvider.GetAuthRoleApiClient();
-            var result = client.GetUserListByRoleAsync(roleId, start, count, filterByName).GetAwaiter().GetResult();
+            var result = client.GetUserListByRoleAsync(role.ExternalId, start, count, filterByName).GetAwaiter().GetResult();
             var users = m_mapper.Map<List<UserContract>>(result.Items);
             m_userDetailManager.AddIdForExternalUsers(users);
 
@@ -114,13 +117,18 @@ namespace Vokabular.MainService.Core.Managers
 
         public RoleDetailContract GetRoleDetail(int roleId)
         {
+            var dbRole = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<UserGroup>(roleId));
+
             var client = m_communicationProvider.GetAuthRoleApiClient();
 
-            var role = client.GetRoleAsync(roleId, true).GetAwaiter().GetResult();
+            var role = client.GetRoleAsync(dbRole.ExternalId, true).GetAwaiter().GetResult();
             if (role == null)
                 return null;
 
-            return m_mapper.Map<RoleDetailContract>(role);
+            var result = m_mapper.Map<RoleDetailContract>(role);
+            result.Id = roleId;
+
+            return result;
         }
 
         public void DeleteRole(int roleId)
@@ -160,19 +168,24 @@ namespace Vokabular.MainService.Core.Managers
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
 
-            var result = client.GetRoleListAsync(startValue, countValue, filterByName).GetAwaiter().GetResult();
+            var authResult = client.GetRoleListAsync(startValue, countValue, filterByName).GetAwaiter().GetResult();
 
-            foreach (var roleContract in result.Items)
+            var resultList = new List<RoleContract>();
+            foreach (var authRoleContract in authResult.Items)
             {
-                new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleContract).Execute();
-            }
+                var synchronizeRoleWork = new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, authRoleContract);
+                synchronizeRoleWork.Execute();
 
-            var roleContracts = m_mapper.Map<List<RoleContract>>(result.Items);
+                var resultRoleContract = m_mapper.Map<RoleContract>(authRoleContract);
+                resultRoleContract.Id = synchronizeRoleWork.LocalId;
+                
+                resultList.Add(resultRoleContract);
+            }
 
             return new PagedResultList<RoleContract>
             {
-                List = roleContracts,
-                TotalCount = result.ItemsCount,
+                List = resultList,
+                TotalCount = authResult.ItemsCount,
             };
         }
     }

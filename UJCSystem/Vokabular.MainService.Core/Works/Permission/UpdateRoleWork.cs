@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using Ridics.Authentication.DataContracts;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Authentication;
@@ -32,23 +33,24 @@ namespace Vokabular.MainService.Core.Works.Permission
             CheckRoleForUpdating(m_defaultUserProvider.GetDefaultUnregisteredRole());
             CheckRoleForUpdating(m_defaultUserProvider.GetDefaultRegisteredRole());
             
-            var group = m_permissionRepository.FindGroupByExternalIdOrCreate(m_data.Id);
+            var group = m_permissionRepository.FindById<UserGroup>(m_data.Id);
             group.Name = m_data.Name;
             group.LastChange = DateTime.UtcNow;
             m_permissionRepository.Save(group);
             m_permissionRepository.Flush();
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
-            var authRole = client.GetRoleAsync(m_data.Id).GetAwaiter().GetResult();
+            var authRole = client.GetRoleAsync(group.ExternalId).GetAwaiter().GetResult();
             authRole.Name = m_data.Name;
             authRole.Description = m_data.Description;
 
-            client.EditRoleAsync(m_data.Id, authRole).GetAwaiter().GetResult();
+            client.EditRoleAsync(group.ExternalId, authRole).GetAwaiter().GetResult();
         }
 
         private void CheckRoleForUpdating(RoleContractBase defaultRole)
         {
-            if (defaultRole.Id == m_data.Id && defaultRole.Name != m_data.Name)
+            var dbRole = m_permissionRepository.FindById<UserGroup>(m_data.Id);
+            if (defaultRole.Id == dbRole.ExternalId && defaultRole.Name != m_data.Name)
             {
                 throw new MainServiceException(MainServiceErrorCode.RenameDefaultRole,
                     $"The name of the default role {defaultRole.Name} cannot be changed.",
