@@ -58,8 +58,11 @@ namespace Vokabular.MainService.Core.Works.Permission
             m_permissionRepository.Flush();
 
 
-            var client = m_communicationProvider.GetAuthUserApiClient();
-            client.RemoveRoleFromUserAsync(user.ExternalId.Value, group.ExternalId).GetAwaiter().GetResult();
+            if (group is RoleUserGroup roleUserGroup)
+            {
+                var client = m_communicationProvider.GetAuthUserApiClient();
+                client.RemoveRoleFromUserAsync(user.ExternalId.Value, roleUserGroup.ExternalId).GetAwaiter().GetResult();
+            }
         }
     }
 }
