@@ -1,4 +1,15 @@
 ﻿@import "ITJakub.Colors-selected.scss";
-@import "../lib/loading-visualization/src/main.scss";
+@import "../lib/loading-visualization/src/colors.scss";
 
-/*TODO customize colors*/
+// colors are same as main theme color
+$determinate_bordered_line_border: $menu-background-color;
+$determinate_bordered_line_color: $menu-background-color;
+$bordered_line_color: $menu-background-color;
+$circles_color: $menu-background-color;
+$bars_color: $menu-background-color;
+$dots_color: $menu-background-color;
+
+$bars_scale: 5;
+$dots_scale: 15;
+
+@import "../lib/loading-visualization/src/element-styles.scss";

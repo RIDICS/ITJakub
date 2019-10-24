@@ -2,7 +2,7 @@
     private paginator: Pagination;
     private newsOnPage = 5;
     private newsContainer: HTMLElement;
-    private loaderElement: string = '<div class="lv-dots md lv-mid lvt-3 lvb-3"></div>';
+    private loaderElement = lv.create(null, "lv-dots md lv-mid lvt-3 lvb-3");
     private errorHandler: ErrorHandler;
 
     public initNews() {
@@ -96,6 +96,6 @@
     }
 
     private showLoading() {
-        $(this.newsContainer).html(this.loaderElement);
+        $(this.newsContainer).append(this.loaderElement.getElement());
     }
 }
