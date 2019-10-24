@@ -1,5 +1,9 @@
 ﻿@using Scalesoft.Localization.AspNetCore
+@using Vokabular.Shared.AspNetCore.Extensions
 @inject ILocalizationService Localization
+
+<div id="userInfo" data-first-name="@User.GetFirstName()" data-last-name="@User.GetLastName()" class="hide"></div>
+
 <div id="project-resource-preview">
     <div id="page-slider" class="text-editor-page-slider">
         <div class="ui-slider-handle page-slider-handle">

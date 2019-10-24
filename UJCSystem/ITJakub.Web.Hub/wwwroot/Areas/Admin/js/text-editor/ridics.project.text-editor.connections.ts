@@ -13,6 +13,11 @@
             const pageTextOffsetTop = textEl.offset().top;
             const commentEl = container.find(".comment-area").find(`div[data-text-reference-id="${commentId}"]`);
             const commentName = commentEl.siblings(".media-body").find(".media-heading");
+            if(commentName.length === 0){
+                this.removeConnections();
+                return true;
+            }
+            
             const pageContainer = $(".editor-areas");
             const pageBottom = pageContainer.offset().top + pageContainer.height();
             if (pageTextOffsetTop < pageContainer.offset().top ||
@@ -49,16 +54,16 @@
                         this.interval = window.setInterval(() => {
                             if (this.checkIfOverFlowing(uniqueId, pageRow)) {
                                 $(".highlighted-element").removeClass("highlighted-element");
-                                    jqSimpleConnect.removeAll();
+                                jqSimpleConnect.removeAll();
+                            } else {
+                                if ($(".jqSimpleConnect").length) {
+                                    jqSimpleConnect.repaintAll();
                                 } else {
-                                    if ($(".jqSimpleConnect").length) {
-                                        jqSimpleConnect.repaintAll();
-                                    } else {
-                                        this.drawConnections(uniqueId, pageRow);
-                                    }
+                                    this.drawConnections(uniqueId, pageRow);
                                 }
-                            },
-                            25);
+                            }
+                        },
+                        25);
                     }
                 } else {
                     console.log("Something is wrong. This comment doesn't have an id.");
@@ -70,12 +75,16 @@
         $(document.documentElement).on("mouseleave",
             ".media-list",
             () => {
-                if (typeof this.interval !== "undefined") {
-                    clearInterval(this.interval);
-                }
-                $(".highlighted-element").removeClass("highlighted-element");
-                jqSimpleConnect.removeAll();
+               this.removeConnections();
             });
+    }
+    
+    private removeConnections() {
+        if (typeof this.interval !== "undefined") {
+            clearInterval(this.interval);
+        }
+        $(".highlighted-element").removeClass("highlighted-element");
+        jqSimpleConnect.removeAll();
     }
 
     init(): void {

@@ -92,6 +92,11 @@
 
 .project-layout,
 .snapshot-layout {
+    .back-button {
+        margin-top: -1rem;
+        margin-bottom: 0.7rem;
+    }
+    
     .left-menu, .vertical-splitter, .vertical-splitter-control, .content {
         display: table-cell;
     }
@@ -1184,6 +1189,10 @@ table {
                                 background-color: @odd-comment-area-background-color;
                             }
                         }
+
+                        .respond-to-comment-textarea {
+                            margin-top: 5px;
+                        }
                     }
 
                     .composition-area {
@@ -1721,6 +1730,8 @@ table {
                     max-width: 5em;
 
                     .dropdown-menu {
+                        z-index: 1035;
+
                         .active {
                             a,
                             a:hover,

@@ -83,13 +83,12 @@
 
             let mainCommentContentEl: JQuery<HTMLElement>;
             let editedCommentBody: JQuery<HTMLElement>;
+            editedCommentBody = commentActionsRowEl.parent(".media-body");
             if (target.hasClass("edit-root-comment"))
             {
-                editedCommentBody = commentActionsRowEl.parents(".media-body");
                 mainCommentContentEl = editedCommentBody;
             }
             else {
-                editedCommentBody = commentActionsRowEl.siblings(".media-body");
                 mainCommentContentEl = editedCommentBody.parents(".media-body");
             }
 
@@ -99,9 +98,9 @@
             const textId = mainCommentLeftHeader.parents(".page-row").data("text-id");
             const commentTextEl = editedCommentBody.children(".comment-body");
             const commentText = commentTextEl.text();
+            commentActionsRowEl.after(`<textarea cols="40" rows="3" class="textarea-no-resize edit-comment-textarea">${commentText}</textarea>`);
             commentActionsRowEl.hide();
             commentTextEl.hide();
-            editedCommentBody.append(`<textarea cols="40" rows="3" class="textarea-no-resize edit-comment-textarea">${commentText}</textarea>`);
             const jTextareaEl = $(".edit-comment-textarea");
             jTextareaEl.focus();
             const commentId = parseInt(editedCommentBody.attr("data-comment-id"));
@@ -118,9 +117,9 @@
                 var textId = $(pageRow).data("text-id") as number;
                 const textReferenceId = target.parents(".media-body").siblings(".main-comment").data("text-reference-id");
                 const parentCommentId = target.parents(".media-body").siblings(".main-comment").data("parent-comment-id") as number;
-                const id = 0; //creating comment
+                //creating comment (commentId = null)
                 if (textReferenceId !== null && typeof textReferenceId !== "undefined") {
-                    this.addCommentFromCommentArea(textReferenceId, textId, id, parentCommentId, target);
+                    this.addCommentFromCommentArea(textReferenceId, textId, null, parentCommentId, target);
                 } else {
                     console.log("Something is wrong. This comment doesn't have an id.");
                 }
@@ -170,8 +169,8 @@
                             return;
                         }
 
-                        const id = 0; //creating comment
-                        this.processCommentSendClick(textId, textReferenceId, id, null, commentText);
+                        //creating comment (commentId = null)
+                        this.processCommentSendClick(textId, textReferenceId, null, null, commentText);
                         codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
                             { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
                     }).fail(() => {
@@ -206,9 +205,9 @@
         id: number,
         parentCommentId: number,
         buttonEl: JQuery) {
-        const elm = `<textarea class="respond-to-comment-textarea textarea-no-resize"></textarea>`;
+        const elm = this.commentArea.constructCommentInputAreaHtml();
         buttonEl.parents(".comment-actions-row").hide();
-        buttonEl.parents(".comment-actions-row").after(elm);
+        buttonEl.parents(".media-body").append(elm);
         const textareaEl = $(".respond-to-comment-textarea");
         textareaEl.focus();
         this.processCommentReply(textId, textReferenceId, id, parentCommentId, textareaEl, buttonEl);
@@ -225,18 +224,18 @@
         textAreaEl.on("focusout",
             (event: JQuery.Event) => {
                 event.stopImmediatePropagation();
-                var commentText = textAreaEl.val() as string;
+                const commentText = textAreaEl.val() as string;
                 if (commentText === commentTextOriginal) {
                     const actionsRow = jEl.parents(".comment-actions-row");
                     actionsRow.show();
-
-                    if (jEl.hasClass("edit-root-comment")) {
-                        actionsRow.siblings(".comment-body").show();
-                    } else {
-                        actionsRow.siblings(".media-body").find(".comment-body").show();
-                    }
+                    actionsRow.siblings(".comment-body").show();
                     
-                    textAreaEl.remove();
+                    if (commentId == null) {
+                        textAreaEl.parent(".media-body").parent(".media").remove();
+                    }
+                    else {
+                        textAreaEl.remove();   
+                    }
                 } else {
                     const comment: ICommentStructureReply = {
                         id: commentId,
@@ -244,7 +243,7 @@
                         parentCommentId: parentCommentId,
                         textReferenceId: textReferenceId
                     };
-                    if (commentId === 0) {
+                    if (commentId == null) {
                         const sendAjax = this.util.createComment(textId, comment);
                         this.onCommentSendRequest(sendAjax, textAreaEl, textId);
                     } else {
