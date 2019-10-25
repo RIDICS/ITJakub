@@ -8,17 +8,19 @@ using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Users
 {
-    public class CreateUserIfNotExistWork : UnitOfWorkBase<int>
+    public class CreateOrUpdateUserIfNotExistWork : UnitOfWorkBase<int>
     {
         private readonly UserRepository m_userRepository;
         private readonly int m_userExternalId;
         private readonly IList<RoleContractBase> m_roles;
+        private readonly UpdateUserInfo m_userInfo;
 
-        public CreateUserIfNotExistWork(UserRepository userRepository, int userExternalId, IList<RoleContractBase> roles) : base(userRepository)
+        public CreateOrUpdateUserIfNotExistWork(UserRepository userRepository, int userExternalId, IList<RoleContractBase> roles, UpdateUserInfo userInfo) : base(userRepository)
         {
             m_userRepository = userRepository;
             m_userExternalId = userExternalId;
             m_roles = roles;
+            m_userInfo = userInfo;
         }
 
         protected override int ExecuteWorkImplementation()
@@ -36,6 +38,11 @@ namespace Vokabular.MainService.Core.Works.Users
             var user = m_userRepository.GetUserByExternalId(m_userExternalId);
             if (user != null)
             {
+                // Update user data
+                user.ExtUsername = m_userInfo.Username;
+                user.ExtFirstName = m_userInfo.FirstName;
+                user.ExtLastName = m_userInfo.LastName;
+
                 if (dbRoleUserGroups != null)
                 {
                     // User already exists, so only update groups
@@ -46,8 +53,9 @@ namespace Vokabular.MainService.Core.Works.Users
                     newGroups.AddRange(nonRoleGroups);
 
                     user.Groups = newGroups;
-                    m_userRepository.Update(user);
                 }
+
+                m_userRepository.Update(user);
 
                 return user.Id;
             }
@@ -57,6 +65,9 @@ namespace Vokabular.MainService.Core.Works.Users
                 ExternalId = m_userExternalId,
                 CreateTime = now,
                 Groups = dbRoleUserGroups?.Cast<UserGroup>().ToList(),
+                ExtUsername = m_userInfo.Username,
+                ExtFirstName = m_userInfo.FirstName,
+                ExtLastName = m_userInfo.LastName,
                 //Groups = new List<Group> { m_defaultMembershipProvider.GetDefaultRegisteredUserGroup(), m_defaultMembershipProvider.GetDefaultUnRegisteredUserGroup() },
                 //FavoriteLabels = new List<FavoriteLabel> { defaultFavoriteLabel }
             };
@@ -68,5 +79,19 @@ namespace Vokabular.MainService.Core.Works.Users
             var userId = (int) m_userRepository.Create(dbUser);
             return userId;
         }
+    }
+
+    public class UpdateUserInfo
+    {
+        public UpdateUserInfo(string username, string firstName, string lastName)
+        {
+            Username = username;
+            FirstName = firstName;
+            LastName = lastName;
+        }
+
+        public string Username { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }

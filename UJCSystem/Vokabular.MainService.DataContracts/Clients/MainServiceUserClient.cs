@@ -37,11 +37,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public int CreateUserIfNotExist(int userExternalId)
+        public int CreateUserIfNotExist(CreateUserIfNotExistContract data)
         {
             try
             {
-                var result = m_client.Post<int>("user/external", userExternalId);
+                var result = m_client.Post<int>("user/current/local-data", data);
                 return result;
             }
             catch (HttpRequestException e)
