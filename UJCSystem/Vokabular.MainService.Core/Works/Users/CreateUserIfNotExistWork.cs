@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -22,22 +23,29 @@ namespace Vokabular.MainService.Core.Works.Users
 
         protected override int ExecuteWorkImplementation()
         {
-            IList<UserGroup> dbUserGroups = null;
+            IList<RoleUserGroup> dbRoleUserGroups = null;
 
             var now = DateTime.UtcNow;
             
             if (m_roles != null)
             {
                 var userGroupSubwork = new UserGroupSubwork(m_userRepository);
-                dbUserGroups = userGroupSubwork.UpdateAndGetUserGroups(m_roles);
+                dbRoleUserGroups = userGroupSubwork.UpdateAndGetUserGroups(m_roles);
             }
 
             var user = m_userRepository.GetUserByExternalId(m_userExternalId);
             if (user != null)
             {
-                if (dbUserGroups != null)
+                if (dbRoleUserGroups != null)
                 {
-                    user.Groups = dbUserGroups;
+                    // User already exists, so only update groups
+                    var originalGroups = user.Groups;
+                    var nonRoleGroups = originalGroups.Where(x => !(x is RoleUserGroup));
+
+                    var newGroups = new List<UserGroup>(dbRoleUserGroups);
+                    newGroups.AddRange(nonRoleGroups);
+
+                    user.Groups = newGroups;
                     m_userRepository.Update(user);
                 }
 
@@ -48,7 +56,7 @@ namespace Vokabular.MainService.Core.Works.Users
             {
                 ExternalId = m_userExternalId,
                 CreateTime = now,
-                Groups = dbUserGroups,
+                Groups = dbRoleUserGroups?.Cast<UserGroup>().ToList(),
                 //Groups = new List<Group> { m_defaultMembershipProvider.GetDefaultRegisteredUserGroup(), m_defaultMembershipProvider.GetDefaultUnRegisteredUserGroup() },
                 //FavoriteLabels = new List<FavoriteLabel> { defaultFavoriteLabel }
             };

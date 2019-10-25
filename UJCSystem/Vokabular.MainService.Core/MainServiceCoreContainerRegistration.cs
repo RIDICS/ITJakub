@@ -97,6 +97,7 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, TrackProfile>();
             services.AddSingleton<Profile, TransformationProfile>();
             services.AddSingleton<Profile, UserContactProfile>();
+            services.AddSingleton<Profile, UserGroupProfile>();
             services.AddSingleton<Profile, UserProfile>();
 
             services.AddSingleton<Profile, BucketContractProfile>();

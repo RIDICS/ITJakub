@@ -32,6 +32,7 @@
       discriminator-value="Single">
 
       <many-to-one name="User"
+                   column="[User]"
                    class="User"
                    lazy="proxy" />
 

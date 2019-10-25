@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -83,6 +85,29 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .WhereRestrictionOn(x => x.ExternalId).IsInG(externalIds)
                 .List();
             return result;
+        }
+
+        public virtual ListWithTotalCountResult<User> GetUsersByGroup(int groupId, int start, int count, string filterByName)
+        {
+            UserGroup userGroupAlias = null;
+
+            var query = GetSession().QueryOver<User>()
+                .JoinAlias(x => x.Groups, () => userGroupAlias)
+                .Where(() => userGroupAlias.Id == groupId)
+                // TODO add Name column to allow filtering and sorting
+                //.WhereRestrictionOn(x => x.name).IsLike(filterByName, MatchMode.Anywhere)
+                //.OrderBy(x => x.name).Asc
+                .Skip(start)
+                .Take(count);
+
+            var result = query.Future();
+            var resultCount = query.ToRowCountQuery().FutureValue<int>();
+                
+            return new ListWithTotalCountResult<User>
+            {
+                List = result.ToList(),
+                Count = resultCount.Value,
+            };
         }
     }
 }
