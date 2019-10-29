@@ -13,8 +13,8 @@ namespace Vokabular.FulltextService.Core
     {
         public void Install(IServiceCollection services)
         {
-            services.AddScoped<CommunicationConfigurationProvider>();
-            services.AddScoped<CommunicationProvider>();
+            services.AddSingleton<CommunicationConfigurationProvider>();
+            services.AddSingleton<CommunicationProvider>();
             services.AddScoped<TextResourceManager>();
             services.AddScoped<SnapshotResourceManager>();
             services.AddScoped<SearchManager>();
