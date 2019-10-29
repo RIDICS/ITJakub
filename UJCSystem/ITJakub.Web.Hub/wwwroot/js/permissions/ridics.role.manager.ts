@@ -422,7 +422,7 @@ class RoleManager {
                 this.client.createRole(createRoleForm.serialize())
                     .done((response) => {
                         createRoleSection.html(response);
-                        if (createRoleForm.find(".alert-success").length) {
+                        if ($("#createRoleForm").find(".alert-success").length) {
                             this.roleList.reloadPage();
                         }
                         this.initCreateRoleForm();
