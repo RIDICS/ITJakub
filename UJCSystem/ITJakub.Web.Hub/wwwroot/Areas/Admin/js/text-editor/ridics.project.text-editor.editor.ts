@@ -172,7 +172,7 @@
                                 label: localization.translate("SaveAndClose", "RidicsProject").value,
                                 className: "btn-default",
                                 callback: () => {
-                                    this.saveContents(this.currentTextId, contentBeforeClose, SaveTextModeType.FullValidateOrDeny, () => {
+                                    this.saveContents(this.currentTextId, contentBeforeClose, selectedPageRow, SaveTextModeType.FullValidateOrDeny, () => {
                                         this.editorChangePage(previousPageEl, selectedPageRow);
                                     });
                                 }
@@ -218,7 +218,7 @@
                             label: localization.translate("SaveAndClose", "RidicsProject").value,
                             className: "btn-default",
                             callback: () => {
-                                this.saveContents(this.currentTextId, contentBeforeClose, SaveTextModeType.FullValidateOrDeny, () => {
+                                this.saveContents(this.currentTextId, contentBeforeClose, pageRows, SaveTextModeType.FullValidateOrDeny, () => {
                                     thisClass.simplemde.toTextArea();
                                     thisClass.simplemde = null;
                                     this.togglePageRows(pageRows);
@@ -247,23 +247,19 @@
         this.togglePageRows(currentPageEl);
         this.originalContent = this.simplemde.value();
     }
-
+    
     private createText(pageRow: JQuery<HTMLElement>) {
         const pageId = pageRow.data("page-id");
+        const loading = pageRow.find("composition-area-loading");
+        pageRow.find(".rendered-text").find(".alert").remove();
+        loading.show();
         this.apiClient.createTextOnPage(pageId).done(() => {
             this.pageStructure.loadPage(pageRow).done(() => {
                 $(".edit-page", pageRow).click(); //Open editor
             });
         }).fail((error) => {
-            bootbox.alert({
-                title: localization.translate("Fail", "RidicsProject").value,
-                message: this.errorHandler.getErrorMessage(error),
-                buttons: {
-                    ok: {
-                        className: "btn-default"
-                    }
-                }
-            });
+            const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+            pageRow.find(".rendered-text").append(alert);
         });
     }
 
@@ -286,8 +282,12 @@
         return ajax;
     }
 
-    saveContents(textId: number, contents: string, mode = SaveTextModeType.FullValidateOrDeny, doneCallback: () => void = null): void {
+    saveContents(textId: number, contents: string, pageRow: JQuery<HTMLElement>, mode = SaveTextModeType.FullValidateOrDeny, doneCallback: () => void = null): void {
         const saveAjax = this.saveText(textId, contents, mode);
+        const alertHolder = pageRow.find(".alert-holder");
+        alertHolder.empty();
+        const pageElement = pageRow.find(".page");
+        
         saveAjax.done((response) => {
             if (!response.isValidationSuccess) {
                 bootbox.dialog({
@@ -302,14 +302,14 @@
                             label: localization.translate("AutomaticallyFixProblems", "RidicsProject").value,
                             className: "btn-default",
                             callback: () => {
-                                this.saveContents(textId, contents, SaveTextModeType.FullValidateAndRepair, doneCallback);
+                                this.saveContents(textId, contents, pageRow, SaveTextModeType.FullValidateAndRepair, doneCallback);
                             }
                         },
                         overwrite: {
                             label: localization.translate("SaveWithErrors", "RidicsProject").value,
                             className: "btn-default",
                             callback: () => {
-                                this.saveContents(textId, contents, SaveTextModeType.NoValidation, doneCallback);
+                                this.saveContents(textId, contents, pageRow, SaveTextModeType.NoValidation, doneCallback);
                             }
                         }
                     }
@@ -317,40 +317,24 @@
                 return;
             }
             this.simplemde.value(response.newText);
-            bootbox.alert({
-                title: localization.translate("Success", "RidicsProject").value,
-                message: localization.translate("ChangesSaveSuccess", "RidicsProject").value,
-                buttons: {
-                    ok: {
-                        className: "btn-default"
-                    }
-                }
-            });
+            const alert = new AlertComponentBuilder(AlertType.Success)
+                .addContent(localization.translate("ChangesSaveSuccess", "RidicsProject").value)
+                .buildElement();
+            $(alert).delay(3000).fadeOut(2000);
+            alertHolder.empty().append(alert);
+            
             if (doneCallback != null) {
                 doneCallback();
             }
         }).fail((error) => {
+            const alert = new AlertComponentBuilder(AlertType.Error);
             if (error.status === 409) {
-                bootbox.alert({
-                    title: localization.translate("Fail", "RidicsProject").value,
-                    message: localization.translate("ChangesSaveConflict", "RidicsProject").value,
-                    buttons: {
-                        ok: {
-                            className: "btn-default"
-                        }
-                    }
-                });
+                alert.addContent(localization.translate("ChangesSaveConflict", "RidicsProject").value)
             } else {
-                bootbox.alert({
-                    title: localization.translate("Fail", "RidicsProject").value,
-                    message: localization.translate("ChangesSaveFail", "RidicsProject").value,
-                    buttons: {
-                        ok: {
-                            className: "btn-default"
-                        }
-                    }
-                });
+                alert.addContent(localization.translate("ChangesSaveFail", "RidicsProject").value)
             }
+
+            alertHolder.empty().append(alert.buildElement());
         });
     }
 
@@ -367,7 +351,7 @@
             toolbar: [ 
                 {
                     name: "save",
-                    action: (editor) => { this.saveContents(textId, editor.value()) },
+                    action: (editor) => { this.saveContents(textId, editor.value(), pageRow) },
                     className: "fa fa-floppy-o",
                     title: localization.translate("Save", "RidicsProject").value
                 },{

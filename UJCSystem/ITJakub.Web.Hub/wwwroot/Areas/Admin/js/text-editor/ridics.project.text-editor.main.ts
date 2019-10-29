@@ -62,11 +62,15 @@
                                                     <div class="col-xs-4"></div>
                                                 </div>
                                             </div>`;
+                    
+                    const alertHolder = `<div class="col-xs-12 alert-holder"></div>`;
+                    
                     $(".pages-start")
                         .append(
                             `<div class="page-splitter"></div>
                             <div class="page-row row lazyload comment-never-loaded" data-page-id="${projectPage.id}" data-page-name="${projectPage.name}">
                                 ${pageToolbarDiv}
+                                ${alertHolder}
                                 ${compositionAreaDiv}
                                 ${commentAreaDiv}
                             </div>`);

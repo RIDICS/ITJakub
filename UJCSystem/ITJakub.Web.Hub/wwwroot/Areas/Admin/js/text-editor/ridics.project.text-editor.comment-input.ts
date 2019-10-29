@@ -1,6 +1,7 @@
 ﻿class CommentInput {
     private readonly commentArea: CommentArea;
     private readonly util: EditorsApiClient;
+    private readonly alertHolderSelector = ".alert-holder";
 
     readonly commentPattern = `komentar-`;
     readonly commentRegexExpr = `(${this.commentPattern}\\w+)`;
@@ -16,64 +17,48 @@
     }
 
     /**
-    * Detects buttons click and sends data to server according to ICommentStructureReply
-    * @param {Number} textId  - Text Id of page, where comment occured
-    * @param {string} textReferenceId  - Comment thread unique id to connect composition area and comment area
-    * @param {Number} id - Unique comment id 
-    * @param {Number} parentCommentId - Unique id of parent comment
-    * @param {JQuery} dialogEl - Dialog element to display result message about send
-    * @param {string} text - Comment body
-    */
+     * Detects buttons click and sends data to server according to ICommentStructureReply
+     * @param {Number} textId  - Text Id of page, where comment occured
+     * @param {string} textReferenceId  - Comment thread unique id to connect composition area and comment area
+     * @param {Number} id - Unique comment id
+     * @param {Number} parentCommentId - Unique id of parent comment
+     * @param commentText
+     * @param alertHolder
+     */
     processCommentSendClick(
         textId: number,
         textReferenceId: string,
         id: number,
-        parentCommentId: number, commentText: string) {
-        if (!commentText) {
-            bootbox.alert({
-                title: localization.translate("Warning", "RidicsProject").value,
-                message: localization.translate("EmptyComment", "RidicsProject").value,
-                buttons: {
-                    ok: {
-                        className: "btn-default"
-                    }
-                }
-            });
-        } else {
-            const comment: ICommentStructureReply = {
-                id: id,
-                text: commentText,
-                parentCommentId: parentCommentId,
-                textReferenceId: textReferenceId
-            };
+        parentCommentId: number,
+        commentText: string,
+        alertHolder: JQuery<HTMLElement>) {
 
-            this.util.createComment(textId, comment).done(() => {
-                bootbox.alert({
-                    title: localization.translate("Success", "RidicsProject").value,
-                    message: localization.translate("CommentCreateSuccess", "RidicsProject").value,
-                    buttons: {
-                        ok: {
-                            className: "btn-default"
-                        }
-                    }
-                });
-                const deferred = this.commentArea.reloadCommentArea(textId);
-                deferred.done(() => {
-                    const pageEl = $(`[data-text-id="${textId}"]`);
-                    this.commentArea.collapseIfCommentAreaContentOverflows(pageEl.children(".comment-area"));//collapse section fully when updating section height initially
-                });
-            }).fail(() => {
-                bootbox.alert({
-                    title: localization.translate("Fail", "RidicsProject").value,
-                    message: localization.translate("CommentCreateFail", "RidicsProject").value,
-                    buttons: {
-                        ok: {
-                            className: "btn-default"
-                        }
-                    }
-                });
+        alertHolder.empty();
+        const comment: ICommentStructureReply = {
+            id: id,
+            text: commentText,
+            parentCommentId: parentCommentId,
+            textReferenceId: textReferenceId
+        };
+
+        this.util.createComment(textId, comment).done(() => {
+            const alert = new AlertComponentBuilder(AlertType.Success)
+                .addContent(localization.translate("CommentCreateSuccess", "RidicsProject").value)
+                .buildElement();
+            alertHolder.empty().append(alert);
+            $(alert).delay(3000).fadeOut(2000);
+
+            const deferred = this.commentArea.reloadCommentArea(textId);
+            deferred.done(() => {
+                const pageEl = $(`[data-text-id="${textId}"]`);
+                this.commentArea.collapseIfCommentAreaContentOverflows(pageEl.children(".comment-area"));//collapse section fully when updating section height initially
             });
-        }
+        }).fail(() => {
+            const alert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(localization.translate("CommentCreateFail", "RidicsProject").value)
+                .buildElement();
+            alertHolder.empty().append(alert);
+        });
     }
 
     private processEditCommentClick() {
@@ -84,11 +69,9 @@
             let mainCommentContentEl: JQuery<HTMLElement>;
             let editedCommentBody: JQuery<HTMLElement>;
             editedCommentBody = commentActionsRowEl.parent(".media-body");
-            if (target.hasClass("edit-root-comment"))
-            {
+            if (target.hasClass("edit-root-comment")) {
                 mainCommentContentEl = editedCommentBody;
-            }
-            else {
+            } else {
                 mainCommentContentEl = editedCommentBody.parents(".media-body");
             }
 
@@ -134,6 +117,8 @@
         const selectionStartLine = codeMirror.getCursor("from").line;
         const selectionEndChar = codeMirror.getCursor("to").ch;
         const selectionEndLine = codeMirror.getCursor("to").line;
+        const alertHolder = $(".CodeMirror").parents(".page-row").find(this.alertHolderSelector);
+        alertHolder.empty();
         const customCommentarySign = selectedText.match(new RegExp(`\\$${this.commentRegexExpr}\\%`)); //searching on one side only because of the same amount of characters.
         if (!addSigns) {
             if (customCommentarySign) {
@@ -141,8 +126,8 @@
                 output = output.replace(new RegExp(`\\%${this.commentRegexExpr}\\$`), "");
                 markSize = customCommentarySign[0].length;
                 codeMirror.replaceSelection(output);
-                codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar },
-                    { line: selectionEndLine, ch: selectionEndChar - markSize });
+                codeMirror.setSelection({line: selectionStartLine, ch: selectionStartChar},
+                    {line: selectionEndLine, ch: selectionEndChar - markSize});
             }
         } else {
             this.util.createTextReferenceId(textId).done((commentId) => {
@@ -157,54 +142,39 @@
                     saveTextFunction.call(thisForCallback, textId, codeMirror.getValue(), SaveTextModeType.ValidateOnlySyntax).done((response: ISaveTextResponse) => {
                         if (!response.isValidationSuccess) {
                             codeMirror.setValue(originalText);
-                            bootbox.alert({
-                                title: localization.translate("Fail", "RidicsProject").value,
-                                message: localization.translate("CommentSyntaxError", "RidicsProject").value,
-                                buttons: {
-                                    ok: {
-                                        className: "btn-default"
-                                    }
-                                }
-                            });
+                            const alert = new AlertComponentBuilder(AlertType.Error)
+                                .addContent(localization.translate("CommentSyntaxError", "RidicsProject").value)
+                                .buildElement();
+                            alertHolder.empty().append(alert);
                             return;
                         }
 
                         //creating comment (commentId = null)
-                        this.processCommentSendClick(textId, textReferenceId, null, null, commentText);
-                        codeMirror.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
-                            { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
+                        this.processCommentSendClick(textId, textReferenceId, null, null, commentText, alertHolder);
+                        codeMirror.setSelection({line: selectionStartLine, ch: selectionStartChar}, //setting caret
+                            {line: selectionEndLine, ch: selectionEndChar + 2 * markSize});
                     }).fail(() => {
                         codeMirror.setValue(originalText);
-                        bootbox.alert({
-                            title: localization.translate("Fail", "RidicsProject").value,
-                            message: localization.translate("Failed to create comment.", "RidicsProject").value,
-                            buttons: {
-                                ok: {
-                                    className: "btn-default"
-                                }
-                            }
-                        });
+                        const alert = new AlertComponentBuilder(AlertType.Error)
+                            .addContent(localization.translate("CommentCreateFail", "RidicsProject").value)
+                            .buildElement();
+                        alertHolder.empty().append(alert);
                     });
                 }
             }).fail(() => {
-                bootbox.alert({
-                    title: localization.translate("Fail", "RidicsProject").value,
-                    message: localization.translate("Failed to create comment.", "RidicsProject").value,
-                    buttons: {
-                        ok: {
-                            className: "btn-default"
-                        }
-                    }
-                });
+                const alert = new AlertComponentBuilder(AlertType.Error)
+                    .addContent(localization.translate("CommentCreateFail", "RidicsProject").value)
+                    .buildElement();
+                alertHolder.empty().append(alert);
             });
         }
     }
 
     private addCommentFromCommentArea(textReferenceId: string,
-        textId: number,
-        id: number,
-        parentCommentId: number,
-        buttonEl: JQuery) {
+                                      textId: number,
+                                      id: number,
+                                      parentCommentId: number,
+                                      buttonEl: JQuery) {
         const elm = this.commentArea.constructCommentInputAreaHtml();
         buttonEl.parents(".comment-actions-row").hide();
         buttonEl.parents(".media-body").append(elm);
@@ -229,12 +199,11 @@
                     const actionsRow = jEl.parents(".comment-actions-row");
                     actionsRow.show();
                     actionsRow.siblings(".comment-body").show();
-                    
+
                     if (commentId == null) {
                         textAreaEl.parent(".media-body").parent(".media").remove();
-                    }
-                    else {
-                        textAreaEl.remove();   
+                    } else {
+                        textAreaEl.remove();
                     }
                 } else {
                     const comment: ICommentStructureReply = {
@@ -254,31 +223,26 @@
             });
     }
 
-    private onCommentSendRequest(sendAjax:JQueryXHR, textAreaEl:JQuery, textId:number, isEditRequest = false) {
+    private onCommentSendRequest(sendAjax: JQueryXHR, textAreaEl: JQuery, textId: number, isEditRequest = false) {
+        const alertHolder = textAreaEl.parents(".page-row").find(this.alertHolderSelector);
+        alertHolder.empty();
+
         sendAjax.done(() => {
-            bootbox.alert({
-                title: localization.translate("Success", "RidicsProject").value,
-                message: localization.translate(isEditRequest ? "CommentUpdateSuccess" : "CommentCreateSuccess", "RidicsProject").value,
-                buttons: {
-                    ok: {
-                        className: "btn-default"
-                    }
-                }
-            });
+            const alert = new AlertComponentBuilder(AlertType.Success)
+                .addContent(localization.translate(isEditRequest ? "CommentUpdateSuccess" : "CommentCreateSuccess", "RidicsProject").value)
+                .buildElement();
+            alertHolder.empty().append(alert);
+            $(alert).delay(3000).fadeOut(2000);
+            
             textAreaEl.val("");
             textAreaEl.off();
             this.commentArea.reloadCommentArea(textId);
         });
         sendAjax.fail(() => {
-            bootbox.alert({
-                title: localization.translate("Fail", "RidicsProject").value,
-                message: localization.translate(isEditRequest ? "CommentUpdateFail" : "CommentCreateFail", "RidicsProject").value,
-                buttons: {
-                    ok: {
-                        className: "btn-default"
-                    }
-                }
-            });
+            const alert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(localization.translate(isEditRequest ? "CommentUpdateFail" : "CommentCreateFail", "RidicsProject").value)
+                .buildElement();
+            alertHolder.empty().append(alert);
         });
     }
 }
