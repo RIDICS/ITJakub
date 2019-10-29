@@ -47,7 +47,7 @@ namespace Vokabular.MainService.Core.Managers
         {
             if (m_registrationOption.ReservedUsernames.Contains(data.UserName.ToLower()))
             {
-                throw new MainServiceException(MainServiceErrorCode.ReservedUsernameError, $"Username '{data.UserName}' is reserved, cannot be used.", HttpStatusCode.Conflict, data.UserName);
+                throw new MainServiceException(MainServiceErrorCode.ReservedUsernameError, $"Username '{data.UserName}' is reserved, cannot be used.", HttpStatusCode.BadRequest, data.UserName);
             }
             
             var userId = new CreateNewUserWork(m_userRepository, m_communicationProvider, data).Execute();
