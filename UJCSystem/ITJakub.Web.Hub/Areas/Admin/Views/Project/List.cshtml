@@ -1,4 +1,4 @@
-﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectListViewModel
+﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Areas.Admin.Models.ProjectItemViewModel>
 @using ITJakub.Web.Hub.Core
 @using Scalesoft.Localization.AspNetCore
 @using Vokabular.Shared.DataContracts.Types
@@ -9,8 +9,10 @@
 }
 @section styles {
     <link asp-append-version="true" rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/css/ridics.permissions.css" />
 }
 @section scripts {
+    <script asp-append-version="true" src="~/js/ridics.list.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.list.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.client.js"></script>
 }
@@ -22,9 +24,7 @@
         </div>
     </div>
     
-    @*<hr/>*@
-
-    <div class="row project-list-header">
+     <div class="row project-list-header">
         <div class="col-md-2">
             <label for="filter">@Localizer.Translate("Filter", "Admin"):</label>
             <select class="form-control input-sm" id="filter">
@@ -33,28 +33,51 @@
                 <option>@Localizer.Translate("ForeignProjects", "Admin")</option>
             </select>
         </div>
-        <div class="col-md-2 col-md-offset-8">
-            <label for="name-filter">@Localizer.Translate("FindByName", "Admin"):</label>
-            <div class="input-group input-group-sm">
-                <input type="text" class="form-control" id="name-filter" placeholder="@Localizer.Translate("NewProjectName", "Admin")" title="@Localizer.Translate("FindByName", "Admin")" />
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" id="name-filter-button"><span class="glyphicon glyphicon-search"></span></button>
-                </span>
+     </div>
+    
+    <div class="row">
+        <div class="col-xs-12 project-section" id="project-section">
+            <div class="section">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="panel-title col-xs-12 col-sm-2">
+                                @Localizer.Translate("Projects", "Permission")
+                            </div>
+                            <div class="col-xs-12 col-sm-10">
+                                <form asp-action="List" asp-controller="Project" method="get" class="project-search-form search-form form-inline">
+                                    <div class="form-group">
+                                        <div id="createProjectButton" class="btn btn-default">
+                                            <i class="fa fa-plus"></i>
+                                        </div>
+                                        <div class="search-input">
+                                            <input class="form-control search-value" name="search" placeholder=" " value="@Model.SearchQuery" />
+                                            <i class="fa fa-close reset-search-button"></i>
+                                        </div>
+                                        <div class="search-button">
+                                            <button class="btn btn-default" type="submit">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div id="projectListContainer" class="list-container selectable">
+                            @await Html.PartialAsync("_ProjectListContent", Model)
+                        </div>
+                        <div id="projectPagination" class="text-center"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     
-    <div class="project-list-subheader">
-        <a href="#">@Localizer.Translate("AdvancedSearch", "Admin") <span class="glyphicon glyphicon-chevron-down"></span></a>
-    </div>
+    @*<hr/>*@
 
-    <hr/>
-    
-    <div id="list-container">
-        @await Html.PartialAsync("_ProjectListContent", Model)
-    </div>
-    
-    <div id="pagination" class="text-center"></div>
+   
 </div>
 
 <div class="modal fade" role="dialog" id="new-project-dialog">

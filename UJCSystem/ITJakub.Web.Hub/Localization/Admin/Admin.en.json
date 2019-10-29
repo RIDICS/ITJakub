@@ -233,7 +233,8 @@
     "CreateForumInModules": "Create a forum in modules",
     "NoSelectedModuleForForum": "At least one module must be selected for forum creation.",
     "EmptyProjectNameError": "Project name cannot be empty.",
-    
+    "NoPermissionsSearch": "Sorry, but we could not find any project matching ",
+    "NoPermissionsFound": "Sorry, but no projects were found",
     "RenameSource": "translate[Přejmenovat zdroj]",
 
     "Group": "trnaslate[Skupina {0}]",

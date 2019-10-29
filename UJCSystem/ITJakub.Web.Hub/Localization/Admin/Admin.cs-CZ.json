@@ -233,7 +233,9 @@
     "CreateForumInModules": "Vytvoření fóra v modulech",
     "NoSelectedModuleForForum": "Musí být vybrán alespoň jeden modul pro vytvoření fóra.",
     "EmptyProjectNameError": "Název díla nemůže být prázdný.",
-
+    "NoProjectsSearch": "Je nám líto, ale nepodařilo se najít žádné projekty odpovídající dotazu ",
+    "NoProjectsFound": "Je nám líto, ale nebyly nalezeny žádné projekty",
+    
     "RenameSource": "Přejmenovat zdroj",
 
     "Group": "Skupina {0}",

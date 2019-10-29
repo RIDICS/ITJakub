@@ -35,26 +35,30 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             m_localization = localization;
         }
 
-        private ProjectListViewModel CreateProjectListViewModel(PagedResultList<ProjectDetailContract> data, int start)
+        public IActionResult List(string search, int start, int count = ProjectListPageSize, ViewType viewType = ViewType.Full)
         {
-            var listViewModel = Mapper.Map<List<ProjectItemViewModel>>(data.List);
-            return new ProjectListViewModel
+            var client = GetProjectClient();
+            var result = client.GetProjectList(start, count, GetDefaultProjectType(), search, true);
+            var listViewModel = Mapper.Map<List<ProjectItemViewModel>>(result.List);
+            var model = new ListViewModel<ProjectItemViewModel>
             {
-                TotalCount = data.TotalCount,
+                TotalCount = result.TotalCount,
                 List = listViewModel,
                 PageSize = ProjectListPageSize,
                 Start = start,
                 AvailableBookTypes = ProjectConstants.AvailableBookTypes,
+                SearchQuery = search
             };
-        }
-
-        public IActionResult List()
-        {
-            var client = GetProjectClient();
-            const int start = 0;
-            var result = client.GetProjectList(start, ProjectListPageSize, GetDefaultProjectType(), null, true);
-            var viewModel = CreateProjectListViewModel(result, start);
-            return View(viewModel);
+            
+            switch (viewType)
+            {
+                case ViewType.Widget:
+                    return PartialView("_ProjectListContent", model);
+                case ViewType.Full:
+                    return View(model);
+                default:
+                    return View(model);
+            }
         }
 
         public IActionResult Project(long id)
@@ -63,14 +67,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var result = client.GetProject(id);
             var viewModel = Mapper.Map<ProjectItemViewModel>(result);
             return View(viewModel);
-        }
-
-        public IActionResult ProjectListContent(int start, int count)
-        {
-            var client = GetProjectClient();
-            var result = client.GetProjectList(start, count, GetDefaultProjectType(), null, true);
-            var viewModel = CreateProjectListViewModel(result, start);
-            return PartialView("_ProjectListContent", viewModel);
         }
 
         public IActionResult ProjectModule(ProjectModuleType moduleType)

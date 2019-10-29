@@ -1,16 +1,14 @@
 ﻿$(document.documentElement).ready(() => {
-    var projectList = new ProjectList();
+    const projectList = new ProjectList();
     projectList.init();
 });
 
 class ProjectList {
     private projectClient: ProjectClient;
+    private projectList: ListWithPagination;
     private newProjectDialog: BootstrapDialogWrapper;
     private deleteProjectDialog: BootstrapDialogWrapper;
-    private pagination: Pagination;
     private projectIdForDelete: number;
-    private pageSize: number;
-    private totalCount: number;
 
     constructor() {
         this.projectClient = new ProjectClient();
@@ -26,36 +24,30 @@ class ProjectList {
             autoClearInputs: false,
             submitCallback: this.deleteProject.bind(this)
         });
-
-        this.pagination = new Pagination({
-            container: document.getElementById("#pagination") as HTMLDivElement,
-            pageClickCallback: this.loadPage.bind(this)
-        });
     }
 
     public init() {
         $("#new-project-button").click((event) => {
             this.newProjectDialog.show();
-
             event.preventDefault();
         });
+        
+      
+        this.projectList = new ListWithPagination("Admin/Project/List", "project", ViewType.Widget, true, false, this.reinitProjectList, this);
+        this.projectList.init();     
+    }
 
+    public reinitProjectList() {
         $(".project-item .delete-button").click((event) => {
-            var $projectItem = $(event.currentTarget as Node as Element).closest(".project-item");
+            const $projectItem = $(event.currentTarget as Node as Element).closest(".project-item");
             this.projectIdForDelete = Number($projectItem.data("project-id"));
-            var projectName = $projectItem.data("project-name");
+            const projectName = $projectItem.data("project-name");
 
             $("#delete-project-name").text(projectName);
             this.deleteProjectDialog.show();
 
             event.preventDefault();
         });
-
-        var $pagingInfo = $("#list-container .paging-info");
-        this.pageSize = $pagingInfo.data("page-size");
-        this.totalCount = $pagingInfo.data("total-count");
-
-        this.pagination.make(this.totalCount, this.pageSize);
     }
 
     private createNewProject() {
@@ -99,26 +91,5 @@ class ProjectList {
 
             window.location.reload(true);
         });
-    }
-
-    private loadPage(pageNumber: number) {
-        var parameters = {
-            start: (pageNumber-1) * this.pageSize,
-            count: this.pageSize
-        };
-        var url = getBaseUrl() + "Admin/Project/ProjectListContent?" + $.param(parameters);
-
-        var $listContainer = $("#list-container");
-
-        $listContainer
-            .html("<div class=\"loader\"></div>")
-            .load(url, null, (responseText, textStatus, xmlHttpRequest) => {
-                if (xmlHttpRequest.status !== HttpStatusCode.Success) {
-                    var alert = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("ListError", "Admin").value);
-                    $listContainer
-                        .empty()
-                        .append(alert.buildElement());
-                }
-            });
     }
 }
