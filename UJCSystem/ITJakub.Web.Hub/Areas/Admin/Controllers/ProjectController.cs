@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
+using ITJakub.Web.Hub.Areas.Admin.Controllers.Constants;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
@@ -16,6 +17,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
 using ITJakub.Web.Hub.Options;
 using Scalesoft.Localization.AspNetCore;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
@@ -41,7 +43,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 TotalCount = data.TotalCount,
                 List = listViewModel,
                 PageSize = ProjectListPageSize,
-                Start = start
+                Start = start,
+                AvailableBookTypes = ProjectConstants.AvailableBookTypes,
             };
         }
 
@@ -213,10 +216,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             var client = GetProjectClient();
 
-            var newProject = new ProjectContract
+            var newProject = new CreateProjectContract
             {
                 Name = request.Name,
                 ProjectType = GetDefaultProjectType(),
+                BookTypes = request.SelectedBookTypes
             };
             var newProjectId = client.CreateProject(newProject);
             return Json(newProjectId);

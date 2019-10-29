@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using ITJakub.Web.Hub.Areas.Admin.Controllers.Constants;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
@@ -155,15 +156,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 }
             }
 
-
-            var availableBookTypes = new List<BookTypeEnumContract>
-            {
-                BookTypeEnumContract.Edition,
-                BookTypeEnumContract.TextBank,
-                BookTypeEnumContract.Grammar,
-                //BookTypeEnumContract.AudioBook,
-            };
-            
             return new NewPublicationViewModel
             {
                 ProjectId = projectId,
@@ -189,8 +181,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     //    Title = m_localization.Translate("AudioSources", "Admin"),
                     //},
                 },
-                AvailableBookTypes = availableBookTypes,
-                PublishBookTypes = availableBookTypes.Select(availableBookType => new SelectableBookType
+                AvailableBookTypes = ProjectConstants.AvailableBookTypes,
+                PublishBookTypes = ProjectConstants.AvailableBookTypes.Select(availableBookType => new SelectableBookType
                 {
                     BookType = availableBookType,
                     IsSelected = snapshot != null && snapshot.BookTypes.Any(y => y == availableBookType),

@@ -64,7 +64,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPost]
-        public long CreateProject([FromBody] ProjectContract project)
+        public long CreateProject([FromBody] CreateProjectContract project)
         {
             return m_projectManager.CreateProject(project);
         }

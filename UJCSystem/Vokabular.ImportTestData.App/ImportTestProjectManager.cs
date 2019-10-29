@@ -46,10 +46,11 @@ namespace Vokabular.ImportTestData.App
         {
             var startTime = DateTime.UtcNow;
 
-            var projectId = m_projectClient.CreateProject(new ProjectContract
+            var projectId = m_projectClient.CreateProject(new CreateProjectContract
             {
                 Name = $"Test project {index}",
                 ProjectType = ProjectTypeContract.Community,
+                BookTypes = new List<BookTypeEnumContract> {BookTypeEnumContract.Edition},
             });
 
             // Metadata

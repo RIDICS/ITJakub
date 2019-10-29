@@ -60,7 +60,27 @@ class ProjectList {
 
     private createNewProject() {
         const projectName = $("#new-project-name").val() as string;
-        this.projectClient.createProject(projectName, (newId, error) => {
+        if(projectName.length == 0)
+        {
+            this.newProjectDialog.showError(localization.translate("EmptyProjectNameError", "Admin").value);
+            return;
+        }
+        
+        const selectedBookTypes = [];
+        $(`input[name="bookType"]`).each((i, elem) => {
+            if($(elem).is(":checked"))
+            {
+                selectedBookTypes.push( BookTypeEnum[$(elem).data("book-type")])
+            }            
+        });
+
+        if(selectedBookTypes.length == 0)
+        {
+            this.newProjectDialog.showError(localization.translate("NoSelectedModuleForForum", "Admin").value);
+            return;
+        }
+                
+        this.projectClient.createProject(projectName, selectedBookTypes, (newId, error) => {
             if (error != null) {
                 this.newProjectDialog.showError();
                 return;
@@ -85,7 +105,7 @@ class ProjectList {
         var parameters = {
             start: (pageNumber-1) * this.pageSize,
             count: this.pageSize
-        }
+        };
         var url = getBaseUrl() + "Admin/Project/ProjectListContent?" + $.param(parameters);
 
         var $listContainer = $("#list-container");
