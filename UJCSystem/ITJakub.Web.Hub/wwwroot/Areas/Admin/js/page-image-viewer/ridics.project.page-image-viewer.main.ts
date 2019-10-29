@@ -22,5 +22,8 @@
                 .addContent(localization.translate("ProjectLoadFailed", "RidicsProject").value);
             projectImagesElement.empty().append(error.buildElement());
         });
+        compositionPagesAjax.always(() => {
+            projectImagesElement.removeClass("hide");
+        });
     }
 }

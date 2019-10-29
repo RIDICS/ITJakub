@@ -1,12 +1,16 @@
 ﻿class TextEditorMain {
     private numberOfPages: number = 0;
+    private resourcePreview: JQuery<HTMLElement>;
 
+    constructor() {
+        this.resourcePreview = $("#project-resource-preview");
+    }
     getNumberOfPages(): number {
         return this.numberOfPages;
     }
 
     isShowPageNumbers(): boolean {
-        return $("#project-resource-preview .display-page-checkbox").is(":checked");
+        return this.resourcePreview.find(".display-page-checkbox").is(":checked");
     }
 
     init(projectId: number) {
@@ -78,19 +82,22 @@
 
             } else {
                 const error = new AlertComponentBuilder(AlertType.Error)
-                    .addContent(localization.translate("NoTextPages", "RidicsProject").value);
-                $("#project-resource-preview").empty().append(error.buildElement());
+                    .addContent(localization.translate("NoPages", "RidicsProject").value);
+                this.resourcePreview.empty().append(error.buildElement());
             }
         });
         projectAjax.fail(() => {
             const error = new AlertComponentBuilder(AlertType.Error)
                 .addContent(localization.translate("ProjectLoadFailed", "RidicsProject").value);
-            $("#project-resource-preview").empty().append(error.buildElement());
+            this.resourcePreview.empty().append(error.buildElement());
+        });
+        projectAjax.always(() => {
+            this.resourcePreview.removeClass("hide");
         });
     }
 
     private attachEventShowPageCheckbox(pageNavigation: TextEditorPageNavigation) {
-        $("#project-resource-preview").on("click",
+        this.resourcePreview.on("click",
             ".display-page-checkbox",
             () => {
                 const isChecked = this.isShowPageNumbers();
