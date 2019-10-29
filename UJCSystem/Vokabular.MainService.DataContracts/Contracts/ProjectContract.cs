@@ -13,6 +13,11 @@ namespace Vokabular.MainService.DataContracts.Contracts
         //public string ExternalId { get; set; }
     }
 
+    public class CreateProjectContract : ProjectContract
+    {
+        public IList<BookTypeEnumContract> BookTypesForForum { get; set; }
+    }
+    
     public class GetProjectContract : ProjectContract
     {
         public DateTime CreateTime { get; set; }

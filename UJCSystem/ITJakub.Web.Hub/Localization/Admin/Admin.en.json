@@ -230,7 +230,10 @@
     "DeleteProject": "translate[Smazat dílo]",
     "DeleteProjectAreYouSure": "translate[Opravdu chcete smazat dílo]",
     "Close2": "translate[Zavřít]",
-
+    "CreateForumInModules": "Create a forum in modules",
+    "NoSelectedModuleForForum": "At least one module must be selected for forum creation.",
+    "EmptyProjectNameError": "Project name cannot be empty.",
+    
     "RenameSource": "translate[Přejmenovat zdroj]",
 
     "Group": "trnaslate[Skupina {0}]",

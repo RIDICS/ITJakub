@@ -15,6 +15,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
+using Vokabular.Shared.DataContracts.Types;
 using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -27,31 +28,38 @@ namespace Vokabular.MainService.Core.Managers
         private readonly PermissionRepository m_permissionRepository;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly UserDetailManager m_userDetailManager;
+        private readonly ForumSiteManager m_forumSiteManager;
         private readonly CommunicationProvider m_communicationProvider;
         private readonly DefaultUserProvider m_defaultUserProvider;
         private readonly IMapper m_mapper;
 
         public ProjectManager(ProjectRepository projectRepository, MetadataRepository metadataRepository,
             PermissionRepository permissionRepository, AuthenticationManager authenticationManager,
-            UserDetailManager userDetailManager, CommunicationProvider communicationProvider, DefaultUserProvider defaultUserProvider,
-            IMapper mapper)
+            UserDetailManager userDetailManager, ForumSiteManager forumSiteManager, CommunicationProvider communicationProvider,
+            DefaultUserProvider defaultUserProvider, IMapper mapper)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_permissionRepository = permissionRepository;
             m_authenticationManager = authenticationManager;
             m_userDetailManager = userDetailManager;
+            m_forumSiteManager = forumSiteManager;
             m_communicationProvider = communicationProvider;
             m_defaultUserProvider = defaultUserProvider;
             m_mapper = mapper;
         }
 
-        public long CreateProject(ProjectContract projectData)
+        public long CreateProject(CreateProjectContract projectData)
         {
             var currentUserId = m_authenticationManager.GetCurrentUserId();
             var work = new CreateProjectWork(m_projectRepository, projectData, currentUserId, m_defaultUserProvider, m_mapper);
-
             var resultId = work.Execute();
+            
+            if (projectData.ProjectType == ProjectTypeContract.Community && projectData.BookTypesForForum != null)
+            {
+                m_forumSiteManager.CreateOrUpdateForums(resultId, projectData.BookTypesForForum.Select(x => (short) x).ToArray());
+            }
+
             return resultId;
         }
 
@@ -75,7 +83,8 @@ namespace Vokabular.MainService.Core.Managers
             var countValue = PagingHelper.GetCountForProject(count);
             var projectTypeEnum = m_mapper.Map<ProjectTypeEnum?>(projectType);
 
-            var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, projectTypeEnum, filterByName, fetchPageCount, fetchAuthors, fetchResponsiblePersons);
+            var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, projectTypeEnum,
+                filterByName, fetchPageCount, fetchAuthors, fetchResponsiblePersons);
             var resultEntities = work.Execute();
 
             var metadataList = work.GetMetadataResources();
@@ -108,7 +117,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public ProjectDetailContract GetProject(long projectId, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons)
         {
-            var work = new GetProjectWork(m_projectRepository, m_metadataRepository, projectId, fetchPageCount, fetchAuthors, fetchResponsiblePersons, false);
+            var work = new GetProjectWork(m_projectRepository, m_metadataRepository, projectId, fetchPageCount, fetchAuthors,
+                fetchResponsiblePersons, false);
             var project = work.Execute();
 
             if (project == null)
@@ -200,7 +210,7 @@ namespace Vokabular.MainService.Core.Managers
                 var work = new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, group.ExternalId);
                 work.Execute();
                 var authRoleContract = work.GetRoleContract();
-                
+
                 var roleContract = m_mapper.Map<RoleContract>(authRoleContract);
                 roleContract.Id = group.Id;
 
