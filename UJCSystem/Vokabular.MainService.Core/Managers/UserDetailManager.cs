@@ -29,6 +29,9 @@ namespace Vokabular.MainService.Core.Managers
         
         public UserContract GetUserContractForUser(UserContract user)
         {
+            if (user == null)
+                return null;
+
             var authUser = GetDetailUserFromAuthService(user.ExternalId);
             if (authUser == null)
                 return user;
@@ -40,6 +43,9 @@ namespace Vokabular.MainService.Core.Managers
 
         public string GetUserFullName(User user)
         {
+            if (user == null)
+                return null;
+
             if (user.ExternalId == null)
             {
                 throw new MainServiceException(MainServiceErrorCode.UserHasMissingExternalId,
@@ -58,6 +64,9 @@ namespace Vokabular.MainService.Core.Managers
 
         public UserDetailContract GetUserDetailContractForUser(User user)
         {
+            if (user == null)
+                return null;
+
             if (user.ExternalId == null)
             {
                 throw new MainServiceException(MainServiceErrorCode.UserHasMissingExternalId,
@@ -76,6 +85,9 @@ namespace Vokabular.MainService.Core.Managers
 
         public UserDetailContract GetUserDetailContractForUser(UserDetailContract user)
         {
+            if (user == null)
+                return null;
+
             var authUser = GetDetailUserFromAuthService(user.ExternalId);
             if (authUser == null)
                 return user;
