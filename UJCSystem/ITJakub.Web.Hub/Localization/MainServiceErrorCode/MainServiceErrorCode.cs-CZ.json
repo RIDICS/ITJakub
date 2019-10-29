@@ -53,7 +53,8 @@
     "oai-pmh-communication-failed": "Chyba při získávání dat z: {0}.",
     "project-parser-not-found": "Konvertor pro bibilografický formát {0} nebyl nalezen.",
     "change-in-conflict": "Nelze uložit provedné změny, protože konfliktní změny už byly provedeny jiným uživatelem.",
-
+    "reserved-username-error": "Uživatelské jméno '{0}' je rezerováno, nelze ho použít.",
+    
     //Auth service codes
     "generic-error": "Operace se nezdařila",
     "user-not-exist-id": "Uživatel s daným identifikátorem neexistuje",
