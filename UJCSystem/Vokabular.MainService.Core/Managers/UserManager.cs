@@ -76,6 +76,9 @@ namespace Vokabular.MainService.Core.Managers
             authUser.LastName = data.LastName;
 
             client.EditSelfAsync(user.ExternalId.Value, authUser).GetAwaiter().GetResult();
+
+            var updateUserInfo = new UpdateUserInfo(authUser.UserName, authUser.FirstName, authUser.LastName);
+            new UpdateUserWork(m_userRepository, user.Id, updateUserInfo).Execute();
         }
 
         public void UpdateUser(int userId, UpdateUserContract data)
