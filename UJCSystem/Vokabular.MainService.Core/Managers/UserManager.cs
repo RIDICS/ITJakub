@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using AutoMapper;
+using Microsoft.Extensions.Options;
 using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -11,6 +12,7 @@ using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataEntities.UnitOfWork;
+using Vokabular.Shared.Options;
 using AuthChangeContactContract = Ridics.Authentication.DataContracts.ChangeContactContract;
 using AuthChangePasswordContract = Ridics.Authentication.DataContracts.User.ChangePasswordContract;
 using AuthChangeTwoFactorContract = Ridics.Authentication.DataContracts.User.ChangeTwoFactorContract;
@@ -28,19 +30,26 @@ namespace Vokabular.MainService.Core.Managers
         private readonly AuthenticationManager m_authenticationManager;
         private readonly UserDetailManager m_userDetailManager;
         private readonly IMapper m_mapper;
+        private readonly RegistrationOption m_registrationOption;
 
         public UserManager(UserRepository userRepository, CommunicationProvider communicationProvider,
-            AuthenticationManager authenticationManager, UserDetailManager userDetailManager, IMapper mapper)
+            AuthenticationManager authenticationManager, UserDetailManager userDetailManager, IMapper mapper, IOptions<RegistrationOption> registrationOption)
         {
             m_userRepository = userRepository;
             m_communicationProvider = communicationProvider;
             m_authenticationManager = authenticationManager;
             m_userDetailManager = userDetailManager;
             m_mapper = mapper;
+            m_registrationOption = registrationOption.Value;
         }
 
         public int CreateNewUser(CreateUserContract data)
         {
+            if (m_registrationOption.ReservedUsernames.Contains(data.UserName.ToLower()))
+            {
+                throw new MainServiceException(MainServiceErrorCode.ReservedUsernameError, $"Username '{data.UserName}' is reserved, cannot be used.", HttpStatusCode.Conflict, data.UserName);
+            }
+            
             var userId = new CreateNewUserWork(m_userRepository, m_communicationProvider, data).Execute();
             return userId;
         }
