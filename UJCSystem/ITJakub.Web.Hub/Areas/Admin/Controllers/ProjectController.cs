@@ -220,7 +220,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 Name = request.Name,
                 ProjectType = GetDefaultProjectType(),
-                BookTypes = request.SelectedBookTypes
+                BookTypesForForum = request.SelectedBookTypes,
             };
             var newProjectId = client.CreateProject(newProject);
             return Json(newProjectId);

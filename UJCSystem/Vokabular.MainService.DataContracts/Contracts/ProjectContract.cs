@@ -15,7 +15,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
     public class CreateProjectContract : ProjectContract
     {
-        public IList<BookTypeEnumContract> BookTypes { get; set; }
+        public IList<BookTypeEnumContract> BookTypesForForum { get; set; }
     }
     
     public class GetProjectContract : ProjectContract

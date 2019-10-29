@@ -55,9 +55,9 @@ namespace Vokabular.MainService.Core.Managers
             var work = new CreateProjectWork(m_projectRepository, projectData, currentUserId, m_defaultUserProvider, m_mapper);
             var resultId = work.Execute();
             
-            if (projectData.ProjectType == ProjectTypeContract.Community)
+            if (projectData.ProjectType == ProjectTypeContract.Community && projectData.BookTypesForForum != null)
             {
-                m_forumSiteManager.CreateOrUpdateForums(resultId, projectData.BookTypes.Select(x => (short) x).ToArray());
+                m_forumSiteManager.CreateOrUpdateForums(resultId, projectData.BookTypesForForum.Select(x => (short) x).ToArray());
             }
 
             return resultId;

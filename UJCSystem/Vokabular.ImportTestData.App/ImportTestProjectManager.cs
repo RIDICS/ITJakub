@@ -50,7 +50,7 @@ namespace Vokabular.ImportTestData.App
             {
                 Name = $"Test project {index}",
                 ProjectType = ProjectTypeContract.Community,
-                BookTypes = new List<BookTypeEnumContract> {BookTypeEnumContract.Edition},
+                BookTypesForForum = null,
             });
 
             // Metadata
