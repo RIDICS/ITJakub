@@ -6,14 +6,24 @@
         const upload = new ImageViewerUpload(contentAddition);
         const navigation = new ImageViewerPageNavigation(contentAddition, gui);
         const compositionPagesAjax = util.getPagesList(projectId);
+        const projectImagesElement = $("#project-resource-images");
         compositionPagesAjax.done((pages: IPage[]) => {
-            navigation.init(pages);
-            upload.init();
+            if(pages.length !== 0) {
+                navigation.init(pages);
+                upload.init();
+            } else {
+                const error = new AlertComponentBuilder(AlertType.Error)
+                    .addContent(localization.translate("NoPages", "RidicsProject").value);
+                projectImagesElement.empty().append(error.buildElement());
+            }
         });
         compositionPagesAjax.fail(() => {
             const error = new AlertComponentBuilder(AlertType.Error)
                 .addContent(localization.translate("ProjectLoadFailed", "RidicsProject").value);
-            $("#project-resource-images").empty().append(error.buildElement());
+            projectImagesElement.empty().append(error.buildElement());
+        });
+        compositionPagesAjax.always(() => {
+            projectImagesElement.removeClass("hide");
         });
     }
 }
