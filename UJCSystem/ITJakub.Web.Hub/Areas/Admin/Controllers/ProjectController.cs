@@ -46,8 +46,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 List = listViewModel,
                 PageSize = ProjectListPageSize,
                 Start = start,
-                AvailableBookTypes = ProjectConstants.AvailableBookTypes,
                 SearchQuery = search
+            };
+            var viewModel = new ProjectListViewModel
+            {
+                Projects = model,
+                AvailableBookTypes = ProjectConstants.AvailableBookTypes
             };
             
             switch (viewType)
@@ -55,9 +59,9 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 case ViewType.Widget:
                     return PartialView("_ProjectListContent", model);
                 case ViewType.Full:
-                    return View(model);
+                    return View(viewModel);
                 default:
-                    return View(model);
+                    return View(viewModel);
             }
         }
 
