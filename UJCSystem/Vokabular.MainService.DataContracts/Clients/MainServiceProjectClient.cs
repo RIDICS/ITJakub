@@ -65,7 +65,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long CreateProject(ProjectContract project)
+        public long CreateProject(CreateProjectContract project)
         {
             try
             {

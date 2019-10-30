@@ -35,7 +35,7 @@ namespace Vokabular.MainService.Core.Managers
             m_forumOptions = forumOptions.Value;
         }
 
-        public int? CreateOrUpdateForums(long projectId)
+        public int? CreateOrUpdateForums(long projectId, short[] bookTypeIds = null)
         {
             if (m_forumOptions.IsEnabled == false)
             {
@@ -52,7 +52,11 @@ namespace Vokabular.MainService.Core.Managers
 
             var projectDetailContract = m_mapper.Map<ProjectDetailContract>(project);
             projectDetailContract.PageCount = work.GetPageCount();
-            var bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short) x.Type).ToArray();
+            if (bookTypeIds == null && project.LatestPublishedSnapshot != null)
+            {
+                bookTypeIds = project.LatestPublishedSnapshot.BookTypes.Select(x => (short) x.Type).ToArray();    
+            }
+            
 
             if (project.ForumId != null)
             {

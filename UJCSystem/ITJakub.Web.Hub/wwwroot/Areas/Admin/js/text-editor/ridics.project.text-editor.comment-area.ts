@@ -1,8 +1,9 @@
 ﻿class CommentArea {
     private readonly util: EditorsApiClient;
     private readonly adminApiClient = new AdminApiClient();
+    private readonly alertHolderSelector = ".alert-holder";
     private editor: Editor;
-    private defaultImage = `<div><i class="fa fa-4x fa-user media-object"></i></div>`;
+    private defaultImage = `<div><i class="fa fa-4x fa-user media-object"></i></div>`;    
     private readonly signedInUserFirstName: string;
     private readonly signedInUserLastName: string;
     private readonly signedInUserImage: string;
@@ -405,7 +406,10 @@
     private processDeleteCommentClick(commentAreaEl: JQuery) {
         commentAreaEl.find(".delete-comment, .delete-root-comment").on("click", (event) => {
             const target = $(event.target as Node as HTMLElement);
-            const isEditingModeEnabled = target.parents(".page-row").find(".viewer").length === 0;
+            const pageRow = target.parents(".page-row");
+            const alertHolder = pageRow.find(this.alertHolderSelector);
+            alertHolder.empty();
+            const isEditingModeEnabled = pageRow.find(".viewer").length === 0;
             const commentActionsRowEl = target.parents(".comment-actions-row");
 
             let confirmMessage = localization.translate("DeleteCommentConfirm", "RidicsProject").value;
@@ -461,15 +465,10 @@
                         (response: ISaveTextResponse) => {
                             if (!response.isValidationSuccess) {
                                 codeMirror.setValue(originalText);
-                                bootbox.alert({
-                                    title: localization.translate("Fail", "RidicsProject").value,
-                                    message: localization.translate("CommentSyntaxError", "RidicsProject").value,
-                                    buttons: {
-                                        ok: {
-                                            className: "btn-default"
-                                        }
-                                    }
-                                });
+                                const alert = new AlertComponentBuilder(AlertType.Error)
+                                    .addContent(localization.translate("CommentSyntaxError", "RidicsProject").value)
+                                    .buildElement();
+                                alertHolder.empty().append(alert);
                                 return;
                             }
 
@@ -486,29 +485,25 @@
     }
 
     private onCommentDeleteRequest(deleteAjax: JQuery.Promise<any>, targetButton: JQuery) {
+        const pageRow = targetButton.parents(".page-row");
+        const alertHolder = pageRow.find(this.alertHolderSelector);
+        alertHolder.empty();
+        
         deleteAjax.done(() => {
-            const textId = targetButton.parents(".page-row").data("text-id");
-            bootbox.alert({
-                title: localization.translate("Success", "RidicsProject").value,
-                message: localization.translate("CommentDeleteSuccess", "RidicsProject").value,
-                buttons: {
-                    ok: {
-                        className: "btn-default"
-                    }
-                }
-            });
+            const alert = new AlertComponentBuilder(AlertType.Success)
+                .addContent(localization.translate("CommentDeleteSuccess", "RidicsProject").value)
+                .buildElement();
+            $(alert).delay(3000).fadeOut(2000);
+            alertHolder.empty().append(alert);
+
+            const textId = pageRow.data("text-id");
             this.reloadCommentArea(textId);
         });
         deleteAjax.fail(() => {
-            bootbox.alert({
-                title: localization.translate("Fail", "RidicsProject").value,
-                message: localization.translate("CommentDeleteFail", "RidicsProject").value,
-                buttons: {
-                    ok: {
-                        className: "btn-default"
-                    }
-                }
-            });
+            const alert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(localization.translate("CommentDeleteFail", "RidicsProject").value)
+                .buildElement();
+            alertHolder.empty().append(alert);
         });
     }
 
