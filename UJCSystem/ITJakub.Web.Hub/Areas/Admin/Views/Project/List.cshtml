@@ -7,10 +7,12 @@
 @{
     ViewBag.Title = Localizer.Translate("ProjectList", "Admin");
 }
+
 @section styles {
-    <link asp-append-version="true" rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css" />
-    <link asp-append-version="true" rel="stylesheet" href="~/css/ridics.permissions.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css"/>
+    <link asp-append-version="true" rel="stylesheet" href="~/css/ridics.permissions.css"/>
 }
+
 @section scripts {
     <script asp-append-version="true" src="~/js/ridics.list.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.list.js"></script>
@@ -29,27 +31,27 @@
                             </div>
                             <div class="col-xs-12 col-sm-10">
                                 <form asp-action="List" asp-controller="Project" method="get" class="project-search-form search-form form-inline">
-                                   <div class="form-group">
-                                       <select class="form-control input-sm" id="projectOwnerFilter">
-                                           @foreach(var option in Model.FilterTypes)
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-default" id="new-project-button">
+                                            @Localizer.Translate("CreateNewProject", "Admin")
+                                        </button>
+                                        <select class="form-control" id="projectOwnerFilter">
+                                            @foreach (var option in Model.FilterTypes)
                                             {
-                                                <option value="@option">@Localizer.Translate(option.ToString(), "Admin")</option>     
+                                                <option value="@option">@Localizer.Translate(option.ToString(), "Admin")</option>
                                             }
-                                       </select>
-                                       <button type="button" class="btn btn-default" id="new-project-button">
-                                           @Localizer.Translate("CreateNewProject", "Admin")
-                                       </button>
-                                       <div class="search-input">
-                                           <input class="form-control search-value" name="search" placeholder=" " value="@Model.Projects.SearchQuery"/>
-                                           <i class="fa fa-close reset-search-button"></i>
-                                       </div>
-                                       <div class="search-button">
-                                           <button class="btn btn-default" type="submit">
-                                               <i class="fa fa-search"></i>
-                                           </button>
-                                       </div>
-                                   </div>
-                               </form>
+                                        </select>
+                                        <div class="search-input">
+                                            <input class="form-control search-value" name="search" placeholder=" " value="@Model.Projects.SearchQuery"/>
+                                            <i class="fa fa-close reset-search-button"></i>
+                                        </div>
+                                        <div class="search-button">
+                                            <button class="btn btn-default" type="submit">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -63,10 +65,10 @@
             </div>
         </div>
     </div>
-    
+
     @*<hr/>*@
 
-   
+
 </div>
 
 <div class="modal fade" role="dialog" id="new-project-dialog">
@@ -124,7 +126,8 @@
             <div class="modal-footer">
                 <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("ErrorDuringDelete", "Admin")</div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Delete", "Admin")</button>
+                <button type="button" class="btn btn-default save-button">
+                    <span class="saving-icon loading-small-button"></span>@Localizer.Translate("Delete", "Admin")</button>
             </div>
         </div>
     </div>
