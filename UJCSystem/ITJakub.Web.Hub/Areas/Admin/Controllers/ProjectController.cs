@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using ITJakub.Web.Hub.Areas.Admin.Controllers.Constants;
@@ -14,7 +13,6 @@ using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.RestClient.Results;
 using ITJakub.Web.Hub.Options;
 using Scalesoft.Localization.AspNetCore;
 using Vokabular.Shared.DataContracts.Types;
@@ -30,34 +28,42 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         private readonly ILocalizationService m_localization;
 
-        public ProjectController(ControllerDataProvider controllerDataProvider, ILocalizationService localization) : base(controllerDataProvider)
+        public ProjectController(ControllerDataProvider controllerDataProvider, ILocalizationService localization) : base(
+            controllerDataProvider)
         {
             m_localization = localization;
         }
 
-        public IActionResult List(string search, int start, int count = ProjectListPageSize, ViewType viewType = ViewType.Full)
+        public IActionResult List(string search, int start, int count = ProjectListPageSize, ViewType viewType = ViewType.Full,
+            ProjectOwnerType projectOwnerType = ProjectOwnerType.AllProjects)
         {
             var client = GetProjectClient();
-            var result = client.GetProjectList(start, count, GetDefaultProjectType(), search, true);
-            var listViewModel = Mapper.Map<List<ProjectItemViewModel>>(result.List);
-            var model = new ListViewModel<ProjectItemViewModel>
+            var result = client.GetProjectList(start, count, GetDefaultProjectType(), projectOwnerType, search, true);
+            var projectItems = Mapper.Map<List<ProjectItemViewModel>>(result.List);
+            var listViewModel = new ListViewModel<ProjectItemViewModel>
             {
                 TotalCount = result.TotalCount,
-                List = listViewModel,
+                List = projectItems,
                 PageSize = ProjectListPageSize,
                 Start = start,
                 SearchQuery = search
             };
             var viewModel = new ProjectListViewModel
             {
-                Projects = model,
-                AvailableBookTypes = ProjectConstants.AvailableBookTypes
+                Projects = listViewModel,
+                AvailableBookTypes = ProjectConstants.AvailableBookTypes,
+                FilterTypes = new List<ProjectOwnerType>
+                {
+                    ProjectOwnerType.AllProjects,
+                    ProjectOwnerType.MyProjects,
+                    ProjectOwnerType.ForeignProjects,
+                }
             };
-            
+
             switch (viewType)
             {
                 case ViewType.Widget:
-                    return PartialView("_ProjectListContent", model);
+                    return PartialView("_ProjectListContent", listViewModel);
                 case ViewType.Full:
                     return View(viewModel);
                 default:

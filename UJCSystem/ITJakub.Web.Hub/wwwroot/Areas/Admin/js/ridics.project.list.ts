@@ -4,6 +4,7 @@
 });
 
 class ProjectList {
+    private readonly projectListUrl = "Admin/Project/List";
     private projectClient: ProjectClient;
     private projectList: ListWithPagination;
     private newProjectDialog: BootstrapDialogWrapper;
@@ -32,12 +33,24 @@ class ProjectList {
             event.preventDefault();
         });
         
-      
-        this.projectList = new ListWithPagination("Admin/Project/List", "project", ViewType.Widget, true, false, this.reinitProjectList, this);
-        this.projectList.init();     
+        $("#projectOwnerFilter").change((event) => {
+            const value = $(event.currentTarget).val();
+            console.log(value);
+            const url = new URI(this.projectListUrl).search((query) => {
+                query.projectOwnerType = value;
+            }).toString();
+            
+            this.projectList.setNewUrlPath(url);
+            this.projectList.loadFirstPage();
+        });
+        
+        this.projectList = new ListWithPagination(this.projectListUrl, "project", ViewType.Widget, true, false, this.reinitProjectListButtons, this);
+        this.projectList.init();
+        
+        this.reinitProjectListButtons();
     }
 
-    public reinitProjectList() {
+    public reinitProjectListButtons() {
         $(".project-item .delete-button").click((event) => {
             const $projectItem = $(event.currentTarget as Node as Element).closest(".project-item");
             this.projectIdForDelete = Number($projectItem.data("project-id"));
@@ -88,8 +101,8 @@ class ProjectList {
                 this.deleteProjectDialog.showError();
                 return;
             }
-
-            window.location.reload(true);
+            
+            this.projectList.reloadPage();
         });
     }
 }

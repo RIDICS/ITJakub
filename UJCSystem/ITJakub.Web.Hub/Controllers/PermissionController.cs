@@ -13,6 +13,7 @@ using Ridics.Core.Structures.Shared;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Errors;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -84,7 +85,7 @@ namespace ITJakub.Web.Hub.Controllers
             search = search ?? string.Empty;
 
             var client = GetProjectClient();
-            var result = client.GetProjectList(start, count, GetDefaultProjectType(), search);
+            var result = client.GetProjectList(start, count, GetDefaultProjectType(), ProjectOwnerType.AllProjects, search);
             var model = new ListViewModel<ProjectDetailContract>
             {
                 TotalCount = result.TotalCount,

@@ -8,6 +8,7 @@ using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Headers;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -33,6 +34,7 @@ namespace Vokabular.MainService.Controllers
         public List<ProjectDetailContract> GetProjectList([FromQuery] int? start,
             [FromQuery] int? count,
             [FromQuery] ProjectTypeContract? projectType,
+            [FromQuery] ProjectOwnerType? projectOwnerType,
             [FromQuery] string filterByName,
             [FromQuery] bool? fetchPageCount,
             [FromQuery] bool? fetchAuthors,
@@ -41,7 +43,8 @@ namespace Vokabular.MainService.Controllers
             var isFetchPageCount = fetchPageCount ?? false;
             var isFetchAuthors = fetchAuthors ?? false;
             var isFetchResponsiblePersons = fetchResponsiblePersons ?? false;
-            var result = m_projectManager.GetProjectList(start, count, projectType, filterByName, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons);
+            var projectOwner = projectOwnerType ?? ProjectOwnerType.AllProjects;
+            var result = m_projectManager.GetProjectList(start, count, projectType, projectOwner, filterByName, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons);
 
             SetTotalCountHeader(result.TotalCount);
 

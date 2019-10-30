@@ -76,15 +76,25 @@ namespace Vokabular.MainService.Core.Managers
             throw new NotImplementedException();
         }
 
-        public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, ProjectTypeContract? projectType,
-            string filterByName, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons)
+        public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, ProjectTypeContract? projectType, 
+            ProjectOwnerType projectOwnerType, string filterByName, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCountForProject(count);
             var projectTypeEnum = m_mapper.Map<ProjectTypeEnum?>(projectType);
-
+            
+            int? userId;
+            if (projectOwnerType == ProjectOwnerType.MyProjects || projectOwnerType == ProjectOwnerType.ForeignProjects)
+            {
+                userId = m_authenticationManager.GetCurrentUserId();
+            }
+            else
+            {
+                userId = null;
+            }
+            
             var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, projectTypeEnum,
-                filterByName, fetchPageCount, fetchAuthors, fetchResponsiblePersons);
+                projectOwnerType, userId, filterByName, fetchPageCount, fetchAuthors, fetchResponsiblePersons);
             var resultEntities = work.Execute();
 
             var metadataList = work.GetMetadataResources();

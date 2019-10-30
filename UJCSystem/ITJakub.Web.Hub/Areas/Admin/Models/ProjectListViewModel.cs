@@ -7,5 +7,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
     {
         public ListViewModel<ProjectItemViewModel> Projects { get; set; }
         public IList<BookTypeEnumContract> AvailableBookTypes { get; set; }
+        public IList<ProjectOwnerType> FilterTypes { get; set; }
     }
 }

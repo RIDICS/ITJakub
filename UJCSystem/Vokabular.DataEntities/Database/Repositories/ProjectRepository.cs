@@ -6,6 +6,7 @@ using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
+using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -17,7 +18,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         }
 
         public virtual ListWithTotalCountResult<Project> GetProjectList(int start, int count, ProjectTypeEnum? projectType,
-            string filterByName = null)
+            string filterByName = null, int? userId = null, ProjectOwnerType projectOwnerType = ProjectOwnerType.AllProjects)
         {
             var query = GetSession().QueryOver<Project>()
                 .Fetch(SelectMode.Fetch, x => x.CreatedByUser);
@@ -32,6 +33,19 @@ namespace Vokabular.DataEntities.Database.Repositories
                 query.WhereRestrictionOn(x => x.Name).IsInsensitiveLike(filterByName, MatchMode.Anywhere);
             }
 
+            if(userId != null)
+            {
+                switch (projectOwnerType)
+                {
+                    case ProjectOwnerType.ForeignProjects:
+                        query.And(x => x.CreatedByUser.Id != userId);
+                        break;
+                    case ProjectOwnerType.MyProjects:
+                        query.And(x => x.CreatedByUser.Id == userId);
+                        break;
+                }
+            }
+            
             query.OrderBy(x => x.Name).Asc
                 .Skip(start)
                 .Take(count);
