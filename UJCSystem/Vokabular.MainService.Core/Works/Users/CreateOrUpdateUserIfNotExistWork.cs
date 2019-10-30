@@ -39,7 +39,10 @@ namespace Vokabular.MainService.Core.Works.Users
             if (user != null)
             {
                 // Update user data
-                user.ExtUsername = m_userInfo.Username;
+                if (m_userInfo.Username != null) // Username is not always returned
+                {
+                    user.ExtUsername = m_userInfo.Username;
+                }
                 user.ExtFirstName = m_userInfo.FirstName;
                 user.ExtLastName = m_userInfo.LastName;
 
