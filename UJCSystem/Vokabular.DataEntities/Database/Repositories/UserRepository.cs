@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -52,11 +54,11 @@ namespace Vokabular.DataEntities.Database.Repositories
             return defaultUser;
         }
 
-        public virtual UserGroup GetDefaultGroupOrCreate(string defaultRegisteredGroupName, Func<int> getExternalId)
+        public virtual RoleUserGroup GetDefaultGroupOrCreate(string defaultRegisteredGroupName, Func<int> getExternalId)
         {
-            var registeredUsersGroup = GetSession().QueryOver<UserGroup>()
+            var registeredUsersGroup = GetSession().QueryOver<RoleUserGroup>()
                 .Where(x => x.Name == defaultRegisteredGroupName)
-                .SingleOrDefault<UserGroup>();
+                .SingleOrDefault();
 
             if (registeredUsersGroup != null)
             {
@@ -64,7 +66,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             }
 
             var now = DateTime.UtcNow;
-            registeredUsersGroup = new UserGroup
+            registeredUsersGroup = new RoleUserGroup
             {
                 Name = defaultRegisteredGroupName,
                 CreateTime = now,
@@ -77,12 +79,35 @@ namespace Vokabular.DataEntities.Database.Repositories
             return registeredUsersGroup;
         }
 
-        public virtual IList<UserGroup> GetUserGroupsByExternalIds(IEnumerable<int> externalIds)
+        public virtual IList<RoleUserGroup> GetUserGroupsByExternalIds(IEnumerable<int> externalIds)
         {
-            var result = GetSession().QueryOver<UserGroup>()
+            var result = GetSession().QueryOver<RoleUserGroup>()
                 .WhereRestrictionOn(x => x.ExternalId).IsInG(externalIds)
                 .List();
             return result;
+        }
+
+        public virtual ListWithTotalCountResult<User> GetUsersByGroup(int groupId, int start, int count, string filterByName)
+        {
+            UserGroup userGroupAlias = null;
+
+            var query = GetSession().QueryOver<User>()
+                .JoinAlias(x => x.Groups, () => userGroupAlias)
+                .Where(() => userGroupAlias.Id == groupId)
+                // TODO add Name column to allow filtering and sorting
+                //.WhereRestrictionOn(x => x.name).IsLike(filterByName, MatchMode.Anywhere)
+                //.OrderBy(x => x.name).Asc
+                .Skip(start)
+                .Take(count);
+
+            var result = query.Future();
+            var resultCount = query.ToRowCountQuery().FutureValue<int>();
+                
+            return new ListWithTotalCountResult<User>
+            {
+                List = result.ToList(),
+                Count = resultCount.Value,
+            };
         }
     }
 }

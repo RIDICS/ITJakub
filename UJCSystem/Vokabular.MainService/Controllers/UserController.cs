@@ -52,13 +52,13 @@ namespace Vokabular.MainService.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("external")]
+        [HttpPost("current/local-data")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-        public IActionResult CreateUserIfNotExist([FromBody] int externalId)
+        public IActionResult CreateUserIfNotExist([FromBody] CreateUserIfNotExistContract data)
         {
             try
             {
-                var userId = m_userManager.CreateUserIfNotExist(externalId);
+                var userId = m_userManager.CreateUserIfNotExist(data);
                 return Ok(userId);
             }
             catch (HttpErrorCodeException exception)

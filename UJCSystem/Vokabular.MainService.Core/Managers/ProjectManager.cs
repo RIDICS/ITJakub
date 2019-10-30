@@ -207,14 +207,22 @@ namespace Vokabular.MainService.Core.Managers
             var resultRoles = new List<RoleContract>();
             foreach (var group in result.List)
             {
-                var work = new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, group.ExternalId);
-                work.Execute();
-                var authRoleContract = work.GetRoleContract();
+                if (group is RoleUserGroup roleUserGroup)
+                {
+                    var work = new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleUserGroup.ExternalId);
+                    work.Execute();
+                    var authRoleContract = work.GetRoleContract();
 
-                var roleContract = m_mapper.Map<RoleContract>(authRoleContract);
-                roleContract.Id = group.Id;
+                    var roleContract = m_mapper.Map<RoleContract>(authRoleContract);
+                    roleContract.Id = group.Id;
 
-                resultRoles.Add(roleContract);
+                    resultRoles.Add(roleContract);
+                }
+                else
+                {
+                    var roleContract = m_mapper.Map<RoleContract>(group);
+                    resultRoles.Add(roleContract);
+                }
             }
 
             return new PagedResultList<RoleContract>

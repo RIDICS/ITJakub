@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ITJakub.Web.Hub.Models.Config;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using ITJakub.Web.Hub.Middleware;
 using ITJakub.Web.Hub.Options;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -31,6 +33,7 @@ using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Util;
 using Scalesoft.Localization.Database.NHibernate;
 using Vokabular.MainService.DataContracts;
+using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared;
 using Vokabular.Shared.AspNetCore.Container;
@@ -138,7 +141,13 @@ namespace ITJakub.Web.Hub
                             var communicationProvider = context.HttpContext.RequestServices.GetRequiredService<CommunicationProvider>();
                             var client = communicationProvider.GetMainServiceUserClient();
 
-                            client.CreateUserIfNotExist(context.Principal.GetIdOrDefault().GetValueOrDefault());
+                            client.CreateUserIfNotExist(new CreateUserIfNotExistContract
+                            {
+                                ExternalId = context.Principal.GetIdOrDefault().GetValueOrDefault(),
+                                Username = GetUserValueByClaim(context, ClaimTypes.Name),
+                                FirstName = GetUserValueByClaim(context, ClaimTypes.GivenName),
+                                LastName = GetUserValueByClaim(context, ClaimTypes.Surname),
+                            });
 
                             return Task.CompletedTask;
                         },
@@ -278,6 +287,16 @@ namespace ITJakub.Web.Hub
         private void OnShutdown()
         {
             Container.Dispose();
+        }
+
+        private string GetUserValueByClaim(UserInformationReceivedContext context, string claimType)
+        {
+            var claimAction = context.Options.ClaimActions.First(x => x.ClaimType == claimType) as JsonKeyClaimAction;
+            if (claimAction == null)
+                return null;
+
+            var value = context.User.Value<string>(claimAction.JsonKey);
+            return value;
         }
     }
 }

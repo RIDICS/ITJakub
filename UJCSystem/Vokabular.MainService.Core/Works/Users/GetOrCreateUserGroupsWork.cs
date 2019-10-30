@@ -6,7 +6,7 @@ using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Users
 {
-    public class GetOrCreateUserGroupsWork<T> : UnitOfWorkBase<IList<UserGroup>> where T : RoleContractBase
+    public class GetOrCreateUserGroupsWork<T> : UnitOfWorkBase<IList<RoleUserGroup>> where T : RoleContractBase
     {
         private readonly UserRepository m_userRepository;
         private readonly IList<T> m_authRoles;
@@ -17,7 +17,7 @@ namespace Vokabular.MainService.Core.Works.Users
             m_authRoles = authRoles;
         }
 
-        protected override IList<UserGroup> ExecuteWorkImplementation()
+        protected override IList<RoleUserGroup> ExecuteWorkImplementation()
         {
             var subwork = new UserGroupSubwork(m_userRepository);
             var result = subwork.UpdateAndGetUserGroups(m_authRoles);

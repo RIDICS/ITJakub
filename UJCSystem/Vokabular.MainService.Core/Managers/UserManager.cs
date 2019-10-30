@@ -54,11 +54,14 @@ namespace Vokabular.MainService.Core.Managers
             return userId;
         }
 
-        public int CreateUserIfNotExist(int externalId)
+        public int CreateUserIfNotExist(CreateUserIfNotExistContract data)
         {
+            var userExternalId = data.ExternalId;
+            var userInfo = new UpdateUserInfo(data.Username, data.FirstName, data.LastName);
+
             var authUserApiClient = m_communicationProvider.GetAuthUserApiClient();
-            var userRoles = authUserApiClient.GetRolesByUserAsync(externalId).GetAwaiter().GetResult();
-            var userId = new CreateUserIfNotExistWork(m_userRepository, externalId, userRoles).Execute();
+            var userRoles = authUserApiClient.GetRolesByUserAsync(userExternalId).GetAwaiter().GetResult();
+            var userId = new CreateOrUpdateUserIfNotExistWork(m_userRepository, userExternalId, userRoles, userInfo).Execute();
             return userId;
         }
 
@@ -82,6 +85,9 @@ namespace Vokabular.MainService.Core.Managers
             authUser.LastName = data.LastName;
 
             client.EditSelfAsync(user.ExternalId.Value, authUser).GetAwaiter().GetResult();
+
+            var updateUserInfo = new UpdateUserInfo(authUser.UserName, authUser.FirstName, authUser.LastName);
+            new UpdateUserWork(m_userRepository, user.Id, updateUserInfo).Execute();
         }
 
         public void UpdateUser(int userId, UpdateUserContract data)
@@ -94,6 +100,9 @@ namespace Vokabular.MainService.Core.Managers
             authUser.LastName = data.LastName;
 
             client.EditUserAsync(userExternalId, authUser).GetAwaiter().GetResult();
+
+            var updateUserInfo = new UpdateUserInfo(authUser.UserName, authUser.FirstName, authUser.LastName);
+            new UpdateUserWork(m_userRepository, userId, updateUserInfo).Execute();
         }
 
         public void UpdateUserContact(int userId, UpdateUserContactContract data)

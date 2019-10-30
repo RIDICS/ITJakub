@@ -92,18 +92,40 @@ namespace Vokabular.MainService.Core.Managers
 
         public PagedResultList<UserContract> GetUsersByRole(int roleId, int? start, int? count, string filterByName)
         {
+            // Method required for Role management (select role, load users)
+
             var role = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<UserGroup>(roleId));
 
-            var client = m_communicationProvider.GetAuthRoleApiClient();
-            var result = client.GetUserListByRoleAsync(role.ExternalId, start, count, filterByName).GetAwaiter().GetResult();
-            var users = m_mapper.Map<List<UserContract>>(result.Items);
-            m_userDetailManager.AddIdForExternalUsers(users);
-
-            return new PagedResultList<UserContract>
+            if (role is RoleUserGroup roleUserGroup)
             {
-                List = users,
-                TotalCount = result.ItemsCount
-            };
+                // If UserGroup has relation to Roles on Auth service, use user list from Auth service (the main data source)
+
+                var client = m_communicationProvider.GetAuthRoleApiClient();
+                var result = client.GetUserListByRoleAsync(roleUserGroup.ExternalId, start, count, filterByName).GetAwaiter().GetResult();
+                var users = m_mapper.Map<List<UserContract>>(result.Items);
+                m_userDetailManager.AddIdForExternalUsers(users);
+
+                return new PagedResultList<UserContract>
+                {
+                    List = users,
+                    TotalCount = result.ItemsCount
+                };
+            }
+            else
+            {
+                // If UserGroup has no relation to Auth service (permissions to books), use local user list
+
+                var startValue = PagingHelper.GetStart(start);
+                var countValue = PagingHelper.GetCount(count);
+                var dbUsers = m_userRepository.GetUsersByGroup(roleId, startValue, countValue, filterByName);
+                var users = m_mapper.Map<List<UserContract>>(dbUsers.List);
+
+                return new PagedResultList<UserContract>
+                {
+                    List = users,
+                    TotalCount = dbUsers.Count,
+                };
+            }
         }
 
         public int CreateRole(string roleName, string description)
@@ -122,14 +144,22 @@ namespace Vokabular.MainService.Core.Managers
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
 
-            var role = client.GetRoleAsync(dbRole.ExternalId, true).GetAwaiter().GetResult();
-            if (role == null)
-                return null;
+            if (dbRole is RoleUserGroup roleUserGroup)
+            {
+                var role = client.GetRoleAsync(roleUserGroup.ExternalId, true).GetAwaiter().GetResult();
+                if (role == null)
+                    return null;
 
-            var result = m_mapper.Map<RoleDetailContract>(role);
-            result.Id = roleId;
+                var result = m_mapper.Map<RoleDetailContract>(role);
+                result.Id = roleId;
 
-            return result;
+                return result;
+            }
+            else
+            {
+                var result = m_mapper.Map<RoleDetailContract>(dbRole);
+                return result;
+            }
         }
 
         public void DeleteRole(int roleId)

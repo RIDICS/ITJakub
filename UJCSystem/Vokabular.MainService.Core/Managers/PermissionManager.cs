@@ -66,7 +66,7 @@ namespace Vokabular.MainService.Core.Managers
                 return;
             }
 
-            var userGroup = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<UserGroup>(roleId));
+            var userGroup = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<RoleUserGroup>(roleId));
 
             var roleClient = m_communicationProvider.GetAuthRoleApiClient();
             var permissionClient = m_communicationProvider.GetAuthPermissionApiClient();
@@ -99,7 +99,7 @@ namespace Vokabular.MainService.Core.Managers
                 return;
             }
 
-            var userGroup = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<UserGroup>(roleId));
+            var userGroup = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<RoleUserGroup>(roleId));
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
             var permissions = client.GetRoleAsync(userGroup.ExternalId, true).GetAwaiter().GetResult().Permissions;

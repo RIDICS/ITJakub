@@ -26,21 +26,21 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public virtual UserGroup FindGroupByExternalId(int externalId)
+        public virtual RoleUserGroup FindGroupByExternalId(int externalId)
         {
-            var group = GetSession().QueryOver<UserGroup>()
+            var group = GetSession().QueryOver<RoleUserGroup>()
                 .Where(g => g.ExternalId == externalId)
                 .SingleOrDefault();
 
             return group;
         }
 
-        public virtual UserGroup FindGroupByExternalIdOrCreate(int externalId)
+        public virtual RoleUserGroup FindGroupByExternalIdOrCreate(int externalId)
         {
             return FindGroupByExternalIdOrCreate(externalId, null);
         }
 
-        public virtual UserGroup FindGroupByExternalIdOrCreate(int externalId, string roleName)
+        public virtual RoleUserGroup FindGroupByExternalIdOrCreate(int externalId, string roleName)
         {
             var group = FindGroupByExternalId(externalId);
             if (group != null)
@@ -49,7 +49,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             }
 
             var now = DateTime.UtcNow;
-            var newGroup = new UserGroup
+            var newGroup = new RoleUserGroup
             {
                 ExternalId = externalId,
                 CreateTime = now,
@@ -64,7 +64,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public virtual IList<int> GetGroupIdsByExternalIds(IEnumerable<int> externalIds)
         {
-            var result = GetSession().QueryOver<UserGroup>()
+            var result = GetSession().QueryOver<RoleUserGroup>()
                 .WhereRestrictionOn(x => x.ExternalId).IsInG(externalIds)
                 .Select(x => x.Id)
                 .List<int>();
@@ -190,7 +190,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public virtual Permission FindPermissionByBookAndGroupExternalId(long projectId, int externalId)
         {
-            UserGroup groupAlias = null;
+            RoleUserGroup groupAlias = null;
 
             return
                 GetSession().QueryOver<Permission>()

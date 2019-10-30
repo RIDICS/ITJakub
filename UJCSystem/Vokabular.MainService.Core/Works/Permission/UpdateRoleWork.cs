@@ -39,18 +39,21 @@ namespace Vokabular.MainService.Core.Works.Permission
             m_permissionRepository.Save(group);
             m_permissionRepository.Flush();
 
-            var client = m_communicationProvider.GetAuthRoleApiClient();
-            var authRole = client.GetRoleAsync(group.ExternalId).GetAwaiter().GetResult();
-            authRole.Name = m_data.Name;
-            authRole.Description = m_data.Description;
+            if (group is RoleUserGroup roleUserGroup)
+            {
+                var client = m_communicationProvider.GetAuthRoleApiClient();
+                var authRole = client.GetRoleAsync(roleUserGroup.ExternalId).GetAwaiter().GetResult();
+                authRole.Name = m_data.Name;
+                authRole.Description = m_data.Description;
 
-            client.EditRoleAsync(group.ExternalId, authRole).GetAwaiter().GetResult();
+                client.EditRoleAsync(roleUserGroup.ExternalId, authRole).GetAwaiter().GetResult();
+            }
         }
 
         private void CheckRoleForUpdating(RoleContractBase defaultRole)
         {
-            var dbRole = m_permissionRepository.FindById<UserGroup>(m_data.Id);
-            if (defaultRole.Id == dbRole.ExternalId && defaultRole.Name != m_data.Name)
+            var dbRole = m_permissionRepository.FindById<RoleUserGroup>(m_data.Id);
+            if (dbRole != null && defaultRole.Id == dbRole.ExternalId && defaultRole.Name != m_data.Name)
             {
                 throw new MainServiceException(MainServiceErrorCode.RenameDefaultRole,
                     $"The name of the default role {defaultRole.Name} cannot be changed.",

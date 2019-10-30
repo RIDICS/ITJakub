@@ -113,7 +113,8 @@ namespace Vokabular.MainService.Core.Managers
         {
             foreach (var userDetailContract in userDetailContracts)
             {
-                var userId = new CreateUserIfNotExistWork(m_userRepository, userDetailContract.ExternalId, null).Execute();
+                var userInfo = new UpdateUserInfo(userDetailContract.UserName, userDetailContract.FirstName, userDetailContract.LastName);
+                var userId = new CreateOrUpdateUserIfNotExistWork(m_userRepository, userDetailContract.ExternalId, null, userInfo).Execute();
                 userDetailContract.Id = userId;
             }
         }
@@ -122,7 +123,8 @@ namespace Vokabular.MainService.Core.Managers
         {
             foreach (var userDetailContract in userDetailContracts)
             {
-                var userId = new CreateUserIfNotExistWork(m_userRepository, userDetailContract.ExternalId, null).Execute();
+                var userInfo = new UpdateUserInfo(userDetailContract.UserName, userDetailContract.FirstName, userDetailContract.LastName);
+                var userId = new CreateOrUpdateUserIfNotExistWork(m_userRepository, userDetailContract.ExternalId, null, userInfo).Execute();
                 userDetailContract.Id = userId;
             }
         }
