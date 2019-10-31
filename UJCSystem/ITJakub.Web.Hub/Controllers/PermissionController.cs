@@ -12,6 +12,7 @@ using Vokabular.MainService.DataContracts;
 using Ridics.Core.Structures.Shared;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Controllers
@@ -55,10 +56,17 @@ namespace ITJakub.Web.Hub.Controllers
 
             search = search ?? string.Empty;
             var result = client.GetRoleList(start, count, search);
-            var model = new ListViewModel<RoleContract>
+            var model = new ListViewModel<UserGroupContract>
             {
                 TotalCount = result.TotalCount,
-                List = result.List,
+                List = result.List.Select(x => new UserGroupContract
+                {
+                    Id = x.Id,
+                    ExternalId = x.ExternalId,
+                    Name = x.Name,
+                    Description = x.Description,
+                    Type = UserGroupTypeContract.Role,
+                }).ToList(),
                 PageSize = count,
                 Start = start,
                 SearchQuery = search
@@ -147,10 +155,10 @@ namespace ITJakub.Web.Hub.Controllers
             var client = GetProjectClient();
             search = search ?? string.Empty;
             var result = client.GetRolesByProject(projectId, start, count, search);
-            var model = new ListViewModel<RoleContract>
+            var model = new ListViewModel<UserGroupContract>
             {
                 TotalCount = result.TotalCount,
-                List = result.List.Cast<RoleContract>().ToList(), // WORKAROUND correct type should be used in View (without casting)
+                List = result.List,
                 PageSize = count,
                 Start = start,
                 SearchQuery = search
@@ -241,16 +249,16 @@ namespace ITJakub.Web.Hub.Controllers
             return PartialView("_EditRole", roleViewModel);
         }
 
-        // TODO this should load all groups (Role and Single)
         public IActionResult EditUserRoles(int userId)
         {
             var client = GetUserClient();
-            var result = client.GetUserDetail(userId);
-            var model = Mapper.Map<UserDetailViewModel>(result);
-            model.Roles = new ListViewModel<RoleContract>
+            var resultUser = client.GetUserDetail(userId);
+            var resultRoles = client.GetRolesByUser(userId);
+            var model = Mapper.Map<UserDetailViewModel>(resultUser);
+            model.Roles = new ListViewModel<UserGroupContract>
             {
-                TotalCount = result.Roles.Count,
-                List = result.Roles,
+                TotalCount = resultRoles.Count,
+                List = resultRoles,
                 PageSize = RoleListPageSize,
                 Start = 0
             };
@@ -334,12 +342,11 @@ namespace ITJakub.Web.Hub.Controllers
             return AjaxOkResponse();
         }
 
-        // TODO this should load all groups (Role and Single)
         public IActionResult GetRolesByUser(int userId)
         {
             var client = GetUserClient();
             var result = client.GetRolesByUser(userId);
-            var model = new ListViewModel<RoleContract>
+            var model = new ListViewModel<UserGroupContract>
             {
                 TotalCount = result.Count,
                 List = result,

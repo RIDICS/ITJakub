@@ -26,6 +26,18 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
+        public virtual IList<UserGroup> GetUserGroupsByUser(int userId)
+        {
+            User userAlias = null;
+
+            var result = GetSession().QueryOver<UserGroup>()
+                .JoinAlias(x => x.Users, () => userAlias)
+                .Where(() => userAlias.Id == userId)
+                .OrderBy(x => x.Name).Asc
+                .List();
+            return result;
+        }
+
         public virtual RoleUserGroup FindGroupByExternalId(int externalId)
         {
             var group = GetSession().QueryOver<RoleUserGroup>()

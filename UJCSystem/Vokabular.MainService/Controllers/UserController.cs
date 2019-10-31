@@ -148,7 +148,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{userId}/role")]
-        public List<RoleContract> GetRolesByUser(int userId)
+        public List<UserGroupContract> GetRolesByUser(int userId)
         {
             var result = m_roleManager.GetRolesByUser(userId);
             return result;

@@ -23,6 +23,14 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
             CreateMap<SingleUserGroup, RoleDetailContract>()
                 .IncludeBase<SingleUserGroup, UserGroupContract>()
                 .ForMember(dest => dest.Permissions, opt => opt.MapFrom(src => new List<SpecialPermissionContract>()));
+
+
+            CreateMap<RoleUserGroup, UserGroupContract>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => UserGroupTypeContract.Role))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.ExternalId))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Description, opt => opt.Ignore());
         }
     }
 }

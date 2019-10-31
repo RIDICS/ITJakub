@@ -100,7 +100,7 @@ namespace Vokabular.MainService.Core.Managers
 
         private UserDetailContract GetUserDetailContractForUser(AuthUserContract authUser, int localUserId)
         {
-            var localDbRoles = new GetOrCreateUserGroupsWork<AuthRoleContractBase>(m_userRepository, authUser.Roles).Execute();
+            var localDbRoles = new GetOrCreateUserGroupsWork<AuthRoleContractBase>(m_userRepository, authUser.Roles, localUserId).Execute();
 
             var userDetailContract = m_mapper.Map<UserDetailContract>(authUser);
             userDetailContract.Id = localUserId;

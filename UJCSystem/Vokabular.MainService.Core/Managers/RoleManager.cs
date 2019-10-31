@@ -14,6 +14,7 @@ using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
@@ -45,7 +46,7 @@ namespace Vokabular.MainService.Core.Managers
             m_mapper = mapper;
         }
 
-        public List<RoleContract> GetRolesByUser(int userId)
+        public List<UserGroupContract> GetRolesByUser(int userId)
         {
             var user = m_userRepository.InvokeUnitOfWork(x => x.GetUserById(userId));
 
@@ -74,18 +75,17 @@ namespace Vokabular.MainService.Core.Managers
             var client = m_communicationProvider.GetAuthUserApiClient();
 
             var authUser = client.GetUserForRoleAssignmentAsync(user.ExternalId.Value).GetAwaiter().GetResult();
-            var localDbRoles = new GetOrCreateUserGroupsWork<AuthRoleContractBase>(m_userRepository, authUser.Roles).Execute();
+            new GetOrCreateUserGroupsWork<AuthRoleContractBase>(m_userRepository, authUser.Roles, userId).Execute();
 
-            var resultList = new List<RoleContract>();
+            var dbGroups = m_permissionRepository.InvokeUnitOfWork(x => x.GetUserGroupsByUser(userId));
+            var resultList = m_mapper.Map<List<UserGroupContract>>(dbGroups);
 
-            foreach (var authRole in authUser.Roles)
+            // Fill description for RoleUserGroups (local database doesn't contain this)
+            foreach (var roleUserGroup in resultList.Where(x => x.Type == UserGroupTypeContract.Role))
             {
-                var resultRole = m_mapper.Map<RoleContract>(authRole);
-                resultRole.Id = localDbRoles.First(x => x.ExternalId == resultRole.ExternalId).Id;
-
-                resultList.Add(resultRole);
+                roleUserGroup.Description = authUser.Roles.First(x => x.Id == roleUserGroup.ExternalId).Description;
             }
-            
+
             return resultList;
         }
 
