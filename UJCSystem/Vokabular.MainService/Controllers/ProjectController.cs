@@ -194,12 +194,12 @@ namespace Vokabular.MainService.Controllers
             return m_projectInfoManager.GetProjectResponsiblePersons(projectId);
         }
 
-        [HttpGet("{projectId}/role")]
+        [HttpGet("{projectId}/user-group")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total records count")]
-        public List<UserGroupContract> GetRolesByProject(long projectId, [FromQuery] int? start, [FromQuery] int? count,
+        public List<UserGroupContract> GetUserGroupsByProject(long projectId, [FromQuery] int? start, [FromQuery] int? count,
             [FromQuery] string filterByName)
         {
-            var result = m_projectManager.GetRolesByProject(projectId, start, count, filterByName);
+            var result = m_projectManager.GetUserGroupsByProject(projectId, start, count, filterByName);
 
             SetTotalCountHeader(result.TotalCount);
 

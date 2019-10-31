@@ -547,11 +547,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public PagedResultList<UserGroupContract> GetRolesByProject(int projectId, int start, int count, string query)
+        public PagedResultList<UserGroupContract> GetUserGroupsByProject(int projectId, int start, int count, string query)
         {
             try
             {
-                var url = UrlQueryBuilder.Create($"project/{projectId}/role")
+                var url = UrlQueryBuilder.Create($"project/{projectId}/user-group")
                     .AddParameter("start", start)
                     .AddParameter("count", count)
                     .AddParameter("filterByName", query)

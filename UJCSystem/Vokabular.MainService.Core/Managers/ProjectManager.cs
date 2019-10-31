@@ -190,7 +190,7 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
-        public PagedResultList<UserGroupContract> GetRolesByProject(long projectId, int? start, int? count, string filterByName)
+        public PagedResultList<UserGroupContract> GetUserGroupsByProject(long projectId, int? start, int? count, string filterByName)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);

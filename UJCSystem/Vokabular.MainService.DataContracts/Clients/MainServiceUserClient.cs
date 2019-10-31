@@ -256,11 +256,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<UserGroupContract> GetRolesByUser(int userId)
+        public List<UserGroupContract> GetUserGroupsByUser(int userId)
         {
             try
             {
-                var result = m_client.Get<List<UserGroupContract>>($"user/{userId}/role");
+                var result = m_client.Get<List<UserGroupContract>>($"user/{userId}/group");
                 return result;
             }
             catch (HttpRequestException e)

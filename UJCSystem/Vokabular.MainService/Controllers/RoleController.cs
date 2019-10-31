@@ -22,18 +22,7 @@ namespace Vokabular.MainService.Controllers
             m_roleManager = roleManager;
             m_permissionManager = permissionManager;
         }
-
-        [Authorize(PermissionNames.ListUsers)]
-        [HttpGet("{roleId}/user")]
-        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
-        public List<UserContract> GetUsersByRole(int roleId, [FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
-        {
-            var result = m_roleManager.GetUsersByRole(roleId, start, count, filterByName);
-
-            SetTotalCountHeader(result.TotalCount);
-            return result.List;
-        }
-
+        
         [Authorize(PermissionNames.ManageUserRoles)]
         [HttpPost("")]
         public int CreateRole([FromBody] RoleContract data)
@@ -49,22 +38,14 @@ namespace Vokabular.MainService.Controllers
             m_roleManager.UpdateRole(data);
             return Ok();
         }
-
-        [Authorize]
-        [HttpGet("{roleId}/detail")]
-        public RoleDetailContract GetRoleDetail(int roleId)
-        {
-            var result = m_roleManager.GetRoleDetail(roleId);
-            return result;
-        }
-
+        
         [Authorize(PermissionNames.ManageUserRoles)]
         [HttpDelete("{roleId}")]
         public void DeleteRole(int roleId)
         {
             m_roleManager.DeleteRole(roleId);
         }
-
+        
         [Authorize(PermissionNames.ManageUserRoles)]
         [HttpGet("")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
@@ -75,29 +56,7 @@ namespace Vokabular.MainService.Controllers
             SetTotalCountHeader(result.TotalCount);
             return result.List;
         }
-
-        [Authorize(PermissionNames.AssignPermissionsToRoles)]
-        [HttpGet("{roleId}/book/{bookId}/permission")]
-        public PermissionDataContract GetPermissionsForRoleAndBook(int roleId, long bookId)
-        {
-            var result = m_permissionManager.GetPermissionsForRoleAndBook(roleId, bookId);
-            return result;
-        }
-
-        [Authorize(PermissionNames.AssignPermissionsToRoles)]
-        [HttpPut("{roleId}/book/{bookId}/permission")]
-        public void UpdateOrAddBooksToRole(int roleId, long bookId, [FromBody] PermissionDataContract data)
-        {
-            m_permissionManager.UpdateOrAddBooksToRole(roleId, new List<long> {bookId}, data);
-        }
-
-        [Authorize(PermissionNames.AssignPermissionsToRoles)]
-        [HttpDelete("{roleId}/book/{bookId}/permission")]
-        public void RemoveBooksFromRole(int roleId, long bookId)
-        {
-            m_permissionManager.RemoveBooksFromRole(roleId, new List<long> {bookId});
-        }
-
+        
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpDelete("{roleId}/user/{userId}")]
         public void RemoveUserFromRole(int userId, int roleId)
@@ -132,6 +91,61 @@ namespace Vokabular.MainService.Controllers
         {
             var result = m_roleManager.GetRoleAutocomplete(query, count);
             return result;
+        }
+    }
+
+    //[Route("api/[controller]")] // TODO use new controller name
+    [Route("api/Role")]
+    public class UserGroupController : BaseController
+    {
+        private readonly RoleManager m_roleManager;
+        private readonly PermissionManager m_permissionManager;
+
+        public UserGroupController(RoleManager roleManager, PermissionManager permissionManager)
+        {
+            m_roleManager = roleManager;
+            m_permissionManager = permissionManager;
+        }
+
+        [Authorize(PermissionNames.ListUsers)]
+        [HttpGet("{roleId}/user")]
+        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
+        public List<UserContract> GetUsersByGroup(int roleId, [FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
+        {
+            var result = m_roleManager.GetUsersByGroup(roleId, start, count, filterByName);
+
+            SetTotalCountHeader(result.TotalCount);
+            return result.List;
+        }
+
+        [Authorize]
+        [HttpGet("{roleId}/detail")]
+        public RoleDetailContract GetUserGroupDetail(int roleId)
+        {
+            var result = m_roleManager.GetUserGroupDetail(roleId);
+            return result;
+        }
+
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
+        [HttpGet("{roleId}/book/{bookId}/permission")]
+        public PermissionDataContract GetPermissionsForGroupAndBook(int roleId, long bookId)
+        {
+            var result = m_permissionManager.GetPermissionsForGroupAndBook(roleId, bookId);
+            return result;
+        }
+
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
+        [HttpPut("{roleId}/book/{bookId}/permission")]
+        public void UpdateOrAddBooksToGroup(int roleId, long bookId, [FromBody] PermissionDataContract data)
+        {
+            m_permissionManager.UpdateOrAddBooksToGroup(roleId, new List<long> { bookId }, data);
+        }
+
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
+        [HttpDelete("{roleId}/book/{bookId}/permission")]
+        public void RemoveBooksFromGroup(int roleId, long bookId)
+        {
+            m_permissionManager.RemoveBooksFromGroup(roleId, new List<long> { bookId });
         }
     }
 }

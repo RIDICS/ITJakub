@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -38,6 +39,10 @@ namespace Vokabular.MainService.Core.Works.Permission
             {
                 var client = m_communicationProvider.GetAuthRoleApiClient();
                 client.DeleteRoleAsync(roleUserGroup.ExternalId).GetAwaiter().GetResult();
+            }
+            else
+            {
+                throw new InvalidOperationException($"Only RoleUserGroup can be updated by this method, argument type was: {group.GetType()}");
             }
         }
 

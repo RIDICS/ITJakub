@@ -3,6 +3,7 @@ using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using Vokabular.RestClient;
 using Vokabular.RestClient.Extensions;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
@@ -20,13 +21,16 @@ namespace Vokabular.MainService.DataContracts.Clients
             m_client = client;
         }
 
-        public PagedResultList<UserContract> GetUsersByRole(int roleId, int start, int count, string query)
+        public PagedResultList<UserContract> GetUsersByGroup(int roleId, int start, int count, string query)
         {
             try
             {
-                var url = $"role/{roleId}/user".AddQueryString("start", start.ToString());
-                url = url.AddQueryString("count", count.ToString());
-                url = url.AddQueryString("filterByName", query);
+                var url = UrlQueryBuilder.Create($"role/{roleId}/user")
+                    .AddParameter("start", start)
+                    .AddParameter("count", count)
+                    .AddParameter("filterByName", query)
+                    .ToResult();
+                
                 var result = m_client.GetPagedList<UserContract>(url);
                 return result;
             }
@@ -104,7 +108,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public RoleDetailContract GetRoleDetail(int roleId)
+        public RoleDetailContract GetUserGroupDetail(int roleId)
         {
             try
             {
@@ -166,7 +170,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public PermissionDataContract GetPermissionsForRoleAndBook(int roleId, long bookId)
+        public PermissionDataContract GetPermissionsForGroupAndBook(int roleId, long bookId)
         {
             try
             {
@@ -182,7 +186,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void UpdateOrAddBooksToRole(int roleId, long bookId, PermissionDataContract data)
+        public void UpdateOrAddBooksToGroup(int roleId, long bookId, PermissionDataContract data)
         {
             try
             {
@@ -197,7 +201,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void RemoveBooksFromRole(int roleId, long bookId)
+        public void RemoveBooksFromGroup(int roleId, long bookId)
         {
             try
             {

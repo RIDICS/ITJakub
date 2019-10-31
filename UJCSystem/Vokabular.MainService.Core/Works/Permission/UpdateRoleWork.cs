@@ -48,6 +48,10 @@ namespace Vokabular.MainService.Core.Works.Permission
 
                 client.EditRoleAsync(roleUserGroup.ExternalId, authRole).GetAwaiter().GetResult();
             }
+            else
+            {
+                throw new InvalidOperationException($"Only RoleUserGroup can be updated by this method, argument type was: {group.GetType()}");
+            }
         }
 
         private void CheckRoleForUpdating(RoleContractBase defaultRole)

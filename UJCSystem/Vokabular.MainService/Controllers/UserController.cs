@@ -147,10 +147,10 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
-        [HttpGet("{userId}/role")]
-        public List<UserGroupContract> GetRolesByUser(int userId)
+        [HttpGet("{userId}/group")]
+        public List<UserGroupContract> GetUserGroupsByUser(int userId)
         {
-            var result = m_roleManager.GetRolesByUser(userId);
+            var result = m_roleManager.GetUserGroupsByUser(userId);
             return result;
         }
 

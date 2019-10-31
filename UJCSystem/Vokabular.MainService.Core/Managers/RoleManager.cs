@@ -46,7 +46,7 @@ namespace Vokabular.MainService.Core.Managers
             m_mapper = mapper;
         }
 
-        public List<UserGroupContract> GetRolesByUser(int userId)
+        public List<UserGroupContract> GetUserGroupsByUser(int userId)
         {
             var user = m_userRepository.InvokeUnitOfWork(x => x.GetUserById(userId));
 
@@ -90,7 +90,7 @@ namespace Vokabular.MainService.Core.Managers
         }
 
 
-        public PagedResultList<UserContract> GetUsersByRole(int roleId, int? start, int? count, string filterByName)
+        public PagedResultList<UserContract> GetUsersByGroup(int roleId, int? start, int? count, string filterByName)
         {
             // Method required for Role management (select role, load users)
 
@@ -138,7 +138,7 @@ namespace Vokabular.MainService.Core.Managers
             new UpdateRoleWork(m_permissionRepository, m_defaultUserProvider, m_communicationProvider, data).Execute();
         }
 
-        public RoleDetailContract GetRoleDetail(int roleId)
+        public RoleDetailContract GetUserGroupDetail(int roleId)
         {
             var dbRole = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<UserGroup>(roleId));
 
