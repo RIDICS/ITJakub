@@ -202,7 +202,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                     .SingleOrDefault<Permission>();
         }
 
-        public virtual ListWithTotalCountResult<UserGroup> FindGroupsByBook(long bookId, int start, int count, string filterByName)
+        public virtual ListWithTotalCountResult<UserGroup> FindGroupsByBook(long bookId, int start, int count, string filterByName, bool fetchUser = false)
         {
             Project projectAlias = null;
             Permission permissionAlias = null;
@@ -225,11 +225,21 @@ namespace Vokabular.DataEntities.Database.Repositories
             var list = query.Future();
             var totalCount = query.ToRowCountQuery().FutureValue<int>();
 
-            return new ListWithTotalCountResult<UserGroup>
+            var result = new ListWithTotalCountResult<UserGroup>
             {
                 List = list.ToList(),
                 Count = totalCount.Value
             };
+
+            if (fetchUser)
+            {
+                GetSession().QueryOver<SingleUserGroup>()
+                    .WhereRestrictionOn(x => x.Id).IsInG(result.List.Select(x => x.Id))
+                    .Fetch(SelectMode.Fetch, x => x.User)
+                    .List();
+            }
+
+            return result;
         }
 
         public virtual IList<Permission> FindPermissionsForSnapshotByUserId(long snapshotId, int userId)

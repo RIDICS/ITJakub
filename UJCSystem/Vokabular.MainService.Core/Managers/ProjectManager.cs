@@ -195,7 +195,7 @@ namespace Vokabular.MainService.Core.Managers
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
 
-            var result = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupsByBook(projectId, startValue, countValue, filterByName));
+            var result = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupsByBook(projectId, startValue, countValue, filterByName, true));
 
             if (result == null)
             {

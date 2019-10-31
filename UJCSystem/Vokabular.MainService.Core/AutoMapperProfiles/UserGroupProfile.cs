@@ -13,7 +13,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.ExternalId, opt => opt.Ignore())
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(dest => dest.Description, opt => opt.Ignore());
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => $"{src.User.ExtFirstName} {src.User.ExtLastName} - {src.User.ExtUsername}"));
 
             CreateMap<SingleUserGroup, RoleDetailContract>()
                 .IncludeBase<SingleUserGroup, RoleContract>()
