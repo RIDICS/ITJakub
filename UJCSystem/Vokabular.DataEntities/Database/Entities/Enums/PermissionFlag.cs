@@ -10,5 +10,6 @@ namespace Vokabular.DataEntities.Database.Entities.Enums
         ReadProject = 0x02,
         EditProject = 0x04,
         AdminProject = 0x08,
+        All = ShowPublished | ReadProject | EditProject | AdminProject,
     }
 }

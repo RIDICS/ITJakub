@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -47,6 +48,7 @@ namespace Vokabular.MainService.Core.Works
             // Set default permissions
             var unregisteredUserGroup = m_defaultUserProvider.GetDefaultUnregisteredUserGroup();
             var registeredUsersGroup = m_defaultUserProvider.GetDefaultRegisteredUserGroup();
+            var singleUserGroup = currentUser.Groups.OfType<SingleUserGroup>().SingleOrDefault();
             var permission1 = new PermissionEntity
             {
                 Project = project,
@@ -59,11 +61,16 @@ namespace Vokabular.MainService.Core.Works
                 UserGroup = registeredUsersGroup,
                 Flags = PermissionFlag.ShowPublished,
             };
-
-            // TODO create default permission for current user
+            var permission3 = new PermissionEntity
+            {
+                Project = project,
+                UserGroup = singleUserGroup,
+                Flags = PermissionFlag.All,
+            };
 
             m_projectRepository.Create(permission1);
             m_projectRepository.Create(permission2);
+            m_projectRepository.Create(permission3);
 
             return projectId;
         }
