@@ -15,6 +15,6 @@ namespace Vokabular.MainService.DataContracts.Contracts.Permission
 
     public class RoleDetailContract : RoleContract
     {
-        public List<PermissionContract> Permissions { get; set; }
+        public List<SpecialPermissionContract> Permissions { get; set; }
     }
 }

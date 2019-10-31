@@ -212,11 +212,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<PermissionContract> GetPermissionsForRole(int roleId)
+        public List<SpecialPermissionContract> GetPermissionsForRole(int roleId)
         {
             try
             {
-                var result = m_client.Get<List<PermissionContract>>($"role/{roleId}/permission");
+                var result = m_client.Get<List<SpecialPermissionContract>>($"role/{roleId}/permission");
                 return result;
             }
             catch (HttpRequestException e)

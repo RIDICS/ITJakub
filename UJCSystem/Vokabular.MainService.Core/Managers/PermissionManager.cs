@@ -14,7 +14,6 @@ using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataEntities.UnitOfWork;
-using PermissionContract = Vokabular.MainService.DataContracts.Contracts.Permission.PermissionContract;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -134,7 +133,7 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
-        public PagedResultList<PermissionContract> GetPermissions(int? start, int? count, string filterByName)
+        public PagedResultList<SpecialPermissionContract> GetPermissions(int? start, int? count, string filterByName)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
@@ -143,9 +142,9 @@ namespace Vokabular.MainService.Core.Managers
 
             var result = client.GetPermissionListAsync(startValue, countValue, filterByName).GetAwaiter()
                 .GetResult();
-            var permissionContracts = m_mapper.Map<List<PermissionContract>>(result.Items);
+            var permissionContracts = m_mapper.Map<List<SpecialPermissionContract>>(result.Items);
 
-            return new PagedResultList<PermissionContract>
+            return new PagedResultList<SpecialPermissionContract>
             {
                 List = permissionContracts,
                 TotalCount = result.ItemsCount
