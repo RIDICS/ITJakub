@@ -90,11 +90,11 @@ namespace Vokabular.MainService.Core.Managers
         }
 
 
-        public PagedResultList<UserContract> GetUsersByGroup(int roleId, int? start, int? count, string filterByName)
+        public PagedResultList<UserContract> GetUsersByGroup(int groupId, int? start, int? count, string filterByName)
         {
             // Method required for Role management (select role, load users)
 
-            var role = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<UserGroup>(roleId));
+            var role = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<UserGroup>(groupId));
 
             if (role is RoleUserGroup roleUserGroup)
             {
@@ -117,7 +117,7 @@ namespace Vokabular.MainService.Core.Managers
 
                 var startValue = PagingHelper.GetStart(start);
                 var countValue = PagingHelper.GetCount(count);
-                var dbUsers = m_userRepository.GetUsersByGroup(roleId, startValue, countValue, filterByName);
+                var dbUsers = m_userRepository.GetUsersByGroup(groupId, startValue, countValue, filterByName);
                 var users = m_mapper.Map<List<UserContract>>(dbUsers.List);
 
                 return new PagedResultList<UserContract>
@@ -138,9 +138,9 @@ namespace Vokabular.MainService.Core.Managers
             new UpdateRoleWork(m_permissionRepository, m_defaultUserProvider, m_communicationProvider, data).Execute();
         }
 
-        public RoleDetailContract GetUserGroupDetail(int roleId)
+        public RoleDetailContract GetUserGroupDetail(int groupId)
         {
-            var dbRole = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<UserGroup>(roleId));
+            var dbRole = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<UserGroup>(groupId));
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
 
@@ -151,7 +151,7 @@ namespace Vokabular.MainService.Core.Managers
                     return null;
 
                 var result = m_mapper.Map<RoleDetailContract>(role);
-                result.Id = roleId;
+                result.Id = groupId;
 
                 return result;
             }

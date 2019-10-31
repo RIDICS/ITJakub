@@ -18,7 +18,7 @@ namespace ITJakub.Web.Hub.Core.Communication
         private readonly MainServiceNewsClient m_newsClient;
         private readonly MainServicePermissionClient m_permissionClient;
         private readonly MainServiceProjectClient m_projectClient;
-        private readonly MainServiceRoleClient m_roleClient;
+        private readonly MainServiceUserGroupClient m_userGroupClient;
         private readonly MainServiceSessionClient m_sessionClient;
         private readonly MainServiceSnapshotClient m_snapshotClient;
         private readonly MainServiceTermClient m_termClient;
@@ -31,7 +31,7 @@ namespace ITJakub.Web.Hub.Core.Communication
             MainServiceExternalRepositoryClient externalRepositoryClient, MainServiceFavoriteClient favoriteClient,
             MainServiceFeedbackClient feedbackClient, MainServiceFilteringExpressionSetClient filteringExpressionSetClient,
             MainServiceMetadataClient metadataClient, MainServiceNewsClient newsClient, MainServicePermissionClient permissionClient,
-            MainServiceProjectClient projectClient, MainServiceRoleClient roleClient,
+            MainServiceProjectClient projectClient, MainServiceUserGroupClient userGroupClient,
             MainServiceSessionClient sessionClient, MainServiceSnapshotClient snapshotClient, MainServiceTermClient termClient,
             MainServiceUserClient userClient)
         {
@@ -47,7 +47,7 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_newsClient = newsClient;
             m_permissionClient = permissionClient;
             m_projectClient = projectClient;
-            m_roleClient = roleClient;
+            m_userGroupClient = userGroupClient;
             m_sessionClient = sessionClient;
             m_snapshotClient = snapshotClient;
             m_termClient = termClient;
@@ -109,9 +109,9 @@ namespace ITJakub.Web.Hub.Core.Communication
             return m_projectClient;
         }
         
-        public MainServiceRoleClient GetMainServiceRoleClient()
+        public MainServiceUserGroupClient GetMainServiceRoleClient()
         {
-            return m_roleClient;
+            return m_userGroupClient;
         }
 
         public MainServiceSessionClient GetMainServiceSessionClient()

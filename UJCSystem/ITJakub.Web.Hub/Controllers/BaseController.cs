@@ -105,7 +105,7 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceProjectClient();
         }
 
-        public MainServiceRoleClient GetRoleClient()
+        public MainServiceUserGroupClient GetRoleClient()
         {
             return m_communication.GetMainServiceRoleClient();
         }
