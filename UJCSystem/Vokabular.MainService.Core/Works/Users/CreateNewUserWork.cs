@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Ridics.Authentication.DataContracts.User;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -13,12 +14,14 @@ namespace Vokabular.MainService.Core.Works.Users
         private readonly UserRepository m_userRepository;
         private readonly CommunicationProvider m_communicationProvider;
         private readonly CreateUserContract m_data;
+        private readonly string m_newUserGroupCode;
 
-        public CreateNewUserWork(UserRepository userRepository, CommunicationProvider communicationProvider, CreateUserContract data) : base(userRepository)
+        public CreateNewUserWork(UserRepository userRepository, CommunicationProvider communicationProvider, CreateUserContract data, string newUserGroupCode) : base(userRepository)
         {
             m_userRepository = userRepository;
             m_communicationProvider = communicationProvider;
             m_data = data;
+            m_newUserGroupCode = newUserGroupCode;
         }
 
         protected override int ExecuteWorkImplementation()
@@ -49,13 +52,26 @@ namespace Vokabular.MainService.Core.Works.Users
                 ExtUsername = user.UserName,
                 ExtFirstName = user.FirstName,
                 ExtLastName = user.LastName,
-                //Groups = new List<Group> { m_defaultMembershipProvider.GetDefaultRegisteredUserGroup(), m_defaultMembershipProvider.GetDefaultUnRegisteredUserGroup() },
+                Groups = null,
                 //FavoriteLabels = new List<FavoriteLabel> { defaultFavoriteLabel }
             };
 
+            var singleUserGroup = new SingleUserGroup
+            {
+                Name = m_newUserGroupCode,
+                CreateTime = now,
+                LastChange = now,
+                User = dbUser,
+                Users = new List<User> {dbUser},
+                Permissions = null,
+            };
+
+            dbUser.Groups = new List<UserGroup> {singleUserGroup};
+            // RoleUserGroups are assigned on every login
+
+
             //defaultFavoriteLabel.User = dbUser;
             // TODO generate default FavoriteLabel
-            // TODO assign User Groups
 
             var userId = (int) m_userRepository.Create(dbUser);
             return userId;

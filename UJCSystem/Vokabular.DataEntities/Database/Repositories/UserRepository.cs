@@ -109,5 +109,13 @@ namespace Vokabular.DataEntities.Database.Repositories
                 Count = resultCount.Value,
             };
         }
+
+        public virtual SingleUserGroup GetSingleUserGroup(int userId)
+        {
+            var result = GetSession().QueryOver<SingleUserGroup>()
+                .Where(x => x.User.Id == userId)
+                .SingleOrDefault();
+            return result;
+        }
     }
 }
