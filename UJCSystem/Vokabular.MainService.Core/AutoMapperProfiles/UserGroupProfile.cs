@@ -10,8 +10,8 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
         public UserGroupProfile()
         {
             CreateMap<SingleUserGroup, RoleContract>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore())
-                .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.ExternalId, opt => opt.Ignore())
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Description, opt => opt.Ignore());
 
