@@ -27,7 +27,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         }
 
         public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, ProjectTypeContract projectType,
-            ProjectOwnerType projectOwnerType = ProjectOwnerType.AllProjects, string filterByName = null, bool fetchPageCount = false)
+            ProjectOwnerTypeContract projectOwnerType = ProjectOwnerTypeContract.AllProjects, string filterByName = null, bool fetchPageCount = false)
         {
             try
             {

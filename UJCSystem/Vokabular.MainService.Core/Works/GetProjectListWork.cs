@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.Shared.DataContracts.Types;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works
@@ -16,7 +17,7 @@ namespace Vokabular.MainService.Core.Works
         private readonly int m_start;
         private readonly int m_count;
         private readonly ProjectTypeEnum? m_projectType;
-        private readonly ProjectOwnerType m_projectOwnerType;
+        private readonly ProjectOwnerTypeContract m_projectOwnerType;
         private readonly int? m_userId;
         private readonly string m_filterByName;
         private readonly bool m_fetchPageCount;
@@ -27,7 +28,7 @@ namespace Vokabular.MainService.Core.Works
         private IList<PageCountResult> m_pageCount;
 
         public GetProjectListWork(ProjectRepository projectRepository, MetadataRepository metadataRepository, int start, int count,
-            ProjectTypeEnum? projectType, ProjectOwnerType projectOwnerType, int? userId, string filterByName, bool fetchPageCount,
+            ProjectTypeEnum? projectType, ProjectOwnerTypeContract projectOwnerType, int? userId, string filterByName, bool fetchPageCount,
             bool fetchAuthors, bool fetchResponsiblePersons) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
@@ -45,7 +46,24 @@ namespace Vokabular.MainService.Core.Works
 
         protected override IList<Project> ExecuteWorkImplementation()
         {
-            var dbResult = m_projectRepository.GetProjectList(m_start, m_count, m_projectType, m_filterByName, m_userId, m_projectOwnerType);
+            int? includeUserId = null;
+            int? excludeUserId = null;
+            switch (m_projectOwnerType)
+            {
+                case ProjectOwnerTypeContract.AllProjects:
+                    // No filter
+                    break;
+                case ProjectOwnerTypeContract.MyProjects:
+                    includeUserId = m_userId;
+                    break;
+                case ProjectOwnerTypeContract.ForeignProjects:
+                    excludeUserId = m_userId;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            var dbResult = m_projectRepository.GetProjectList(m_start, m_count, m_projectType, m_filterByName, includeUserId, excludeUserId);
             var projectIdList = dbResult.List.Select(x => x.Id).ToList();
 
             m_metadataList = m_metadataRepository.GetMetadataByProjectIds(projectIdList, m_fetchAuthors, m_fetchResponsiblePersons, false);

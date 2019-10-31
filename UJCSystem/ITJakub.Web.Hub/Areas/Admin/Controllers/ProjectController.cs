@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using ITJakub.Web.Hub.Options;
 using Scalesoft.Localization.AspNetCore;
-using Vokabular.Shared.DataContracts.Types;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
@@ -35,7 +35,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         public IActionResult List(string search, int start, int count = ProjectListPageSize, ViewType viewType = ViewType.Full,
-            ProjectOwnerType projectOwnerType = ProjectOwnerType.AllProjects)
+            ProjectOwnerTypeContract projectOwnerType = ProjectOwnerTypeContract.AllProjects)
         {
             var client = GetProjectClient();
             var result = client.GetProjectList(start, count, GetDefaultProjectType(), projectOwnerType, search, true);
@@ -52,11 +52,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 Projects = listViewModel,
                 AvailableBookTypes = ProjectConstants.AvailableBookTypes,
-                FilterTypes = new List<ProjectOwnerType>
+                FilterTypes = new List<ProjectOwnerTypeContract>
                 {
-                    ProjectOwnerType.AllProjects,
-                    ProjectOwnerType.MyProjects,
-                    ProjectOwnerType.ForeignProjects,
+                    ProjectOwnerTypeContract.AllProjects,
+                    ProjectOwnerTypeContract.MyProjects,
+                    ProjectOwnerTypeContract.ForeignProjects,
                 }
             };
 
