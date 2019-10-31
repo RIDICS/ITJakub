@@ -196,7 +196,7 @@ namespace Vokabular.MainService.Controllers
 
         [HttpGet("{projectId}/role")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total records count")]
-        public List<RoleContract> GetRolesByProject(long projectId, [FromQuery] int? start, [FromQuery] int? count,
+        public List<UserGroupContract> GetRolesByProject(long projectId, [FromQuery] int? start, [FromQuery] int? count,
             [FromQuery] string filterByName)
         {
             var result = m_projectManager.GetRolesByProject(projectId, start, count, filterByName);

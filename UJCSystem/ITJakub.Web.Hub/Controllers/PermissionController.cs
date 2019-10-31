@@ -150,7 +150,7 @@ namespace ITJakub.Web.Hub.Controllers
             var model = new ListViewModel<RoleContract>
             {
                 TotalCount = result.TotalCount,
-                List = result.List,
+                List = result.List.Cast<RoleContract>().ToList(), // WORKAROUND correct type should be used in View (without casting)
                 PageSize = count,
                 Start = start,
                 SearchQuery = search
@@ -241,6 +241,7 @@ namespace ITJakub.Web.Hub.Controllers
             return PartialView("_EditRole", roleViewModel);
         }
 
+        // TODO this should load all groups (Role and Single)
         public IActionResult EditUserRoles(int userId)
         {
             var client = GetUserClient();
@@ -333,6 +334,7 @@ namespace ITJakub.Web.Hub.Controllers
             return AjaxOkResponse();
         }
 
+        // TODO this should load all groups (Role and Single)
         public IActionResult GetRolesByUser(int userId)
         {
             var client = GetUserClient();

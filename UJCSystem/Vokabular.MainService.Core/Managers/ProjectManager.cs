@@ -190,7 +190,7 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
-        public PagedResultList<RoleContract> GetRolesByProject(long projectId, int? start, int? count, string filterByName)
+        public PagedResultList<UserGroupContract> GetRolesByProject(long projectId, int? start, int? count, string filterByName)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
@@ -202,7 +202,7 @@ namespace Vokabular.MainService.Core.Managers
                 return null;
             }
 
-            var resultRoles = new List<RoleContract>();
+            var resultRoles = new List<UserGroupContract>();
             foreach (var group in result.List)
             {
                 if (group is RoleUserGroup roleUserGroup)
@@ -211,19 +211,19 @@ namespace Vokabular.MainService.Core.Managers
                     work.Execute();
                     var authRoleContract = work.GetRoleContract();
 
-                    var roleContract = m_mapper.Map<RoleContract>(authRoleContract);
+                    var roleContract = m_mapper.Map<UserGroupContract>(authRoleContract);
                     roleContract.Id = group.Id;
 
                     resultRoles.Add(roleContract);
                 }
                 else
                 {
-                    var roleContract = m_mapper.Map<RoleContract>(group);
+                    var roleContract = m_mapper.Map<UserGroupContract>(group);
                     resultRoles.Add(roleContract);
                 }
             }
 
-            return new PagedResultList<RoleContract>
+            return new PagedResultList<UserGroupContract>
             {
                 List = resultRoles,
                 TotalCount = result.Count,

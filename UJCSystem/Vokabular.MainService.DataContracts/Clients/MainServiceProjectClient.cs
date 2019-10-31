@@ -547,7 +547,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public PagedResultList<RoleContract> GetRolesByProject(int projectId, int start, int count, string query)
+        public PagedResultList<UserGroupContract> GetRolesByProject(int projectId, int start, int count, string query)
         {
             try
             {
@@ -557,7 +557,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("filterByName", query)
                     .ToResult();
 
-                var result = m_client.GetPagedList<RoleContract>(url);
+                var result = m_client.GetPagedList<UserGroupContract>(url);
                 return result;
             }
             catch (HttpRequestException e)
