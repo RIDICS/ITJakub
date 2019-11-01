@@ -117,12 +117,21 @@ namespace Vokabular.MainService.Core.Managers
 
                 var startValue = PagingHelper.GetStart(start);
                 var countValue = PagingHelper.GetCount(count);
-                var dbUsers = m_userRepository.GetUsersByGroup(groupId, startValue, countValue, filterByName);
-                var users = m_mapper.Map<List<UserContract>>(dbUsers.List);
+                var dbUsers = m_userRepository.InvokeUnitOfWork(x => x.GetUsersByGroup(groupId, startValue, countValue, filterByName));
 
+                var resultList = new List<UserContract>();
+                foreach (var dbUser in dbUsers.List)
+                {
+                    var resultUser = m_mapper.Map<UserContract>(dbUser);
+                    resultUser.FirstName = dbUser.ExtFirstName;
+                    resultUser.LastName = dbUser.ExtLastName;
+                    resultUser.UserName = dbUser.ExtUsername;
+                    resultList.Add(resultUser);
+                }
+                
                 return new PagedResultList<UserContract>
                 {
-                    List = users,
+                    List = resultList,
                     TotalCount = dbUsers.Count,
                 };
             }

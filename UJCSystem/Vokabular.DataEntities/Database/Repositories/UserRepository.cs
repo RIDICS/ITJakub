@@ -95,15 +95,28 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             var query = GetSession().QueryOver<User>()
                 .JoinAlias(x => x.Groups, () => userGroupAlias)
-                .Where(() => userGroupAlias.Id == groupId)
-                // TODO add Name column to allow filtering and sorting
-                //.WhereRestrictionOn(x => x.name).IsLike(filterByName, MatchMode.Anywhere)
-                //.OrderBy(x => x.name).Asc
-                .Skip(start)
-                .Take(count);
+                .Where(() => userGroupAlias.Id == groupId);
 
-            var result = query.Future();
-            var resultCount = query.ToRowCountQuery().FutureValue<int>();
+            if (!string.IsNullOrEmpty(filterByName))
+            {
+                query.And(Restrictions.Like(Projections.SqlFunction("concat",
+                        NHibernateUtil.String,
+                        Projections.Property<User>(x => x.ExtFirstName),
+                        Projections.Constant(" "),
+                        Projections.Property<User>(x => x.ExtLastName)),
+                    filterByName, MatchMode.Anywhere));
+            }
+
+            var result = query
+                .OrderBy(x => x.ExtFirstName).Asc
+                .ThenBy(x => x.ExtLastName).Asc
+                .Skip(start)
+                .Take(count)
+                .Future();
+
+            var resultCount = query
+                .ToRowCountQuery()
+                .FutureValue<int>();
                 
             return new ListWithTotalCountResult<User>
             {
