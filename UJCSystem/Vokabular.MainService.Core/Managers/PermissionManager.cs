@@ -10,6 +10,7 @@ using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.Const;
@@ -166,6 +167,19 @@ namespace Vokabular.MainService.Core.Managers
             };
 
             client.EnsurePermissionsExistAsync(request).GetAwaiter().GetResult();
+        }
+
+        public void AddBookToSingleUserGroup(long projectId, string userGroupCode, PermissionDataContract permissions)
+        {
+            var dbUserGroup = m_permissionRepository.InvokeUnitOfWork(x => x.FindSingleUserGroupByName(userGroupCode));
+            if (dbUserGroup == null)
+            {
+                throw new MainServiceException(MainServiceErrorCode.GroupNotFound, $"Group with specified code {userGroupCode} was not found");
+            }
+
+            var permissionFlags = m_permissionConverter.GetFlags(permissions);
+
+            new UpdateOrAddProjectsToRoleWork(m_permissionRepository, dbUserGroup.Id, new List<long> {projectId}, permissionFlags).Execute();
         }
     }
 }

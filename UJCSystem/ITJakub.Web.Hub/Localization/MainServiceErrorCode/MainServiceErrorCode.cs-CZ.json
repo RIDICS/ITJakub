@@ -54,6 +54,7 @@
     "project-parser-not-found": "Konvertor pro bibilografický formát {0} nebyl nalezen.",
     "change-in-conflict": "Nelze uložit provedné změny, protože konfliktní změny už byly provedeny jiným uživatelem.",
     "reserved-username-error": "Uživatelské jméno '{0}' je rezerováno, nelze ho použít.",
+    "group-not-found": "Skupina nebyla nalezena",
     
     //Auth service codes
     "generic-error": "Operace se nezdařila",

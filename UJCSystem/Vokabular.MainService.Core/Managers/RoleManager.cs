@@ -202,6 +202,19 @@ namespace Vokabular.MainService.Core.Managers
             return resultList;
         }
 
+        public IList<UserGroupContract> GetSingleUserGroupAutocomplete(string query, int? count, bool includeSearchInUsers)
+        {
+            if (query == null)
+                query = string.Empty;
+
+            var countValue = PagingHelper.GetAutocompleteCount(count);
+
+            var dbResult = m_userRepository.InvokeUnitOfWork(x => x.FindSingleUserGroups(0, countValue, query, includeSearchInUsers));
+            var result = m_mapper.Map<IList<UserGroupContract>>(dbResult);
+
+            return result;
+        }
+
         public PagedResultList<RoleContract> GetRoleList(int? start, int? count, string filterByName)
         {
             var startValue = PagingHelper.GetStart(start);

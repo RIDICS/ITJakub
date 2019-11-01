@@ -83,6 +83,14 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
+        public virtual SingleUserGroup FindSingleUserGroupByName(string name)
+        {
+            var result = GetSession().QueryOver<SingleUserGroup>()
+                .Where(x => x.Name == name)
+                .SingleOrDefault();
+            return result;
+        }
+
         public virtual int CreateGroup(UserGroup group)
         {
             return (int) GetSession().Save(group);

@@ -18,14 +18,16 @@ namespace Vokabular.MainService.Controllers
         private readonly ProjectMetadataManager m_projectMetadataManager;
         private readonly ProjectInfoManager m_projectInfoManager;
         private readonly ForumSiteManager m_forumSiteManager;
+        private readonly PermissionManager m_permissionManager;
 
         public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager,
-            ProjectInfoManager projectInfoManager, ForumSiteManager forumSiteManager)
+            ProjectInfoManager projectInfoManager, ForumSiteManager forumSiteManager, PermissionManager permissionManager)
         {
             m_projectManager = projectManager;
             m_projectMetadataManager = projectMetadataManager;
             m_projectInfoManager = projectInfoManager;
             m_forumSiteManager = forumSiteManager;
+            m_permissionManager = permissionManager;
         }
         
         [HttpGet]
@@ -220,6 +222,13 @@ namespace Vokabular.MainService.Controllers
             var forumId = m_forumSiteManager.CreateOrUpdateForums(projectId);
 
             return forumId != null ? (ActionResult<int>) Ok(forumId.Value) : BadRequest("Forum is disabled");
+        }
+
+        [HttpPost("{projectId}/single-user-group")]
+        public IActionResult AddProjectToUserGroupByCode(long projectId, [FromBody] AssignPermissionToSingleUserGroupContract data)
+        {
+            m_permissionManager.AddBookToSingleUserGroup(projectId, data.Code, data.Permissions);
+            return Ok();
         }
     }
 }
