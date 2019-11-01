@@ -164,6 +164,7 @@ namespace ITJakub.Web.Hub.Controllers
                 SearchQuery = search
             };
 
+            ViewData[RoleViewConstants.IsSingleUserGroupRemoveAllowed] = true;
             return PartialView("Widget/_RoleListWidget", model);
         }
 
