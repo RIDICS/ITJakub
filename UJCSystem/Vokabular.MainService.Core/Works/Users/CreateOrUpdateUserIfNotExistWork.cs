@@ -99,10 +99,10 @@ namespace Vokabular.MainService.Core.Works.Users
 
         private SingleUserGroup CreateSingleUserGroupObject(User user, DateTime now)
         {
-            var newGroupCode = m_codeGenerator.Generate(CodeGenerator.UserGroupNameLength);
+            var singleUserGroupSubwork = new SingleUserGroupSubwork(m_userRepository, m_codeGenerator);
             var result = new SingleUserGroup
             {
-                Name = newGroupCode,
+                Name = singleUserGroupSubwork.GetUniqueName(),
                 CreateTime = now,
                 LastChange = now,
                 User = user,

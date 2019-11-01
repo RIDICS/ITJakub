@@ -4,6 +4,7 @@ using Ridics.Authentication.DataContracts.User;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.Core.Utils;
 using CreateUserContract = Vokabular.MainService.DataContracts.Contracts.CreateUserContract;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -14,14 +15,14 @@ namespace Vokabular.MainService.Core.Works.Users
         private readonly UserRepository m_userRepository;
         private readonly CommunicationProvider m_communicationProvider;
         private readonly CreateUserContract m_data;
-        private readonly string m_newUserGroupCode;
+        private readonly CodeGenerator m_codeGenerator;
 
-        public CreateNewUserWork(UserRepository userRepository, CommunicationProvider communicationProvider, CreateUserContract data, string newUserGroupCode) : base(userRepository)
+        public CreateNewUserWork(UserRepository userRepository, CommunicationProvider communicationProvider, CreateUserContract data, CodeGenerator codeGenerator) : base(userRepository)
         {
             m_userRepository = userRepository;
             m_communicationProvider = communicationProvider;
             m_data = data;
-            m_newUserGroupCode = newUserGroupCode;
+            m_codeGenerator = codeGenerator;
         }
 
         protected override int ExecuteWorkImplementation()
@@ -56,9 +57,10 @@ namespace Vokabular.MainService.Core.Works.Users
                 //FavoriteLabels = new List<FavoriteLabel> { defaultFavoriteLabel }
             };
 
+            var singleUserGroupSubwork = new SingleUserGroupSubwork(m_userRepository, m_codeGenerator);
             var singleUserGroup = new SingleUserGroup
             {
-                Name = m_newUserGroupCode,
+                Name = singleUserGroupSubwork.GetUniqueName(),
                 CreateTime = now,
                 LastChange = now,
                 User = dbUser,

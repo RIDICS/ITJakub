@@ -53,8 +53,7 @@ namespace Vokabular.MainService.Core.Managers
                 throw new MainServiceException(MainServiceErrorCode.ReservedUsernameError, $"Username '{data.UserName}' is reserved, cannot be used.", HttpStatusCode.BadRequest, data.UserName);
             }
 
-            var newUserGroupCode = m_codeGenerator.Generate(CodeGenerator.UserGroupNameLength);
-            var userId = new CreateNewUserWork(m_userRepository, m_communicationProvider, data, newUserGroupCode).Execute();
+            var userId = new CreateNewUserWork(m_userRepository, m_communicationProvider, data, m_codeGenerator).Execute();
             return userId;
         }
 

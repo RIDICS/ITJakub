@@ -133,6 +133,14 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
+        public virtual IList<SingleUserGroup> FindSingleUserGroupsByName(string name)
+        {
+            var result = GetSession().QueryOver<SingleUserGroup>()
+                .Where(x => x.Name == name)
+                .List();
+            return result;
+        }
+
         public virtual IList<SingleUserGroup> FindSingleUserGroups(int start, int count, string queryString, bool includeSearchInUsers)
         {
             User userAlias = null;
