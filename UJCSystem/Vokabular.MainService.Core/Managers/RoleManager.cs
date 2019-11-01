@@ -31,12 +31,13 @@ namespace Vokabular.MainService.Core.Managers
         private readonly UserDetailManager m_userDetailManager;
         private readonly DefaultUserProvider m_defaultUserProvider;
         private readonly IMapper m_mapper;
+        private readonly CodeGenerator m_codeGenerator;
 
         private readonly CommunicationProvider m_communicationProvider;
 
         public RoleManager(UserRepository userRepository, PermissionRepository permissionRepository,
             CommunicationProvider communicationProvider, UserDetailManager userDetailManager, DefaultUserProvider defaultUserProvider,
-            IMapper mapper)
+            IMapper mapper, CodeGenerator codeGenerator)
         {
             m_userRepository = userRepository;
             m_permissionRepository = permissionRepository;
@@ -44,6 +45,7 @@ namespace Vokabular.MainService.Core.Managers
             m_userDetailManager = userDetailManager;
             m_defaultUserProvider = defaultUserProvider;
             m_mapper = mapper;
+            m_codeGenerator = codeGenerator;
         }
 
         public List<UserGroupContract> GetUserGroupsByUser(int userId)
@@ -250,6 +252,13 @@ namespace Vokabular.MainService.Core.Managers
                 List = resultList,
                 TotalCount = authResult.ItemsCount,
             };
+        }
+
+        public string RegenerateSingleUserGroupName(int groupId)
+        {
+            var work = new RegenerateSingleUserGroupNameWork(m_userRepository, groupId, m_codeGenerator);
+            var newCode = work.Execute();
+            return newCode;
         }
     }
 }
