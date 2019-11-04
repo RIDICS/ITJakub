@@ -26,6 +26,18 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
+        public virtual IList<UserGroup> GetUserGroupsByUser(int userId)
+        {
+            User userAlias = null;
+
+            var result = GetSession().QueryOver<UserGroup>()
+                .JoinAlias(x => x.Users, () => userAlias)
+                .Where(() => userAlias.Id == userId)
+                .OrderBy(x => x.Name).Asc
+                .List();
+            return result;
+        }
+
         public virtual RoleUserGroup FindGroupByExternalId(int externalId)
         {
             var group = GetSession().QueryOver<RoleUserGroup>()
@@ -68,6 +80,14 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .WhereRestrictionOn(x => x.ExternalId).IsInG(externalIds)
                 .Select(x => x.Id)
                 .List<int>();
+            return result;
+        }
+
+        public virtual SingleUserGroup FindSingleUserGroupByName(string name)
+        {
+            var result = GetSession().QueryOver<SingleUserGroup>()
+                .Where(x => x.Name == name)
+                .SingleOrDefault();
             return result;
         }
 
@@ -202,7 +222,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                     .SingleOrDefault<Permission>();
         }
 
-        public virtual ListWithTotalCountResult<UserGroup> FindGroupsByBook(long bookId, int start, int count, string filterByName)
+        public virtual ListWithTotalCountResult<UserGroup> FindGroupsByBook(long bookId, int start, int count, string filterByName, bool fetchUser = false)
         {
             Project projectAlias = null;
             Permission permissionAlias = null;
@@ -225,11 +245,21 @@ namespace Vokabular.DataEntities.Database.Repositories
             var list = query.Future();
             var totalCount = query.ToRowCountQuery().FutureValue<int>();
 
-            return new ListWithTotalCountResult<UserGroup>
+            var result = new ListWithTotalCountResult<UserGroup>
             {
                 List = list.ToList(),
                 Count = totalCount.Value
             };
+
+            if (fetchUser)
+            {
+                GetSession().QueryOver<SingleUserGroup>()
+                    .WhereRestrictionOn(x => x.Id).IsInG(result.List.Select(x => x.Id))
+                    .Fetch(SelectMode.Fetch, x => x.User)
+                    .List();
+            }
+
+            return result;
         }
 
         public virtual IList<Permission> FindPermissionsForSnapshotByUserId(long snapshotId, int userId)

@@ -1,30 +1,38 @@
 ﻿@using ITJakub.Web.Hub.Constants
+@using ITJakub.Web.Hub.Helpers
 @using Ridics.Core.Structures.Shared
 @using Scalesoft.Localization.AspNetCore
+@using Vokabular.MainService.DataContracts.Contracts.Type
 @using Vokabular.Shared.AspNetCore.Extensions
-@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract>
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.UserGroupContract>
 @inject ILocalizationService Localizer
 
 @foreach (var role in Model.List)
 {
     <tr data-role-id="@role.Id" class="role-row">
         <td>
+            @{
+                var descriptionPrefix = role.Type == UserGroupTypeContract.Single ? $"{Localizer.Translate("User", "Permission")}: " : string.Empty;
+            }
             <div class="name">@role.Name</div>
-            <div class="description">@role.Description</div>
+            <div class="description">@descriptionPrefix@role.Description</div>
             <div class="alert alert-danger"></div>
         </td>
          @if (User.HasPermission(PermissionNames.ManageUserRoles))
          {
              <td class="buttons">
-                 @if (ViewData.TryGetValue(RoleViewConstants.IsRoleEditAllowed, out var isEditAllowed) && (bool)isEditAllowed)
+                 @if (ViewData.TryGetBooleanValue(RoleViewConstants.IsRoleEditAllowed))
                  {
                      <a class="edit-role btn btn-sm btn-default">
                          <i class="fa fa-pencil"></i>
                      </a>
                  }
-                 <a class="remove-role btn btn-sm btn-default">
-                     <i class="fa fa-trash"></i>
-                 </a>
+                 @if (ViewData.TryGetBooleanValue(RoleViewConstants.IsSingleUserGroupRemoveAllowed) || role.Type != UserGroupTypeContract.Single)
+                 {
+                     <a class="remove-role btn btn-sm btn-default">
+                         <i class="fa fa-trash"></i>
+                     </a>
+                 }
              </td>
          }
     </tr>

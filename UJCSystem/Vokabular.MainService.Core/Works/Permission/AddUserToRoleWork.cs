@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -67,6 +68,10 @@ namespace Vokabular.MainService.Core.Works.Permission
             {
                 var client = m_communicationProvider.GetAuthUserApiClient();
                 client.AddRoleToUserAsync(user.ExternalId.Value, roleGroup.ExternalId).GetAwaiter().GetResult();
+            }
+            else
+            {
+                throw new InvalidOperationException($"Only RoleUserGroup can be updated by this method, argument type was: {group.GetType()}");
             }
         }
     }

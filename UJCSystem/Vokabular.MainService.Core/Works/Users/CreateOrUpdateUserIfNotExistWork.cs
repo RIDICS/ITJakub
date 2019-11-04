@@ -4,6 +4,7 @@ using System.Linq;
 using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Users
@@ -14,13 +15,16 @@ namespace Vokabular.MainService.Core.Works.Users
         private readonly int m_userExternalId;
         private readonly IList<RoleContractBase> m_roles;
         private readonly UpdateUserInfo m_userInfo;
+        private readonly CodeGenerator m_codeGenerator;
 
-        public CreateOrUpdateUserIfNotExistWork(UserRepository userRepository, int userExternalId, IList<RoleContractBase> roles, UpdateUserInfo userInfo) : base(userRepository)
+        public CreateOrUpdateUserIfNotExistWork(UserRepository userRepository, int userExternalId, IList<RoleContractBase> roles,
+            UpdateUserInfo userInfo, CodeGenerator codeGenerator) : base(userRepository)
         {
             m_userRepository = userRepository;
             m_userExternalId = userExternalId;
             m_roles = roles;
             m_userInfo = userInfo;
+            m_codeGenerator = codeGenerator;
         }
 
         protected override int ExecuteWorkImplementation()
@@ -46,6 +50,7 @@ namespace Vokabular.MainService.Core.Works.Users
                 user.ExtFirstName = m_userInfo.FirstName;
                 user.ExtLastName = m_userInfo.LastName;
 
+                // Update RoleUserGroups
                 if (dbRoleUserGroups != null)
                 {
                     // User already exists, so only update groups
@@ -58,6 +63,12 @@ namespace Vokabular.MainService.Core.Works.Users
                     user.Groups = newGroups;
                 }
 
+                // Add SingleUserGroup
+                if (user.Groups.OfType<SingleUserGroup>().Any() == false)
+                {
+                    user.Groups.Add(CreateSingleUserGroupObject(user, now));
+                }
+
                 m_userRepository.Update(user);
 
                 return user.Id;
@@ -67,20 +78,38 @@ namespace Vokabular.MainService.Core.Works.Users
             {
                 ExternalId = m_userExternalId,
                 CreateTime = now,
-                Groups = dbRoleUserGroups?.Cast<UserGroup>().ToList(),
+                Groups = dbRoleUserGroups?.Cast<UserGroup>().ToList() ?? new List<UserGroup>(),
                 ExtUsername = m_userInfo.Username,
                 ExtFirstName = m_userInfo.FirstName,
                 ExtLastName = m_userInfo.LastName,
-                //Groups = new List<Group> { m_defaultMembershipProvider.GetDefaultRegisteredUserGroup(), m_defaultMembershipProvider.GetDefaultUnRegisteredUserGroup() },
                 //FavoriteLabels = new List<FavoriteLabel> { defaultFavoriteLabel }
             };
 
+            var newSingleUserGroup = CreateSingleUserGroupObject(dbUser, now);
+            dbUser.Groups.Add(newSingleUserGroup);
+
+
             //defaultFavoriteLabel.User = dbUser;
             // TODO generate default FavoriteLabel
-            // TODO assign User Groups
+            
 
             var userId = (int) m_userRepository.Create(dbUser);
             return userId;
+        }
+
+        private SingleUserGroup CreateSingleUserGroupObject(User user, DateTime now)
+        {
+            var singleUserGroupSubwork = new SingleUserGroupSubwork(m_userRepository, m_codeGenerator);
+            var result = new SingleUserGroup
+            {
+                Name = singleUserGroupSubwork.GetUniqueName(),
+                CreateTime = now,
+                LastChange = now,
+                User = user,
+                Users = new List<User> {user},
+                Permissions = null,
+            };
+            return result;
         }
     }
 

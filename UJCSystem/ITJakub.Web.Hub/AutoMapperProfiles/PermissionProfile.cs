@@ -8,7 +8,7 @@ namespace ITJakub.Web.Hub.AutoMapperProfiles
     {
         public PermissionProfile()
         {
-            CreateMap<PermissionContract, PermissionViewModel>()
+            CreateMap<SpecialPermissionContract, PermissionViewModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))

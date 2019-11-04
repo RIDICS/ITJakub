@@ -54,6 +54,7 @@
     "project-parser-not-found": "The project parser was not found for bibliographic format {0}.",
     "change-in-conflict": "Could not save your changes because a conflict changes have already been made by another user.",
     "reserved-username-error": "Username '{0}' is reserved, cannot be used.",
+    "group-not-found": "The group was not found",
 
     //Auth service codes
     "generic-error": "Operation failed",

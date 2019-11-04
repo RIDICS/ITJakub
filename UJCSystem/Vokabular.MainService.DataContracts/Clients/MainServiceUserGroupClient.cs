@@ -3,6 +3,7 @@ using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using Vokabular.RestClient;
 using Vokabular.RestClient.Extensions;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
@@ -10,23 +11,26 @@ using Vokabular.Shared.Extensions;
 
 namespace Vokabular.MainService.DataContracts.Clients
 {
-    public class MainServiceRoleClient
+    public class MainServiceUserGroupClient
     {
         private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<MainServiceRestClient>();
         private readonly MainServiceRestClient m_client;
 
-        public MainServiceRoleClient(MainServiceRestClient client)
+        public MainServiceUserGroupClient(MainServiceRestClient client)
         {
             m_client = client;
         }
 
-        public PagedResultList<UserContract> GetUsersByRole(int roleId, int start, int count, string query)
+        public PagedResultList<UserContract> GetUsersByGroup(int groupId, int start, int count, string query)
         {
             try
             {
-                var url = $"role/{roleId}/user".AddQueryString("start", start.ToString());
-                url = url.AddQueryString("count", count.ToString());
-                url = url.AddQueryString("filterByName", query);
+                var url = UrlQueryBuilder.Create($"usergroup/{groupId}/user")
+                    .AddParameter("start", start)
+                    .AddParameter("count", count)
+                    .AddParameter("filterByName", query)
+                    .ToResult();
+                
                 var result = m_client.GetPagedList<UserContract>(url);
                 return result;
             }
@@ -39,11 +43,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void AddUserToRole(int userId, int roleId)
+        public void AddUserToRole(int userId, int groupId)
         {
             try
             {
-                m_client.Post<object>($"role/{roleId}/user/{userId}", null);
+                m_client.Post<object>($"role/{groupId}/user/{userId}", null);
             }
             catch (HttpRequestException e)
             {
@@ -54,11 +58,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void RemoveUserFromRole(int userId, int roleId)
+        public void RemoveUserFromRole(int userId, int groupId)
         {
             try
             {
-                m_client.Delete($"role/{roleId}/user/{userId}");
+                m_client.Delete($"role/{groupId}/user/{userId}");
             }
             catch (HttpRequestException e)
             {
@@ -104,11 +108,15 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public RoleDetailContract GetRoleDetail(int roleId)
+        public List<UserGroupContract> GetSingleUserGroupAutocomplete(string query, bool includeSearchInUsers)
         {
             try
             {
-                var result = m_client.Get<RoleDetailContract>($"role/{roleId}/detail");
+                var url = UrlQueryBuilder.Create("singleusergroup/autocomplete")
+                    .AddParameter("query", query)
+                    .AddParameter("includeSearchInUsers", includeSearchInUsers)
+                    .ToResult();
+                var result = m_client.Get<List<UserGroupContract>>(url);
                 return result;
             }
             catch (HttpRequestException e)
@@ -120,11 +128,27 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void UpdateRole(int roleId, RoleContract data)
+        public RoleDetailContract GetUserGroupDetail(int groupId)
         {
             try
             {
-                m_client.Put<object>($"role/{roleId}", data);
+                var result = m_client.Get<RoleDetailContract>($"usergroup/{groupId}/detail");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateRole(int groupId, RoleContract data)
+        {
+            try
+            {
+                m_client.Put<object>($"role/{groupId}", data);
             }
             catch (HttpRequestException e)
             {
@@ -151,11 +175,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void DeleteRole(int roleId)
+        public void DeleteRole(int groupId)
         {
             try
             {
-                m_client.Delete($"role/{roleId}");
+                m_client.Delete($"role/{groupId}");
             }
             catch (HttpRequestException e)
             {
@@ -166,11 +190,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public PermissionDataContract GetPermissionsForRoleAndBook(int roleId, long bookId)
+        public PermissionDataContract GetPermissionsForGroupAndBook(int groupId, long bookId)
         {
             try
             {
-                var result = m_client.Get<PermissionDataContract>($"role/{roleId}/book/{bookId}/permission");
+                var result = m_client.Get<PermissionDataContract>($"usergroup/{groupId}/book/{bookId}/permission");
                 return result;
             }
             catch (HttpRequestException e)
@@ -182,11 +206,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void UpdateOrAddBooksToRole(int roleId, long bookId, PermissionDataContract data)
+        public void UpdateOrAddBooksToGroup(int groupId, long bookId, PermissionDataContract data)
         {
             try
             {
-                m_client.Put<object>($"role/{roleId}/book/{bookId}/permission", data);
+                m_client.Put<object>($"usergroup/{groupId}/book/{bookId}/permission", data);
             }
             catch (HttpRequestException e)
             {
@@ -197,11 +221,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void RemoveBooksFromRole(int roleId, long bookId)
+        public void RemoveBooksFromGroup(int groupId, long bookId)
         {
             try
             {
-                m_client.Delete($"role/{roleId}/book/{bookId}/permission");
+                m_client.Delete($"usergroup/{groupId}/book/{bookId}/permission");
             }
             catch (HttpRequestException e)
             {
@@ -212,27 +236,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<PermissionContract> GetPermissionsForRole(int roleId)
+        public void AddSpecialPermissionsToRole(int groupId, IList<int> specialPermissionsIds)
         {
             try
             {
-                var result = m_client.Get<List<PermissionContract>>($"role/{roleId}/permission");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
-        public void AddSpecialPermissionsToRole(int roleId, IList<int> specialPermissionsIds)
-        {
-            try
-            {
-                m_client.Post<object>($"role/{roleId}/permission/special", new IntegerIdListContract
+                m_client.Post<object>($"role/{groupId}/permission/special", new IntegerIdListContract
                 {
                     IdList = specialPermissionsIds
                 });
@@ -246,11 +254,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void RemoveSpecialPermissionsFromRole(int roleId, IList<int> specialPermissionsIds)
+        public void RemoveSpecialPermissionsFromRole(int groupId, IList<int> specialPermissionsIds)
         {
             try
             {
-                m_client.Delete($"role/{roleId}/permission/special", new IntegerIdListContract
+                m_client.Delete($"role/{groupId}/permission/special", new IntegerIdListContract
                 {
                     IdList = specialPermissionsIds
                 });

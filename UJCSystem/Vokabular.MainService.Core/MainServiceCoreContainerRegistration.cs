@@ -49,6 +49,7 @@ namespace Vokabular.MainService.Core
             services.AddScoped<UserDetailManager>();
             services.AddScoped<UserManager>();
 
+            services.AddSingleton<CodeGenerator>();
             services.AddScoped<CommunicationConfigurationProvider>();
             services.AddScoped<CommunicationProvider>();
             services.AddScoped<DefaultUserProvider>();

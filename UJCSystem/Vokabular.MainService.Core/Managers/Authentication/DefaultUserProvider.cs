@@ -32,14 +32,14 @@ namespace Vokabular.MainService.Core.Managers.Authentication
                 : m_userRepository.GetVirtualUserForUnregisteredUsersOrCreate(GetDefaultUnregisteredUserGroup());
         }
 
-        public UserGroup GetDefaultUnregisteredUserGroup()
+        public RoleUserGroup GetDefaultUnregisteredUserGroup()
         {
             return m_userRepository.UnitOfWork.CurrentSession == null
                 ? m_userRepository.InvokeUnitOfWork(x => x.GetDefaultGroupOrCreate(Unregistered, GetUnregisteredRoleExternalId))
                 : m_userRepository.GetDefaultGroupOrCreate(Unregistered, GetUnregisteredRoleExternalId);
         }
 
-        public UserGroup GetDefaultRegisteredUserGroup()
+        public RoleUserGroup GetDefaultRegisteredUserGroup()
         {
             return m_userRepository.UnitOfWork.CurrentSession == null
                 ? m_userRepository.InvokeUnitOfWork(x => x.GetDefaultGroupOrCreate(RegisteredUser, GetRegisteredUserRoleExternalId))

@@ -4,7 +4,7 @@
 });
 
 class ProjectManager {
-    private readonly searchBox: SingleSetTypeaheadSearchBox<IRole>;
+    private readonly searchBox: MultiSetTypeaheadSearchBox<IRole>;
     private readonly client: PermissionApiClient;
     private readonly errorHandler: ErrorHandler;
     private currentRoleSelectedItem: IRole;
@@ -13,9 +13,9 @@ class ProjectManager {
     private permissionPanel: JQuery<HTMLElement>;
 
     constructor() {
-        this.searchBox = new SingleSetTypeaheadSearchBox<IRole>("#roleSearchInput", "Permission",
+        this.searchBox = new MultiSetTypeaheadSearchBox<IRole>("#roleSearchInput", "Permission",
             (item) => item.name,
-            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.name, item.description));
+            (item) => MultiSetTypeaheadSearchBox.getDefaultSuggestionTemplateMulti(item.name, item.description));
         this.client = new PermissionApiClient();
         this.errorHandler = new ErrorHandler();
     }
@@ -118,7 +118,7 @@ class ProjectManager {
                 subContent.html(result);
                 saveButton.removeClass("hide");
             }).fail((error) => {
-                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement
+                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement;
                 subContent.empty();
                 alertHolder.empty().append(alert);
             });
@@ -136,7 +136,8 @@ class ProjectManager {
     }
 
     private initSearchBox() {
-        this.searchBox.setDataSet("Role");
+        this.searchBox.addDataSet("Role", localization.translate("Groups", "PermissionJs").value);
+        this.searchBox.addDataSet("SingleUserGroup", localization.translate("Users", "PermissionJs").value);
         this.searchBox.create((selectedExists: boolean, selectionConfirmed: boolean) => {
             if (selectionConfirmed) {
                 this.currentRoleSelectedItem = this.searchBox.getValue();

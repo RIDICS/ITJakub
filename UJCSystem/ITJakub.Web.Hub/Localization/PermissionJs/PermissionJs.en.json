@@ -42,6 +42,8 @@
     "DeleteRoleConfirm": "Are you sure you want to delete group {0}?",
     "AssignPermission": "Assign permission",
     "UnassignPermission": "Unassign permission",
+    "Groups": "Groups",
+    "Users": "Users",
     "RegisteredRoleModifyWarning":
       "The group {0} is automatically assigned to every registered user. Are you sure that you wanted to modify it?",
     "UnregisteredRoleModifyWarning":

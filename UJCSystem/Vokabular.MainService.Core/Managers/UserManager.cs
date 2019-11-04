@@ -30,16 +30,19 @@ namespace Vokabular.MainService.Core.Managers
         private readonly AuthenticationManager m_authenticationManager;
         private readonly UserDetailManager m_userDetailManager;
         private readonly IMapper m_mapper;
+        private readonly CodeGenerator m_codeGenerator;
         private readonly RegistrationOption m_registrationOption;
 
         public UserManager(UserRepository userRepository, CommunicationProvider communicationProvider,
-            AuthenticationManager authenticationManager, UserDetailManager userDetailManager, IMapper mapper, IOptions<RegistrationOption> registrationOption)
+            AuthenticationManager authenticationManager, UserDetailManager userDetailManager, IMapper mapper,
+            CodeGenerator codeGenerator, IOptions<RegistrationOption> registrationOption)
         {
             m_userRepository = userRepository;
             m_communicationProvider = communicationProvider;
             m_authenticationManager = authenticationManager;
             m_userDetailManager = userDetailManager;
             m_mapper = mapper;
+            m_codeGenerator = codeGenerator;
             m_registrationOption = registrationOption.Value;
         }
 
@@ -49,8 +52,8 @@ namespace Vokabular.MainService.Core.Managers
             {
                 throw new MainServiceException(MainServiceErrorCode.ReservedUsernameError, $"Username '{data.UserName}' is reserved, cannot be used.", HttpStatusCode.BadRequest, data.UserName);
             }
-            
-            var userId = new CreateNewUserWork(m_userRepository, m_communicationProvider, data).Execute();
+
+            var userId = new CreateNewUserWork(m_userRepository, m_communicationProvider, data, m_codeGenerator).Execute();
             return userId;
         }
 
@@ -61,7 +64,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var authUserApiClient = m_communicationProvider.GetAuthUserApiClient();
             var userRoles = authUserApiClient.GetRolesByUserAsync(userExternalId).GetAwaiter().GetResult();
-            var userId = new CreateOrUpdateUserIfNotExistWork(m_userRepository, userExternalId, userRoles, userInfo).Execute();
+            var userId = new CreateOrUpdateUserIfNotExistWork(m_userRepository, userExternalId, userRoles, userInfo, m_codeGenerator).Execute();
             return userId;
         }
 

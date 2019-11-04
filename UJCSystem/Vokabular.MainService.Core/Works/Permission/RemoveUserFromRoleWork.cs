@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Reflection;
 using log4net;
 using Vokabular.DataEntities.Database.Entities;
@@ -62,6 +63,10 @@ namespace Vokabular.MainService.Core.Works.Permission
             {
                 var client = m_communicationProvider.GetAuthUserApiClient();
                 client.RemoveRoleFromUserAsync(user.ExternalId.Value, roleUserGroup.ExternalId).GetAwaiter().GetResult();
+            }
+            else
+            {
+                throw new InvalidOperationException($"Only RoleUserGroup can be updated by this method, argument type was: {group.GetType()}");
             }
         }
     }

@@ -147,10 +147,10 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
-        [HttpGet("{userId}/role")]
-        public List<RoleContract> GetRolesByUser(int userId)
+        [HttpGet("{userId}/group")]
+        public List<UserGroupContract> GetUserGroupsByUser(int userId)
         {
-            var result = m_roleManager.GetRolesByUser(userId);
+            var result = m_roleManager.GetUserGroupsByUser(userId);
             return result;
         }
 
@@ -263,6 +263,13 @@ namespace Vokabular.MainService.Controllers
             {
                 return StatusCode(exception.StatusCode, exception.Description);
             }
+        }
+
+        [HttpPost("current/single-user-group/regenerate-name")]
+        public ActionResult<string> RegenerateSingleUserGroupName()
+        {
+            var newCode = m_roleManager.RegenerateSingleUserGroupName();
+            return Ok(newCode);
         }
     }
 }
