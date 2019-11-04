@@ -174,4 +174,8 @@ class MultiSetTypeaheadSearchBox<T> extends TypeaheadSearchBoxBase<T> {
         this.bloodhounds.push(result.item1);
         this.datasets.push(result.item2);
     }
+
+    public static getDefaultSuggestionTemplateMulti(name: string, description: string) {
+        return `<div style="padding-left: 1.5rem;">${TypeaheadSearchBoxBase.getDefaultSuggestionTemplate(name, description)}</div>`;
+    }
 }
