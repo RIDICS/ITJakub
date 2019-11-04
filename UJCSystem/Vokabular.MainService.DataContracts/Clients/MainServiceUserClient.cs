@@ -286,5 +286,21 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        public string RegenerateSingleUserGroupName(int userId)
+        {
+            try
+            {
+                var result = m_client.Post<string>("user/current/single-user-group/regenerate-name", null);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
     }
 }
