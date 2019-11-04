@@ -30,6 +30,7 @@ namespace Vokabular.MainService.Core.Managers
         private readonly PermissionRepository m_permissionRepository;
         private readonly UserDetailManager m_userDetailManager;
         private readonly DefaultUserProvider m_defaultUserProvider;
+        private readonly AuthenticationManager m_authenticationManager;
         private readonly IMapper m_mapper;
         private readonly CodeGenerator m_codeGenerator;
 
@@ -37,13 +38,14 @@ namespace Vokabular.MainService.Core.Managers
 
         public RoleManager(UserRepository userRepository, PermissionRepository permissionRepository,
             CommunicationProvider communicationProvider, UserDetailManager userDetailManager, DefaultUserProvider defaultUserProvider,
-            IMapper mapper, CodeGenerator codeGenerator)
+            AuthenticationManager authenticationManager, IMapper mapper, CodeGenerator codeGenerator)
         {
             m_userRepository = userRepository;
             m_permissionRepository = permissionRepository;
             m_communicationProvider = communicationProvider;
             m_userDetailManager = userDetailManager;
             m_defaultUserProvider = defaultUserProvider;
+            m_authenticationManager = authenticationManager;
             m_mapper = mapper;
             m_codeGenerator = codeGenerator;
         }
@@ -254,9 +256,10 @@ namespace Vokabular.MainService.Core.Managers
             };
         }
 
-        public string RegenerateSingleUserGroupName(int groupId)
+        public string RegenerateSingleUserGroupName()
         {
-            var work = new RegenerateSingleUserGroupNameWork(m_userRepository, groupId, m_codeGenerator);
+            var userId = m_authenticationManager.GetCurrentUserId();
+            var work = new RegenerateSingleUserGroupNameWork(m_userRepository, userId, m_codeGenerator);
             var newCode = work.Execute();
             return newCode;
         }

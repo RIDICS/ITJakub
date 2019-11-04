@@ -264,5 +264,12 @@ namespace Vokabular.MainService.Controllers
                 return StatusCode(exception.StatusCode, exception.Description);
             }
         }
+
+        [HttpPost("current/single-user-group/regenerate-name")]
+        public ActionResult<string> RegenerateSingleUserGroupName()
+        {
+            var newCode = m_roleManager.RegenerateSingleUserGroupName();
+            return Ok(newCode);
+        }
     }
 }

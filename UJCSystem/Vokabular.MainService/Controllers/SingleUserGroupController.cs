@@ -24,13 +24,5 @@ namespace Vokabular.MainService.Controllers
             var result = m_roleManager.GetSingleUserGroupAutocomplete(query, count, includeSearchInUsers);
             return result;
         }
-
-        // TODO check permissions
-        [HttpPost("{groupId}/regenerate-name")]
-        public IActionResult RegenerateSingleUserGroupName(int groupId)
-        {
-            var newCode = m_roleManager.RegenerateSingleUserGroupName(groupId);
-            return Ok(newCode);
-        }
     }
 }
