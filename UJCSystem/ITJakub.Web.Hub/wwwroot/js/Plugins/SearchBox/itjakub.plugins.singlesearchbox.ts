@@ -1,13 +1,13 @@
 ﻿///<reference path="../../../js/typings-custom/typeahead-custom_.d.ts" />
 
-class SingleSetTypeaheadSearchBox<T> {
+class TypeaheadSearchBoxBase<T> {
     private displayPath: (item: T) => string;
     private suggestionTemplate: (item: T) => string;
     private inputField: string;
     private urlWithController: string;
     private options: Twitter.Typeahead.Options;
-    private dataset: Twitter.Typeahead.Dataset<T>;
-    private bloodhound: Bloodhound<T>;
+    protected datasets: Array<Twitter.Typeahead.Dataset<T>>;
+    protected bloodhounds: Array<Bloodhound<T>>;
     private currentItem: T;
 
     constructor(inputFieldElement: string, controllerName: string, displayPath: (item: T) => string, suggestionTemplate: (item: T) => string = null, menuEl?: JQuery) {
@@ -38,7 +38,7 @@ class SingleSetTypeaheadSearchBox<T> {
 
     create(selectionChangedCallback: (selectedExists: boolean, selectConfirmed: boolean) => void): void {
         var self = this;
-        $(this.inputField).typeahead(this.options, this.dataset);
+        $(this.inputField).typeahead(this.options, this.datasets);
         $(this.inputField).bind("typeahead:render", <any>function (e, ...datums: T[]) {
             if (datums.length > 0) {
                 var currentText = self.getInputValue();
@@ -86,16 +86,18 @@ class SingleSetTypeaheadSearchBox<T> {
     }
 
     clearCache(): void {
-        if (this.bloodhound) {
-            this.bloodhound.clear();
-            this.bloodhound.clearPrefetchCache();
-            this.bloodhound.clearRemoteCache();
+        if (!this.bloodhounds)
+            return;
+
+        for (var i = 0; i < this.bloodhounds.length; i++) {
+            var bloodhound = this.bloodhounds[i];
+            bloodhound.clear();
+            bloodhound.clearPrefetchCache();
+            bloodhound.clearRemoteCache();
         }
     }
 
-    setDataSet(name: string, parameterUrlString: string = null): void {
-        this.clearCache();
-        this.destroy();
+    protected createDataSet(name: string, groupHeader: string, parameterUrlString: string): ITuple<Bloodhound<T>, Twitter.Typeahead.Dataset<T>> {
         var remoteUrl: string = this.urlWithController + "/GetTypeahead" + name + "?query=%QUERY";
 
         if (parameterUrlString != null) {
@@ -117,16 +119,20 @@ class SingleSetTypeaheadSearchBox<T> {
             name: name,
             source: bloodhound,
             display: this.displayPath,
-            limit: 10
+            limit: 10,
+            templates: {}
         };
         if (this.suggestionTemplate) {
-            dataset.templates = {
-                suggestion: this.suggestionTemplate
-            }
+            dataset.templates.suggestion = this.suggestionTemplate;
+        }
+        if (groupHeader) {
+            dataset.templates.header = `<div class="tt-suggestions-header">${groupHeader}</div>`;
         }
 
-        this.bloodhound = bloodhound;
-        this.dataset = dataset;
+        return {
+            item1: bloodhound,
+            item2: dataset
+        };
     }
 
     private datumTokenizer(datum: T): string[] {
@@ -135,6 +141,37 @@ class SingleSetTypeaheadSearchBox<T> {
     }
 
     public static getDefaultSuggestionTemplate(name: string, description: string) {
-        return "<div><div class=\"suggestion\" style='font-weight: bold'>" + escapeHtmlChars(name) + "</div><div class=\"description\">" + escapeHtmlChars(description) + "</div></div>";
+        return `<div><div class="suggestion" style='font-weight: bold'>${escapeHtmlChars(name)}</div><div class="description">${escapeHtmlChars(description)}</div></div>`;
+    }
+}
+
+class SingleSetTypeaheadSearchBox<T> extends TypeaheadSearchBoxBase<T> {
+    setDataSet(name: string, parameterUrlString: string = null): void {
+        this.clearCache();
+        this.destroy();
+
+        var result = this.createDataSet(name, null, parameterUrlString);
+
+        this.bloodhounds = [result.item1];
+        this.datasets = [result.item2];
+    }
+}
+
+class MultiSetTypeaheadSearchBox<T> extends TypeaheadSearchBoxBase<T> {
+    clearDataSets(): void {
+        this.clearCache();
+        this.destroy();
+        this.bloodhounds = null;
+        this.datasets = null;
+    }
+
+    addDataSet(name: string, groupHeader: string, parameterUrlString: string = null): void {
+        var result = this.createDataSet(name, groupHeader, parameterUrlString);
+
+        if (!this.bloodhounds) this.bloodhounds = [];
+        if (!this.datasets) this.datasets = [];
+
+        this.bloodhounds.push(result.item1);
+        this.datasets.push(result.item2);
     }
 }
