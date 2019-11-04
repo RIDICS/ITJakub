@@ -281,6 +281,13 @@ namespace ITJakub.Web.Hub.Controllers
             return Json(result);
         }
 
+        public IActionResult GetTypeaheadSingleUserGroup(string query)
+        {
+            var client = GetRoleClient();
+            var result = client.GetSingleUserGroupAutocomplete(query, true);
+            return Json(result);
+        }
+
         [HttpPost]
         public IActionResult AddUserToRole([FromBody] AddUserToRoleRequest request)
         {
