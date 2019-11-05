@@ -391,7 +391,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             var client = GetRoleClient();
             var result = client.GetPermissionsForGroupAndBook(roleId, bookId);
-            return PartialView("Widget/_ProjectPermissionsWidget", result);
+            return PartialView("Widgets/_ProjectPermissionsWidget", result);
         }
 
         [HttpPost]
