@@ -17,6 +17,7 @@
     ViewBag.Title = Localization.Translate("SearchCombined", "BohemianTextBank");
 }
 
+@await Html.PartialAsync("_SearchConfiguration")
 @await Html.PartialAsync("_BibliographySearch")
 
 <div class="search-result-section container-fluid" id="corpus-search-div">
