@@ -63,16 +63,16 @@ namespace Vokabular.FulltextService.Controllers
         }
 
         [HttpPost("snapshot/{snapshotId}/search")]
-        public PageSearchResultContract SearchPageByCriteria(long snapshotId, [FromBody] SearchRequestContractBase criteria)
+        public PageSearchResultContract SearchPageByCriteria(long snapshotId, [FromBody] SearchPageRequestContract criteria)
         {
             var result = m_searchManager.SearchPageByCriteria(snapshotId, criteria);
             return result;
         }
 
-        [HttpPost("snapshot/{snapshotId}/search-count")]
-        public long SearchPageByCriteriaCount(long snapshotId, [FromBody] SearchRequestContractBase criteria)
+        [HttpPost("snapshot/{snapshotId}/search-hits-count")]
+        public long SearchHitsResultCount(long snapshotId, [FromBody] SearchPageRequestContract criteria)
         {
-            var result = m_searchManager.SearchPageByCriteriaCount(snapshotId, criteria);
+            var result = m_searchManager.SearchHitsResultCount(snapshotId, criteria);
             return result;
         }
 

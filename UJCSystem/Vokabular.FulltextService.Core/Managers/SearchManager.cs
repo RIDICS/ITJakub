@@ -137,7 +137,7 @@ namespace Vokabular.FulltextService.Core.Managers
         }
 
 
-        public PageSearchResultContract SearchPageByCriteria(long snapshotId, SearchRequestContractBase searchRequest)
+        public PageSearchResultContract SearchPageByCriteria(long snapshotId, SearchPageRequestContract searchRequest)
         {
             var pageIdList = GetPageIds(snapshotId);
 
@@ -156,12 +156,12 @@ namespace Vokabular.FulltextService.Core.Managers
                             .Must(mustQuery)
                         )
                     )
-                    .Size(DefaultSize) //TODO add pagination
+                    .Size(DefaultSize) //WORKAROUND we need all pages which have any hits, so specify big enough number
             );
             return m_searchResultProcessor.ProcessSearchPageResult(pageResponse);
         }
 
-        public long SearchPageByCriteriaCount(long snapshotId, SearchRequestContractBase searchRequest)
+        public long SearchHitsResultCount(long snapshotId, SearchPageRequestContract searchRequest)
         {
             var pageIdList = GetPageIds(snapshotId);
 
@@ -190,7 +190,7 @@ namespace Vokabular.FulltextService.Core.Managers
                             .Type(HighlighterType)
                         )
                     )
-                    .Size(DefaultSize) //TODO add pagination
+                    .Size(DefaultSize) //WORKAROUND we need get all hits to sum total hit count, so specify big enough number
             );
             return m_searchResultProcessor.ProcessSearchPageResultCount(pageResponse, HighlightTag);
         }
@@ -452,7 +452,7 @@ namespace Vokabular.FulltextService.Core.Managers
                             .Type(HighlighterType)
                         )
                     )
-                    .Size(DefaultSize) //TODO add pagination
+                    .Size(DefaultSize) //WORKAROUND get all hits and create paging manually, so specify big enough number
             );
             return m_searchResultProcessor.ProcessSearchHitsWithPageContext(pageResponse, pageList, HighlightTag, searchRequest.Start ?? DefaultStart, searchRequest.Count ?? DefaultSize);
         }
