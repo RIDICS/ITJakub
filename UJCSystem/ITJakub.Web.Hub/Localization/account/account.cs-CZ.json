@@ -50,7 +50,7 @@
     "TwoFactorVerificationIsNotActive": "Emailová adresa není ověřena - dvoufaktorové ověření není aktivní.",
     "Save": "Uložit",
 
-    "UserCode": "Uživatleský kód",
-    "GenerateNewUserCode": "Vygenerovat nový uživatelský kód"
+    "UserCode": "Kód uživatele",
+    "GenerateNewUserCode": "Vygenerovat nový kód uživatele"
   }
 }

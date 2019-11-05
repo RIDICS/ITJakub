@@ -5,15 +5,15 @@
 <h2>@Localizer.Translate("Cooperation", "Admin")</h2>
 
 <div class="row">
-    <div class="col-xs-12  col-sm-6 col-md-7 col-lg-7 role-section" id="role-section">
+    <div class="col-xs-12 col-sm-7 role-section" id="role-section">
         <div class="section">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="panel-title col col-xs-12 col-sm-2">
+                        <div class="panel-title col col-xs-12 col-sm-1">
                             @Localizer.Translate("Group", "Permission")
                         </div>
-                        <div class="col col-xs-12 col col-sm-10">
+                        <div class="col col-xs-12 col col-sm-11">
                             <form asp-action="CooperationList" asp-controller="Project" method="get" class="role-search-form search-form form-inline">
                                 <div class="form-group">
                                     <div id="addPermissionButton" class="btn btn-default">
@@ -42,7 +42,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5 project-permission-section" id="project-permission-section">
+    <div class="col-xs-12 col-sm-5 project-permission-section" id="project-permission-section">
         @await Html.PartialAsync("Widgets/_ProjectPermissionsPanel")
     </div>
     
