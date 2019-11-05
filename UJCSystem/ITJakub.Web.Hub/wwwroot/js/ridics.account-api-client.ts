@@ -54,6 +54,14 @@
             this.htmlDataType
         );
     }
+    
+    public regenerateUserCode(): JQuery.jqXHR {
+        return this.post(this.getAccountControllerUrl() + "RegenerateUserCode", 
+            null,
+            this.formContentType,
+            this.htmlDataType
+        );
+    }
 
     private getAccountControllerUrl(): string {
         return getBaseUrl() + "Account/";

@@ -29,6 +29,9 @@
         <li role="presentation" @(Model.ActualTab == AccountTab.UpdateTwoFactorVerification ? "class=active" : string.Empty)>
             <a href="#updateTwoFactorVerification" id="updateTwoFactorVerificationButton" data-toggle="tab" role="tab">@Localizer.Translate("UpdateTwoFactorVerification", "Account")</a>
         </li>
+        <li role="presentation" @(Model.ActualTab == AccountTab.UserCode ? "class=active" : string.Empty)>
+            <a href="#userCode" id="userCodeButton" data-toggle="tab" role="tab">@Localizer.Translate("UserCode", "Account")</a>
+        </li>
     </ul>
 
     <div class="tab-content">
@@ -43,6 +46,9 @@
         </div>
         <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UpdateTwoFactorVerification ? "active" : string.Empty)" id="updateTwoFactorVerification">
             @await Html.PartialAsync("UserProfile/_UpdateTwoFactorVerification", Model.UpdateTwoFactorVerificationViewModel)
+        </div>
+        <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UserCode ? "active" : string.Empty)" id="userCode">
+            @await Html.PartialAsync("UserProfile/_UserCode", Model.UserCodeViewModel)
         </div>
     </div>
 </div>

@@ -307,6 +307,14 @@ namespace ITJakub.Web.Hub.Controllers
             twoFactorVerificationViewModel = CreateUpdateTwoFactorVerificationViewModel();
             return PartialView("UserProfile/_UpdateTwoFactorVerification", twoFactorVerificationViewModel);
         }
+        
+        [HttpPost]
+        public IActionResult RegenerateUserCode()
+        {
+            var client = GetUserClient();
+            var userCode = client.RegenerateSingleUserGroupName();
+            return PartialView("UserProfile/_UserCode", new UserCodeViewModel{UserCode = userCode});
+        }
 
         //
         // POST: /Account/LogOut
@@ -340,12 +348,15 @@ namespace ITJakub.Web.Hub.Controllers
         {
             var client = GetUserClient();
             var user = client.GetCurrentUser();
+            var userCode = client.GetSingleUserGroupName();
+
             return new AccountDetailViewModel
             {
                 UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
                 UpdatePasswordViewModel = null,
                 UpdateContactViewModel = Mapper.Map<UpdateContactViewModel>(user),
                 UpdateTwoFactorVerificationViewModel = CreateUpdateTwoFactorVerificationViewModel(user),
+                UserCodeViewModel = new UserCodeViewModel {UserCode = userCode},
                 ActualTab = accountTab
             };
         }
