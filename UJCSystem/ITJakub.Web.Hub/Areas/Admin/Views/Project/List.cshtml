@@ -33,17 +33,17 @@
                     <div class="col-xs-12 col-sm-10">
                         <form asp-action="List" asp-controller="Project" method="get" class="project-search-form search-form form-inline">
                             <div class="form-group">
-                                <select class="form-control" id="projectOwnerFilter">
+                                <select class="form-control" id="projectOwnerFilter" title="@Localizer.Translate("Filter", "Admin")">
                                     @foreach (var option in Model.FilterTypes)
                                     {
                                         <option value="@option">@Localizer.Translate(option.ToString(), "Admin")</option>
                                     }
                                 </select>
-                                <div class="search-input">
-                                    <input class="form-control search-value" name="search" placeholder=" " value="@Model.Projects.SearchQuery"/>
+                                <div class="search-input" title="@Localizer.Translate("FindByName", "Admin")">
+                                    <input class="form-control search-value" name="search" placeholder="@Localizer.Translate("ProjectName", "Admin")" value="@Model.Projects.SearchQuery"/>
                                     <i class="fa fa-close reset-search-button"></i>
                                 </div>
-                                <div class="search-button">
+                                <div class="search-button" title="@Localizer.Translate("FindByName", "Admin")">
                                     <button class="btn btn-default" type="submit">
                                         <i class="fa fa-search"></i>
                                     </button>
