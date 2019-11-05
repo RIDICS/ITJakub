@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using ITJakub.Web.Hub.Areas.Admin.Controllers.Constants;
@@ -17,7 +16,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
 using ITJakub.Web.Hub.Options;
 using Scalesoft.Localization.AspNetCore;
-using Vokabular.Shared.DataContracts.Types;
+using Vokabular.MainService.DataContracts.Contracts.Permission;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
@@ -27,6 +26,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     {
         private const int ProjectListPageSize = 5;
         private const int SnapshotListPageSize = 10;
+        private const int CooperationListPageSize = 10;
 
         private readonly ILocalizationService m_localization;
 
@@ -96,11 +96,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var projectClient = GetProjectClient();
             var codeListClient = GetCodeListClient();
 
+            var search = string.Empty;
+            var start = 0;
+            
             switch (tabType)
             {
                 case ProjectModuleTabType.WorkPublications:
-                    var search = string.Empty;
-                    var start = 0;
                     var snapshotList = projectClient.GetSnapshotList(projectId.Value, start, SnapshotListPageSize, search);
                     var listModel = CreateListViewModel<SnapshotViewModel, SnapshotAggregatedInfoContract>(snapshotList, start, SnapshotListPageSize, search);
                     var model = new SnapshotListViewModel
@@ -113,7 +114,17 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     var pages = projectClient.GetAllPageList(projectId.Value);
                     return PartialView("Work/_PageList", pages);
                 case ProjectModuleTabType.WorkCooperation:
-                    return PartialView("Work/_Cooperation");
+                    var result = projectClient.GetUserGroupsByProject(projectId.Value, start, CooperationListPageSize, search);
+                    var cooperationViewModel = new ListViewModel<UserGroupContract>
+                    {
+                        TotalCount = result.TotalCount,
+                        List = result.List,
+                        PageSize = CooperationListPageSize,
+                        Start = start,
+                        SearchQuery = search
+                    };
+                    
+                    return PartialView("Work/_Cooperation", cooperationViewModel);
                 case ProjectModuleTabType.WorkMetadata:
                     var literaryOriginals = codeListClient.GetLiteraryOriginalList();
                     var responsibleTypes = codeListClient.GetResponsibleTypeList();
@@ -199,6 +210,23 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var model = CreateListViewModel<SnapshotViewModel, SnapshotAggregatedInfoContract>(snapshotList, start, count, search);
 
             return PartialView("Work/SubView/_PublicationListPage", model);
+        } 
+        
+        public IActionResult CooperationList(long projectId, string search, int start, int count = CooperationListPageSize)
+        {
+            var client = GetProjectClient();
+
+            search = search ?? string.Empty;
+            var result = client.GetUserGroupsByProject(projectId, start, count, search);
+            var viewModel = new ListViewModel<UserGroupContract>
+            {
+                TotalCount = result.TotalCount,
+                List = result.List,
+                PageSize = count,
+                Start = start,
+                SearchQuery = search
+            };
+            return PartialView("Work/SubView/_CooperationList", viewModel);
         }
 
         [HttpPost]

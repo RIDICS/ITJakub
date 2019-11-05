@@ -3,6 +3,7 @@
     private readonly client: PermissionApiClient;
     private readonly errorHandler: ErrorHandler;
     private readonly typeaheadForSingleUserGroupEnabled: boolean;
+    private readonly savePermissionButtonSelector: string;
     private projectId: number;
     private currentRoleSelectedItem: IRole;
     private roleList: ListWithPagination;
@@ -16,11 +17,12 @@
             (item) => MultiSetTypeaheadSearchBox.getDefaultSuggestionTemplateMulti(item.name, item.description));
         this.client = new PermissionApiClient();
         this.errorHandler = new ErrorHandler();
+        this.savePermissionButtonSelector = "#saveProjectPermissions";
     }
 
     public init() {
         if (this.projectId != null) {
-            this.roleList = new ListWithPagination(`Permission/RolesByProject?projectId=${this.projectId}`,
+            this.roleList = new ListWithPagination(`Admin/Project/CooperationList?projectId=${this.projectId}`,
                 "role",
                 ViewType.Widget,
                 true,
@@ -102,14 +104,14 @@
     }
 
     private initRoleClicks(): void {
-        $(".role-row").click((event) => {
+        $(".role-row").on("click", (event) => {
             $(event.currentTarget as Node as Element).addClass("active").siblings().removeClass("active");
             const roleRow = $(event.currentTarget as Node as Element);
             const roleId = roleRow.data("role-id");
             const body = $("#project-permission-section .panel-body");
             const subContent = body.find(".sub-content");
             const alertHolder = body.find(".alert-holder");
-            const saveButton = body.find("#saveProjectPermissions");
+            const saveButton = body.find(this.savePermissionButtonSelector);
             saveButton.addClass("hide");
             subContent.empty().append(`<div class="loader"></div>`);
             alertHolder.empty();
@@ -211,8 +213,8 @@
     }
 
     private initPermissionsSaving() {
-        $("#saveProjectPermissions").off();
-        $("#saveProjectPermissions").on("click", (event) => {
+        $(this.savePermissionButtonSelector).off();
+        $(this.savePermissionButtonSelector).on("click", () => {
             const roleId = $(".role-row.active").data("role-id");
             const alertHolder = this.permissionPanel.find(".alert-holder");
             alertHolder.empty();
@@ -225,7 +227,7 @@
                 const errorAlert = new AlertComponentBuilder(AlertType.Error)
                     .addContent(this.errorHandler.getErrorMessage(error));
                 alertHolder.empty().append(errorAlert.buildElement());
-            });
+            })
         });
     }
 

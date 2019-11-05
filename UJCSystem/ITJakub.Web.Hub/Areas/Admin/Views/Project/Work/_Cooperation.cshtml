@@ -1,3 +1,50 @@
 ﻿@using Scalesoft.Localization.AspNetCore
 @inject ILocalizationService Localizer
-@Localizer.Translate("Cooperation", "Admin")
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.UserGroupContract>
+
+<h2>@Localizer.Translate("Cooperation", "Admin")</h2>
+
+<div class="row">
+    <div class="col-xs-12  col-sm-6 col-md-7 col-lg-7 role-section" id="role-section">
+        <div class="section">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="panel-title col col-xs-12 col-sm-2">
+                            @Localizer.Translate("Group", "Permission")
+                        </div>
+                        <div class="col col-xs-12 col col-sm-10">
+                            <form asp-action="CooperationList" asp-controller="Project" method="get" class="role-search-form search-form form-inline">
+                                <div class="form-group">
+                                    <div id="addPermissionButton" class="btn btn-default">
+                                        <i class="fa fa-plus"></i>
+                                    </div>
+                                    <div class="search-input">
+                                        <input class="form-control search-value" name="search" placeholder=" " value="@Model.SearchQuery" />
+                                        <i class="fa fa-close reset-search-button"></i>
+                                    </div>
+                                    <div class="search-button">
+                                        <button class="btn btn-default" type="submit">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div id="roleListContainer" class="list-container selectable">
+                        @await Html.PartialAsync("Work/SubView/_CooperationList", Model, ViewData)
+                    </div>
+                    <div id="rolePagination" class="text-center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5 project-permission-section" id="project-permission-section">
+        @await Html.PartialAsync("Widgets/_ProjectPermissionsPanel")
+    </div>
+    
+    @await Html.PartialAsync("Widgets/_AddProjectPermissionsDialog")
+</div>
