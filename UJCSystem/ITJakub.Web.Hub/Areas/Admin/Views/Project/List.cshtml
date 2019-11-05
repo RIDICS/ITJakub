@@ -10,7 +10,7 @@
 
 @section styles {
     <link asp-append-version="true" rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css"/>
-    <link asp-append-version="true" rel="stylesheet" href="~/css/ridics.permissions.css"/>@*TODO WHY PERMISSIONS.CSS??????*@
+    <link asp-append-version="true" rel="stylesheet" href="~/css/ridics.list.css"/>
 }
 
 @section scripts {
@@ -22,53 +22,45 @@
 <div class="content-container project-list">
     <div class="row">
         <div class="col-xs-12 project-section" id="project-section">
+            <h2>@Localizer.Translate("ProjectList", "Admin")</h2>
             <div class="section">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="panel-title col-xs-12 col-sm-2">
-                                @Localizer.Translate("Projects", "Permission")
-                            </div>
-                            <div class="col-xs-12 col-sm-10">
-                                <form asp-action="List" asp-controller="Project" method="get" class="project-search-form search-form form-inline">
-                                    <div class="form-group">
-                                        <button type="button" class="btn btn-default" id="new-project-button">
-                                            @Localizer.Translate("CreateNewProject", "Admin")
-                                        </button>
-                                        <select class="form-control" id="projectOwnerFilter">
-                                            @foreach (var option in Model.FilterTypes)
-                                            {
-                                                <option value="@option">@Localizer.Translate(option.ToString(), "Admin")</option>
-                                            }
-                                        </select>
-                                        <div class="search-input">
-                                            <input class="form-control search-value" name="search" placeholder=" " value="@Model.Projects.SearchQuery"/>
-                                            <i class="fa fa-close reset-search-button"></i>
-                                        </div>
-                                        <div class="search-button">
-                                            <button class="btn btn-default" type="submit">
-                                                <i class="fa fa-search"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                <div class="row button-menu">
+                    <div class="col-xs-12 col-sm-2">
+                        <button type="button" class="btn btn-default" id="new-project-button">
+                            @Localizer.Translate("CreateNewProject", "Admin")
+                        </button>
                     </div>
-                    <div class="panel-body">
-                        <div id="projectListContainer" class="list-container selectable">
-                            @await Html.PartialAsync("_ProjectListContent", Model.Projects)
-                        </div>
-                        <div id="projectPagination" class="text-center"></div>
+                    <div class="col-xs-12 col-sm-10">
+                        <form asp-action="List" asp-controller="Project" method="get" class="project-search-form search-form form-inline">
+                            <div class="form-group">
+                                <select class="form-control" id="projectOwnerFilter">
+                                    @foreach (var option in Model.FilterTypes)
+                                    {
+                                        <option value="@option">@Localizer.Translate(option.ToString(), "Admin")</option>
+                                    }
+                                </select>
+                                <div class="search-input">
+                                    <input class="form-control search-value" name="search" placeholder=" " value="@Model.Projects.SearchQuery"/>
+                                    <i class="fa fa-close reset-search-button"></i>
+                                </div>
+                                <div class="search-button">
+                                    <button class="btn btn-default" type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
+                <hr/>
+
+                <div id="projectListContainer" class="list-container selectable">
+                    @await Html.PartialAsync("_ProjectListContent", Model.Projects)
+                </div>
+                <div id="projectPagination" class="text-center"></div>
             </div>
         </div>
     </div>
-
-    @*<hr/>*@
-
-
 </div>
 
 <div class="modal fade" role="dialog" id="new-project-dialog">

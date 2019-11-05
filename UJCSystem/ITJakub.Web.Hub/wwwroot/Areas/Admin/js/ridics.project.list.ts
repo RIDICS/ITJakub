@@ -35,7 +35,6 @@ class ProjectList {
         
         $("#projectOwnerFilter").change((event) => {
             const value = $(event.currentTarget).val();
-            console.log(value);
             const url = new URI(this.projectListUrl).search((query) => {
                 query.projectOwnerType = value;
             }).toString();
