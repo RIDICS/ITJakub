@@ -44,7 +44,7 @@
     "Duplicate": "Duplikovat",
     "ResourceNewVersion": "Nová verze zdroje ",
     "NewVersionComment": "Komentář k nové verzi",
-    "ProjectsList": "Projekty - Seznam",
+    "MyProjectsList": "Moje díla - Seznam",
     "PublicationInfo": "Informace o publikaci",
     "EditionNotePublish": "Ediční poznámka bude publikována s dílem",
     "NoEditionNote": "Ediční poznámka k dílu není vytvořena",
@@ -218,9 +218,10 @@
     "Comment": "Komentář",
     "CreateDate": "Datum vložení",
 
-    "ProjectList": "Projekty - Seznam",
+    "ProjectList": "Moje díla",
     "CreateNewProject": "Založit nové dílo",
     "Filter": "Filtrovat",
+    "AllProjects": "Všechna díla",
     "MyProjects": "Moje díla",
     "ForeignProjects": "Cizí díla",
     "FindByName": "Vyhledat podle názvu",
@@ -233,8 +234,11 @@
     "CreateForumInModules": "Vytvoření fóra v modulech",
     "NoSelectedModuleForForum": "Musí být vybrán alespoň jeden modul pro vytvoření fóra.",
     "EmptyProjectNameError": "Název díla nemůže být prázdný.",
-
+    "NoProjectsSearch": "Je nám líto, ale nepodařilo se najít žádné projekty odpovídající dotazu ",
+    "NoProjectsFound": "Je nám líto, ale nebyly nalezeny žádné projekty",    
     "RenameSource": "Přejmenovat zdroj",
+    "SearchQuery": "Zobrazují se výsledky pro",
+    "ResetSearch": "Zrušit hledání",
 
     "Group": "Skupina {0}",
     "Page": "Strana {0}",

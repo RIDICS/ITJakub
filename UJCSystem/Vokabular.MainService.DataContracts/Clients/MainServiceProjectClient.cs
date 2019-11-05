@@ -26,7 +26,8 @@ namespace Vokabular.MainService.DataContracts.Clients
             m_client = client;
         }
 
-        public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, ProjectTypeContract projectType, string filterByName = null, bool fetchPageCount = false)
+        public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, ProjectTypeContract projectType,
+            ProjectOwnerTypeContract projectOwnerType = ProjectOwnerTypeContract.AllProjects, string filterByName = null, bool fetchPageCount = false)
         {
             try
             {
@@ -34,6 +35,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("start", start)
                     .AddParameter("count", count)
                     .AddParameter("projectType", projectType)
+                    .AddParameter("projectOwnerType", projectOwnerType)
                     .AddParameter("filterByName", filterByName)
                     .AddParameter("fetchPageCount", fetchPageCount)
                     .ToResult();

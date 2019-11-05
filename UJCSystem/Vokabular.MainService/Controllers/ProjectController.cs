@@ -35,6 +35,7 @@ namespace Vokabular.MainService.Controllers
         public List<ProjectDetailContract> GetProjectList([FromQuery] int? start,
             [FromQuery] int? count,
             [FromQuery] ProjectTypeContract? projectType,
+            [FromQuery] ProjectOwnerTypeContract? projectOwnerType,
             [FromQuery] string filterByName,
             [FromQuery] bool? fetchPageCount,
             [FromQuery] bool? fetchAuthors,
@@ -43,7 +44,8 @@ namespace Vokabular.MainService.Controllers
             var isFetchPageCount = fetchPageCount ?? false;
             var isFetchAuthors = fetchAuthors ?? false;
             var isFetchResponsiblePersons = fetchResponsiblePersons ?? false;
-            var result = m_projectManager.GetProjectList(start, count, projectType, filterByName, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons);
+            var projectOwner = projectOwnerType ?? ProjectOwnerTypeContract.AllProjects;
+            var result = m_projectManager.GetProjectList(start, count, projectType, projectOwner, filterByName, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons);
 
             SetTotalCountHeader(result.TotalCount);
 
