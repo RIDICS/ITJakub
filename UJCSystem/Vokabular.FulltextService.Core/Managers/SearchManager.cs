@@ -361,7 +361,7 @@ namespace Vokabular.FulltextService.Core.Managers
                 )
             );
 
-            return m_searchResultProcessor.ProccessSearchCorpusSnapshotByCriteria(response, HighlightTag, searchRequest.Start ?? DefaultStart, searchRequest.Count ?? DefaultSize);
+            return m_searchResultProcessor.ProcessSearchCorpusSnapshotByCriteria(response, HighlightTag, searchRequest.Start ?? DefaultStart, searchRequest.Count ?? DefaultSize);
         }
 
         public async Task<long> SearchCorpusSnapshotsByCriteriaCount(SearchRequestContractBase searchRequest)

@@ -10,10 +10,10 @@ namespace Vokabular.FulltextService.Core.Managers
 {
     public class UnfinishedSearchManager : ElasticsearchManagerBase
     {
-        private readonly SearchResultProcessor m_searchResultProcessor;
+        private readonly UnfinishedSearchResultProcessor m_searchResultProcessor;
         private readonly QueriesBuilder m_queriesBuilder;
 
-        public UnfinishedSearchManager(CommunicationProvider communicationProvider, SearchResultProcessor searchResultProcessor,
+        public UnfinishedSearchManager(CommunicationProvider communicationProvider, UnfinishedSearchResultProcessor searchResultProcessor,
             QueriesBuilder queriesBuilder, IOptions<IndicesOption> indicesOptions) : base(communicationProvider, indicesOptions)
         {
             m_searchResultProcessor = searchResultProcessor;
@@ -40,7 +40,7 @@ namespace Vokabular.FulltextService.Core.Managers
                     )
                 )
             ).Total;
-            return new FulltextSearchCorpusResultContract { Count = responseCount * 30 }; //TODO HACK pagination on books
+            return new FulltextSearchCorpusResultContract { Count = responseCount * 30 }; //TODO pagination on books
             /*var response = client.Search<SnapshotResourceContract>(s => s
                 .Index(SnapshotIndex)
                 .Type(SnapshotType)
