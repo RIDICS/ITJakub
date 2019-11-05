@@ -2,6 +2,8 @@
 {
     public static class PageSizes
     {
-        public const int BibliographyModule = 3;
+        public const int BibliographyModule = 20;
+        public const int CorpusSearch = 30;
+        public const int CorpusSearchBooks = 10;
     }
 }
