@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Vokabular.FulltextService.Core.Managers;
 using Vokabular.FulltextService.DataContracts.Contracts;
-using Vokabular.Shared;
-using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Request;
 
 namespace Vokabular.FulltextService.Controllers
@@ -11,13 +8,11 @@ namespace Vokabular.FulltextService.Controllers
     [Route("api/[controller]")]
     public class SnapshotController : Controller
     {
-        private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<TextController>();
-
         private readonly SnapshotResourceManager m_snapshotResourceManager;
         
         private readonly SearchManager m_searchManager;
 
-        public SnapshotController(SnapshotResourceManager snapshotResourceManager, TextResourceManager textResourceManager, SearchManager searchManager)
+        public SnapshotController(SnapshotResourceManager snapshotResourceManager, SearchManager searchManager)
         {
             m_snapshotResourceManager = snapshotResourceManager;
             m_searchManager = searchManager;
@@ -51,7 +46,7 @@ namespace Vokabular.FulltextService.Controllers
         [HttpPost("search")]
         public FulltextSearchResultContract SearchByCriteria([FromBody] SearchRequestContract searchRequest)
         {
-            var result = m_searchManager.SearchByCriteria(searchRequest);
+            var result = m_searchManager.SearchProjectsByCriteria(searchRequest);
             return result;
         }
 
@@ -63,7 +58,7 @@ namespace Vokabular.FulltextService.Controllers
         [HttpPost("search-count")]
         public FulltextSearchResultContract SearchByCriteriaCount([FromBody] SearchRequestContractBase searchRequest)
         {
-            var result = m_searchManager.SearchByCriteriaCount(searchRequest);
+            var result = m_searchManager.SearchProjectsByCriteriaCount(searchRequest);
             return result;
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -30,8 +31,9 @@ namespace Vokabular.MainService.Core.Works.Permission
         protected override void ExecuteWorkImplementation()
         {
             var group = m_permissionRepository.FindById<UserGroup>(m_roleId);
+            var roleGroup = group as RoleUserGroup;
             var role = m_defaultUserProvider.GetDefaultUnregisteredRole();
-            if (role.Id == group.ExternalId)
+            if (roleGroup != null && role.Id == roleGroup.ExternalId)
             {
                 throw new MainServiceException(MainServiceErrorCode.AddUserToDefaultRole,
                     $"Users cannot be added to the default role {role.Name}",
@@ -62,8 +64,15 @@ namespace Vokabular.MainService.Core.Works.Permission
             m_permissionRepository.Flush();
 
 
-            var client = m_communicationProvider.GetAuthUserApiClient();
-            client.AddRoleToUserAsync(user.ExternalId.Value, group.ExternalId).GetAwaiter().GetResult();
+            if (roleGroup != null)
+            {
+                var client = m_communicationProvider.GetAuthUserApiClient();
+                client.AddRoleToUserAsync(user.ExternalId.Value, roleGroup.ExternalId).GetAwaiter().GetResult();
+            }
+            else
+            {
+                throw new InvalidOperationException($"Only RoleUserGroup can be updated by this method, argument type was: {group.GetType()}");
+            }
         }
     }
 }

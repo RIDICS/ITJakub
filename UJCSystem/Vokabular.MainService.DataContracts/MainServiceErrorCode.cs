@@ -52,5 +52,6 @@
         public const string UnsupportedFormatType = "unsupported-format-type";
         public const string ChangeInConflict = "change-in-conflict";
         public const string ReservedUsernameError = "reserved-username-error";
+        public const string GroupNotFound = "group-not-found";
     }
 }

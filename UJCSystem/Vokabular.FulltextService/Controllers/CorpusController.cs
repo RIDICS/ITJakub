@@ -11,9 +11,9 @@ namespace Vokabular.FulltextService.Controllers
     [Route("api/[controller]")]
     public class CorpusController : Controller
     {
-        private readonly SearchManager m_searchManager;
+        private readonly UnfinishedSearchManager m_searchManager;
 
-        public CorpusController(SearchManager searchManager)
+        public CorpusController(UnfinishedSearchManager searchManager)
         {
             m_searchManager = searchManager;
         }

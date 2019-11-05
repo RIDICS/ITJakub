@@ -69,13 +69,14 @@
             const pageId = imageEl.data("page-id");
             const imageId = imageEl.data("image-id");
             const resourceVersionId = imageEl.data("version-id");
-            $("#new-image-page-id").val(pageId);
-            $("#new-image-image-id").val(imageId);
-            $("#new-image-resource-version-id").val(resourceVersionId);
 
             this.dropzone.removeAllFiles(true);
 
             this.addImageDropzoneDialog.show();
+
+            $("#new-image-page-id").val(pageId);
+            $("#new-image-image-id").val(imageId);
+            $("#new-image-resource-version-id").val(resourceVersionId);
         });
     }
 

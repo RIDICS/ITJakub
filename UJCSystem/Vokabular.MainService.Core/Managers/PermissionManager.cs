@@ -10,11 +10,11 @@ using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataEntities.UnitOfWork;
-using PermissionContract = Vokabular.MainService.DataContracts.Contracts.Permission.PermissionContract;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -66,7 +66,7 @@ namespace Vokabular.MainService.Core.Managers
                 return;
             }
 
-            var userGroup = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<UserGroup>(roleId));
+            var userGroup = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<RoleUserGroup>(roleId));
 
             var roleClient = m_communicationProvider.GetAuthRoleApiClient();
             var permissionClient = m_communicationProvider.GetAuthPermissionApiClient();
@@ -99,7 +99,7 @@ namespace Vokabular.MainService.Core.Managers
                 return;
             }
 
-            var userGroup = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<UserGroup>(roleId));
+            var userGroup = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<RoleUserGroup>(roleId));
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
             var permissions = client.GetRoleAsync(userGroup.ExternalId, true).GetAwaiter().GetResult().Permissions;
@@ -112,29 +112,29 @@ namespace Vokabular.MainService.Core.Managers
             client.AssignPermissionsToRoleAsync(userGroup.ExternalId, permissionsId).GetAwaiter().GetResult();
         }
 
-        public void UpdateOrAddBooksToRole(int roleId, IList<long> bookIds, PermissionDataContract data)
+        public void UpdateOrAddBooksToGroup(int groupId, IList<long> bookIds, PermissionDataContract data)
         {
             var permissionFlags = m_permissionConverter.GetFlags(data);
 
             //new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
-            new UpdateOrAddProjectsToRoleWork(m_permissionRepository, roleId, bookIds, permissionFlags).Execute();
+            new UpdateOrAddProjectsToRoleWork(m_permissionRepository, groupId, bookIds, permissionFlags).Execute();
         }
 
-        public void RemoveBooksFromRole(int roleId, IList<long> bookIds)
+        public void RemoveBooksFromGroup(int groupId, IList<long> bookIds)
         {
             //new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
-            new RemoveProjectsFromRoleWork(m_permissionRepository, roleId, bookIds).Execute();
+            new RemoveProjectsFromRoleWork(m_permissionRepository, groupId, bookIds).Execute();
         }
 
-        public PermissionDataContract GetPermissionsForRoleAndBook(int roleId, long bookId)
+        public PermissionDataContract GetPermissionsForGroupAndBook(int groupId, long bookId)
         {
             //new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
-            var dbResult = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionByBookAndGroup(bookId, roleId));
+            var dbResult = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionByBookAndGroup(bookId, groupId));
             var result = m_mapper.Map<PermissionDataContract>(dbResult);
             return result;
         }
 
-        public PagedResultList<PermissionContract> GetPermissions(int? start, int? count, string filterByName)
+        public PagedResultList<SpecialPermissionContract> GetPermissions(int? start, int? count, string filterByName)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
@@ -143,9 +143,9 @@ namespace Vokabular.MainService.Core.Managers
 
             var result = client.GetPermissionListAsync(startValue, countValue, filterByName).GetAwaiter()
                 .GetResult();
-            var permissionContracts = m_mapper.Map<List<PermissionContract>>(result.Items);
+            var permissionContracts = m_mapper.Map<List<SpecialPermissionContract>>(result.Items);
 
-            return new PagedResultList<PermissionContract>
+            return new PagedResultList<SpecialPermissionContract>
             {
                 List = permissionContracts,
                 TotalCount = result.ItemsCount
@@ -167,6 +167,19 @@ namespace Vokabular.MainService.Core.Managers
             };
 
             client.EnsurePermissionsExistAsync(request).GetAwaiter().GetResult();
+        }
+
+        public void AddBookToSingleUserGroup(long projectId, string userGroupCode, PermissionDataContract permissions)
+        {
+            var dbUserGroup = m_permissionRepository.InvokeUnitOfWork(x => x.FindSingleUserGroupByName(userGroupCode));
+            if (dbUserGroup == null)
+            {
+                throw new MainServiceException(MainServiceErrorCode.GroupNotFound, $"Group with specified code {userGroupCode} was not found");
+            }
+
+            var permissionFlags = m_permissionConverter.GetFlags(permissions);
+
+            new UpdateOrAddProjectsToRoleWork(m_permissionRepository, dbUserGroup.Id, new List<long> {projectId}, permissionFlags).Execute();
         }
     }
 }

@@ -6,7 +6,7 @@
 class BohemianTextbankSearch {
     private actualPage: number;
 
-    private resultsCountOnPage = 30;
+    private resultsCountOnPage = Number($("#corpus-search-configuration").data("page-size"));
     private paginationMaxVisibleElements = 5;
 
     private localization: Localization;

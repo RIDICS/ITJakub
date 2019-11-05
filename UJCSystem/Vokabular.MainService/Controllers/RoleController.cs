@@ -22,18 +22,7 @@ namespace Vokabular.MainService.Controllers
             m_roleManager = roleManager;
             m_permissionManager = permissionManager;
         }
-
-        [Authorize(PermissionNames.ListUsers)]
-        [HttpGet("{roleId}/user")]
-        [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
-        public List<UserContract> GetUsersByRole(int roleId, [FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
-        {
-            var result = m_roleManager.GetUsersByRole(roleId, start, count, filterByName);
-
-            SetTotalCountHeader(result.TotalCount);
-            return result.List;
-        }
-
+        
         [Authorize(PermissionNames.ManageUserRoles)]
         [HttpPost("")]
         public int CreateRole([FromBody] RoleContract data)
@@ -43,28 +32,21 @@ namespace Vokabular.MainService.Controllers
         }
 
         [Authorize(PermissionNames.ManageUserRoles)]
-        [HttpPut("{roleId}")]
-        public IActionResult UpdateRole([FromBody] RoleContract data)
+        [HttpPut("{groupId}")]
+        public IActionResult UpdateRole(int groupId, [FromBody] RoleContract data)
         {
+            data.Id = groupId;
             m_roleManager.UpdateRole(data);
             return Ok();
         }
-
-        [Authorize]
-        [HttpGet("{roleId}/detail")]
-        public RoleDetailContract GetRoleDetail(int roleId)
-        {
-            var result = m_roleManager.GetRoleDetail(roleId);
-            return result;
-        }
-
+        
         [Authorize(PermissionNames.ManageUserRoles)]
-        [HttpDelete("{roleId}")]
-        public void DeleteRole(int roleId)
+        [HttpDelete("{groupId}")]
+        public void DeleteRole(int groupId)
         {
-            m_roleManager.DeleteRole(roleId);
+            m_roleManager.DeleteRole(groupId);
         }
-
+        
         [Authorize(PermissionNames.ManageUserRoles)]
         [HttpGet("")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
@@ -75,55 +57,33 @@ namespace Vokabular.MainService.Controllers
             SetTotalCountHeader(result.TotalCount);
             return result.List;
         }
-
+        
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
-        [HttpGet("{roleId}/book/{bookId}/permission")]
-        public PermissionDataContract GetPermissionsForRoleAndBook(int roleId, long bookId)
+        [HttpDelete("{groupId}/user/{userId}")]
+        public void RemoveUserFromRole(int userId, int groupId)
         {
-            var result = m_permissionManager.GetPermissionsForRoleAndBook(roleId, bookId);
-            return result;
+            m_roleManager.RemoveUserFromRole(userId, groupId);
         }
 
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
-        [HttpPut("{roleId}/book/{bookId}/permission")]
-        public void UpdateOrAddBooksToRole(int roleId, long bookId, [FromBody] PermissionDataContract data)
+        [HttpPost("{groupId}/user/{userId}")]
+        public void AddUserToRole(int userId, int groupId)
         {
-            m_permissionManager.UpdateOrAddBooksToRole(roleId, new List<long> {bookId}, data);
+            m_roleManager.AddUserToRole(userId, groupId);
         }
 
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
-        [HttpDelete("{roleId}/book/{bookId}/permission")]
-        public void RemoveBooksFromRole(int roleId, long bookId)
+        [HttpPost("{groupId}/permission/special")]
+        public void AddSpecialPermissionsToGroup(int groupId, [FromBody] IntegerIdListContract specialPermissionsIds)
         {
-            m_permissionManager.RemoveBooksFromRole(roleId, new List<long> {bookId});
+            m_permissionManager.AddSpecialPermissionsToRole(groupId, specialPermissionsIds.IdList);
         }
 
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
-        [HttpDelete("{roleId}/user/{userId}")]
-        public void RemoveUserFromRole(int userId, int roleId)
+        [HttpDelete("{groupId}/permission/special")]
+        public void RemoveSpecialPermissionsFromGroup(int groupId, [FromBody] IntegerIdListContract specialPermissionsIds)
         {
-            m_roleManager.RemoveUserFromRole(userId, roleId);
-        }
-
-        [Authorize(PermissionNames.AssignPermissionsToRoles)]
-        [HttpPost("{roleId}/user/{userId}")]
-        public void AddUserToRole(int userId, int roleId)
-        {
-            m_roleManager.AddUserToRole(userId, roleId);
-        }
-
-        [Authorize(PermissionNames.AssignPermissionsToRoles)]
-        [HttpPost("{roleId}/permission/special")]
-        public void AddSpecialPermissionsToGroup(int roleId, [FromBody] IntegerIdListContract specialPermissionsIds)
-        {
-            m_permissionManager.AddSpecialPermissionsToRole(roleId, specialPermissionsIds.IdList);
-        }
-
-        [Authorize(PermissionNames.AssignPermissionsToRoles)]
-        [HttpDelete("{roleId}/permission/special")]
-        public void RemoveSpecialPermissionsFromGroup(int roleId, [FromBody] IntegerIdListContract specialPermissionsIds)
-        {
-            m_permissionManager.RemoveSpecialPermissionsFromRole(roleId, specialPermissionsIds.IdList);
+            m_permissionManager.RemoveSpecialPermissionsFromRole(groupId, specialPermissionsIds.IdList);
         }
 
         [Authorize(PermissionNames.ManageUserRoles)]

@@ -5,6 +5,7 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -19,12 +20,14 @@ namespace Vokabular.MainService.Core.Managers
         private readonly CommunicationProvider m_communicationProvider;
         private readonly UserRepository m_userRepository;
         private readonly IMapper m_mapper;
+        private readonly CodeGenerator m_codeGenerator;
 
-        public UserDetailManager(CommunicationProvider communicationProvider, UserRepository userRepository, IMapper mapper)
+        public UserDetailManager(CommunicationProvider communicationProvider, UserRepository userRepository, IMapper mapper, CodeGenerator codeGenerator)
         {
             m_communicationProvider = communicationProvider;
             m_userRepository = userRepository;
             m_mapper = mapper;
+            m_codeGenerator = codeGenerator;
         }
         
         public UserContract GetUserContractForUser(UserContract user)
@@ -97,7 +100,7 @@ namespace Vokabular.MainService.Core.Managers
 
         private UserDetailContract GetUserDetailContractForUser(AuthUserContract authUser, int localUserId)
         {
-            var localDbRoles = new GetOrCreateUserGroupsWork<AuthRoleContractBase>(m_userRepository, authUser.Roles).Execute();
+            var localDbRoles = new GetOrCreateUserGroupsWork<AuthRoleContractBase>(m_userRepository, authUser.Roles, localUserId).Execute();
 
             var userDetailContract = m_mapper.Map<UserDetailContract>(authUser);
             userDetailContract.Id = localUserId;
@@ -113,7 +116,8 @@ namespace Vokabular.MainService.Core.Managers
         {
             foreach (var userDetailContract in userDetailContracts)
             {
-                var userId = new CreateUserIfNotExistWork(m_userRepository, userDetailContract.ExternalId, null).Execute();
+                var userInfo = new UpdateUserInfo(userDetailContract.UserName, userDetailContract.FirstName, userDetailContract.LastName);
+                var userId = new CreateOrUpdateUserIfNotExistWork(m_userRepository, userDetailContract.ExternalId, null, userInfo, m_codeGenerator).Execute();
                 userDetailContract.Id = userId;
             }
         }
@@ -122,7 +126,8 @@ namespace Vokabular.MainService.Core.Managers
         {
             foreach (var userDetailContract in userDetailContracts)
             {
-                var userId = new CreateUserIfNotExistWork(m_userRepository, userDetailContract.ExternalId, null).Execute();
+                var userInfo = new UpdateUserInfo(userDetailContract.UserName, userDetailContract.FirstName, userDetailContract.LastName);
+                var userId = new CreateOrUpdateUserIfNotExistWork(m_userRepository, userDetailContract.ExternalId, null, userInfo, m_codeGenerator).Execute();
                 userDetailContract.Id = userId;
             }
         }

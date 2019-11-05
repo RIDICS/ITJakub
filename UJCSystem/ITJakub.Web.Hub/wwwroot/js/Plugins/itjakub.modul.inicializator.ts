@@ -8,7 +8,7 @@
     protected categoryIdsInQuery = new Array();
     
     protected initPage: number = null;
-    protected booksCountOnPage = 20;
+    protected booksCountOnPage = Number($("#bibliography-configuration").data("page-size"));
 
     protected readyForInit = false;
     protected notInitialized = true;

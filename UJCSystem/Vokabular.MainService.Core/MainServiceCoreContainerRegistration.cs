@@ -49,6 +49,7 @@ namespace Vokabular.MainService.Core
             services.AddScoped<UserDetailManager>();
             services.AddScoped<UserManager>();
 
+            services.AddSingleton<CodeGenerator>();
             services.AddScoped<CommunicationConfigurationProvider>();
             services.AddScoped<CommunicationProvider>();
             services.AddScoped<DefaultUserProvider>();
@@ -97,6 +98,7 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, TrackProfile>();
             services.AddSingleton<Profile, TransformationProfile>();
             services.AddSingleton<Profile, UserContactProfile>();
+            services.AddSingleton<Profile, UserGroupProfile>();
             services.AddSingleton<Profile, UserProfile>();
 
             services.AddSingleton<Profile, BucketContractProfile>();

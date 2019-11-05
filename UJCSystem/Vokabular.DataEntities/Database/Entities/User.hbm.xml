@@ -9,6 +9,12 @@
     <property name="CreateTime" not-null="true" type="UtcDateTime" />
     
     <property name="ExternalId" not-null="false" unique="true" />
+
+    <property name="ExtUsername" not-null="false" />
+
+    <property name="ExtFirstName" not-null="false" />
+
+    <property name="ExtLastName" not-null="false" />
     
     <!--<bag name="FavoriteItems" inverse="true">
       <key column="[User]" />

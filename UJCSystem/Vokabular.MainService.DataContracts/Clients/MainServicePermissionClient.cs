@@ -18,14 +18,14 @@ namespace Vokabular.MainService.DataContracts.Clients
             m_client = client;
         }
 
-        public PagedResultList<PermissionContract> GetPermissions(int start, int count, string query)
+        public PagedResultList<SpecialPermissionContract> GetPermissions(int start, int count, string query)
         {
             try
             {
                 var url = "permission".AddQueryString("start", start.ToString());
                 url = url.AddQueryString("count", count.ToString());
                 url = url.AddQueryString("filterByName", query);
-                var result = m_client.GetPagedList<PermissionContract>(url);
+                var result = m_client.GetPagedList<SpecialPermissionContract>(url);
                 return result;
             }
             catch (HttpRequestException e)
