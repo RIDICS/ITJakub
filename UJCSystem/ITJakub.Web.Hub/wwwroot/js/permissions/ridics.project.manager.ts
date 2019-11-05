@@ -8,7 +8,7 @@ class ProjectManager {
     private projectList: ListWithPagination;
 
     constructor() {
-        this.projectPermissionManager = new ProjectPermissionManager();
+        this.projectPermissionManager = new ProjectPermissionManager(true);
     }
 
     public init(list?: ListWithPagination) {

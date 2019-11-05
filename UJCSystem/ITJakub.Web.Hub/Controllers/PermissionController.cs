@@ -374,19 +374,27 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddProjectsToRole([FromBody] AddProjectsToRoleRequest request)
+        public IActionResult AddProjectsToRole([FromBody] AddProjectsToGroupRequest request)
         {
             var client = GetRoleClient();
-            client.UpdateOrAddBooksToGroup(request.RoleId, request.BookId, new PermissionDataContract
+            client.UpdateOrAddBooksToGroup(request.RoleId, 
+                request.PermissionsConfiguration.BookId, 
+                convertPermissionsConfigurationRequestToPermissionDataContract(request.PermissionsConfiguration));
+            return AjaxOkResponse();
+        }
+        
+        [HttpPost]
+        public IActionResult AddProjectsToSingleUserGroup([FromBody] AddProjectsToSingleUserGroupRequest request)
+        {
+            var client = GetProjectClient();
+            client.AddProjectToUserGroupByCode(request.PermissionsConfiguration.BookId, new AssignPermissionToSingleUserGroupContract
             {
-                ShowPublished = request.ShowPublished,
-                ReadProject = request.ReadProject,
-                AdminProject = request.AdminProject,
-                EditProject = request.EditProject,
+                Code = request.UserCode,
+                Permissions = convertPermissionsConfigurationRequestToPermissionDataContract(request.PermissionsConfiguration),
             });
             return AjaxOkResponse();
         }
-
+        
         public IActionResult GetPermissionsForRoleAndBook(int roleId, long bookId)
         {
             var client = GetRoleClient();
@@ -416,6 +424,17 @@ namespace ITJakub.Web.Hub.Controllers
             var client = GetRoleClient();
             client.RemoveSpecialPermissionsFromRole(request.RoleId, new List<int> {request.SpecialPermissionId});
             return Json(new { });
+        }
+        
+        private PermissionDataContract convertPermissionsConfigurationRequestToPermissionDataContract(PermissionsConfigurationRequest request)
+        {
+            return new PermissionDataContract
+            {
+                ShowPublished = request.ShowPublished,
+                ReadProject = request.ReadProject,
+                AdminProject = request.AdminProject,
+                EditProject = request.EditProject,
+            };
         }
     }
 }

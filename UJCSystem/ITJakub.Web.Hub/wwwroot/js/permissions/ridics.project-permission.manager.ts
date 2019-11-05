@@ -2,12 +2,14 @@
     private readonly searchBox: MultiSetTypeaheadSearchBox<IRole>;
     private readonly client: PermissionApiClient;
     private readonly errorHandler: ErrorHandler;
+    private readonly typeaheadForSingleUserGroupEnabled: boolean;
     private projectId: number;
     private currentRoleSelectedItem: IRole;
     private roleList: ListWithPagination;
     private permissionPanel: JQuery<HTMLElement>;
 
-    constructor(projectId: number = null) {
+    constructor(enableTypeaheadForSingleUserGroup, projectId: number = null) {
+        this.typeaheadForSingleUserGroupEnabled = enableTypeaheadForSingleUserGroup; 
         this.projectId = projectId;
         this.searchBox = new MultiSetTypeaheadSearchBox<IRole>("#roleSearchInput", "Permission",
             (item) => item.name,
@@ -17,26 +19,26 @@
     }
 
     public init() {
-        if(this.projectId != null)
-        {
-            this.roleList = new ListWithPagination(`Permission/RolesByProject?projectId=${this.projectId}`, 
-                "role", 
-                ViewType.Widget, 
-                true, 
-                false, 
+        if (this.projectId != null) {
+            this.roleList = new ListWithPagination(`Permission/RolesByProject?projectId=${this.projectId}`,
+                "role",
+                ViewType.Widget,
+                true,
+                false,
                 this.initRoleClicks,
                 this);
             this.roleList.init();
+            this.initRoleClicks();
         }
         this.initSearchBox();
         this.permissionPanel = $("#project-permission-section");
         this.initPermissionsSaving();
     }
 
-    public setProjectId(projectId: number){
+    public setProjectId(projectId: number) {
         this.projectId = projectId;
     }
-    
+
     public clearSections() {
         this.roleList.clear(localization.translate("ProjectIsNotSelected", "PermissionJs").value);
         this.clearPermissionSection();
@@ -50,7 +52,7 @@
         alertHolder.empty().append(errorAlert.buildElement());
         $("#saveProjectPermissions").addClass("hide");
     }
-    
+
     public loadRoles(projectId: number) {
         this.projectId = projectId;
         const roleSection = $("#role-section .section");
@@ -80,7 +82,7 @@
             this.initRoleClicks();
         });
     }
-    
+
     private initRemoveRoleFromProjectButton() {
         $(".remove-role").on("click", (event) => {
             event.stopPropagation();
@@ -100,7 +102,7 @@
     }
 
     private initRoleClicks(): void {
-        $(".role-row").click((event) => {            
+        $(".role-row").click((event) => {
             $(event.currentTarget as Node as Element).addClass("active").siblings().removeClass("active");
             const roleRow = $(event.currentTarget as Node as Element);
             const roleId = roleRow.data("role-id");
@@ -136,7 +138,10 @@
 
     private initSearchBox() {
         this.searchBox.addDataSet("Role", localization.translate("Groups", "PermissionJs").value);
-        this.searchBox.addDataSet("SingleUserGroup", localization.translate("Users", "PermissionJs").value);
+        if (this.typeaheadForSingleUserGroupEnabled) {
+            this.searchBox.addDataSet("SingleUserGroup", localization.translate("Users", "PermissionJs").value);
+        }
+
         this.searchBox.create((selectedExists: boolean, selectionConfirmed: boolean) => {
             if (selectionConfirmed) {
                 this.currentRoleSelectedItem = this.searchBox.getValue();
@@ -153,7 +158,7 @@
 
             const addProjectPermissionModal = $("#addProjectPermissionToRoleDialog");
             const roleError = $("#addProjectToRoleError");
-            
+
             $("#addPermissionButton").on("click", (event) => {
                 event.preventDefault();
                 const role = $(".project-row.active");
@@ -169,14 +174,27 @@
             });
 
             addProjectPermissionToRoleBtn.on("click", () => {
-                roleError.empty();                 
-                if (typeof this.currentRoleSelectedItem == "undefined" || this.currentRoleSelectedItem == null) {
+                roleError.empty();
+                const rawRoleSearchInput = String($("#roleSearchInput").val());
+                if(!this.typeaheadForSingleUserGroupEnabled && rawRoleSearchInput !== "")
+                {
+                    this.addPermissionsOnProjectToUser(rawRoleSearchInput, addProjectPermissionModal).done(() => {
+                        this.roleList.reloadPage();
+                        this.clearPermissionSection();
+                        addProjectPermissionModal.modal("hide");
+                    }).fail((error) => {
+                        const errorAlert = new AlertComponentBuilder(AlertType.Error)
+                            .addContent(this.errorHandler.getErrorMessage(error,
+                                localization.translate("AddProjectToRoleError", "PermissionJs").value));
+                        roleError.empty().append(errorAlert.buildElement());
+                    });
+                }
+                else if (typeof this.currentRoleSelectedItem == "undefined" || this.currentRoleSelectedItem == null) {
                     const errorAlert = new AlertComponentBuilder(AlertType.Error)
                         .addContent(localization.translate("RoleIsNotSelected", "PermissionJs").value);
                     roleError.empty().append(errorAlert.buildElement());
                     return;
-                }
-                else {
+                } else {
                     this.updateRolePermissionsOnProject(this.currentRoleSelectedItem.id, addProjectPermissionModal).done(() => {
                         this.roleList.reloadPage();
                         this.clearPermissionSection();
@@ -192,10 +210,9 @@
         }
     }
 
-    private initPermissionsSaving()
-    {
+    private initPermissionsSaving() {
         $("#saveProjectPermissions").off();
-        $("#saveProjectPermissions").on("click",(event) => {
+        $("#saveProjectPermissions").on("click", (event) => {
             const roleId = $(".role-row.active").data("role-id");
             const alertHolder = this.permissionPanel.find(".alert-holder");
             alertHolder.empty();
@@ -212,17 +229,33 @@
         });
     }
 
-    
-    private updateRolePermissionsOnProject(roleId: number, context: JQuery): JQueryXHR {        
+
+    private updateRolePermissionsOnProject(roleId: number, context: JQuery): JQueryXHR {
         const addProjectToRole = {
-            bookId: this.projectId,
             roleId: roleId,
+            permissionsConfiguration: this.getPermissionsConfiguration(context),
+        };
+
+        return this.client.addProjectToRole(addProjectToRole);
+    }
+
+    private addPermissionsOnProjectToUser(userCode: string, context: JQuery): JQueryXHR {
+        const addProjectToUser = {
+            userCode: userCode,
+            permissionsConfiguration: this.getPermissionsConfiguration(context),
+        };
+        
+        return this.client.addProjectToSingleUser(addProjectToUser);
+    }
+    
+    private getPermissionsConfiguration(context: JQuery): IPermissionsConfiguration
+    {
+        return {
+            bookId: this.projectId,
             showPublished: context.find(`input[name="show-published"]`).is(":checked"),
             readProject: context.find(`input[name="read-project"]`).is(":checked"),
             adminProject: context.find(`input[name="admin-project"]`).is(":checked"),
             editProject: context.find(`input[name="edit-project"]`).is(":checked"),
         };
-
-         return this.client.addProjectToRole(addProjectToRole);
     }
 }
