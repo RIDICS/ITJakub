@@ -1,7 +1,7 @@
 ﻿
 
 function initBiblSearch() {
-    var bookCountPerPage = 20;
+    var bookCountPerPage = Number($("#bibliography-configuration").data("page-size"));
     var bibliographies = new BibliographiesSearch(bookCountPerPage);
     bibliographies.create();
 }

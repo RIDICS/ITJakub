@@ -1,4 +1,5 @@
-﻿@using ITJakub.Web.Hub.Helpers
+﻿@using ITJakub.Web.Hub.Constants
+@using ITJakub.Web.Hub.Helpers
 @using ITJakub.Web.Hub.Options
 @using Microsoft.Extensions.Options;
 @using Scalesoft.Localization.AspNetCore
@@ -78,6 +79,7 @@
                                                                                                     {@Html.Raw("EditLemmatization")
                                                                                                     } "></div>
     <div id="bibliography-configuration-default-url" data-url="@FileVersionProvider.AddFileVersionToPath(Context.Request.PathBase, Url.Content("~/content/BibliographyConfiguration/configuration.json"))"></div>
+    <div id="bibliography-configuration" data-page-size="@PageSizes.BibliographyModule"></div>
     <div class="page-body-content">
 
         <script asp-append-version="true" src="~/lib/jquery/dist/jquery.min.js"></script>
