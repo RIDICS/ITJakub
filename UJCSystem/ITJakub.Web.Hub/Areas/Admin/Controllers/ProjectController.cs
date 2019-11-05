@@ -8,6 +8,7 @@ using ITJakub.Web.Hub.Areas.Admin.Models.Request;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
 using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Authorization;
+using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Helpers;
@@ -23,9 +24,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     [Area("Admin")]
     public class ProjectController : BaseController
     {
-        private const int ProjectListPageSize = 5;
-        private const int SnapshotListPageSize = 10;
-
         private readonly ILocalizationService m_localization;
 
         public ProjectController(ControllerDataProvider controllerDataProvider, ILocalizationService localization) : base(
@@ -34,7 +32,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             m_localization = localization;
         }
 
-        public IActionResult List(string search, int start, int count = ProjectListPageSize, ViewType viewType = ViewType.Full,
+        public IActionResult List(string search, int start, int count = PageSizes.ProjectList, ViewType viewType = ViewType.Full,
             ProjectOwnerTypeContract projectOwnerType = ProjectOwnerTypeContract.AllProjects)
         {
             var client = GetProjectClient();
@@ -44,7 +42,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 TotalCount = result.TotalCount,
                 List = projectItems,
-                PageSize = ProjectListPageSize,
+                PageSize = count,
                 Start = start,
                 SearchQuery = search
             };
@@ -107,8 +105,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 case ProjectModuleTabType.WorkPublications:
                     var search = string.Empty;
                     var start = 0;
-                    var snapshotList = projectClient.GetSnapshotList(projectId.Value, start, SnapshotListPageSize, search);
-                    var listModel = CreateListViewModel<SnapshotViewModel, SnapshotAggregatedInfoContract>(snapshotList, start, SnapshotListPageSize, search);
+                    var snapshotList = projectClient.GetSnapshotList(projectId.Value, start, PageSizes.SnapshotList, search);
+                    var listModel = CreateListViewModel<SnapshotViewModel, SnapshotAggregatedInfoContract>(snapshotList, start, PageSizes.SnapshotList, search);
                     var model = new SnapshotListViewModel
                     {
                         ProjectId = projectId.Value,
@@ -196,7 +194,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return PartialView("Work/SubView/_ChapterTable", chapterEditorViewModel);
         }
         
-        public IActionResult SnapshotList(long projectId, string search, int start, int count = SnapshotListPageSize)
+        public IActionResult SnapshotList(long projectId, string search, int start, int count = PageSizes.SnapshotList)
         {
             var client = GetProjectClient();
 
