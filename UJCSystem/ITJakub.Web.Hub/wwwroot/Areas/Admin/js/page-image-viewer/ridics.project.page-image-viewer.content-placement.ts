@@ -1,21 +1,30 @@
 ﻿class ImageViewerContentAddition {
-    private readonly util: EditorsUtil;
+    private readonly apiClient: EditorsApiClient;
+    private readonly errorHandler: ErrorHandler;
 
-    constructor(util: EditorsUtil) {
-        this.util = util;
+    constructor(apiClient: EditorsApiClient) {
+        this.apiClient = apiClient;
+        this.errorHandler = new ErrorHandler();
     }
 
     formImageContent(pageId: number) {
-        const imgUrl = this.util.getImageUrlOnPage(pageId);
         const pageImageEl = $(".page-image");
-        const imageString = `<img src="${imgUrl}">`;
-        pageImageEl.fadeOut(150, () => {
-            pageImageEl.empty(); 
-            pageImageEl.append(imageString);
-            this.onError(pageImageEl);
+        pageImageEl.data("page-id", pageId);
+
+        this.apiClient.getImageResourceByPageId(pageId).done(result => {
+            pageImageEl.data("image-id", result.id)
+                .data("version-id", result.versionId);
+            this.addImageContent(pageImageEl, result.imageUrl);
+        }).fail((response) => {
+            const errorMessage = response.status === 404
+                ? localization.translate("NoImageOnPage", "RidicsProject").value
+                : this.errorHandler.getErrorMessage(response);
+            const alert = new AlertComponentBuilder(AlertType.Error).addContent(errorMessage);
+            pageImageEl.data("image-id", null)
+                .data("version-id", null)
+                .empty()
+                .append(alert.buildElement());
         });
-        pageImageEl.fadeIn(150);
-        pageImageEl.off();
     }
 
     addImageContent(element: JQuery, imageUrl: string) {
@@ -23,13 +32,13 @@
         element.fadeOut(150, () => {
             element.empty();
             element.append(imageString);
-            this.onError(element);
+            this.attachOnErrorEvent(element);
         });
         element.fadeIn(150);
         element.off();
     }
 
-    private onError(pageImageEl) {
+    private attachOnErrorEvent(pageImageEl) {
         const imageEl = pageImageEl.children("img");
         imageEl.on("error", () => {
             const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("NoImageOnPage","RidicsProject").value);

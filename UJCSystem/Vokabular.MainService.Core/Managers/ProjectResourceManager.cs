@@ -67,13 +67,17 @@ namespace Vokabular.MainService.Core.Managers
                 }
             }
 
-            try
+            if (projectType == DataContracts.Contracts.Type.ProjectTypeContract.Community)
             {
-                m_forumSiteManager.CreateOrUpdateForums(importResult.ProjectId);
-            }
-            catch (ForumException e)
-            {
-                throw new MainServiceException(MainServiceErrorCode.ImportSucceedForumFailed, $"Import succeeded. Forum creation failed. {e.Message}", HttpStatusCode.BadRequest, new object[]{ e.Code});
+                try
+                {
+                    m_forumSiteManager.CreateOrUpdateForums(importResult.ProjectId);
+                }
+                catch (ForumException e)
+                {
+                    throw new MainServiceException(MainServiceErrorCode.ImportSucceedForumFailed,
+                        $"Import succeeded. Forum creation failed. {e.Message}", HttpStatusCode.BadRequest, new object[] {e.Code});
+                }
             }
         }
     }

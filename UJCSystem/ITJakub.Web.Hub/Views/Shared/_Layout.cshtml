@@ -1,4 +1,5 @@
-﻿@using ITJakub.Web.Hub.Helpers
+﻿@using ITJakub.Web.Hub.Constants
+@using ITJakub.Web.Hub.Helpers
 @using ITJakub.Web.Hub.Options
 @using Microsoft.Extensions.Options;
 @using Scalesoft.Localization.AspNetCore
@@ -8,6 +9,7 @@
 
 @inject ILocalizationService Localizer
 @inject IOptions<PortalOption> PortalConfig
+@inject IFileVersionProvider FileVersionProvider
 
 <!DOCTYPE html>
 <html>
@@ -17,7 +19,7 @@
     <link asp-append-version="true" rel="icon" type="image/png" href="@Url.Content(PortalConfig.Value.FaviconPath)">
     <title>@PortalConfig.Value.MainPortal.PortalNameFull - @ViewBag.Title</title>
     <link asp-append-version="true" href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-    <link asp-append-version="true" href="~/lib/dropzone/downloads/css/dropzone.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/lib-custom/dropzone.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/lib/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/lib/jquery-eu-cookie-law-popup/css/jquery-eu-cookie-law-popup.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/lib/simplemde-custom-markdown-mode/dist/simplemde.min.css" rel="stylesheet" />
@@ -77,6 +79,8 @@
     <div id="permissions-div" class="hidden" data-is-authenticated="@User.Identity.IsAuthenticated" data-roles="@if (User.HasPermission(VokabularPermissionNames.EditLemmatization))
                                                                                                     {@Html.Raw("EditLemmatization")
                                                                                                     } "></div>
+    <div id="bibliography-configuration-default-url" data-url="@FileVersionProvider.AddFileVersionToPath(Context.Request.PathBase, Url.Content("~/content/BibliographyConfiguration/configuration.json"))"></div>
+    <div id="bibliography-configuration" data-page-size="@PageSizes.BibliographyModule"></div>
     <div class="page-body-content">
 
         <script asp-append-version="true" src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -97,7 +101,7 @@
         <script asp-append-version="true" src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker-plus.js"></script>
         <script asp-append-version="true" src="~/lib/s-pagination/dist/pagination.js"></script>
         <script asp-append-version="true" src="~/lib/bootbox/bootbox.js"></script>
-        <script asp-append-version="true" src="~/lib/dropzone/downloads/dropzone.js"></script>
+        <script asp-append-version="true" src="~/lib/dropzone/dist/dropzone.js"></script>
         <script asp-append-version="true" src="~/lib/he/he.js"></script>
         <script asp-append-version="true" src="~/lib/urijs/src/URI.min.js"></script>
         @*<script asp-append-version="true" src="~/lib/modernizr/modernizr.js"></script>*@
@@ -165,7 +169,7 @@
                 @{
                     string vokabularStartedNew = FooterHelper.VokabularStartedLocalized(Localizer, new DateTime(2015, 1, 1));
                 }
-                
+
                 @Localizer.TranslateFormat("FooterText", "layout", LocTranslationSource.File, vokabularStartedNew)
             </div>
             <div class="footer-logos">

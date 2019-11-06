@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
@@ -10,6 +12,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
+using Vokabular.TextConverter.Markdown.Extensions;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -17,18 +20,16 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly AuthenticationManager m_authenticationManager;
         private readonly ResourceRepository m_resourceRepository;
-        private readonly BookRepository m_bookRepository;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
-        private readonly FileSystemManager m_fileSystemManager;
+        private readonly IFileSystemManager m_fileSystemManager;
         private readonly IMapper m_mapper;
 
         public ProjectItemManager(AuthenticationManager authenticationManager, ResourceRepository resourceRepository,
-            BookRepository bookRepository, FulltextStorageProvider fulltextStorageProvider, FileSystemManager fileSystemManager,
+            FulltextStorageProvider fulltextStorageProvider, IFileSystemManager fileSystemManager,
             IMapper mapper)
         {
             m_authenticationManager = authenticationManager;
             m_resourceRepository = resourceRepository;
-            m_bookRepository = bookRepository;
             m_fulltextStorageProvider = fulltextStorageProvider;
             m_fileSystemManager = fileSystemManager;
             m_mapper = mapper;
@@ -36,7 +37,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<PageContract> GetPageList(long projectId)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectPages(projectId));
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestPages(projectId));
             var result = m_mapper.Map<List<PageContract>>(dbResult);
             return result;
         }
@@ -66,7 +67,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<TermContract> GetPageTermList(long pageId)
         {
-            var dbResult = m_bookRepository.InvokeUnitOfWork(x => x.GetPageTermList(pageId));
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestPageTermList(pageId));
             var result = m_mapper.Map<List<TermContract>>(dbResult);
             return result;
         }
@@ -76,10 +77,10 @@ namespace Vokabular.MainService.Core.Managers
             new SetPageTermsWork(m_resourceRepository, pageId, termIdList).Execute();
         }
 
-        public List<ChapterHierarchyContract> GetChapterList(long projectId)
+        public List<ChapterHierarchyDetailContract> GetChapterList(long projectId)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectChapters(projectId));
-            var result = ChaptersHelper.ChapterToHierarchyContracts(dbResult, m_mapper);
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestChapters(projectId, true));
+            var result = ChaptersHelper.ChapterToHierarchyDetailContracts(dbResult, m_mapper);
             return result;
         }
 
@@ -105,9 +106,15 @@ namespace Vokabular.MainService.Core.Managers
             new CreateOrUpdateChapterWork(m_resourceRepository, chapterData, null, chapterId, userId).Execute();
         }
 
+        public void UpdateChapters(long projectId, IList<CreateOrUpdateChapterContract> chapterData)
+        {
+            var userId = m_authenticationManager.GetCurrentUserId();
+            new CreateOrUpdateChaptersWork(m_resourceRepository, chapterData, projectId, userId).Execute();
+        }
+
         public List<TrackContract> GetTrackList(long projectId)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectTracks(projectId));
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestTracks(projectId));
             var result = m_mapper.Map<List<TrackContract>>(dbResult);
             return result;
         }
@@ -121,7 +128,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public IList<AudioContract> GetTrackRecordings(long trackId)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetRecordings(trackId));
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetAudioRecordingsByTrack(trackId));
             var result = m_mapper.Map<IList<AudioContract>>(dbResult);
             return result;
         }
@@ -160,33 +167,7 @@ namespace Vokabular.MainService.Core.Managers
             var userId = m_authenticationManager.GetCurrentUserId();
             new CreateOrUpdateTrackWork(m_resourceRepository, trackData, null, trackId, userId).Execute();
         }
-
-        public EditionNoteContract GetEditionNote(long projectId, TextFormatEnumContract format)
-        {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestEditionNote(projectId));
-            var result = m_mapper.Map<EditionNoteContract>(dbResult);
-
-            if (result == null)
-            {
-                return null;
-            }
-
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(dbResult.Resource.Project.ProjectType);
-            var editionNoteText = fulltextStorage.GetEditionNote(dbResult, format);
-
-            result.Text = editionNoteText;
-            return result;
-        }
-
-        public long CreateEditionNoteVersion(long projectId, CreateEditionNoteContract data)
-        {
-            var userId = m_authenticationManager.GetCurrentUserId();
-            var project = m_resourceRepository.FindById<Project>(projectId);
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(project.ProjectType);
-            var resourceVersionId = new CreateEditionNoteVersionWork(m_resourceRepository, projectId, data, userId, fulltextStorage).Execute();
-            return resourceVersionId;
-        }
-
+        
         public void UpdatePages(long projectId, List<CreateOrUpdatePageContract> data)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
@@ -230,6 +211,25 @@ namespace Vokabular.MainService.Core.Managers
                 Stream = imageStream,
                 FileSize = imageStream.Length,
             };
+        }
+
+        public void GenerateChapters(long projectId)
+        {
+            var textResources = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestTexts(projectId, null, true));
+            var sortedTextResources = textResources.OrderBy(x => ((PageResource)x.ResourcePage.LatestVersion).Position);
+            var pageWithHeadingsList = new List<Tuple<PageResource, IList<MarkdownHeadingData>>>();
+
+            foreach (var textResource in sortedTextResources)
+            {
+                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(textResource.Resource.Project.ProjectType);
+                var headings = fulltextStorage.GetHeadingsFromPageText(textResource);
+
+                var pageResource = (PageResource) textResource.ResourcePage.LatestVersion;
+                pageWithHeadingsList.Add(new Tuple<PageResource, IList<MarkdownHeadingData>>(pageResource, headings));
+            }
+
+            var userId = m_authenticationManager.GetCurrentUserId();
+            new GenerateChaptersWork(projectId, userId, pageWithHeadingsList, m_resourceRepository).Execute();
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿@using System.Threading.Tasks
-@using ITJakub.Web.Hub.Areas.Admin.Models
-@using ITJakub.Web.Hub.Areas.Admin.Models.Type
+﻿@using ITJakub.Web.Hub.Areas.Admin.Models.Type
 @using Scalesoft.Localization.AspNetCore
 @inject ILocalizationService Localizer
 
@@ -8,18 +6,22 @@
     <ul class="nav nav-tabs" role="tablist" id="project-work-tabs">
         <li role="presentation" class="active"><a href="#project-work-publications" aria-controls="project-work-publications" role="tab">@Localizer.Translate("Publication", "Admin")</a></li>
         <li role="presentation"><a href="#project-work-page-list" aria-controls="project-work-page-list" role="tab">@Localizer.Translate("PageList", "Admin")</a></li>
+        <li role="presentation"><a href="#project-work-chapter-editor" aria-controls="project-work-chapter-editor" role="tab">@Localizer.Translate("Chapters", "Admin")</a></li>
         <li role="presentation"><a href="#project-work-cooperation" aria-controls="project-work-cooperation" role="tab">@Localizer.Translate("Cooperation", "Admin")</a></li>
         <li role="presentation"><a href="#project-work-metadata" aria-controls="project-work-metadata" role="tab">@Localizer.Translate("Metadata", "Admin")</a></li>
+        <li role="presentation"><a href="#project-work-categorization" aria-controls="project-work-categorization" role="tab">@Localizer.Translate("Categorization", "Admin")</a></li>
         <li role="presentation"><a href="#project-work-history" aria-controls="project-work-history" role="tab">@Localizer.Translate("History", "Admin")</a></li>
-        <li role="presentation"><a href="#project-work-note" aria-controls="project-work-history" role="tab">Ediční poznámka</a></li>
+        <li role="presentation"><a href="#project-work-note" aria-controls="project-work-note" role="tab">@Localizer.Translate("EditionNote", "Admin")</a></li>
         <li role="presentation"><a href="#project-forum" aria-controls="project-work-forum" role="tab">@Localizer.Translate("Forum", "Admin")</a></li>
     </ul>
     
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="project-work-publications" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkPublications)"></div>
         <div role="tabpanel" class="tab-pane" id="project-work-page-list" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkPageList)"></div>
+        <div role="tabpanel" class="tab-pane" id="project-work-chapter-editor" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkChapters)"></div>
         <div role="tabpanel" class="tab-pane" id="project-work-cooperation" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkCooperation)"></div>
         <div role="tabpanel" class="tab-pane" id="project-work-metadata" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkMetadata)"></div>
+        <div role="tabpanel" class="tab-pane" id="project-work-categorization" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkCategorization)"></div>
         <div role="tabpanel" class="tab-pane" id="project-work-history" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkHistory)"></div>
         <div role="tabpanel" class="tab-pane" id="project-work-note" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkNote)"></div>
         <div role="tabpanel" class="tab-pane" id="project-forum" data-panel-type="@Html.Raw((int)ProjectModuleTabType.Forum)"></div>

@@ -1,11 +1,10 @@
 ﻿@using Scalesoft.Localization.AspNetCore
+@using Vokabular.Shared.AspNetCore.Extensions
 @inject ILocalizationService Localization
-<div id="project-resource-preview">
-    <div class="toggle-mode-panel container-fluid text-center">
-        <button type="button" class="btn btn-default editing-mode-button">
-            @Localization.Translate("ToggleEditingMode", "RidicsProject")
-        </button>
-    </div>
+
+<div id="userInfo" data-first-name="@User.GetFirstName()" data-last-name="@User.GetLastName()" class="hide"></div>
+
+<div id="project-resource-preview" class="hide">
     <div id="page-slider" class="text-editor-page-slider">
         <div class="ui-slider-handle page-slider-handle">
             <div class="slider-tooltip">
@@ -30,7 +29,7 @@
         <div class="col-xs-2">
             <div class="checkbox">
                 <label class="checkbox-inline">
-                    <input type="checkbox" value="" class="display-page-checkbox">
+                    <input type="checkbox" class="display-page-checkbox" checked="checked">
                     @Localization.Translate("DisplayPageNumbers", "RidicsProject")
                 </label>
             </div>

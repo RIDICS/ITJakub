@@ -26,9 +26,7 @@ namespace Vokabular.MainService.Core.Works.Permission
                 allBookIds.AddRange(m_bookIds);
             }
 
-            var group = m_permissionRepository.FindGroupByExternalIdOrCreate(m_roleId);
-
-            var permissions = m_permissionRepository.FindPermissionsByGroupAndBooks(group.Id, allBookIds);
+            var permissions = m_permissionRepository.FindPermissionsByGroupAndBooks(m_roleId, allBookIds);
             m_permissionRepository.DeleteAll(permissions);
         }
     }

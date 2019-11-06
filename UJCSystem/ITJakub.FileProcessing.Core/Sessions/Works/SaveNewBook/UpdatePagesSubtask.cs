@@ -31,7 +31,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             if (bookData.Pages == null)
                 return;
 
-            var importedPageResourceIds = new HashSet<long>();
+            var updatedPageResourceIds = new HashSet<long>();
             var newPageTextResources = new List<NewPageTextData>();
             var newPageImageResources = new List<ImageResource>();
             var resultPageResourceList = new List<PageResource>();
@@ -40,7 +40,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var project = m_resourceRepository.Load<Project>(projectId);
             var user = m_resourceRepository.Load<User>(userId);
             var bookVersion = m_resourceRepository.Load<BookVersionResource>(bookVersionId);
-            var dbPages = m_resourceRepository.GetProjectPages(projectId);
+            var dbPages = m_resourceRepository.GetProjectLatestPages(projectId);
             var dbPagesDict = dbPages.ToDictionaryMultipleValues(x => x.Name);
 
             // Update page list
@@ -55,48 +55,43 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         : dbPageResources.FirstOrDefault(x => x.Position == page.Position); // If multiple pages have the same name, try identify page by Position
                 }
 
+                var newPageResource = new PageResource
+                {
+                    Resource = null,
+                    Name = page.Text,
+                    Comment = string.Empty,
+                    CreateTime = now,
+                    CreatedByUser = user,
+                    Position = page.Position,
+                    VersionNumber = 0,
+                    Terms = PrepareTermList(page.TermXmlIds, dbTermCache),
+                };
+
                 if (dbPageResource == null)
                 {
-                    var newResource = new Resource
+                    newPageResource.Resource = new Resource
                     {
                         Project = project,
                         Name = page.Text,
                         ContentType = ContentTypeEnum.Page,
-                        ResourceType = ResourceTypeEnum.Page
+                        ResourceType = ResourceTypeEnum.Page,
                     };
-                    var newPageResource = new PageResource
-                    {
-                        Resource = newResource,
-                        Name = page.Text,
-                        Comment = string.Empty,
-                        CreateTime = now,
-                        CreatedByUser = user,
-                        Position = page.Position,
-                        VersionNumber = 1,
-                        Terms = PrepareTermList(page.TermXmlIds, dbTermCache),
-                    };
-                    newResource.LatestVersion = newPageResource;
-
-                    m_resourceRepository.Create(newPageResource);
-                    dbPageResource = newPageResource;
+                    newPageResource.VersionNumber = 1;
                 }
                 else
                 {
-                    //if (IsPageUpdated(dbPageResource, page))
-                    //{
-                    // Always update page data
-                        dbPageResource.Position = page.Position;
-                        dbPageResource.CreateTime = now;
-                        dbPageResource.CreatedByUser = user;
-                        dbPageResource.Comment = string.Empty;
-                        dbPageResource.Terms = PrepareTermList(page.TermXmlIds, dbTermCache);
-                        // Update resource name is not required (PageResources are distinguish by name)
+                    newPageResource.Resource = dbPageResource.Resource;
+                    newPageResource.VersionNumber = dbPageResource.VersionNumber + 1;
 
-                        m_resourceRepository.Update(dbPageResource);
-                        importedPageResourceIds.Add(dbPageResource.Id);
-                    //}
+                    updatedPageResourceIds.Add(dbPageResource.Id);
                 }
+
+                newPageResource.Resource.LatestVersion = newPageResource;
                 
+                m_resourceRepository.Create(newPageResource);
+
+                
+                // Create TextResource
                 if (!string.IsNullOrEmpty(page.XmlId))
                 {
                     var newTextResource = new TextResource
@@ -106,7 +101,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         CreateTime = now,
                         CreatedByUser = user,
                         ExternalId = page.XmlId,
-                        ResourcePage = dbPageResource.Resource,
+                        ResourcePage = newPageResource.Resource,
                         BookVersion = bookVersion,
                         VersionNumber = 0
                     };
@@ -117,6 +112,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     });
                 }
 
+                // Create ImageResource
                 if (!string.IsNullOrEmpty(page.Image))
                 {
                     var imageMimeType = MimeMapping.GetMimeMapping(page.Image);
@@ -131,24 +127,27 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         FileId = fileInfo?.NewNameInStorage,
                         MimeType = imageMimeType,
                         Size = fileInfo != null ? fileInfo.NewFileSize : 0L,
-                        ResourcePage = dbPageResource.Resource,
+                        ResourcePage = newPageResource.Resource,
                         VersionNumber = 0
                     };
                     newPageImageResources.Add(newImageResource);
                 }
 
-                m_allImportedResourceVersionIds.Add(dbPageResource.Id);
-                resultPageResourceList.Add(dbPageResource);
+                m_allImportedResourceVersionIds.Add(newPageResource.Id);
+                resultPageResourceList.Add(newPageResource);
             }
 
             ResultPageResourceList = resultPageResourceList;
 
-            // Update positions to unused pages
-            var unusedDbPages = dbPages.Where(x => !importedPageResourceIds.Contains(x.Id));
+            // Remove unused pages
+            var unusedDbPages = dbPages.Where(x => !updatedPageResourceIds.Contains(x.Id));
             foreach (var unusedDbPage in unusedDbPages)
             {
-                unusedDbPage.Position = 0;
-                m_resourceRepository.Update(unusedDbPage);
+                var resourceToRemove = unusedDbPage.Resource;
+                resourceToRemove.IsRemoved = true;
+                m_resourceRepository.Update(resourceToRemove);
+
+                // Related resources are remove in own subtask
             }
 
             UpdateTextResources(project, newPageTextResources);
@@ -170,13 +169,14 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             var projectId = project.Id;
             var resourceGroup = GetOrCreateNamedResourceGroup(projectId, TextTypeEnum.Transcribed, DefaultImportResourceGroupName);
-            var dbTexts = m_resourceRepository.GetProjectTexts(projectId, resourceGroup.Id, false);
+            var dbTexts = m_resourceRepository.GetProjectLatestTexts(projectId, resourceGroup.Id, false);
             var dbTextsByPageResId = new Dictionary<long, List<TextResource>>();
             foreach (var textResourceByPageGroup in dbTexts.GroupBy(x => x.ResourcePage.Id))
             {
                 dbTextsByPageResId.Add(textResourceByPageGroup.Key, textResourceByPageGroup.ToList());
             }
 
+            var updatedTextResourceIds = new HashSet<long>();
             foreach (var pageTextData in newPageTextResources)
             {
                 var newTextResource = pageTextData.NewTextResource;
@@ -207,9 +207,20 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     newTextResource.VersionNumber = originDbText.VersionNumber + 1;
                     newTextResource.Resource.LatestVersion = newTextResource;
                     newTextResource.Resource.Name = pageTextData.BookPageData.XmlResource ?? string.Empty; // Name is required
+
+                    updatedTextResourceIds.Add(originDbText.Id);
                 }
                 m_resourceRepository.Create(newTextResource);
                 m_allImportedResourceVersionIds.Add(newTextResource.Id);
+            }
+
+            // Remove unused
+            var unusedDbTexts = dbTexts.Where(x => !updatedTextResourceIds.Contains(x.Id));
+            foreach (var unusedDbText in unusedDbTexts)
+            {
+                var resourceToRemove = unusedDbText.Resource;
+                resourceToRemove.IsRemoved = true;
+                m_resourceRepository.Update(resourceToRemove);
             }
         }
 
@@ -222,13 +233,14 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             var projectId = project.Id;
             var imageResourceGroup = GetOrCreateNamedResourceGroup(projectId, TextTypeEnum.Original, DefaultImportResourceGroupName);
-            var dbImages = m_resourceRepository.GetProjectImages(projectId, imageResourceGroup.Id, false);
+            var dbImages = m_resourceRepository.GetProjectLatestImages(projectId, imageResourceGroup.Id, false);
             var dbImagesByPageResId = new Dictionary<long, List<ImageResource>>();
             foreach (var imageResourceByPageGroup in dbImages.GroupBy(x => x.ResourcePage.Id))
             {
                 dbImagesByPageResId.Add(imageResourceByPageGroup.Key, imageResourceByPageGroup.ToList());
             }
 
+            var updatedImageResourceIds = new HashSet<long>();
             foreach (var newImageResource in newPageImageResources)
             {
                 var pageResourceId = newImageResource.ResourcePage.Id;
@@ -257,9 +269,20 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     newImageResource.VersionNumber = originDbImage.VersionNumber + 1;
                     newImageResource.Resource.LatestVersion = newImageResource;
                     newImageResource.Resource.Name = newImageResource.FileName;
+
+                    updatedImageResourceIds.Add(originDbImage.Id);
                 }
                 m_resourceRepository.Create(newImageResource);
                 m_allImportedResourceVersionIds.Add(newImageResource.Id);
+            }
+
+            // Remove unused
+            var unusedDbImages = dbImages.Where(x => !updatedImageResourceIds.Contains(x.Id));
+            foreach (var unusedDbImage in unusedDbImages)
+            {
+                var resourceToRemove = unusedDbImage.Resource;
+                resourceToRemove.IsRemoved = true;
+                m_resourceRepository.Update(resourceToRemove);
             }
         }
 

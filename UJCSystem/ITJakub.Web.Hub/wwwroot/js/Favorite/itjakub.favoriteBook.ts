@@ -5,6 +5,8 @@
     private bodyDiv: HTMLDivElement;
     private favoriteManager: FavoriteManager;
     private loading: boolean;
+    private bookIdList: number[];
+    private categoryIdList: number[];
 
 	private localizationScope = "FavoriteJs";
 
@@ -14,6 +16,8 @@
         this.container = container;
         this.favoriteManager = new FavoriteManager();
         this.loading = false;
+        this.bookIdList = [];
+        this.categoryIdList = [];
     }
 
     public make() {
@@ -150,10 +154,33 @@
 
     private onLabelClick(event: JQueryEventObject) {
         var linkJquery = $(event.currentTarget);
-        var bookIdList = <number[]>linkJquery.data("bookIdList");
-        var categoryIdList = <number[]>linkJquery.data("categoryIdList");
+        this.bookIdList = <number[]>linkJquery.data("bookIdList");
+        this.categoryIdList = <number[]>linkJquery.data("categoryIdList");
 
-        this.dropdownSelect.setSelected(categoryIdList, bookIdList);
+        if (!this.dropdownSelect.hasBooksLoaded()) {
+            this.dropdownSelect.overrideSelectedBookCount(this.bookIdList.length);
+        }
+        
+        this.dropdownSelect.setSelected(this.categoryIdList, this.bookIdList);
         setTimeout(() => this.dropdownSelect.showBody(), 0);
+    }
+
+    public resetSelected() {
+        this.bookIdList = [];
+        this.categoryIdList = [];
+
+        if (!this.dropdownSelect.hasBooksLoaded()) {
+            this.dropdownSelect.overrideSelectedBookCount(null);
+        }
+
+        this.dropdownSelect.setSelected(this.categoryIdList, this.bookIdList);
+    }
+
+    public getLastSelectedBookIds(): number[] {
+        return this.bookIdList;
+    }
+
+    public getLastSelectedCategoryIds(): number[] {
+        return this.categoryIdList;
     }
 }

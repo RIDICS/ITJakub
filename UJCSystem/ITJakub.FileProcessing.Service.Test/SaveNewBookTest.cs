@@ -137,6 +137,71 @@ namespace ITJakub.FileProcessing.Service.Test
         }
 
         [TestMethod]
+        public void TestUpdateResponsiblePersons()
+        {
+            var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
+            var bookData = new BookData
+            {
+                Responsibles = new List<ResponsibleData>
+                {
+                    new ResponsibleData
+                    {
+                        NameText = "Aaa Bbb",
+                        TypeText = "editor",
+                    },
+                    new ResponsibleData
+                    {
+                        NameText = "Aaa Bbb",
+                        TypeText = "production",
+                    },
+                    new ResponsibleData
+                    {
+                        NameText = "Ccc Ddd",
+                        TypeText = "editor",
+                    },
+                }
+            };
+
+
+            var personRepository = new MockPersonRepository(unitOfWorkProvider)
+            {
+                CanFindAuthorByName = true
+            };
+            var projectRepository = new MockProjectRepository(unitOfWorkProvider)
+            {
+                ProjectResponsiblePersons = new List<ProjectResponsiblePerson>
+                {
+                    new ProjectResponsiblePerson
+                    {
+                        ResponsiblePerson = new ResponsiblePerson {FirstName = "Eee", LastName = "Fff", Id = 30},
+                        ResponsibleType = new ResponsibleType{Text = "editor", Id = 10},
+                        Sequence = 1,
+                    },
+                    new ProjectResponsiblePerson
+                    {
+                        ResponsiblePerson = new ResponsiblePerson {FirstName = "Aaa", LastName = "Bbb", Id = 31},
+                        ResponsibleType = new ResponsibleType{Text = "editor", Id = 10},
+                        Sequence = 1,
+                    }
+                }
+            };
+            var subtask = new UpdateResponsiblePersonSubtask(projectRepository, personRepository);
+
+            subtask.UpdateResponsiblePersonList(41, bookData);
+
+            Assert.AreEqual(2, projectRepository.CreatedObjects.Count);
+            Assert.AreEqual(1, projectRepository.UpdatedObjects.Count);
+            Assert.AreEqual(1, projectRepository.DeletedObjects.Count);
+
+            var createdItem2 = projectRepository.CreatedObjects.OfType<ProjectResponsiblePerson>().Single(x => x.ResponsiblePerson.FirstName == "Aaa");
+            var createdItem3 = projectRepository.CreatedObjects.OfType<ProjectResponsiblePerson>().Single(x => x.ResponsiblePerson.FirstName == "Ccc");
+            var updatedItem = projectRepository.UpdatedObjects.OfType<ProjectResponsiblePerson>().Single();
+            Assert.AreEqual(1, updatedItem.Sequence);
+            Assert.AreEqual(2, createdItem2.Sequence);
+            Assert.AreEqual(3, createdItem3.Sequence);
+        }
+
+        [TestMethod]
         public void TestUpdateMetadata()
         {
             var unitOfWorkProvider = CreateMockUnitOfWorkProvider();
@@ -237,16 +302,16 @@ namespace ITJakub.FileProcessing.Service.Test
             var subtask = new UpdatePagesSubtask(resourceRepository);
             subtask.UpdatePages(40, 3, 1, bookData, GetTestTermCache());
 
-            Assert.AreEqual(1, resourceRepository.CreatedObjects.Count);
-            Assert.AreEqual(2, resourceRepository.UpdatedObjects.Count);
+            Assert.AreEqual(2, resourceRepository.CreatedObjects.Count);
+            Assert.AreEqual(1, resourceRepository.UpdatedObjects.Count);
 
-            var firstPage = resourceRepository.CreatedObjects.Cast<PageResource>().First();
-            var secondPage = resourceRepository.UpdatedObjects.Cast<PageResource>().First(x => x.Name == "40r");
-            var removedPage = resourceRepository.UpdatedObjects.Cast<PageResource>().First(x => x.Name == "40v");
+            var firstPage = resourceRepository.CreatedObjects.Cast<PageResource>().First(x => x.Name == "39v");
+            var secondPage = resourceRepository.CreatedObjects.Cast<PageResource>().First(x => x.Name == "40r");
+            var removedResourcePage = resourceRepository.UpdatedObjects.Cast<Resource>().First();
 
             Assert.AreEqual(1, firstPage.Position);
             Assert.AreEqual(2, secondPage.Position);
-            Assert.AreEqual(0, removedPage.Position);
+            Assert.IsTrue(removedResourcePage.IsRemoved);
 
             // Test term assignment
             Assert.IsNull(firstPage.Terms);
@@ -280,9 +345,11 @@ namespace ITJakub.FileProcessing.Service.Test
 
             var createdTexts = resourceRepository.CreatedObjects.OfType<TextResource>().ToList();
             var updatedTexts = resourceRepository.UpdatedObjects.OfType<TextResource>().ToList();
+            var updatedResources = resourceRepository.UpdatedObjects.OfType<Resource>().ToList();
 
             Assert.AreEqual(2, createdTexts.Count);
             Assert.AreEqual(0, updatedTexts.Count);
+            Assert.AreEqual(1, updatedResources.Count);
 
             var firstText = createdTexts.First(x => x.ExternalId == "xml-39-v");
             var secondText = createdTexts.First(x => x.ExternalId == "xml-40-r");
@@ -290,6 +357,8 @@ namespace ITJakub.FileProcessing.Service.Test
             Assert.AreEqual(1, firstText.VersionNumber);
             Assert.AreEqual(2, secondText.VersionNumber);
             Assert.AreEqual(900, secondText.Resource.Id);
+
+            Assert.IsTrue(updatedResources[0].IsRemoved);
         }
 
         [TestMethod]
@@ -324,9 +393,11 @@ namespace ITJakub.FileProcessing.Service.Test
 
             var createdImages = resourceRepository.CreatedObjects.OfType<ImageResource>().ToList();
             var updatedImages = resourceRepository.UpdatedObjects.OfType<ImageResource>().ToList();
+            var updatedResources = resourceRepository.UpdatedObjects.OfType<Resource>().ToList();
 
             Assert.AreEqual(2, createdImages.Count);
             Assert.AreEqual(0, updatedImages.Count);
+            Assert.AreEqual(1, updatedResources.Count);
 
             var firstImage = createdImages.First(x => x.FileName == "image_39v.jpg");
             var secondImage = createdImages.First(x => x.FileName == "image_40r.jpg");
@@ -337,6 +408,7 @@ namespace ITJakub.FileProcessing.Service.Test
 
             Assert.IsNotNull(firstImage.FileId);
             Assert.IsNotNull(firstImage.FileId);
+            Assert.IsTrue(updatedResources[0].IsRemoved);
         }
 
         [TestMethod]
@@ -380,22 +452,22 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
             var subtask = new UpdateChaptersSubtask(resourceRepository);
-            var pageResources = resourceRepository.GetProjectPages(0).ToList();
+            var pageResources = resourceRepository.GetProjectLatestPages(0).ToList();
             subtask.UpdateChapters(41, 2, bookData, pageResources);
 
             var createdChapters = resourceRepository.CreatedObjects.OfType<ChapterResource>().ToList();
-            var updatedChapters = resourceRepository.UpdatedObjects.OfType<ChapterResource>().ToList();
+            var updatedResources = resourceRepository.UpdatedObjects.OfType<Resource>().ToList();
 
-            Assert.AreEqual(1, createdChapters.Count);
-            Assert.AreEqual(2, updatedChapters.Count);
+            Assert.AreEqual(2, createdChapters.Count);
+            Assert.AreEqual(1, updatedResources.Count);
 
-            var firstChapter = updatedChapters.First(x => x.Name == "Chapter 40");
-            var secondChapter = createdChapters.First();
-            var deletedChapter = updatedChapters.First(x => x.Name != "Chapter 40");
+            var firstChapter = createdChapters.First(x => x.Name == "Chapter 40");
+            var secondChapter = createdChapters.First(x => x.Name == "Chapter 41");
+            var deletedChapter = updatedResources.First();
 
             Assert.AreEqual(2, firstChapter.Position);
             Assert.AreEqual(1, secondChapter.Position);
-            Assert.AreEqual(0, deletedChapter.Position);
+            Assert.IsTrue(deletedChapter.IsRemoved);
 
             Assert.IsNotNull(firstChapter.ParentResource);
             Assert.IsNull(secondChapter.ParentResource);
@@ -464,10 +536,14 @@ namespace ITJakub.FileProcessing.Service.Test
             
             var createdHeadwordResources = resourceRepository.CreatedObjects.OfType<HeadwordResource>().ToList();
             var createdHeadwordItems = resourceRepository.CreatedObjects.OfType<HeadwordItem>().ToList();
+            var updatedResources = resourceRepository.UpdatedObjects.OfType<Resource>().ToList();
             
-            Assert.AreEqual(0, resourceRepository.UpdatedObjects.Count); // No updates
+            Assert.AreEqual(0, resourceRepository.UpdatedObjects.Count - updatedResources.Count); // No updates except the removed resources
             Assert.AreEqual(2, createdHeadwordResources.Count);
             Assert.AreEqual(3, createdHeadwordItems.Count);
+            Assert.AreEqual(1, updatedResources.Count);
+
+            Assert.IsTrue(updatedResources[0].IsRemoved);
 
             var newHeadword = createdHeadwordResources.First(x => x.ExternalId == "null");
             var updatedHeadword = createdHeadwordResources.First(x => x.ExternalId == "id-2");
@@ -668,10 +744,17 @@ namespace ITJakub.FileProcessing.Service.Test
             var updatedTracks = resourceRepository.UpdatedObjects.OfType<TrackResource>().ToList();
             var createdRecordings = resourceRepository.CreatedObjects.OfType<AudioResource>().ToList();
             var updatedRecordings = resourceRepository.UpdatedObjects.OfType<AudioResource>().ToList();
+            var updatedResources = resourceRepository.UpdatedObjects.OfType<Resource>().ToList();
 
-            Assert.AreEqual(1, createdTracks.Count);
-            Assert.AreEqual(1, updatedTracks.Count);
+            Assert.AreEqual(3, createdTracks.Count);
+            Assert.AreEqual(0, updatedTracks.Count);
+            Assert.AreEqual(3, updatedResources.Count);
 
+            // Remove one Track and two Audio resources
+            Assert.IsTrue(updatedResources[0].IsRemoved);
+            Assert.IsTrue(updatedResources[1].IsRemoved);
+            Assert.IsTrue(updatedResources[2].IsRemoved);
+            
             Assert.AreEqual(0, updatedRecordings.Count);
             Assert.AreEqual(2, createdRecordings.Count);
 
@@ -719,9 +802,14 @@ namespace ITJakub.FileProcessing.Service.Test
 
             var createdRecordings = resourceRepository.CreatedObjects.OfType<AudioResource>().ToList();
             var updatedRecordings = resourceRepository.UpdatedObjects.OfType<AudioResource>().ToList();
+            var updatedResources = resourceRepository.UpdatedObjects.OfType<Resource>().ToList();
 
             Assert.AreEqual(0, updatedRecordings.Count);
             Assert.AreEqual(2, createdRecordings.Count);
+            Assert.AreEqual(2, updatedResources.Count);
+
+            Assert.IsTrue(updatedResources[0].IsRemoved);
+            Assert.IsTrue(updatedResources[1].IsRemoved);
 
             var recording2 = createdRecordings.FirstOrDefault(x => x.FileName == "file-2.mp3");
             var recording8 = createdRecordings.FirstOrDefault(x => x.FileName == "file-8.mp3");

@@ -18,10 +18,14 @@
         public PageContract ParentPage { get; set; }
     }
 
+    public class CreateTextVersionRequestContract
+    {
+        public string Text { get; set; }
+        public long? ResourceVersionId { get; set; }
+    }
+
     public class CreateTextRequestContract
     {
         public string Text { get; set; }
-        public long Id { get; set; }
-        public long VersionNumber { get; set; }
     }
 }

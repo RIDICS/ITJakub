@@ -1,18 +1,29 @@
 ﻿class ImageViewerMain {
     init(projectId: number) {
-        const util = new EditorsUtil();
+        const util = new EditorsApiClient();
         const gui = new EditorsGui();
         const contentAddition = new ImageViewerContentAddition(util);
-        const upload = new ImageViewerUpload(projectId);
+        const upload = new ImageViewerUpload(contentAddition);
         const navigation = new ImageViewerPageNavigation(contentAddition, gui);
         const compositionPagesAjax = util.getPagesList(projectId);
+        const projectImagesElement = $("#project-resource-images");
         compositionPagesAjax.done((pages: IPage[]) => {
-            navigation.init(pages);
-            upload.init();
+            if(pages.length !== 0) {
+                navigation.init(pages);
+                upload.init();
+            } else {
+                const error = new AlertComponentBuilder(AlertType.Error)
+                    .addContent(localization.translate("NoPages", "RidicsProject").value);
+                projectImagesElement.empty().append(error.buildElement());
+            }
         });
         compositionPagesAjax.fail(() => {
-            const error = new AlertComponentBuilder(AlertType.Error).addContent("Failed to load project info");
-            $("#project-resource-images").empty().append(error.buildElement());
+            const error = new AlertComponentBuilder(AlertType.Error)
+                .addContent(localization.translate("ProjectLoadFailed", "RidicsProject").value);
+            projectImagesElement.empty().append(error.buildElement());
+        });
+        compositionPagesAjax.always(() => {
+            projectImagesElement.removeClass("hide");
         });
     }
 }

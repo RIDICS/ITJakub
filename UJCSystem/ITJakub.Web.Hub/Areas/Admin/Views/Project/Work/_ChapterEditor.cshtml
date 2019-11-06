@@ -1,0 +1,178 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Areas.Admin.Models.ChapterEditorViewModel
+@inject ILocalizationService Localizer
+
+<div class="project-chapter-list">
+    <div class="row resource-tab-row-fix">
+        <div id="chaptersUnsavedChanges" class="col-xs-12 hide">
+            <div class="alert alert-warning">
+                <div class="row">
+                    <div class="col-xs-8">@Localizer.Translate("UnsavedChanges", "RidicsProject")</div>
+                    <div class="col-xs-4 text-right">
+                        <button type="button" class="btn btn-default save-chapters-button">@Localizer.Translate("Save", "Admin")</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-md-7">
+            <div class="panel panel-default chapters">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-4">
+                            <div class="panel-title">
+                                @Localizer.Translate("Chapters", "Admin")
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-8 panel-buttons text-right">
+                            <button type="button" class="btn btn-default form-control" id="project-chapters-edit-button">@Localizer.Translate("CreateChapter", "Admin")</button>
+                            <button type="button" class="btn btn-default form-control" id="generateChapters">@Localizer.Translate("GenerateChapters", "Admin")</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="list-container selectable chapter-listing">
+                        @await Html.PartialAsync("Work/SubView/_ChapterTable", Model)
+                    </div>
+                    <div class="panel-bottom-buttons text-right">
+                        <button type="button" class="btn btn-default move-chapter-left" title="@Localizer.Translate("ExcludeChapterFromTheSubCategory", "RidicsProject")">
+                            <span class="glyphicon glyphicon-arrow-left"></span>
+                        </button>
+                        <button type="button" class="btn btn-default move-chapter-right" title="@Localizer.Translate("IncludeChapterToTheSubCategory", "RidicsProject")">
+                            <span class="glyphicon glyphicon-arrow-right"></span>
+                        </button>
+                        <label for="chapterMoveDistance" class="chapter-move-distance-label">@Localizer.Translate("Shift", "RidicsProject")</label>
+                        <input type="number" id="chapterMoveDistance" class="chapter-move-distance form-control" value="1" min="1" max="@Model.Chapters.Count"/>
+                        <button type="button" class="btn btn-default move-chapter-up" title="@Localizer.Translate("ShiftChapterUp", "RidicsProject")">
+                            <span class="glyphicon glyphicon-arrow-up"></span>
+                        </button>
+                        <button type="button" class="btn btn-default move-chapter-down" title="@Localizer.Translate("ShiftChapterDown", "RidicsProject")">
+                            <span class="glyphicon glyphicon-arrow-down"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="chaptersPageDetail" class="hide col-xs-12 col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                @Localizer.Translate("PageContent", "RidicsProject")
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <i class="hide fa fa-file-text-o" title="@Localizer.Translate("PageContainsText", "RidicsProject")"></i>
+                                <i class="hide fa fa-image" title="@Localizer.Translate("PageContainsImage", "RidicsProject")"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="alert-holder"></div>
+                    <div class="body-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="project-bottom-buttons">
+        <button type="button" class="btn btn-default save-chapters-button">@Localizer.Translate("Save", "Admin")</button>
+    </div>
+</div>
+
+<div class="modal fade" role="dialog" id="projectChaptersDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Localizer.Translate("NewChapter", "Admin")</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>@Localizer.Translate("ChapterName", "Admin")</label>
+                            <input type="text" name="chapter-name" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>@Localizer.Translate("StartsOnPage", "Admin")</label>
+                            <select name="chapter-page" class="form-control select-page selectpicker">
+                                @foreach (var pageItem in Model.Pages)
+                                {
+                                    <option value="@pageItem.Id">@pageItem.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert-holder"></div>
+            </div>
+            <div class="modal-footer">
+                <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("SaveError", "Admin")</div>
+                <button type="button" class="btn btn-default cancel-chapter">@Localizer.Translate("Cancel", "Admin")</button>
+                <button type="button" class="btn btn-default create-chapter">@Localizer.Translate("Create", "Admin")</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade info-modal-dialog" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title info-dialog-title"></h4>
+            </div>
+            <div class="modal-body">
+                <p class="info-dialog-message"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Admin")</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="chapterTemplate" class="hide">
+    @*chapter-container has duplicate definition in _ChapterRow.cshtml*@
+    <div class="chapter-container">
+        <div class="chapter-row">
+            <div class="ridics-checkbox">
+                <label>
+                    <input type="checkbox" class="selection-checkbox" />
+                    <span class="cr cr-black">
+                        <i class="cr-icon glyphicon glyphicon-ok"></i>
+                    </span>
+                </label>
+            </div>
+            <div class="name">
+                <div>
+                    <input type="text" name="chapter-name" class="form-control hide"/>
+                    <span class="chapter-name"></span>
+                </div>
+                <div class="alert alert-danger"></div>
+            </div>
+            <div class="buttons">
+                <span class="page-name"></span>
+                <select name="chapter-page" class="form-control select-page selectpicker hide">
+                    @foreach (var pageItem in Model.Pages)
+                    {
+                        <option value="@pageItem.Id">@pageItem.Name</option>
+                    }
+                </select>
+                <a class="edit-chapter btn btn-sm btn-default" title="@Localizer.Translate("EditChapter", "RidicsProject")">
+                    <i class="fa fa-pencil"></i>
+                </a>
+                <a class="discard-chapter-changes btn btn-sm btn-default hide" title="@Localizer.Translate("DiscardChapterChanges", "RidicsProject")">
+                                <i class="fa fa-times"></i>
+                </a>
+                <a class="remove-chapter btn btn-sm btn-default" title="@Localizer.Translate("DeleteChapter", "RidicsProject")">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </div>
+        </div>
+        <div class="sub-chapters">
+        </div>
+    </div>
+</div>

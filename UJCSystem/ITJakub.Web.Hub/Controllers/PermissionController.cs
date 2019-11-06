@@ -2,7 +2,7 @@
 using System.Linq;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Constants;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests.Permission;
 using ITJakub.Web.Hub.Models.User;
@@ -12,6 +12,7 @@ using Vokabular.MainService.DataContracts;
 using Ridics.Core.Structures.Shared;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Controllers
@@ -24,7 +25,7 @@ namespace ITJakub.Web.Hub.Controllers
         private const int PermissionListPageSize = 10;
         private const int BookListPageSize = 10;
 
-        public PermissionController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        public PermissionController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
 
@@ -55,10 +56,17 @@ namespace ITJakub.Web.Hub.Controllers
 
             search = search ?? string.Empty;
             var result = client.GetRoleList(start, count, search);
-            var model = new ListViewModel<RoleContract>
+            var model = new ListViewModel<UserGroupContract>
             {
                 TotalCount = result.TotalCount,
-                List = result.List,
+                List = result.List.Select(x => new UserGroupContract
+                {
+                    Id = x.Id,
+                    ExternalId = x.ExternalId,
+                    Name = x.Name,
+                    Description = x.Description,
+                    Type = UserGroupTypeContract.Role,
+                }).ToList(),
                 PageSize = count,
                 Start = start,
                 SearchQuery = search
@@ -84,7 +92,7 @@ namespace ITJakub.Web.Hub.Controllers
             search = search ?? string.Empty;
 
             var client = GetProjectClient();
-            var result = client.GetProjectList(start, count, GetDefaultProjectType(), search);
+            var result = client.GetProjectList(start, count, GetDefaultProjectType(), ProjectOwnerTypeContract.AllProjects, search);
             var model = new ListViewModel<ProjectDetailContract>
             {
                 TotalCount = result.TotalCount,
@@ -110,7 +118,7 @@ namespace ITJakub.Web.Hub.Controllers
             search = search ?? string.Empty;
 
             var roleClient = GetRoleClient();
-            var roleContract = roleClient.GetRoleDetail(roleId);
+            var roleContract = roleClient.GetUserGroupDetail(roleId);
             var permissionClient = GetPermissionClient();
 
             var pagedPermissionsResult = permissionClient.GetPermissions(start, count, search);
@@ -137,7 +145,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             var client = GetRoleClient();
             search = search ?? string.Empty;
-            var result = client.GetUsersByRole(roleId, start, count, search);
+            var result = client.GetUsersByGroup(roleId, start, count, search);
             var model = CreateListViewModel<UserDetailViewModel, UserContract>(result, start, count, search);
             return PartialView("Widget/_UserListWidget", model);
         }
@@ -146,8 +154,8 @@ namespace ITJakub.Web.Hub.Controllers
         {
             var client = GetProjectClient();
             search = search ?? string.Empty;
-            var result = client.GetRolesByProject(projectId, start, count, search);
-            var model = new ListViewModel<RoleContract>
+            var result = client.GetUserGroupsByProject(projectId, start, count, search);
+            var model = new ListViewModel<UserGroupContract>
             {
                 TotalCount = result.TotalCount,
                 List = result.List,
@@ -156,6 +164,7 @@ namespace ITJakub.Web.Hub.Controllers
                 SearchQuery = search
             };
 
+            ViewData[RoleViewConstants.IsSingleUserGroupRemoveAllowed] = true;
             return PartialView("Widget/_RoleListWidget", model);
         }
 
@@ -244,12 +253,13 @@ namespace ITJakub.Web.Hub.Controllers
         public IActionResult EditUserRoles(int userId)
         {
             var client = GetUserClient();
-            var result = client.GetUserDetail(userId);
-            var model = Mapper.Map<UserDetailViewModel>(result);
-            model.Roles = new ListViewModel<RoleContract>
+            var resultUser = client.GetUserDetail(userId);
+            var resultRoles = client.GetUserGroupsByUser(userId);
+            var model = Mapper.Map<UserDetailViewModel>(resultUser);
+            model.Roles = new ListViewModel<UserGroupContract>
             {
-                TotalCount = result.Roles.Count,
-                List = result.Roles,
+                TotalCount = resultRoles.Count,
+                List = resultRoles,
                 PageSize = RoleListPageSize,
                 Start = 0
             };
@@ -268,6 +278,13 @@ namespace ITJakub.Web.Hub.Controllers
         {
             var client = GetRoleClient();
             var result = client.GetRoleAutocomplete(query);
+            return Json(result);
+        }
+
+        public IActionResult GetTypeaheadSingleUserGroup(string query)
+        {
+            var client = GetRoleClient();
+            var result = client.GetSingleUserGroupAutocomplete(query, true);
             return Json(result);
         }
 
@@ -295,7 +312,7 @@ namespace ITJakub.Web.Hub.Controllers
                         Description = roleViewModel.Description
                     };
                     var client = GetRoleClient();
-                    client.UpdateRole(roleContract.Id, roleContract);
+                    client.CreateRole(roleContract);
                     roleViewModel.SuccessfulUpdate = true;
                 }
                 catch (HttpErrorCodeException e)
@@ -336,8 +353,8 @@ namespace ITJakub.Web.Hub.Controllers
         public IActionResult GetRolesByUser(int userId)
         {
             var client = GetUserClient();
-            var result = client.GetRolesByUser(userId);
-            var model = new ListViewModel<RoleContract>
+            var result = client.GetUserGroupsByUser(userId);
+            var model = new ListViewModel<UserGroupContract>
             {
                 TotalCount = result.Count,
                 List = result,
@@ -360,15 +377,28 @@ namespace ITJakub.Web.Hub.Controllers
         public IActionResult AddProjectsToRole([FromBody] AddProjectsToRoleRequest request)
         {
             var client = GetRoleClient();
-            client.AddBooksToRole(request.RoleId, request.BookIds);
+            client.UpdateOrAddBooksToGroup(request.RoleId, request.BookId, new PermissionDataContract
+            {
+                ShowPublished = request.ShowPublished,
+                ReadProject = request.ReadProject,
+                AdminProject = request.AdminProject,
+                EditProject = request.EditProject,
+            });
             return AjaxOkResponse();
+        }
+
+        public IActionResult GetPermissionsForRoleAndBook(int roleId, long bookId)
+        {
+            var client = GetRoleClient();
+            var result = client.GetPermissionsForGroupAndBook(roleId, bookId);
+            return PartialView("Widget/_ProjectPermissionsWidget", result);
         }
 
         [HttpPost]
         public IActionResult RemoveProjectsFromRole([FromBody] RemoveProjectsFromRoleRequest request)
         {
             var client = GetRoleClient();
-            client.RemoveBooksFromRole(request.RoleId, request.BookIds);
+            client.RemoveBooksFromGroup(request.RoleId, request.BookId);
             return AjaxOkResponse();
         }
 

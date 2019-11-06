@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using AutoMapper;
+using Microsoft.Extensions.Options;
 using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -11,6 +12,7 @@ using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataEntities.UnitOfWork;
+using Vokabular.Shared.Options;
 using AuthChangeContactContract = Ridics.Authentication.DataContracts.ChangeContactContract;
 using AuthChangePasswordContract = Ridics.Authentication.DataContracts.User.ChangePasswordContract;
 using AuthChangeTwoFactorContract = Ridics.Authentication.DataContracts.User.ChangeTwoFactorContract;
@@ -28,28 +30,41 @@ namespace Vokabular.MainService.Core.Managers
         private readonly AuthenticationManager m_authenticationManager;
         private readonly UserDetailManager m_userDetailManager;
         private readonly IMapper m_mapper;
+        private readonly CodeGenerator m_codeGenerator;
+        private readonly RegistrationOption m_registrationOption;
 
         public UserManager(UserRepository userRepository, CommunicationProvider communicationProvider,
-            AuthenticationManager authenticationManager, UserDetailManager userDetailManager, IMapper mapper)
+            AuthenticationManager authenticationManager, UserDetailManager userDetailManager, IMapper mapper,
+            CodeGenerator codeGenerator, IOptions<RegistrationOption> registrationOption)
         {
             m_userRepository = userRepository;
             m_communicationProvider = communicationProvider;
             m_authenticationManager = authenticationManager;
             m_userDetailManager = userDetailManager;
             m_mapper = mapper;
+            m_codeGenerator = codeGenerator;
+            m_registrationOption = registrationOption.Value;
         }
 
         public int CreateNewUser(CreateUserContract data)
         {
-            var userId = new CreateNewUserWork(m_userRepository, m_communicationProvider, data).Execute();
+            if (m_registrationOption.ReservedUsernames.Contains(data.UserName.ToLower()))
+            {
+                throw new MainServiceException(MainServiceErrorCode.ReservedUsernameError, $"Username '{data.UserName}' is reserved, cannot be used.", HttpStatusCode.BadRequest, data.UserName);
+            }
+
+            var userId = new CreateNewUserWork(m_userRepository, m_communicationProvider, data, m_codeGenerator).Execute();
             return userId;
         }
 
-        public int CreateUserIfNotExist(int externalId)
+        public int CreateUserIfNotExist(CreateUserIfNotExistContract data)
         {
+            var userExternalId = data.ExternalId;
+            var userInfo = new UpdateUserInfo(data.Username, data.FirstName, data.LastName);
+
             var authUserApiClient = m_communicationProvider.GetAuthUserApiClient();
-            var userRoles = authUserApiClient.GetRolesByUserAsync(externalId).GetAwaiter().GetResult();
-            var userId = new CreateUserIfNotExistWork(m_userRepository, externalId, userRoles).Execute();
+            var userRoles = authUserApiClient.GetRolesByUserAsync(userExternalId).GetAwaiter().GetResult();
+            var userId = new CreateOrUpdateUserIfNotExistWork(m_userRepository, userExternalId, userRoles, userInfo, m_codeGenerator).Execute();
             return userId;
         }
 
@@ -67,24 +82,30 @@ namespace Vokabular.MainService.Core.Managers
 
             var client = m_communicationProvider.GetAuthUserApiClient();
 
-            var authUser = client.HttpClient.GetItemAsync<AuthUserContract>(user.ExternalId.Value).GetAwaiter().GetResult();
+            var authUser = client.GetUserAsync(user.ExternalId.Value).GetAwaiter().GetResult();
 
             authUser.FirstName = data.FirstName;
             authUser.LastName = data.LastName;
 
             client.EditSelfAsync(user.ExternalId.Value, authUser).GetAwaiter().GetResult();
+
+            var updateUserInfo = new UpdateUserInfo(authUser.UserName, authUser.FirstName, authUser.LastName);
+            new UpdateUserWork(m_userRepository, user.Id, updateUserInfo).Execute();
         }
 
         public void UpdateUser(int userId, UpdateUserContract data)
         {
             var userExternalId = GetUserExternalId(userId);
             var client = m_communicationProvider.GetAuthUserApiClient();
-            var authUser = client.HttpClient.GetItemAsync<AuthUserContract>(userExternalId).GetAwaiter().GetResult();
+            var authUser = client.GetUserAsync(userExternalId).GetAwaiter().GetResult();
 
             authUser.FirstName = data.FirstName;
             authUser.LastName = data.LastName;
 
-            client.HttpClient.EditItemAsync(userExternalId, authUser).GetAwaiter().GetResult();
+            client.EditUserAsync(userExternalId, authUser).GetAwaiter().GetResult();
+
+            var updateUserInfo = new UpdateUserInfo(authUser.UserName, authUser.FirstName, authUser.LastName);
+            new UpdateUserWork(m_userRepository, userId, updateUserInfo).Execute();
         }
 
         public void UpdateUserContact(int userId, UpdateUserContactContract data)
@@ -123,7 +144,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var client = m_communicationProvider.GetAuthUserApiClient();
 
-            var result = client.HttpClient.GetListAsync<AuthUserContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
+            var result = client.GetUserListAsync(startValue, countValue, filterByName).GetAwaiter().GetResult();
             var userDetailContracts = m_mapper.Map<List<UserDetailContract>>(result.Items);
             m_userDetailManager.AddIdForExternalUsers(userDetailContracts);
 
@@ -143,7 +164,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var client = m_communicationProvider.GetAuthUserApiClient();
 
-            var result = client.HttpClient.GetListAsync<AuthUserContract>(0, countValue, query).GetAwaiter().GetResult();
+            var result = client.GetUserListAsync(0, countValue, query).GetAwaiter().GetResult();
             var userDetailContracts = m_mapper.Map<List<UserDetailContract>>(result.Items);
             m_userDetailManager.AddIdForExternalUsers(userDetailContracts);
             return userDetailContracts;

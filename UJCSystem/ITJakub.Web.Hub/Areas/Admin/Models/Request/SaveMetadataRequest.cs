@@ -26,11 +26,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models.Request
         public string ManuscriptRepository { get; set; }
         public string ManuscriptExtent { get; set; }
 
-        public List<int> LiteraryKindIdList { get; set; }
-        public List<int> LiteraryGenreIdList { get; set; }
         public List<int> AuthorIdList { get; set; }
-        public List<int> KeywordIdList { get; set; }
-        public List<int> CategoryIdList { get; set; }
         public List<ProjectResponsiblePersonIdContract> ProjectResponsiblePersonIdList { get; set; }
     }
 }

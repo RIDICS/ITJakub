@@ -11,12 +11,12 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class HeadwordSearchManager
     {
-        private readonly MetadataRepository m_metadataRepository;
+        private readonly ResourceRepository m_resourceRepository;
         private readonly IMapper m_mapper;
 
-        public HeadwordSearchManager(MetadataRepository metadataRepository, IMapper mapper)
+        public HeadwordSearchManager(ResourceRepository resourceRepository, IMapper mapper)
         {
-            m_metadataRepository = metadataRepository;
+            m_resourceRepository = resourceRepository;
             m_mapper = mapper;
         }
 
@@ -30,7 +30,7 @@ namespace Vokabular.MainService.Core.Managers
             var orderedResultList = new List<HeadwordContract>();
             foreach (var headwordDictionaryEntryData in list)
             {
-                var headwordInfo = m_metadataRepository.InvokeUnitOfWork(x => x.GetHeadwordWithFetchByExternalId(headwordDictionaryEntryData.ProjectExternalId, headwordDictionaryEntryData.HeadwordExternalId, projectType));
+                var headwordInfo = m_resourceRepository.InvokeUnitOfWork(x => x.GetHeadwordWithFetchByExternalId(headwordDictionaryEntryData.ProjectExternalId, headwordDictionaryEntryData.HeadwordExternalId, projectType));
                 var headwordContract = m_mapper.Map<HeadwordContract>(headwordInfo);
                 orderedResultList.Add(headwordContract);
             }

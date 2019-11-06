@@ -1,13 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
+using AuthRoleContractBase = Ridics.Authentication.DataContracts.RoleContractBase;
 using AuthUserContract = Ridics.Authentication.DataContracts.User.UserContract;
 
 namespace Vokabular.MainService.Core.Managers
@@ -17,16 +20,21 @@ namespace Vokabular.MainService.Core.Managers
         private readonly CommunicationProvider m_communicationProvider;
         private readonly UserRepository m_userRepository;
         private readonly IMapper m_mapper;
+        private readonly CodeGenerator m_codeGenerator;
 
-        public UserDetailManager(CommunicationProvider communicationProvider, UserRepository userRepository, IMapper mapper)
+        public UserDetailManager(CommunicationProvider communicationProvider, UserRepository userRepository, IMapper mapper, CodeGenerator codeGenerator)
         {
             m_communicationProvider = communicationProvider;
             m_userRepository = userRepository;
             m_mapper = mapper;
+            m_codeGenerator = codeGenerator;
         }
         
         public UserContract GetUserContractForUser(UserContract user)
         {
+            if (user == null)
+                return null;
+
             var authUser = GetDetailUserFromAuthService(user.ExternalId);
             if (authUser == null)
                 return user;
@@ -38,6 +46,9 @@ namespace Vokabular.MainService.Core.Managers
 
         public string GetUserFullName(User user)
         {
+            if (user == null)
+                return null;
+
             if (user.ExternalId == null)
             {
                 throw new MainServiceException(MainServiceErrorCode.UserHasMissingExternalId,
@@ -56,6 +67,9 @@ namespace Vokabular.MainService.Core.Managers
 
         public UserDetailContract GetUserDetailContractForUser(User user)
         {
+            if (user == null)
+                return null;
+
             if (user.ExternalId == null)
             {
                 throw new MainServiceException(MainServiceErrorCode.UserHasMissingExternalId,
@@ -69,19 +83,32 @@ namespace Vokabular.MainService.Core.Managers
             if (authUser == null)
                 return null;
 
-            var userDetailContract = m_mapper.Map<UserDetailContract>(authUser);
-            userDetailContract.Id = user.Id;
-            return userDetailContract;
+            return GetUserDetailContractForUser(authUser, user.Id);
         }
 
         public UserDetailContract GetUserDetailContractForUser(UserDetailContract user)
         {
+            if (user == null)
+                return null;
+
             var authUser = GetDetailUserFromAuthService(user.ExternalId);
             if (authUser == null)
                 return user;
 
+            return GetUserDetailContractForUser(authUser, user.Id);
+        }
+
+        private UserDetailContract GetUserDetailContractForUser(AuthUserContract authUser, int localUserId)
+        {
+            var localDbRoles = new GetOrCreateUserGroupsWork<AuthRoleContractBase>(m_userRepository, authUser.Roles, localUserId).Execute();
+
             var userDetailContract = m_mapper.Map<UserDetailContract>(authUser);
-            userDetailContract.Id = user.Id;
+            userDetailContract.Id = localUserId;
+            foreach (var resultRole in userDetailContract.Roles)
+            {
+                resultRole.Id = localDbRoles.First(x => x.ExternalId == resultRole.ExternalId).Id;
+            }
+
             return userDetailContract;
         }
 
@@ -89,7 +116,8 @@ namespace Vokabular.MainService.Core.Managers
         {
             foreach (var userDetailContract in userDetailContracts)
             {
-                var userId = new CreateUserIfNotExistWork(m_userRepository, userDetailContract.ExternalId, null).Execute();
+                var userInfo = new UpdateUserInfo(userDetailContract.UserName, userDetailContract.FirstName, userDetailContract.LastName);
+                var userId = new CreateOrUpdateUserIfNotExistWork(m_userRepository, userDetailContract.ExternalId, null, userInfo, m_codeGenerator).Execute();
                 userDetailContract.Id = userId;
             }
         }
@@ -98,7 +126,8 @@ namespace Vokabular.MainService.Core.Managers
         {
             foreach (var userDetailContract in userDetailContracts)
             {
-                var userId = new CreateUserIfNotExistWork(m_userRepository, userDetailContract.ExternalId, null).Execute();
+                var userInfo = new UpdateUserInfo(userDetailContract.UserName, userDetailContract.FirstName, userDetailContract.LastName);
+                var userId = new CreateOrUpdateUserIfNotExistWork(m_userRepository, userDetailContract.ExternalId, null, userInfo, m_codeGenerator).Execute();
                 userDetailContract.Id = userId;
             }
         }
@@ -138,17 +167,23 @@ namespace Vokabular.MainService.Core.Managers
         {
             foreach (var textComment in list)
             {
-                textComment.User = GetUserContractForUser(textComment.User);
-                textComment.TextComments = AddUserDetails(textComment.TextComments);
+                AddUserDetails(textComment);
             }
 
             return list;
         }
 
+        public GetTextCommentContract AddUserDetails(GetTextCommentContract textComment)
+        {
+            textComment.User = GetUserContractForUser(textComment.User);
+            textComment.TextComments = AddUserDetails(textComment.TextComments);
+            return textComment;
+        }
+
         private AuthUserContract GetDetailUserFromAuthService(int userExternalId)
         {
             var client = m_communicationProvider.GetAuthUserApiClient();
-            var result = client.HttpClient.GetItemAsync<AuthUserContract>(userExternalId).GetAwaiter().GetResult();
+            var result = client.GetUserAsync(userExternalId).GetAwaiter().GetResult();
 
             return result;
         }

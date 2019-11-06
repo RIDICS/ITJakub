@@ -1,10 +1,11 @@
 {
-	"culture":"cs-CZ",
-	"scope":"Permission",
+  "culture": "cs-CZ",
+  "scope": "Permission",
   "dictionary": {
     "GroupPermissionManagementTitle": "Administrace - Správa skupin",
     "GroupManagementHeadline": "Správa skupin",
     "GroupPermissionManagementHeadline": "Správa oprávnění skupin",
+    "SearchGroupLabel": "Vyhledat skupinu",
     "SearchGroup": "Hledat skupinu...",
     "SelectedGroup": "Vybraná skupina",
     "Name": "Název",
@@ -47,7 +48,7 @@
     "NoRolesFound": "Je nám líto, ale nebyly nalezeny žádné skupiny",
     "NoPermissionsSearch": "Je nám líto, ale nepodařilo se najít žádné oprávnění odpovídající dotazu ",
     "NoPermissionsFound": "Je nám líto, ale nebyla nalezena žádná oprávnění",
-    "NoProjectsSearch": "Je nám líto, ale nepodařilo se najít žádné projekty odpovídající dotazu  ",
+    "NoProjectsSearch": "Je nám líto, ale nepodařilo se najít žádné projekty odpovídající dotazu ",
     "NoProjectsFound": "Je nám líto, ale nebyly nalezeny žádné projekty",
     "SearchQuery": "Zobrazují se výsledky pro",
     "ResetSearch": "Zrušit hledání",
@@ -58,6 +59,7 @@
     "User": "Uživatel",
     "ManagePermissions": "Spravovat práva",
     "Permissions": "Oprávnění",
+    "SuccessGroupCreate": "Skupina úspěšně vytvořena.",
     "SuccessGroupUpdate": "Úprava skupiny proběhla úspěšně.",
     "SuccessUserUpdate": "Úprava uživatele proběhla úspěšně.",
     "GroupEditTitle": "Úprava skupiny",
@@ -65,9 +67,14 @@
 
     "ProjectPermissionManagementHeadline": "Správa práv projektů",
     "Projects": "Projekty",
-    "AddProjectPermissionToGroup": "Přidat právo na projekt skupině",
+    "AddProjectPermissionToGroup": "Přidat skupině právo na projekt",
     "SelectedProject": "Vybraný projekt",
     "AddPermissionToGroup": "Přidat oprávnění skupině",
-    "ResetPassword":  "Resetovat heslo"
+    "ResetPassword": "Resetovat heslo",
+
+    "ReadProjectPermission": "Právo číst projekt",
+    "ReadPublishedProjectPermission": "Právo číst publikovaný projekt",
+    "EditProjectPermission": "Právo editovat projekt",
+    "AdminProjectPermission": "Právo spravovat projekt"
   }
 }

@@ -131,7 +131,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             };
         }
 
-        public override IList<PageResource> GetProjectPages(long projectId)
+        public override IList<PageResource> GetProjectLatestPages(long projectId)
         {
             var project = new Project
             {
@@ -170,7 +170,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             };
         }
 
-        public override IList<TextResource> GetProjectTexts(long projectId, long? namedResourceGroupId, bool fetchParentPage)
+        public override IList<TextResource> GetProjectLatestTexts(long projectId, long? namedResourceGroupId, bool fetchParentPage)
         {
             return new List<TextResource>
             {
@@ -213,7 +213,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             };
         }
 
-        public override IList<ImageResource> GetProjectImages(long projectId, long? namedResourceGroupId, bool fetchParentPage)
+        public override IList<ImageResource> GetProjectLatestImages(long projectId, long? namedResourceGroupId, bool fetchParentPage)
         {
             return new List<ImageResource>
             {
@@ -265,8 +265,8 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                 TextType = textType
             };
         }
-
-        public override IList<ChapterResource> GetProjectChapters(long projectId)
+        
+        public override IList<ChapterResource> GetProjectLatestChapters(long projectId, bool fetchBeginningPage = false)
         {
             return new List<ChapterResource>
             {
@@ -421,10 +421,24 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                         Id = HeadwordBookVersionId
                     }
                 },
+                new HeadwordResource // for removing
+                {
+                    HeadwordItems = new List<HeadwordItem>(),
+                    DefaultHeadword = "eee",
+                    ExternalId = "id-REMOVE",
+                    Resource = new Resource(),
+                    Sorting = "eee-s",
+                    VersionNumber = 1,
+                    Id = 103,
+                    BookVersion = new BookVersionResource
+                    {
+                        Id = HeadwordBookVersionId
+                    }
+                }
             };
         }
 
-        public override IList<TrackResource> GetProjectTracks(long projectId)
+        public override IList<TrackResource> GetProjectLatestTracks(long projectId)
         {
             if (projectId == 0)
                 return null;
@@ -452,11 +466,22 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                     Position = 2,
                     VersionNumber = 1,
                     Name = "track-2"
+                },
+                new TrackResource
+                {
+                    Id = 11001,
+                    Resource = new Resource
+                    {
+                        Id = 81
+                    },
+                    Position = 3,
+                    VersionNumber = 1,
+                    Name = "track-to-remove"
                 }
             };
         }
 
-        public override IList<AudioResource> GetProjectAudioResources(long projectId)
+        public override IList<AudioResource> GetProjectLatestAudioResources(long projectId)
         {
             if (projectId == 0)
                 return null;
@@ -465,6 +490,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             {
                 new AudioResource
                 {
+                    Id = 2001,
                     Resource = new Resource
                     {
                         Id = 3,
@@ -478,6 +504,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                 },
                 new AudioResource
                 {
+                    Id = 2002,
                     Resource = new Resource
                     {
                         Id = 3,
@@ -491,6 +518,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                 },
                 new AudioResource
                 {
+                    Id = 2003,
                     Resource = new Resource
                     {
                         Id = 3,
@@ -502,10 +530,20 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                         Id = 2
                     }
                 },
+                new AudioResource
+                {
+                    Id = 2004,
+                    Resource = new Resource
+                    {
+                        Id = 4,
+                    },
+                    FileName = "file-full.mp3",
+                    VersionNumber = 1,
+                },
             };
         }
 
-        public override IList<AudioResource> GetProjectFullAudioResources(long projectId)
+        public override IList<AudioResource> GetProjectLatestFullAudioResources(long projectId)
         {
             if (projectId == 0)
                 return null;
@@ -514,6 +552,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             {
                 new AudioResource
                 {
+                    Id = 2101,
                     Resource = new Resource
                     {
                         Id = 3,
@@ -523,6 +562,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                 },
                 new AudioResource
                 {
+                    Id = 2102,
                     Resource = new Resource
                     {
                         Id = 3,
@@ -532,6 +572,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                 },
                 new AudioResource
                 {
+                    Id = 2103,
                     Resource = new Resource
                     {
                         Id = 3,
@@ -557,8 +598,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                         Id = projectId
                     }
                 },
-                VersionNumber = 1,
-                ExternalId = null,
+                VersionNumber = 1
             };
         }
     }

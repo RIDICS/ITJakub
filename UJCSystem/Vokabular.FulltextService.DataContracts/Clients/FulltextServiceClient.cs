@@ -2,7 +2,6 @@
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.FulltextService.DataContracts.Contracts;
-using Vokabular.RestClient;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
@@ -110,7 +109,7 @@ namespace Vokabular.FulltextService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.Post<PageSearchResultContract>($"text/snapshot/{snapshotId}/search", new SearchRequestContractBase{ConditionConjunction = searchCriterias});
+                var result = m_client.Post<PageSearchResultContract>($"text/snapshot/{snapshotId}/search", new SearchPageRequestContract {ConditionConjunction = searchCriterias});
                 return result;
             }
             catch (HttpRequestException e)
@@ -126,7 +125,7 @@ namespace Vokabular.FulltextService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.Post<long>($"text/snapshot/{snapshotId}/search-count", new SearchRequestContractBase { ConditionConjunction = searchCriterias });
+                var result = m_client.Post<long>($"text/snapshot/{snapshotId}/search-hits-count", new SearchPageRequestContract { ConditionConjunction = searchCriterias });
                 return result;
             }
             catch (HttpRequestException e)
@@ -190,7 +189,7 @@ namespace Vokabular.FulltextService.DataContracts.Clients
 
         public CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(int start, int count, SortTypeEnumContract? sort, SortDirectionEnumContract? sortDirection, List<SearchCriteriaContract> searchCriterias, bool fetchNumberOfResults)
         {
-            var searchRequest = new CorpusSearchRequestContract { Start = start, Count = count, ConditionConjunction = searchCriterias, FetchNumberOfResults = fetchNumberOfResults, Sort = sort, SortDirection = sortDirection };
+            var searchRequest = new BookPagedCorpusSearchRequestContract { Start = start, Count = count, ConditionConjunction = searchCriterias, FetchNumberOfResults = fetchNumberOfResults, Sort = sort, SortDirection = sortDirection };
             try
             {
                 var result = m_client.Post<CorpusSearchSnapshotsResultContract>("bookpagedcorpus/search", searchRequest);
@@ -207,7 +206,7 @@ namespace Vokabular.FulltextService.DataContracts.Clients
 
         public List<CorpusSearchResultContract> SearchCorpusInSnapshotByCriteria(long snapshotId, int start, int count, int contextLength, List<SearchCriteriaContract> searchCriterias)
         {
-            var searchRequest = new CorpusSearchRequestContract { Start = start, Count = count, ContextLength = contextLength, ConditionConjunction = searchCriterias };
+            var searchRequest = new BookPagedCorpusSearchInSnapshotRequestContract { Start = start, Count = count, ContextLength = contextLength, ConditionConjunction = searchCriterias };
             try
             {
                 var result = m_client.Post<List<CorpusSearchResultContract>>($"bookpagedcorpus/snapshot/{snapshotId}/search", searchRequest);

@@ -1,16 +1,16 @@
 ﻿class BohemianTextBankBase {
-    protected searchResultsOnPage = 10;//corresponds to amount of results per page that should be on screen
+    protected searchResultsOnPage = Number($("#corpus-search-configuration").data("page-size"));//corresponds to amount of results per page that should be on screen
     protected contextLength = 50;
 
     protected minContextLength = 40;//search backend may crash if context is too short
     protected maxContextLength = 100;
     protected minResultsPerPage = 1;
-    protected maxResultsPerPage = 50;
+    protected maxResultsPerPage = 100;
 
     protected hitBookIds:number[] = [];
 
     protected compositionResultListStart = -1;
-    protected compositionsPerPage = 10;
+    protected compositionsPerPage = Number($("#corpus-search-configuration").data("composition-page-size"));
     protected compositionPageIsLast = false;
 
     protected currentBookId = -1;
@@ -77,7 +77,9 @@
 
     protected updateSelectedBooksAndCategoriesInQuery() {
         const selectedIds = this.booksSelector.getSelectedIds();
-        this.bookIdsInQuery = selectedIds.selectedBookIds;
+        this.bookIdsInQuery = this.booksSelector.hasBooksLoaded()
+            ? selectedIds.selectedBookIds
+            : this.booksSelector.getFavoriteBookComponent().getLastSelectedBookIds();
         this.categoryIdsInQuery = selectedIds.selectedCategoryIds;
     }
 

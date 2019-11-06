@@ -1,19 +1,24 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using AutoMapper;
 using log4net;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Permission;
+using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
+using AuthRoleContractBase = Ridics.Authentication.DataContracts.RoleContractBase;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -25,23 +30,27 @@ namespace Vokabular.MainService.Core.Managers
         private readonly PermissionRepository m_permissionRepository;
         private readonly UserDetailManager m_userDetailManager;
         private readonly DefaultUserProvider m_defaultUserProvider;
+        private readonly AuthenticationManager m_authenticationManager;
         private readonly IMapper m_mapper;
+        private readonly CodeGenerator m_codeGenerator;
 
         private readonly CommunicationProvider m_communicationProvider;
 
         public RoleManager(UserRepository userRepository, PermissionRepository permissionRepository,
             CommunicationProvider communicationProvider, UserDetailManager userDetailManager, DefaultUserProvider defaultUserProvider,
-            IMapper mapper)
+            AuthenticationManager authenticationManager, IMapper mapper, CodeGenerator codeGenerator)
         {
             m_userRepository = userRepository;
             m_permissionRepository = permissionRepository;
             m_communicationProvider = communicationProvider;
             m_userDetailManager = userDetailManager;
             m_defaultUserProvider = defaultUserProvider;
+            m_authenticationManager = authenticationManager;
             m_mapper = mapper;
+            m_codeGenerator = codeGenerator;
         }
 
-        public List<RoleContract> GetRolesByUser(int userId)
+        public List<UserGroupContract> GetUserGroupsByUser(int userId)
         {
             var user = m_userRepository.InvokeUnitOfWork(x => x.GetUserById(userId));
 
@@ -70,22 +79,66 @@ namespace Vokabular.MainService.Core.Managers
             var client = m_communicationProvider.GetAuthUserApiClient();
 
             var authUser = client.GetUserForRoleAssignmentAsync(user.ExternalId.Value).GetAwaiter().GetResult();
-            return m_mapper.Map<List<RoleContract>>(authUser.Roles);
+            new GetOrCreateUserGroupsWork<AuthRoleContractBase>(m_userRepository, authUser.Roles, userId).Execute();
+
+            var dbGroups = m_permissionRepository.InvokeUnitOfWork(x => x.GetUserGroupsByUser(userId));
+            var resultList = m_mapper.Map<List<UserGroupContract>>(dbGroups);
+
+            // Fill description for RoleUserGroups (local database doesn't contain this)
+            foreach (var roleUserGroup in resultList.Where(x => x.Type == UserGroupTypeContract.Role))
+            {
+                roleUserGroup.Description = authUser.Roles.First(x => x.Id == roleUserGroup.ExternalId).Description;
+            }
+
+            return resultList;
         }
 
 
-        public PagedResultList<UserContract> GetUsersByRole(int roleId, int? start, int? count, string filterByName)
+        public PagedResultList<UserContract> GetUsersByGroup(int groupId, int? start, int? count, string filterByName)
         {
-            var client = m_communicationProvider.GetAuthRoleApiClient();
-            var result = client.GetUserListByRoleAsync(roleId, start, count, filterByName).GetAwaiter().GetResult();
-            var users = m_mapper.Map<List<UserContract>>(result.Items);
-            m_userDetailManager.AddIdForExternalUsers(users);
+            // Method required for Role management (select role, load users)
 
-            return new PagedResultList<UserContract>
+            var role = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<UserGroup>(groupId));
+
+            if (role is RoleUserGroup roleUserGroup)
             {
-                List = users,
-                TotalCount = result.ItemsCount
-            };
+                // If UserGroup has relation to Roles on Auth service, use user list from Auth service (the main data source)
+
+                var client = m_communicationProvider.GetAuthRoleApiClient();
+                var result = client.GetUserListByRoleAsync(roleUserGroup.ExternalId, start, count, filterByName).GetAwaiter().GetResult();
+                var users = m_mapper.Map<List<UserContract>>(result.Items);
+                m_userDetailManager.AddIdForExternalUsers(users);
+
+                return new PagedResultList<UserContract>
+                {
+                    List = users,
+                    TotalCount = result.ItemsCount
+                };
+            }
+            else
+            {
+                // If UserGroup has no relation to Auth service (permissions to books), use local user list
+
+                var startValue = PagingHelper.GetStart(start);
+                var countValue = PagingHelper.GetCount(count);
+                var dbUsers = m_userRepository.InvokeUnitOfWork(x => x.GetUsersByGroup(groupId, startValue, countValue, filterByName));
+
+                var resultList = new List<UserContract>();
+                foreach (var dbUser in dbUsers.List)
+                {
+                    var resultUser = m_mapper.Map<UserContract>(dbUser);
+                    resultUser.FirstName = dbUser.ExtFirstName;
+                    resultUser.LastName = dbUser.ExtLastName;
+                    resultUser.UserName = dbUser.ExtUsername;
+                    resultList.Add(resultUser);
+                }
+                
+                return new PagedResultList<UserContract>
+                {
+                    List = resultList,
+                    TotalCount = dbUsers.Count,
+                };
+            }
         }
 
         public int CreateRole(string roleName, string description)
@@ -98,15 +151,28 @@ namespace Vokabular.MainService.Core.Managers
             new UpdateRoleWork(m_permissionRepository, m_defaultUserProvider, m_communicationProvider, data).Execute();
         }
 
-        public RoleDetailContract GetRoleDetail(int roleId)
+        public RoleDetailContract GetUserGroupDetail(int groupId)
         {
+            var dbRole = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<UserGroup>(groupId));
+
             var client = m_communicationProvider.GetAuthRoleApiClient();
 
-            var role = client.HttpClient.GetItemAsync<AuthRoleContract>(roleId).GetAwaiter().GetResult();
-            if (role == null)
-                return null;
+            if (dbRole is RoleUserGroup roleUserGroup)
+            {
+                var role = client.GetRoleAsync(roleUserGroup.ExternalId, true).GetAwaiter().GetResult();
+                if (role == null)
+                    return null;
 
-            return m_mapper.Map<RoleDetailContract>(role);
+                var result = m_mapper.Map<RoleDetailContract>(role);
+                result.Id = groupId;
+
+                return result;
+            }
+            else
+            {
+                var result = m_mapper.Map<RoleDetailContract>(dbRole);
+                return result;
+            }
         }
 
         public void DeleteRole(int roleId)
@@ -116,13 +182,13 @@ namespace Vokabular.MainService.Core.Managers
 
         public void RemoveUserFromRole(int userId, int roleId)
         {
-            new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
+            //new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
             new RemoveUserFromRoleWork(m_permissionRepository, m_communicationProvider, userId, roleId).Execute();
         }
 
         public void AddUserToRole(int userId, int roleId)
         {
-            new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
+            //new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleId).Execute();
             new AddUserToRoleWork(m_permissionRepository, m_defaultUserProvider, m_communicationProvider, userId, roleId).Execute();
         }
 
@@ -134,9 +200,32 @@ namespace Vokabular.MainService.Core.Managers
             var countValue = PagingHelper.GetAutocompleteCount(count);
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
+            var authResultList = client.GetRoleListAsync(0, countValue, query).GetAwaiter().GetResult();
+            
+            var dbUserGroups = new GetOrCreateUserGroupsWork<AuthRoleContract>(m_userRepository, authResultList.Items).Execute();
 
-            var result = client.HttpClient.GetListAsync<AuthRoleContract>(0, countValue, query).GetAwaiter().GetResult();
-            return m_mapper.Map<List<RoleContract>>(result.Items);
+            var resultList = new List<RoleContract>();
+            foreach (var authRole in authResultList.Items)
+            {
+                var resultRole = m_mapper.Map<RoleContract>(authRole);
+                resultRole.Id = dbUserGroups.First(x => x.ExternalId == resultRole.ExternalId).Id;
+                resultList.Add(resultRole);
+            }
+
+            return resultList;
+        }
+
+        public IList<UserGroupContract> GetSingleUserGroupAutocomplete(string query, int? count, bool includeSearchInUsers)
+        {
+            if (query == null)
+                query = string.Empty;
+
+            var countValue = PagingHelper.GetAutocompleteCount(count);
+
+            var dbResult = m_userRepository.InvokeUnitOfWork(x => x.FindSingleUserGroups(0, countValue, query, includeSearchInUsers));
+            var result = m_mapper.Map<IList<UserGroupContract>>(dbResult);
+
+            return result;
         }
 
         public PagedResultList<RoleContract> GetRoleList(int? start, int? count, string filterByName)
@@ -146,20 +235,33 @@ namespace Vokabular.MainService.Core.Managers
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
 
-            var result = client.HttpClient.GetListAsync<AuthRoleContract>(startValue, countValue, filterByName).GetAwaiter().GetResult();
+            var authResult = client.GetRoleListAsync(startValue, countValue, filterByName).GetAwaiter().GetResult();
 
-            foreach (var roleContract in result.Items)
+            var resultList = new List<RoleContract>();
+            foreach (var authRoleContract in authResult.Items)
             {
-                new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleContract).Execute();
-            }
+                var synchronizeRoleWork = new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, authRoleContract);
+                synchronizeRoleWork.Execute();
 
-            var roleContracts = m_mapper.Map<List<RoleContract>>(result.Items);
+                var resultRoleContract = m_mapper.Map<RoleContract>(authRoleContract);
+                resultRoleContract.Id = synchronizeRoleWork.LocalId;
+                
+                resultList.Add(resultRoleContract);
+            }
 
             return new PagedResultList<RoleContract>
             {
-                List = roleContracts,
-                TotalCount = result.ItemsCount,
+                List = resultList,
+                TotalCount = authResult.ItemsCount,
             };
+        }
+
+        public string RegenerateSingleUserGroupName()
+        {
+            var userId = m_authenticationManager.GetCurrentUserId();
+            var work = new RegenerateSingleUserGroupNameWork(m_userRepository, userId, m_codeGenerator);
+            var newCode = work.Execute();
+            return newCode;
         }
     }
 }

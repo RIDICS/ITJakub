@@ -290,7 +290,7 @@ namespace Vokabular.RestClient
             });
         }
 
-        protected Task<T> PostStreamAsFormAsync<T>(string uriPath, Stream data, string fileName, IEnumerable<Tuple<string, string>> headers = null, TimeSpan? timeout = null)
+        protected Task<T> PostStreamAsFormAsync<T>(string uriPath, Stream data, string fileName, IEnumerable<Tuple<string, string>> formData = null, TimeSpan? timeout = null)
         {
             return Task.Run(async () =>
             {
@@ -298,13 +298,21 @@ namespace Vokabular.RestClient
                 {
                     try
                     {
+                        var content = new MultipartFormDataContent();
+
+                        if (formData != null)
+                        {
+                            foreach (var formItem in formData)
+                            {
+                                content.Add(new StringContent(formItem.Item2), formItem.Item1);
+                            }
+                        }
+
                         var fileStreamContent = new StreamContent(data, StreamBufferSize);
                         fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue(ContentTypes.ApplicationOctetStream);
-
-                        var content = new MultipartFormDataContent();
                         content.Add(fileStreamContent, "File", fileName);
 
-                        var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
+                        var request = CreateRequestMessage(HttpMethod.Post, uriPath);
                         request.Content = content;
                         request.Headers.TransferEncodingChunked = true;
 
@@ -443,6 +451,11 @@ namespace Vokabular.RestClient
             }
 
             var exceptionMessage = responseContent.Trim('\"');
+            if (string.IsNullOrWhiteSpace(exceptionMessage))
+            {
+                exceptionMessage = $"Response status code does not indicate success: {response.StatusCode:D} ({response.StatusCode}).";
+            }
+
             throw new HttpErrorCodeException(exceptionMessage, responseStatusCode);
         }
 

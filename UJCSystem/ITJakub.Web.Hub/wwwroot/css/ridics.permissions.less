@@ -3,48 +3,6 @@
 @import "ridics.list.less";
 
 .list-container {
-    min-height: 446px;
-    &.selectable {
-        tbody {
-            cursor: pointer;
-
-            .active {
-                td {
-                    background-color: #DCDCDC !important;
-                }
-            }
-        }
-    }
-
-    table {
-        tr {
-            border-bottom: 1px solid @separation-line-color;
-
-            td {
-                border: none;
-            }
-
-            .alert {
-                padding: 3px 7px;
-                margin: 1px 0 0 0;
-            }
-        }
-    }
-
-    .buttons {
-        vertical-align: middle;
-        text-align: right;
-
-        .btn-default {
-            margin-left: 0.5em;
-            margin-bottom: 0.5em;
-
-            &:first-of-type {
-                margin-left: 0;
-            }
-        }
-    }
-
     .role-row {
         .description {
             font-size: 11px;
@@ -104,14 +62,15 @@
 .user-section,
 .role-section,
 .permission-section,
-.project-section {
+.project-section,
+.project-permission-section {
     margin: 1.5em 0;
 
     .panel {
         .panel-title {
             padding-top: 7px;
             margin-bottom: 0.5em;
-            text-align: center;
+            text-align: left;
         }
 
         @media(max-width: 767px) {
@@ -123,6 +82,17 @@
                 }
             }
         }
+    }
+}
+
+#addProjectPermissionToRoleDialog .content,
+.project-permission-section { 
+     .ridics-checkbox {
+         padding: 0.2em 0.8em;
+     }
+    
+    button {
+        margin-left: 0.8em;
     }
 }
 
@@ -148,9 +118,9 @@
             }
 
             .top-separation-line {
-                margin-top: 0.3em;
+                margin-top: 0.5em;
                 border-top: 1px solid @separation-line-color;
-                padding-top: 0.3em;
+                padding-top: 0.5em;
             }
 
             #selectedUser,
@@ -158,6 +128,16 @@
                 font-weight: bold;
             }
         }
+    }
+}
+
+#addProjectPermissionToRoleDialog {
+    h5 {
+        font-size: 16px;
+    }
+
+    fieldset > div {
+        margin-left: 0.5rem;
     }
 }
 

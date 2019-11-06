@@ -1,4 +1,5 @@
 ﻿using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.Repositories.BibliographyImport;
 using Vokabular.ProjectImport.Works;
 using Vokabular.ProjectParsing.Model.Entities;
 

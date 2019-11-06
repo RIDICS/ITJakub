@@ -12,6 +12,8 @@
     <many-to-one name="ResponsiblePerson" class="ResponsiblePerson" column="Responsible" lazy="proxy" insert="false" update="false" access="field.camelcase-m-underscore" />
     
     <many-to-one name="ResponsibleType" class="ResponsibleType" column="ResponsibleType" lazy="proxy" insert="false" update="false" access="field.camelcase-m-underscore" />
+
+    <property name="Sequence" not-null="true" />
     
   </class>
 </hibernate-mapping>

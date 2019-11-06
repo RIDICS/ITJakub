@@ -5,11 +5,13 @@ using System.Net;
 using AutoMapper;
 using ITJakub.Lemmatization.Shared.Contracts;
 using ITJakub.Web.Hub.Areas.Admin.Models;
+using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.DataContracts;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Scalesoft.Localization.AspNetCore;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Clients;
 using Vokabular.MainService.DataContracts.Contracts.Type;
@@ -20,16 +22,20 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public abstract class BaseController : Controller
     {
+        private readonly ControllerDataProvider m_controllerDataProvider;
         private readonly CommunicationProvider m_communication;
 
-        protected BaseController(CommunicationProvider communicationProvider)
+        protected BaseController(ControllerDataProvider controllerDataProvider)
         {
-            m_communication = communicationProvider;
+            m_controllerDataProvider = controllerDataProvider;
+            m_communication = controllerDataProvider.CommunicationProvider;
         }
 
-        protected PortalTypeContract PortalTypeValue => m_communication.PortalType;
+        protected PortalTypeContract PortalTypeValue => m_controllerDataProvider.PortalType;
 
-        protected IMapper Mapper => m_communication.Mapper;
+        protected IMapper Mapper => m_controllerDataProvider.Mapper;
+
+        protected ILocalizationService Localizer => m_controllerDataProvider.Localizer;
 
         public ProjectTypeContract GetDefaultProjectType()
         {
@@ -99,12 +105,7 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetMainServiceProjectClient();
         }
 
-        public MainServiceResourceClient GetResourceClient()
-        {
-            return m_communication.GetMainServiceResourceClient();
-        }
-
-        public MainServiceRoleClient GetRoleClient()
+        public MainServiceUserGroupClient GetRoleClient()
         {
             return m_communication.GetMainServiceRoleClient();
         }
@@ -163,7 +164,8 @@ namespace ITJakub.Web.Hub.Controllers
         {
             if (exception.ValidationErrors == null)
             {
-                ModelState.AddModelError(string.Empty, exception.Message);
+                // All errors with description should be propagated by MainServiceException so this is fallback:
+                ModelState.AddModelError(string.Empty, Localizer.Translate("unknown-error-msg", "Error"));
                 return;
             }
 

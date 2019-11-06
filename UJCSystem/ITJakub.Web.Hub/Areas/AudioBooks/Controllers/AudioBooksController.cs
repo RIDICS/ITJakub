@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using AutoMapper;
-using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
-using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
@@ -15,11 +12,9 @@ using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
-using ITJakub.Web.Hub.Options;
 
 namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 {
-    [LimitedAccess(PortalType.ResearchPortal)]
     [Area("AudioBooks")]
     public class AudioBooksController : AreaController
     {
@@ -27,7 +22,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
         private readonly FeedbacksManager m_feedbacksManager;
 
         public AudioBooksController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager,
-            CommunicationProvider communicationProvider) : base(communicationProvider)
+            ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
             m_staticTextManager = staticTextManager;
             m_feedbacksManager = feedbacksManager;
@@ -81,7 +76,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 
         public ActionResult GetAudioWithCategories()
         {
-            var result = GetBooksAndCategories();
+            var result = GetBooksAndCategories(true);
             return Json(result);
         }
 

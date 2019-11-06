@@ -1,15 +1,28 @@
 ﻿class CommentArea {
-    private readonly util: EditorsUtil;
+    private readonly util: EditorsApiClient;
     private readonly adminApiClient = new AdminApiClient();
-
-    constructor(util: EditorsUtil) {
+    private readonly alertHolderSelector = ".alert-holder";
+    private editor: Editor;
+    private defaultImage = `<div><i class="fa fa-4x fa-user media-object"></i></div>`;    
+    private readonly signedInUserFirstName: string;
+    private readonly signedInUserLastName: string;
+    private readonly signedInUserImage: string;
+    
+    constructor(util: EditorsApiClient) {
         this.util = util;
+        this.signedInUserImage = null;
+        const userInfo = $("#userInfo");
+        this.signedInUserFirstName = userInfo.data("first-name");
+        this.signedInUserLastName = userInfo.data("last-name");
     }
 
     init() {
         this.processToggleCommentAresSizeClick();
         this.processToggleNestedCommentClick();
-        this.processDeleteCommentClick();
+    }
+
+    initCommentsDeleting(editor: Editor) {
+        this.editor = editor;
     }
 
     /**
@@ -21,7 +34,7 @@
         if (content === null) {
             return null;
         }
-        const textId = commentAreaEl.parent(".page-row").data("page") as number;
+        const textId = commentAreaEl.parents(".page-row").data("text-id") as number;
         const threadsContainerStart = `<div class="threads-container">`;
         const threadStart = `<ul class="media-list">`;
         const threadEnd = `</ul>`;
@@ -67,14 +80,28 @@
             var unixTimeMilliseconds = content[i].time;
             var timeUtc = new Date(unixTimeMilliseconds);
             var commentBodyStart = `<div class="media-body" data-comment-id=${id}>`;
-            var commentImage =
-                `<a href="#"><img alt="48x48" class="media-object" src="${picture
+            let commentImage;
+            if (picture == null) {
+                commentImage = this.defaultImage;
+            } else {
+                commentImage =
+                    `<a href="#"><img alt="48x48" class="media-object" src="${picture
                     }" style="width: 48px; height: 48px;"></a>`;
+            }
+
             var mainCommentLeftPartStart =
-                `<div class="media-left main-comment" id="${textReferenceId}-comment" data-parent-comment-id="${id}">`;
+                `<div class="media-left main-comment" data-text-reference-id="${textReferenceId}" data-parent-comment-id="${id}">`;
             var commentName = `<h5 class="media-heading">${name} ${surname}</h5>`;
             var mainCommentBody =
-                `<p class="comment-body">${body}</p><button class="respond-to-comment">Respond</button>`;
+                `<p class="comment-body">${body}</p>
+                <div class="comment-actions-row">
+                    <div class="btn-group">
+                        <button class="respond-to-comment">${localization.translate("Respond", "RidicsProject").value}</button>
+                        <button type="button" class="edit-root-comment">${localization.translate("Edit", "RidicsProject").value}</button>
+                        <button type="button" class="delete-root-comment">${localization.translate("Delete", "RidicsProject").value}</button>
+                    </div>
+                </div>`;
+
             var nestedCommentBody = `<p class="comment-body">${body}</p>`;
             if (commentTextId === textId) {
                 if (needToCloseTag) {
@@ -91,7 +118,7 @@
                     areaContent += commentImage;
                     areaContent += commentLeftPartEnd;
                     areaContent += commentBodyStart;
-                    areaContent += `<div class="text-center id-in-comment-area text-muted">Commentary ${textReferenceId
+                    areaContent += `<div class="text-center id-in-comment-area text-muted">${localization.translate("Commentary", "RidicsProject").value} ${textReferenceId
                         }</div>`;
                     areaContent += commentName;
                     areaContent += `<p class="replied-on text-muted">On ${timeUtc.toDateString()} at ${timeUtc
@@ -108,9 +135,17 @@
                     areaContent += commentName;
                     areaContent += `<p class="replied-on text-muted">On ${timeUtc.toDateString()} at ${timeUtc
                         .toTimeString().split(" ")[0]}</p>`; //only date and time, no timezone
+                    nestedCommentBody += 
+                        `<div class="row comment-actions-row">
+                            <div class="col-xs-12">
+                                <div class="btn-group">
+                                    <button type="button" class="edit-comment">${localization.translate("Edit", "RidicsProject").value}</button>
+                                    <button type="button" class="delete-comment">${localization.translate("Delete", "RidicsProject").value}</button>
+                                </div>
+                            </div>
+                        </div>`;
                     areaContent += nestedCommentBody;
                     areaContent += nestedCommentBodyEnd;
-                    areaContent += `<div class="row comment-actions-row"><div class="col-xs-8"></div><div class="col-xs-4"><div class="btn-group"><button type="button" class="edit-comment">Edit</button><button type="button" class="delete-comment">Delete</button></div></div></div>`;
                     areaContent += nestedCommentEnd;
                 }
             }
@@ -122,6 +157,28 @@
         var html = $.parseHTML(areaContent);
         return html;
     }
+
+    public constructCommentInputAreaHtml() {
+        let commentImage;
+        if (this.signedInUserImage == null) {
+            commentImage =
+                commentImage = this.defaultImage;
+        } else {
+            commentImage =
+                `<a href="#"><img alt="48x48" class="media-object" src="${this.signedInUserImage}" style="width: 48px; height: 48px;"></a>`;
+        }
+
+        return `<div class="media">
+                    <div class="media-left nested-comment">
+                        ${commentImage}
+                    </div>
+                    <div class="media-body">
+                        <h5 class="media-heading">${this.signedInUserFirstName} ${this.signedInUserLastName}</h5>
+                        <textarea class="respond-to-comment-textarea textarea-no-resize"></textarea>
+                    </div>
+                </div>`;
+    }
+
 
     /**
      * Collapses comment area, adds buttons to enlarge
@@ -137,9 +194,9 @@
         const ellipsisStart = "<div class=\"ellipsis-container\">";
         const ellipsisBodyStart = "<div class=\"ellipsis toggleCommentViewAreaSize\">";
         const ellipsisIconExpand =
-            "<i class=\"fa fa-expand expand-icon fa-lg\" aria-hidden=\"true\" title=\"Expand comment area\"></i>";
+            `<i class="fa fa-expand expand-icon fa-lg" aria-hidden="true" title="${localization.translate("ExpandCommentArea", "RidicsProject").value}"></i>`;
         const ellipsisIconCollapse =
-            "<i class=\"fa fa-compress collapse-icon fa-lg\" aria-hidden=\"true\" title=\"Collapse comment area\"></i>";
+            `<i class="fa fa-compress collapse-icon fa-lg" aria-hidden="true" title="${localization.translate("CollapseCommentArea", "RidicsProject").value}"></i>`;
         const ellipsisBodyEnd = "</div>";
         const ellipsisEnd = "</div>";
         areaContent += ellipsisStart;
@@ -174,9 +231,9 @@
         const ellipsisStart = "<div class=\"ellipsis-container\">";
         const ellipsisBodyStart = "<div class=\"ellipsis toggleCommentViewAreaSize\">";
         const ellipsisIconExpand =
-            "<i class=\"fa fa-expand expand-icon fa-lg\" aria-hidden=\"true\" title=\"Expand comment area\"></i>";
+            `<i class="fa fa-expand expand-icon fa-lg" aria-hidden="true" title="${localization.translate("ExpandCommentArea", "RidicsProject").value}"></i>`;
         const ellipsisIconCollapse =
-            "<i class=\"fa fa-compress collapse-icon fa-lg\" aria-hidden=\"true\" title=\"Collapse comment area\"></i>";
+            `<i class="fa fa-compress collapse-icon fa-lg" aria-hidden="true" title="${localization.translate("CollapseCommentArea", "RidicsProject").value}"></i>`;
         const ellipsisBodyEnd = "</div>";
         const ellipsisEnd = "</div>";
         areaContent += ellipsisStart;
@@ -213,7 +270,7 @@
                     if (nestedComments.length) {
                         nestedComments.addClass("nested-comment-collapsed");
                         thread.append(`<p class="text-center toggle-nested-comments-icon-container">
-                                           <i class="fa fa-bars fa-lg toggle-nested-comments" aria-hidden="true" title="Toggle nested comments"></i>
+                                           <i class="fa fa-bars fa-lg toggle-nested-comments" aria-hidden="true" title="${localization.translate("CollapseCommentArea", "RidicsProject").value}"></i>
                                        </p>`);
                     }
                 });
@@ -267,10 +324,20 @@
  * Loads contents of files with comments in a page from the server.
  * @param {JQuery} commentAreaEl Comment area element for which to construct structure
  */
-    asyncConstructCommentArea(commentAreaEl: JQuery): JQuery.jqXHR<ICommentSctucture[]> {
+    asyncConstructCommentArea(commentAreaEl: JQuery): JQuery.Promise<ICommentSctucture[]> {
+        var deferredResult = $.Deferred<ICommentSctucture[]>();
         const pageRowEl = commentAreaEl.parent(".page-row");
         const pageName = pageRowEl.data("page-name") as string;
-        const textId = pageRowEl.data("page") as number;
+        const textId = pageRowEl.data("text-id") as number;
+        commentAreaEl.empty();
+        if (!textId) { // textId doesn't have to be specified (text is not created yet)
+            const alert = new AlertComponentBuilder(AlertType.Info).addContent(localization.translate("CommentNotLoadedMissingText", "RidicsProject").value);
+            commentAreaEl.append(alert.buildElement());
+            deferredResult.reject();
+            return deferredResult.promise();
+        }
+
+        pageRowEl.removeClass("comment-never-loaded");
         const ajax = this.adminApiClient.loadCommentFile(textId);
         ajax.done(
             (fileContent: ICommentSctucture[]) => {
@@ -283,19 +350,15 @@
                         `<div class="comment-placeholder-container"><div class="comment-placeholder-text">${localization.translate("NoComments", "RidicsProject").value}</div></div>`;
                     commentAreaEl.append(placeHolderText);
                 }
+                deferredResult.resolve(fileContent);
             });
         ajax.fail(() => {
-            bootbox.alert({
-                title: "Error",
-                message: `Failed to construct comment area for page ${pageName}`,
-                buttons: {
-                    ok: {
-                        className: "btn-default"
-                    }
-                }
-            });
+            const alert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(localization.translateFormat("LoadCommentsFailed", [pageName], "RidicsProject").value).buildElement();
+            commentAreaEl.append(alert);
+            deferredResult.reject();
         });
-        return ajax;
+        return deferredResult.promise();
     }
 
     /**
@@ -330,24 +393,40 @@
                 }
                 const sortedContent = this.util.splitArrayToArrays(content, indexes);
                 this.constructCommentArea(sortedContent, commentAreaEl);
+                this.processDeleteCommentClick(commentAreaEl);
             }
         }
     }
 
-    private constructCommentArea = (content: ICommentSctucture[],
-        commentAreaEl: JQuery) => {
+    private constructCommentArea(content: ICommentSctucture[], commentAreaEl: JQuery) {
         const html = this.constructCommentAreaHtml(content, commentAreaEl);
         commentAreaEl.append(html);
     }
 
-    private processDeleteCommentClick() {
-        $(".delete-comment").on("click", (event) => {
+    private processDeleteCommentClick(commentAreaEl: JQuery) {
+        commentAreaEl.find(".delete-comment, .delete-root-comment").on("click", (event) => {
             const target = $(event.target as Node as HTMLElement);
+            const pageRow = target.parents(".page-row");
+            const alertHolder = pageRow.find(this.alertHolderSelector);
+            alertHolder.empty();
+            const isEditingModeEnabled = pageRow.find(".viewer").length === 0;
             const commentActionsRowEl = target.parents(".comment-actions-row");
-            const commentId = parseInt(commentActionsRowEl.siblings(".media-body").attr("data-comment-id"));
+
+            let confirmMessage = localization.translate("DeleteCommentConfirm", "RidicsProject").value;
+            const commentId = parseInt(commentActionsRowEl.parents(".media-body").attr("data-comment-id"));
+            
+            if (target.hasClass("delete-root-comment") && isEditingModeEnabled) {
+                confirmMessage = `<div class="alert alert-warning">
+                                    <i class="fa fa-warning"></i> ${localization.translate("DeleteCommentWarning", "RidicsProject").value}
+                                  </div>
+                                    <div class="bootbox-body">
+                                       ${localization.translate("DeleteCommentConfirm", "RidicsProject").value}
+                                  </div>`;
+            } 
+            
             bootbox.confirm({
-                message:"Do you want to delete this comment?",
-                title: "Please confirm",
+                title: localization.translate("ConfirmTitle", "RidicsProject").value,
+                message: confirmMessage,
                 buttons: {
                     confirm: {
                         className: "btn-default"
@@ -357,35 +436,81 @@
                     }
                 },
                 callback: (result) => {
-                    if (result) {
-                        const deleteAjax = this.util.deleteComment(commentId);
-                        deleteAjax.done(() => {
-                            const textId = commentActionsRowEl.parents(".page-row").data("page");
-                            bootbox.alert({
-                                title: "Success",
-                                message: "Comment successfully deleted.",
-                                buttons: {
-                                    ok: {
-                                        className: "btn-default"
-                                    }
-                                }
-                            });
-                            this.reloadCommentArea(textId);
-                        });
-                        deleteAjax.fail(() => {
-                            bootbox.alert({
-                                title: "Fail",
-                                message: "Failed to delete this comment.",
-                                buttons: {
-                                    ok: {
-                                        className: "btn-default"
-                                    }
-                                }
-                            });
-                        });
+                    if (!result) {
+                        return;
                     }
+
+                    // delete child comment:
+                    if (!target.hasClass("delete-root-comment")) {
+                        const deleteAjax = this.util.deleteComment(commentId);
+                        this.onCommentDeleteRequest(deleteAjax, target);
+                        return;
+                    }
+
+                    // delete root comment in reading mode:
+                    const pageRow = target.parents(".page-row");
+                    if (!isEditingModeEnabled) {
+                        const deleteAjax = this.util.deleteRootComment(commentId);
+                        this.onRootCommentDeleteRequest(deleteAjax, pageRow);
+                        this.onCommentDeleteRequest(deleteAjax, target);
+                        return;
+                    }
+
+                    // delete root comment in editing mode:
+                    const codeMirror = this.editor.getSimpleMdeEditor().codemirror;
+                    const originalText = codeMirror.getValue();
+                    const textId = Number(pageRow.data("text-id"));
+
+                    this.editor.saveText(textId, originalText, SaveTextModeType.ValidateOnlySyntax).done(
+                        (response: ISaveTextResponse) => {
+                            if (!response.isValidationSuccess) {
+                                codeMirror.setValue(originalText);
+                                const alert = new AlertComponentBuilder(AlertType.Error)
+                                    .addContent(localization.translate("CommentSyntaxError", "RidicsProject").value)
+                                    .buildElement();
+                                alertHolder.empty().append(alert);
+                                return;
+                            }
+
+                            const deleteAjax = this.util.deleteRootComment(commentId);
+                            deleteAjax.done((result) => {
+                                this.editor.setTextInEditor(result.newText, true);
+                            });
+                            this.onRootCommentDeleteRequest(deleteAjax, pageRow);
+                            this.onCommentDeleteRequest(deleteAjax, target);
+                        });
                 }
             });
+        });
+    }
+
+    private onCommentDeleteRequest(deleteAjax: JQuery.Promise<any>, targetButton: JQuery) {
+        const pageRow = targetButton.parents(".page-row");
+        const alertHolder = pageRow.find(this.alertHolderSelector);
+        alertHolder.empty();
+        
+        deleteAjax.done(() => {
+            const alert = new AlertComponentBuilder(AlertType.Success)
+                .addContent(localization.translate("CommentDeleteSuccess", "RidicsProject").value)
+                .buildElement();
+            $(alert).delay(3000).fadeOut(2000);
+            alertHolder.empty().append(alert);
+
+            const textId = pageRow.data("text-id");
+            this.reloadCommentArea(textId);
+        });
+        deleteAjax.fail(() => {
+            const alert = new AlertComponentBuilder(AlertType.Error)
+                .addContent(localization.translate("CommentDeleteFail", "RidicsProject").value)
+                .buildElement();
+            alertHolder.empty().append(alert);
+        });
+    }
+
+    private onRootCommentDeleteRequest(deleteAjax: JQuery.jqXHR<IDeleteRootCommentResponse>, pageRow: JQuery) {
+        deleteAjax.done((response) => {
+            const compositionArea = pageRow.children(".composition-area");
+            compositionArea.data("version-id", response.resourceVersionId);
         });
     }
 
@@ -472,7 +597,7 @@
 
     reloadCommentArea(textId: number) {
         var deferred = $.Deferred();
-        const commentAreaEl = $(`*[data-page="${textId}"]`).children(".comment-area");
+        const commentAreaEl = $(`*[data-text-id="${textId}"]`).children(".comment-area");
         const threadsContainer = commentAreaEl.children(".threads-container");
         threadsContainer.remove();
         if (commentAreaEl.children(".comment-placeholder-container").length) {

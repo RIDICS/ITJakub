@@ -11,18 +11,6 @@
     Tools = "Tools",
 }
 
-var categoryTranslation = new DictionaryWrapper<string>();
-categoryTranslation.add(FeedbackCategoryEnum.None, "None");
-categoryTranslation.add(FeedbackCategoryEnum.Dictionaries, "Dictionaries");
-categoryTranslation.add(FeedbackCategoryEnum.Editions, "Editions");
-categoryTranslation.add(FeedbackCategoryEnum.BohemianTextBank, "BohemianTextBank");
-categoryTranslation.add(FeedbackCategoryEnum.OldGrammar, "OldGrammar");
-categoryTranslation.add(FeedbackCategoryEnum.ProfessionalLiterature, "ProfessionalLiterature");
-categoryTranslation.add(FeedbackCategoryEnum.Bibliographies, "Bibliographies");
-categoryTranslation.add(FeedbackCategoryEnum.CardFiles, "CardFiles");
-categoryTranslation.add(FeedbackCategoryEnum.AudioBooks, "AudioBooks");
-categoryTranslation.add(FeedbackCategoryEnum.Tools, "Tools");
-
 enum FeedbackSortEnum {
     Date = 0,
     Category = 1,
@@ -33,14 +21,25 @@ enum FeedbackTypeEnum {
     Headword = "Headword",
 }
 
-var sortCriteria = FeedbackSortEnum.Date;
-var sortOrderAsc = false;
-var categories = new Array<number>();
-var paginator: Pagination;
-var feedbacksOnPage = 5;
-
 $(document.documentElement).ready(() => {
 
+    var categoryTranslation = new DictionaryWrapper<string>();
+    categoryTranslation.add(FeedbackCategoryEnum.None, "None");
+    categoryTranslation.add(FeedbackCategoryEnum.Dictionaries, "Dictionaries");
+    categoryTranslation.add(FeedbackCategoryEnum.Editions, "Editions");
+    categoryTranslation.add(FeedbackCategoryEnum.BohemianTextBank, "BohemianTextBank");
+    categoryTranslation.add(FeedbackCategoryEnum.OldGrammar, "OldGrammar");
+    categoryTranslation.add(FeedbackCategoryEnum.ProfessionalLiterature, "ProfessionalLiterature");
+    categoryTranslation.add(FeedbackCategoryEnum.Bibliographies, "Bibliographies");
+    categoryTranslation.add(FeedbackCategoryEnum.CardFiles, "CardFiles");
+    categoryTranslation.add(FeedbackCategoryEnum.AudioBooks, "AudioBooks");
+    categoryTranslation.add(FeedbackCategoryEnum.Tools, "Tools");
+
+    var sortCriteria = FeedbackSortEnum.Date;
+    var sortOrderAsc = false;
+    var categories = new Array<number>();
+    var paginator: Pagination;
+    var feedbacksOnPage = 5;
     var notFilledMessage = localization.translateFormat("NotFilled", new Array<string>("&lt;", "&gt;"), "ItJakubJs").value;
 
 

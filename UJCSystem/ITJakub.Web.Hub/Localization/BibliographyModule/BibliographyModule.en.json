@@ -1,6 +1,6 @@
 {
-	"culture":"en",
-	"scope":"BibliographyModule",
+  "culture": "en",
+  "scope": "BibliographyModule",
   "dictionary": {
     "NumberOfPages": "translate[Počet stran]",
     "Century": "translate[století]",

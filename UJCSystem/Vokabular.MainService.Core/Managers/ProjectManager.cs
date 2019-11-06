@@ -7,6 +7,7 @@ using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works;
 using Vokabular.MainService.Core.Works.Permission;
@@ -14,7 +15,6 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
-using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Managers
@@ -26,28 +26,38 @@ namespace Vokabular.MainService.Core.Managers
         private readonly PermissionRepository m_permissionRepository;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly UserDetailManager m_userDetailManager;
+        private readonly ForumSiteManager m_forumSiteManager;
         private readonly CommunicationProvider m_communicationProvider;
+        private readonly DefaultUserProvider m_defaultUserProvider;
         private readonly IMapper m_mapper;
 
         public ProjectManager(ProjectRepository projectRepository, MetadataRepository metadataRepository,
             PermissionRepository permissionRepository, AuthenticationManager authenticationManager,
-            UserDetailManager userDetailManager, CommunicationProvider communicationProvider, IMapper mapper)
+            UserDetailManager userDetailManager, ForumSiteManager forumSiteManager, CommunicationProvider communicationProvider,
+            DefaultUserProvider defaultUserProvider, IMapper mapper)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_permissionRepository = permissionRepository;
             m_authenticationManager = authenticationManager;
             m_userDetailManager = userDetailManager;
+            m_forumSiteManager = forumSiteManager;
             m_communicationProvider = communicationProvider;
+            m_defaultUserProvider = defaultUserProvider;
             m_mapper = mapper;
         }
 
-        public long CreateProject(ProjectContract projectData)
+        public long CreateProject(CreateProjectContract projectData)
         {
             var currentUserId = m_authenticationManager.GetCurrentUserId();
-            var work = new CreateProjectWork(m_projectRepository, projectData, currentUserId, m_mapper);
-
+            var work = new CreateProjectWork(m_projectRepository, projectData, currentUserId, m_defaultUserProvider, m_mapper);
             var resultId = work.Execute();
+            
+            if (projectData.ProjectType == ProjectTypeContract.Community && projectData.BookTypesForForum != null)
+            {
+                m_forumSiteManager.CreateOrUpdateForums(resultId, projectData.BookTypesForForum.Select(x => (short) x).ToArray());
+            }
+
             return resultId;
         }
 
@@ -64,14 +74,17 @@ namespace Vokabular.MainService.Core.Managers
             throw new NotImplementedException();
         }
 
-        public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, ProjectTypeContract? projectType,
-            string filterByName, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons)
+        public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, ProjectTypeContract? projectType, 
+            ProjectOwnerTypeContract projectOwnerType, string filterByName, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCountForProject(count);
             var projectTypeEnum = m_mapper.Map<ProjectTypeEnum?>(projectType);
-
-            var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, projectTypeEnum, filterByName, fetchPageCount, fetchAuthors, fetchResponsiblePersons);
+            
+            var userId = m_authenticationManager.GetCurrentUserId();
+            
+            var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, projectTypeEnum,
+                projectOwnerType, userId, filterByName, fetchPageCount, fetchAuthors, fetchResponsiblePersons);
             var resultEntities = work.Execute();
 
             var metadataList = work.GetMetadataResources();
@@ -104,7 +117,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public ProjectDetailContract GetProject(long projectId, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons)
         {
-            var work = new GetProjectWork(m_projectRepository, m_metadataRepository, projectId, fetchPageCount, fetchAuthors, fetchResponsiblePersons, false);
+            var work = new GetProjectWork(m_projectRepository, m_metadataRepository, projectId, fetchPageCount, fetchAuthors,
+                fetchResponsiblePersons, false);
             var project = work.Execute();
 
             if (project == null)
@@ -178,31 +192,42 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
-        public PagedResultList<RoleContract> GetRolesByProject(long projectId, int? start, int? count, string filterByName)
+        public PagedResultList<UserGroupContract> GetUserGroupsByProject(long projectId, int? start, int? count, string filterByName)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
 
-            var result = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupsByBook(projectId, startValue, countValue, filterByName));
+            var result = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupsByBook(projectId, startValue, countValue, filterByName, true));
 
             if (result == null)
             {
                 return null;
             }
 
-            var authRoles = new List<AuthRoleContract>();
+            var resultRoles = new List<UserGroupContract>();
             foreach (var group in result.List)
             {
-                var work = new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, group.ExternalId);
-                work.Execute();
-                authRoles.Add(work.GetRoleContract());
+                if (group is RoleUserGroup roleUserGroup)
+                {
+                    var work = new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleUserGroup.ExternalId);
+                    work.Execute();
+                    var authRoleContract = work.GetRoleContract();
+
+                    var roleContract = m_mapper.Map<UserGroupContract>(authRoleContract);
+                    roleContract.Id = group.Id;
+
+                    resultRoles.Add(roleContract);
+                }
+                else
+                {
+                    var roleContract = m_mapper.Map<UserGroupContract>(group);
+                    resultRoles.Add(roleContract);
+                }
             }
 
-            var roles = m_mapper.Map<List<RoleContract>>(authRoles);
-
-            return new PagedResultList<RoleContract>
+            return new PagedResultList<UserGroupContract>
             {
-                List = roles,
+                List = resultRoles,
                 TotalCount = result.Count,
             };
         }

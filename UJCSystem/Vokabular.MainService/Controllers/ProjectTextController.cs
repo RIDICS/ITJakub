@@ -25,6 +25,23 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        [HttpGet("page/{pageId}/text")]
+        public FullTextContract GetTextResourceByPageId(long pageId, [FromQuery] TextFormatEnumContract? format)
+        {
+            if (format == null)
+                format = TextFormatEnumContract.Html;
+
+            var result = m_projectContentManager.GetTextResourceByPageId(pageId, format.Value);
+            return result;
+        }
+
+        [HttpPost("page/{pageId}/text")]
+        public long CreateTextResource(long pageId, [FromBody] CreateTextRequestContract request)
+        {
+            var resultResourceId = m_projectContentManager.CreateTextResourceOnPage(pageId, request);
+            return resultResourceId;
+        }
+
         [HttpGet("text/{textId}")]
         public FullTextContract GetTextResource(long textId, [FromQuery] TextFormatEnumContract? format)
         {
@@ -47,12 +64,10 @@ namespace Vokabular.MainService.Controllers
 
         [HttpPost("text/{textId}")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult CreateNewTextResourceVersion([FromBody] CreateTextRequestContract request)
+        public IActionResult CreateNewTextResourceVersion(long textId, [FromBody] CreateTextVersionRequestContract request)
         {
-            var result = m_projectContentManager.CreateNewTextResourceVersion(request);
+            var result = m_projectContentManager.CreateNewTextResourceVersion(textId, request);
             return Ok(result);
-            //TODO check result
-            //return StatusCode(StatusCodes.Status409Conflict); // Version conflict
         }
 
         [HttpGet("text/{textId}/comment")]
@@ -60,6 +75,13 @@ namespace Vokabular.MainService.Controllers
         {
             var result = m_projectContentManager.GetCommentsForText(textId);
             return result;
+        }
+
+        [HttpGet("text/comment/{commentId}")]
+        public ActionResult<GetTextCommentContract> GetComment(long commentId)
+        {
+            var result = m_projectContentManager.GetComment(commentId);
+            return Ok(result);
         }
 
         [HttpPost("text/{textId}/comment")]

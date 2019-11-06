@@ -1,26 +1,28 @@
 ﻿class SnapshotApiClient extends WebHubApiClient {
 
-    getVersionList(resourceId: number): JQuery.jqXHR<IResourceVersion[]> {
+    getVersionList(resourceId: number, higherVersion: number, lowerVersion: number): JQuery.jqXHR<IResourceVersion[]> {
         return this.get(URI(this.getSnapshotControllerUrl() + "VersionList").search((query) => {
-            query.resourceId = resourceId
+            query.resourceId = resourceId;
+            query.higherVersion = higherVersion;
+            query.lowerVersion = lowerVersion;
         }).toString());
     }
 
-    getText(textId: number): JQuery.jqXHR<ITextWithContent> {
+    getText(textVersionId: number): JQuery.jqXHR<ITextWithContent> {
         return this.get(URI(this.getSnapshotControllerUrl() + "GetText").search((query) => {
-            query.textId = textId
+            query.textVersionId = textVersionId;
         }).toString());
     }
 
-    getAudio(trackId: number): JQuery.jqXHR<string> {
+    getAudio(trackVersionId: number): JQuery.jqXHR<string> {
         return this.get(URI(this.getSnapshotControllerUrl() + "GetRecordings").search((query) => {
-            query.trackId = trackId
+            query.trackVersionId = trackVersionId;
         }).toString());
     }
 
-    getImageUrl(imageId: number): string {
+    getImageUrl(imageVersionId: number): string {
         return URI(this.getSnapshotControllerUrl() + "GetImage").search((query) => {
-            query.imageId = imageId
+            query.imageVersionId = imageVersionId;
         }).toString();
     }
 

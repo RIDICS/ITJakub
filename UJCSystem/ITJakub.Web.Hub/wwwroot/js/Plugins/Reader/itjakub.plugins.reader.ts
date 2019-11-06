@@ -1,14 +1,11 @@
-﻿class ReaderModule {
+﻿class ReaderModule extends ReaderPagination {
 
     private favoriteManager: FavoriteManager;
     private newFavoriteDialog: NewFavoriteDialog;
     readerContainer: HTMLDivElement;
     sliderOnPage: number;
-    actualPageIndex: number;
-    pages: Array<BookPage>;
     pagesById: IDictionary<BookPage>;
     bookmarks: Array<IBookmarkPosition>;
-    pagerDisplayPages: number;
     preloadPagesBefore: number;
     preloadPagesAfter: number;
     bookId: string;
@@ -41,20 +38,24 @@
     showLeftSidePanelsButtonList: Array<PanelButtonEnum>;
     showMainPanelsButtonList: Array<PanelButtonEnum>;
 
-    pageChangedCallback: (pageId: number) => void;
+    pageChangeCallback: (pageId: number) => void;
 
 
     constructor(readerContainer: HTMLDivElement, pageChangedCallback: (pageId: number) => void, showPanelList: Array<ReaderPanelEnum>, showLeftSidePanelsButtonList: Array<PanelButtonEnum>, showMainPanelsButtonList: Array<PanelButtonEnum>) {
-        this.readerContainer = readerContainer;
-        this.pageChangedCallback = pageChangedCallback;
-        this.pagerDisplayPages = 5;
+        super(readerContainer);
+        this.pageChangeCallback = pageChangedCallback;
         this.showPanelList = showPanelList;
         this.showLeftSidePanelsButtonList = showLeftSidePanelsButtonList;
         this.showMainPanelsButtonList = showMainPanelsButtonList;
         this.favoriteManager = new FavoriteManager();
         this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
+        this.init((pageId, pageIndex, scrollTo) => {
+            this.actualizeSlider(pageIndex);
+            this.notifyPanelsMovePage(pageIndex, scrollTo);
+            this.pageChangeCallback(pageId);        
+        });
     }
-
+        
     public makeReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: IPage[]) {
         this.bookId = bookXmlId;
         this.versionId = versionXmlId;
@@ -362,124 +363,7 @@
 
         this.activateTypeahead(pageInputText);
 
-        var paginationUl: HTMLUListElement = document.createElement("ul");
-        paginationUl.classList.add("pagination", "pagination-sm");
-
-        var toLeft = document.createElement("ul");
-        toLeft.classList.add("page-navigation-container","page-navigation-container-left");
-
-        var liElement: HTMLLIElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-left");
-        var anchor: HTMLAnchorElement = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = "|<";
-        $(anchor).click((event: JQuery.Event) => {
-            event.stopPropagation();
-            this.moveToPageNumber(0, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toLeft.appendChild(liElement);
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-left");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = "<<";
-        $(anchor).click((event: JQuery.Event) => {
-            event.stopPropagation();
-            this.moveToPageNumber(this.actualPageIndex - 5, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toLeft.appendChild(liElement);
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-left");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = "<";
-        $(anchor).click((event: JQuery.Event) => {
-            event.stopPropagation();
-            this.moveToPageNumber(this.actualPageIndex - 1, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toLeft.appendChild(liElement);
-
-        var toRight = document.createElement("ul");
-        toRight.classList.add("page-navigation-container","page-navigation-container-right");
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-right");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = ">";
-        $(anchor).click((event: JQuery.Event) => {
-            event.stopPropagation();
-            this.moveToPageNumber(this.actualPageIndex + 1, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toRight.appendChild(liElement);
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-right");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = ">>";
-        $(anchor).click((event: JQuery.Event) => {
-            event.stopPropagation();
-            this.moveToPageNumber(this.actualPageIndex + 5, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toRight.appendChild(liElement);
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-right");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = ">|";
-        $(anchor).click((event: JQuery.Event) => {
-            event.stopPropagation();
-            this.moveToPageNumber(this.pages.length - 1, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toRight.appendChild(liElement);
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("more-pages more-pages-left");
-        liElement.innerHTML = "...";
-        paginationUl.appendChild(liElement);
-
-        $.each(this.pages, (index, page) => {
-            liElement = document.createElement("li");
-            $(liElement).addClass("page");
-            $(liElement).data("page-index", index);
-            anchor = document.createElement("a");
-            anchor.href = "#";
-            anchor.innerHTML = page.text;
-            $(anchor).click((event: JQuery.Event) => {
-                event.stopPropagation();
-                this.moveToPage(page.pageId, true);
-                return false;
-            });
-            liElement.appendChild(anchor);
-            paginationUl.appendChild(liElement);
-        });
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("more-pages more-pages-right");
-        liElement.innerHTML = "...";
-        paginationUl.appendChild(liElement);
-
-        var listingContainer = document.createElement("div");
-        listingContainer.classList.add("page-navigation-container-helper");
-        listingContainer.appendChild(toLeft);
-        listingContainer.appendChild(paginationUl);
-        listingContainer.appendChild(toRight);
+       const listingContainer = this.createPagination(true);
 
         var buttonsDiv: HTMLDivElement = document.createElement("div");
         $(buttonsDiv).addClass("buttons");
@@ -803,26 +687,6 @@
         return imagePanel;
     }
 
-    moveToPageNumber(pageIndex: number, scrollTo: boolean) {
-        if (pageIndex < 0) {
-            pageIndex = 0;
-        } else if (pageIndex >= this.pages.length) {
-            pageIndex = this.pages.length - 1;
-        }
-
-        if (!scrollTo) {
-            this.clickedMoveToPage = true;
-        }
-
-        this.actualPageIndex = pageIndex;
-        this.actualizeSlider(pageIndex);
-        this.actualizePagination(pageIndex);
-        this.notifyPanelsMovePage(pageIndex, scrollTo);
-
-        var pageId = this.pages[pageIndex].pageId;
-        this.pageChangedCallback(pageId);
-    }
-
     notifyPanelsMovePage(pageIndex: number, scrollTo: boolean) {
         for (var k = 0; k < this.leftSidePanels.length; k++) {
             this.leftSidePanels[k].onMoveToPage(pageIndex, scrollTo);
@@ -832,71 +696,13 @@
             this.rightSidePanels[k].onMoveToPage(pageIndex, scrollTo);
         }
     }
-
-    moveToPage(pageId: number, scrollTo: boolean) {
-        var pageIndex: number = -1;
-        for (var i = 0; i < this.pages.length; i++) {
-            if (this.pages[i].pageId === pageId) {
-                pageIndex = i;
-                break;
-            }
-        }
-        if (pageIndex >= 0 && pageIndex < this.pages.length) {
-            this.moveToPageNumber(pageIndex, scrollTo);
-
-        } else {
-            console.log("Page with id '" + pageId + "' does not exist");
-            //TODO tell user page not exist  
-        }
-    }
-
+    
     actualizeSlider(pageIndex: number) {
         var slider = $(this.readerContainer).find(".slider");
         $(slider).slider().slider("value", pageIndex);
         $(slider).find(".ui-slider-handle").find(".tooltip-inner").html(localization.translate("Page:", "PluginsJs").value + this.pages[pageIndex].text);
     }
-
-    actualizePagination(pageIndex: number) {
-        var pager = $(this.readerContainer).find("ul.pagination");
-        pager.find("li.page-navigation").css("visibility", "visible");
-        pager.find("li.more-pages").css("visibility", "visible");
-        if (pageIndex === 0) {
-            pager.find("li.page-navigation-left").css("visibility", "hidden");
-            pager.find("li.more-pages-left").css("visibility", "hidden");
-        } else if (pageIndex === this.pages.length - 1) {
-            pager.find("li.page-navigation-right").css("visibility", "hidden");
-            pager.find("li.more-pages-right").css("visibility", "hidden");
-        }
-
-        var pages = $(pager).find(".page");
-        $(pages).css("display", "none");
-        $(pages).removeClass("page-active");
-        var actualPage = $(pages).filter(function (index) {
-            return $(this).data("page-index") === pageIndex;
-        });
-
-        var displayPagesOnEachSide = (this.pagerDisplayPages - 1) / 2;
-        var displayOnRight = displayPagesOnEachSide;
-        var displayOnLeft = displayPagesOnEachSide;
-        var pagesOnLeft = pageIndex;
-        var pagesOnRight = this.pages.length - (pageIndex + 1);
-        if (pagesOnLeft <= displayOnLeft) {
-            displayOnRight += displayOnLeft - pagesOnLeft;
-            pager.find("li.more-pages-left").css("visibility", "hidden");
-        } else if (pagesOnRight <= displayOnRight) {
-            displayOnLeft += displayOnRight - pagesOnRight;
-            pager.find("li.more-pages-right").css("visibility", "hidden");
-        }
-
-        var displayedPages = $(pages).filter(function (index) {
-            var itemPageIndex = $(this).data("page-index");
-            return (itemPageIndex >= pageIndex - displayOnLeft && itemPageIndex <= pageIndex + displayOnRight);
-        });
-        $(displayedPages).css("display", "inline-block");
-        $(actualPage).addClass("page-active");
-
-    }
-
+        
     private createBookmarkSpan(pageIndex: number, pageName: string, pageId: number, title: string, tooltipTitle: string|(()=>string), favoriteLabel: IFavoriteLabel) {
         var positionStep = 100 / (this.pages.length - 1);
         var bookmarkSpan = document.createElement("span");

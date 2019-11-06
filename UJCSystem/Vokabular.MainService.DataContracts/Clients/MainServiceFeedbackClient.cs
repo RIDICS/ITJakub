@@ -3,6 +3,7 @@ using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.RestClient;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Types;
@@ -92,7 +93,14 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.GetPagedList<FeedbackContract>("feedback");
+                var url = UrlQueryBuilder.Create("feedback")
+                    .AddParameter("start", start)
+                    .AddParameter("count", count)
+                    .AddParameter("sort", sort)
+                    .AddParameter("sortDirection", sortDirection)
+                    .AddParameterList("filterCategories", filterCategories)
+                    .ToResult();
+                var result = m_client.GetPagedList<FeedbackContract>(url);
                 return result;
             }
             catch (HttpRequestException e)

@@ -6,7 +6,7 @@
 class BohemianTextbankSearch {
     private actualPage: number;
 
-    private resultsCountOnPage = 30;
+    private resultsCountOnPage = Number($("#corpus-search-configuration").data("page-size"));
     private paginationMaxVisibleElements = 5;
 
     private localization: Localization;
@@ -215,13 +215,15 @@ class BohemianTextbankSearch {
 
     private actualizeSelectedBooksAndCategoriesInQuery() {
         const selectedIds = this.booksSelector.getSelectedIds();
-        this.bookIdsInQuery = selectedIds.selectedBookIds;
+        this.bookIdsInQuery = this.booksSelector.hasBooksLoaded()
+            ? selectedIds.selectedBookIds
+            : this.booksSelector.getFavoriteBookComponent().getLastSelectedBookIds();
         this.categoryIdsInQuery = selectedIds.selectedCategoryIds;
     }
 
     private sortOrderChanged() {
-        if (paginator) {
-            paginator.goToPage(1);
+        if (this.paginator) {
+            this.paginator.goToPage(1);
         }
     }
 

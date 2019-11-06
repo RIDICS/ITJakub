@@ -1,47 +1,64 @@
 ﻿using System;
+using System.IO;
 using System.Net;
-using Vokabular.Core.Storage.Resources;
+using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Content
 {
-    public class CreateNewImageResourceVersionWork : UnitOfWorkBase<long>
+    public class CreateNewImageResourceVersionWork : UnitOfWorkBase<NewResourceResultContract>
     {
         private readonly ResourceRepository m_resourceRepository;
-        private readonly long m_imageId;
+        private readonly IFileSystemManager m_fileSystemManager;
         private readonly CreateImageContract m_data;
-        private readonly SaveResourceResult m_fileInfo;
+        private readonly Stream m_fileStream;
         private readonly int m_userId;
 
-        public CreateNewImageResourceVersionWork(ResourceRepository resourceRepository, long imageId, CreateImageContract data, SaveResourceResult fileInfo, int userId) : base(resourceRepository)
+        public CreateNewImageResourceVersionWork(ResourceRepository resourceRepository, IFileSystemManager fileSystemManager, CreateImageContract data, Stream fileStream, int userId) : base(resourceRepository)
         {
             m_resourceRepository = resourceRepository;
-            m_imageId = imageId;
+            m_fileSystemManager = fileSystemManager;
             m_data = data;
-            m_fileInfo = fileInfo;
+            m_fileStream = fileStream;
             m_userId = userId;
         }
 
-        protected override long ExecuteWorkImplementation()
+        protected override NewResourceResultContract ExecuteWorkImplementation()
         {
             var now = DateTime.UtcNow;
-            
-            var latestImage = m_resourceRepository.GetLatestResourceVersion<ImageResource>(m_imageId);
-            if (latestImage.Id != m_data.OriginalVersionId)
-            {
-                throw new MainServiceException(
-                    MainServiceErrorCode.ResourceModified,
-                    $"Conflict. Current latest versionId is {latestImage.Id}, but originalVersionId was specified {m_data.OriginalVersionId}",
-                    HttpStatusCode.Conflict
-                );
-            }
 
+            ImageResource latestImage;
+            if (m_data.ImageId == null || m_data.OriginalVersionId == null)
+            {
+                var newResourceResult = TryCreateNewResource();
+                latestImage = new ImageResource // simulate previous ImageResource version which doesn't exist yet
+                {
+                    Resource = newResourceResult.Item1,
+                    ResourcePage = newResourceResult.Item2.Resource,
+                    VersionNumber = 0,
+                };
+            }
+            else
+            {
+                latestImage = m_resourceRepository.GetLatestResourceVersion<ImageResource>(m_data.ImageId.Value);
+                if (latestImage.Id != m_data.OriginalVersionId)
+                {
+                    throw new MainServiceException(
+                        MainServiceErrorCode.ResourceModified,
+                        $"Conflict. Current latest versionId is {latestImage.Id}, but originalVersionId was specified {m_data.OriginalVersionId}",
+                        HttpStatusCode.Conflict
+                    );
+                }
+            }
+            
+            
             var user = m_resourceRepository.Load<User>(m_userId);
-            var resourcePage = m_resourceRepository.Load<Resource>(m_data.ResourcePageId);
             var mimeType = MimeMapping.MimeUtility.GetMimeMapping(m_data.FileName);
 
             var newImageResource = new ImageResource
@@ -49,17 +66,63 @@ namespace Vokabular.MainService.Core.Works.Content
                 CreateTime = now,
                 CreatedByUser = user,
                 Comment = m_data.Comment,
-                FileId = m_fileInfo.FileNameId,
+                FileId = null, // Must be added after saving in FileStorageManager
                 FileName = m_data.FileName,
                 MimeType = mimeType,
                 Resource = latestImage.Resource,
-                ResourcePage = resourcePage,
-                Size = m_fileInfo.FileSize,
+                ResourcePage = latestImage.ResourcePage,
+                Size = 0, // Must be added after saving in FileStorageManager
                 VersionNumber = latestImage.VersionNumber + 1,
             };
             newImageResource.Resource.LatestVersion = newImageResource;
+            newImageResource.Resource.Name = m_data.FileName;
 
-            return (long) m_resourceRepository.Create(newImageResource);
+            m_resourceRepository.Create(newImageResource);
+
+            var fileInfo = m_fileSystemManager.SaveResource(ResourceType.Image, latestImage.Resource.Project.Id, m_fileStream);
+
+            newImageResource.FileId = fileInfo.FileNameId;
+            newImageResource.Size = fileInfo.FileSize;
+            m_resourceRepository.Update(newImageResource);
+
+            return new NewResourceResultContract
+            {
+                ResourceId = newImageResource.Resource.Id,
+                ResourceVersionId = newImageResource.Id,
+                VersionNumber = newImageResource.VersionNumber,
+            };
+        }
+
+        private Tuple<Resource, PageResource> TryCreateNewResource()
+        {
+            if (m_data.ResourcePageId == null)
+            {
+                throw new ArgumentException("Missing required parameters. Some parameters of ImageId, OriginalVersionId and ResourcePageId are required.");
+            }
+
+            var pageId = m_data.ResourcePageId.Value;
+            var latestPageVersion = m_resourceRepository.GetLatestResourceVersion<PageResource>(pageId);
+            if (latestPageVersion == null)
+            {
+                throw new MainServiceException(MainServiceErrorCode.EntityNotFound, $"PageResource with ResourceId={pageId} was not found");
+            }
+
+            var latestImage = m_resourceRepository.GetLatestPageImage(pageId);
+            if (latestImage != null)
+            {
+                throw new MainServiceException(MainServiceErrorCode.ChangeInConflict, $"Conflict. Image already exists for specified page with ID {pageId}.");
+            }
+
+            var newResource = new Resource
+            {
+                Project = latestPageVersion.Resource.Project,
+                Name = m_data.FileName,
+                ContentType = ContentTypeEnum.Page,
+                NamedResourceGroup = null,
+                ResourceType = ResourceTypeEnum.Image,
+            };
+
+            return new Tuple<Resource, PageResource>(newResource, latestPageVersion);
         }
     }
 }

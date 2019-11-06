@@ -23,7 +23,7 @@ namespace Vokabular.MainService.Controllers
 
         [HttpPost("search")]
         [ProducesResponseType(typeof(CorpusSearchSnapshotsResultContract), StatusCodes.Status200OK)]
-        public IActionResult SearchCorpusGetSnapshotListResult([FromBody] CorpusSearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
+        public IActionResult SearchCorpusGetSnapshotListResult([FromBody] BookPagedCorpusSearchRequestContract request, [FromQuery] ProjectTypeContract? projectType)
         {
             if (projectType == null)
             {
@@ -47,7 +47,7 @@ namespace Vokabular.MainService.Controllers
 
         [HttpPost("snapshot/{snapshotId}/search")]
         [ProducesResponseType(typeof(List<CorpusSearchResultContract>), StatusCodes.Status200OK)]
-        public IActionResult SearchCorpusInSnapshotResult(long snapshotId, [FromBody] CorpusSearchRequestContract request)
+        public IActionResult SearchCorpusInSnapshotResult(long snapshotId, [FromBody] BookPagedCorpusSearchInSnapshotRequestContract request)
         {
             try
             {

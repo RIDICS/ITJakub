@@ -1,6 +1,4 @@
-﻿///<reference path="../editors-common-base/ridics.project.editors.util.ts" />
-
-$(document.documentElement).ready(() => {
+﻿$(document.documentElement).ready(() => {
     const main = new KeyTableEditorMain();
     main.init();
 });

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -19,16 +20,17 @@ namespace Vokabular.MainService.Test
         public void TestNewImageVersion()
         {
             var repository = new MockResourceRepository();
+            var fileSystemManager = new MockFileSystemManager();
             var resourceId = 1;
             var userId = 2;
             var data = new CreateImageContract
             {
                 FileName = "test.jpeg",
                 Comment = string.Empty,
+                ImageId = resourceId,
                 OriginalVersionId = 1,
-                ResourcePageId = 40,
             };
-            var fileInfo = new SaveResourceResult
+            fileSystemManager.FileInfo = new SaveResourceResult
             {
                 FileNameId = "file-id",
                 FileSize = 4096,
@@ -36,7 +38,7 @@ namespace Vokabular.MainService.Test
 
             try
             {
-                new CreateNewImageResourceVersionWork(repository, resourceId, data, fileInfo, userId).Execute();
+                new CreateNewImageResourceVersionWork(repository, fileSystemManager, data, Stream.Null, userId).Execute();
                 Assert.Fail("Create new ImageResouce should fail, because version conflict");
             }
             catch (MainServiceException e)
@@ -48,11 +50,12 @@ namespace Vokabular.MainService.Test
             data.OriginalVersionId = latestImage.Id; // No conflict ID
 
 
-            var work = new CreateNewImageResourceVersionWork(repository, resourceId, data, fileInfo, userId);
+            var work = new CreateNewImageResourceVersionWork(repository, fileSystemManager, data, Stream.Null, userId);
             work.Execute();
 
             Assert.AreEqual(1, repository.CreatedObjects.Count);
-            Assert.AreEqual(0, repository.UpdatedObjects.Count);
+            Assert.AreEqual(1, repository.UpdatedObjects.Count);
+            Assert.AreSame(repository.CreatedObjects.First(), repository.UpdatedObjects.First());
 
             var newImageResource = repository.CreatedObjects.OfType<ImageResource>().First();
 
@@ -60,13 +63,13 @@ namespace Vokabular.MainService.Test
             Assert.AreEqual("image/jpeg", newImageResource.MimeType);
             Assert.AreEqual(latestImage.Resource.Id, newImageResource.Resource.Id);
             Assert.AreEqual(userId, newImageResource.CreatedByUser.Id);
-            Assert.AreEqual(data.ResourcePageId, newImageResource.ResourcePage.Id);
         }
 
         [TestMethod]
         public void TestNewAudioVersion()
         {
             var repository = new MockResourceRepository();
+            var fileSystemManager = new MockFileSystemManager();
             var resourceId = 2;
             var userId = 3;
             var data = new CreateAudioContract
@@ -77,7 +80,7 @@ namespace Vokabular.MainService.Test
                 ResourceTrackId = 30,
                 Duration = new TimeSpan(0, 3, 45)
             };
-            var fileInfo = new SaveResourceResult
+            fileSystemManager.FileInfo = new SaveResourceResult
             {
                 FileNameId = "file-id",
                 FileSize = 8192,
@@ -85,7 +88,7 @@ namespace Vokabular.MainService.Test
 
             try
             {
-                new CreateNewAudioResourceVersionWork(repository, resourceId, data, fileInfo, userId).Execute();
+                new CreateNewAudioResourceVersionWork(repository, fileSystemManager, resourceId, data, Stream.Null, userId).Execute();
                 Assert.Fail("Create new AudioResouce should fail, because version conflict");
             }
             catch (MainServiceException e)
@@ -97,11 +100,12 @@ namespace Vokabular.MainService.Test
             data.OriginalVersionId = latestAudio.Id; // No conflict ID
 
 
-            var work = new CreateNewAudioResourceVersionWork(repository, resourceId, data, fileInfo, userId);
+            var work = new CreateNewAudioResourceVersionWork(repository, fileSystemManager, resourceId, data, Stream.Null, userId);
             work.Execute();
 
             Assert.AreEqual(1, repository.CreatedObjects.Count);
-            Assert.AreEqual(0, repository.UpdatedObjects.Count);
+            Assert.AreEqual(1, repository.UpdatedObjects.Count);
+            Assert.AreSame(repository.CreatedObjects.First(), repository.UpdatedObjects.First());
 
             var newAudioResource = repository.CreatedObjects.OfType<AudioResource>().First();
 

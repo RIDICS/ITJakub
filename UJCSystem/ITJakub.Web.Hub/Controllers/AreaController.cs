@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ITJakub.Web.Hub.Converters;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
@@ -17,7 +17,9 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public abstract class AreaController : BaseController
     {
-        protected AreaController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        private const int FetchBookCount = 200;
+
+        protected AreaController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
 
@@ -38,14 +40,11 @@ namespace ITJakub.Web.Hub.Controllers
             return Json(result);
         }
 
-        protected BooksAndCategoriesContract GetBooksAndCategories()
+        protected BooksAndCategoriesContract GetBooksAndCategories(bool fetchBooks = false)
         {
-            var bookClient = GetBookClient();
             var categoryClient = GetCodeListClient();
-
             var categories = categoryClient.GetCategoryList();
-            var books = bookClient.GetBooksByType(AreaBookType);
-
+            
             // Modify data for DropDownSelect usage
 
             const int rootCategoryId = 0;
@@ -64,29 +63,35 @@ namespace ITJakub.Web.Hub.Controllers
 
             categories.Add(rootBookTypeCategory);
 
-
             var booksResult = new List<BookWithCategoryIdsContract>();
-            foreach (var book in books)
+
+            if (fetchBooks)
             {
-                var categoryIds = book.CategoryList.Select(x => x.Id).ToList();
-                if (categoryIds.Count == 0)
-                    categoryIds.Add(rootCategoryId);
+                var bookClient = GetBookClient();
+                var books = bookClient.GetBooksByType(AreaBookType, 0, FetchBookCount);
 
-                booksResult.Add(new BookWithCategoryIdsContract
+                foreach (var book in books)
                 {
-                    Id = book.Id,
-                    Title = book.Title,
-                    SubTitle = book.SubTitle,
-                    Guid = null,
-                    CategoryIds = categoryIds
-                });
-            }
+                    var categoryIds = book.CategoryIds;
+                    if (categoryIds.Count == 0)
+                        categoryIds.Add(rootCategoryId);
 
+                    booksResult.Add(new BookWithCategoryIdsContract
+                    {
+                        Id = book.Id,
+                        Title = book.Title,
+                        SubTitle = book.SubTitle,
+                        Guid = null,
+                        CategoryIds = categoryIds
+                    });
+                }
+            }
+            
             var result = new BooksAndCategoriesContract
             {
                 BookType = AreaBookType,
                 Categories = categories,
-                Books = booksResult
+                Books = booksResult,
             };
             return result;
         }

@@ -8,7 +8,9 @@ using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Managers.Fulltext;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.Shared.Container;
+using Vokabular.TextConverter;
 
 namespace Vokabular.MainService.Core
 {
@@ -25,6 +27,7 @@ namespace Vokabular.MainService.Core
             services.AddScoped<CatalogValueManager>();
             services.AddScoped<CategoryManager>();
             services.AddScoped<CorpusSearchManager>();
+            services.AddScoped<EditionNoteManager>();
             services.AddScoped<FavoriteManager>();
             services.AddScoped<FeedbackManager>();
             services.AddScoped<ForumSiteManager>();
@@ -46,6 +49,7 @@ namespace Vokabular.MainService.Core
             services.AddScoped<UserDetailManager>();
             services.AddScoped<UserManager>();
 
+            services.AddSingleton<CodeGenerator>();
             services.AddScoped<CommunicationConfigurationProvider>();
             services.AddScoped<CommunicationProvider>();
             services.AddScoped<DefaultUserProvider>();
@@ -54,11 +58,14 @@ namespace Vokabular.MainService.Core
             services.AddScoped<IFulltextStorage, ElasticSearchStorage>();
             services.AddScoped<PortalTypeProvider>();
 
+            services.AddScoped<ProjectPermissionConverter>();
+
             services.AddSingleton<Profile, AuthUserProfile>();
             services.AddSingleton<Profile, RoleProfile>();
             services.AddSingleton<Profile, PermissionProfile>();
 
             services.AddSingleton<Profile, AudioProfile>();
+            services.AddSingleton<Profile, BasicBookProfile>();
             services.AddSingleton<Profile, BookProfile>();
             services.AddSingleton<Profile, BookTypeProfile>();
             services.AddSingleton<Profile, CategoryProfile>();
@@ -80,6 +87,7 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, OriginalAuthorProfile>();
             services.AddSingleton<Profile, PageProfile>();
             services.AddSingleton<Profile, ProjectProfile>();
+            services.AddSingleton<Profile, ProjectPermissionProfile>();
             services.AddSingleton<Profile, ResourceProfile>();
             services.AddSingleton<Profile, ResourceVersionProfile>();
             services.AddSingleton<Profile, ResponsiblePersonProfile>();
@@ -90,6 +98,7 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, TrackProfile>();
             services.AddSingleton<Profile, TransformationProfile>();
             services.AddSingleton<Profile, UserContactProfile>();
+            services.AddSingleton<Profile, UserGroupProfile>();
             services.AddSingleton<Profile, UserProfile>();
 
             services.AddSingleton<Profile, BucketContractProfile>();
@@ -100,6 +109,7 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, CardShortContractProfile>();
 
             new CoreContainerRegistration().Install(services);
+            services.AddTextConverterServices();
         }
     }
 }

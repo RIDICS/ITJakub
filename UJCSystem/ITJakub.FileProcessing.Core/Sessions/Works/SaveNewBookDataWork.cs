@@ -45,7 +45,13 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             m_importedResourceVersionIds = new List<long>();
 
             m_bookVersionId = new UpdateBookVersionSubtask(m_resourceRepository).UpdateBookVersion(m_projectId, m_userId, m_bookData);
-            new UpdateEditionNoteSubtask(m_resourceRepository).UpdateEditionNote(m_projectId, m_bookVersionId, m_userId, m_bookData);
+
+            var updateEditionNoteSubtask = new UpdateEditionNoteSubtask(m_resourceRepository);
+            var editionNoteVersionId = updateEditionNoteSubtask.UpdateEditionNote(m_projectId, m_bookVersionId, m_userId, m_bookData);
+            if (editionNoteVersionId != null)
+            {
+                m_importedResourceVersionIds.Add(editionNoteVersionId.Value);
+            }
             
             //TODO update: transformations
 

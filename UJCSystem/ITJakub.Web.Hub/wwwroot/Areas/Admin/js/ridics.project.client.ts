@@ -24,54 +24,12 @@
         this.ajax("POST", urlPath, JSON.stringify(data), response => callback(response, null), status => callback(null, status));
     }
 
-    public createProject(name: string, callback: (id: number, error: HttpStatusCode) => void) {
-        this.postAjax("Admin/Project/CreateProject", {name: name}, callback);
+    public createProject(name: string, selectedBookTypes: BookTypeEnum[], callback: (id: number, error: HttpStatusCode) => void) {
+        this.postAjax("Admin/Project/CreateProject", {name: name, selectedBookTypes: selectedBookTypes}, callback);
     }
 
     public deleteProject(id: number, callback: (error: HttpStatusCode) => void) {
         this.postAjax("Admin/Project/DeleteProject", {id: id}, (response, errorCode) => callback(errorCode));
-    }
-
-    public getResourceList(projectId: number, resourceType: ResourceType, callback: (list: IProjectResource[], errorCode: HttpStatusCode) => void) {
-        var data = {
-            projectId: projectId,
-            resourceType: resourceType
-        }
-        this.getAjax("Admin/Project/GetResourceList", data, callback);
-    }
-
-    public processUploadedResources(projectId: number, sessionId: string, comment: string, callback: (errorCode: HttpStatusCode) => void) {
-        var data = {
-            projectId: projectId,
-            sessionId: sessionId,
-            comment: comment
-        };
-        this.postAjax("Admin/Project/ProcessUploadedResources", data, (response, errorCode) => callback(errorCode));
-    }
-
-    public processUploadedResourceVersion(resourceId: number, sessionId: string, comment: string, callback: (errorCode: HttpStatusCode) => void) {
-        var data = {
-            resourceId: resourceId,
-            sessionId: sessionId,
-            comment: comment
-        };
-        this.postAjax("Admin/Project/ProcessUploadResourceVersion", data, (response, errorCode) => callback(errorCode));
-    }
-
-    public deleteResource(resourceId: number, callback: (errorCode: HttpStatusCode) => void) {
-        this.postAjax("Admin/Project/DeleteResource", {resourceId: resourceId}, (response, errorCode) => callback(errorCode));
-    }
-
-    public renameResource(resourceId: number, newName: string, callback: (errorCode: HttpStatusCode) => void) {
-        var data = {
-            resourceId: resourceId,
-            newName: newName
-        }
-        this.postAjax("Admin/Project/RenameResource", data, (response, errorCode) => callback(errorCode));
-    }
-
-    public duplicateResource(resourceId: number, callback: (newResourceId: number, errorCode: HttpStatusCode) => void) {
-        this.postAjax("Admin/Project/DuplicateResource", {resourceId: resourceId}, callback);
     }
 
     public createPublisher(name: string, email: string, callback: (newPublisherId: number, errorCode: HttpStatusCode) => void) {
@@ -126,6 +84,18 @@
     saveMetadata(projectId: number, data: ISaveMetadataResource): JQuery.jqXHR<IMetadataSaveResult> {
         return $.ajax({
             url: `${getBaseUrl()}Admin/Project/SaveMetadata?projectId=${projectId}`,
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            cache: false,
+            async: true,
+            dataType: "json"
+        });
+    }
+
+    saveCategorization(projectId: number, data: ISaveCategorization): JQuery.jqXHR {
+        return $.ajax({
+            url: `${getBaseUrl()}Admin/Project/SaveCategorization?projectId=${projectId}`,
             type: "POST",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",

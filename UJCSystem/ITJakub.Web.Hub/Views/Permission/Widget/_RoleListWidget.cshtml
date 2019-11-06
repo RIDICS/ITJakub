@@ -1,5 +1,5 @@
 ﻿@using Scalesoft.Localization.AspNetCore
-@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.RoleContract>
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.UserGroupContract>
 
 @inject ILocalizationService Localizer
 
@@ -17,6 +17,7 @@
     </div>
 }
 
+<div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
 @if (Model != null && Model.List.Count != 0)
 {
     <div class="table-responsive">

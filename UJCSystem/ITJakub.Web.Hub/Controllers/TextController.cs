@@ -1,6 +1,5 @@
-﻿using ITJakub.Web.Hub.Core.Communication;
+﻿using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Managers;
-using ITJakub.Web.Hub.Core.Markdown;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests;
 using ITJakub.Web.Hub.Models.Type;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Scalesoft.Localization.AspNetCore;
 using Vokabular.Shared.Const;
+using Vokabular.TextConverter.Markdown;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -17,7 +17,7 @@ namespace ITJakub.Web.Hub.Controllers
         private readonly StaticTextManager m_staticTextManager;
         private readonly IMarkdownToHtmlConverter m_markdownToHtmlConverter;
 
-        public TextController(ILocalizationService localizationService, StaticTextManager staticTextManager, CommunicationProvider communicationProvider, IMarkdownToHtmlConverter markdownToHtmlConverter) : base(communicationProvider)
+        public TextController(ILocalizationService localizationService, StaticTextManager staticTextManager, ControllerDataProvider controllerDataProvider, IMarkdownToHtmlConverter markdownToHtmlConverter) : base(controllerDataProvider)
         {
             m_localizationService = localizationService;
             m_staticTextManager = staticTextManager;

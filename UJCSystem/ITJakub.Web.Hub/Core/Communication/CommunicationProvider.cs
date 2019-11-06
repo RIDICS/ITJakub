@@ -1,10 +1,6 @@
 using System.ServiceModel;
-using AutoMapper;
 using ITJakub.Lemmatization.Shared.Contracts;
-using ITJakub.Web.Hub.Options;
-using Microsoft.Extensions.Options;
 using Vokabular.MainService.DataContracts.Clients;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Core.Communication
 {
@@ -22,13 +18,11 @@ namespace ITJakub.Web.Hub.Core.Communication
         private readonly MainServiceNewsClient m_newsClient;
         private readonly MainServicePermissionClient m_permissionClient;
         private readonly MainServiceProjectClient m_projectClient;
-        private readonly MainServiceResourceClient m_resourceClient;
-        private readonly MainServiceRoleClient m_roleClient;
+        private readonly MainServiceUserGroupClient m_userGroupClient;
         private readonly MainServiceSessionClient m_sessionClient;
         private readonly MainServiceSnapshotClient m_snapshotClient;
         private readonly MainServiceTermClient m_termClient;
         private readonly MainServiceUserClient m_userClient;
-        private readonly IOptions<PortalOption> m_portalOption;
 
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
 
@@ -37,9 +31,9 @@ namespace ITJakub.Web.Hub.Core.Communication
             MainServiceExternalRepositoryClient externalRepositoryClient, MainServiceFavoriteClient favoriteClient,
             MainServiceFeedbackClient feedbackClient, MainServiceFilteringExpressionSetClient filteringExpressionSetClient,
             MainServiceMetadataClient metadataClient, MainServiceNewsClient newsClient, MainServicePermissionClient permissionClient,
-            MainServiceProjectClient projectClient, MainServiceResourceClient resourceClient, MainServiceRoleClient roleClient,
+            MainServiceProjectClient projectClient, MainServiceUserGroupClient userGroupClient,
             MainServiceSessionClient sessionClient, MainServiceSnapshotClient snapshotClient, MainServiceTermClient termClient,
-            MainServiceUserClient userClient, IOptions<PortalOption> portalOption, IMapper mapper)
+            MainServiceUserClient userClient)
         {
             m_configurationProvider = communicationConfigurationProvider;
             m_bookClient = bookClient;
@@ -53,20 +47,13 @@ namespace ITJakub.Web.Hub.Core.Communication
             m_newsClient = newsClient;
             m_permissionClient = permissionClient;
             m_projectClient = projectClient;
-            m_resourceClient = resourceClient;
-            m_roleClient = roleClient;
+            m_userGroupClient = userGroupClient;
             m_sessionClient = sessionClient;
             m_snapshotClient = snapshotClient;
             m_termClient = termClient;
             m_userClient = userClient;
-            m_portalOption = portalOption;
-            Mapper = mapper;
         }
-
-        public PortalTypeContract PortalType => Mapper.Map<PortalTypeContract>(m_portalOption.Value.PortalType);
-
-        public IMapper Mapper { get; }
-
+        
         public MainServiceBookClient GetMainServiceBookClient()
         {
             return m_bookClient;
@@ -121,15 +108,10 @@ namespace ITJakub.Web.Hub.Core.Communication
         {
             return m_projectClient;
         }
-
-        public MainServiceResourceClient GetMainServiceResourceClient()
+        
+        public MainServiceUserGroupClient GetMainServiceRoleClient()
         {
-            return m_resourceClient;
-        }
-
-        public MainServiceRoleClient GetMainServiceRoleClient()
-        {
-            return m_roleClient;
+            return m_userGroupClient;
         }
 
         public MainServiceSessionClient GetMainServiceSessionClient()

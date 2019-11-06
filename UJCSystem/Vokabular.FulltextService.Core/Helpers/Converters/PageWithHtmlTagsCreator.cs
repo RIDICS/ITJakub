@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.FulltextService.Core.Helpers.Converters

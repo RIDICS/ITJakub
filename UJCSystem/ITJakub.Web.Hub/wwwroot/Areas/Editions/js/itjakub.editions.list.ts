@@ -2,7 +2,7 @@
         const modulInicializator = new ListModulInicializator({
             bibliographyModule: {
                 forcedBookType: BookTypeEnum.Edition,
-                customConfigurationPath: "Editions/Editions/GetListConfiguration"
+                customConfigurationPath: $("#bibliography-configuration-url").data("url")
             },
             search: {
                 enabledOptions: [

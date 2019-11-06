@@ -8,7 +8,7 @@
     "bootstrap-colorpicker-plus": "https://github.com/Scalesoft/bootstrap-colorpicker-plus.git#0fdd970967ad47210d29dece08a4b4f8d28adbc7",
     "bootstrap-select": "^1.13.10",
     "bootstrap-tokenfield": "https://github.com/tilonet/bootstrap-tokenfield.git#0.12.3",
-    "dropzone": "3.12.0",
+    "dropzone": "5.5.1",
     "font-awesome": "4.7.0",
     "gijgo": "https://github.com/atatanasov/gijgo.git#1.9.13",
     "he": "1.2.0",

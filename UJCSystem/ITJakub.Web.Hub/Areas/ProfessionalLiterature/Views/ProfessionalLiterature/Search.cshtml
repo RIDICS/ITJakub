@@ -1,5 +1,6 @@
 ﻿@using Scalesoft.Localization.AspNetCore
 @inject ILocalizationService Localizer
+@inject IFileVersionProvider FileVersionProvider
 
 @{
     ViewBag.Title = @Localizer.Translate("ProfessionalLiteratureSearch", "ProfessionalLiterature");
@@ -12,5 +13,7 @@
     <script asp-append-version="true" src="~/Areas/ProfessionalLiterature/js/itjakub.professionalliterature.js"></script>
     <script asp-append-version="true" src="~/Areas/ProfessionalLiterature/js/itjakub.professionalliterature.search.js"></script>
 }
+
+<div id="bibliography-configuration-url" data-url="@FileVersionProvider.AddFileVersionToPath(Context.Request.PathBase, Url.Content("~/Areas/ProfessionalLiterature/content/BibliographyPlugin/search_configuration.json"))"></div>
 
 @await Html.PartialAsync("_BibliographySearch")

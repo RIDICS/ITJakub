@@ -405,15 +405,15 @@ class RoleManager {
     }
 
     private initCreateRoleModal() {
-        const createRoleModal = $("#createRoleModal");
-        const roleError = $("#create-role-error");
-
+        const createRoleModal = $("#createRoleDialog");
+        
         $("#createRoleButton").click(() => {
             createRoleModal.modal();
         });
 
         createRoleModal.on("hidden.bs.modal", () => {
-            roleError.empty();
+            $("input[type=text]", createRoleModal).val("");
+            $(".error-container", createRoleModal).empty();
         });
     }
 
@@ -430,7 +430,7 @@ class RoleManager {
                 this.client.createRole(createRoleForm.serialize())
                     .done((response) => {
                         createRoleSection.html(response);
-                        if (createRoleForm.find(".alert-success").length) {
+                        if ($("#createRoleForm").find(".alert-success").length) {
                             this.roleList.reloadPage();
                         }
                         this.initCreateRoleForm();
@@ -445,8 +445,9 @@ class RoleManager {
     }
 
     private clearSections() {
-        this.userList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
-        this.permissionList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
+        if (this.userList) this.userList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
+        if (this.permissionList) this.permissionList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
+
         $("#addRoleButton").addClass("disabled");
     }
 }

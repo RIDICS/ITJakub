@@ -4,7 +4,6 @@
 @inject ILocalizationService Localizer
 @inject PermissionLocalizer PermissionLocalizer
 
-<div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
 @foreach (var permission in Model.List)
 {
 <tr class="permission-row" data-permission-id="@permission.Id">

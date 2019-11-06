@@ -19,7 +19,7 @@ namespace Vokabular.FulltextService.Core.Managers
 
         public TextResourceContract GetTextResource(string textResourceId)
         {
-            var client = CommunicationProvider.GetElasticClient();
+            var client = m_communicationProvider.GetElasticClient();
             var response = client.Get<TextResourceContract>(textResourceId, idx => idx.Index(PageIndex).Type(PageType));
             if (!response.IsValid)
             {
@@ -36,7 +36,7 @@ namespace Vokabular.FulltextService.Core.Managers
                 throw new ArgumentException(validationResult.ErrorMessage);
             }
 
-            var client = CommunicationProvider.GetElasticClient();
+            var client = m_communicationProvider.GetElasticClient();
             var response = client.Index(textResource, idx => idx.Index(PageIndex).Type(PageType));
 
             if (!response.IsValid)

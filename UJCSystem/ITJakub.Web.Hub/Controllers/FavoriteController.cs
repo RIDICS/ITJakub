@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using AutoMapper;
-using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Models.Favorite;
 using ITJakub.Web.Hub.Models.Requests.Favorite;
 using Microsoft.AspNetCore.Http;
@@ -17,9 +16,9 @@ namespace ITJakub.Web.Hub.Controllers
         private const int LatestFavoriteCount = 5;
         private readonly ILocalizationService m_localizer;
 
-        public FavoriteController(CommunicationProvider communicationProvider, ILocalizationService localizer) : base(communicationProvider)
+        public FavoriteController(ControllerDataProvider controllerDataProvider, ILocalizationService localization) : base(controllerDataProvider)
         {
-            m_localizer = localizer;
+            m_localizer = localization;
         }
 
         public ActionResult Management()
@@ -171,8 +170,13 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         public ActionResult GetFavoriteLabeledBooks([FromBody] GetFavoriteLabeledBookRequest request)
         {
+            if (request.BookType == null && (request.BookIds == null || request.BookIds.Count == 0))
+            {
+                return Json(new List<object>());
+            }
+
             var client = GetFavoriteClient();
-            var result = client.GetFavoriteLabeledBooks(request.BookIds, request.BookType);
+            var result = client.GetFavoriteLabeledBooks(request.BookIds, request.BookType, GetDefaultProjectType());
             return Json(result);
         }
 
@@ -187,7 +191,7 @@ namespace ITJakub.Web.Hub.Controllers
         public ActionResult GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType)
         {
             var client = GetFavoriteClient();
-            var result = client.GetFavoriteLabelsWithBooksAndCategories(bookType);
+            var result = client.GetFavoriteLabelsWithBooksAndCategories(bookType, GetDefaultProjectType());
             return Json(result);
         }
 

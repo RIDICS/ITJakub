@@ -18,14 +18,16 @@ namespace Vokabular.MainService.Controllers
         private readonly ProjectMetadataManager m_projectMetadataManager;
         private readonly ProjectInfoManager m_projectInfoManager;
         private readonly ForumSiteManager m_forumSiteManager;
+        private readonly PermissionManager m_permissionManager;
 
         public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager,
-            ProjectInfoManager projectInfoManager, ForumSiteManager forumSiteManager)
+            ProjectInfoManager projectInfoManager, ForumSiteManager forumSiteManager, PermissionManager permissionManager)
         {
             m_projectManager = projectManager;
             m_projectMetadataManager = projectMetadataManager;
             m_projectInfoManager = projectInfoManager;
             m_forumSiteManager = forumSiteManager;
+            m_permissionManager = permissionManager;
         }
         
         [HttpGet]
@@ -33,6 +35,7 @@ namespace Vokabular.MainService.Controllers
         public List<ProjectDetailContract> GetProjectList([FromQuery] int? start,
             [FromQuery] int? count,
             [FromQuery] ProjectTypeContract? projectType,
+            [FromQuery] ProjectOwnerTypeContract? projectOwnerType,
             [FromQuery] string filterByName,
             [FromQuery] bool? fetchPageCount,
             [FromQuery] bool? fetchAuthors,
@@ -41,7 +44,8 @@ namespace Vokabular.MainService.Controllers
             var isFetchPageCount = fetchPageCount ?? false;
             var isFetchAuthors = fetchAuthors ?? false;
             var isFetchResponsiblePersons = fetchResponsiblePersons ?? false;
-            var result = m_projectManager.GetProjectList(start, count, projectType, filterByName, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons);
+            var projectOwner = projectOwnerType ?? ProjectOwnerTypeContract.AllProjects;
+            var result = m_projectManager.GetProjectList(start, count, projectType, projectOwner, filterByName, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons);
 
             SetTotalCountHeader(result.TotalCount);
 
@@ -64,7 +68,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPost]
-        public long CreateProject([FromBody] ProjectContract project)
+        public long CreateProject([FromBody] CreateProjectContract project)
         {
             return m_projectManager.CreateProject(project);
         }
@@ -194,12 +198,12 @@ namespace Vokabular.MainService.Controllers
             return m_projectInfoManager.GetProjectResponsiblePersons(projectId);
         }
 
-        [HttpGet("{projectId}/role")]
+        [HttpGet("{projectId}/user-group")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total records count")]
-        public List<RoleContract> GetRolesByProject(long projectId, [FromQuery] int? start, [FromQuery] int? count,
+        public List<UserGroupContract> GetUserGroupsByProject(long projectId, [FromQuery] int? start, [FromQuery] int? count,
             [FromQuery] string filterByName)
         {
-            var result = m_projectManager.GetRolesByProject(projectId, start, count, filterByName);
+            var result = m_projectManager.GetUserGroupsByProject(projectId, start, count, filterByName);
 
             SetTotalCountHeader(result.TotalCount);
 
@@ -220,6 +224,13 @@ namespace Vokabular.MainService.Controllers
             var forumId = m_forumSiteManager.CreateOrUpdateForums(projectId);
 
             return forumId != null ? (ActionResult<int>) Ok(forumId.Value) : BadRequest("Forum is disabled");
+        }
+
+        [HttpPost("{projectId}/single-user-group")]
+        public IActionResult AddProjectToUserGroupByCode(long projectId, [FromBody] AssignPermissionToSingleUserGroupContract data)
+        {
+            m_permissionManager.AddBookToSingleUserGroup(projectId, data.Code, data.Permissions);
+            return Ok();
         }
     }
 }

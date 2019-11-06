@@ -25,12 +25,15 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             if (bookData.Responsibles == null)
                 return;
 
-            var itemsToCreate = new List<ProjectResponsiblePerson>();
             var project = m_projectRepository.Load<Project>(projectId);
             var dbResponsibles = m_projectRepository.GetProjectResponsibleList(projectId);
 
-            foreach (var responsiblePerson in bookData.Responsibles)
+            var updatedResponsibles = new List<ProjectResponsiblePerson>();
+            var comparer = new ProjectResponsibleNameEqualityComparer();
+
+            for (var i = 0; i < bookData.Responsibles.Count; i++)
             {
+                var responsiblePerson = bookData.Responsibles[i];
                 var dbResponsiblePerson = GetOrCreateResponsiblePerson(responsiblePerson.NameText);
                 var dbResponsibleTypes = GetOrCreateResponsibleType(responsiblePerson.TypeText);
 
@@ -40,18 +43,27 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     {
                         Project = project,
                         ResponsiblePerson = dbResponsiblePerson,
-                        ResponsibleType = dbResponsibleType
+                        ResponsibleType = dbResponsibleType,
+                        Sequence = i + 1,
                     };
-                    var comparer = new ProjectResponsibleNameEqualityComparer();
-
+                    
                     if (!dbResponsibles.Contains(newProjectResponsible, comparer))
                     {
-                        itemsToCreate.Add(newProjectResponsible);
+                        m_projectRepository.Create(newProjectResponsible);
+                    }
+                    else
+                    {
+                        var dbResponsible = dbResponsibles.Single(x => comparer.Equals(x, newProjectResponsible));
+                        dbResponsible.Sequence = i + 1;
+                        m_projectRepository.Update(dbResponsible);
+
+                        updatedResponsibles.Add(dbResponsible);
                     }
                 }
             }
 
-            m_projectRepository.CreateAll(itemsToCreate);
+            var responsiblesToRemove = dbResponsibles.Except(updatedResponsibles);
+            m_projectRepository.DeleteAll(responsiblesToRemove);
         }
 
         private ResponsiblePerson GetOrCreateResponsiblePerson(string responsiblePersonName)

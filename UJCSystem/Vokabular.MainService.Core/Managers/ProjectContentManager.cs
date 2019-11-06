@@ -6,7 +6,6 @@ using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Works.Content;
 using Vokabular.MainService.Core.Works.Text;
@@ -21,22 +20,20 @@ namespace Vokabular.MainService.Core.Managers
     public class ProjectContentManager
     {
         private readonly ResourceRepository m_resourceRepository;
-        private readonly FileSystemManager m_fileSystemManager;
+        private readonly IFileSystemManager m_fileSystemManager;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
-        private readonly CommunicationProvider m_communicationProvider;
         private readonly UserDetailManager m_userDetailManager;
         private readonly IMapper m_mapper;
 
-        public ProjectContentManager(ResourceRepository resourceRepository, FileSystemManager fileSystemManager,
+        public ProjectContentManager(ResourceRepository resourceRepository, IFileSystemManager fileSystemManager,
             AuthenticationManager authenticationManager, FulltextStorageProvider fulltextStorageProvider,
-            CommunicationProvider communicationProvider, UserDetailManager userDetailManager, IMapper mapper)
+            UserDetailManager userDetailManager, IMapper mapper)
         {
             m_resourceRepository = resourceRepository;
             m_fileSystemManager = fileSystemManager;
             m_authenticationManager = authenticationManager;
             m_fulltextStorageProvider = fulltextStorageProvider;
-            m_communicationProvider = communicationProvider;
             m_userDetailManager = userDetailManager;
             m_mapper = mapper;
         }
@@ -54,24 +51,65 @@ namespace Vokabular.MainService.Core.Managers
             var userCache = new Dictionary<int, string>();
             foreach (var resource in dbResult)
             {
+                var latestResourceVersion = resource.LatestVersion;
                 var resourceContract = m_mapper.Map<ResourceWithLatestVersionContract>(resource);
-                var userId = resource.LatestVersion.CreatedByUser.Id;
+                var userId = latestResourceVersion.CreatedByUser.Id;
                 if (!userCache.TryGetValue(userId, out var userName))
                 {
-                     userCache.Add(userId, m_userDetailManager.GetUserFullName(resource.LatestVersion.CreatedByUser));
+                     userCache.Add(userId, m_userDetailManager.GetUserFullName(latestResourceVersion.CreatedByUser));
                      userCache.TryGetValue(userId, out userName);
                 }
 
                 resourceContract.LatestVersion.Author = userName;
+                resourceContract.LatestVersion.RelatedResource = GetRelatedResourceContract(latestResourceVersion);
                 resultList.Add(resourceContract);
             }
             
             return resultList;
         }
 
+        private RelatedResourceContract GetRelatedResourceContract(ResourceVersion resourceVersion)
+        {
+            Resource relatedResource = null;
+            switch (resourceVersion)
+            {
+                case TextResource textResource:
+                    relatedResource = m_resourceRepository
+                        .InvokeUnitOfWork(x => x.GetLatestResourceVersion<PageResource>(textResource.ResourcePage.Id)).Resource;
+                    break;
+                case ImageResource imageResource:
+                    relatedResource = m_resourceRepository
+                        .InvokeUnitOfWork(x => x.GetLatestResourceVersion<PageResource>(imageResource.ResourcePage.Id)).Resource;
+                    break;
+                case AudioResource audioResource:
+                    relatedResource = m_resourceRepository
+                        .InvokeUnitOfWork(x => x.GetLatestResourceVersion<TrackResource>(audioResource.ResourceTrack.Id)).Resource;
+                    break;
+            }
+
+            if (relatedResource != null)
+            {
+                var result = m_mapper.Map<RelatedResourceContract>(relatedResource);
+
+                switch (relatedResource.LatestVersion)
+                {
+                    case PageResource pageResource:
+                        result.Sequence = pageResource.Position;
+                        break;
+                    case TrackResource trackResource:
+                        result.Sequence = trackResource.Position;
+                        break;
+                }
+
+                return result;
+            }
+
+            return null;
+        }
+
         public List<TextWithPageContract> GetTextResourceList(long projectId, long? resourceGroupId)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectTexts(projectId, resourceGroupId, true));
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestTexts(projectId, resourceGroupId, true));
             var sortedDbResult = dbResult.OrderBy(x => ((PageResource) x.ResourcePage.LatestVersion).Position);
             var result = m_mapper.Map<List<TextWithPageContract>>(sortedDbResult);
             return result;
@@ -79,7 +117,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<ImageWithPageContract> GetImageResourceList(long projectId)
         {
-            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectImages(projectId, null, true));
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestImages(projectId, null, true));
             var sortedDbResult = dbResult.OrderBy(x => ((PageResource) x.ResourcePage.LatestVersion).Position);
             var result = m_mapper.Map<List<ImageWithPageContract>>(sortedDbResult);
             return result;
@@ -88,33 +126,49 @@ namespace Vokabular.MainService.Core.Managers
         public FullTextContract GetTextResource(long textId, TextFormatEnumContract formatValue)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetTextResource(textId));
+            return GetTextResource(dbResult, formatValue);
+        }
+
+        public FullTextContract GetTextResourceByPageId(long pageId, TextFormatEnumContract formatValue)
+        {
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestPageText(pageId));
+            return GetTextResource(dbResult, formatValue);
+        }
+
+        private FullTextContract GetTextResource(TextResource dbResult, TextFormatEnumContract formatValue)
+        {
             var result = m_mapper.Map<FullTextContract>(dbResult);
 
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(dbResult.Resource.Project.ProjectType);
+            if (result != null)
+            {
+                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(dbResult.Resource.Project.ProjectType);
 
-            var text = fulltextStorage.GetPageText(dbResult, formatValue);
-            result.Text = text;
-
+                var text = fulltextStorage.GetPageText(dbResult, formatValue);
+                result.Text = text;
+            }
+            
             return result;
         }
 
         public FullTextContract GetTextResourceVersion(long textVersionId, TextFormatEnumContract formatValue)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetResourceVersion<TextResource>(textVersionId, true, true));
-            var result = m_mapper.Map<FullTextContract>(dbResult);
-
-            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(dbResult.Resource.Project.ProjectType);
-
-            var text = fulltextStorage.GetPageText(dbResult, formatValue);
-            result.Text = text;
-
-            return result;
+            return GetTextResource(dbResult, formatValue);
         }
 
         public List<GetTextCommentContract> GetCommentsForText(long textId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetCommentsForText(textId));
-            var result = m_userDetailManager.AddUserDetails(m_mapper.Map<List<GetTextCommentContract>>(dbResult));
+            var contractList = m_mapper.Map<List<GetTextCommentContract>>(dbResult);
+            var result = m_userDetailManager.AddUserDetails(contractList);
+            return result;
+        }
+
+        public GetTextCommentContract GetComment(long commentId)
+        {
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetComment(commentId));
+            var contract = m_mapper.Map<GetTextCommentContract>(dbResult);
+            var result = m_userDetailManager.AddUserDetails(contract);
             return result;
         }
 
@@ -136,6 +190,13 @@ namespace Vokabular.MainService.Core.Managers
         {
             var deleteCommentWork = new DeleteTextCommentWork(m_resourceRepository, commentId);
             deleteCommentWork.Execute();
+        }
+
+        public ImageContract GetImageResourceByPageId(long pageId)
+        {
+            var imageResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestPageImage(pageId));
+            var result = m_mapper.Map<ImageContract>(imageResource);
+            return result;
         }
 
         public FileResultData GetImageResource(long imageId)
@@ -166,40 +227,52 @@ namespace Vokabular.MainService.Core.Managers
             };
         }
 
-        public long CreateNewImageVersion(long imageId, CreateImageContract data, Stream stream)
+        public NewResourceResultContract CreateNewImageVersion(CreateImageContract data, Stream stream)
         {
-            var latestImage = m_resourceRepository.GetLatestResourceVersion<ImageResource>(imageId);
-            var projectId = latestImage.Resource.Project.Id;
-
-            var fileInfo = m_fileSystemManager.SaveResource(ResourceType.Image, projectId, stream);
-
             var userId = m_authenticationManager.GetCurrentUserId();
-            var resultVersionId = new CreateNewImageResourceVersionWork(m_resourceRepository, imageId,
-                data, fileInfo, userId).Execute();
+            var resultVersionId = new CreateNewImageResourceVersionWork(m_resourceRepository, m_fileSystemManager,
+                data, stream, userId).Execute();
 
             return resultVersionId;
         }
 
         public long CreateNewAudioVersion(long audioId, CreateAudioContract data, Stream stream)
         {
-            var latestAudio = m_resourceRepository.GetLatestResourceVersion<AudioResource>(audioId);
-            var projectId = latestAudio.Resource.Project.Id;
-
-            var fileInfo = m_fileSystemManager.SaveResource(ResourceType.Audio, projectId, stream);
-
             var userId = m_authenticationManager.GetCurrentUserId();
-            var resultVersionId = new CreateNewAudioResourceVersionWork(m_resourceRepository, audioId,
-                data, fileInfo, userId).Execute();
+            var resultVersionId = new CreateNewAudioResourceVersionWork(m_resourceRepository, m_fileSystemManager, audioId,
+                data, stream, userId).Execute();
 
             return resultVersionId;
         }
 
-        public long CreateNewTextResourceVersion(CreateTextRequestContract request)
+        public long CreateNewTextResourceVersion(long textId, CreateTextVersionRequestContract request)
         {
+            var latestText = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<TextResource>(textId));
+            var project = latestText.Resource.Project;
+
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(project.ProjectType);
+
             var userId = m_authenticationManager.GetCurrentUserId();
-            var createNewTextResourceWork = new CreateNewTextResourceWork(m_resourceRepository, request, userId, m_communicationProvider);
+            var createNewTextResourceWork = new CreateNewTextResourceWork(m_resourceRepository, textId, request, userId, fulltextStorage);
             var resultId = createNewTextResourceWork.Execute();
             return resultId;
+        }
+
+        public long CreateTextResourceOnPage(long pageId, CreateTextRequestContract request)
+        {
+            var latestPage = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<PageResource>(pageId));
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(latestPage.Resource.Project.ProjectType);
+
+            var userId = m_authenticationManager.GetCurrentUserId();
+
+            var resourceId = new CreateEmptyTextResourceWork(m_resourceRepository, pageId, request, userId, fulltextStorage).Execute();
+            return resourceId;
+        }
+
+        public void RemoveResource(long resourceId)
+        {
+            var work = new RemoveResourceWork(m_resourceRepository, resourceId);
+            work.Execute();
         }
     }
 }

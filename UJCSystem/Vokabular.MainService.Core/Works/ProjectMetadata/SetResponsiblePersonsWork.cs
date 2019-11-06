@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -25,8 +26,9 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
             var project = m_projectRepository.Load<Project>(m_projectId);
             
             var newDbProjectResponsibles = new List<ProjectResponsiblePerson>();
-            foreach (var projectPerson in m_projectResponsiblePersonIdList)
+            for (var i = 0; i < m_projectResponsiblePersonIdList.Count; i++)
             {
+                var projectPerson = m_projectResponsiblePersonIdList[i];
                 var responsiblePerson = m_projectRepository.Load<ResponsiblePerson>(projectPerson.ResponsiblePersonId);
                 var responsibleType = m_projectRepository.Load<ResponsibleType>(projectPerson.ResponsibleTypeId);
                 var newProjectResponsible = new ProjectResponsiblePerson
@@ -34,6 +36,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
                     Project = project,
                     ResponsiblePerson = responsiblePerson,
                     ResponsibleType = responsibleType,
+                    Sequence = i + 1,
                 };
 
                 newDbProjectResponsibles.Add(newProjectResponsible);
@@ -43,14 +46,24 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
             foreach (var dbProjectResponsible in dbProjectResponsibles)
             {
                 if (!newDbProjectResponsibles.Contains(dbProjectResponsible))
+                {
                     m_projectRepository.Delete(dbProjectResponsible);
+                }
             }
 
-            // Create new responsibles
+            // Create or update new responsibles
             foreach (var newDbProjectResponsible in newDbProjectResponsibles)
             {
                 if (!dbProjectResponsibles.Contains(newDbProjectResponsible))
+                {
                     m_projectRepository.Create(newDbProjectResponsible);
+                }
+                else
+                {
+                    var dbProjectResponsible = dbProjectResponsibles.Single(x => x.Equals(newDbProjectResponsible));
+                    dbProjectResponsible.Sequence = newDbProjectResponsible.Sequence;
+                    m_projectRepository.Update(dbProjectResponsible);
+                }
             }
         }
     }

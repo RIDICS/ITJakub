@@ -37,11 +37,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public int CreateUserIfNotExist(int userExternalId)
+        public int CreateUserIfNotExist(CreateUserIfNotExistContract data)
         {
             try
             {
-                var result = m_client.Post<int>("user/external", userExternalId);
+                var result = m_client.Post<int>("user/current/local-data", data);
                 return result;
             }
             catch (HttpRequestException e)
@@ -256,11 +256,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<RoleContract> GetRolesByUser(int userId)
+        public List<UserGroupContract> GetUserGroupsByUser(int userId)
         {
             try
             {
-                var result = m_client.Get<List<RoleContract>>($"user/{userId}/role");
+                var result = m_client.Get<List<UserGroupContract>>($"user/{userId}/group");
                 return result;
             }
             catch (HttpRequestException e)
@@ -277,6 +277,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 m_client.Post<object>($"user/{userId}/reset-password", null);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public string RegenerateSingleUserGroupName(int userId)
+        {
+            try
+            {
+                var result = m_client.Post<string>("user/current/single-user-group/regenerate-name", null);
+                return result;
             }
             catch (HttpRequestException e)
             {

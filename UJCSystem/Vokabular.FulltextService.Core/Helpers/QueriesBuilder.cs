@@ -106,7 +106,7 @@ namespace Vokabular.FulltextService.Core.Helpers
             {
                 if (restriction != null && restriction.SnapshotIds != null)
                 {
-                    idList.AddRange(restriction.SnapshotIds.Select(id => (object)id)); //HACK long to object
+                    idList.AddRange(restriction.SnapshotIds.Cast<object>());
                 }
             }
             return new QueryContainer(new TermsQuery
@@ -152,7 +152,7 @@ namespace Vokabular.FulltextService.Core.Helpers
 
         private string EscapeChars(string text)
         {
-            return text; //TODO 
+            return text; //TODO escape text
             foreach (var reservedChar in ReservedChars)
             {
                 text = text.Replace(reservedChar.ToString(), $"\\{reservedChar}");

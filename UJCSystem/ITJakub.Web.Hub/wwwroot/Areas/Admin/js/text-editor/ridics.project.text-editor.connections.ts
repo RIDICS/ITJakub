@@ -6,13 +6,18 @@
      * @param {string} commentId Unique id of a commentary
      * @returns Whether the connection is not visible
      */
-    private checkIfOverFlowing(commentId: string): boolean {
+    private checkIfOverFlowing(commentId: string, container: JQuery): boolean {
         let overflowing: boolean = false;
-        const textEl = $(`#${commentId}-text`);
-        if (length in textEl) {
+        const textEl = $(container.find(".composition-area").find(`span[data-text-reference-id="${commentId}"]`));
+        if (textEl.length) {
             const pageTextOffsetTop = textEl.offset().top;
-            const commentEl = $(`#${commentId}-comment`);
+            const commentEl = container.find(".comment-area").find(`div[data-text-reference-id="${commentId}"]`);
             const commentName = commentEl.siblings(".media-body").find(".media-heading");
+            if(commentName.length === 0){
+                this.removeConnections();
+                return true;
+            }
+            
             const pageContainer = $(".editor-areas");
             const pageBottom = pageContainer.offset().top + pageContainer.height();
             if (pageTextOffsetTop < pageContainer.offset().top ||
@@ -25,10 +30,10 @@
         return overflowing;
     }
 
-    private drawConnections(commentId: string): void {
-        const from = $(`#${commentId}-text`);
+    private drawConnections(commentId: string, container: JQuery): void {
+        const from = container.find(".composition-area").find(`span[data-text-reference-id="${commentId}"]`);
         from.addClass("highlighted-element");
-        const to = $(`#${commentId}-comment`).children().children(".media-object");
+        const to = container.find(".comment-area").find(`div[data-text-reference-id="${commentId}"]`).children().children(".media-object");
         jqSimpleConnect.connect(from,
             to,
             { radius: 2, color: "red", anchorA: "vertical", anchorB: "horizontal", roundedCorners: true });
@@ -40,26 +45,25 @@
             (event) => {
                 event.stopImmediatePropagation();
                 const target = event.target as HTMLElement;
+                const pageRow = $(target).parents(".page-row");
                 var thread = $(target).parents(".media-list");
-                var uniqueIdWithText = $(thread).children(".media").children(".main-comment").attr("id");
-                var uniqueId = uniqueIdWithText.replace("-comment", "");
+                var uniqueId = $(thread).children(".media").children(".main-comment").data("text-reference-id");
                 if (uniqueId !== null) {
-                    if (!this.checkIfOverFlowing(uniqueId)) {
-                        this.drawConnections(uniqueId);
+                    if (!this.checkIfOverFlowing(uniqueId, pageRow)) {
+                        this.drawConnections(uniqueId, pageRow);
                         this.interval = window.setInterval(() => {
-                            if (this.checkIfOverFlowing(uniqueId)) {
+                            if (this.checkIfOverFlowing(uniqueId, pageRow)) {
                                 $(".highlighted-element").removeClass("highlighted-element");
-                                    jqSimpleConnect.removeAll();
+                                jqSimpleConnect.removeAll();
+                            } else {
+                                if ($(".jqSimpleConnect").length) {
+                                    jqSimpleConnect.repaintAll();
                                 } else {
-                                    if ($(".jqSimpleConnect").length) {
-                                        jqSimpleConnect.repaintAll();
-                                    } else {
-                                        this.drawConnections(uniqueId);
-                                    }
-
+                                    this.drawConnections(uniqueId, pageRow);
                                 }
-                            },
-                            25);
+                            }
+                        },
+                        25);
                     }
                 } else {
                     console.log("Something is wrong. This comment doesn't have an id.");
@@ -71,12 +75,16 @@
         $(document.documentElement).on("mouseleave",
             ".media-list",
             () => {
-                if (typeof this.interval !== "undefined") {
-                    clearInterval(this.interval);
-                }
-                $(".highlighted-element").removeClass("highlighted-element");
-                jqSimpleConnect.removeAll();
+               this.removeConnections();
             });
+    }
+    
+    private removeConnections() {
+        if (typeof this.interval !== "undefined") {
+            clearInterval(this.interval);
+        }
+        $(".highlighted-element").removeClass("highlighted-element");
+        jqSimpleConnect.removeAll();
     }
 
     init(): void {

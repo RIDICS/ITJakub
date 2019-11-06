@@ -5,10 +5,15 @@
 
 class StaticTextEditor {
     private textEditor: TextEditorWrapper;
+    private readonly client: TextApiClient;
+
+    constructor() {
+        this.client = new TextApiClient();
+    }
 
     public init() {
         var textArea = document.getElementById("text");
-        this.textEditor = new TextEditorWrapper(textArea);
+        this.textEditor = new TextEditorWrapper(textArea, this.client);
         this.textEditor.create();
 
         $("#save-button").click(() => {
@@ -17,11 +22,11 @@ class StaticTextEditor {
     }
 
     private saveText() {
-        var textName = $("#name").val() as string;
-        var category = $("#scope").val() as string;
-        var markdownText = this.textEditor.getValue();
+        const textName = $("#name").val() as string;
+        const category = $("#scope").val() as string;
+        const markdownText = this.textEditor.getValue();
 
-        var data: IStaticTextViewModel = {
+        const data: IStaticTextViewModel = {
             name: textName,
             scope: category,
             text: markdownText,
@@ -33,29 +38,20 @@ class StaticTextEditor {
         $("#save-progress").removeClass("hidden");
         $("#save-button").prop("disabled", true);
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Text/SaveText",
-            data: JSON.stringify(data),
-            dataType: "json",
-            contentType: "application/json",
-            success: (modificationUpdate: IModificationUpdateViewModel) => {
-                $("#save-success")
-                    .removeClass("hidden")
-                    .show();
-                $("#save-progress").addClass("hidden");
-                $("#save-button").prop("disabled", false);
-                $("#save-success").delay(3000).fadeOut(2000);
+        this.client.saveText(data).done((modificationUpdate) => {
+            $("#save-success")
+                .removeClass("hidden")
+                .show();
+            $("#save-progress").addClass("hidden");
+            $("#save-button").prop("disabled", false);
+            $("#save-success").delay(3000).fadeOut(2000);
 
-                $("#modification-author").text(modificationUpdate.user ? modificationUpdate.user : localization.translate("Anonymous", "ItJakubJs").value);
-                $("#modification-time").text(modificationUpdate.modificationTime);
-            },
-            error: () => {
-                $("#save-error").removeClass("hidden");
-                $("#save-progress").addClass("hidden");
-                $("#save-button").prop("disabled", false);
-            }
+            $("#modification-author").text(modificationUpdate.user ? modificationUpdate.user : localization.translate("Anonymous", "ItJakubJs").value);
+            $("#modification-time").text(modificationUpdate.modificationTime);
+        }).fail(() => {
+            $("#save-error").removeClass("hidden");
+            $("#save-progress").addClass("hidden");
+            $("#save-button").prop("disabled", false);
         });
     }
 }
@@ -73,14 +69,17 @@ interface IModificationUpdateViewModel {
 }
 
 class TextEditorWrapper {
-    private simplemde: SimpleMDE;
+    private readonly client: TextApiClient;
+    private simpleMde: SimpleMDE;
+    private simpleMdeTools: SimpleMdeTools;
     private options: SimpleMDE.Options;
     private dialogInsertImage: BootstrapDialogWrapper;
     private dialogInsertLink: BootstrapDialogWrapper;
-    private isPreviewRendering = false;
+    private isPreviewRendering = true;
     private originalPreviewRender: (plaintext: string, preview?: HTMLElement) => string;
 
-    constructor(textArea: HTMLElement) {
+    constructor(textArea: HTMLElement, client: TextApiClient) {
+        this.simpleMdeTools = new SimpleMdeTools();
         this.options = {
             element: textArea,
             autoDownloadFontAwesome: false,
@@ -88,36 +87,37 @@ class TextEditorWrapper {
             promptURLs: false,
             spellChecker: false,
             toolbar: [
-                this.toolUndo,
-                this.toolRedo,
-                this.toolSeparator,
-                this.toolBold,
-                this.toolItalic,
-                //this.toolStrikethrough, // not supported by the most markdown parsers
-                this.toolSeparator,
-                this.toolHeading1,
-                this.toolHeading2,
-                this.toolHeading3,
-                this.toolHeadingSmaller,
-                this.toolHeadingBigger,
-                this.toolSeparator,
-                this.toolUnorderedList,
-                this.toolOrderedList,
-                this.toolCodeBlock,
-                this.toolQuote,
-                this.toolSeparator,
-                this.toolLink,
-                this.toolImage,
-                this.toolTable,
-                this.toolHorizontalRule,
-                this.toolSeparator,
-                this.toolPreview,
-                this.toolSideBySide,
-                this.toolFullScreen,
-                this.toolSeparator,
-                this.toolGuide
+                this.simpleMdeTools.toolUndo,
+                this.simpleMdeTools.toolRedo,
+                this.simpleMdeTools.toolSeparator,
+                this.simpleMdeTools.toolBold,
+                this.simpleMdeTools.toolItalic,
+                //this.simplemdeIcons.toolStrikethrough, // not supported by the most markdown parsers
+                this.simpleMdeTools.toolSeparator,
+                this.simpleMdeTools.toolHeading1,
+                this.simpleMdeTools.toolHeading2,
+                this.simpleMdeTools.toolHeading3,
+                this.simpleMdeTools.toolHeadingSmaller,
+                this.simpleMdeTools.toolHeadingBigger,
+                this.simpleMdeTools.toolSeparator,
+                this.simpleMdeTools.toolUnorderedList,
+                this.simpleMdeTools.toolOrderedList,
+                this.simpleMdeTools.toolCodeBlock,
+                this.simpleMdeTools.toolQuote,
+                this.simpleMdeTools.toolSeparator,
+                this.simpleMdeTools.toolLink,
+                this.simpleMdeTools.toolImage,
+                this.simpleMdeTools.toolTable,
+                this.simpleMdeTools.toolHorizontalRule,
+                this.simpleMdeTools.toolSeparator,
+                this.simpleMdeTools.toolPreview,
+                this.simpleMdeTools.toolSideBySide,
+                this.simpleMdeTools.toolFullScreen,
+                this.simpleMdeTools.toolSeparator,
+                this.simpleMdeTools.toolGuide
             ]
         };
+        this.client = client;
     }
 
     public create(initValue?: string) {
@@ -126,50 +126,37 @@ class TextEditorWrapper {
         this.setCustomPreviewRender();
         
         this.options.initialValue = initValue;
-        this.simplemde = new SimpleMDE(this.options);
+        this.simpleMde = new SimpleMDE(this.options);
 
         this.originalPreviewRender = this.options.previewRender;
     }
 
     public getValue(): string {
-        return this.simplemde.value();
+        return this.simpleMde.value();
     }
 
     private previewRemoteRender(text: string, previewElement: HTMLElement) {
+        this.isPreviewRendering = !this.isPreviewRendering;
         if (this.isPreviewRendering) {
             return;
         }
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Text/RenderPreview",
-            data: JSON.stringify({
-                text: text,
-                inputTextFormat: "markdown"
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: (generatedHtml) => {
-                previewElement.innerHTML = generatedHtml;
-                this.isPreviewRendering = false;
-            },
-            error: () => {
-                previewElement.innerHTML = "<div>" + localization.translate("RenderError", "ItJakubJs").value + "</div>";
-                this.isPreviewRendering = false;
-            }
+        this.client.renderPreview(text, "markdown").done((generatedHtml) => {
+            previewElement.innerHTML = generatedHtml;
+        }).fail(() => {
+            previewElement.innerHTML = `<div>${localization.translate("RenderError", "ItJakubJs").value}</div>`;
         });
     }
 
     private setCustomPreviewRender() {
         // for SideBySide mode use faster inner markdown parser
-        this.toolSideBySide.action = (editor: SimpleMDE) => {
+        this.simpleMdeTools.toolSideBySide.action = (editor: SimpleMDE) => {
             this.options.previewRender = this.originalPreviewRender;
             SimpleMDE.toggleSideBySide(editor);
         };
 
         // for Preview mode use server-side markdown parser
-        this.toolPreview.action = (editor: SimpleMDE) => {
+        this.simpleMdeTools.toolPreview.action = (editor: SimpleMDE) => {
             this.options.previewRender = (plainText: string, preview: HTMLElement) => {
                 this.previewRemoteRender(plainText, preview);
                 return "<div class=\"loading\"></div>";
@@ -184,7 +171,7 @@ class TextEditorWrapper {
             autoClearInputs: true
         });
 
-        this.toolImage.action = (editor: SimpleMDE) => {
+        this.simpleMdeTools.toolImage.action = (editor: SimpleMDE) => {
             var selectedText = editor.codemirror.getSelection();
             $("#editor-insert-image-alt").val(selectedText);
             this.dialogInsertImage.show();
@@ -202,7 +189,7 @@ class TextEditorWrapper {
             autoClearInputs: true
         });
 
-        this.toolLink.action = (editor: SimpleMDE) => {
+        this.simpleMdeTools.toolLink.action = (editor: SimpleMDE) => {
             var selectedText = editor.codemirror.getSelection();
             $("#editor-insert-link-label").val(selectedText);
 
@@ -227,7 +214,7 @@ class TextEditorWrapper {
         var alt = $("#editor-insert-image-alt").val() as string;
         var imageText = "![" + alt + "](" + url+ ")";
 
-        var cm = this.simplemde.codemirror;
+        var cm = this.simpleMde.codemirror;
         this.replaceSelection(cm, imageText);
     }
 
@@ -244,7 +231,7 @@ class TextEditorWrapper {
 
         var linkText = "[" + label + "](" + url + ")";
 
-        var cm = this.simplemde.codemirror;
+        var cm = this.simpleMde.codemirror;
         this.replaceSelection(cm, linkText);
     }
 
@@ -261,163 +248,6 @@ class TextEditorWrapper {
         codeMirror.setSelection(startPoint, endPoint);
         codeMirror.focus();
     }
-
-    public toolSeparator = "|";
-
-    public toolBold: SimpleMDE.ToolbarIcon = {
-        name: "bold",
-        action: SimpleMDE.toggleBold,
-        className: "fa fa-bold",
-        title: localization.translate("Bold", "ItJakubJs").value
-    }
-
-    public toolItalic: SimpleMDE.ToolbarIcon = {
-        name: "italic",
-        action: SimpleMDE.toggleItalic,
-        className: "fa fa-italic",
-        title: localization.translate("Italic", "ItJakubJs").value
-    }
-
-    public toolStrikethrough: SimpleMDE.ToolbarIcon = {
-        name: "strikethrough",
-        action: SimpleMDE.toggleStrikethrough,
-        className: "fa fa-strikethrough",
-        title: localization.translate("StrikeThrough", "ItJakubJs").value
-    }
-
-    public toolHeadingSmaller: SimpleMDE.ToolbarIcon = {
-        name: "heading-smaller",
-        action: SimpleMDE.toggleHeadingSmaller,
-        className: "fa fa-header fa-header-x fa-header-smaller",
-        title: localization.translate("HeaderSmaller", "ItJakubJs").value
-    }
-
-    public toolHeadingBigger: SimpleMDE.ToolbarIcon = {
-        name: "heading-bigger",
-        action: SimpleMDE.toggleHeadingBigger,
-        className: "fa fa-header fa-header-x fa-header-bigger",
-        title: localization.translate("HeaderBigger", "ItJakubJs").value
-    }
-
-    public toolHeading1: SimpleMDE.ToolbarIcon = {
-        name: "heading-1",
-        action: SimpleMDE.toggleHeading1,
-        className: "fa fa-header fa-header-x fa-header-1",
-        title: localization.translate("H1", "ItJakubJs").value
-    }
-
-    public toolHeading2: SimpleMDE.ToolbarIcon = {
-        name: "heading-2",
-        action: SimpleMDE.toggleHeading2,
-        className: "fa fa-header fa-header-x fa-header-2",
-        title: localization.translate("H2", "ItJakubJs").value
-    }
-
-    public toolHeading3: SimpleMDE.ToolbarIcon = {
-        name: "heading-3",
-        action: SimpleMDE.toggleHeading3,
-        className: "fa fa-header fa-header-x fa-header-3",
-        title: localization.translate("H3", "ItJakubJs").value
-    }
-
-    public toolCodeBlock: SimpleMDE.ToolbarIcon = {
-        name: "code",
-        action: SimpleMDE.toggleCodeBlock,
-        className: "fa fa-code",
-        title: localization.translate("Code", "ItJakubJs").value
-    }
-
-    public toolQuote: SimpleMDE.ToolbarIcon = {
-        name: "quote",
-        action: SimpleMDE.toggleBlockquote,
-        className: "fa fa-quote-left",
-        title: localization.translate("Quote", "ItJakubJs").value
-    }
-
-    public toolUnorderedList: SimpleMDE.ToolbarIcon = {
-        name: "unordered-list",
-        action: SimpleMDE.toggleUnorderedList,
-        className: "fa fa-list-ul",
-        title: localization.translate("UnorderedList", "ItJakubJs").value
-    }
-
-    public toolOrderedList: SimpleMDE.ToolbarIcon = {
-        name: "ordered-list",
-        action: SimpleMDE.toggleOrderedList,
-        className: "fa fa-list-ol",
-        title: localization.translate("OrderedList", "ItJakubJs").value
-    }
-
-    public toolLink: SimpleMDE.ToolbarIcon = {
-        name: "link",
-        action: SimpleMDE.drawLink,
-        className: "fa fa-link",
-        title: localization.translate("CreateLink", "ItJakubJs").value
-    }
-
-    public toolImage: SimpleMDE.ToolbarIcon = {
-        name: "image",
-        action: SimpleMDE.drawImage,
-        className: "fa fa-picture-o",
-        title: localization.translate("InsertImage", "ItJakubJs").value
-    }
-
-    public toolTable: SimpleMDE.ToolbarIcon = {
-        name: "table",
-        action: SimpleMDE.drawTable,
-        className: "fa fa-table",
-        title: localization.translate("InsertTable", "ItJakubJs").value
-    }
-
-    public toolHorizontalRule: SimpleMDE.ToolbarIcon = {
-        name: "horizontal-rule",
-        action: SimpleMDE.drawHorizontalRule,
-        className: "fa fa-minus",
-        title: localization.translate("InsertHorizontalRule", "ItJakubJs").value
-    }
-
-    public toolPreview: SimpleMDE.ToolbarIcon = {
-        name: "preview",
-        action: SimpleMDE.togglePreview,
-        className: "fa fa-eye no-disable",
-        title: localization.translate("TogglePreview", "ItJakubJs").value
-    }
-
-    public toolSideBySide: SimpleMDE.ToolbarIcon = {
-        name: "side-by-side",
-        action: SimpleMDE.toggleSideBySide,
-        className: "fa fa-columns no-disable no-mobile",
-        title: localization.translate("ToggleSideBySide", "ItJakubJs").value
-    }
-
-    public toolFullScreen: SimpleMDE.ToolbarIcon = {
-        name: "fullscreen",
-        action: SimpleMDE.toggleFullScreen,
-        className: "fa fa-arrows-alt no-disable no-mobile",
-        title: localization.translate("ToggleFullscreen", "ItJakubJs").value
-    }
-
-    public toolGuide: SimpleMDE.ToolbarIcon = {
-        name: "guide",
-        action: "https://simplemde.com/markdown-guide",
-        className: "fa fa-question-circle",
-        title: localization.translate("MarkdownGuide", "ItJakubJs").value
-    }
-
-    public toolUndo: SimpleMDE.ToolbarIcon = {
-        name: "undo",
-        action: SimpleMDE.undo,
-        className: "fa fa-undo no-disable",
-        title: localization.translate("Undo", "ItJakubJs").value
-    }
-
-    public toolRedo: SimpleMDE.ToolbarIcon = {
-        name: "redo",
-        action: SimpleMDE.redo,
-        className: "fa fa-repeat no-disable",
-        title: localization.translate("Redo", "ItJakubJs").value
-    }
-    
 }
 
 //class BootstrapDialogWrapper {

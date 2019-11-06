@@ -8,10 +8,7 @@
     }
 
     public loadCommentFile(textId: number): JQuery.jqXHR<ICommentSctucture[]> {
-        return this.post(`${getBaseUrl()}Admin/ContentEditor/LoadCommentFile`,
-            JSON.stringify({
-                 textId: textId
-            }));
+        return this.get(`${getBaseUrl()}Admin/ContentEditor/LoadCommentFile?textId=${textId}`);
     }
 
     public createNewKeywordsByArray(names: string[]): JQuery.jqXHR<number[]> {

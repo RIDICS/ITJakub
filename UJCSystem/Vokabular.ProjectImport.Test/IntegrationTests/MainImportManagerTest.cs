@@ -10,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Ridics.Authentication.DataContracts;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
@@ -71,7 +70,7 @@ namespace Vokabular.ProjectImport.Test.IntegrationTests
                 .Returns(Task.CompletedTask);
 
             var permissionProviderMock = mockFactory.Create<IPermissionsProvider>();
-            permissionProviderMock.Setup(x => x.GetPermissionByName(It.IsAny<string>())).Returns((PermissionContract) null);
+            permissionProviderMock.Setup(x => x.GetRoleIdsByPermissionName(It.IsAny<string>())).Returns((IList<int>) null);
 
             var mockIoc = new MockIocContainer(true);
             mockIoc.ServiceCollection.Replace(new ServiceDescriptor(typeof(IProjectImportManager),

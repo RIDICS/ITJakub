@@ -1,8 +1,8 @@
 {
-	"culture":"cs-CZ",
-	"scope":"EditionNote",
-	"dictionary": {
-		"EditionNote": "Ediční poznámka"
-
-		}
+  "culture": "cs-CZ",
+  "scope": "EditionNote",
+  "dictionary": {
+    "EditionNote": "Ediční poznámka",
+    "NotFound": "Ediční poznámka k tomuto dílu nebyla nalezena"
+  }
 }

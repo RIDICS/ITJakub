@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using AutoMapper;
 using ITJakub.Web.Hub.Areas.OldGrammar.Models;
-using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
-using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
@@ -16,11 +13,9 @@ using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
-using ITJakub.Web.Hub.Options;
 
 namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 {
-    [LimitedAccess(PortalType.ResearchPortal)]
     [Area("OldGrammar")]
     public class OldGrammarController : AreaController
     {
@@ -28,7 +23,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         private readonly FeedbacksManager m_feedbacksManager;
 
         public OldGrammarController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager,
-            CommunicationProvider communicationProvider) : base(communicationProvider)
+            ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
             m_staticTextManager = staticTextManager;
             m_feedbacksManager = feedbacksManager;
@@ -121,19 +116,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                     JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                 });
         }
-
-        public ActionResult GetListConfiguration()
-        {
-            var fullPath = "~/Areas/OldGrammar/Content/BibliographyPlugin/list_configuration.json";
-            return File(fullPath, "application/json", fullPath);
-        }
-
-        public ActionResult GetSearchConfiguration()
-        {
-            var fullPath = "~/Areas/OldGrammar/Content/BibliographyPlugin/search_configuration.json";
-            return File(fullPath, "application/json", fullPath);
-        }
-
+        
         public ActionResult GetGrammarsWithCategories()
         {
             var result = GetBooksAndCategories();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.Core.Works.Content;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
@@ -28,53 +29,62 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
         {
             var now = DateTime.UtcNow;
             var user = m_resourceRepository.Load<User>(m_userId);
-            var dbPages = m_resourceRepository.GetProjectPages(m_projectId);
-            var updatedPageIds = new List<long>();
+            var dbPages = m_resourceRepository.GetProjectLatestPages(m_projectId);
+            var updatedResourcePageIds = new List<long>();
 
             foreach (var newPage in m_newPages)
             {
-                PageResource pageResource;
+                var pageResource = new PageResource
+                {
+                    Name = newPage.Name,
+                    Comment = null,
+                    Position = newPage.Position,
+                    Resource = null,
+                    VersionNumber = 0,
+                    CreateTime = now,
+                    CreatedByUser = user,
+                    Terms = null, // Terms must be also updated
+                };
+
                 if (newPage.Id == null)
                 {
-                    pageResource = new PageResource
+                    var resource = new Resource
                     {
-                        VersionNumber = 0,
-                        Resource = new Resource
-                        {
-                            ContentType = ContentTypeEnum.Page,
-                            ResourceType = ResourceTypeEnum.Page,
-                            Project = m_resourceRepository.Load<Project>(m_projectId),
-                        }
+                        ContentType = ContentTypeEnum.Page,
+                        ResourceType = ResourceTypeEnum.Page,
+                        Project = m_resourceRepository.Load<Project>(m_projectId),
                     };
+
+                    pageResource.Resource = resource;
+                    pageResource.VersionNumber = 1;
                 }
                 else
                 {
-                    pageResource = m_resourceRepository.GetLatestResourceVersion<PageResource>(newPage.Id.Value);
-                    if (pageResource == null)
+                    var latestPageResource = m_resourceRepository.GetLatestResourceVersion<PageResource>(newPage.Id.Value);
+                    if (latestPageResource == null)
                     {
                         throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
                     }
-                    updatedPageIds.Add(newPage.Id.Value);
+
+                    pageResource.Resource = latestPageResource.Resource;
+                    pageResource.VersionNumber = latestPageResource.VersionNumber + 1;
+                    pageResource.Terms = new List<Term>(latestPageResource.Terms); // Lazy fetch
+
+                    updatedResourcePageIds.Add(newPage.Id.Value);
                 }
 
-                pageResource.Name = newPage.Name;
-                pageResource.Position = newPage.Position;
                 pageResource.Resource.Name = newPage.Name;
                 pageResource.Resource.LatestVersion = pageResource;
-                pageResource.VersionNumber++;
-                pageResource.CreateTime = now;
-                pageResource.CreatedByUser = user;
 
-                m_resourceRepository.Save(pageResource);
+                m_resourceRepository.Create(pageResource);
             }
 
-
+            var removeResourceSubwork = new RemoveResourceSubwork(m_resourceRepository);
             foreach (var dbPage in dbPages)
             {
-                if (!updatedPageIds.Contains(dbPage.Id))
+                if (!updatedResourcePageIds.Contains(dbPage.Resource.Id))
                 {
-                    //TODO remove page
-                    //m_resourceRepository.Delete(dbPage);
+                    removeResourceSubwork.RemoveResource(dbPage.Resource.Id);
                 }
             }
         }

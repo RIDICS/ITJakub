@@ -21,7 +21,7 @@ class BibliographyModule {
 
     private sortChangeCallback: () => void;
 
-    private defaultConfigurationUrl = "Bibliography/GetConfiguration";
+    private defaultConfigurationUrl = $("#bibliography-configuration-default-url").data("url");
 
     private isConfigurationLoad=false;
     private onConfigurationLoad: Array<() => any>=[];
@@ -51,7 +51,7 @@ class BibliographyModule {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + configDownloadPath,
+            url: configDownloadPath,
             dataType: 'json',
             contentType: 'application/json',
             success: (response) => {
@@ -392,7 +392,7 @@ interface IBookInfo {
     LastEditation: string;
     EditationNote: string; //anchor href?
     Copyright: string;
-    Pages: IPage[];
+    //Pages: IPage[];
     Archive: IArchive;
     Century: number;
     Sign: string;
@@ -412,10 +412,10 @@ enum BookTypeEnum {
     AudioBook = "AudioBook"
 }
 
-interface IPage {
-    Start: number;
-    End: number;
-}
+//interface IPage {
+//    Start: number;
+//    End: number;
+//}
 
 interface IArchive {
     Name: string;
