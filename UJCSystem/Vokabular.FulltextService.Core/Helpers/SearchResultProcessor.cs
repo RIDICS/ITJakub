@@ -58,79 +58,7 @@ namespace Vokabular.FulltextService.Core.Helpers
         {
             return highlightedText.Split(new[] { highlightTag }, StringSplitOptions.None).Length / 2;
         }
-
-        //TODO Obsolete method
-        public List<CorpusSearchResultContract> ProcessSearchCorpusByCriteria(ISearchResponse<SnapshotResourceContract> response, string highlightTag, int start, int count)
-        {
-            if (!response.IsValid)
-            {
-                throw new FulltextDatabaseException(response.DebugInformation);
-            }
-
-            var startCounter = 0;
-
-            var resultList = new List<CorpusSearchResultContract>();
-            foreach (var hit in response.Hits)
-            {
-                foreach (var value in hit.Highlights.Values)
-                {
-                    foreach (var highlight in value.Highlights)
-                    {
-                        var numberOfOccurences = GetNumberOfHighlitOccurences(highlight, highlightTag);
-
-                        if (startCounter + numberOfOccurences <= start)
-                        {
-                            startCounter += numberOfOccurences;
-                            continue;
-                        }
-
-                        var resultData = GetCorpusSearchResultDataList(highlight, hit.Source.ProjectId, highlightTag);
-                        AddPageIdsToResult(resultData, hit.Source.Pages);
-
-                        if (startCounter < start)
-                        {
-                            resultData.RemoveRange(0, start - startCounter);
-                            startCounter += resultData.Count;
-                        }
-
-                        if (resultList.Count + resultData.Count > count)
-                            resultData = resultData.GetRange(0, count - resultList.Count);
-
-                        resultList.AddRange(resultData);
-
-                        if (resultList.Count == count)
-                            return resultList;
-                    }
-                }
-            }
-            return resultList;
-        }
-
-        public List<CorpusSearchResultContract> ProcessSearchCorpusByCriteria(ISearchResponse<SnapshotResourceContract> response, string highlightTag)
-        {
-            if (!response.IsValid)
-            {
-                throw new FulltextDatabaseException(response.DebugInformation);
-            }
-
-            var resultList = new List<CorpusSearchResultContract>();
-            foreach (var hit in response.Hits)
-            {
-                foreach (var value in hit.Highlights.Values)
-                {
-                    foreach (var highlight in value.Highlights)
-                    {
-                        var resultData = GetCorpusSearchResultDataList(highlight, hit.Source.ProjectId, highlightTag);
-                        AddPageIdsToResult(resultData, hit.Source.Pages);
-
-                        resultList.AddRange(resultData);
-                    }
-                }
-            }
-            resultList = resultList.Count > 100 ? resultList.GetRange(0, 100) : resultList; //TODO temporary returns only first 100 results
-            return resultList;
-        }
-
+        
         public TextResourceContract ProcessSearchPageByCriteria(ISearchResponse<TextResourceContract> response)
         {
             if (!response.IsValid)
@@ -188,7 +116,7 @@ namespace Vokabular.FulltextService.Core.Helpers
             return counter;
         }
 
-        private void AddPageIdsToResult(List<CorpusSearchResultContract> resultData, List<SnapshotPageResourceContract> sourcePages)
+        protected void AddPageIdsToResult(List<CorpusSearchResultContract> resultData, List<SnapshotPageResourceContract> sourcePages)
         {
             foreach (var searchResultData in resultData)
             {
@@ -232,7 +160,7 @@ namespace Vokabular.FulltextService.Core.Helpers
             //contextStructure.Match = Regex.Replace(contextStructure.Match, @"[ ]<[0-9]*$", "");
         }
 
-        private List<CorpusSearchResultContract> GetCorpusSearchResultDataList(string highlightedText, long projectId, string highlightTag)
+        protected List<CorpusSearchResultContract> GetCorpusSearchResultDataList(string highlightedText, long projectId, string highlightTag)
         {
             var result = new List<CorpusSearchResultContract>();
 
@@ -283,9 +211,8 @@ namespace Vokabular.FulltextService.Core.Helpers
                 SnapshotList = response.Documents.Select(x => new CorpusSearchSnapshotContract{ SnapshotId = x.SnapshotId }).ToList()
             };
         }
-
-
-        public List<CorpusSearchResultContract> ProccessSearchCorpusSnapshotByCriteria( ISearchResponse<SnapshotResourceContract> response, string highlightTag, int start, int count)
+        
+        public List<CorpusSearchResultContract> ProcessSearchCorpusSnapshotByCriteria( ISearchResponse<SnapshotResourceContract> response, string highlightTag, int start, int count)
         {
             if (!response.IsValid)
             {

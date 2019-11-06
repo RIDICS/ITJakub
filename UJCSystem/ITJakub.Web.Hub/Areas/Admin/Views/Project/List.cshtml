@@ -7,54 +7,60 @@
 @{
     ViewBag.Title = Localizer.Translate("ProjectList", "Admin");
 }
+
 @section styles {
-    <link asp-append-version="true" rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css"/>
+    <link asp-append-version="true" rel="stylesheet" href="~/css/ridics.list.css"/>
 }
+
 @section scripts {
+    <script asp-append-version="true" src="~/js/ridics.list.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.list.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.client.js"></script>
 }
 
 <div class="content-container project-list">
-    <div class="row project-list-new">
-        <div class="col-md-4">
-            <button type="button" class="btn btn-default" id="new-project-button">@Localizer.Translate("CreateNewProject", "Admin")</button>
-        </div>
-    </div>
-    
-    @*<hr/>*@
+    <div class="row">
+        <div class="col-xs-12 project-section" id="project-section">
+            <h2>@Localizer.Translate("ProjectList", "Admin")</h2>
+            <div class="section">
+                <div class="row button-menu">
+                    <div class="col-xs-12 col-sm-2">
+                        <button type="button" class="btn btn-default" id="new-project-button">
+                            @Localizer.Translate("CreateNewProject", "Admin")
+                        </button>
+                    </div>
+                    <div class="col-xs-12 col-sm-10">
+                        <form asp-action="List" asp-controller="Project" method="get" class="project-search-form search-form form-inline">
+                            <div class="form-group">
+                                <select class="form-control" id="projectOwnerFilter" title="@Localizer.Translate("Filter", "Admin")">
+                                    @foreach (var option in Model.FilterTypes)
+                                    {
+                                        <option value="@option">@Localizer.Translate(option.ToString(), "Admin")</option>
+                                    }
+                                </select>
+                                <div class="search-input" title="@Localizer.Translate("FindByName", "Admin")">
+                                    <input class="form-control search-value" name="search" placeholder="@Localizer.Translate("ProjectName", "Admin")" value="@Model.Projects.SearchQuery"/>
+                                    <i class="fa fa-close reset-search-button"></i>
+                                </div>
+                                <div class="search-button" title="@Localizer.Translate("FindByName", "Admin")">
+                                    <button class="btn btn-default" type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <hr/>
 
-    <div class="row project-list-header">
-        <div class="col-md-2">
-            <label for="filter">@Localizer.Translate("Filter", "Admin"):</label>
-            <select class="form-control input-sm" id="filter">
-                <option>@Localizer.Translate("All", "Admin")</option>
-                <option>@Localizer.Translate("MyProjects", "Admin")</option>
-                <option>@Localizer.Translate("ForeignProjects", "Admin")</option>
-            </select>
-        </div>
-        <div class="col-md-2 col-md-offset-8">
-            <label for="name-filter">@Localizer.Translate("FindByName", "Admin"):</label>
-            <div class="input-group input-group-sm">
-                <input type="text" class="form-control" id="name-filter" placeholder="@Localizer.Translate("NewProjectName", "Admin")" title="@Localizer.Translate("FindByName", "Admin")" />
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" id="name-filter-button"><span class="glyphicon glyphicon-search"></span></button>
-                </span>
+                <div id="projectListContainer" class="list-container selectable">
+                    @await Html.PartialAsync("_ProjectListContent", Model.Projects)
+                </div>
+                <div id="projectPagination" class="text-center"></div>
             </div>
         </div>
     </div>
-    
-    <div class="project-list-subheader">
-        <a href="#">@Localizer.Translate("AdvancedSearch", "Admin") <span class="glyphicon glyphicon-chevron-down"></span></a>
-    </div>
-
-    <hr/>
-    
-    <div id="list-container">
-        @await Html.PartialAsync("_ProjectListContent", Model)
-    </div>
-    
-    <div id="pagination" class="text-center"></div>
 </div>
 
 <div class="modal fade" role="dialog" id="new-project-dialog">
@@ -112,7 +118,8 @@
             <div class="modal-footer">
                 <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("ErrorDuringDelete", "Admin")</div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Delete", "Admin")</button>
+                <button type="button" class="btn btn-default save-button">
+                    <span class="saving-icon loading-small-button"></span>@Localizer.Translate("Delete", "Admin")</button>
             </div>
         </div>
     </div>

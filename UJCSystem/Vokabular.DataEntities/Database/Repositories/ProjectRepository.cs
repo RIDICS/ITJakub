@@ -17,7 +17,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         }
 
         public virtual ListWithTotalCountResult<Project> GetProjectList(int start, int count, ProjectTypeEnum? projectType,
-            string filterByName = null)
+            string filterByName = null, int? includeUserId = null, int? excludeUserId = null)
         {
             var query = GetSession().QueryOver<Project>()
                 .Fetch(SelectMode.Fetch, x => x.CreatedByUser);
@@ -32,6 +32,16 @@ namespace Vokabular.DataEntities.Database.Repositories
                 query.WhereRestrictionOn(x => x.Name).IsInsensitiveLike(filterByName, MatchMode.Anywhere);
             }
 
+            if (includeUserId != null)
+            {
+                query.And(x => x.CreatedByUser.Id == includeUserId.Value);
+            }
+
+            if (excludeUserId != null)
+            {
+                query.And(x => x.CreatedByUser.Id != excludeUserId.Value);
+            }
+            
             query.OrderBy(x => x.Name).Asc
                 .Skip(start)
                 .Take(count);

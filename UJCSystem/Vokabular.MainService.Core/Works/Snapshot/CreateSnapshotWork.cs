@@ -107,8 +107,10 @@ namespace Vokabular.MainService.Core.Works.Snapshot
             var snapshotId = (long)m_projectRepository.Create(newDbSnapshot);
 
             // Publish snapshot to fulltext database
+            var orderedTextResourceVersions =
+                textResourceVersions.OrderBy(x => ((PageResource) x.ResourcePage.LatestVersion).Position).ToList();
 
-            m_fulltextStorage.CreateSnapshot(newDbSnapshot, textResourceVersions, metadataResourceVersion);
+            m_fulltextStorage.CreateSnapshot(newDbSnapshot, orderedTextResourceVersions, metadataResourceVersion);
 
             return snapshotId;
         }

@@ -214,7 +214,7 @@ namespace Vokabular.MainService.Core.Managers
                 var item = new PageResultContextContract
                 {
                     ContextStructure = pageResultContext.ContextStructure,
-                    PageId = dbPage.Id,
+                    PageId = dbPage.Resource.Id,
                     PageName = dbPage.Name,
                 };
                 resultList.Add(item);

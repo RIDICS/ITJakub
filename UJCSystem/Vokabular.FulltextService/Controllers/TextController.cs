@@ -1,10 +1,8 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Vokabular.FulltextService.Core.Helpers.Converters;
 using Vokabular.FulltextService.Core.Managers;
 using Vokabular.FulltextService.DataContracts.Contracts;
-using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
@@ -14,8 +12,6 @@ namespace Vokabular.FulltextService.Controllers
     [Route("api/[controller]")]
     public class TextController : Controller
     {
-        private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<TextController>();
-
         private readonly TextResourceManager m_textResourceManager;
         private readonly ITextConverter m_textConverter;
         private readonly SearchManager m_searchManager;
@@ -44,9 +40,12 @@ namespace Vokabular.FulltextService.Controllers
         {
             ResultContract result;
 
-            try{
+            try
+            {
                 result = m_textResourceManager.CreateTextResource(textResource);
-            }catch (ArgumentException exception){
+            }
+            catch (ArgumentException exception)
+            {
                 return BadRequest(exception.Message);
             }
 
@@ -56,7 +55,7 @@ namespace Vokabular.FulltextService.Controllers
         [HttpPost("{textResourceId}/search")]
         public TextResourceContract GetSearchTextResource(string textResourceId, [FromQuery] TextFormatEnumContract formatValue, [FromBody] SearchPageRequestContract searchPageRequestContract )
         {
-            var textResource = m_searchManager.SearchPageByCriteria(textResourceId, searchPageRequestContract);
+            var textResource = m_searchManager.SearchOnPageByCriteria(textResourceId, searchPageRequestContract);
             textResource.PageText = m_textConverter.Convert(textResource.PageText, formatValue);
             textResource.PageText = m_pageWithHtmlTagsCreator.CreatePage(textResource.PageText, formatValue);
 
@@ -64,16 +63,16 @@ namespace Vokabular.FulltextService.Controllers
         }
 
         [HttpPost("snapshot/{snapshotId}/search")]
-        public PageSearchResultContract SearchPageByCriteria(long snapshotId, [FromBody] SearchRequestContractBase criteria)
+        public PageSearchResultContract SearchPageByCriteria(long snapshotId, [FromBody] SearchPageRequestContract criteria)
         {
             var result = m_searchManager.SearchPageByCriteria(snapshotId, criteria);
             return result;
         }
 
-        [HttpPost("snapshot/{snapshotId}/search-count")]
-        public long SearchPageByCriteriaCount(long snapshotId, [FromBody] SearchRequestContractBase criteria)
+        [HttpPost("snapshot/{snapshotId}/search-hits-count")]
+        public long SearchHitsResultCount(long snapshotId, [FromBody] SearchPageRequestContract criteria)
         {
-            var result = m_searchManager.SearchPageByCriteriaCount(snapshotId, criteria);
+            var result = m_searchManager.SearchHitsResultCount(snapshotId, criteria);
             return result;
         }
 

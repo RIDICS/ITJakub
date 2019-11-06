@@ -3,52 +3,6 @@
 @import "ridics.list.less";
 
 .list-container {
-    &.selectable {
-        tbody {
-            cursor: pointer;
-
-            .active {
-                td {
-                    background-color: #DCDCDC !important;
-                }
-            }
-        }
-    }
-
-    .alert-info {
-        margin-top: 8px;
-        margin-bottom: 8px;
-    }
-
-    table {
-        tr {
-            border-bottom: 1px solid @separation-line-color;
-
-            td {
-                border: none;
-            }
-
-            .alert {
-                padding: 3px 7px;
-                margin: 1px 0 0 0;
-            }
-        }
-    }
-
-    .buttons {
-        vertical-align: middle;
-        text-align: right;
-
-        .btn-default {
-            margin-left: 0.5em;
-            margin-bottom: 0.5em;
-
-            &:first-of-type {
-                margin-left: 0;
-            }
-        }
-    }
-
     .role-row {
         .name,
         .description {
@@ -121,7 +75,7 @@
         .panel-title {
             padding-top: 7px;
             margin-bottom: 0.5em;
-            text-align: center;
+            text-align: left;
         }
 
         @media(max-width: 767px) {

@@ -1,39 +1,40 @@
 ﻿@using Scalesoft.Localization.AspNetCore
-@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectListViewModel
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Areas.Admin.Models.ProjectItemViewModel>
 @inject ILocalizationService Localizer
 
-<div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
-@foreach (var viewModel in Model.List)
+@if (!string.IsNullOrEmpty(Model.SearchQuery))
 {
-    <div class="project-item row" data-project-id="@viewModel.Id" data-project-name="@viewModel.Name">
-        <div class="col-md-6">
-            <a href="@Url.Action("Project", "Project", new {id = viewModel.Id})">
-                <div>
-                    <strong>@viewModel.Name</strong>
-                </div>
-                <div>@viewModel.PublisherString</div>
-                <div>@viewModel.LiteraryOriginalString</div>
-                <div>@Localizer.Translate("NumberOfPages", "Admin"): @viewModel.PageCount</div>
-            </a>
+    <div class="row reset-search">
+        <div class="query">
+            <span class="text-nowrap">@Localizer.Translate("SearchQuery", "Admin"): <span class="searched-query">@Model.SearchQuery</span></span>
         </div>
-        <div class="col-md-4">
-            @Localizer.Translate("LastEdited", "Admin"): @viewModel.LastEditDate @Localizer.Translate("ByUser", "Admin") @viewModel.LastEditUser<br />
-            @Localizer.Translate("Created", "Admin"): @viewModel.CreateDate @Localizer.Translate("ByUser", "Admin") @viewModel.CreateUser
-        </div>
-        <div class="col-md-2 project-item-buttons">
-            <a href="#" class="delete-button">
-                <div>
-                    <span class="glyphicon glyphicon-trash"></span>
-                </div>
-                <div>@Localizer.Translate("Delete", "Admin")</div>
-            </a>
-            <a href="@Url.Action("Project", "Project", new {id = viewModel.Id})">
-                <div>
-                    <span class="glyphicon glyphicon-pencil"></span>
-                </div>
-                <div>@Localizer.Translate("Edit", "Admin")</div>
-            </a>
+        <div class="reset-search-form">
+            <form asp-action="List" asp-controller="Project" method="get" class="">
+                <button type="submit" class="btn btn-sm btn-default">@Localizer.Translate("ResetSearch", "Admin")</button>
+            </form>
         </div>
     </div>
     <hr />
+}
+
+
+<div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
+@if (Model != null && Model.List.Count != 0)
+{
+    @await Html.PartialAsync("_ProjectListItem", Model)
+}
+else
+{
+    <div class="alert alert-info">
+        <i class="fa fa-info-circle fa-lg"></i>
+        @if (!string.IsNullOrEmpty(Model.SearchQuery))
+        {
+            @(Localizer.Translate("NoProjectsSearch", "Admin") + "\"")<span class="searched-query">@Model.SearchQuery</span>
+            @("\"")
+        }
+        else
+        {
+            @Localizer.Translate("NoProjectsFound", "Admin")
+        }
+    </div>
 }

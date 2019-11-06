@@ -109,7 +109,7 @@ namespace Vokabular.FulltextService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.Post<PageSearchResultContract>($"text/snapshot/{snapshotId}/search", new SearchRequestContractBase{ConditionConjunction = searchCriterias});
+                var result = m_client.Post<PageSearchResultContract>($"text/snapshot/{snapshotId}/search", new SearchPageRequestContract {ConditionConjunction = searchCriterias});
                 return result;
             }
             catch (HttpRequestException e)
@@ -125,7 +125,7 @@ namespace Vokabular.FulltextService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.Post<long>($"text/snapshot/{snapshotId}/search-count", new SearchRequestContractBase { ConditionConjunction = searchCriterias });
+                var result = m_client.Post<long>($"text/snapshot/{snapshotId}/search-hits-count", new SearchPageRequestContract { ConditionConjunction = searchCriterias });
                 return result;
             }
             catch (HttpRequestException e)
