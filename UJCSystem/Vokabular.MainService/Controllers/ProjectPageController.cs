@@ -22,6 +22,13 @@ namespace Vokabular.MainService.Controllers
             var result = m_projectItemManager.GetPageList(projectId);
             return result;
         }
+        
+        [HttpGet("{projectId}/page/detail")]
+        public List<DetailPageContract> GetDetailPageList(long projectId)
+        {
+            var result = m_projectItemManager.GetDetailPageList(projectId);
+            return result;
+        }
 
         [HttpGet("page/{pageId}")]
         public PageContract GetPageResource(long pageId)

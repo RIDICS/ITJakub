@@ -334,6 +334,22 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+        
+        public List<DetailPageContract> GetAllDetailPageList(long projectId)
+        {
+            try
+            {
+                var result = m_client.Get<List<DetailPageContract>>($"project/{projectId}/page/detail");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
         public List<TextWithPageContract> GetAllTextResourceList(long projectId, long? resourceGroupId)
         {
             try

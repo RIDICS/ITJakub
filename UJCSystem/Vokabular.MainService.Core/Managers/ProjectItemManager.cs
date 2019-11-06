@@ -41,6 +41,22 @@ namespace Vokabular.MainService.Core.Managers
             var result = m_mapper.Map<List<PageContract>>(dbResult);
             return result;
         }
+        
+        public List<DetailPageContract> GetDetailPageList(long projectId)
+        {
+            var dbPages = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestPages(projectId));
+            var dbImages = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestImages(projectId, null, true));
+
+            var result = new List<DetailPageContract>();
+            foreach (var dbPage in dbPages)
+            {
+                var page = m_mapper.Map<DetailPageContract>(dbPage);
+                page.HasImage = dbImages.Any(x => x.ResourcePage.Id == dbPage.Resource.Id);
+                result.Add(page);
+            }
+            
+            return result;
+        }
 
         public PageContract GetPage(long pageId)
         {
