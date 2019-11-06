@@ -160,6 +160,10 @@
 
             const addProjectPermissionModal = $("#addProjectPermissionToRoleDialog");
             const roleError = $("#addProjectToRoleError");
+            
+            if (this.typeaheadForSingleUserGroupEnabled) {
+                addProjectPermissionModal.find("#addPermissionHelpAlert").removeClass("hide");
+            }            
 
             $("#addPermissionButton").on("click", (event) => {
                 event.preventDefault();

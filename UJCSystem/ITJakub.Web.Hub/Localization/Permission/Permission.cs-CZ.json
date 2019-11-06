@@ -75,6 +75,7 @@
     "ReadProjectPermission": "Právo číst projekt",
     "ReadPublishedProjectPermission": "Právo číst publikovaný projekt",
     "EditProjectPermission": "Právo editovat projekt",
-    "AdminProjectPermission": "Právo spravovat projekt"
+    "AdminProjectPermission": "Právo spravovat projekt",
+    "AddPermissionOnProjectHelp" : "Pro přidání práva na projekt skupině, vyhledejte danou skupinu pomocí pole níže. Pokud chcete přidat právo pouze jedné osobě, poždájte ji, aby Vám sdělila svůj kód uživatele, který zadáte do pole níže. Kód uživatele lze nalézt v profilu uživatele, pod záložkou \"Kód uživatele\"."
   }
 }
