@@ -74,7 +74,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPut("{projectId}")]
-        public void UpdateProject(long projectId, [FromBody] ProjectContract data)
+        public void UpdateProject(long projectId, [FromBody] ItemNameContract data)
         {
             m_projectManager.UpdateProject(projectId, data);
         }

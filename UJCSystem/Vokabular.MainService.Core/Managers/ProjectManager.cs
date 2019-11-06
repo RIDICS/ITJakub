@@ -61,10 +61,10 @@ namespace Vokabular.MainService.Core.Managers
             return resultId;
         }
 
-        public void UpdateProject(long projectId, ProjectContract data)
+        public void UpdateProject(long projectId, ItemNameContract data)
         {
-            var currentUserId = m_authenticationManager.GetCurrentUserId();
-            var work = new UpdateProjectWork(m_projectRepository, projectId, data, currentUserId);
+            // TODO check permission (not only here)
+            var work = new UpdateProjectWork(m_projectRepository, projectId, data.Name);
             work.Execute();
         }
 
