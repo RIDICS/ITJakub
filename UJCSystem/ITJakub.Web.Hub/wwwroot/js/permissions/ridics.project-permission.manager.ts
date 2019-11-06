@@ -9,7 +9,7 @@
     private roleList: ListWithPagination;
     private permissionPanel: JQuery<HTMLElement>;
 
-    constructor(enableTypeaheadForSingleUserGroup, projectId: number = null) {
+    constructor(enableTypeaheadForSingleUserGroup: boolean, projectId: number = null) {
         this.typeaheadForSingleUserGroupEnabled = enableTypeaheadForSingleUserGroup; 
         this.projectId = projectId;
         this.searchBox = new MultiSetTypeaheadSearchBox<IRole>("#roleSearchInput", "Permission",

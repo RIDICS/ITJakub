@@ -272,7 +272,7 @@ namespace Vokabular.MainService.Controllers
             return Ok(newCode);
         }
         
-        [HttpGet("current/single-user-group")]
+        [HttpGet("current/single-user-group/name")]
         public ActionResult<string> GetCurrentUserSingleUserGroupName()
         {
             var userCode = m_roleManager.GetCurrentUserSingleUserGroupName();

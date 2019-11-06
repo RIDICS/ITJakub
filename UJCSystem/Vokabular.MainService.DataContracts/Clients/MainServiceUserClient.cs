@@ -307,7 +307,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = m_client.Get<string>("user/current/single-user-group");
+                var result = m_client.Get<string>("user/current/single-user-group/name");
                 return result;
             }
             catch (HttpRequestException e)

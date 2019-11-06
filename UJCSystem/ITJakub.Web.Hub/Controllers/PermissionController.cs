@@ -377,9 +377,9 @@ namespace ITJakub.Web.Hub.Controllers
         public IActionResult AddProjectsToRole([FromBody] AddProjectsToGroupRequest request)
         {
             var client = GetRoleClient();
-            client.UpdateOrAddBooksToGroup(request.RoleId, 
-                request.PermissionsConfiguration.BookId, 
-                convertPermissionsConfigurationRequestToPermissionDataContract(request.PermissionsConfiguration));
+            client.UpdateOrAddBooksToGroup(request.RoleId,
+                request.PermissionsConfiguration.BookId,
+                CreatePermissionDataContract(request.PermissionsConfiguration));
             return AjaxOkResponse();
         }
         
@@ -390,7 +390,7 @@ namespace ITJakub.Web.Hub.Controllers
             client.AddProjectToUserGroupByCode(request.PermissionsConfiguration.BookId, new AssignPermissionToSingleUserGroupContract
             {
                 Code = request.UserCode,
-                Permissions = convertPermissionsConfigurationRequestToPermissionDataContract(request.PermissionsConfiguration),
+                Permissions = CreatePermissionDataContract(request.PermissionsConfiguration),
             });
             return AjaxOkResponse();
         }
@@ -426,7 +426,7 @@ namespace ITJakub.Web.Hub.Controllers
             return Json(new { });
         }
         
-        private PermissionDataContract convertPermissionsConfigurationRequestToPermissionDataContract(PermissionsConfigurationRequest request)
+        private PermissionDataContract CreatePermissionDataContract(PermissionsConfigurationRequest request)
         {
             return new PermissionDataContract
             {
