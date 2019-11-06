@@ -53,6 +53,10 @@ class ProjectList {
             this.projectList.loadFirstPage();
         });
         
+        $("#editProject").on("click", () => {
+            window.location.href = getBaseUrl() + "Admin/Project/Project?id=" + this.projectIdForRename;
+        });
+        
         this.projectList = new ListWithPagination(this.projectListUrl, "project", ViewType.Widget, true, false, this.reinitProjectListButtons, this);
         this.projectList.init();
         

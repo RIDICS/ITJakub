@@ -231,6 +231,7 @@
     "Rename": "Rename",
     "RenameProject": "translate[Přejmenovat pracovní název díla]",
     "DeleteProject": "translate[Smazat dílo]",
+    "GoToProjectEdit": "translate[Přejít do úpravy díla]",
     "DeleteProjectAreYouSure": "translate[Opravdu chcete smazat dílo]",
     "Close2": "translate[Zavřít]",
     "CreateForumInModules": "Create a forum in modules",
