@@ -98,7 +98,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
         
-        public void UpdateProject(long projectId, ProjectContract data)
+        public void UpdateProject(long projectId, ItemNameContract data)
         {
             try
             {

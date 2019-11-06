@@ -244,9 +244,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             var client = GetProjectClient();
 
-            client.UpdateProject(request.Id, new ProjectContract
+            client.UpdateProject(request.Id, new ItemNameContract
             {
-                Id = request.Id,
                 Name = request.NewProjectName,
             });
             return AjaxOkResponse();
