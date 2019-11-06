@@ -32,7 +32,7 @@ namespace Vokabular.FulltextService.Core.Managers
 
         public ResultContract CreateSnapshotResource(SnapshotPageIdsResourceContract snapshotPageIdsResourceContract)
         {
-            var snapshotContract = m_snapshotResourceBuilder.GetSnapshotResourceFromPageIds(snapshotPageIdsResourceContract.PageIds);
+            var snapshotContract = m_snapshotResourceBuilder.GetSnapshotResourceFromPageIds(snapshotPageIdsResourceContract.OrderedPageIds);
             snapshotContract.SnapshotId = snapshotPageIdsResourceContract.SnapshotId;
             snapshotContract.ProjectId = snapshotPageIdsResourceContract.ProjectId;
             MapToDatabaseMetadata(snapshotContract, snapshotPageIdsResourceContract.MetadataResource);
