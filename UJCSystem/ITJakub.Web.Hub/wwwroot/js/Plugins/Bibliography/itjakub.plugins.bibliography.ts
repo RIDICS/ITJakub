@@ -182,7 +182,7 @@ class BibliographyModule {
     public showLoading() {
         if ($("#loader").length == 0) {
             var loader = document.createElement("div");
-            $(loader).addClass("lv-circles md lv-mid lvt-5");
+            $(loader).addClass("lv-circles sm lv-mid lvt-5");
             $(loader).attr('id', "#loading");
             $(this.booksContainer).append(loader);
         }

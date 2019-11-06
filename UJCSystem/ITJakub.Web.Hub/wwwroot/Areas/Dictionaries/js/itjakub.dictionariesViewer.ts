@@ -130,9 +130,9 @@ class DictionaryViewer {
         var backgroundDiv2 = document.createElement("div");
 
         var loadingDiv1 = document.createElement('div');
-        $(loadingDiv1).addClass("lv-dots md lv-mid");
+        $(loadingDiv1).addClass("lv-dots md lv-mid loading-bottom");
         var loadingDiv2 = document.createElement('div');
-        $(loadingDiv2).addClass("lv-dots md lv-mid");
+        $(loadingDiv2).addClass("lv-dots md lv-mid loading-top");
 
         $(backgroundDiv1).addClass("dictionary-loading");
         $(backgroundDiv2).addClass("dictionary-loading");

@@ -88,22 +88,20 @@
         var innerContainerDiv = document.createElement("div");
         $(innerContainerDiv).addClass("favorite-query");
 
-        var loadingDiv = document.createElement("div");
-        $(loadingDiv).addClass("loading");
+        var loadingDiv = lv.create(null, "lv-circles sm lv-mid");
 
-        $(innerContainerDiv).append(loadingDiv);
+        $(innerContainerDiv).append(loadingDiv.getElement());
         
         this.renderContainer.empty();
         this.renderContainer.append(innerContainerDiv);
     }
 
     private renderLoadingQueries() {
-        var loadingDiv = document.createElement("div");
-        $(loadingDiv).addClass("loading");
+        var loadingDiv = lv.create(null, "lv-circles sm lv-mid lvt-3");
 
         $(this.listContainer)
             .empty()
-            .append(loadingDiv);
+            .append(loadingDiv.getElement());
     }
 
     private render(favoriteLabels: IFavoriteLabel[]) {

@@ -226,16 +226,19 @@ class BohemianTextbankSearch {
     }
 
     private showLoading() {
-        $("#result-table").hide();
-        $("#result-abbrev-table").hide();
-        $("#corpus-search-results-table-div-loader").empty();
-        $("#corpus-search-results-table-div-loader").show();
-        $("#corpus-search-results-table-div-loader").addClass("loader");
+        if (!$("#corpus-search-results-table-div-loader div").hasClass("lv-circles")) {
+            var loaderElement = lv.create(null, "lv-circles sm lv-mid lvt-2 lvb-2");
+            $("#result-table").hide();
+            $("#result-abbrev-table").hide();
+            $("#corpus-search-results-table-div-loader").empty();
+            $("#corpus-search-results-table-div-loader").show();
+            $("#corpus-search-results-table-div-loader").append(loaderElement.getElement());
+        }
     }
 
 
     private hideLoading() {
-        $("#corpus-search-results-table-div-loader").removeClass("loader");
+        $("#corpus-search-results-table-div-loader").empty();
         $("#corpus-search-results-table-div-loader").hide();
         $("#result-abbrev-table").show();
         $("#result-table").show();

@@ -49,16 +49,18 @@
 
     protected showLoading(tableEl: JQuery) {
         const loaderEl = tableEl.siblings(".corpus-search-results-table-div-loader");
+        var loaderElement = lv.create(null, "lv-circles sm lv-mid lvt-2 lvb-2");
         tableEl.hide();
         loaderEl.empty();
         loaderEl.show();
-        loaderEl.removeClass("alert alert-info").addClass("loader");
+        loaderEl.removeClass("alert alert-info");
+        loaderEl.append(loaderElement.getElement());
     }
 
 
     protected hideLoading(tableEl: JQuery) {
         const loaderEl = tableEl.siblings(".corpus-search-results-table-div-loader");
-        loaderEl.removeClass("loader");
+        loaderEl.empty();
         loaderEl.hide();
         tableEl.show();
     }
