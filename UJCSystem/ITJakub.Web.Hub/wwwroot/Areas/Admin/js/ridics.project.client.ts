@@ -1,4 +1,4 @@
-﻿class ProjectClient {
+﻿class ProjectClient extends WebHubApiClient {
     private ajax(type: string, urlPath: string, data: Object|string, success: (response: any) => void, error: (status: HttpStatusCode) => void) {
         $.ajax({
             type: type,
@@ -31,7 +31,11 @@
     public deleteProject(id: number, callback: (error: HttpStatusCode) => void) {
         this.postAjax("Admin/Project/DeleteProject", {id: id}, (response, errorCode) => callback(errorCode));
     }
-
+    
+    public renameProject(id: number, newProjectName: string): JQuery.jqXHR {
+        return this.post(`${getBaseUrl()}Admin/Project/RenameProject`, JSON.stringify({id: id, newProjectName: newProjectName}));
+    }
+        
     public createPublisher(name: string, email: string, callback: (newPublisherId: number, errorCode: HttpStatusCode) => void) {
         var data = {
             text: name,
@@ -115,5 +119,9 @@
 
     createForum(projectId: number): JQuery.jqXHR<IForumViewModel> {
         return $.post(`${getBaseUrl()}Admin/Project/CreateForum?projectId=${projectId}`, {});
+    }
+    
+    private getAdminProjectUrl(): string {
+        return `${getBaseUrl()}Admin/Project/`;
     }
 }

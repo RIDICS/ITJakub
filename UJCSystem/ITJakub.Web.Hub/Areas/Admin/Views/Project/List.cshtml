@@ -99,7 +99,7 @@
             <div class="modal-footer">
                 <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("ErrorDuringSave", "Admin")</div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close2", "Admin")</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Vytvořit</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Create", "Admin")</button>
             </div>
         </div>
     </div>
@@ -120,6 +120,32 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
                 <button type="button" class="btn btn-default save-button">
                     <span class="saving-icon loading-small-button"></span>@Localizer.Translate("Delete", "Admin")</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" role="dialog" id="renameProjectDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Localizer.Translate("RenameProject", "Admin")</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="renameProjectInput" class="col-md-3 col-lg-4 control-label">@Localizer.Translate("NewProjectName", "Admin")</label>
+                        <div class="col-md-8 col-lg-7">
+                            <input class="form-control" id="renameProjectInput" type="text" maxlength="@Projects.MaxNameLength">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("ErrorDuringSave", "Admin")</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close2", "Admin")</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Rename", "Admin")</button>
             </div>
         </div>
     </div>

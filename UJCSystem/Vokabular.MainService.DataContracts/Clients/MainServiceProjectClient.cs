@@ -97,6 +97,21 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+        
+        public void UpdateProject(long projectId, ProjectContract data)
+        {
+            try
+            {
+                m_client.Put<object>($"project/{projectId}", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
 
         public ProjectMetadataResultContract GetProjectMetadata(long projectId, bool includeAuthor,
             bool includeResponsiblePerson, bool includeKind, bool includeGenre, bool includeOriginal, bool includeKeyword,

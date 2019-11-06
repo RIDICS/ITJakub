@@ -240,6 +240,19 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
         
         [HttpPost]
+        public IActionResult RenameProject([FromBody] RenameProjectRequest request)
+        {
+            var client = GetProjectClient();
+
+            client.UpdateProject(request.Id, new ProjectContract
+            {
+                Id = request.Id,
+                Name = request.NewProjectName,
+            });
+            return AjaxOkResponse();
+        }
+        
+        [HttpPost]
         public IActionResult CreateKeywordsWithArray(List<KeywordContract> request)
         {
             var client = GetCodeListClient();

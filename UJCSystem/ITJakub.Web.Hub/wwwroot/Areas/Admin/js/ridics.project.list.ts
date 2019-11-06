@@ -7,13 +7,17 @@ class ProjectList {
     private readonly projectListUrl = "Admin/Project/List";
     private projectClient: ProjectClient;
     private projectList: ListWithPagination;
+    private errorHandler: ErrorHandler;
     private newProjectDialog: BootstrapDialogWrapper;
     private deleteProjectDialog: BootstrapDialogWrapper;
+    private renameProjectDialog: BootstrapDialogWrapper;
     private projectIdForDelete: number;
+    private projectIdForRename: number;
 
     constructor() {
         this.projectClient = new ProjectClient();
-
+        this.errorHandler = new ErrorHandler();
+        
         this.newProjectDialog = new BootstrapDialogWrapper({
             element: $("#new-project-dialog"),
             autoClearInputs: true,
@@ -25,15 +29,21 @@ class ProjectList {
             autoClearInputs: false,
             submitCallback: this.deleteProject.bind(this)
         });
+
+        this.renameProjectDialog = new BootstrapDialogWrapper({
+            element: $("#renameProjectDialog"),
+            autoClearInputs: false,
+            submitCallback: this.renameProject.bind(this)
+        });
     }
 
     public init() {
-        $("#new-project-button").click((event) => {
+        $("#new-project-button").on("click", (event) => {
             this.newProjectDialog.show();
             event.preventDefault();
         });
         
-        $("#projectOwnerFilter").change((event) => {
+        $("#projectOwnerFilter").on("change",(event) => {
             const value = $(event.currentTarget).val();
             const url = new URI(this.projectListUrl).search((query) => {
                 query.projectOwnerType = value;
@@ -50,7 +60,7 @@ class ProjectList {
     }
 
     public reinitProjectListButtons() {
-        $(".project-item .delete-button").click((event) => {
+        $(".project-item .delete-button").on("click", (event) => {
             const $projectItem = $(event.currentTarget as Node as Element).closest(".project-item");
             this.projectIdForDelete = Number($projectItem.data("project-id"));
             const projectName = $projectItem.data("project-name");
@@ -59,6 +69,15 @@ class ProjectList {
             this.deleteProjectDialog.show();
 
             event.preventDefault();
+        });
+        
+        $(".rename-project-button").on("click", (event) => {
+            const $projectItem = $(event.currentTarget as Node as Element).closest(".project-item");
+            this.projectIdForRename = Number($projectItem.data("project-id"));
+            const projectName = $projectItem.data("project-name");
+
+            $("#renameProjectInput").val(projectName);
+            this.renameProjectDialog.show();
         });
     }
 
@@ -102,6 +121,25 @@ class ProjectList {
             }
             
             this.projectList.reloadPage();
+        });
+    }
+
+    private renameProject() {
+        const newProjectName = $("#renameProjectInput").val() as string;
+        
+        if(newProjectName.length == 0)
+        {
+            this.renameProjectDialog.showError(localization.translate("EmptyProjectNameError", "Admin").value);
+            return;
+        }
+        
+        this.projectClient.renameProject(this.projectIdForRename, newProjectName).done(() => {
+            this.projectList.reloadPage();
+            this.renameProjectDialog.hide();
+        }).fail(error => {
+            this.renameProjectDialog.showError(
+                this.errorHandler.getErrorMessage(error, localization.translate("ErrorDuringSave", "Admin").value)
+            );            
         });
     }
 }
