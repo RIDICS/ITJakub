@@ -192,14 +192,14 @@
                 var bar = lv.create(null, "lv-circles lv-mid sm");
                 $(mainHeadwordDiv).append(bar.getElement());
 
-                if (dictionary.pageId) { //image may be exists 
+                if (dictionary.pageId) { //image may be exists
                     var imageCheckBoxDiv = document.createElement("div");
                     var imageCheckBox = document.createElement("input");
                     var imageIconSpan = document.createElement("span");
                     var imageCheckBoxLabel = document.createElement("label");
 
                     imageCheckBox.type = "checkbox";
-                    imageCheckBox.autocomplete = "on";
+                    imageCheckBox.autocomplete = "off";
                     $(imageCheckBox).change(event => {
                         this.updateImageVisibility(event.target as Node as HTMLInputElement);
                     });
