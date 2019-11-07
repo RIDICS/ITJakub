@@ -1,23 +1,22 @@
 ﻿@import "ITJakub.Colors-selected.scss";
 @import "../lib/loading-visualization/src/colors.scss";
 
-// colors are same as main theme color
-$determinate_bordered_line_border: $menu-background-color;
-$determinate_bordered_line_color: $menu-background-color;
-$bordered_line_color: $menu-background-color;
-$circles_color: $menu-background-color;
-$bars_color: $menu-background-color;
-$dots_color: $menu-background-color;
+$determinate_bordered_line_border:  #696969;
+$determinate_bordered_line_color:  #696969;
+$bordered_line_color:  #696969;
+$circles_color:  #696969;
+$bars_color:  #696969;
+$dots_color:  #696969;
 $line_background: lightgray;
-$line_color: $menu-background-color;
+$line_color:  #696969;
 $determinate_line_background: lightgray;
-$determinate_line_color: $menu-background-color;
+$determinate_line_color:  #696969;
 $spinner_shadow: lightgray;
-$spinner_color: $menu-background-color;
+$spinner_color:  #696969;
 $determinate_circle_background: lightgray;
-$determinate_circle_color: $menu-background-color;
-$dashed_color: $menu-background-color;
-$squares_color: $menu-background-color;
+$determinate_circle_color:  #696969;
+$dashed_color:  #696969;
+$squares_color:  #696969;
 
 $bars_scale: 5;
 $squares_scale: 15;

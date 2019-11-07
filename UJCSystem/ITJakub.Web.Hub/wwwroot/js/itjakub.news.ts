@@ -63,7 +63,7 @@
         $(this.newsContainer).empty();
         if (items.length === 0) {
             var noNews = document.createElement('div');
-            $(noNews).addClass("no-messages");
+            $(noNews).addClass("home-no-news");
             $(noNews).text(localization.translate("NoResultsToShow", "PluginsJs").value);
             $(this.newsContainer).append(noNews);
         } else {
@@ -91,6 +91,15 @@
                 itemDiv.appendChild(itemMessage);
 
                 $(this.newsContainer).append(itemDiv);
+                $(this.newsContainer).append(lv.create(null, "lv-bars md lv-mid lvt-5").getElement());
+                $(this.newsContainer).append(lv.create(null, "lv-circles md lv-mid lvt-5").getElement());
+                $(this.newsContainer).append(lv.create(null, "lv-dots md lv-mid lvt-5").getElement());
+                $(this.newsContainer).append(lv.create(null, "lv-squares md lv-mid lvt-5").getElement());
+                $(this.newsContainer).append(lv.create(null, "lv-dashed md lv-mid lvt-5").getElement());
+                $(this.newsContainer).append(lv.create(null, "lv-spinner md lv-mid lvt-5").getElement());
+                $(this.newsContainer).append(lv.create(null, "lv-line md lv-mid lvt-5").getElement());
+                $(this.newsContainer).append(lv.create(null, "lv-bordered_line md lv-mid lvt-5").getElement());
+                
             }
         }
     }

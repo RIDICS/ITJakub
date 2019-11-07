@@ -68,7 +68,9 @@ class RoleManager {
         const container = userSection.find(".list-container");
         const searchForm = userSection.find(".user-search-form");
         searchForm.find("input.search-value").val("");
-        container.html("<div class=\"lv-dots lv-mid sm\"></div>");
+        var loader = lv.create(null, "lv-dots lv-mid sm");
+        container.empty();
+        container.append(loader.getElement());
         userSection.removeClass("hide");
 
         this.client.getUsersByRole(roleId).done(response => {
@@ -95,7 +97,9 @@ class RoleManager {
     private loadPermissions(roleId: number) {
         const permissionSection = $("#permission-section .section");
         const container = permissionSection.find(".list-container");
-        container.html("<div class=\"lv-dots lv-mid sm\"></div>");
+        var loader = lv.create(null, "lv-dots lv-mid sm");
+        container.empty();
+        container.append(loader.getElement());
         const searchForm = permissionSection.find(".permission-search-form");
         searchForm.find("input.search").val("");
         permissionSection.removeClass("hide");
@@ -170,14 +174,14 @@ class RoleManager {
         alert.hide();
         const specialPermissionId = permissionRow.data("permission-id");
         const roleId = $(".role-row.active").data("role-id");
-        const spinnerContainer = permissionRow.find(".hidden-xs");
-        const hiddenSpinnerContainer = permissionRow.find("td").find(".visible-xs");
+        const wrappedSpinnerContainer = permissionRow.find(".permission-loader-wrapped");
+        const spinnerContainer = permissionRow.find(".permission-loader");
         const spinner = lv.create(null, "lv-circles tiniest lv-right");
         const spinnerWrapped = lv.create(null, "lv-circles tiniest lv-left");
 
         if (spinnerContainer.children(".lv-circles").length === 0) {
+            wrappedSpinnerContainer.append(spinnerWrapped.getElement());
             spinnerContainer.append(spinner.getElement());
-            hiddenSpinnerContainer.append(spinnerWrapped.getElement());
         }
 
         const successLabel = permissionRow.find(".success");

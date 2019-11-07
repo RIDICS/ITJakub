@@ -1,6 +1,4 @@
-﻿///
-
-class DictionaryViewer {
+﻿class DictionaryViewer {
     private headwordDescriptionContainer: string;
     private paginationContainer: string;
     private headwordListContainer: string;
@@ -21,7 +19,6 @@ class DictionaryViewer {
     private isCriteriaJson: boolean;
     private defaultPageNumber: number;
     private localization: Localization;
-    private loadingItemsElement: string = '<div class="lv-circles lv-mid sm"></div>';
 
     constructor(headwordListContainer: string, paginationContainer: string, headwordDescriptionContainer: string, lazyLoad: boolean) {
         this.headwordDescriptionContainer = headwordDescriptionContainer;
@@ -129,17 +126,14 @@ class DictionaryViewer {
         var backgroundDiv1 = document.createElement("div");
         var backgroundDiv2 = document.createElement("div");
 
-        var loadingDiv1 = document.createElement('div');
-        $(loadingDiv1).addClass("lv-dots md lv-mid loading-bottom");
-        var loadingDiv2 = document.createElement('div');
-        $(loadingDiv2).addClass("lv-dots md lv-mid loading-top");
+        var loadingDiv1 = lv.create(null, "lv-dots md lv-mid loading-headword-list");
+        var loadingDiv2 = lv.create(null, "lv-dots md lv-mid loading-headword-description");
 
         $(backgroundDiv1).addClass("dictionary-loading");
         $(backgroundDiv2).addClass("dictionary-loading");
-        $(backgroundDiv1).append(loadingDiv1);
-        $(backgroundDiv2).append(loadingDiv2);
-        lv.create(loadingDiv1);
-        lv.create(loadingDiv2);
+        $(backgroundDiv1).append(loadingDiv1.getElement());
+        $(backgroundDiv2).append(loadingDiv2.getElement());
+
         $(this.headwordListContainer).append(backgroundDiv1);
         $(this.headwordDescriptionContainer).append(backgroundDiv2);
     }
@@ -162,7 +156,6 @@ class DictionaryViewer {
 
         var listUl = document.createElement("ul");
         var descriptionsDiv = document.createElement("div");
-        var bar;
         for (var i = 0; i < headwords.headwordList.length; i++) {
             var headwordLi = document.createElement("li");
             var record = headwords.headwordList[i];
@@ -196,18 +189,17 @@ class DictionaryViewer {
                 // create description
                 var mainHeadwordDiv = document.createElement("div");
 
-                bar = $(this.loadingItemsElement);
-                $(mainHeadwordDiv).append(bar);
-                lv.create(bar[0]);
+                var bar = lv.create(null, "lv-circles lv-mid sm");
+                $(mainHeadwordDiv).append(bar.getElement());
 
-                if (dictionary.pageId) { //image may be exists
+                if (dictionary.pageId) { //image may be exists 
                     var imageCheckBoxDiv = document.createElement("div");
                     var imageCheckBox = document.createElement("input");
                     var imageIconSpan = document.createElement("span");
                     var imageCheckBoxLabel = document.createElement("label");
 
                     imageCheckBox.type = "checkbox";
-                    imageCheckBox.autocomplete = "off";
+                    imageCheckBox.autocomplete = "on";
                     $(imageCheckBox).change(event => {
                         this.updateImageVisibility(event.target as Node as HTMLInputElement);
                     });
@@ -300,7 +292,7 @@ class DictionaryViewer {
     private updateImageVisibility(checkBox: HTMLInputElement) {
         var mainDiv = $(checkBox).closest("[data-entry-index]");
         var imageContainer = $(".dictionary-entry-image", mainDiv);
-        var loadingElement = '<div class="lv-circles lv-mid tiny"></div>';
+        var loader = lv.create(null, "lv-circles lv-mid tiny");
         if (checkBox.checked) {
             if (imageContainer.hasClass("hidden")) {
                 imageContainer.removeClass("hidden");
@@ -314,7 +306,7 @@ class DictionaryViewer {
             imageElement.setAttribute("src", imageLink);
             imageContainer.append(imageElement);
 
-            $(imageContainer).html(loadingElement);
+            $(imageContainer).append(loader.getElement());
             imageElement.onload = () => {
                 $(imageContainer).empty();
             };
