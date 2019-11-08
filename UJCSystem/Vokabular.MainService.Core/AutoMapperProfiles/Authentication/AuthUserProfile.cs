@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Ridics.Core.Shared.Types;
 using Vokabular.MainService.DataContracts.Contracts;
+using ContactTypeEnum = Ridics.Authentication.DataContracts.ContactTypeEnum;
 
 namespace Vokabular.MainService.Core.AutoMapperProfiles.Authentication
 {
@@ -36,6 +37,10 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles.Authentication
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.UserData[UserDataTypes.FirstName]))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.UserData[UserDataTypes.LastName]))
                 .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.Id));
+
+            CreateMap<Ridics.Authentication.DataContracts.BasicUserInfoContract, UserWithContactContract>()
+                .IncludeBase<Ridics.Authentication.DataContracts.BasicUserInfoContract, UserContract>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.UserContact[ContactTypeEnum.Email.ToString()]));
         }
     }
 }

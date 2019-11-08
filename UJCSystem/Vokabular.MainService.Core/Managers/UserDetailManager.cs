@@ -93,17 +93,19 @@ namespace Vokabular.MainService.Core.Managers
             return GetUserDetailContractForUser(authUser, user.Id);
         }
 
-        // TODO this method requires only e-mail from additional user data
-        public UserDetailContract GetUserDetailContractForUser(UserDetailContract user)
+        public UserWithContactContract GetUserWithContactContract(UserWithContactContract user)
         {
             if (user == null)
                 return null;
 
-            var authUser = GetDetailUserFromAuthService(user.ExternalId);
+            var authUser = GetBasicUserFromAuthService(user.ExternalId);
             if (authUser == null)
                 return user;
 
-            return GetUserDetailContractForUser(authUser, user.Id);
+            var userResultContract = m_mapper.Map<UserWithContactContract>(authUser);
+            userResultContract.Id = user.Id;
+
+            return userResultContract;
         }
 
         private UserDetailContract GetUserDetailContractForUser(AuthUserContract authUser, int localUserId)
@@ -155,7 +157,7 @@ namespace Vokabular.MainService.Core.Managers
         {
             foreach (var newsItem in list)
             {
-                newsItem.CreatedByUser = GetUserDetailContractForUser(newsItem.CreatedByUser);
+                newsItem.CreatedByUser = GetUserWithContactContract(newsItem.CreatedByUser);
             }
 
             return list;
@@ -165,7 +167,7 @@ namespace Vokabular.MainService.Core.Managers
         {
             foreach (var feedback in list)
             {
-                feedback.AuthorUser = GetUserDetailContractForUser(feedback.AuthorUser);
+                feedback.AuthorUser = GetUserWithContactContract(feedback.AuthorUser);
             }
 
             return list;

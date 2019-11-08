@@ -18,6 +18,11 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public int ExternalId { get; set; }
     }
 
+    public class UserWithContactContract : UserContract
+    {
+        public string Email { get; set; }
+    }
+
     public class UserDetailContract : UserContract
     {
         public string Email { get; set; }
