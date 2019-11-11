@@ -44,12 +44,13 @@ class ProjectList {
         });
         
         $("#projectOwnerFilter").on("change",(event) => {
-            const value = $(event.currentTarget).val();
+            const value = $(event.currentTarget).val() as string;
             const url = new URI(this.projectListUrl).search((query) => {
                 query.projectOwnerType = value;
             }).toString();
             
             this.projectList.setNewUrlPath(url);
+            this.projectList.setAdditionalUrlParameters([{key: "projectOwnerType", value: value}]);
             this.projectList.loadFirstPage();
         });
         
