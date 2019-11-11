@@ -38,7 +38,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             ProjectOwnerTypeContract projectOwnerType = ProjectOwnerTypeContract.MyProjects)
         {
             var client = GetProjectClient();
-            var result = client.GetProjectList(start, count, GetDefaultProjectType(), projectOwnerType, search, true, true);
+            var result = client.GetProjectList(start, count, GetDefaultProjectType(), projectOwnerType, search, true, true, true);
             var projectItems = Mapper.Map<List<ProjectItemViewModel>>(result.List);
             var listViewModel = new ListViewModel<ProjectItemViewModel>
             {

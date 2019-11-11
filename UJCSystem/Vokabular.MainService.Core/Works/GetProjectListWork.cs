@@ -18,20 +18,22 @@ namespace Vokabular.MainService.Core.Works
         private readonly int m_count;
         private readonly ProjectTypeEnum? m_projectType;
         private readonly ProjectOwnerTypeContract m_projectOwnerType;
-        private readonly int? m_userId;
+        private readonly int m_userId;
         private readonly string m_filterByName;
         private readonly bool m_fetchPageCount;
         private readonly bool m_fetchAuthors;
         private readonly bool m_fetchResponsiblePersons;
         private readonly bool m_fetchLatestChangedResource;
+        private readonly bool m_fetchPermissions;
         private int m_resultCount;
         private IList<MetadataResource> m_metadataList;
         private IList<PageCountResult> m_pageCount;
         private IList<LatestChangedResourceResult> m_latestChangedResources;
+        private Dictionary<long, List<DataEntities.Database.Entities.Permission>> m_permissions;
 
         public GetProjectListWork(ProjectRepository projectRepository, MetadataRepository metadataRepository, int start, int count,
-            ProjectTypeEnum? projectType, ProjectOwnerTypeContract projectOwnerType, int? userId, string filterByName, bool fetchPageCount,
-            bool fetchAuthors, bool fetchResponsiblePersons, bool fetchLatestChangedResource) : base(projectRepository)
+            ProjectTypeEnum? projectType, ProjectOwnerTypeContract projectOwnerType, int userId, string filterByName, bool fetchPageCount,
+            bool fetchAuthors, bool fetchResponsiblePersons, bool fetchLatestChangedResource, bool fetchPermissions) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
@@ -45,6 +47,7 @@ namespace Vokabular.MainService.Core.Works
             m_fetchAuthors = fetchAuthors;
             m_fetchResponsiblePersons = fetchResponsiblePersons;
             m_fetchLatestChangedResource = fetchLatestChangedResource;
+            m_fetchPermissions = fetchPermissions;
         }
 
         protected override IList<Project> ExecuteWorkImplementation()
@@ -80,6 +83,16 @@ namespace Vokabular.MainService.Core.Works
                 ? m_projectRepository.GetAllLatestChangedResource(projectIdList)
                 : new List<LatestChangedResourceResult>();
 
+            if (m_fetchPermissions)
+            {
+                var permissions = m_projectRepository.FindPermissionsForProjectsByUserId(projectIdList, m_userId);
+                m_permissions = permissions.GroupBy(key => key.Project.Id).ToDictionary(key => key.Key, val => val.ToList());
+            }
+            else
+            {
+                m_permissions = new Dictionary<long, List<DataEntities.Database.Entities.Permission>>();
+            }
+
             return dbResult.List;
         }
 
@@ -101,6 +114,11 @@ namespace Vokabular.MainService.Core.Works
         public IList<LatestChangedResourceResult> GetLatestChangedResources()
         {
             return m_latestChangedResources;
+        }
+
+        public Dictionary<long, List<DataEntities.Database.Entities.Permission>> GetUserPermission()
+        {
+            return m_permissions;
         }
     }
 }

@@ -232,5 +232,20 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(() => projectAlias.Id == projectId)
                 .List();
         }
+
+        public virtual IList<Permission> FindPermissionsForProjectsByUserId(IEnumerable<long> projectIds, int userId)
+        {
+            UserGroup userGroupAlias = null;
+            User userAlias = null;
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<Permission>()
+                .JoinAlias(x => x.UserGroup, () => userGroupAlias)
+                .JoinAlias(() => userGroupAlias.Users, () => userAlias)
+                .JoinAlias(x => x.Project, () => projectAlias)
+                .WhereRestrictionOn(() => projectAlias.Id).IsInG(projectIds)
+                .Where(() => userAlias.Id == userId)
+                .List();
+        }
     }
 }

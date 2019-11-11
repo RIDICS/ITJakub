@@ -76,7 +76,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, ProjectTypeContract? projectType,
             ProjectOwnerTypeContract projectOwnerType, string filterByName, bool fetchPageCount, bool fetchAuthors,
-            bool fetchResponsiblePersons, bool fetchLatestChangedResource)
+            bool fetchResponsiblePersons, bool fetchLatestChangedResource, bool fetchPermissions)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCountForProject(count);
@@ -85,12 +85,13 @@ namespace Vokabular.MainService.Core.Managers
             var userId = m_authenticationManager.GetCurrentUserId();
             
             var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, projectTypeEnum,
-                projectOwnerType, userId, filterByName, fetchPageCount, fetchAuthors, fetchResponsiblePersons, fetchLatestChangedResource);
+                projectOwnerType, userId, filterByName, fetchPageCount, fetchAuthors, fetchResponsiblePersons, fetchLatestChangedResource, fetchPermissions);
             var resultEntities = work.Execute();
 
             var metadataList = work.GetMetadataResources();
             var pageCountList = work.GetPageCountList();
             var latestChangesList = work.GetLatestChangedResources();
+            var userPermissionDict = work.GetUserPermission();
             var resultList = m_mapper.Map<List<ProjectDetailContract>>(resultEntities);
             foreach (var projectContract in resultList)
             {
@@ -114,6 +115,20 @@ namespace Vokabular.MainService.Core.Managers
                 {
                     projectContract.LatestChangeTime = latestChangeResult.CreateTime;
                     projectContract.EditedByUser = m_userDetailManager.GetUserContract(latestChangeResult.CreatedByUserId);
+                }
+
+                if (fetchPermissions)
+                {
+                    var joinedFlags = PermissionFlag.None;
+                    if (userPermissionDict.TryGetValue(projectContract.Id, out var permissions))
+                    {
+                        foreach (var permission in permissions)
+                        {
+                            joinedFlags |= permission.Flags;
+                        }
+                    }
+
+                    projectContract.CurrentUserPermissions = m_mapper.Map<PermissionDataContract>(joinedFlags);
                 }
             }
 

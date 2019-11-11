@@ -23,8 +23,13 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
 
             CreateMap<Project, ProjectDetailContract>()
                 .IncludeBase<Project, ProjectContract>()
+                .ForMember(dest => dest.LatestMetadata, opt => opt.Ignore())
+                .ForMember(dest => dest.PageCount, opt => opt.Ignore())
                 .ForMember(dest => dest.Authors, opt => opt.Ignore())
-                .ForMember(dest => dest.ResponsiblePersons, opt => opt.Ignore());
+                .ForMember(dest => dest.ResponsiblePersons, opt => opt.Ignore())
+                .ForMember(dest => dest.EditedByUser, opt => opt.Ignore())
+                .ForMember(dest => dest.LatestChangeTime, opt => opt.Ignore())
+                .ForMember(dest => dest.CurrentUserPermissions, opt => opt.Ignore());
 
 
             CreateMap<ProjectTypeEnum, ProjectTypeContract>().ReverseMap();

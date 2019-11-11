@@ -28,7 +28,7 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, ProjectTypeContract projectType,
             ProjectOwnerTypeContract projectOwnerType = ProjectOwnerTypeContract.AllProjects, string filterByName = null, bool fetchPageCount = false,
-            bool fetchLatestChangedResource = false)
+            bool fetchLatestChangedResource = false, bool fetchPermissions = false)
         {
             try
             {
@@ -40,6 +40,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("filterByName", filterByName)
                     .AddParameter("fetchPageCount", fetchPageCount)
                     .AddParameter("fetchLatestChangedResource", fetchLatestChangedResource)
+                    .AddParameter("fetchPermissions", fetchPermissions)
                     .ToResult();
                 var result = m_client.GetPagedList<ProjectDetailContract>(url);
                 return result;
