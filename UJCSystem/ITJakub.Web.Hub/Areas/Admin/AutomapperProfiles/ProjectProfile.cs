@@ -14,8 +14,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateTime.ToLocalTime()))
                 .ForMember(dest => dest.CreateUser, opt => opt.MapFrom(src => src.CreatedByUser))
-                //.ForMember(dest => dest.LastEditDate, opt => opt.MapFrom(src => src.LastEditDate.ToLocalTime()))
-                //.ForMember(dest => dest.LastEditUser, opt => opt.MapFrom(src => src.LastEditUser))
+                .ForMember(dest => dest.LastEditDate, opt => opt.MapFrom(src => src.LatestChangeTime != null ? (DateTime?)src.LatestChangeTime.Value.ToLocalTime() : null))
+                .ForMember(dest => dest.LastEditUser, opt => opt.MapFrom(src => src.EditedByUser))
                 .ForMember(dest => dest.LiteraryOriginalString, opt => opt.MapFrom(src => GetManuscriptText(src.LatestMetadata)))
                 .ForMember(dest => dest.PageCount, opt => opt.MapFrom(src => src.PageCount))
                 .ForMember(dest => dest.PublisherString, opt => opt.MapFrom(src => GetPublisherText(src.LatestMetadata)));

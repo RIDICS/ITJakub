@@ -30,5 +30,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public int? PageCount { get; set; }
         public List<OriginalAuthorContract> Authors { get; set; }
         public List<ProjectResponsiblePersonContract> ResponsiblePersons { get; set; }
+        public UserContract EditedByUser { get; set; }
+        public DateTime? LatestChangeTime { get; set; }
     }
 }

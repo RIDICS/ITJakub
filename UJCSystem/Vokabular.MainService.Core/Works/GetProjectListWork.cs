@@ -23,13 +23,15 @@ namespace Vokabular.MainService.Core.Works
         private readonly bool m_fetchPageCount;
         private readonly bool m_fetchAuthors;
         private readonly bool m_fetchResponsiblePersons;
+        private readonly bool m_fetchLatestChangedResource;
         private int m_resultCount;
         private IList<MetadataResource> m_metadataList;
         private IList<PageCountResult> m_pageCount;
+        private IList<LatestChangedResourceResult> m_latestChangedResources;
 
         public GetProjectListWork(ProjectRepository projectRepository, MetadataRepository metadataRepository, int start, int count,
             ProjectTypeEnum? projectType, ProjectOwnerTypeContract projectOwnerType, int? userId, string filterByName, bool fetchPageCount,
-            bool fetchAuthors, bool fetchResponsiblePersons) : base(projectRepository)
+            bool fetchAuthors, bool fetchResponsiblePersons, bool fetchLatestChangedResource) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
@@ -42,6 +44,7 @@ namespace Vokabular.MainService.Core.Works
             m_fetchPageCount = fetchPageCount;
             m_fetchAuthors = fetchAuthors;
             m_fetchResponsiblePersons = fetchResponsiblePersons;
+            m_fetchLatestChangedResource = fetchLatestChangedResource;
         }
 
         protected override IList<Project> ExecuteWorkImplementation()
@@ -73,6 +76,10 @@ namespace Vokabular.MainService.Core.Works
                 ? m_projectRepository.GetAllPageCount(projectIdList)
                 : new List<PageCountResult>();
 
+            m_latestChangedResources = m_fetchLatestChangedResource
+                ? m_projectRepository.GetAllLatestChangedResource(projectIdList)
+                : new List<LatestChangedResourceResult>();
+
             return dbResult.List;
         }
 
@@ -89,6 +96,11 @@ namespace Vokabular.MainService.Core.Works
         public IList<PageCountResult> GetPageCountList()
         {
             return m_pageCount;
+        }
+
+        public IList<LatestChangedResourceResult> GetLatestChangedResources()
+        {
+            return m_latestChangedResources;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
@@ -103,6 +104,34 @@ namespace Vokabular.DataEntities.Database.Repositories
                     .SelectCount(() => pageResourceAlias.Id).WithAlias(() => resultAlias.PageCount))
                 .TransformUsing(Transformers.AliasToBean<PageCountResult>())
                 .List<PageCountResult>();
+
+            return result;
+        }
+        
+        public virtual IList<LatestChangedResourceResult> GetAllLatestChangedResource(IEnumerable<long> projectIdList)
+        {
+            ResourceVersion resourceVersionAlias = null;
+            Resource resourceAlias = null;
+            ResourceVersion resourceVersionAlias2 = null;
+            Resource resourceAlias2 = null;
+            LatestChangedResourceResult resultAlias = null;
+
+            var result = GetSession().QueryOver(() => resourceVersionAlias)
+                .JoinAlias(() => resourceVersionAlias.Resource, () => resourceAlias)
+                .WhereRestrictionOn(() => resourceAlias.Project.Id).IsInG(projectIdList)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id /*&& !resourceAlias.IsRemoved*/)
+                .WithSubquery.Where(() => resourceVersionAlias.CreateTime == QueryOver.Of(() => resourceAlias2)
+                                              .JoinAlias(() => resourceAlias2.LatestVersion, () => resourceVersionAlias2)
+                                              .Where(() => resourceAlias2.Project.Id == resourceAlias.Project.Id)
+                                              .Select(Projections.Max(() => resourceVersionAlias2.CreateTime))
+                                              .Take(1)
+                                              .As<DateTime>())
+                .SelectList(list => list
+                    .SelectGroup(() => resourceAlias.Project.Id).WithAlias(() => resultAlias.ProjectId)
+                    .SelectMax(() => resourceVersionAlias.CreateTime).WithAlias(() => resultAlias.CreateTime)
+                    .SelectMin(() => resourceVersionAlias.CreatedByUser.Id).WithAlias(() => resultAlias.CreatedByUserId))
+                .TransformUsing(Transformers.AliasToBean<LatestChangedResourceResult>())
+                .List<LatestChangedResourceResult>();
 
             return result;
         }
