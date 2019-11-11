@@ -7,6 +7,7 @@ using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
+using Vokabular.DataEntities.Database.Utils;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -20,6 +21,10 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual ListWithTotalCountResult<Project> GetProjectList(int start, int count, ProjectTypeEnum? projectType,
             string filterByName = null, int? includeUserId = null, int? excludeUserId = null)
         {
+            Permission permissionAlias = null;
+            UserGroup userGroupAlias = null;
+            User userAlias = null;
+
             var query = GetSession().QueryOver<Project>()
                 .Fetch(SelectMode.Fetch, x => x.CreatedByUser);
 
@@ -33,14 +38,24 @@ namespace Vokabular.DataEntities.Database.Repositories
                 query.WhereRestrictionOn(x => x.Name).IsInsensitiveLike(filterByName, MatchMode.Anywhere);
             }
 
+            var permissionSubquery = QueryOver.Of<Project>()
+                .JoinAlias(x => x.Permissions, () => permissionAlias)
+                .JoinAlias(() => permissionAlias.UserGroup, () => userGroupAlias)
+                .JoinAlias(() => userGroupAlias.Users, () => userAlias)
+                .Where(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(PermissionFlag.ReadProject));
+
             if (includeUserId != null)
             {
-                query.And(x => x.CreatedByUser.Id == includeUserId.Value);
+                query.WithSubquery.WhereProperty(x => x.Id)
+                    .In(permissionSubquery.Where(() => userAlias.Id == includeUserId.Value)
+                        .Select(x => x.Id));
             }
 
             if (excludeUserId != null)
             {
-                query.And(x => x.CreatedByUser.Id != excludeUserId.Value);
+                query.WithSubquery.WhereProperty(x => x.Id)
+                    .NotIn(permissionSubquery.Where(() => userAlias.Id == excludeUserId.Value)
+                        .Select(x => x.Id));
             }
             
             query.OrderBy(x => x.Name).Asc
