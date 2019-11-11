@@ -12,6 +12,7 @@ using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using AuthRoleContractBase = Ridics.Authentication.DataContracts.RoleContractBase;
 using AuthUserContract = Ridics.Authentication.DataContracts.User.UserContract;
 using AuthBasicUserInfoContract = Ridics.Authentication.DataContracts.BasicUserInfoContract;
@@ -33,7 +34,17 @@ namespace Vokabular.MainService.Core.Managers
             m_mapper = mapper;
             m_codeGenerator = codeGenerator;
         }
-        
+
+        public UserContract GetUserContract(int userId)
+        {
+            var user = m_userRepository.InvokeUnitOfWork(x => x.GetUserById(userId));
+            var userContract = m_mapper.Map<UserContract>(user);
+            userContract.FirstName = user.ExtFirstName;
+            userContract.LastName = user.ExtLastName;
+            userContract.UserName = user.ExtUsername;
+            return userContract;
+        }
+
         public UserContract GetUserContractForUser(UserContract user)
         {
             if (user == null)
