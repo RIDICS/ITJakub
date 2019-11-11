@@ -17,10 +17,9 @@
         </div>
         <div class="col-md-4">
             @{
-                var lastEditDate = viewModel.LastEditDate?.ToString() ?? "-";
-                var lastEditUser = viewModel.LastEditUser ?? "-";
+                var lastEditDate = viewModel.LastEditDate?.ToString() ?? $"({Localizer.Translate("NotFilled")})";
             }
-            @Localizer.Translate("LastEdited", "Admin"): @lastEditDate @Localizer.Translate("ByUser", "Admin") @lastEditUser<br/>
+            @Localizer.Translate("LastEdited", "Admin"): @lastEditDate @Localizer.Translate("ByUser", "Admin") @viewModel.LastEditUser<br/>
             @Localizer.Translate("Created", "Admin"): @viewModel.CreateDate @Localizer.Translate("ByUser", "Admin") @viewModel.CreateUser
         </div>
         <div class="col-md-2 project-item-buttons">
