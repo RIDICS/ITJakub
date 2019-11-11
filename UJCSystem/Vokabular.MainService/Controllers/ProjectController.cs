@@ -40,14 +40,16 @@ namespace Vokabular.MainService.Controllers
             [FromQuery] bool? fetchPageCount,
             [FromQuery] bool? fetchAuthors,
             [FromQuery] bool? fetchResponsiblePersons,
-            [FromQuery] bool? fetchLatestChangedResource)
+            [FromQuery] bool? fetchLatestChangedResource,
+            [FromQuery] bool? fetchPermissions)
         {
             var isFetchPageCount = fetchPageCount ?? false;
             var isFetchAuthors = fetchAuthors ?? false;
             var isFetchResponsiblePersons = fetchResponsiblePersons ?? false;
             var isFetchLatestChangedResource = fetchLatestChangedResource ?? false;
+            var isFetchPermissions = fetchPermissions ?? false;
             var projectOwner = projectOwnerType ?? ProjectOwnerTypeContract.AllProjects;
-            var result = m_projectManager.GetProjectList(start, count, projectType, projectOwner, filterByName, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons, isFetchLatestChangedResource);
+            var result = m_projectManager.GetProjectList(start, count, projectType, projectOwner, filterByName, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons, isFetchLatestChangedResource, isFetchPermissions);
 
             SetTotalCountHeader(result.TotalCount);
 
