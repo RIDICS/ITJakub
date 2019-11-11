@@ -1,4 +1,5 @@
 ﻿using System;
+using Vokabular.MainService.DataContracts.Contracts.Permission;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Models
 {
@@ -13,5 +14,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public string PublisherString { get; set; }
         public string LiteraryOriginalString { get; set; }
         public int PageCount { get; set; }
+        public PermissionDataContract Permissions { get; set; }
     }
 }
