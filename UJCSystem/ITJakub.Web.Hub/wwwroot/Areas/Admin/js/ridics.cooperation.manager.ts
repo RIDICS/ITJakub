@@ -8,6 +8,6 @@
     }
     
     public init() {
-        this.projectPermissionManager.init();
+        this.projectPermissionManager.init(true);
     }
 }

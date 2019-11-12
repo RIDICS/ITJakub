@@ -20,7 +20,7 @@
         this.savePermissionButtonSelector = "#saveProjectPermissions";
     }
 
-    public init() {
+    public init(clearPermissions = false) {
         if (this.projectId != null) {
             this.roleList = new ListWithPagination(`Admin/Project/CooperationList?projectId=${this.projectId}`,
                 "role",
@@ -35,6 +35,10 @@
         this.initSearchBox();
         this.permissionPanel = $("#project-permission-section");
         this.initPermissionsSaving();
+        if(clearPermissions) {
+            this.permissionPanel.find(".section").removeClass("hide");
+            this.clearPermissionSection();   
+        }
     }
 
     public setProjectId(projectId: number) {
@@ -42,9 +46,13 @@
     }
 
     public clearSections() {
-        this.roleList.clear(localization.translate("ProjectIsNotSelected", "PermissionJs").value);
+        this.clearRoleSection();
         this.clearPermissionSection();
+    }
+
+    public clearRoleSection() {
         $("#addPermissionButton").addClass("disabled");
+        this.roleList.clear(localization.translate("ProjectIsNotSelected", "PermissionJs").value);
     }
 
     public clearPermissionSection() {
@@ -161,7 +169,7 @@
             const addProjectPermissionModal = $("#addProjectPermissionToRoleDialog");
             const roleError = $("#addProjectToRoleError");
             
-            if (this.typeaheadForSingleUserGroupEnabled) {
+            if (!this.typeaheadForSingleUserGroupEnabled) {
                 addProjectPermissionModal.find("#addPermissionHelpAlert").removeClass("hide");
             }            
 
