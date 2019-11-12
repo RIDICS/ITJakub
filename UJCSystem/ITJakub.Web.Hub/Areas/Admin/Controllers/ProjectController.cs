@@ -163,9 +163,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult GetImageViewer()
+        public IActionResult GetImageViewer(long projectId)
         {
-            return PartialView("Resource/_Images");
+            var client = GetProjectClient();
+            var pages = client.GetAllDetailPageList(projectId);
+            return PartialView("Resource/_Images", pages);
         }
 
         public IActionResult GetTextPreview()

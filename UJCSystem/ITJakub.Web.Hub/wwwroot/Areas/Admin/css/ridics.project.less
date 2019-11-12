@@ -1009,10 +1009,6 @@ table {
         user-select: none; //page selection arrows on the same row select text here on double click
     }
 
-    .page-image {
-        margin: 10px 0;
-    }
-
     .page-menu-row {
         height: 5%;
     }
@@ -1020,18 +1016,20 @@ table {
     .content-images {
         height: 90%; //TODO
         overflow-y: auto;
+        
+        .page-image {
+            height: 95%;
+            overflow-y: auto;
 
-        .image-container {
-            height: 100%;
-
-            .image-row {
-                height: 100%;
-
-                .page-image {
-                    height: 95%;
-                    overflow-y: auto;
-                }
+            img {
+                max-width: 100%;
             }
+        }
+    }
+    
+    .page-row {
+        .fa-image {
+            float: right;
         }
     }
 }
@@ -1277,7 +1275,7 @@ table {
     }
 
     .page-menu-row {
-        margin: 0 0 5px 0;
+        margin: 1em 0 1em 0;
 
         .page-navigation-arrow {
             cursor: pointer;
