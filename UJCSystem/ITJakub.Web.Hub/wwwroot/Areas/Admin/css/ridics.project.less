@@ -1009,6 +1009,11 @@ table {
         user-select: none; //page selection arrows on the same row select text here on double click
     }
     
+    .page-listing {
+        height: auto;
+        max-height: 56vh;
+    }
+    
     .content-images {
         text-align: center;
         
@@ -1017,16 +1022,19 @@ table {
 
             img {
                 max-width: 100%;
-                max-height: 100%;
+                max-height: 56vh;
             }
         }
     }
 
     .pages,
     .content-images {
-        .panel-body {
-            @media (min-width: 768px) {
-                height: 60vh;
+        @media (min-width: 768px) {
+            .panel {
+                height: 65vh;
+                .panel-body {
+                    max-height: 60vh;
+                }
             }
         }
     }
@@ -1279,7 +1287,11 @@ table {
     }
 
     .page-menu-row {
-        margin: 1em 0 1em 0;
+        margin: 0;
+        
+        > div {
+            margin: 1em 0 1em 0;
+        }
 
         .page-navigation-arrow {
             cursor: pointer;
@@ -1633,6 +1645,10 @@ table {
     .image-preview {
         flex: 1 0 45%;
         text-align: center;
+        
+        img {
+            width: 100%;
+        }
     }
 
     .sub-content {

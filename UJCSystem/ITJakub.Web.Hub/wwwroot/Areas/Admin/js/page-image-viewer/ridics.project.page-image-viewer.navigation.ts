@@ -9,16 +9,27 @@
         this.gui = gui;
     }
 
-    init(pages: IPage[]) {
-        this.pages = pages;
+    init() {
         this.index = 0;
         this.pageButtonClickProcess();
-        this.listenToPageEnteredConfirmation(pages);
-        this.loadPage(this.index);
+        this.listenToPageEnteredConfirmation();
+        this.reinit();        
+    }
 
+    reinit() {
+        this.pages = [];
+        $(".page-row").toArray().forEach((element, index) => {
+            this.pages[index] = {
+                id: $(element).data("page-id"),
+                name: $(element).data("name"),
+                versionId: $(element).data("version-id"),
+                position: $(element).data("position"),
+            }
+        });
+        this.loadPage(this.index);
         $(`.page-row`).on("click", (event) => {
-           const index = Number($(event.currentTarget).data("index"));
-           this.loadPage(index);
+            const index = Number($(event.currentTarget).data("index"));
+            this.loadPage(index);
         });
     }
     
@@ -69,11 +80,11 @@
             });
     }
 
-    private listenToPageEnteredConfirmation(pages: IPage[]) {
+    private listenToPageEnteredConfirmation() {
         $(".page-menu-row").on("click",
             ".go-to-page-button",
             () => {
-                this.processPageInputField(pages);
+                this.processPageInputField();
             });
 
         $(".page-menu-row").on("keypress",
@@ -81,19 +92,19 @@
             (event) => {
                 var keycode = (event.keyCode ? event.keyCode : event.which);
                 if (keycode === 13) { //Enter key
-                    this.processPageInputField(pages);
+                    this.processPageInputField();
                 }
             });
     }
 
-    private processPageInputField(pages: IPage[]) {
+    private processPageInputField() {
         const inputField = $(".go-to-page-field");
         const inputFieldValue = inputField.val() as string;
         if (inputFieldValue === "") {
             this.gui.showInfoDialog(localization.translate("Warning", "RidicsProject").value,
                 localization.translate("EnterPageName", "RidicsProject").value);
         } else {
-            const namesStringArray: string[] = $.map(pages, (x) => { return x.name });
+            const namesStringArray: string[] = $.map(this.pages, (x) => { return x.name });
             let index = this.getPageIdByPageName(inputFieldValue, namesStringArray);
             if (index === -1) {
                 const minusToDashInputValue = inputFieldValue.replace("-", "–");

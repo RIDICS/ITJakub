@@ -509,6 +509,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
         
+        public long CreatePage(long projectId, CreatePageContract request)
+        {
+            try
+            {
+                var result = m_client.Post<long>($"project/{projectId}/page", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
         public long CreateTextResource(long pageId, CreateTextRequestContract request)
         {
             try
