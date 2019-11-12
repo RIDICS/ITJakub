@@ -29,12 +29,12 @@
 
     addImageContent(element: JQuery, imageUrl: string) {
         const imageString = `<img src="${imageUrl}">`;
-        element.fadeOut(150, () => {
-            element.empty();
-            element.append(imageString);
+        element.fadeOut(300, () => {
+            element.html(imageString);
             this.attachOnErrorEvent(element);
+            wheelzoom($(".page-image").children("img"));
         });
-        element.fadeIn(150);
+        element.fadeIn(300);
         element.off();
     }
 

@@ -1008,21 +1008,25 @@ table {
     .go-to-page-field-group {
         user-select: none; //page selection arrows on the same row select text here on double click
     }
-
-    .page-menu-row {
-        height: 5%;
-    }
-
+    
     .content-images {
-        height: 90%; //TODO
-        overflow-y: auto;
+        text-align: center;
         
         .page-image {
-            height: 95%;
             overflow-y: auto;
 
             img {
                 max-width: 100%;
+                max-height: 100%;
+            }
+        }
+    }
+
+    .pages,
+    .content-images {
+        .panel-body {
+            @media (min-width: 768px) {
+                height: 60vh;
             }
         }
     }
