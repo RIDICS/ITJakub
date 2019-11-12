@@ -17,12 +17,9 @@
                     <tr class="page-row" data-page-id="@pageItem.Id" data-name="@pageItem.Name" data-position="@pageItem.Position" data-version-id="@pageItem.VersionId" data-index="@i">
                         <td>
                             <span class="name">
-                               @Localizer.Translate("Page", "RidicsProject"): @pageItem.Name
+                                @Localizer.Translate("Page", "RidicsProject"): @pageItem.Name
                             </span>
-                            @if (pageItem.HasImage)
-                            {
-                                <i class="fa fa-image"></i>
-                            }
+                            <i class="fa fa-image @(pageItem.HasImage ? "" : "hide")"></i>
                             <div class="alert alert-danger"></div>
                         </td>
                     </tr>
