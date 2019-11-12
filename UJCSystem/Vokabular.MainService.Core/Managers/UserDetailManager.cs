@@ -10,6 +10,7 @@ using Vokabular.MainService.Core.Works.Users;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Feedback;
+using Vokabular.Shared.DataEntities.UnitOfWork;
 using AuthRoleContractBase = Ridics.Authentication.DataContracts.RoleContractBase;
 using AuthUserContract = Ridics.Authentication.DataContracts.User.UserContract;
 
@@ -104,6 +105,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var userDetailContract = m_mapper.Map<UserDetailContract>(authUser);
             userDetailContract.Id = localUserId;
+            userDetailContract.UserCode = m_userRepository.InvokeUnitOfWork(x => x.GetSingleUserGroup(localUserId)).Name;
             foreach (var resultRole in userDetailContract.Roles)
             {
                 resultRole.Id = localDbRoles.First(x => x.ExternalId == resultRole.ExternalId).Id;

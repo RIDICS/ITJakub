@@ -18,7 +18,8 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
             CreateMap<User, UserDetailContract>()
                 .IncludeBase<User, UserContract>()
                 .ForMember(dest => dest.Email, opt => opt.Ignore())
-                .ForMember(dest => dest.IsEmailConfirmed, opt => opt.Ignore());
+                .ForMember(dest => dest.IsEmailConfirmed, opt => opt.Ignore())
+                .ForMember(dest => dest.UserCode, opt => opt.Ignore());
         }
     }
 }

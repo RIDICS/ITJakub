@@ -57,6 +57,7 @@
     "AssignedGroups": "Assigned groups",
     "AssignToGroup": "Assign to group",
     "User": "User",
+    "UserCode": "User code",
     "ManagePermissions": "Manage permissions",
     "Permissions": "Permissions",
     "SuccessGroupCreate": "Group successfully created.",
