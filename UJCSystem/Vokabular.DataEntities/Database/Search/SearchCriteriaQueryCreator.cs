@@ -78,7 +78,12 @@ namespace Vokabular.DataEntities.Database.Search
 
             return queryString;
         }
-        
+
+        public bool HasHeadwordRestrictions()
+        {
+            return m_conjunctionQuery.Any(x => x.CriteriaKey == CriteriaKey.Headword);
+        }
+
         public ICriterion GetHeadwordRestrictions()
         {
             var conjunction = new Conjunction();
