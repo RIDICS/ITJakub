@@ -310,8 +310,20 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult GetEditionNote(long projectId, TextFormatEnumContract format)
         {
             var client = GetProjectClient();
-            var result = client.GetLatestEditionNote(projectId, format);
-            return Json(result);
+            try
+            {
+                var result = client.GetLatestEditionNote(projectId, format);
+                return Json(result);
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                if (exception.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return Json(null);
+                }
+
+                throw;
+            }
         }
 
         [HttpPost]
