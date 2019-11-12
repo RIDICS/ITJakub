@@ -11,9 +11,7 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual DateTime CreateTime { get; set; }
 
-        //public virtual IList<FavoriteBase> FavoriteItems { get; set; }
-
-        //public virtual IList<FavoriteLabel> FavoriteLabels { get; set; }
+        public virtual IList<FavoriteLabel> FavoriteLabels { get; set; }
 
         public virtual string ExtUsername { get; set; }
 

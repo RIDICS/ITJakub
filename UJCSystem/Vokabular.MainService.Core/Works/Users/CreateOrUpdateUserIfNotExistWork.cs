@@ -29,6 +29,8 @@ namespace Vokabular.MainService.Core.Works.Users
 
         protected override int ExecuteWorkImplementation()
         {
+            var userFavoriteLabelSubwork = new UserFavoriteLabelSubwork(m_userRepository);
+
             IList<RoleUserGroup> dbRoleUserGroups = null;
 
             var now = DateTime.UtcNow;
@@ -70,6 +72,7 @@ namespace Vokabular.MainService.Core.Works.Users
                 }
 
                 m_userRepository.Update(user);
+                userFavoriteLabelSubwork.CreateOrUpdateDefaultFavoriteLabel(user.Id);
 
                 return user.Id;
             }
@@ -82,15 +85,15 @@ namespace Vokabular.MainService.Core.Works.Users
                 ExtUsername = m_userInfo.Username,
                 ExtFirstName = m_userInfo.FirstName,
                 ExtLastName = m_userInfo.LastName,
-                //FavoriteLabels = new List<FavoriteLabel> { defaultFavoriteLabel }
+                FavoriteLabels = null,
             };
 
             var newSingleUserGroup = CreateSingleUserGroupObject(dbUser, now);
             dbUser.Groups.Add(newSingleUserGroup);
 
 
-            //defaultFavoriteLabel.User = dbUser;
-            // TODO generate default FavoriteLabel
+            var defaultFavoriteLabel = userFavoriteLabelSubwork.GetNewDefaultFavoriteLabel(dbUser);
+            dbUser.FavoriteLabels = new List<FavoriteLabel> {defaultFavoriteLabel};
             
 
             var userId = (int) m_userRepository.Create(dbUser);
