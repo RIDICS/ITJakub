@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Vokabular.ForumSite.Core.Helpers;
 using Vokabular.ForumSite.Core.Works;
 using Vokabular.ForumSite.Core.Works.Subworks;
@@ -7,6 +8,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 
 namespace Vokabular.ForumSite.Core.Managers
 {
+    [Obsolete("Categories are not propagated to Forum anymore. Only BookTypes as root categories.")]
     public class SubForumManager
     {
         private readonly ForumRepository m_forumRepository;
