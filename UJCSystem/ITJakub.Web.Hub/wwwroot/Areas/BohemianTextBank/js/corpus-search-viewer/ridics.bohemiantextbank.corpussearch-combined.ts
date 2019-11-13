@@ -222,6 +222,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
 
     private formNextPage() {
         this.currentViewPage = this.paginator.getCurrentPage();
+        this.showCurrentPage(this.currentViewPage);
         this.paginator.disable();
         const hasBeenWrapped = this.paginator.hasBeenWrapped();
         if (hasBeenWrapped) {
@@ -374,6 +375,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                 } else {
                     if (this.paginator.isBasicMode()) {//unknown number of pages, thus page was increased by one and needs descreasing
                         this.paginator.updatePage(this.paginator.getCurrentPage() - 1);
+                        this.showCurrentPage(this.paginator.getCurrentPage());
                     }
                     const tableEl = $(".text-results-table");
                     this.hideLoading(tableEl);
@@ -435,6 +437,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         this.paginator.disable();
         const firstPage = 1;
         this.currentViewPage = firstPage;
+        this.showCurrentPage(firstPage);
         this.emptyResultsTable();
         this.resetHistory();
         this.compositionPageIsLast = false;
@@ -501,6 +504,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
     }
 
     private goToPage(pageNumber: number) {
+        this.showCurrentPage(pageNumber);
         this.paginator.disable();
         this.loadPage(pageNumber);
         this.paginator.updatePage(pageNumber);
@@ -508,6 +512,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
 
     private loadPreviousPage() {
         const previousPage = this.paginator.getCurrentPage();
+        this.showCurrentPage(previousPage);
         this.paginator.disable();
         this.loadPage(previousPage);
     }
@@ -803,5 +808,9 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             deferred.reject();
         });
         return deferred;
+    }
+
+    private showCurrentPage(pageNumber: number) {
+        console.log(pageNumber); // TODO replace with output to view
     }
 }
