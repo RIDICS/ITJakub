@@ -1,16 +1,16 @@
 ﻿class BohemianTextBankBase {
-    protected searchResultsOnPage = Number($("#corpus-search-configuration").data("page-size"));//corresponds to amount of results per page that should be on screen
-    protected contextLength = 50;
+    protected searchResultsOnPage = this.getNumberFromConfig("page-size");//corresponds to amount of results per page that should be on screen
+    protected contextLength = this.getNumberFromConfig("context-length");
 
-    protected minContextLength = 40;//search backend may crash if context is too short
-    protected maxContextLength = 100;
-    protected minResultsPerPage = 1;
-    protected maxResultsPerPage = 100;
+    protected minContextLength = this.getNumberFromConfig("min-context-length");//search backend may crash if context is too short
+    protected maxContextLength = this.getNumberFromConfig("max-context-length");
+    protected minResultsPerPage = this.getNumberFromConfig("min-page-size");
+    protected maxResultsPerPage = this.getNumberFromConfig("max-page-size");
 
     protected hitBookIds:number[] = [];
 
     protected compositionResultListStart = -1;
-    protected compositionsPerPage = Number($("#corpus-search-configuration").data("composition-page-size"));
+    protected compositionsPerPage = this.getNumberFromConfig("composition-page-size");
     protected compositionPageIsLast = false;
 
     protected currentBookId = -1;
@@ -46,6 +46,10 @@
     protected search: Search;
 
     protected basicApiClient = new TextBankApiClient();
+
+    private getNumberFromConfig(key: string): number {
+        return Number($("#corpus-search-configuration").data(key));
+    }
 
     protected showLoading(tableEl: JQuery) {
         const loaderEl = tableEl.siblings(".corpus-search-results-table-div-loader");

@@ -367,8 +367,9 @@ namespace Vokabular.MainService.Core.Managers
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(snapshotInfo.Project.ProjectType);
             var start = m_corpusSearchManager.GetCorpusStart(request.Start);
             var count = m_corpusSearchManager.GetCorpusCount(request.Count);
+            var contextLength = m_corpusSearchManager.GetContextLength(request.ContextLength);
 
-            var result = fulltextStorage.SearchCorpusInSnapshotByCriteria(snapshotId, start, count, request.ContextLength, nonMetadataCriterias);
+            var result = fulltextStorage.SearchCorpusInSnapshotByCriteria(snapshotId, start, count, contextLength, nonMetadataCriterias);
 
             switch (result.SearchResultType)
             {
