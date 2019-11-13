@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.Shared.DataContracts.Search.Old;
 using Vokabular.Shared.DataContracts.Types;
 using ITJakub.Web.Hub.Options;
+using Vokabular.MainService.DataContracts.Contracts.Search;
 
 namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 {
