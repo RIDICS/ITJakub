@@ -142,7 +142,7 @@
                 const parentCategoryIdSelectEl = dialogEl.find(".id-method-selection");
                 parentCategoryIdSelectEl.empty();
                 const newCategoryOption =
-                    `<option value="null" data-parent-category-id="null">No parent category</option>`;
+                    `<option value="null" data-parent-category-id="null">(No parent category)</option>`;
                 parentCategoryIdSelectEl.append(newCategoryOption);
                 parentCategoryIdSelectEl.append(this.generateComboboxFromList(this.categoryItemListArray));
                 const selectedPageEl = $(".list-group").find(".page-list-item-selected");
@@ -186,6 +186,9 @@
                     const textareaEl = dialogEl.find(".primary-input-dialog-textarea");
                     const parentCategoryIdSelectEl = dialogEl.find(".id-method-selection");
                     parentCategoryIdSelectEl.empty();
+                    const newCategoryOption =
+                        `<option value="null" data-parent-category-id="null">(No parent category)</option>`;
+                    parentCategoryIdSelectEl.append(newCategoryOption);
                     parentCategoryIdSelectEl.append(this.generateComboboxFromList(this.categoryItemListArray));
                     const originalText = selectedPageEl.clone().children().remove().end().text();
                     textareaEl.val(originalText);
