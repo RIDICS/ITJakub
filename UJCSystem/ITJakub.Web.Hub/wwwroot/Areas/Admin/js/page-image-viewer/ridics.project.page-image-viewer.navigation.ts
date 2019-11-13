@@ -21,16 +21,23 @@
         $(".page-row").toArray().forEach((element, index) => {
             this.pages[index] = {
                 id: $(element).data("page-id"),
-                name: $(element).data("name"),
+                name: String($(element).data("name")),
                 versionId: $(element).data("version-id"),
                 position: $(element).data("position"),
             }
         });
-        this.loadPage(this.index);
-        $(`.page-row`).on("click", (event) => {
-            const index = Number($(event.currentTarget).data("index"));
-            this.loadPage(index);
-        });
+
+        const uploadImageBtn = $(".upload-new-image-button");
+        if(this.pages.length) {
+            this.loadPage(this.index);
+            $(`.page-row`).on("click", (event) => {
+                const index = Number($(event.currentTarget).data("index"));
+                this.loadPage(index);
+            });
+            uploadImageBtn.removeAttr("disabled")
+        } else {
+            uploadImageBtn.attr("disabled", "true")
+        }
     }
     
     private getPageIdByPageName(pageName: string, pages: string[]): number {

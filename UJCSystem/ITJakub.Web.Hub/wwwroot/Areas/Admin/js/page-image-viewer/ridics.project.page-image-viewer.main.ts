@@ -12,6 +12,8 @@
 
     init(projectId: number) {
         this.projectId = projectId;
+        this.initAddPageDialog();
+        
         const gui = new EditorsGui();
         const contentAddition = new ImageViewerContentAddition(this.client);
         
@@ -20,8 +22,6 @@
         
         this.upload = new ImageViewerUpload(contentAddition);        
         this.upload.init();
-        
-        this.initAddPageDialog();
     }
 
     private loadPages() {
@@ -60,11 +60,6 @@
                 position = 1;
             }
             
-            /* const listContainerEl = $(".page-listing tbody");
-            if (!listContainerEl.children().length) {
-                $("#noPagesAlert").remove();
-            }*/
-
             const newPageName = String(dialog.find("input[name=\"page-name\"]").val());
             if (newPageName !== "") {
                 this.client.createPage(this.projectId, newPageName, position).done(() => {
@@ -74,13 +69,6 @@
                     const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error));
                     alertHolder.empty().append(alert.buildElement());
                 });
-
-
-                /* const html = this.createPageRow(newPageName);
-                 listContainerEl.append(html);
- 
-                 this.showUnsavedChangesAlert();
-                 this.initPageRowClicks();*/
             }
         });
     }

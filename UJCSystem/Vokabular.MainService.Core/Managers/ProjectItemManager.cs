@@ -45,7 +45,7 @@ namespace Vokabular.MainService.Core.Managers
         public List<DetailPageContract> GetDetailPageList(long projectId)
         {
             var dbPages = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestPages(projectId));
-            var dbImages = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestImages(projectId, null, true));
+            var dbImages = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestImages(projectId, null, false));
 
             var result = new List<DetailPageContract>();
             foreach (var dbPage in dbPages)
