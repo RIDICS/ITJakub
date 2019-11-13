@@ -14,6 +14,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
     //string for localisation
     private attentionString = localization.translate("Warning", "BohemianTextBank").value;
     private lastResultPageString = localization.translate("LastPageOfResults", "BohemianTextBank").value;
+    private lastResultPageDetailString = localization.translate("LastPageOfResultsDetail", "BohemianTextBank").value;
+    private firstResultPageDetailString = localization.translate("FirstPageOfResultsDetail", "BohemianTextBank").value;
     private allResults = localization.translate("AllResults", "BohemianTextBank").value;
 
     private loadAllResultsButtonContent = $(`<div>${this.allResults}</div>`);
@@ -223,11 +225,11 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         this.paginator.disable();
         const hasBeenWrapped = this.paginator.hasBeenWrapped();
         if (hasBeenWrapped) {
-            this.showNoPageWarning();
+            this.showWarning(this.lastResultPageString, this.lastResultPageDetailString);
         } else {
             const tableEl = $(".text-results-table");
             this.showLoading(tableEl);
-             this.generateViewingPage();
+            this.generateViewingPage();
         }
             
     }
@@ -376,8 +378,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                     const tableEl = $(".text-results-table");
                     this.hideLoading(tableEl);
                     bootbox.alert({
-                        title: this.attentionString,
-                        message: this.lastResultPageString,
+                        title: this.lastResultPageString,
+                        message: this.lastResultPageDetailString,
                         buttons: {
                             ok: {
                                 className: "btn-default"
@@ -462,11 +464,16 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
     }
 
     private showNoPageWarning(pageNumber?: number) {
-        this.paginator.enable();
         const pageNumberString = (pageNumber) ? pageNumber.toString() : "";
+        const message = localization.translateFormat("PageWithNumberDoesNotExists", [pageNumberString], "BohemianTextBank").value;
+        this.showWarning(this.attentionString, message);
+    }
+
+    private showWarning(title: string, message: string) {
+        this.paginator.enable();
         bootbox.alert({
-            title: this.attentionString,
-            message: localization.translateFormat("PageWithNumberDoesNotExists", [pageNumberString], "BohemianTextBank").value,
+            title: title,
+            message: message,
             buttons: {
                 ok: {
                     className: "btn-default"
@@ -507,8 +514,10 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
 
     private loadPage(pageNumber: number) {
         const tableEl = $(".text-results-table");
-        this.showLoading(tableEl);
         const pageHasBeenWrapped = this.paginator.hasBeenWrapped();
+        if (!pageHasBeenWrapped) {
+            this.showLoading(tableEl);
+        }
         const previousPage = pageNumber - 1;
         if (previousPage === 0 && !pageHasBeenWrapped) {//to load page 1 it's needed to reset indexes
             this.resetIds();
@@ -519,7 +528,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             }
             return;
         }
-        const historyContainerEl = $(".page-history-constainer");;
+        const historyContainerEl = $(".page-history-constainer");
         const viewingPageEl = historyContainerEl.children(`[data-viewing-page-number=${previousPage}]`);
         if (viewingPageEl.length && !pageHasBeenWrapped) {
             const entry: ICorpusSearchViewingPageHistoryEntry = JSON.parse(viewingPageEl.attr("data-viewing-page-structure"));
@@ -534,9 +543,11 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         } else {
             const isBasicPaginationMode = this.paginator.isBasicMode();
             if (isBasicPaginationMode) {
-                this.showNoPageWarning();
+                this.showWarning(this.attentionString, this.firstResultPageDetailString);
             } else {
-                this.makeTableForPage(pageNumber);
+                //this.makeTableForPage(pageNumber); // TODO determine original purpose of this method (now it is replaced by showWarning)
+                // makeTableForPage is also broken because there makeTableForPage -> loadPage -> makeTableForPage recursion
+                this.showWarning(this.attentionString, this.firstResultPageDetailString);
             }
         }
     }
