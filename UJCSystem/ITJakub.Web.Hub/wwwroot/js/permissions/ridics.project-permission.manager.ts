@@ -2,15 +2,13 @@
     private readonly searchBox: MultiSetTypeaheadSearchBox<IRole>;
     private readonly client: PermissionApiClient;
     private readonly errorHandler: ErrorHandler;
-    private readonly typeaheadForSingleUserGroupEnabled: boolean;
     private readonly savePermissionButtonSelector: string;
     private projectId: number;
     private currentRoleSelectedItem: IRole;
     private roleList: ListWithPagination;
     private permissionPanel: JQuery<HTMLElement>;
 
-    constructor(enableTypeaheadForSingleUserGroup: boolean, projectId: number = null) {
-        this.typeaheadForSingleUserGroupEnabled = enableTypeaheadForSingleUserGroup; 
+    constructor(projectId: number = null) {
         this.projectId = projectId;
         this.searchBox = new MultiSetTypeaheadSearchBox<IRole>("#roleSearchInput", "Permission",
             (item) => item.name,
@@ -61,6 +59,10 @@
         const errorAlert = new AlertComponentBuilder(AlertType.Info).addContent(localization.translate("RoleIsNotSelected", "PermissionJs").value);
         alertHolder.empty().append(errorAlert.buildElement());
         $("#saveProjectPermissions").addClass("hide");
+    }
+    
+    public reloadRoles() {
+        this.roleList.reloadPage();
     }
 
     public loadRoles(projectId: number) {
@@ -148,9 +150,7 @@
 
     private initSearchBox() {
         this.searchBox.addDataSet("Role", localization.translate("Groups", "PermissionJs").value);
-        if (this.typeaheadForSingleUserGroupEnabled) {
-            this.searchBox.addDataSet("SingleUserGroup", localization.translate("Users", "PermissionJs").value);
-        }
+        this.searchBox.addDataSet("SingleUserGroup", localization.translate("Users", "PermissionJs").value);        
 
         this.searchBox.create((selectedExists: boolean, selectionConfirmed: boolean) => {
             if (selectionConfirmed) {
@@ -168,10 +168,6 @@
 
             const addProjectPermissionModal = $("#addProjectPermissionToRoleDialog");
             const roleError = $("#addProjectToRoleError");
-            
-            if (!this.typeaheadForSingleUserGroupEnabled) {
-                addProjectPermissionModal.find("#addPermissionHelpAlert").removeClass("hide");
-            }            
 
             $("#addPermissionButton").on("click", (event) => {
                 event.preventDefault();
@@ -189,21 +185,7 @@
 
             addProjectPermissionToRoleBtn.on("click", () => {
                 roleError.empty();
-                const rawRoleSearchInput = String($("#roleSearchInput").val());
-                if(!this.typeaheadForSingleUserGroupEnabled && rawRoleSearchInput !== "")
-                {
-                    this.addPermissionsOnProjectToUser(rawRoleSearchInput, addProjectPermissionModal).done(() => {
-                        this.roleList.reloadPage();
-                        this.clearPermissionSection();
-                        addProjectPermissionModal.modal("hide");
-                    }).fail((error) => {
-                        const errorAlert = new AlertComponentBuilder(AlertType.Error)
-                            .addContent(this.errorHandler.getErrorMessage(error,
-                                localization.translate("AddProjectToRoleError", "PermissionJs").value));
-                        roleError.empty().append(errorAlert.buildElement());
-                    });
-                }
-                else if (typeof this.currentRoleSelectedItem == "undefined" || this.currentRoleSelectedItem == null) {
+                if (typeof this.currentRoleSelectedItem == "undefined" || this.currentRoleSelectedItem == null) {
                     const errorAlert = new AlertComponentBuilder(AlertType.Error)
                         .addContent(localization.translate("RoleIsNotSelected", "PermissionJs").value);
                     roleError.empty().append(errorAlert.buildElement());
@@ -252,17 +234,8 @@
 
         return this.client.addProjectToRole(addProjectToRole);
     }
-
-    private addPermissionsOnProjectToUser(userCode: string, context: JQuery): JQueryXHR {
-        const addProjectToUser = {
-            userCode: userCode,
-            permissionsConfiguration: this.getPermissionsConfiguration(context),
-        };
-        
-        return this.client.addProjectToSingleUser(addProjectToUser);
-    }
     
-    private getPermissionsConfiguration(context: JQuery): IPermissionsConfiguration
+    public getPermissionsConfiguration(context: JQuery): IPermissionsConfiguration
     {
         return {
             bookId: this.projectId,

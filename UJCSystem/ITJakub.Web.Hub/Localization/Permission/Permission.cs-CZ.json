@@ -58,6 +58,7 @@
     "AssignToGroup": "Přiřadit do skupiny",
     "User": "Uživatel",
     "UserCode": "Kód uživatele",
+    "GroupsAndUsers": "Skupiny a uživatelé",
     "ManagePermissions": "Spravovat práva",
     "Permissions": "Oprávnění",
     "SuccessGroupCreate": "Skupina úspěšně vytvořena.",
@@ -69,14 +70,16 @@
     "ProjectPermissionManagementHeadline": "Správa práv projektů",
     "Projects": "Projekty",
     "AddProjectPermissionToGroup": "Přidat skupině právo na projekt",
+    "AddProjectPermissionToUser": "Přidat uživateli právo na projekt",
     "SelectedProject": "Vybraný projekt",
     "AddPermissionToGroup": "Přidat oprávnění skupině",
+    "AddPermissionToUser": "Přidat oprávnění uživateli",
     "ResetPassword": "Resetovat heslo",
 
     "ReadProjectPermission": "Právo číst projekt",
     "ReadPublishedProjectPermission": "Právo číst publikovaný projekt",
     "EditProjectPermission": "Právo editovat projekt",
     "AdminProjectPermission": "Právo spravovat projekt",
-    "AddPermissionOnProjectHelp": "Pro přidání práva na projekt skupině, vyhledejte danou skupinu pomocí pole níže. Pokud chcete přidat právo pouze jedné osobě, požádejte ji, aby Vám sdělila svůj kód uživatele, který zadáte do pole níže. Kód uživatele lze nalézt v profilu uživatele pod záložkou \"Kód uživatele\"."
+    "AddPermissionOnProjectHelp": "Pokud chcete přidat právo pouze jedné osobě, požádejte ji, aby Vám sdělila svůj kód uživatele, který zadáte do pole níže. Kód uživatele lze nalézt v profilu uživatele pod záložkou \"Kód uživatele\"."
   }
 }
