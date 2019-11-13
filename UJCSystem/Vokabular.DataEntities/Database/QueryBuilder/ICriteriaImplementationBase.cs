@@ -2,7 +2,7 @@
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
 
-namespace Vokabular.Shared.DataContracts.Search.QueryBuilder
+namespace Vokabular.DataEntities.Database.QueryBuilder
 {
     public interface ICriteriaImplementationBase
     {

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Text;
+using Vokabular.DataEntities.Database.QueryBuilder;
 using Vokabular.DataEntities.Database.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
-using Vokabular.Shared.DataContracts.Search.QueryBuilder;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.DataEntities.Database.SearchCriteria

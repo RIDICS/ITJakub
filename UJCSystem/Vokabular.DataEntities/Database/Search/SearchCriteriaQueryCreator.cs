@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Entities.Enums;
-using Vokabular.Shared.DataContracts.Search.QueryBuilder;
+using Vokabular.DataEntities.Database.QueryBuilder;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.DataEntities.Database.Search

@@ -1,6 +1,7 @@
+using NHibernate.Criterion;
 using Vokabular.Shared.DataContracts.Types;
 
-namespace Vokabular.Shared.DataContracts.Search.QueryBuilder
+namespace Vokabular.DataEntities.Database.QueryBuilder
 {
     public class SearchCriteriaQuery
     {
@@ -10,6 +11,6 @@ namespace Vokabular.Shared.DataContracts.Search.QueryBuilder
         
         public string Where { get; set; }
 
-        public object Restriction { get; set; } // TODO change to specific type after DB migration to VokabularDB
+        public ICriterion Restriction { get; set; }
     }
 }

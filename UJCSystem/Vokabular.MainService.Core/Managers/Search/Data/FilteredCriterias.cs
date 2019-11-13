@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using Vokabular.DataEntities.Database.QueryBuilder;
 using Vokabular.Shared.DataContracts.Search.Criteria;
-using Vokabular.Shared.DataContracts.Search.QueryBuilder;
 
-namespace Vokabular.Core.Data
+namespace Vokabular.MainService.Core.Managers.Search.Data
 {
     public class FilteredCriterias
     {

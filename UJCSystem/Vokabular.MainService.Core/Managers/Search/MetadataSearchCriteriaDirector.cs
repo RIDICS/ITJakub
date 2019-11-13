@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vokabular.DataEntities.Database.QueryBuilder;
 using Vokabular.Shared.DataContracts.Search.Criteria;
-using Vokabular.Shared.DataContracts.Search.QueryBuilder;
 using Vokabular.Shared.DataContracts.Types;
 
-namespace Vokabular.Core.Search
+namespace Vokabular.MainService.Core.Managers.Search
 {
     public class MetadataSearchCriteriaDirector
     {
