@@ -61,10 +61,10 @@ namespace Vokabular.MainService.Core.Managers
             return resultId;
         }
 
-        public void UpdateProject(long projectId, ProjectContract data)
+        public void UpdateProject(long projectId, ItemNameContract data)
         {
-            var currentUserId = m_authenticationManager.GetCurrentUserId();
-            var work = new UpdateProjectWork(m_projectRepository, projectId, data, currentUserId);
+            // TODO check permission (not only here)
+            var work = new UpdateProjectWork(m_projectRepository, projectId, data.Name);
             work.Execute();
         }
 
@@ -74,8 +74,9 @@ namespace Vokabular.MainService.Core.Managers
             throw new NotImplementedException();
         }
 
-        public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, ProjectTypeContract? projectType, 
-            ProjectOwnerTypeContract projectOwnerType, string filterByName, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons)
+        public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, ProjectTypeContract? projectType,
+            ProjectOwnerTypeContract projectOwnerType, string filterByName, bool fetchPageCount, bool fetchAuthors,
+            bool fetchResponsiblePersons, bool fetchLatestChangedResource, bool fetchPermissions)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCountForProject(count);
@@ -84,16 +85,19 @@ namespace Vokabular.MainService.Core.Managers
             var userId = m_authenticationManager.GetCurrentUserId();
             
             var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, projectTypeEnum,
-                projectOwnerType, userId, filterByName, fetchPageCount, fetchAuthors, fetchResponsiblePersons);
+                projectOwnerType, userId, filterByName, fetchPageCount, fetchAuthors, fetchResponsiblePersons, fetchLatestChangedResource, fetchPermissions);
             var resultEntities = work.Execute();
 
             var metadataList = work.GetMetadataResources();
             var pageCountList = work.GetPageCountList();
+            var latestChangesList = work.GetLatestChangedResources();
+            var userPermissionDict = work.GetUserPermission();
             var resultList = m_mapper.Map<List<ProjectDetailContract>>(resultEntities);
             foreach (var projectContract in resultList)
             {
                 var metadataResource = metadataList.FirstOrDefault(x => x.Resource.Project.Id == projectContract.Id);
                 var pageCountResult = pageCountList.FirstOrDefault(x => x.ProjectId == projectContract.Id);
+                var latestChangeResult = latestChangesList.FirstOrDefault(x => x.ProjectId == projectContract.Id);
 
                 var metadataContract = m_mapper.Map<ProjectMetadataContract>(metadataResource);
                 projectContract.LatestMetadata = metadataContract;
@@ -106,6 +110,26 @@ namespace Vokabular.MainService.Core.Managers
                 if (fetchResponsiblePersons && metadataResource != null)
                     projectContract.ResponsiblePersons =
                         m_mapper.Map<List<ProjectResponsiblePersonContract>>(metadataResource.Resource.Project.ResponsiblePersons);
+
+                if (fetchLatestChangedResource && latestChangeResult != null)
+                {
+                    projectContract.LatestChangeTime = latestChangeResult.CreateTime;
+                    projectContract.EditedByUser = m_userDetailManager.GetUserContract(latestChangeResult.CreatedByUserId);
+                }
+
+                if (fetchPermissions)
+                {
+                    var joinedFlags = PermissionFlag.None;
+                    if (userPermissionDict.TryGetValue(projectContract.Id, out var permissions))
+                    {
+                        foreach (var permission in permissions)
+                        {
+                            joinedFlags |= permission.Flags;
+                        }
+                    }
+
+                    projectContract.CurrentUserPermissions = m_mapper.Map<PermissionDataContract>(joinedFlags);
+                }
             }
 
             return new PagedResultList<ProjectDetailContract>

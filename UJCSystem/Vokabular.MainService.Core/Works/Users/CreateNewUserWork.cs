@@ -54,7 +54,7 @@ namespace Vokabular.MainService.Core.Works.Users
                 ExtFirstName = user.FirstName,
                 ExtLastName = user.LastName,
                 Groups = null,
-                //FavoriteLabels = new List<FavoriteLabel> { defaultFavoriteLabel }
+                FavoriteLabels = null,
             };
 
             var singleUserGroupSubwork = new SingleUserGroupSubwork(m_userRepository, m_codeGenerator);
@@ -71,9 +71,12 @@ namespace Vokabular.MainService.Core.Works.Users
             dbUser.Groups = new List<UserGroup> {singleUserGroup};
             // RoleUserGroups are assigned on every login
 
+            
+            var userFavoriteLabelSubwork = new UserFavoriteLabelSubwork(m_userRepository);
+            var defaultFavoriteLabel = userFavoriteLabelSubwork.GetNewDefaultFavoriteLabel(dbUser);
 
-            //defaultFavoriteLabel.User = dbUser;
-            // TODO generate default FavoriteLabel
+            dbUser.FavoriteLabels = new List<FavoriteLabel> {defaultFavoriteLabel};
+            
 
             var userId = (int) m_userRepository.Create(dbUser);
             return userId;

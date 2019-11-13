@@ -14,6 +14,12 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.ReadProject, opt => opt.MapFrom(src => src.Flags.HasFlag(PermissionFlag.ReadProject)))
                 .ForMember(dest => dest.EditProject, opt => opt.MapFrom(src => src.Flags.HasFlag(PermissionFlag.EditProject)))
                 .ForMember(dest => dest.AdminProject, opt => opt.MapFrom(src => src.Flags.HasFlag(PermissionFlag.AdminProject)));
+
+            CreateMap<PermissionFlag, PermissionDataContract>()
+                .ForMember(dest => dest.ShowPublished, opt => opt.MapFrom(src => src.HasFlag(PermissionFlag.ShowPublished)))
+                .ForMember(dest => dest.ReadProject, opt => opt.MapFrom(src => src.HasFlag(PermissionFlag.ReadProject)))
+                .ForMember(dest => dest.EditProject, opt => opt.MapFrom(src => src.HasFlag(PermissionFlag.EditProject)))
+                .ForMember(dest => dest.AdminProject, opt => opt.MapFrom(src => src.HasFlag(PermissionFlag.AdminProject)));
         }
     }
 }

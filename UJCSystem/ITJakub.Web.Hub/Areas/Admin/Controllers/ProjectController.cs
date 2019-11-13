@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using ITJakub.Web.Hub.Areas.Admin.Controllers.Constants;
@@ -15,6 +16,7 @@ using ITJakub.Web.Hub.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using ITJakub.Web.Hub.Options;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Scalesoft.Localization.AspNetCore;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Type;
@@ -34,10 +36,10 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         public IActionResult List(string search, int start, int count = PageSizes.ProjectList, ViewType viewType = ViewType.Full,
-            ProjectOwnerTypeContract projectOwnerType = ProjectOwnerTypeContract.AllProjects)
+            ProjectOwnerTypeContract projectOwnerType = ProjectOwnerTypeContract.MyProjects)
         {
             var client = GetProjectClient();
-            var result = client.GetProjectList(start, count, GetDefaultProjectType(), projectOwnerType, search, true);
+            var result = client.GetProjectList(start, count, GetDefaultProjectType(), projectOwnerType, search, true, true, true);
             var projectItems = Mapper.Map<List<ProjectItemViewModel>>(result.List);
             var listViewModel = new ListViewModel<ProjectItemViewModel>
             {
@@ -47,16 +49,18 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 Start = start,
                 SearchQuery = search
             };
+            var filterTypes = new List<ProjectOwnerTypeContract>
+            {
+                ProjectOwnerTypeContract.MyProjects,
+                ProjectOwnerTypeContract.ForeignProjects,
+                ProjectOwnerTypeContract.AllProjects,
+            };
             var viewModel = new ProjectListViewModel
             {
                 Projects = listViewModel,
                 AvailableBookTypes = ProjectConstants.AvailableBookTypes,
-                FilterTypes = new List<ProjectOwnerTypeContract>
-                {
-                    ProjectOwnerTypeContract.AllProjects,
-                    ProjectOwnerTypeContract.MyProjects,
-                    ProjectOwnerTypeContract.ForeignProjects,
-                }
+                FilterTypes = filterTypes.Select(x =>
+                    new SelectListItem(m_localization.Translate(x.ToString(), "Admin"), x.ToString(), x == projectOwnerType)).ToList()
             };
 
             switch (viewType)
@@ -266,6 +270,18 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
             client.DeleteProject(request.Id);
             return Json(new { });
+        }
+        
+        [HttpPost]
+        public IActionResult RenameProject([FromBody] RenameProjectRequest request)
+        {
+            var client = GetProjectClient();
+
+            client.UpdateProject(request.Id, new ItemNameContract
+            {
+                Name = request.NewProjectName,
+            });
+            return AjaxOkResponse();
         }
         
         [HttpPost]
