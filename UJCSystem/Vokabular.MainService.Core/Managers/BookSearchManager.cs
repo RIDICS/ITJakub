@@ -140,6 +140,10 @@ namespace Vokabular.MainService.Core.Managers
 
                 // 1) search in metadata
                 var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+                if (projectIdentificatorList.Count == 0)
+                {
+                    return new List<SearchResultContract>();
+                }
 
                 // 2) search in fulltext
                 var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);
@@ -232,6 +236,10 @@ namespace Vokabular.MainService.Core.Managers
 
                 // 1) search in metadata
                 var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+                if (projectIdentificatorList.Count == 0)
+                {
+                    return 0;
+                }
 
                 // 2) search in fulltext
                 var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);
@@ -267,6 +275,10 @@ namespace Vokabular.MainService.Core.Managers
 
                 // 1) search in metadata
                 var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+                if (projectIdentificatorList.Count == 0)
+                {
+                    return new List<HeadwordContract>();
+                }
 
                 // 2) search in fulltext
                 var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);
@@ -314,6 +326,10 @@ namespace Vokabular.MainService.Core.Managers
 
                 // 1) search in metadata
                 var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+                if (projectIdentificatorList.Count == 0)
+                {
+                    return 0;
+                }
 
                 // 2) search in fulltext
                 var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);
@@ -430,8 +446,12 @@ namespace Vokabular.MainService.Core.Managers
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
 
             var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectType);
+            if (projectIdentificatorList.Count == 0)
+            {
+                return new List<CorpusSearchResultContract>();
+            }
+
             // Search in fulltext DB
-            
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);
             var start = m_corpusSearchManager.GetCorpusStart(request.Start);
             var count = m_corpusSearchManager.GetCorpusCount(request.Count);
@@ -456,6 +476,10 @@ namespace Vokabular.MainService.Core.Managers
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
 
             var projectIdentificatorList = GetProjectIdentificatorList(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters, projectType);
+            if (projectIdentificatorList.Count == 0)
+            {
+                return 0;
+            }
             
             // Search in fulltext DB
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectType);
