@@ -6,7 +6,7 @@
 
     constructor(projectId: number) {
         this.projectId = projectId;
-        this.projectPermissionManager = new ProjectPermissionManager(projectId);
+        this.projectPermissionManager = new ProjectPermissionManager(false, projectId);
         this.errorHandler = new ErrorHandler();
         this.client = new PermissionApiClient();
     }

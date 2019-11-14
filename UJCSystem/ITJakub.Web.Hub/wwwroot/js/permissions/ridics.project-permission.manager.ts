@@ -3,12 +3,14 @@
     private readonly client: PermissionApiClient;
     private readonly errorHandler: ErrorHandler;
     private readonly savePermissionButtonSelector: string;
+    private readonly isUserTypeaheadEnabled: boolean;
     private projectId: number;
     private currentRoleSelectedItem: IRole;
     private roleList: ListWithPagination;
     private permissionPanel: JQuery<HTMLElement>;
 
-    constructor(projectId: number = null) {
+    constructor(isUserTypeaheadEnabled: boolean, projectId: number = null) {
+        this.isUserTypeaheadEnabled = isUserTypeaheadEnabled;
         this.projectId = projectId;
         this.searchBox = new MultiSetTypeaheadSearchBox<IRole>("#roleSearchInput", "Permission",
             (item) => item.name,
@@ -150,7 +152,9 @@
 
     private initSearchBox() {
         this.searchBox.addDataSet("Role", localization.translate("Groups", "PermissionJs").value);
-        this.searchBox.addDataSet("SingleUserGroup", localization.translate("Users", "PermissionJs").value);        
+        if (this.isUserTypeaheadEnabled) {
+            this.searchBox.addDataSet("SingleUserGroup", localization.translate("Users", "PermissionJs").value);
+        }        
 
         this.searchBox.create((selectedExists: boolean, selectionConfirmed: boolean) => {
             if (selectionConfirmed) {
