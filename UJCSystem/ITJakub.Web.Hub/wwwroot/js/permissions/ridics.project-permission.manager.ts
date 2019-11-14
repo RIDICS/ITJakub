@@ -195,7 +195,8 @@
                     roleError.empty().append(errorAlert.buildElement());
                     return;
                 } else {
-                    this.updateRolePermissionsOnProject(this.currentRoleSelectedItem.id, addProjectPermissionModal).done(() => {
+                    const requestContract = this.getRequestContract(this.currentRoleSelectedItem.id, addProjectPermissionModal);
+                    this.client.addProjectToRole(requestContract).done(() => {
                         this.roleList.reloadPage();
                         this.clearPermissionSection();
                         addProjectPermissionModal.modal("hide");
@@ -216,7 +217,8 @@
             const roleId = $(".role-row.active").data("role-id");
             const alertHolder = this.permissionPanel.find(".alert-holder");
             alertHolder.empty();
-            this.updateRolePermissionsOnProject(roleId, this.permissionPanel).done(() => {
+            const requestContract = this.getRequestContract(roleId, this.permissionPanel);
+            this.client.updateOrAddProjectToRole(requestContract).done(() => {
                 const errorAlert = new AlertComponentBuilder(AlertType.Success)
                     .addContent(localization.translate("ChangesSavedSuccessfully", "PermissionJs").value);
                 alertHolder.empty().append(errorAlert.buildElement());
@@ -225,20 +227,18 @@
                 const errorAlert = new AlertComponentBuilder(AlertType.Error)
                     .addContent(this.errorHandler.getErrorMessage(error));
                 alertHolder.empty().append(errorAlert.buildElement());
-            })
+            });
         });
     }
 
-
-    private updateRolePermissionsOnProject(roleId: number, context: JQuery): JQueryXHR {
-        const addProjectToRole = {
+    private getRequestContract(roleId: number, context: JQuery): IAddProjectToUserGroupRequest {
+        const addProjectToRole: IAddProjectToUserGroupRequest = {
             roleId: roleId,
             permissionsConfiguration: this.getPermissionsConfiguration(context),
         };
-
-        return this.client.addProjectToRole(addProjectToRole);
+        return addProjectToRole;
     }
-    
+
     public getPermissionsConfiguration(context: JQuery): IPermissionsConfiguration
     {
         return {

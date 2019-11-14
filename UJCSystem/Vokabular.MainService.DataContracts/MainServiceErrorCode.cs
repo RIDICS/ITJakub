@@ -53,5 +53,7 @@
         public const string ChangeInConflict = "change-in-conflict";
         public const string ReservedUsernameError = "reserved-username-error";
         public const string GroupNotFound = "group-not-found";
+        public const string GroupAlreadyAssignedToProject = "group-already-assigned-to-project";
+        public const string UserAlreadyAssignedToProject = "user-already-assigned-to-project";
     }
 }

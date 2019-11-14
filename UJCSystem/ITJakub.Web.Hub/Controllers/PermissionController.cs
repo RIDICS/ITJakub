@@ -374,15 +374,25 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddProjectsToRole([FromBody] AddProjectsToGroupRequest request)
+        public IActionResult UpdateOrAddProjectsToRole([FromBody] AddProjectsToGroupRequest request)
         {
             var client = GetRoleClient();
-            client.UpdateOrAddBooksToGroup(request.RoleId,
+            client.UpdateOrAddBookToGroup(request.RoleId,
                 request.PermissionsConfiguration.BookId,
                 CreatePermissionDataContract(request.PermissionsConfiguration));
             return AjaxOkResponse();
         }
-        
+
+        [HttpPost]
+        public IActionResult AddProjectsToRole([FromBody] AddProjectsToGroupRequest request)
+        {
+            var client = GetRoleClient();
+            client.AddBookToGroup(request.RoleId,
+                request.PermissionsConfiguration.BookId,
+                CreatePermissionDataContract(request.PermissionsConfiguration));
+            return AjaxOkResponse();
+        }
+
         [HttpPost]
         public IActionResult AddProjectsToSingleUserGroup([FromBody] AddProjectsToSingleUserGroupRequest request)
         {

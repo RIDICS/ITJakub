@@ -89,6 +89,11 @@
         }).toString());
     }
 
+    updateOrAddProjectToRole(data: IAddProjectToUserGroupRequest): JQuery.jqXHR<string> {
+        return this.post(this.getPermissionControllerUrl() + "UpdateOrAddProjectsToRole",
+            JSON.stringify(data));
+    }
+
     addProjectToRole(data: IAddProjectToUserGroupRequest): JQuery.jqXHR<string> {
         return this.post(this.getPermissionControllerUrl() + "AddProjectsToRole",
             JSON.stringify(data));
