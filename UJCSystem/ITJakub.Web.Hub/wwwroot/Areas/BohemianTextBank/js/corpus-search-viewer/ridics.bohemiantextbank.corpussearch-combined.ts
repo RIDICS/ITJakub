@@ -802,6 +802,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             const totalResultsNumberEl = totalResultsEl.children("#totalResultCountDiv");
             totalResultsNumberEl.text(result.totalCount);
             totalResultsEl.show();
+            $("#currentPageContainer").hide();
             deferred.resolve(totalNumberOfPages);
         });
         ajax.fail(() => {
@@ -811,6 +812,11 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
     }
 
     private showCurrentPage(pageNumber: number) {
-        console.log(pageNumber); // TODO replace with output to view
+        $("#currentPageValue").text(pageNumber);
+        if (this.paginator.isBasicMode()) {
+            $("#currentPageContainer").show();
+        } else {
+            $("#currentPageContainer").hide();
+        }
     }
 }
