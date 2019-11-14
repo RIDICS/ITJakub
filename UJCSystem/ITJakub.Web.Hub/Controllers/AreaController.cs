@@ -19,6 +19,15 @@ namespace ITJakub.Web.Hub.Controllers
     {
         private const int FetchBookCount = 200;
 
+        private readonly CriteriaKey[] m_pageCriteriaKeys =
+        {
+            CriteriaKey.Fulltext,
+            CriteriaKey.Heading,
+            CriteriaKey.Sentence,
+            CriteriaKey.Term,
+            CriteriaKey.TokenDistance,
+        };
+
         protected AreaController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
@@ -201,6 +210,12 @@ namespace ITJakub.Web.Hub.Controllers
             };
             var result = client.SearchBook(request, GetDefaultProjectType());
             return result;
+        }
+
+        protected List<SearchCriteriaContract> GetOnlyPageCriteria(IList<SearchCriteriaContract> criteriaList)
+        {
+            var resultList = criteriaList.Where(x => m_pageCriteriaKeys.Contains(x.Key)).ToList();
+            return resultList;
         }
     }
 }
