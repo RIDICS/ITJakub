@@ -10,6 +10,7 @@
     }
 
     init() {
+        this.showLoading();
         $("#project-layout-content").find("*").off();
         this.createEntryButtonEl.text("Create new responsible person");
         this.changeEntryButtonEl.text("Rename responsible person");
@@ -26,6 +27,7 @@
     };
 
     private updateContentAfterChange() {
+        this.showLoading();
         const initial = true;
         this.loadPage(this.currentPage, initial);
     }
