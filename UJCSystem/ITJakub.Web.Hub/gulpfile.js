@@ -344,6 +344,9 @@ gulp.task("bundle:ridics_admin_project-editor", function () {
             paths.webroot + "Areas/Admin/js/ridics.project.client.js",
             paths.webroot + "Areas/Admin/js/ridics.project.module.js",
             paths.webroot + "Areas/Admin/js/ridics.project.work.tabs.js",
+            paths.webroot + "js/permissions/ridics.permission-api-client.js",
+            paths.webroot + "js/permissions/ridics.project-permission.manager.js",
+            paths.webroot + "Areas/Admin/js/ridics.cooperation.manager.js",
             paths.webroot + "Areas/Admin/js/snapshot/ridics.snapshot.api-client.js",
             paths.webroot + "Areas/Admin/js/snapshot/ridics.snapshot.list.js"
         ])

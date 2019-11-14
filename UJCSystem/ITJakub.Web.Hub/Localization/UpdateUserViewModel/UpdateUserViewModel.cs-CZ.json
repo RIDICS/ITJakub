@@ -7,6 +7,7 @@
     "HasAtLeastNChars": "{0} musí obsahovat alespoň {2} znaků.",
     "FirstName": "Křestní jméno",
     "LastName": "Příjmení",
+    "UserCode": "Kód uživatele",
     "NotEmpty": "{0} nemůže být prázdné",
     "NotEmpty2": "{0} nemůže být prázdný",
     "MustBeFilled": "{0} musí být vyplněn",

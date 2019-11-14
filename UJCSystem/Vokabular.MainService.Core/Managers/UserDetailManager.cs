@@ -125,6 +125,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var userDetailContract = m_mapper.Map<UserDetailContract>(authUser);
             userDetailContract.Id = localUserId;
+            userDetailContract.UserCode = m_userRepository.InvokeUnitOfWork(x => x.GetSingleUserGroup(localUserId)).Name;
             foreach (var resultRole in userDetailContract.Roles)
             {
                 resultRole.Id = localDbRoles.First(x => x.ExternalId == resultRole.ExternalId).Id;

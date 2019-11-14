@@ -36,6 +36,8 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public string TwoFactorProvider { get; set; }
 
         public IList<string> ValidTwoFactorProviders { get; set; }
+        
+        public string UserCode { get; set; }
     }
 
     public class CreateUserContract : UserContract

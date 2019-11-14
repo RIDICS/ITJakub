@@ -567,7 +567,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public PagedResultList<UserGroupContract> GetUserGroupsByProject(int projectId, int start, int count, string query)
+        public PagedResultList<UserGroupContract> GetUserGroupsByProject(long projectId, int start, int count, string query)
         {
             try
             {
@@ -611,6 +611,21 @@ namespace Vokabular.MainService.DataContracts.Clients
             {
                 var result = m_client.Get<ForumContract>($"project/{projectId}/forum");
                 return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
+        public void AddProjectToUserGroupByCode(long projectId, AssignPermissionToSingleUserGroupContract data)
+        {
+            try
+            {
+                m_client.Post<object>($"project/{projectId}/single-user-group", data);
             }
             catch (HttpRequestException e)
             {

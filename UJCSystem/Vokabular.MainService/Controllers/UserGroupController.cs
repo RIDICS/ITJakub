@@ -51,8 +51,15 @@ namespace Vokabular.MainService.Controllers
         }
 
         [Authorize(PermissionNames.AssignPermissionsToRoles)]
+        [HttpPost("{groupId}/book/{bookId}/permission")]
+        public void AddBookToGroup(int groupId, long bookId, [FromBody] PermissionDataContract data)
+        {
+            m_permissionManager.AddBookToGroup(groupId, bookId, data);
+        }
+
+        [Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpPut("{groupId}/book/{bookId}/permission")]
-        public void UpdateOrAddBooksToGroup(int groupId, long bookId, [FromBody] PermissionDataContract data)
+        public void UpdateOrAddBookToGroup(int groupId, long bookId, [FromBody] PermissionDataContract data)
         {
             m_permissionManager.UpdateOrAddBooksToGroup(groupId, new List<long> { bookId }, data);
         }

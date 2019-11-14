@@ -7,6 +7,7 @@
         public const int CorpusSearchBooks = 10;
         public const int ProjectList = 20;
         public const int SnapshotList = 10;
+        public const int CooperationList = 10;
 
         public const int MinCorpusSearch = 1;
         public const int MaxCorpusSearch = 100;

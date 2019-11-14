@@ -112,6 +112,17 @@ namespace Vokabular.MainService.Core.Managers
             client.AssignPermissionsToRoleAsync(userGroup.ExternalId, permissionsId).GetAwaiter().GetResult();
         }
 
+        public void AddBookToGroup(int groupId, long bookId, PermissionDataContract data)
+        {
+            var dbPermission = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionByBookAndGroup(bookId, groupId));
+            if (dbPermission != null)
+            {
+                throw new MainServiceException(MainServiceErrorCode.GroupAlreadyAssignedToProject, $"Group with ID={groupId} is already assigned to project with ID={bookId}");
+            }
+
+            UpdateOrAddBooksToGroup(groupId, new List<long> {bookId}, data);
+        }
+
         public void UpdateOrAddBooksToGroup(int groupId, IList<long> bookIds, PermissionDataContract data)
         {
             var permissionFlags = m_permissionConverter.GetFlags(data);
@@ -175,6 +186,12 @@ namespace Vokabular.MainService.Core.Managers
             if (dbUserGroup == null)
             {
                 throw new MainServiceException(MainServiceErrorCode.GroupNotFound, $"Group with specified code {userGroupCode} was not found");
+            }
+
+            var dbPermission = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionByBookAndGroup(projectId, dbUserGroup.Id));
+            if (dbPermission != null)
+            {
+                throw new MainServiceException(MainServiceErrorCode.UserAlreadyAssignedToProject, $"Group with ID={dbUserGroup.Id} is already assigned to project with ID={projectId}");
             }
 
             var permissionFlags = m_permissionConverter.GetFlags(permissions);

@@ -11,6 +11,10 @@ namespace ITJakub.Web.Hub.Models.User
         [Display(Name = "UserName")]
         [ReadOnly(true)]
         public string UserName { get; set; }
+        
+        [Display(Name = "UserCode")]
+        [ReadOnly(true)]
+        public string UserCode { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "NotEmpty")]
         [DataType(DataType.Text)]
