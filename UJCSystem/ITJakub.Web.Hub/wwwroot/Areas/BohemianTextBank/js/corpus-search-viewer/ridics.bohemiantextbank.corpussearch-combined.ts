@@ -654,6 +654,11 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
         const sortAsc = this.sortBar.isSortedAsc();
         const sortingDirection = sortAsc ? SortDirection.Asc : SortDirection.Desc;
 
+        updateQueryStringParameter(this.urlSearchKey, text);
+        updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
+        updateQueryStringParameter(this.urlSortAscKey, sortAsc);
+        updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
+        
         const payload: ICorpusListPageLookupBasicSearch = {
             text: text,
             selectedBookIds: this.bookIdsInQuery,
@@ -664,12 +669,43 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             count: count
         };
 
-        updateQueryStringParameter(this.urlSearchKey, text);
+        const ajax = this.basicApiClient.basicSearchGetResultSnapshotListPageOfIdsWithoutResultNumbers(payload);
+        this.processLoadedNextCompositionResultPage(ajax, start, count, setIndexFromId);
+    }
+    /**
+     * Pagination of external list - list of compositions with hits, advanced search
+     * @param json Json request with search request
+     */
+    private loadNextCompositionAdvancedResultPage(json: string, setIndexFromId?: boolean) {
+        if (this.compositionResultListStart === -1) {
+            this.compositionResultListStart = 0;
+        }
+        const start = this.compositionResultListStart;
+        const count = this.compositionsPerPage;
+        const sortingEnum = this.sortBar.getSortCriteria();
+        const sortAsc = this.sortBar.isSortedAsc();
+        const sortingDirection = sortAsc ? SortDirection.Asc : SortDirection.Desc;
+        
+        updateQueryStringParameter(this.urlSearchKey, json);
+        updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
         updateQueryStringParameter(this.urlSortAscKey, sortAsc);
         updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
-        updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
 
-        this.basicApiClient.basicSearchGetResultSnapshotListPageOfIdsWithoutResultNumbers(payload)
+        const payload: ICorpusListPageLookupAdvancedSearch = {
+            json: json,
+            selectedBookIds: this.bookIdsInQuery,
+            selectedCategoryIds: this.categoryIdsInQuery,
+            sortBooksBy: sortingEnum,
+            sortDirection: sortingDirection,
+            start: start,
+            count: count
+        };
+        const ajax = this.basicApiClient.advancedSearchGetResultSnapshotListPageOfIdsWithoutResultNumbers(payload);
+        this.processLoadedNextCompositionResultPage(ajax, start, count, setIndexFromId);
+    }
+
+    private processLoadedNextCompositionResultPage(ajaxResult: JQuery.jqXHR<ICoprusSearchSnapshotResult>, start: number, count: number, setIndexFromId?: boolean) {
+        ajaxResult
             .done((bookIds: ICoprusSearchSnapshotResult) => {
                 const totalCount = bookIds.totalCount;
                 const page = (start / count) + 1;
@@ -690,72 +726,6 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                     } else {
                         const tableEl = $(".text-results-table");
                         this.hideLoading(tableEl);
-                        const alert = new AlertComponentBuilder(AlertType.Info);
-                        alert.addContent(localization.translate("NoResults", "BohemianTextBank").value);
-                        this.emptyResultsTable();
-                        $(".text-results-table-body").append(alert.buildElement());
-                    }
-                } else {
-                    if (setIndexFromId) {
-                        this.currentBookIndex = $.inArray(this.currentBookId, this.hitBookIds);
-                    }
-                    this.compositionResultListStart += this.compositionsPerPage;
-                    this.generateViewingPage();
-                }
-            }).fail(() => {
-                const loaderEl = $(".corpus-search-results-table-div-loader");
-                this.printErrorMessage(this.defaultErrorMessage, loaderEl);
-            });
-    }
-    /**
-     * Pagination of external list - list of compositions with hits, advanced search
-     * @param json Json request with search request
-     */
-    private loadNextCompositionAdvancedResultPage(json: string, setIndexFromId?: boolean) {
-        if (this.compositionResultListStart === -1) {
-            this.compositionResultListStart = 0;
-        }
-        const sortingEnum = this.sortBar.getSortCriteria();
-        const sortAsc = this.sortBar.isSortedAsc();
-        const sortingDirection = sortAsc ? SortDirection.Asc : SortDirection.Desc;
-        const start = this.compositionResultListStart;
-        const count = this.compositionsPerPage;
-
-        updateQueryStringParameter(this.urlSearchKey, json);
-        updateQueryStringParameter(this.urlSelectionKey, this.booksSelector.getSerializedState());
-        updateQueryStringParameter(this.urlSortAscKey, sortAsc);
-        updateQueryStringParameter(this.urlSortCriteriaKey, sortingEnum);
-
-        const payload: ICorpusListPageLookupAdvancedSearch = {
-            json: json,
-            selectedBookIds: this.bookIdsInQuery,
-            selectedCategoryIds: this.categoryIdsInQuery,
-            sortBooksBy: sortingEnum,
-            sortDirection: sortingDirection,
-            start: start,
-            count: count
-        };
-        this.basicApiClient.advancedSearchGetResultSnapshotListPageOfIdsWithoutResultNumbers(payload)
-            .done((bookIds: ICoprusSearchSnapshotResult) => {
-                const totalCount = bookIds.totalCount;
-                const page = (start / count) + 1;
-                const totalPages = Math.ceil(totalCount / count);
-                $("#totalCompositionsCountDiv").text(totalCount);
-                const snapshotStructureArray = bookIds.snapshotList;
-                var idList = [];
-                snapshotStructureArray.forEach((snapshot) => {
-                    idList.push(snapshot.snapshotId);
-                });
-                this.hitBookIds = idList;
-                if (this.hitBookIds.length < this.compositionsPerPage || page === totalPages) {
-                    this.compositionPageIsLast = true;
-                }
-                if (!this.hitBookIds.length) {
-                    if (this.transientResults.length) {
-                        this.flushTransientResults();
-                    } else {
-                        const tableEl = $(".text-results-table");
-                        this.showLoading(tableEl);
                         const alert = new AlertComponentBuilder(AlertType.Info);
                         alert.addContent(localization.translate("NoResults", "BohemianTextBank").value);
                         this.emptyResultsTable();
