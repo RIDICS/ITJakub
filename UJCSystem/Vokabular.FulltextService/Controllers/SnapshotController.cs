@@ -6,7 +6,7 @@ using Vokabular.Shared.DataContracts.Search.Request;
 namespace Vokabular.FulltextService.Controllers
 {
     [Route("api/[controller]")]
-    public class SnapshotController : Controller
+    public class SnapshotController : ApiControllerBase
     {
         private readonly SnapshotResourceManager m_snapshotResourceManager;
         
@@ -44,8 +44,13 @@ namespace Vokabular.FulltextService.Controllers
         /// </param>
         /// <returns></returns>
         [HttpPost("search")]
-        public FulltextSearchResultContract SearchByCriteria([FromBody] SearchRequestContract searchRequest)
+        public ActionResult<FulltextSearchResultContract> SearchByCriteria([FromBody] SearchRequestContract searchRequest)
         {
+            if (ContainsAnyUnsupportedCriteria(searchRequest))
+            {
+                return BadRequest("Request contains unsupported criteria");
+            }
+
             var result = m_searchManager.SearchProjectsByCriteria(searchRequest);
             return result;
         }
@@ -56,8 +61,13 @@ namespace Vokabular.FulltextService.Controllers
         /// <param name="searchRequest"></param>
         /// <returns></returns>
         [HttpPost("search-count")]
-        public FulltextSearchResultContract SearchByCriteriaCount([FromBody] SearchRequestContractBase searchRequest)
+        public ActionResult<FulltextSearchResultContract> SearchByCriteriaCount([FromBody] SearchRequestContractBase searchRequest)
         {
+            if (ContainsAnyUnsupportedCriteria(searchRequest))
+            {
+                return BadRequest("Request contains unsupported criteria");
+            }
+
             var result = m_searchManager.SearchProjectsByCriteriaCount(searchRequest);
             return result;
         }
