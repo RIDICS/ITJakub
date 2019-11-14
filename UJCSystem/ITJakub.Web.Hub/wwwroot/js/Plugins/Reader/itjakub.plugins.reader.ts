@@ -1792,9 +1792,13 @@ class ContentPanel extends LeftSidePanel {
     }
 
     private parseJsonItemToContentItem(chapterItem: IChapterHieararchyContract): ContentItem {
-        var pageItem = this.parentReader.pagesById[chapterItem.beginningPageId];
+        var pageItem = chapterItem.beginningPageId != null
+            ? this.parentReader.pagesById[chapterItem.beginningPageId]
+            : null;
+        var pageItemText = pageItem != null ? pageItem.text : "";
+
         return new ContentItem(chapterItem.name, chapterItem.beginningPageId,
-            pageItem.text, chapterItem.subChapters);
+            pageItemText, chapterItem.subChapters);
     }
 
     private makeContentItemChilds(contentItem: ContentItem): HTMLUListElement {
