@@ -547,12 +547,10 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             }
         } else {
             const isBasicPaginationMode = this.paginator.isBasicMode();
-            if (isBasicPaginationMode) {
+            if (isBasicPaginationMode || this.paginator.hasBeenWrapped()) {
                 this.showWarning(this.attentionString, this.firstResultPageDetailString);
             } else {
-                //this.makeTableForPage(pageNumber); // TODO determine original purpose of this method (now it is replaced by showWarning)
-                // makeTableForPage is also broken because there makeTableForPage -> loadPage -> makeTableForPage recursion
-                this.showWarning(this.attentionString, this.firstResultPageDetailString);
+                this.makeTableForPage(pageNumber);
             }
         }
     }
