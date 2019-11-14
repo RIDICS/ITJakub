@@ -186,20 +186,6 @@ namespace ITJakub.Web.Hub.Controllers
             int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds, SearchAdvancedParametersContract parameters)
         {
-            //listSearchCriteriaContracts.Add(new ResultCriteriaContract
-            //{
-            //    Start = start,
-            //    Count = count,
-            //    Sorting = (SortEnum)sortingEnum,
-            //    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
-            //    //HitSettingsContract = new HitSettingsContract // TODO currently not used
-            //    //{
-            //    //    ContextLength = 50,
-            //    //    Count = 3,
-            //    //    Start = 1
-            //    //}
-            //});
-
             AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
 
             var client = GetBookClient();

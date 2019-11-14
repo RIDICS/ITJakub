@@ -4,6 +4,9 @@ using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.Shared.DataContracts.Search.Criteria
 {
+    /// <summary>
+    /// Should be used only by ITJakub.SearchService
+    /// </summary>
     [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Criteria", Name = "ResultCriteriaContract")]
     public class ResultCriteriaContract : SearchCriteriaContract
     {
