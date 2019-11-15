@@ -146,12 +146,14 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
         private bool IsBeginningOfTag(StringSlice slice, char tagClosingChar)
         {
             var i = slice.Start + CommentMark.Length + 1;
-            while (slice.Text[i].IsDigit())
+            var maxI = slice.Text.Length - 2; // the last must be closing char
+            while (i <= maxI && slice.Text[i].IsDigit())
             {
                 i++;
             }
 
-            return slice.Text[i] == tagClosingChar;
+            return i < slice.Text.Length &&
+                   slice.Text[i] == tagClosingChar;
         }
     }
 }
