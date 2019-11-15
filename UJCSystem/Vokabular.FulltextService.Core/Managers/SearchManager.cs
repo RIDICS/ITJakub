@@ -25,22 +25,21 @@ namespace Vokabular.FulltextService.Core.Managers
         public const string ClosingEmphTag = "</span>";
         public const string HighlighterType = "experimental";
 
-        private readonly QueriesBuilder m_queriesBuilder;
         private readonly SearchResultProcessor m_searchResultProcessor;
         
 
         public SearchManager(CommunicationProvider communicationProvider, SearchResultProcessor searchResultProcessor,
-            QueriesBuilder queriesBuilder, IOptions<IndicesOption> indicesOptions) : base(communicationProvider, indicesOptions)
+            IOptions<IndicesOption> indicesOptions) : base(communicationProvider, indicesOptions)
         {
             m_searchResultProcessor = searchResultProcessor;
-            m_queriesBuilder = queriesBuilder;
         }
 
         public FulltextSearchResultContract SearchProjectsByCriteriaCount(SearchRequestContractBase searchRequest)
         {
+            var queriesBuilder = QueriesBuilder.Create(IndexType.Snapshot);
             var filterQuery =
-                m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
-            var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
+                queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
+            var mustQuery = queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
 
             var client = m_communicationProvider.GetElasticClient();
 
@@ -60,9 +59,10 @@ namespace Vokabular.FulltextService.Core.Managers
 
         public FulltextSearchResultContract SearchProjectsByCriteria(SearchRequestContract searchRequest)
         {
+            var queriesBuilder = QueriesBuilder.Create(IndexType.Snapshot);
             var filterQuery =
-                m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
-            var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
+                queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
+            var mustQuery = queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
 
 
             var client = m_communicationProvider.GetElasticClient();
@@ -107,8 +107,9 @@ namespace Vokabular.FulltextService.Core.Managers
 
         public TextResourceContract SearchOnPageByCriteria(string textResourceId, SearchPageRequestContract searchRequest)
         {
-            var filterQuery = m_queriesBuilder.GetFilterByIdSearchQuery(textResourceId);
-            var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, PageTextField);
+            var queriesBuilder = QueriesBuilder.Create(IndexType.Page);
+            var filterQuery = queriesBuilder.GetFilterByIdSearchQuery(textResourceId);
+            var mustQuery = queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, PageTextField);
 
             var client = m_communicationProvider.GetElasticClient();
 
@@ -143,8 +144,9 @@ namespace Vokabular.FulltextService.Core.Managers
 
             var client = m_communicationProvider.GetElasticClient();
 
-            var filterQuery = m_queriesBuilder.GetFilterByIdSearchQuery(pageIdList);
-            var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, PageTextField);
+            var queriesBuilder = QueriesBuilder.Create(IndexType.Page);
+            var filterQuery = queriesBuilder.GetFilterByIdSearchQuery(pageIdList);
+            var mustQuery = queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, PageTextField);
 
             var pageResponse = client.Search<TextResourceContract>(s => s
                     .Index(PageIndex)
@@ -167,8 +169,9 @@ namespace Vokabular.FulltextService.Core.Managers
 
             var client = m_communicationProvider.GetElasticClient();
 
-            var filterQuery = m_queriesBuilder.GetFilterByIdSearchQuery(pageIdList);
-            var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, PageTextField);
+            var queriesBuilder = QueriesBuilder.Create(IndexType.Page);
+            var filterQuery = queriesBuilder.GetFilterByIdSearchQuery(pageIdList);
+            var mustQuery = queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, PageTextField);
 
             var pageResponse = client.Search<TextResourceContract>(s => s
                     .Index(PageIndex)
@@ -241,8 +244,9 @@ namespace Vokabular.FulltextService.Core.Managers
 
         public CorpusSearchSnapshotsResultContract SearchCorpusSnapshotsByCriteria(BookPagedCorpusSearchRequestContract searchRequest)
         {
-            var filterQuery = m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
-            var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
+            var queriesBuilder = QueriesBuilder.Create(IndexType.Snapshot);
+            var filterQuery = queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
+            var mustQuery = queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
 
             var client = m_communicationProvider.GetElasticClient();
 
@@ -326,8 +330,9 @@ namespace Vokabular.FulltextService.Core.Managers
 
         public List<CorpusSearchResultContract> SearchCorpusSnapshotByCriteria(long snapshotId, BookPagedCorpusSearchInSnapshotRequestContract searchRequest)
         {
-            var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
-            var filterQuery = m_queriesBuilder.GetFilterByFieldSearchQuery(SnapshotIdField, snapshotId.ToString());
+            var queriesBuilder = QueriesBuilder.Create(IndexType.Snapshot);
+            var mustQuery = queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
+            var filterQuery = queriesBuilder.GetFilterByFieldSearchQuery(SnapshotIdField, snapshotId.ToString());
 
             var client = m_communicationProvider.GetElasticClient();
 
@@ -366,8 +371,9 @@ namespace Vokabular.FulltextService.Core.Managers
 
         public async Task<long> SearchCorpusSnapshotsByCriteriaCount(SearchRequestContractBase searchRequest)
         {
-            var filterQuery = m_queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
-            var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
+            var queriesBuilder = QueriesBuilder.Create(IndexType.Snapshot);
+            var filterQuery = queriesBuilder.GetFilterSearchQuery(searchRequest.ConditionConjunction, SnapshotIdField);
+            var mustQuery = queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, SnapshotTextField);
 
             var client = m_communicationProvider.GetElasticClient();
             List<Task<FulltextSearchCorpusResultContract>> tasks = new List<Task<FulltextSearchCorpusResultContract>>();
@@ -429,8 +435,9 @@ namespace Vokabular.FulltextService.Core.Managers
 
             var client = m_communicationProvider.GetElasticClient();
 
-            var filterQuery = m_queriesBuilder.GetFilterByIdSearchQuery(pageList.Select(x => x.Id).ToList());
-            var mustQuery = m_queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, PageTextField);
+            var queriesBuilder = QueriesBuilder.Create(IndexType.Page);
+            var filterQuery = queriesBuilder.GetFilterByIdSearchQuery(pageList.Select(x => x.Id).ToList());
+            var mustQuery = queriesBuilder.GetSearchQuery(searchRequest.ConditionConjunction, PageTextField);
 
             var pageResponse = client.Search<TextResourceContract>(s => s
                     .Index(PageIndex)
