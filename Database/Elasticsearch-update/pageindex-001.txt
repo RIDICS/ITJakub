@@ -1,0 +1,24 @@
+# The changes will be applied only on newly saved data
+# (it is required to save pages again and create new snapshost or recreate indices to ignore comment marks in search)
+
+POST /pageindex/_close
+
+PUT /pageindex/_settings
+{
+  "analysis": {
+    "analyzer": {
+      "page_analyzer": {
+        "char_filter": "comment_chars"
+      }
+    },
+    "char_filter": {
+      "comment_chars": { 
+        "type": "pattern_replace",
+        "pattern": "(\\$komentar-[0-9]+%)|(%komentar-[0-9]+\\$)",
+        "replacement": ""
+      }
+    }
+  }
+}
+
+POST /pageindex/_open
