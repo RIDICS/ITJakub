@@ -11,6 +11,7 @@ namespace Vokabular.TextConverter
         public static void AddTextConverterServices(this IServiceCollection services)
         {
             services.AddScoped<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
+            services.AddScoped<IMarkdownHtmlEncoder, MarkdigMarkdownHtmlEncoder>();
             services.AddScoped<IHtmlToPlainTextConverter, HtmlToPlainTextConverter>();
             services.AddScoped<IMarkdownToPlainTextConverter, MarkdownToPlainTextConverter>();
 

@@ -22,6 +22,7 @@ namespace Vokabular.FulltextService.Core
             services.AddScoped<UnfinishedSearchResultProcessor>();
             services.AddScoped<SearchResultProcessor>();
             services.AddScoped<SnapshotResourceBuilder>();
+            services.AddScoped<QueriesBuilderFactory>();
 
             services.AddTextConverterServices();
             services.AddScoped<ITextConverter, Helpers.Converters.TextConverter>();
