@@ -6,11 +6,19 @@ using Nest;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Corpus;
+using Vokabular.TextConverter.Markdown;
 
 namespace Vokabular.FulltextService.Core.Helpers
 {
     public class SearchResultProcessor
     {
+        private readonly IMarkdownToPlainTextConverter m_markdownToPlainTextConverter;
+
+        public SearchResultProcessor(IMarkdownToPlainTextConverter markdownToPlainTextConverter)
+        {
+            m_markdownToPlainTextConverter = markdownToPlainTextConverter;
+        }
+
         public FulltextSearchResultContract ProcessSearchByCriteriaCount(ICountResponse response)
         {
             if (!response.IsValid)
@@ -322,7 +330,9 @@ namespace Vokabular.FulltextService.Core.Helpers
                     {
                         foreach (var highlight in value.Highlights)
                         {
-                            var numberOfOccurences = GetNumberOfHighlitOccurences(highlight, highlightTag);
+                            var highlightPlain = m_markdownToPlainTextConverter.Convert(highlight);
+
+                            var numberOfOccurences = GetNumberOfHighlitOccurences(highlightPlain, highlightTag);
 
                             if (startCounter + numberOfOccurences <= start)
                             {
@@ -330,7 +340,7 @@ namespace Vokabular.FulltextService.Core.Helpers
                                 continue;
                             }
 
-                            var resultData = GetSearchHitsWithPageContextList(highlight, hit.Id, highlightTag);
+                            var resultData = GetSearchHitsWithPageContextList(highlightPlain, hit.Id, highlightTag);
 
                             if (startCounter < start)
                             {
