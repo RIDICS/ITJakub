@@ -20,7 +20,7 @@ namespace Vokabular.FulltextService.Core.Managers
         public const int DefaultStart = 0;
         public const int DefaultSize = 10000;
         public const int BatchSize = 5;
-        public const string HighlightTag = "$";
+        public const string HighlightTag = "¼";
         public const string OpeningEmphTag = "<span class=\"reader-search-result-match\">";
         public const string ClosingEmphTag = "</span>";
         public const string HighlighterType = "experimental";
