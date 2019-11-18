@@ -170,14 +170,18 @@ namespace Vokabular.FulltextService.Core.Helpers
             {
                 var contextStructure = GetContextStructure(highlightedText, index, out index, highlightTag);
 
-                var corpusSearchResult = new CorpusSearchResultContract
+                if (contextStructure != null)
                 {
-                    ProjectId = projectId,
-                    PageResultContext = new CorpusSearchPageResultContract {ContextStructure = contextStructure},
-                };
-                
-                result.Add(corpusSearchResult);
+                    var corpusSearchResult = new CorpusSearchResultContract
+                    {
+                        ProjectId = projectId,
+                        PageResultContext = new CorpusSearchPageResultContract { ContextStructure = contextStructure },
+                    };
 
+                    result.Add(corpusSearchResult);
+                    break;
+                }
+                
                 index = highlightedText.IndexOf(highlightTag, index + highlightTag.Length, StringComparison.Ordinal);
             } while (index > 0);
 
@@ -187,6 +191,10 @@ namespace Vokabular.FulltextService.Core.Helpers
         private KwicStructure GetContextStructure(string highlightedText, int index, out int newIndex, string highlightTag)
         {
             newIndex = highlightedText.IndexOf(highlightTag, index + 1, StringComparison.Ordinal);
+            if (newIndex < 0)
+            {
+                return null;
+            }
 
             var before = highlightedText.Substring(0, index);
             var match = highlightedText.Substring(index + highlightTag.Length, newIndex - (index + highlightTag.Length));
@@ -354,14 +362,18 @@ namespace Vokabular.FulltextService.Core.Helpers
             {
                 var contextStructure = GetContextStructure(highlightedText, index, out index, highlightTag);
 
-                var corpusSearchResult = new PageResultContextData
+                if (contextStructure != null)
                 {
-                    PageExternalId = sourceId,
-                    ContextStructure = contextStructure,
-                };
+                    var corpusSearchResult = new PageResultContextData
+                    {
+                        PageExternalId = sourceId,
+                        ContextStructure = contextStructure,
+                    };
 
-                result.Add(corpusSearchResult);
-
+                    result.Add(corpusSearchResult);
+                    break;
+                }
+                
                 index = highlightedText.IndexOf(highlightTag, index + highlightTag.Length, StringComparison.Ordinal);
             } while (index > 0);
 
