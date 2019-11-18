@@ -15,7 +15,7 @@ namespace Vokabular.FulltextService.Core.Helpers
         private readonly IndexType m_indexType;
         private readonly IMarkdownHtmlEncoder m_markdownHtmlEncoder;
 
-        private const string ReservedChars = ".?+*|{}[]()\"\\#@&<>~";
+        private const string ReservedChars = "\\.?+*|{}[]()\"#@&<>~";
         private const string RegexpQueryFlags = "INTERSECTION";
         private const string IdField = "_id";
 
@@ -175,8 +175,6 @@ namespace Vokabular.FulltextService.Core.Helpers
                     throw new ArgumentOutOfRangeException();
             }
 
-            // TODO finish escaping RegEx characters
-            
             foreach (var reservedChar in ReservedChars)
             {
                 text = text.Replace(reservedChar.ToString(), $"\\{reservedChar}");
