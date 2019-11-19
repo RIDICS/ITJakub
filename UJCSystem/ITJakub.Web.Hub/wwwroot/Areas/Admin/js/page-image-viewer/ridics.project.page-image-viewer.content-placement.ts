@@ -29,10 +29,32 @@
 
     addImageContent(element: JQuery, imageUrl: string) {
         const imageString = `<img src="${imageUrl}">`;
+        
         element.fadeOut(300, () => {
             element.html(imageString);
             this.attachOnErrorEvent(element);
-            wheelzoom($(".page-image").children("img"));
+            
+            const zoom = 0.1;
+            wheelzoom($(".page-image").children("img"), {zoom: zoom});
+
+            let setMinWidth = true;
+            $('.page-image').on('wheel', (e) =>
+            {
+                const image = $('.page-image img');
+                if(setMinWidth)
+                {
+                    image.css("min-width", image.width());
+                    setMinWidth = false;
+                }
+                
+                const width = image.width();
+                if((<WheelEvent>e.originalEvent).deltaY < 0)
+                {
+                    image.css("width", width + width * zoom / 3);    
+                } else {
+                    image.css("width", width - width * zoom / 3);
+                }
+            });
         });
         element.fadeIn(300);
         element.off();
