@@ -121,9 +121,8 @@
                     areaContent += `<div class="text-center id-in-comment-area text-muted">${localization.translate("Commentary", "RidicsProject").value} ${textReferenceId
                         }</div>`;
                     areaContent += commentName;
-                    areaContent += `<p class="replied-on text-muted">On ${timeUtc.toDateString()} at ${timeUtc
-                        .toTimeString()
-                        .split(" ")[0]}</p>`; //only date and time, no timezone
+                    areaContent += `<p class="replied-on text-muted">${timeUtc.toLocaleDateString()} ${timeUtc
+                        .toLocaleTimeString()}</p>`;
                     areaContent += mainCommentBody;
                 }
                 if (nested) { //creating nested comment structure
@@ -133,8 +132,8 @@
                     areaContent += commentLeftPartEnd;
                     areaContent += commentBodyStart;
                     areaContent += commentName;
-                    areaContent += `<p class="replied-on text-muted">On ${timeUtc.toDateString()} at ${timeUtc
-                        .toTimeString().split(" ")[0]}</p>`; //only date and time, no timezone
+                    areaContent += `<p class="replied-on text-muted">${timeUtc.toLocaleDateString()} ${timeUtc
+                        .toLocaleTimeString()}</p>`;
                     nestedCommentBody += 
                         `<div class="row comment-actions-row">
                             <div class="col-xs-12">
