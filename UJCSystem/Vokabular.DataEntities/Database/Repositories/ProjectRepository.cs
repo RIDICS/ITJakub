@@ -26,6 +26,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             User userAlias = null;
 
             var query = GetSession().QueryOver<Project>()
+                .Where(x => x.IsRemoved == false)
                 .Fetch(SelectMode.Fetch, x => x.CreatedByUser);
 
             if (projectType != null)
@@ -82,7 +83,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual Project GetProjectWithUser(long projectId)
         {
             return GetSession().QueryOver<Project>()
-                .Where(x => x.Id == projectId)
+                .Where(x => x.Id == projectId && x.IsRemoved == false)
                 .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
                 .SingleOrDefault();
         }
@@ -93,14 +94,14 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return GetSession().QueryOver<FullProjectImportLog>()
                 .JoinAlias(x => x.Project, () => projectAlias)
-                .Where(x => projectAlias.ExternalId == projectExternalId && projectAlias.ProjectType == projectType)
+                .Where(x => projectAlias.ExternalId == projectExternalId && projectAlias.ProjectType == projectType && projectAlias.IsRemoved == false)
                 .List();
         }
 
         public virtual Project GetProjectByExternalId(string externalId, ProjectTypeEnum projectType)
         {
             return GetSession().QueryOver<Project>()
-                .Where(x => x.ExternalId == externalId && x.ProjectType == projectType)
+                .Where(x => x.ExternalId == externalId && x.ProjectType == projectType && x.IsRemoved == false)
                 .SingleOrDefault();
         }
 
@@ -115,12 +116,14 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             PageResource pageResourceAlias = null;
             Resource resourceAlias = null;
+            Project projectAlias = null;
             PageCountResult resultAlias = null;
 
             var result = GetSession().QueryOver(() => pageResourceAlias)
                 .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .WhereRestrictionOn(() => resourceAlias.Project.Id).IsInG(projectIdList)
-                .And(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved && projectAlias.IsRemoved == false)
                 .SelectList(list => list
                     .SelectGroup(() => resourceAlias.Project.Id).WithAlias(() => resultAlias.ProjectId)
                     .SelectCount(() => pageResourceAlias.Id).WithAlias(() => resultAlias.PageCount))
@@ -134,13 +137,16 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             ResourceVersion resourceVersionAlias = null;
             Resource resourceAlias = null;
+            Project projectAlias = null;
             ResourceVersion resourceVersionAlias2 = null;
             Resource resourceAlias2 = null;
             LatestChangedResourceResult resultAlias = null;
 
             var result = GetSession().QueryOver(() => resourceVersionAlias)
                 .JoinAlias(() => resourceVersionAlias.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .WhereRestrictionOn(() => resourceAlias.Project.Id).IsInG(projectIdList)
+                .And(() => projectAlias.IsRemoved == false)
                 .And(x => x.Id == resourceAlias.LatestVersion.Id /*&& !resourceAlias.IsRemoved*/)
                 .WithSubquery.Where(() => resourceVersionAlias.CreateTime == QueryOver.Of(() => resourceAlias2)
                                               .JoinAlias(() => resourceAlias2.LatestVersion, () => resourceVersionAlias2)
@@ -160,8 +166,11 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public virtual Snapshot GetLatestSnapshot(long projectId)
         {
+            Project projectAlias = null;
+
             return GetSession().QueryOver<Snapshot>()
-                .Where(x => x.Project.Id == projectId)
+                .JoinAlias(x => x.Project, () => projectAlias)
+                .Where(x => x.Project.Id == projectId && projectAlias.IsRemoved == false)
                 .Fetch(SelectMode.Fetch, x => x.Project)
                 .OrderBy(x => x.VersionNumber).Desc
                 .Take(1)
@@ -171,15 +180,18 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual Project GetProjectWithKeywords(long projectId)
         {
             return GetSession().QueryOver<Project>()
-                .Where(x => x.Id == projectId)
+                .Where(x => x.Id == projectId && x.IsRemoved == false)
                 .Fetch(SelectMode.Fetch, x => x.Keywords)
                 .SingleOrDefault();
         }
 
         public virtual IList<ProjectOriginalAuthor> GetProjectOriginalAuthorList(long projectId, bool includeAuthors = false)
         {
+            Project projectAlias = null;
+
             var query = GetSession().QueryOver<ProjectOriginalAuthor>()
-                .Where(x => x.Project.Id == projectId)
+                .JoinAlias(x => x.Project, () => projectAlias)
+                .Where(x => x.Project.Id == projectId && projectAlias.IsRemoved == false)
                 .OrderBy(x => x.Sequence).Asc;
 
             if (includeAuthors)
@@ -192,8 +204,11 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public virtual IList<ProjectResponsiblePerson> GetProjectResponsibleList(long projectId)
         {
+            Project projectAlias = null;
+
             return GetSession().QueryOver<ProjectResponsiblePerson>()
-                .Where(x => x.Project.Id == projectId)
+                .JoinAlias(x => x.Project, () => projectAlias)
+                .Where(x => x.Project.Id == projectId && projectAlias.IsRemoved == false)
                 .Fetch(SelectMode.Fetch, x => x.ResponsiblePerson)
                 .Fetch(SelectMode.Fetch, x => x.ResponsibleType)
                 .OrderBy(x => x.Sequence).Asc
@@ -206,7 +221,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return GetSession().QueryOver<LiteraryKind>()
                 .JoinAlias(x => x.Projects, () => projectAlias)
-                .Where(() => projectAlias.Id == projectId)
+                .Where(() => projectAlias.Id == projectId && projectAlias.IsRemoved == false)
                 .List();
         }
 
@@ -216,7 +231,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return GetSession().QueryOver<LiteraryGenre>()
                 .JoinAlias(x => x.Projects, () => projectAlias)
-                .Where(() => projectAlias.Id == projectId)
+                .Where(() => projectAlias.Id == projectId && projectAlias.IsRemoved == false)
                 .List();
         }
 
@@ -226,7 +241,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return GetSession().QueryOver<LiteraryOriginal>()
                 .JoinAlias(x => x.Projects, () => projectAlias)
-                .Where(() => projectAlias.Id == projectId)
+                .Where(() => projectAlias.Id == projectId && projectAlias.IsRemoved == false)
                 .List();
         }
 
@@ -236,7 +251,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return GetSession().QueryOver<Category>()
                 .JoinAlias(x => x.Projects, () => projectAlias)
-                .Where(() => projectAlias.Id == projectId)
+                .Where(() => projectAlias.Id == projectId && projectAlias.IsRemoved == false)
                 .List();
         }
 
@@ -251,7 +266,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => userGroupAlias.Users, () => userAlias)
                 .JoinAlias(x => x.Project, () => projectAlias)
                 .WhereRestrictionOn(() => projectAlias.Id).IsInG(projectIds)
-                .Where(() => userAlias.Id == userId)
+                .Where(() => userAlias.Id == userId && projectAlias.IsRemoved == false)
                 .List();
         }
     }
