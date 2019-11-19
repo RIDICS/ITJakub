@@ -17,6 +17,8 @@
 
     <property name="ProjectType" not-null="true" />
 
+    <property name="IsRemoved" not-null="true" />
+
     <many-to-one name="LatestPublishedSnapshot" class="Snapshot" lazy="proxy" />
 
     <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
