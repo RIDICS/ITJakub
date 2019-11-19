@@ -9,6 +9,10 @@
         return pageListAjax;
     }
 
+    getImagesPageListView(projectId: number): JQuery.jqXHR<string> {
+        return $.get(`${this.serverPath}Admin/Project/ImagesPageList?projectId=${projectId}`);
+    }    
+
     getImageResourceByPageId(pageId: number): JQuery.jqXHR<IImageContract> {
         return $.get(`${this.serverPath}Admin/ContentEditor/GetImageResourceByPageId?pageId=${pageId}`);
     }
@@ -19,6 +23,16 @@
 
     getPageListView(projectId: number): JQuery.jqXHR<string> {
         return $.get(`${this.serverPath}Admin/Project/PageList?projectId=${projectId}`);
+    }
+    
+    createPage(projectId: number, name: string, position: number): JQueryXHR {
+        return $.post(`${this.serverPath}Admin/ContentEditor/CreatePage`,
+            {
+                projectId: projectId,
+                name: name,
+                position: position
+            } as JQuery.PlainObject
+        );
     }
     
     savePageList(projectId: number, pageList: IUpdatePage[]): JQuery.jqXHR {

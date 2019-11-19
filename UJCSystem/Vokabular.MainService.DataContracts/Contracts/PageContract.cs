@@ -7,6 +7,11 @@
         public string Name { get; set; }
         public int Position { get; set; }
     }
+    
+    public class PageWithImageInfoContract : PageContract
+    {
+        public bool HasImage { get; set; }
+    }
 
     public class CreatePageContract
     {

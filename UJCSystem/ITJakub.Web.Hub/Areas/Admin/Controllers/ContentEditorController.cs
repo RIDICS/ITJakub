@@ -78,6 +78,19 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        public IActionResult CreatePage(long projectId, string name, int position)
+        {
+            var client = GetProjectClient();
+            var request = new CreatePageContract
+            {
+                Name = name, 
+                Position = position,
+            };
+            var result = client.CreatePage(projectId, request);
+            return Json(result);
+        }
+
+        [HttpPost]
         public IActionResult SaveComment(CreateTextCommentContract comment, long textId)
         {
             var client = GetProjectClient();

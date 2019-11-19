@@ -2,71 +2,62 @@
     private readonly contentAddition: ImageViewerContentAddition;
     private readonly gui: EditorsGui;
     private pages: IPage[];
+    private index: number;
 
     constructor(contentAddition: ImageViewerContentAddition, gui: EditorsGui) {
         this.contentAddition = contentAddition;
         this.gui = gui;
     }
 
-    init(pages: IPage[]) {
-        this.createSlider(pages);
-        this.showTooltipOnHover();
-        this.pages = pages;
+    init() {
+        this.index = 0;
         this.pageButtonClickProcess();
-        this.listenToPageEnteredConfirmation(pages);
+        this.listenToPageEnteredConfirmation();
+        this.reinit();        
     }
 
-    private createSlider(pages: IPage[]) {
-        $(() => {
-            const tooltip = $(".slider-tooltip");
-            const tooltipText = tooltip.children(".slider-tooltip-text");
-            const thisClass = this;
-            $(".text-editor-page-slider").slider({
-                min: 0,
-                max: pages.length - 1,
-                step: 1,
-                create: () => {
-                    this.loadPage(0, pages);
-                },
-                slide: (event, ui) => {
-                    const index = ui.value;
-                    if (!isNaN(index)) {
-                        tooltipText.text(localization.translateFormat("PageName", [pages[index].name], "RidicsProject").value);
-                        tooltip.show();
-                    }
-                },
-                change: (event, ui) => {
-                    const index = ui.value;
-                    if (!isNaN(index)) {
-                        thisClass.loadPage(index, pages);
-                    }
-                }
-            });
+    reinit() {
+        this.pages = [];
+        $(".page-row").toArray().forEach((element, index) => {
+            this.pages[index] = {
+                id: $(element).data("page-id"),
+                name: String($(element).data("name")),
+                versionId: $(element).data("version-id"),
+                position: $(element).data("position"),
+            }
         });
-    }
 
+        const uploadImageBtn = $(".upload-new-image-button");
+        if(this.pages.length) {
+            this.loadPage(this.index);
+            $(`.page-row`).on("click", (event) => {
+                const index = Number($(event.currentTarget).data("index"));
+                this.loadPage(index);
+            });
+            uploadImageBtn.removeAttr("disabled")
+        } else {
+            uploadImageBtn.attr("disabled", "true")
+        }
+    }
+    
     private getPageIdByPageName(pageName: string, pages: string[]): number {
         const index = $.inArray(pageName, pages);
         return index;
     }
 
     private loadNextPage() {
-        let index = parseInt($(".text-editor-page-slider").slider("option", "value"));
-        if (!isNaN(index)) {
-            index++;
-            if (index > -1 && index < this.pages.length) {
-                $(".text-editor-page-slider").slider("value", index);
-            }
-        }
+        let index = this.index;
+        index++;
+        if (index > -1 && index < this.pages.length) {
+            this.loadPage(index);
+        }        
     }
 
     private loadPreviousPage() {
-        let index = parseInt($(".text-editor-page-slider").slider("option", "value"));
-        if (!isNaN(index)) {
-            index--;
-            if (index > -1 && index < this.pages.length) {
-                $(".text-editor-page-slider").slider("value", index);
-            }
+        let index = this.index;
+        index--;
+        if (index > -1 && index < this.pages.length) {
+            this.loadPage(index);
         }
     }
 
@@ -96,11 +87,11 @@
             });
     }
 
-    private listenToPageEnteredConfirmation(pages: IPage[]) {
+    private listenToPageEnteredConfirmation() {
         $(".page-menu-row").on("click",
             ".go-to-page-button",
             () => {
-                this.processPageInputField(pages);
+                this.processPageInputField();
             });
 
         $(".page-menu-row").on("keypress",
@@ -108,19 +99,19 @@
             (event) => {
                 var keycode = (event.keyCode ? event.keyCode : event.which);
                 if (keycode === 13) { //Enter key
-                    this.processPageInputField(pages);
+                    this.processPageInputField();
                 }
             });
     }
 
-    private processPageInputField(pages: IPage[]) {
+    private processPageInputField() {
         const inputField = $(".go-to-page-field");
         const inputFieldValue = inputField.val() as string;
         if (inputFieldValue === "") {
             this.gui.showInfoDialog(localization.translate("Warning", "RidicsProject").value,
                 localization.translate("EnterPageName", "RidicsProject").value);
         } else {
-            const namesStringArray: string[] = $.map(pages, (x) => { return x.name });
+            const namesStringArray: string[] = $.map(this.pages, (x) => { return x.name });
             let index = this.getPageIdByPageName(inputFieldValue, namesStringArray);
             if (index === -1) {
                 const minusToDashInputValue = inputFieldValue.replace("-", "–");
@@ -130,32 +121,25 @@
                 this.gui.showInfoDialog(localization.translate("Warning", "RidicsProject").value,
                     localization.translateFormat("PageDoesNotExist", [inputFieldValue], "RidicsProject").value);
             } else {
-                $(".text-editor-page-slider").slider("value", index);
+                this.loadPage(index);
                 inputField.val("");
             }
         }
-    }
-
-    private showTooltipOnHover() {
-        var tooltip = $(".slider-tooltip");
-        $("#project-resource-images").on("mouseenter", ".page-slider-handle", () => { tooltip.show(); });
-        $("#project-resource-images").on("mouseleave", ".page-slider-handle", () => { tooltip.hide(); });
     }
 
     private updatePageIndicator(pageName: string) {
         $(".page-indicator").text(pageName);
     }
 
-    private updateSliderTooltipText(index: number, pageName: string) {
-        const tooltip = $(".slider-tooltip");
-        const tooltipText = tooltip.children(".slider-tooltip-text");
-        tooltipText.text(localization.translateFormat("PageName", [pageName], "RidicsProject").value);
+    private updateActiveItemInListing(index: number) {
+        $(`.page-row[data-index="${index}"]`).addClass("active").siblings(".page-row").removeClass("active");
     }
 
-    private loadPage(index: number, pages: IPage[]) {
-        const pageName = pages[index].name;
-        this.updateSliderTooltipText(index, pageName);
+    private loadPage(index: number) {
+        this.index = index;
+        const pageName = this.pages[index].name;
+        this.updateActiveItemInListing(index);
         this.updatePageIndicator(pageName);
-        this.contentAddition.formImageContent(pages[index].id);
+        this.contentAddition.formImageContent(this.pages[index].id);
     }
 }

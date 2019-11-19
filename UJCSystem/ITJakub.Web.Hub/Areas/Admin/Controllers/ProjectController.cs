@@ -179,9 +179,18 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult GetImageViewer()
+        public IActionResult GetImageViewer(long projectId)
         {
-            return PartialView("Resource/_Images");
+            var client = GetProjectClient();
+            var pages = client.GetAllPagesWithImageInfoList(projectId);
+            return PartialView("Resource/_Images", pages);
+        }
+        
+        public IActionResult ImagesPageList(long projectId)
+        {
+            var client = GetProjectClient();
+            var pages = client.GetAllPagesWithImageInfoList(projectId);
+            return PartialView("Work/SubView/_PageWithImagesTable", pages);
         }
 
         public IActionResult GetTextPreview()

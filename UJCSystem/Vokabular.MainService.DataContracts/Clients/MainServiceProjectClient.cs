@@ -352,6 +352,22 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+        
+        public List<PageWithImageInfoContract> GetAllPagesWithImageInfoList(long projectId)
+        {
+            try
+            {
+                var result = m_client.Get<List<PageWithImageInfoContract>>($"project/{projectId}/page-image-info");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
         public List<TextWithPageContract> GetAllTextResourceList(long projectId, long? resourceGroupId)
         {
             try
@@ -501,6 +517,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 m_client.Delete($"project/text/comment/{commentId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
+        public long CreatePage(long projectId, CreatePageContract request)
+        {
+            try
+            {
+                var result = m_client.Post<long>($"project/{projectId}/page", request);
+                return result;
             }
             catch (HttpRequestException e)
             {
