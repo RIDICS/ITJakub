@@ -28,6 +28,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.CreateProject
                 if (project.ExternalId != bookData.BookXmlId)
                 {
                     project.ExternalId = bookData.BookXmlId;
+                    project.IsRemoved = false;
                     m_projectRepository.Update(project);
                 }
             }
@@ -44,6 +45,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.CreateProject
                     {
                         Name = bookData.Title,
                         ProjectType = projectType,
+                        IsRemoved = false,
                         CreateTime = DateTime.UtcNow,
                         CreatedByUser = m_projectRepository.Load<User>(userId),
                         ExternalId = bookData.BookXmlId,

@@ -1,5 +1,4 @@
-﻿using Vokabular.DataEntities.Database.Entities;
-using Vokabular.DataEntities.Database.Repositories;
+﻿using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
@@ -20,7 +19,7 @@ namespace Vokabular.MainService.Core.Works
 
         protected override void ExecuteWorkImplementation()
         {
-            var project = m_projectRepository.FindById<Project>(m_projectId);
+            var project = m_projectRepository.GetProject(m_projectId);
 
             if (project == null)
             {

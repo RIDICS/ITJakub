@@ -75,6 +75,13 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual Project GetProject(long projectId)
         {
             return GetSession().QueryOver<Project>()
+                .Where(x => x.Id == projectId && x.IsRemoved == false)
+                .SingleOrDefault();
+        }
+
+        public virtual Project GetProjectWithUser(long projectId)
+        {
+            return GetSession().QueryOver<Project>()
                 .Where(x => x.Id == projectId)
                 .Fetch(SelectMode.Fetch, x => x.CreatedByUser)
                 .SingleOrDefault();

@@ -59,7 +59,7 @@ namespace Vokabular.MainService.Core.Managers
             var bookTypes = m_mapper.Map<IList<BookTypeEnum>>(data.BookTypes);
             var defaultBookTypes = m_mapper.Map<BookTypeEnum>(data.DefaultBookType);
 
-            var projectInfo = m_projectRepository.InvokeUnitOfWork(x => x.FindById<Project>(data.ProjectId));
+            var projectInfo = m_projectRepository.InvokeUnitOfWork(x => x.GetProject(data.ProjectId));
             var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage(projectInfo.ProjectType);
 
             var snapshotId = new CreateSnapshotWork(m_projectRepository, m_resourceRepository, data.ProjectId, userId,
