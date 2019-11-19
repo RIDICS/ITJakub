@@ -728,7 +728,7 @@
         $errorAlert.hide();
         this.projectClient.saveMetadata(this.projectId, data).done((responseData) => {
             $successAlert.show().delay(3000).fadeOut(2000);
-            $("#work-metadata-last-modification").text(responseData.lastModificationText.toLocaleString());
+            $(".work-metadata-last-modification").text(responseData.lastModificationText.toLocaleString());
             if (responseData.literaryOriginalText == null || responseData.literaryOriginalText === "") {
                 $("#work-metadata-literary-original").text(localization.translate("NoLiteraryOriginal", "Admin").value);
             } else {
