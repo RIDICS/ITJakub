@@ -77,6 +77,8 @@ namespace Vokabular.FulltextService
 
             app.UseMiddleware<Log4NetPropertiesMiddleware>();
 
+            app.UseStatusCodePages();
+
             app.UseMvc();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
