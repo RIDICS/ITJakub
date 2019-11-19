@@ -353,11 +353,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
         
-        public List<PageWithImageInfoContract> GetAllPageWithImageInfoList(long projectId)
+        public List<PageWithImageInfoContract> GetAllPagesWithImageInfoList(long projectId)
         {
             try
             {
-                var result = m_client.Get<List<PageWithImageInfoContract>>($"project/{projectId}/page/image-info");
+                var result = m_client.Get<List<PageWithImageInfoContract>>($"project/{projectId}/page-image-info");
                 return result;
             }
             catch (HttpRequestException e)

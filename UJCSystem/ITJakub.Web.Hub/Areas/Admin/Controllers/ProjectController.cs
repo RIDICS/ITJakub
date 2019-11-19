@@ -182,14 +182,14 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult GetImageViewer(long projectId)
         {
             var client = GetProjectClient();
-            var pages = client.GetAllPageWithImageInfoList(projectId);
+            var pages = client.GetAllPagesWithImageInfoList(projectId);
             return PartialView("Resource/_Images", pages);
         }
         
         public IActionResult ImagesPageList(long projectId)
         {
             var client = GetProjectClient();
-            var pages = client.GetAllPageWithImageInfoList(projectId);
+            var pages = client.GetAllPagesWithImageInfoList(projectId);
             return PartialView("Work/SubView/_PageWithImagesTable", pages);
         }
 
