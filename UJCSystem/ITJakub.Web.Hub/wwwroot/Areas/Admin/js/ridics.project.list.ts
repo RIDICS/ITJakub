@@ -88,7 +88,7 @@ class ProjectList {
 
     private createNewProject() {
         const projectName = $("#new-project-name").val() as string;
-        if(projectName.length == 0)
+        if (projectName.length === 0)
         {
             this.newProjectDialog.showError(localization.translate("EmptyProjectNameError", "Admin").value);
             return;
@@ -98,11 +98,11 @@ class ProjectList {
         $(`input[name="bookType"]`).each((i, elem) => {
             if($(elem).is(":checked"))
             {
-                selectedBookTypes.push( BookTypeEnum[$(elem).data("book-type")])
+                selectedBookTypes.push( BookTypeEnum[$(elem).data("book-type")]);
             }            
         });
 
-        if(selectedBookTypes.length == 0)
+        if (selectedBookTypes.length === 0)
         {
             this.newProjectDialog.showError(localization.translate("NoSelectedModuleForForum", "Admin").value);
             return;
@@ -124,15 +124,16 @@ class ProjectList {
                 this.deleteProjectDialog.showError();
                 return;
             }
-            
+
+            this.deleteProjectDialog.hide();
             this.projectList.reloadPage();
         });
     }
 
     private renameProject() {
         const newProjectName = $("#renameProjectInput").val() as string;
-        
-        if(newProjectName.length == 0)
+
+        if (newProjectName.length === 0)
         {
             this.renameProjectDialog.showError(localization.translate("EmptyProjectNameError", "Admin").value);
             return;

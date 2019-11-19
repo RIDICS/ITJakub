@@ -86,7 +86,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void DeleteProject(long projectId)
+        public void RemoveProject(long projectId)
         {
             try
             {

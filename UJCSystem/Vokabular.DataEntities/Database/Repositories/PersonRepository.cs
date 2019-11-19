@@ -44,7 +44,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                     .JoinAlias(() => projectOriginalAuthorAlias.Project, () => projectAlias)
                     .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias)
                     .JoinAlias(() => snapshotAlias.BookTypes, () => bookTypeAlias)
-                    .Where(() => bookTypeAlias.Type == bookTypeEnum.Value)
+                    .Where(() => bookTypeAlias.Type == bookTypeEnum.Value && projectAlias.IsRemoved == false)
                     .Select(Projections.Distinct(Projections.ProjectionList()
                         .Add(Projections.Property<OriginalAuthor>(x => x.Id).WithAlias(() => authorAlias.Id))
                         .Add(Projections.Property<OriginalAuthor>(x => x.FirstName).WithAlias(() => authorAlias.FirstName))

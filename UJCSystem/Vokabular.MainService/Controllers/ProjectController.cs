@@ -84,9 +84,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpDelete("{projectId}")]
-        public void DeleteProject(long projectId)
+        public void RemoveProject(long projectId)
         {
-            m_projectManager.DeleteProject(projectId);
+            m_projectManager.RemoveProject(projectId);
         }
 
         [HttpGet("{projectId}/metadata")]

@@ -22,7 +22,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             var result = GetSession().QueryOver<Snapshot>()
                 .JoinAlias(x => x.Project, () => projectAlias)
                 .Where(x => x.Project.Id == projectId)
-                .Where(x => projectAlias.LatestPublishedSnapshot.Id == x.Id)
+                .Where(x => projectAlias.LatestPublishedSnapshot.Id == x.Id && projectAlias.IsRemoved == false)
                 .Fetch(SelectMode.Fetch, x => x.BookTypes)
                 .Fetch(SelectMode.Fetch, x => x.DefaultBookType)
                 .SingleOrDefault();
@@ -39,17 +39,26 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Fetch(SelectMode.Fetch, x => x.ResourceVersions[0].Resource)
                 .FutureValue();
 
-            return session.QueryOver<Snapshot>()
+            session.QueryOver<Snapshot>()
                 .Where(x => x.Id == snapshotId)
                 .Fetch(SelectMode.Fetch, x => x.BookTypes)
                 .Fetch(SelectMode.Fetch, x => x.DefaultBookType)
-                .Future().FirstOrDefault();
+                .Future();
+
+            return session.QueryOver<Snapshot>()
+                .Where(x => x.Id == snapshotId)
+                .JoinQueryOver(x => x.Project)
+                .Where(x => x.IsRemoved == false)
+                .FutureValue().Value;
         }
 
         public ListWithTotalCountResult<Snapshot> GetPublishedSnapshots(long projectId, int start, int count, string filterByComment = null)
         {
+            Project projectAlias = null;
+
             var query = GetSession().QueryOver<Snapshot>()
-                .Where(x => x.Project.Id == projectId)
+                .JoinAlias(x => x.Project, () => projectAlias)
+                .Where(x => x.Project.Id == projectId && projectAlias.IsRemoved == false)
                 .Fetch(SelectMode.Fetch, x => x.CreatedByUser);
            
             if (!string.IsNullOrEmpty(filterByComment))
@@ -75,12 +84,15 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             ResourceVersion resourceVersionAlias = null;
             Resource resourceAlias = null;
+            Project projectAlias = null;
             SnapshotAggregatedInfo contract = null;
 
             var result = GetSession().QueryOver<Snapshot>()
                 .JoinAlias(x => x.ResourceVersions, () => resourceVersionAlias)
                 .JoinAlias(() => resourceVersionAlias.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .Where(x => x.Id.IsIn(snapshotIds))
+                .And(() => projectAlias.IsRemoved == false)
                 .SelectList(list => 
                     list.SelectGroup(x => x.Id).WithAlias(() => contract.Id)
                     .SelectGroup(() => resourceAlias.ResourceType).WithAlias(() => contract.Type)
@@ -94,8 +106,11 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public Snapshot GetSnapshot(long snapshotId)
         {
+            Project projectAlias = null;
+
             var result = GetSession().QueryOver<Snapshot>()
-                .Where(x => x.Id == snapshotId)
+                .JoinAlias(x => x.Project, () => projectAlias)
+                .Where(x => x.Id == snapshotId && projectAlias.IsRemoved == false)
                 .Fetch(SelectMode.Fetch, x => x.Project)
                 .SingleOrDefault();
             return result;
