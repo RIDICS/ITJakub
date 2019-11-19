@@ -57,6 +57,7 @@
     "group-not-found": "The group was not found",
     "group-already-assigned-to-project": "The group already has assigned some permission for this work",
     "user-already-assigned-to-project": "The user already has assigned some permission for this work",
+    "snapshot-must-contain-metadata": "The work must contain metadata otherwise it can't be published.",
 
     //Auth service codes
     "generic-error": "Operation failed",

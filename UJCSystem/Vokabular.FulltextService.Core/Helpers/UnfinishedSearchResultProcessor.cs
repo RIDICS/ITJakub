@@ -1,11 +1,16 @@
 ﻿using System.Collections.Generic;
 using Nest;
 using Vokabular.FulltextService.DataContracts.Contracts;
+using Vokabular.TextConverter.Markdown;
 
 namespace Vokabular.FulltextService.Core.Helpers
 {
     public class UnfinishedSearchResultProcessor : SearchResultProcessor
     {
+        public UnfinishedSearchResultProcessor(IMarkdownToPlainTextConverter markdownToPlainTextConverter) : base(markdownToPlainTextConverter)
+        {
+        }
+
         public List<CorpusSearchResultContract> ProcessSearchCorpusByCriteria(ISearchResponse<SnapshotResourceContract> response, string highlightTag)
         {
             if (!response.IsValid)

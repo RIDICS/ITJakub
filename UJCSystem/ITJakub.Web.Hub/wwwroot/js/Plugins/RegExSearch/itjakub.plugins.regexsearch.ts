@@ -284,6 +284,14 @@ class Search {
     }
 
     private isValidJson(data: string): boolean {
+        data = data.trim();
+        if (data.length === 0) {
+            return false;
+        }
+        if ((data[0] !== "{" || data[data.length - 1] !== "}") && 
+            (data[0] !== "[" || data[data.length - 1] !== "]")) {
+            return false;
+        }
         try {
             JSON.parse(data);
             return true;

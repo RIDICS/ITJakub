@@ -57,6 +57,7 @@
     "group-not-found": "Skupina nebyla nalezena",
     "group-already-assigned-to-project": "Skupina už má přiřazené nějaké právo k tomuto dílu",
     "user-already-assigned-to-project": "Uživatel už má přiřazené nějaké právo k tomuto dílu",
+    "snapshot-must-contain-metadata": "Dílo musí obsahovat metadata, jinak nemůže být publikováno.",
     
     //Auth service codes
     "generic-error": "Operace se nezdařila",
