@@ -2,7 +2,6 @@
 using Markdig.Helpers;
 using Markdig.Parsers;
 using Markdig.Syntax.Inlines;
-using Microsoft.Extensions.Options;
 using Vokabular.TextConverter.Options;
 
 namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
@@ -14,11 +13,11 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
         private readonly char m_escapeChar;
         private readonly char m_openingChar;
 
-        public CommentMarkParser(IOptions<SpecialCharsOption> options)
+        public CommentMarkParser()
         {
-            m_escapeChar = options.Value.EscapeCharacter[0];
-            m_openingChar = options.Value.CommentMarkOpening[0];
-            m_closingChar = options.Value.CommentMarkClosing[0];
+            m_escapeChar = SpecialCharsOptions.EscapeCharacter[0];
+            m_openingChar = SpecialCharsOptions.CommentMarkOpening[0];
+            m_closingChar = SpecialCharsOptions.CommentMarkClosing[0];
 
             OpeningCharacters = new[] { m_openingChar };
         }
