@@ -33,7 +33,10 @@
 </head>
 <body class="eupopup eupopup-fixedtop eupopup-color-inverse" data-has-book-text-url="@Url.Action("HasBookText", "Reader",  new {area = ""})">
 
-    <div class="portal-type hide" data-portal-type="@PortalConfig.Value.PortalType"></div>
+    <div id="searchUrl" class="hide" data-search-url="@(PortalConfig.Value.PortalType == PortalType.CommunityPortal 
+                                                          ? Url.Action("List", "Editions", new {area = "Editions"})
+                                                          : Url.Action("Search", "Bibliographies", new {area = "Bibliographies"}) )"></div>
+
 <div class="component keyboard-component" data-keyboard-id="0" data-keyboard-api-url="@Url.Action("GetLayoutList", "Keyboard",  new {area = ""})"></div>
 
     @*top fixed part*@

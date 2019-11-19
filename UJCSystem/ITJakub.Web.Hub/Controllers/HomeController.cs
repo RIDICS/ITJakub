@@ -102,7 +102,7 @@ namespace ITJakub.Web.Hub.Controllers
         public ActionResult GetTypeaheadTitle(string query)
         {
             BookTypeEnumContract? bookType = null;
-            if (GetDefaultProjectType() == ProjectTypeContract.Community)
+            if (PortalTypeValue == PortalTypeContract.Community)
             {
                 bookType = BookTypeEnumContract.Edition;
             }

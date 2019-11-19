@@ -107,10 +107,6 @@ function getBaseUrl() {
     return baseUrl;
 }
 
-function getPortalType(): PortalType {
-    return PortalType[$("#portalType").data("portal-type") as string];
-}
-
 function convertDate(date: string): Date {
     return new Date(parseInt(date.substr(6)));
 }
