@@ -63,6 +63,11 @@
                 </li>
                 <li>
                     <a href='@Url.Action("SearchCombined", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                        <span>@Localizer.Translate("Search", "layout", LocTranslationSource.File)</span>
+                    </a>
+                </li>
+                @*<li>
+                    <a href='@Url.Action("SearchCombined", "BohemianTextBank", new {area = "BohemianTextBank"})'>
                         <span>@Localizer.Translate("SearchCombined", "layout")</span>
                     </a>
                 </li>
@@ -75,7 +80,7 @@
                     <a href='@Url.Action("SearchSinglePaged", "BohemianTextBank", new {area = "BohemianTextBank"})'>
                         <span>@Localizer.Translate("SearchSinglePaged", "layout")</span>
                     </a>
-                </li>
+                </li>*@
                 <li>
                     <a href='@Url.Action("Help", "BohemianTextBank", new {area = "BohemianTextBank"})'>
                         <span>@Localizer.Translate("Help", "layout", LocTranslationSource.File)</span>
