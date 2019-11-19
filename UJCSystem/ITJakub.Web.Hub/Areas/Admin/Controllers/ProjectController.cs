@@ -268,7 +268,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             var client = GetProjectClient();
 
-            client.DeleteProject(request.Id);
+            client.RemoveProject(request.Id);
             return Json(new { });
         }
         
