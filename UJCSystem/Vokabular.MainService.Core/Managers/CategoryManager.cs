@@ -11,20 +11,17 @@ namespace Vokabular.MainService.Core.Managers
     public class CategoryManager
     {
         private readonly CategoryRepository m_categoryRepository;
-        private readonly ForumSiteManager m_forumSiteManager;
         private readonly IMapper m_mapper;
 
-        public CategoryManager(CategoryRepository categoryRepository, ForumSiteManager forumSiteManager, IMapper mapper)
+        public CategoryManager(CategoryRepository categoryRepository, IMapper mapper)
         {
             m_categoryRepository = categoryRepository;
-            m_forumSiteManager = forumSiteManager;
             m_mapper = mapper;
         }
 
         public int CreateCategory(CategoryContract category)
         {
             var resultId = new CreateCategoryWork(m_categoryRepository, category).Execute();
-            m_forumSiteManager.CreateCategory(category, resultId);
             return resultId;
         }
 
@@ -37,15 +34,12 @@ namespace Vokabular.MainService.Core.Managers
         public void DeleteCategory(int categoryId)
         {
             var deleteCategoryWork = new DeleteCategoryWork(m_categoryRepository, categoryId);
-            m_forumSiteManager.DeleteCategory(categoryId); 
             deleteCategoryWork.Execute();
         }
 
         public void UpdateCategory(int categoryId, CategoryContract category)
         {
-            var oldCategory = GetCategory(categoryId);
             var updateCategoryWork = new UpdateCategoryWork(m_categoryRepository, categoryId, category);
-            m_forumSiteManager.UpdateCategory(category, oldCategory);
             updateCategoryWork.Execute();
         }
 

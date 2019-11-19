@@ -262,6 +262,13 @@ namespace Vokabular.MainService.Core.Managers
             var work = new RegenerateSingleUserGroupNameWork(m_userRepository, userId, m_codeGenerator);
             var newCode = work.Execute();
             return newCode;
+        } 
+        
+        public string GetCurrentUserSingleUserGroupName()
+        {
+            var userId = m_authenticationManager.GetCurrentUserId();
+            var singleUserGroup = m_userRepository.InvokeUnitOfWork(x => x.GetSingleUserGroup(userId));
+            return singleUserGroup.Name;
         }
     }
 }

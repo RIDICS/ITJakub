@@ -48,6 +48,9 @@
     "TwoFactorProvider": "Způsob dvoufaktorového ověření",
     "SuccessTwoFactorUpdate": "Nastavení dvoufaktorového ověření bylo úspšeně aktualizováno.",
     "TwoFactorVerificationIsNotActive": "Emailová adresa není ověřena - dvoufaktorové ověření není aktivní.",
-    "Save": "Uložit"
+    "Save": "Uložit",
+
+    "UserCode": "Kód uživatele",
+    "GenerateNewUserCode": "Vygenerovat nový kód uživatele"
   }
 }

@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Vokabular.DataEntities.Database.QueryBuilder;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.Repositories.BibliographyImport;
 using Vokabular.DataEntities.Database.SearchCriteria;
-using Vokabular.Shared.DataContracts.Search.QueryBuilder;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities

@@ -14,10 +14,10 @@ namespace Vokabular.FulltextService.Core.Managers
         private readonly QueriesBuilder m_queriesBuilder;
 
         public UnfinishedSearchManager(CommunicationProvider communicationProvider, UnfinishedSearchResultProcessor searchResultProcessor,
-            QueriesBuilder queriesBuilder, IOptions<IndicesOption> indicesOptions) : base(communicationProvider, indicesOptions)
+            QueriesBuilderFactory queriesBuilderFactory, IOptions<IndicesOption> indicesOptions) : base(communicationProvider, indicesOptions)
         {
             m_searchResultProcessor = searchResultProcessor;
-            m_queriesBuilder = queriesBuilder;
+            m_queriesBuilder = queriesBuilderFactory.Create(IndexType.Snapshot);
         }
 
         public FulltextSearchCorpusResultContract SearchCorpusByCriteriaCount(SearchRequestContractBase searchRequest)

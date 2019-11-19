@@ -27,7 +27,8 @@ namespace Vokabular.MainService.DataContracts.Clients
         }
 
         public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, ProjectTypeContract projectType,
-            ProjectOwnerTypeContract projectOwnerType = ProjectOwnerTypeContract.AllProjects, string filterByName = null, bool fetchPageCount = false)
+            ProjectOwnerTypeContract projectOwnerType = ProjectOwnerTypeContract.AllProjects, string filterByName = null, bool fetchPageCount = false,
+            bool fetchLatestChangedResource = false, bool fetchPermissions = false)
         {
             try
             {
@@ -38,6 +39,8 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("projectOwnerType", projectOwnerType)
                     .AddParameter("filterByName", filterByName)
                     .AddParameter("fetchPageCount", fetchPageCount)
+                    .AddParameter("fetchLatestChangedResource", fetchLatestChangedResource)
+                    .AddParameter("fetchPermissions", fetchPermissions)
                     .ToResult();
                 var result = m_client.GetPagedList<ProjectDetailContract>(url);
                 return result;
@@ -88,6 +91,21 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 m_client.Delete($"project/{projectId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
+        public void UpdateProject(long projectId, ItemNameContract data)
+        {
+            try
+            {
+                m_client.Put<object>($"project/{projectId}", data);
             }
             catch (HttpRequestException e)
             {
@@ -581,7 +599,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public PagedResultList<UserGroupContract> GetUserGroupsByProject(int projectId, int start, int count, string query)
+        public PagedResultList<UserGroupContract> GetUserGroupsByProject(long projectId, int start, int count, string query)
         {
             try
             {
@@ -625,6 +643,21 @@ namespace Vokabular.MainService.DataContracts.Clients
             {
                 var result = m_client.Get<ForumContract>($"project/{projectId}/forum");
                 return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
+        public void AddProjectToUserGroupByCode(long projectId, AssignPermissionToSingleUserGroupContract data)
+        {
+            try
+            {
+                m_client.Post<object>($"project/{projectId}/single-user-group", data);
             }
             catch (HttpRequestException e)
             {

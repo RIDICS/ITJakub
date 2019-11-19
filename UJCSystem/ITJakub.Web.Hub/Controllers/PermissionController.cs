@@ -374,24 +374,42 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddProjectsToRole([FromBody] AddProjectsToRoleRequest request)
+        public IActionResult UpdateOrAddProjectsToRole([FromBody] AddProjectsToGroupRequest request)
         {
             var client = GetRoleClient();
-            client.UpdateOrAddBooksToGroup(request.RoleId, request.BookId, new PermissionDataContract
-            {
-                ShowPublished = request.ShowPublished,
-                ReadProject = request.ReadProject,
-                AdminProject = request.AdminProject,
-                EditProject = request.EditProject,
-            });
+            client.UpdateOrAddBookToGroup(request.RoleId,
+                request.PermissionsConfiguration.BookId,
+                CreatePermissionDataContract(request.PermissionsConfiguration));
             return AjaxOkResponse();
         }
 
+        [HttpPost]
+        public IActionResult AddProjectsToRole([FromBody] AddProjectsToGroupRequest request)
+        {
+            var client = GetRoleClient();
+            client.AddBookToGroup(request.RoleId,
+                request.PermissionsConfiguration.BookId,
+                CreatePermissionDataContract(request.PermissionsConfiguration));
+            return AjaxOkResponse();
+        }
+
+        [HttpPost]
+        public IActionResult AddProjectsToSingleUserGroup([FromBody] AddProjectsToSingleUserGroupRequest request)
+        {
+            var client = GetProjectClient();
+            client.AddProjectToUserGroupByCode(request.PermissionsConfiguration.BookId, new AssignPermissionToSingleUserGroupContract
+            {
+                Code = request.UserCode,
+                Permissions = CreatePermissionDataContract(request.PermissionsConfiguration),
+            });
+            return AjaxOkResponse();
+        }
+        
         public IActionResult GetPermissionsForRoleAndBook(int roleId, long bookId)
         {
             var client = GetRoleClient();
             var result = client.GetPermissionsForGroupAndBook(roleId, bookId);
-            return PartialView("Widget/_ProjectPermissionsWidget", result);
+            return PartialView("Widgets/_ProjectPermissionsWidget", result);
         }
 
         [HttpPost]
@@ -416,6 +434,17 @@ namespace ITJakub.Web.Hub.Controllers
             var client = GetRoleClient();
             client.RemoveSpecialPermissionsFromRole(request.RoleId, new List<int> {request.SpecialPermissionId});
             return Json(new { });
+        }
+        
+        private PermissionDataContract CreatePermissionDataContract(PermissionsConfigurationRequest request)
+        {
+            return new PermissionDataContract
+            {
+                ShowPublished = request.ShowPublished,
+                ReadProject = request.ReadProject,
+                AdminProject = request.AdminProject,
+                EditProject = request.EditProject,
+            };
         }
     }
 }

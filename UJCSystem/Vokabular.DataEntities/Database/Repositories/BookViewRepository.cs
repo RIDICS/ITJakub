@@ -326,13 +326,19 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             var projectIds = SearchProjectIdByCriteriaQuery(creator).Select(x => x.ProjectId);
 
-            var result = GetSession().QueryOver<HeadwordResource>()
-                .JoinAlias(x => x.HeadwordItems, () => headwordItemAlias)
+            var query = GetSession().QueryOver<HeadwordResource>()
                 .JoinAlias(x => x.Snapshots, () => snapshotAlias)
                 .JoinAlias(() => snapshotAlias.Project, () => projectAlias)
                 .Where(x => snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
-                .AndRestrictionOn(x => projectAlias.Id).IsInG(projectIds)
-                .And(headwordRestrictions)
+                .AndRestrictionOn(x => projectAlias.Id).IsInG(projectIds);
+
+            if (creator.HasHeadwordRestrictions())
+            {
+                query.JoinAlias(x => x.HeadwordItems, () => headwordItemAlias)
+                    .And(headwordRestrictions);
+            }
+
+            var result = query
                 .Select(Projections.CountDistinct<HeadwordResource>(x => x.Id))
                 .SingleOrDefault<int>();
             return result;
@@ -372,13 +378,19 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             var projectIds = SearchProjectIdByCriteriaQuery(creator).Select(x => x.ProjectId);
 
-            var result = GetSession().QueryOver<HeadwordResource>()
-                .JoinAlias(x => x.HeadwordItems, () => headwordItemAlias)
+            var query = GetSession().QueryOver<HeadwordResource>()
                 .JoinAlias(x => x.Snapshots, () => snapshotAlias)
                 .JoinAlias(() => snapshotAlias.Project, () => projectAlias)
                 .Where(x => snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
-                .AndRestrictionOn(x => projectAlias.Id).IsInG(projectIds)
-                .And(headwordRestrictions)
+                .AndRestrictionOn(x => projectAlias.Id).IsInG(projectIds);
+
+            if (creator.HasHeadwordRestrictions())
+            {
+                query.JoinAlias(x => x.HeadwordItems, () => headwordItemAlias)
+                    .And(headwordRestrictions);
+            }
+
+            var result = query
                 .SelectList(list => list
                     .SelectGroup(x => x.Id).WithAlias(() => resultAlias.Id)
                     .SelectMin(x => x.Sorting).WithAlias(() => resultAlias.Sorting))

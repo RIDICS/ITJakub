@@ -4,6 +4,7 @@
     public static getDefaultConfiguration(): Dropzone.DropzoneOptions {
         var options: Dropzone.DropzoneOptions = {
             maxFilesize: 10000, // size in MB
+            timeout: 0, // disable timeout
             uploadMultiple: true,
             autoProcessQueue: true,
             parallelUploads: 5,

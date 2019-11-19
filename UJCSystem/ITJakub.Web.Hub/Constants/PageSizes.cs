@@ -7,5 +7,12 @@
         public const int CorpusSearchBooks = 10;
         public const int ProjectList = 20;
         public const int SnapshotList = 10;
+        public const int CooperationList = 10;
+
+        public const int MinCorpusSearch = 1;
+        public const int MaxCorpusSearch = 100;
+        public const int DefaultContextLength = 100;
+        public const int MinContextLength = 40; //search backend may crash if context is too short
+        public const int MaxContextLength = 500;
     }
 }

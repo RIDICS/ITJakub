@@ -1,0 +1,28 @@
+﻿@using Ridics.Core.Structures.Shared
+@using Scalesoft.Localization.AspNetCore
+@using Vokabular.MainService.DataContracts.Contracts.Type
+@using Vokabular.Shared.AspNetCore.Extensions
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.UserGroupContract>
+@inject ILocalizationService Localizer
+
+@foreach (var role in Model.List)
+{
+    <tr data-role-id="@role.Id" class="role-row">
+        <td>
+            @{
+                var descriptionPrefix = role.Type == UserGroupTypeContract.Single ? $"{Localizer.Translate("User", "Permission")}: " : string.Empty;
+            }
+            <div class="name">@role.Name</div>
+            <div class="description">@descriptionPrefix@role.Description</div>
+            <div class="alert alert-danger"></div>
+        </td>
+        @if (User.HasPermission(PermissionNames.ManageUserRoles))
+        {
+            <td class="buttons">
+                <a class="remove-role btn btn-sm btn-default">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </td>
+        }
+    </tr>
+}

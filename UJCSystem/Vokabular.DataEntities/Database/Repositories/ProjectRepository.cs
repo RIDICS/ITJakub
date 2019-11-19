@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
@@ -6,6 +7,7 @@ using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
+using Vokabular.DataEntities.Database.Utils;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -19,6 +21,10 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual ListWithTotalCountResult<Project> GetProjectList(int start, int count, ProjectTypeEnum? projectType,
             string filterByName = null, int? includeUserId = null, int? excludeUserId = null)
         {
+            Permission permissionAlias = null;
+            UserGroup userGroupAlias = null;
+            User userAlias = null;
+
             var query = GetSession().QueryOver<Project>()
                 .Fetch(SelectMode.Fetch, x => x.CreatedByUser);
 
@@ -32,14 +38,24 @@ namespace Vokabular.DataEntities.Database.Repositories
                 query.WhereRestrictionOn(x => x.Name).IsInsensitiveLike(filterByName, MatchMode.Anywhere);
             }
 
+            var permissionSubquery = QueryOver.Of<Project>()
+                .JoinAlias(x => x.Permissions, () => permissionAlias)
+                .JoinAlias(() => permissionAlias.UserGroup, () => userGroupAlias)
+                .JoinAlias(() => userGroupAlias.Users, () => userAlias)
+                .Where(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(PermissionFlag.ReadProject));
+
             if (includeUserId != null)
             {
-                query.And(x => x.CreatedByUser.Id == includeUserId.Value);
+                query.WithSubquery.WhereProperty(x => x.Id)
+                    .In(permissionSubquery.Where(() => userAlias.Id == includeUserId.Value)
+                        .Select(x => x.Id));
             }
 
             if (excludeUserId != null)
             {
-                query.And(x => x.CreatedByUser.Id != excludeUserId.Value);
+                query.WithSubquery.WhereProperty(x => x.Id)
+                    .NotIn(permissionSubquery.Where(() => userAlias.Id == excludeUserId.Value)
+                        .Select(x => x.Id));
             }
             
             query.OrderBy(x => x.Name).Asc
@@ -103,6 +119,34 @@ namespace Vokabular.DataEntities.Database.Repositories
                     .SelectCount(() => pageResourceAlias.Id).WithAlias(() => resultAlias.PageCount))
                 .TransformUsing(Transformers.AliasToBean<PageCountResult>())
                 .List<PageCountResult>();
+
+            return result;
+        }
+        
+        public virtual IList<LatestChangedResourceResult> GetAllLatestChangedResource(IEnumerable<long> projectIdList)
+        {
+            ResourceVersion resourceVersionAlias = null;
+            Resource resourceAlias = null;
+            ResourceVersion resourceVersionAlias2 = null;
+            Resource resourceAlias2 = null;
+            LatestChangedResourceResult resultAlias = null;
+
+            var result = GetSession().QueryOver(() => resourceVersionAlias)
+                .JoinAlias(() => resourceVersionAlias.Resource, () => resourceAlias)
+                .WhereRestrictionOn(() => resourceAlias.Project.Id).IsInG(projectIdList)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id /*&& !resourceAlias.IsRemoved*/)
+                .WithSubquery.Where(() => resourceVersionAlias.CreateTime == QueryOver.Of(() => resourceAlias2)
+                                              .JoinAlias(() => resourceAlias2.LatestVersion, () => resourceVersionAlias2)
+                                              .Where(() => resourceAlias2.Project.Id == resourceAlias.Project.Id)
+                                              .Select(Projections.Max(() => resourceVersionAlias2.CreateTime))
+                                              .Take(1)
+                                              .As<DateTime>())
+                .SelectList(list => list
+                    .SelectGroup(() => resourceAlias.Project.Id).WithAlias(() => resultAlias.ProjectId)
+                    .SelectMax(() => resourceVersionAlias.CreateTime).WithAlias(() => resultAlias.CreateTime)
+                    .SelectMin(() => resourceVersionAlias.CreatedByUser.Id).WithAlias(() => resultAlias.CreatedByUserId))
+                .TransformUsing(Transformers.AliasToBean<LatestChangedResourceResult>())
+                .List<LatestChangedResourceResult>();
 
             return result;
         }
@@ -186,6 +230,21 @@ namespace Vokabular.DataEntities.Database.Repositories
             return GetSession().QueryOver<Category>()
                 .JoinAlias(x => x.Projects, () => projectAlias)
                 .Where(() => projectAlias.Id == projectId)
+                .List();
+        }
+
+        public virtual IList<Permission> FindPermissionsForProjectsByUserId(IEnumerable<long> projectIds, int userId)
+        {
+            UserGroup userGroupAlias = null;
+            User userAlias = null;
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<Permission>()
+                .JoinAlias(x => x.UserGroup, () => userGroupAlias)
+                .JoinAlias(() => userGroupAlias.Users, () => userAlias)
+                .JoinAlias(x => x.Project, () => projectAlias)
+                .WhereRestrictionOn(() => projectAlias.Id).IsInG(projectIds)
+                .Where(() => userAlias.Id == userId)
                 .List();
         }
     }

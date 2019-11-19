@@ -10,7 +10,7 @@ using Vokabular.Shared.DataContracts.Types;
 namespace Vokabular.FulltextService.Controllers
 {
     [Route("api/[controller]")]
-    public class TextController : Controller
+    public class TextController : ApiControllerBase
     {
         private readonly TextResourceManager m_textResourceManager;
         private readonly ITextConverter m_textConverter;
@@ -53,8 +53,13 @@ namespace Vokabular.FulltextService.Controllers
         }
 
         [HttpPost("{textResourceId}/search")]
-        public TextResourceContract GetSearchTextResource(string textResourceId, [FromQuery] TextFormatEnumContract formatValue, [FromBody] SearchPageRequestContract searchPageRequestContract )
+        public ActionResult<TextResourceContract> GetSearchTextResource(string textResourceId, [FromQuery] TextFormatEnumContract formatValue, [FromBody] SearchPageRequestContract searchPageRequestContract)
         {
+            if (ContainsAnyUnsupportedCriteria(searchPageRequestContract))
+            {
+                return BadRequest("Request contains unsupported criteria");
+            }
+
             var textResource = m_searchManager.SearchOnPageByCriteria(textResourceId, searchPageRequestContract);
             textResource.PageText = m_textConverter.Convert(textResource.PageText, formatValue);
             textResource.PageText = m_pageWithHtmlTagsCreator.CreatePage(textResource.PageText, formatValue);
@@ -63,22 +68,37 @@ namespace Vokabular.FulltextService.Controllers
         }
 
         [HttpPost("snapshot/{snapshotId}/search")]
-        public PageSearchResultContract SearchPageByCriteria(long snapshotId, [FromBody] SearchPageRequestContract criteria)
+        public ActionResult<PageSearchResultContract> SearchPageByCriteria(long snapshotId, [FromBody] SearchPageRequestContract criteria)
         {
+            if (ContainsAnyUnsupportedCriteria(criteria))
+            {
+                return BadRequest("Request contains unsupported criteria");
+            }
+
             var result = m_searchManager.SearchPageByCriteria(snapshotId, criteria);
             return result;
         }
 
         [HttpPost("snapshot/{snapshotId}/search-hits-count")]
-        public long SearchHitsResultCount(long snapshotId, [FromBody] SearchPageRequestContract criteria)
+        public ActionResult<long> SearchHitsResultCount(long snapshotId, [FromBody] SearchPageRequestContract criteria)
         {
+            if (ContainsAnyUnsupportedCriteria(criteria))
+            {
+                return BadRequest("Request contains unsupported criteria");
+            }
+
             var result = m_searchManager.SearchHitsResultCount(snapshotId, criteria);
             return result;
         }
 
         [HttpPost("snapshot/{snapshotId}/search-context")]
-        public HitsWithPageContextResultContract SearchHitsWithPageContext(long snapshotId, [FromBody] SearchHitsRequestContract searchHitsRequestContract)
+        public ActionResult<HitsWithPageContextResultContract> SearchHitsWithPageContext(long snapshotId, [FromBody] SearchHitsRequestContract searchHitsRequestContract)
         {
+            if (ContainsAnyUnsupportedCriteria(searchHitsRequestContract))
+            {
+                return BadRequest("Request contains unsupported criteria");
+            }
+
             var result = m_searchManager.SearchHitsWithPageContext(snapshotId, searchHitsRequestContract);
             return result;
         }

@@ -39,13 +39,17 @@ namespace Vokabular.MainService.Controllers
             [FromQuery] string filterByName,
             [FromQuery] bool? fetchPageCount,
             [FromQuery] bool? fetchAuthors,
-            [FromQuery] bool? fetchResponsiblePersons)
+            [FromQuery] bool? fetchResponsiblePersons,
+            [FromQuery] bool? fetchLatestChangedResource,
+            [FromQuery] bool? fetchPermissions)
         {
             var isFetchPageCount = fetchPageCount ?? false;
             var isFetchAuthors = fetchAuthors ?? false;
             var isFetchResponsiblePersons = fetchResponsiblePersons ?? false;
+            var isFetchLatestChangedResource = fetchLatestChangedResource ?? false;
+            var isFetchPermissions = fetchPermissions ?? false;
             var projectOwner = projectOwnerType ?? ProjectOwnerTypeContract.AllProjects;
-            var result = m_projectManager.GetProjectList(start, count, projectType, projectOwner, filterByName, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons);
+            var result = m_projectManager.GetProjectList(start, count, projectType, projectOwner, filterByName, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons, isFetchLatestChangedResource, isFetchPermissions);
 
             SetTotalCountHeader(result.TotalCount);
 
@@ -74,7 +78,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPut("{projectId}")]
-        public void UpdateProject(long projectId, [FromBody] ProjectContract data)
+        public void UpdateProject(long projectId, [FromBody] ItemNameContract data)
         {
             m_projectManager.UpdateProject(projectId, data);
         }

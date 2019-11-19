@@ -2,11 +2,20 @@
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Areas.Admin.Models.ProjectItemViewModel>
 @inject ILocalizationService Localizer
 
+<style>
+    a.disabled {
+        cursor: not-allowed;
+    }
+</style>
+
 @foreach (var viewModel in Model.List)
 {
+    var permissions = viewModel.Permissions;
+
     <div class="project-item row" data-project-id="@viewModel.Id" data-project-name="@viewModel.Name">
         <div class="col-md-6">
-            <a href="@Url.Action("Project", "Project", new {id = viewModel.Id})">
+            @*TODO instead of class "disabled" use disabling whole element and also remove style in upper part of this file*@
+            <a href="@Url.Action("Project", "Project", new {id = viewModel.Id})" class="@(permissions.ReadProject ? string.Empty : "disabled")">
                 <div>
                     <strong>@viewModel.Name</strong>
                 </div>
@@ -16,21 +25,24 @@
             </a>
         </div>
         <div class="col-md-4">
-            @Localizer.Translate("LastEdited", "Admin"): @viewModel.LastEditDate @Localizer.Translate("ByUser", "Admin") @viewModel.LastEditUser<br />
+            @{
+                var lastEditDate = viewModel.LastEditDate?.ToString() ?? $"({Localizer.Translate("NotFilled")})";
+            }
+            @Localizer.Translate("LastEdited", "Admin"): @lastEditDate @Localizer.Translate("ByUser", "Admin") @viewModel.LastEditUser<br/>
             @Localizer.Translate("Created", "Admin"): @viewModel.CreateDate @Localizer.Translate("ByUser", "Admin") @viewModel.CreateUser
         </div>
         <div class="col-md-2 project-item-buttons">
-            <a href="#" class="delete-button">
+            <a href="#" class="delete-button @(permissions.AdminProject ? string.Empty : "disabled")">
                 <div>
                     <span class="glyphicon glyphicon-trash"></span>
                 </div>
                 <div>@Localizer.Translate("Delete", "Admin")</div>
             </a>
-            <a href="@Url.Action("Project", "Project", new {id = viewModel.Id})">
+            <a href="#" class="rename-project-button @(permissions.EditProject ? string.Empty : "disabled")">
                 <div>
                     <span class="glyphicon glyphicon-pencil"></span>
                 </div>
-                <div>@Localizer.Translate("Edit", "Admin")</div>
+                <div>@Localizer.Translate("Rename", "Admin")</div>
             </a>
         </div>
     </div>

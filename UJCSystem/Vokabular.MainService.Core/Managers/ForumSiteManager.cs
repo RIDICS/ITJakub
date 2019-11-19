@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using Microsoft.Extensions.Options;
 using Vokabular.DataEntities.Database.Repositories;
@@ -18,18 +17,16 @@ namespace Vokabular.MainService.Core.Managers
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
         private readonly ForumManager m_forumManager;
-        private readonly SubForumManager m_subForumManager;
         private readonly ForumSiteUrlHelper m_forumSiteUrlHelper;
         private readonly IMapper m_mapper;
         private readonly ForumOption m_forumOptions;
 
         public ForumSiteManager(ProjectRepository projectRepository, MetadataRepository metadataRepository, ForumManager forumManager,
-            SubForumManager subForumManager, ForumSiteUrlHelper forumSiteUrlHelper, IOptions<ForumOption> forumOptions, IMapper mapper)
+            ForumSiteUrlHelper forumSiteUrlHelper, IOptions<ForumOption> forumOptions, IMapper mapper)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_forumManager = forumManager;
-            m_subForumManager = subForumManager;
             m_forumSiteUrlHelper = forumSiteUrlHelper;
             m_mapper = mapper;
             m_forumOptions = forumOptions.Value;
@@ -121,6 +118,7 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
+        /* //Categories are not synchronized to the Forum anymore. This code can be removed after testing.
         public void CreateCategory(CategoryContract category, int categoryId)
         {
             if (m_forumOptions.IsEnabled == false)
@@ -161,5 +159,6 @@ namespace Vokabular.MainService.Core.Managers
 
             m_subForumManager.CreateVirtualForums(projectId, categoryIds, oldCategoryIds);
         }
+        */
     }
 }

@@ -1150,7 +1150,10 @@ class ProjectWorkCooperationTab extends ProjectModuleTabBase {
         this.projectId = projectId;
     }
 
-    initTab() {}
+    initTab() {
+        const cooperationManager = new CooperationManager(this.projectId);
+        cooperationManager.init();
+    }
 }
 
 class ProjectWorkHistoryTab extends ProjectModuleTabBase {

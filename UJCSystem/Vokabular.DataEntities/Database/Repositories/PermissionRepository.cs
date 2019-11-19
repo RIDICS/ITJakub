@@ -229,8 +229,8 @@ namespace Vokabular.DataEntities.Database.Repositories
             UserGroup groupAlias = null;
 
             var query = GetSession().QueryOver(() => groupAlias)
-                .JoinQueryOver(x => groupAlias.Permissions, () => permissionAlias)
-                .JoinQueryOver(x => permissionAlias.Project, () => projectAlias)
+                .JoinAlias(x => groupAlias.Permissions, () => permissionAlias)
+                .JoinAlias(x => permissionAlias.Project, () => projectAlias)
                 .Where(() => projectAlias.Id == bookId);
 
             if (!string.IsNullOrEmpty(filterByName))
@@ -238,7 +238,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 query.WhereRestrictionOn( () => groupAlias.Name).IsInsensitiveLike(filterByName, MatchMode.Anywhere);
             }
 
-            query.OrderBy(x => x.Name).Asc
+            query.OrderBy(x => x.GroupType).Asc
+                .OrderBy(x => x.Name).Asc
                 .Skip(start)
                 .Take(count);
 

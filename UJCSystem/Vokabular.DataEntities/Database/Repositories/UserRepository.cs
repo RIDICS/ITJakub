@@ -171,5 +171,13 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return result;
         }
+
+        public virtual FavoriteLabel GetDefaultFavoriteLabelForUser(int userId)
+        {
+            var result = GetSession().QueryOver<FavoriteLabel>()
+                .Where(x => x.User.Id == userId && x.IsDefault)
+                .SingleOrDefault();
+            return result;
+        }
     }
 }

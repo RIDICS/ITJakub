@@ -29,7 +29,7 @@
                                             <select class="item-select-box form-control">
                                             @foreach (var genre in Model.AllLiteraryGenreList)
                                             {
-                                                <option value="@genre.Id" @(genre.Id == genreSelected ? "selected" : null)>@genre.Name</option>
+                                                <option value="@genre.Id" selected="@(genre.Id == genreSelected)">@genre.Name</option>
                                             }
                                             </select>
                                         </div>
@@ -63,7 +63,7 @@
                                             <select class="item-select-box form-control">
                                             @foreach (var kind in Model.AllLiteraryKindList)
                                             {
-                                                <option value="@kind.Id" @(kind.Id == kindSelected ? "selected" : null)>@kind.Name</option>
+                                                <option value="@kind.Id" selected="@(kind.Id == kindSelected)">@kind.Name</option>
                                             }
                                             </select>
                                         </div>

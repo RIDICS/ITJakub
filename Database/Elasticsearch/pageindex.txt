@@ -4,9 +4,16 @@
       "analyzer": {
         "page_analyzer": {
           "type": "custom",
+          "char_filter": "comment_chars",
           "tokenizer": "whitespace",
           "filter": "lowercase"
-          
+        }
+      },
+      "char_filter": {
+        "comment_chars": { 
+          "type": "pattern_replace",
+          "pattern": "(\\$komentar-[0-9]+%)|(%komentar-[0-9]+\\$)",
+          "replacement": ""
         }
       }
     }

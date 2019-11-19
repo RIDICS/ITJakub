@@ -15,16 +15,11 @@
     <property name="ExtFirstName" not-null="false" />
 
     <property name="ExtLastName" not-null="false" />
-    
-    <!--<bag name="FavoriteItems" inverse="true">
-      <key column="[User]" />
-      <one-to-many class="FavoriteBase" />
-    </bag>-->
 
-    <!--<bag name="FavoriteLabels" inverse="true" cascade="save-update">
+    <bag name="FavoriteLabels" inverse="true" cascade="save-update">
       <key column="[User]" />
       <one-to-many class="FavoriteLabel" />
-    </bag>-->
+    </bag>
 
     <bag name="Groups" table="User_UserGroup" cascade="all" lazy="true">
       <key column="[User]" />

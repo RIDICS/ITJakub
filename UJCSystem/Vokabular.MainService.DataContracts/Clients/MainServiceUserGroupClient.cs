@@ -206,7 +206,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void UpdateOrAddBooksToGroup(int groupId, long bookId, PermissionDataContract data)
+        public void AddBookToGroup(int groupId, long bookId, PermissionDataContract data)
+        {
+            try
+            {
+                m_client.Post<object>($"usergroup/{groupId}/book/{bookId}/permission", data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void UpdateOrAddBookToGroup(int groupId, long bookId, PermissionDataContract data)
         {
             try
             {

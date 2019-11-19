@@ -155,9 +155,11 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             if (fetchBeginningPage)
             {
+                var resourceBeginningPageIds = result.Where(x => x.ResourceBeginningPage != null).Select(x => x.ResourceBeginningPage.Id);
+
                 GetSession().QueryOver<PageResource>()
                     .JoinAlias(x => x.Resource, () => resourceAlias)
-                    .WhereRestrictionOn(x => x.Resource.Id).IsInG(result.Select(x => x.ResourceBeginningPage.Id))
+                    .WhereRestrictionOn(x => x.Resource.Id).IsInG(resourceBeginningPageIds)
                     .And(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
                     .Fetch(SelectMode.Fetch, x => x.Resource)
                     .List();

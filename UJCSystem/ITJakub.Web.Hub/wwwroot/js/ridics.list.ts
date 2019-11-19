@@ -18,6 +18,7 @@
     private pageSize: number;
     private totalCount: number;
     private search: string;
+    private additionalUrlParameters: Array<IKeyValue<string, string>>;
     
 
     constructor(urlPath: string, selector: string, viewType: ViewType, saveStateToUrl: boolean = true, useLoadingContainer: boolean = false,
@@ -37,6 +38,7 @@
         });
         this.searchForm = $(`.${this.selector}-search-form`);
         this.search = null;
+        this.additionalUrlParameters = null;
     }
 
     public init() {
@@ -90,6 +92,10 @@
 
     public setNewUrlPath(urlPath: string) {
         this.urlPath = urlPath;
+    }
+
+    public setAdditionalUrlParameters(parameters: Array<IKeyValue<string, string>>) {
+        this.additionalUrlParameters = parameters;
     }
     
     public clear(emptyListMessage: string) {
@@ -198,8 +204,15 @@
                 if (search != null) {
                     query.search = search;
                 }
-            }).toString();
-            history.replaceState(null, null, newUri);
+            });
+
+            if (this.additionalUrlParameters != null) {
+                for (let param of this.additionalUrlParameters) {
+                    newUri.setQuery(param.key, param.value);
+                }
+            }
+            
+            history.replaceState(null, null, newUri.toString());
         }
     }
 
