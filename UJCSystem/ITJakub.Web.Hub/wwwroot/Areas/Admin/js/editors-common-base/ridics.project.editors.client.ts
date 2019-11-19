@@ -17,6 +17,10 @@
         return $.get(`${this.serverPath}Admin/ContentEditor/GetImageResourceByPageId?pageId=${pageId}`);
     }
 
+    getTermsByPageId(pageId: number): JQuery.jqXHR<string> {
+        return $.get(`${this.serverPath}Admin/ContentEditor/GetPageTermList?pageId=${pageId}`);
+    }
+    
     getPageDetail(pageId: number): JQuery.jqXHR<string> {
         return $.get(`${this.serverPath}Admin/ContentEditor/GetPageDetail?pageId=${pageId}`);
     }

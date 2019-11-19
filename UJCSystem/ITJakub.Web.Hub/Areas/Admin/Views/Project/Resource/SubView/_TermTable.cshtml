@@ -1,0 +1,29 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model IList<Vokabular.MainService.DataContracts.Contracts.TermContract>
+@inject ILocalizationService Localizer
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <tbody>
+            @if (Model.Count == 0)
+            {
+                <div id="noTermsAlert" class="alert alert-info">@Localizer.Translate("PageDoesNotContainTerms", "RidicsProject")</div>
+            }
+            else
+            {
+                for (var i = 0; i < Model.Count; i++)
+                {
+                    var term = Model[i];
+                    <tr class="term-row" data-page-id="@term.Id" data-name="@term.Name" data-position="@term.Position" data-category-id="@term.CategoryId" data-index="@i">
+                        <td>
+                            <span class="name">
+                                @term.Name
+                            </span>
+                            <div class="alert alert-danger"></div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

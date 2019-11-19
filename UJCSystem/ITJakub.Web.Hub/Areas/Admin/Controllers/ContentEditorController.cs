@@ -200,6 +200,14 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             
             return PartialView("../Project/Work/SubView/_PageListDetail", model);
         }
+        
+        [HttpGet]
+        public IActionResult GetPageTermList(long pageId)
+        {
+            var client = GetProjectClient();
+            var result = client.GetPageTermList(pageId);
+            return PartialView("../Project/Resource/SubView/_TermTable", result);
+        }
 
         [HttpPost]
         public IActionResult GetTextPages(long projectId, long? resourceGroupId)

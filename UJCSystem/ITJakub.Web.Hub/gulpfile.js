@@ -341,12 +341,13 @@ gulp.task("bundle:itjakub_professionalliterature_list", function () {
 gulp.task("bundle:ridics_admin_project-editor", function () {
     return gulp.src([
             paths.webroot + "Areas/Admin/js/ridics.admin-api-client.js",
+            paths.webroot + "Areas/Admin/js/ridics.cooperation.manager.js",
             paths.webroot + "Areas/Admin/js/ridics.project.client.js",
             paths.webroot + "Areas/Admin/js/ridics.project.module.js",
+            paths.webroot + "Areas/Admin/js/ridics.project.page.navigation.js",
             paths.webroot + "Areas/Admin/js/ridics.project.work.tabs.js",
             paths.webroot + "js/permissions/ridics.permission-api-client.js",
             paths.webroot + "js/permissions/ridics.project-permission.manager.js",
-            paths.webroot + "Areas/Admin/js/ridics.cooperation.manager.js",
             paths.webroot + "Areas/Admin/js/snapshot/ridics.snapshot.api-client.js",
             paths.webroot + "Areas/Admin/js/snapshot/ridics.snapshot.list.js"
         ])
@@ -356,6 +357,19 @@ gulp.task("bundle:ridics_admin_project-editor", function () {
         .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
 });
+
+gulp.task("bundle:ridics_admin_term-editor", function () {
+    return gulp.src([
+        paths.webroot + "Areas/Admin/js/term-editor/ridics.project.term-editor*.js",
+        "!" + paths.webroot + "Areas/Admin/js/term-editor/ridics.project.term-editor.bundle.js",
+    ])
+        .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(concat("ridics.project.term-editor.bundle.js"))
+        //.pipe(uglify())
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest(paths.webroot + "Areas/Admin/js/term-editor"));
+});
+
 
 gulp.task("bundle:ridics_admin_text-editor", function () {
     return gulp.src([
@@ -456,6 +470,7 @@ gulp.task("bundlejs_areas", gulp.parallel
     "bundle:ridics_admin_project-editor",
     "bundle:ridics_admin_editors-common-base",
     "bundle:ridics_admin_text-editor",
+    "bundle:ridics_admin_term-editor",
     "bundle:ridics_admin_page-image-viewer",
     "bundle:ridics_admin_page-list-editor",
     "bundle:ridics_admin_composition-key-table-editor",

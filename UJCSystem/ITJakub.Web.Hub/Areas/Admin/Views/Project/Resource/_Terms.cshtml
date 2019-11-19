@@ -1,0 +1,69 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model IList<Vokabular.MainService.DataContracts.Contracts.PageContract>
+@inject ILocalizationService Localization
+
+<div id="project-resource-terms">
+    @await Html.PartialAsync("Resource/SubView/_PageNavigation")
+
+    <div class="pages col-xs-12 col-sm-5 col-md-4 col-lg-3">
+        <div class="panel panel-default pages">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="panel-title">
+                            @Localization.Translate("Pages", "RidicsProject")
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="list-container selectable page-listing">
+                    @await Html.PartialAsync("Resource/SubView/_PageTable", Model, ViewData)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-terms col-xs-12 col-sm-3 col-md-4 col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="panel-title text-left">
+                                @Localization.Translate("Terms", "Admin")
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 panel-buttons text-right">
+                            <button type="button" class="btn btn-default add-page-button">@Localization.Translate("AddPage", "Admin")</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body page-terms">
+                <div class="alert-holder"></div>
+                <div class="body-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-text col-xs-12 col-sm-4 col-md-4 col-lg-5">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="panel-title text-left">
+                                @Localization.Translate("PageContent", "RidicsProject")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body page-text">
+                <div class="alert-holder"></div>
+                <div class="body-content"></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -198,6 +198,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return PartialView("Resource/_Preview");
         }
 
+        public IActionResult GetTermsEditor(long projectId)
+        {
+            var client = GetProjectClient();
+            var pages = client.GetAllPageList(projectId);
+            return PartialView("Resource/_Terms", pages);
+        }
+
         public IActionResult PageList(long projectId)
         {
             var client = GetProjectClient();
