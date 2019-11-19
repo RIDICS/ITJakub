@@ -42,15 +42,15 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
         
-        public List<DetailPageContract> GetDetailPageList(long projectId)
+        public List<PageWithImageInfoContract> GetPageWithImageInfoList(long projectId)
         {
             var dbPages = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestPages(projectId));
             var dbImages = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectLatestImages(projectId, null, false));
 
-            var result = new List<DetailPageContract>();
+            var result = new List<PageWithImageInfoContract>();
             foreach (var dbPage in dbPages)
             {
-                var page = m_mapper.Map<DetailPageContract>(dbPage);
+                var page = m_mapper.Map<PageWithImageInfoContract>(dbPage);
                 page.HasImage = dbImages.Any(x => x.ResourcePage.Id == dbPage.Resource.Id);
                 result.Add(page);
             }

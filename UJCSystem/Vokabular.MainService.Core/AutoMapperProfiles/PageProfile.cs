@@ -18,7 +18,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
             CreateMap<PageResource, PageWithContextContract>()
                 .IncludeBase<PageResource, PageContract>();
             
-            CreateMap<PageResource, DetailPageContract>()
+            CreateMap<PageResource, PageWithImageInfoContract>()
                 .IncludeBase<PageResource, PageContract>()
                 .ForMember(dest => dest.HasImage, opt => opt.Ignore());
         }

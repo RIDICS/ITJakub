@@ -23,10 +23,10 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
         
-        [HttpGet("{projectId}/page/detail")]
-        public List<DetailPageContract> GetDetailPageList(long projectId)
+        [HttpGet("{projectId}/page/image-info")]
+        public List<PageWithImageInfoContract> GetPageWithImageInfoList(long projectId)
         {
-            var result = m_projectItemManager.GetDetailPageList(projectId);
+            var result = m_projectItemManager.GetPageWithImageInfoList(projectId);
             return result;
         }
 

@@ -8,7 +8,7 @@
         public int Position { get; set; }
     }
     
-    public class DetailPageContract : PageContract
+    public class PageWithImageInfoContract : PageContract
     {
         public bool HasImage { get; set; }
     }
