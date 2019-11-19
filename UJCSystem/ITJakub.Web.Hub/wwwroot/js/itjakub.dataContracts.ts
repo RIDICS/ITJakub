@@ -622,3 +622,8 @@ interface IForumViewModel {
     name: string;
     url: string;
 }
+
+enum PortalType {
+    ResearchPortal,
+    CommunityPortal
+}

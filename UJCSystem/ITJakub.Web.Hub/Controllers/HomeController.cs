@@ -4,7 +4,9 @@ using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -99,8 +101,14 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetTypeaheadTitle(string query)
         {
+            BookTypeEnumContract? bookType = null;
+            if (GetDefaultProjectType() == ProjectTypeContract.Community)
+            {
+                bookType = BookTypeEnumContract.Edition;
+            }
+            
             var client = GetMetadataClient();
-            var result = client.GetTitleAutocomplete(query, projectType: GetDefaultProjectType());
+            var result = client.GetTitleAutocomplete(query, projectType: GetDefaultProjectType(), bookType: bookType);
             return Json(result);
         }
 
