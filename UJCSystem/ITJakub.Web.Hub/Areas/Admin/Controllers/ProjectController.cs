@@ -190,7 +190,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             var client = GetProjectClient();
             var pages = client.GetAllPagesWithImageInfoList(projectId);
-            return PartialView("Work/SubView/_PageWithImagesTable", pages);
+            return PartialView("Resource/SubView/_PageWithImagesTable", pages);
         }
 
         public IActionResult GetTextPreview()

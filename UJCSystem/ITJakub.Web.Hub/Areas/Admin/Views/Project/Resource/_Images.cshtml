@@ -4,27 +4,7 @@
 @inject ILocalizationService Localization
 
 <div id="project-resource-images">
-    <div class="row page-menu-row">
-        <div class="col-xs-12 col-sm-5 col-md-4 col-lg-3">
-            <div class="input-group go-to-page-field-group">
-                <input type="text" class="form-control go-to-page-field" placeholder="@Localization.Translate("GoToPage", "RidicsProject")" aria-label="@Localization.Translate("GoToPage", "RidicsProject")">
-                <span class="input-group-btn">
-                    <button class="btn btn-default go-to-page-button" type="button">
-                        <span class="glyphicon glyphicon-arrow-right"></span>
-                    </button>
-                </span>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-7 col-md-8 col-lg-9 page-navigator text-center">
-            <span class="previous-page page-navigation-arrow text-center">
-                <i class="fa fa-chevron-left" aria-hidden="true"></i>
-            </span>
-            <span class="page-indicator text-center"></span>
-            <span class="next-page page-navigation-arrow text-center">
-                <i class="fa fa-chevron-right" aria-hidden="true"></i>
-            </span>
-        </div>
-    </div>
+    @await Html.PartialAsync("Resource/SubView/_PageNavigation")
     
     <div class="pages col-xs-12 col-sm-5 col-md-4 col-lg-3">
         <div class="panel panel-default pages">
@@ -42,7 +22,7 @@
             </div>
             <div class="panel-body">
                 <div class="list-container selectable page-listing">
-                    @await Html.PartialAsync("Work/SubView/_PageWithImagesTable", Model, ViewData)
+                    @await Html.PartialAsync("Resource/SubView/_PageWithImagesTable", Model, ViewData)
                 </div>
             </div>
         </div>
