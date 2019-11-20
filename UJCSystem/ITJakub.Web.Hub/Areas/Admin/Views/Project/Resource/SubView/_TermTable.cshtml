@@ -14,7 +14,7 @@
                 for (var i = 0; i < Model.Count; i++)
                 {
                     var term = Model[i];
-                    <tr class="term-row" data-page-id="@term.Id" data-name="@term.Name" data-position="@term.Position" data-category-id="@term.CategoryId" data-index="@i">
+                    <tr class="term-row" data-term-id="@term.Id" data-term-category-id="@term.CategoryId" data-term-name="@term.Name" data-term-position="@term.Position">
                         <td>
                             <span class="name">
                                 @term.Name

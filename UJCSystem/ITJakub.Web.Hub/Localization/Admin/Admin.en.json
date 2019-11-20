@@ -258,6 +258,9 @@
     "WorksLoadFailed": "An unexpected error occurred while loading works.",
     "SelectAuthor": "Please select one author from list.",
     "SelectResponsiblePerson": "Please select one responsible person from list.",
-    "SelectResponsibleType": "Please select responsible type."
+    "SelectResponsibleType": "Please select responsible type.",
+
+    "AddTerms": "Add terms",
+    "AllCategories": "All categories"
   }
 }

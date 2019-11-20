@@ -258,6 +258,9 @@
     "WorksLoadFailed": "Při načítání prací nastala neočekávaná chyba.",
     "SelectAuthor": "Prosím vyberte autora ze seznamu.",
     "SelectResponsiblePerson": "Prosím vyberte odpovědnou osobu ze seznamu.",
-    "SelectResponsibleType": "Prosím vyberte typ odpovědnosti."
+    "SelectResponsibleType": "Prosím vyberte typ odpovědnosti.",
+
+    "AddTerms": "Přidat termíny",
+    "AllCategories": "Všechny kategorie"
   }
 }

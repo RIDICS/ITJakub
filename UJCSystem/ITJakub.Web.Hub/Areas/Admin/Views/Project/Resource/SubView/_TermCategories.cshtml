@@ -1,0 +1,50 @@
+﻿@using ITJakub.Web.Hub.Models
+@using Scalesoft.Localization.AspNetCore
+@model IList<Vokabular.MainService.DataContracts.Contracts.TermCategoryDetailContract>
+@inject ILocalizationService Localizer
+
+@for (var i = 0; i < Model.Count; i++)
+{
+    var termCategory = Model[i];
+    @if (i % 2 == 0)
+    {
+        @Html.Raw("<div class=\"row\">")
+    }
+    <div data-category-id="@termCategory.Id" class="col-xs-12 col-md-6 panel panel-default collapsible-panel">
+        <div class="panel-heading">
+            <div class="collapse-icon">
+                <a data-toggle="collapse" href="#category-@termCategory.Id" aria-expanded="true">
+                    <span class="fa fa-chevron-up"></span>
+                    <span class="fa fa-chevron-down"></span>
+                </a>
+            </div>
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#category-@termCategory.Id" aria-expanded="true">@termCategory.Name</a>
+            </h4>
+        </div>
+
+        <div id="category-@termCategory.Id" class="panel-collapse collapse in">
+            @foreach (var term in termCategory.Terms)
+            {
+                <div class="term-row" data-term-id="@term.Id" data-term-category-id="@term.CategoryId" data-term-name="@term.Name" data-term-position="@term.Position">
+                    @await Html.PartialAsync("_RidicsCheckbox", new RidicsCheckboxViewModel
+                    {
+                        IsChecked = false,
+                        Label = term.Name,
+                        Name = "term-" + term.Id,
+                    })
+                </div>
+            }
+        </div>
+    </div>
+
+    @if (i % 2 == 1)
+    {
+        @Html.Raw("</div>")
+    }
+}
+
+@if (Model.Count % 2 == 1)
+{
+    @Html.Raw("</div>")
+}

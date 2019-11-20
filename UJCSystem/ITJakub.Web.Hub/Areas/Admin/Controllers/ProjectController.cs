@@ -202,7 +202,15 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             var client = GetProjectClient();
             var pages = client.GetAllPageList(projectId);
-            return PartialView("Resource/_Terms", pages);
+            
+            var termClient = GetTermClient();
+            var termCategories = termClient.GetTermCategoriesWithTerms();
+            
+            return PartialView("Resource/_Terms",  new TermEditorViewModel
+            {
+                TermCategories = termCategories,
+                Pages = pages,
+            });
         }
 
         public IActionResult PageList(long projectId)

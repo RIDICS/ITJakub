@@ -1673,45 +1673,7 @@ table {
 
 .project-snapshot-new {
     margin: 1em;
-
-    .panel {
-        border: none;
-        box-shadow: none;
-
-        .panel-heading {
-            border-radius: 0;
-            border: none;
-            background-color: @menu-background-color;
-            color: white;
-            font-weight: bold;
-
-            .collapse-icon {
-                float: right;
-            }
-
-            a {
-                color: white;
-
-                &:focus {
-                    text-decoration: none;
-                }
-
-                &[aria-expanded=true] .fa-chevron-down {
-                    display: none;
-                }
-
-                &[aria-expanded=false] .fa-chevron-up {
-                    display: none;
-                }
-            }
-        }
-
-        .panel-collapse {
-            border: @box-border;
-        }
-    }
-
-
+    
     .publish-resource-panel {
         border: none;
 
@@ -1805,6 +1767,79 @@ table {
             position: absolute;
             top: 45%;
             text-align: center;
+        }
+    }
+}
+
+.collapsible-panel {
+    border: none;
+    box-shadow: none;
+
+    .panel-heading {
+        border-radius: 0;
+        border: none;
+        background-color: @menu-background-color;
+        color: white;
+        font-weight: bold;
+
+        .collapse-icon {
+            float: right;
+        }
+
+        a {
+            color: white;
+
+            &:focus {
+                text-decoration: none;
+            }
+
+            &[aria-expanded=true] .fa-chevron-down {
+                display: none;
+            }
+
+            &[aria-expanded=false] .fa-chevron-up {
+                display: none;
+            }
+        }
+    }
+
+    .panel-collapse {
+        border: @box-border;
+    }
+}
+
+#addTermsDialog {    
+    #termsList {
+        height: 60vh;
+        overflow-y: scroll;
+        
+        .panel-collapse {
+            .ridics-checkbox {
+                margin-left: 0.3em;
+                
+                &:first-of-type {
+                    margin-top: 0.3em;
+                }
+            }
+        }
+    }
+
+    .term-options {
+        padding-right: 32px;
+        margin-bottom: 2em;
+    }
+    
+    .reset-search-button {
+        font-size: 1em;
+        position: absolute;
+        right: 1.8em;
+        top: 50%;
+        transform: translatey(-50%);
+        cursor: pointer;
+        color: #cdcdcd;
+
+        &:hover {
+            color: black;
         }
     }
 }

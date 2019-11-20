@@ -1,12 +1,14 @@
 ﻿class TermEditorMain {
     private readonly client: EditorsApiClient;
     private readonly errorHandler: ErrorHandler;
+    private readonly termEditor: TermEditor;
     private navigation: PageNavigation;
     private projectId: number;
 
     constructor() {
         this.client = new EditorsApiClient();
         this.errorHandler = new ErrorHandler();
+        this.termEditor = new TermEditor();
     }
 
     init(projectId: number) {
@@ -19,6 +21,7 @@
         });
 
         this.navigation.init();
+        this.termEditor.init([]);
     }
 
     private loadTerms(pageId: number) {
