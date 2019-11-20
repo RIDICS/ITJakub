@@ -107,6 +107,13 @@ class BootstrapDialogWrapper {
             $("textarea", this.$element).val("");
             $("select", this.$element).val("");
 
+            $("select", this.$element).each((index, element: HTMLSelectElement) => {
+                const option = $("option[selected]", element);
+                if (option.length === 0) return;
+
+                $(element).val(option.attr("value"));
+            });
+
             if (this.options.elementsToClearSelector) {
                 $(this.options.elementsToClearSelector).empty();
             }
