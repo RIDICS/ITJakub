@@ -6,7 +6,7 @@
     protected deleteEntryButtonEl = $(".delete-key-table-entry-description");
     protected titleEl = $(".table-of-keys-title");
     protected listElement = $(".selectable-list-div");
-    protected loaderElement = lv.create(null, "lv-circles sm lv-mid lvt-3");
+    protected loaderElement = lv.create(null, "lv-circles sm lv-mid lvt-1");
 
     protected showLoading() {
         this.listElement.empty();

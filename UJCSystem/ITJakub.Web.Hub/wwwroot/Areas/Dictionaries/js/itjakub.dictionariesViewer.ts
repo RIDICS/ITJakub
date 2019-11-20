@@ -292,23 +292,23 @@
     private updateImageVisibility(checkBox: HTMLInputElement) {
         var mainDiv = $(checkBox).closest("[data-entry-index]");
         var imageContainer = $(".dictionary-entry-image", mainDiv);
-        var loader = lv.create(null, "lv-circles lv-mid tiny");
         if (checkBox.checked) {
             if (imageContainer.hasClass("hidden")) {
                 imageContainer.removeClass("hidden");
                 return;
             }
+            var imageLoader = lv.create(null, "lv-circles tiny lv-mid lvt-1");
+            $(imageContainer).append(imageLoader.getElement());
 
             var index = $(mainDiv).data("entry-index");
             var entryInfo = this.dictionariesInfo[index];
             var imageLink = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordImage?pageId=" + entryInfo.pageId;
             var imageElement = document.createElement("img");
             imageElement.setAttribute("src", imageLink);
-            imageContainer.append(imageElement);
 
-            $(imageContainer).append(loader.getElement());
             imageElement.onload = () => {
-                $(imageContainer).empty();
+                imageContainer.append(imageElement);
+                imageLoader.remove();
             };
             imageElement.onerror = () => {
                 $(imageContainer).empty();
