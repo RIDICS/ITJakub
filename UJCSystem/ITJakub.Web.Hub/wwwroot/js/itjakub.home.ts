@@ -1,7 +1,25 @@
 ﻿$(document.documentElement).ready(() => {
-    var searchBox = new SearchBox("#searchbox", "Home");
+    const searchBoxSelector = "#searchbox";
+    const searchBox = new SearchBox(searchBoxSelector, "Home");
     searchBox.addDataSet("Title", localization.translate("Titles", "ItJakubJs").value);
-    searchBox.addDataSet("Author", localization.translate("Authors", "ItJakubJs").value);
-    searchBox.addDataSet("DictionaryHeadword", localization.translate("DictionaryHeadword", "ItJakubJs").value);
     searchBox.create();
+
+    var submitSearchFunction = () => {
+        const searchedValue = $(searchBoxSelector).val() as string;
+        if (searchedValue !== "") {
+            const url = $("#searchUrl").data("search-url");
+            const escapedValue = encodeURIComponent(searchedValue);
+            window.location.replace(url + "?search=" + escapedValue);
+        }
+    }
+
+    $(".searchbar .search").on("click", () => {
+        submitSearchFunction();
+    });
+
+    $(searchBoxSelector).on("keypress", e => {
+        if (e.which === 13) { // enter
+            submitSearchFunction();
+        }
+    });
 });
