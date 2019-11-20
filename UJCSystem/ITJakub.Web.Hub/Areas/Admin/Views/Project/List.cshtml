@@ -1,6 +1,7 @@
 ﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectListViewModel
 @using ITJakub.Web.Hub.Core
 @using Scalesoft.Localization.AspNetCore
+@using Vokabular.MainService.DataContracts.Contracts.Type
 @using Vokabular.Shared.DataContracts.Types
 @inject ILocalizationService Localizer
 
@@ -72,6 +73,15 @@
                         <label for="new-project-name" class="col-md-3 col-lg-4 control-label">@Localizer.Translate("NewProjectName", "Admin")</label>
                         <div class="col-md-8 col-lg-7">
                             <input class="form-control" id="new-project-name" type="text" maxlength="@Projects.MaxNameLength">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-project-text-type" class="col-md-3 col-lg-4 control-label">@Localizer.Translate("TextType", "Admin")</label>
+                        <div class="col-md-8 col-lg-7">
+                            <select class="form-control" id="new-project-text-type">
+                                <option value="@TextTypeEnumContract.Transliterated">@Localizer.Translate("Transliterated", "Admin")</option>
+                                <option value="@TextTypeEnumContract.Transcribed" selected="selected">@Localizer.Translate("Transcribed", "Admin")</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">

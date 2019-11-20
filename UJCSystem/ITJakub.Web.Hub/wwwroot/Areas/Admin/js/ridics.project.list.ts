@@ -93,6 +93,8 @@ class ProjectList {
             this.newProjectDialog.showError(localization.translate("EmptyProjectNameError", "Admin").value);
             return;
         }
+
+        const textType = $("#new-project-text-type").val() as string;
         
         const selectedBookTypes = [];
         $(`input[name="bookType"]`).each((i, elem) => {
@@ -108,7 +110,7 @@ class ProjectList {
             return;
         }
                 
-        this.projectClient.createProject(projectName, selectedBookTypes, (newId, error) => {
+        this.projectClient.createProject(projectName, textType, selectedBookTypes, (newId, error) => {
             if (error != null) {
                 this.newProjectDialog.showError();
                 return;

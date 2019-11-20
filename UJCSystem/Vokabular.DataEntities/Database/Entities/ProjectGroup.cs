@@ -12,7 +12,7 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual IList<Project> Projects { get; set; }
 
 
-        public bool Equals(ProjectGroup other)
+        public virtual bool Equals(ProjectGroup other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

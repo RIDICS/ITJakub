@@ -24,8 +24,8 @@
         this.ajax("POST", urlPath, JSON.stringify(data), response => callback(response, null), status => callback(null, status));
     }
 
-    public createProject(name: string, selectedBookTypes: BookTypeEnum[], callback: (id: number, error: HttpStatusCode) => void) {
-        this.postAjax("Admin/Project/CreateProject", {name: name, selectedBookTypes: selectedBookTypes}, callback);
+    public createProject(name: string, textType: number|string, selectedBookTypes: BookTypeEnum[], callback: (id: number, error: HttpStatusCode) => void) {
+        this.postAjax("Admin/Project/CreateProject", {name: name, textType: textType, selectedBookTypes: selectedBookTypes}, callback);
     }
 
     public deleteProject(id: number, callback: (error: HttpStatusCode) => void) {

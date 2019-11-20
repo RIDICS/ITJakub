@@ -160,6 +160,8 @@
     "Transcription": "translate[Transkripce]",
     "Transliteration": "translate[Transliterace]",
     "Generate": "translate[Generovat]",
+    "Transcribed": "Transcribed",
+    "Transliterated": "Transliterated",
 
     "PublishedSnapshots": "Published publications",
     "Date": "translate[Datum]",
@@ -228,6 +230,7 @@
     "AdvancedSearch": "translate[Pokročilé vyhledávání]",
     "NewProject": "translate[Nové dílo]",
     "NewProjectName": "translate[Pracovní název díla]",
+    "TextType": "translate[Typ textu]",
     "Rename": "Rename",
     "RenameProject": "translate[Přejmenovat pracovní název díla]",
     "DeleteProject": "translate[Smazat dílo]",

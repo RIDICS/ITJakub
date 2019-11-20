@@ -260,13 +260,18 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult CreateProject([FromBody] CreateProjectRequest request)
         {
+            if (request.TextType == null)
+            {
+                return BadRequest();
+            }
+
             var client = GetProjectClient();
 
             var newProject = new CreateProjectContract
             {
                 Name = request.Name,
                 ProjectType = GetDefaultProjectType(),
-                TextType = TextTypeEnumContract.Transcribed,
+                TextType = request.TextType.Value,
                 BookTypesForForum = request.SelectedBookTypes,
             };
             var newProjectId = client.CreateProject(newProject);
