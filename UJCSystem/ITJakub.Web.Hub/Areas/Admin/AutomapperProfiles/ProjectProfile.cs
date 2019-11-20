@@ -19,6 +19,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles
                 .ForMember(dest => dest.LiteraryOriginalString, opt => opt.MapFrom(src => GetManuscriptText(src.LatestMetadata)))
                 .ForMember(dest => dest.PageCount, opt => opt.MapFrom(src => src.PageCount))
                 .ForMember(dest => dest.PublisherString, opt => opt.MapFrom(src => GetPublisherText(src.LatestMetadata)))
+                .ForMember(dest => dest.TextType, opt => opt.MapFrom(src => src.TextType))
                 .ForMember(dest => dest.Permissions, opt => opt.MapFrom(src => src.CurrentUserPermissions));
 
             CreateMap<ProjectMetadataContract, ProjectWorkMetadataViewModel>()
