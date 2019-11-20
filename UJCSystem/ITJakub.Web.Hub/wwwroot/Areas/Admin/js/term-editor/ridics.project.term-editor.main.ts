@@ -4,11 +4,14 @@
     private readonly termEditor: TermEditor;
     private navigation: PageNavigation;
     private projectId: number;
+    private pageId: number;
 
     constructor() {
         this.client = new EditorsApiClient();
         this.errorHandler = new ErrorHandler();
-        this.termEditor = new TermEditor();
+        this.termEditor = new TermEditor(() => {
+            this.loadTerms(this.pageId);
+        });
     }
 
     init(projectId: number) {
@@ -16,12 +19,14 @@
         const gui = new EditorsGui();
         
         this.navigation = new PageNavigation(gui, (pageId: number) => {
+            this.pageId = pageId;
             this.loadTerms(pageId);
             this.loadPage(pageId);
+            this.termEditor.setPageId(pageId);
         });
 
         this.navigation.init();
-        this.termEditor.init([]);
+        this.termEditor.init();
     }
 
     private loadTerms(pageId: number) {

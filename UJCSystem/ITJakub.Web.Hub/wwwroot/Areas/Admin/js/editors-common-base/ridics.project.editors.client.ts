@@ -20,6 +20,14 @@
     getTermsByPageId(pageId: number): JQuery.jqXHR<string> {
         return $.get(`${this.serverPath}Admin/ContentEditor/GetPageTermList?pageId=${pageId}`);
     }
+
+    setTerms(pageId: number, termIds: number[]): JQuery.jqXHR<string> {
+        return $.post(`${this.serverPath}Admin/ContentEditor/SetTerms`,
+            {
+                pageId: pageId,
+                termIds: termIds
+            } as JQuery.PlainObject);
+    }
     
     getPageDetail(pageId: number): JQuery.jqXHR<string> {
         return $.get(`${this.serverPath}Admin/ContentEditor/GetPageDetail?pageId=${pageId}`);

@@ -895,6 +895,21 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+        
+        public void SetTerms(long pageId, IntegerIdListContract termIdList)
+        {
+            try
+            { 
+                m_client.Put<object>($"project/page/{pageId}/term", termIdList);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
 
         #region Chapters
 

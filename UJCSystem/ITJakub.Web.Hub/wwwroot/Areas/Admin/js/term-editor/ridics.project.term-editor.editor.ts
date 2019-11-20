@@ -1,13 +1,16 @@
 ﻿class TermEditor {
     private readonly client: EditorsApiClient;
     private readonly errorHandler: ErrorHandler;
+    private pageId: number;
     private selectedTerms: Array<ITermContract>;
     private addTermsDialog: JQuery;
     private termListContainer: JQuery;
+    private saveTermsCallback: () => void;
 
-    constructor() {
+    constructor(saveTermsCallback: () => void = null) {
         this.client = new EditorsApiClient();
         this.errorHandler = new ErrorHandler();
+        this.saveTermsCallback = saveTermsCallback;
     }
 
     init() {
@@ -27,6 +30,21 @@
             }
             
             this.addTermsDialog.modal();
+        });
+        
+        $(".save-terms").on("click", () => {
+            const alertHolder = this.addTermsDialog.find(".alert-holder");
+            alertHolder.empty();
+            this.client.setTerms(this.pageId, this.selectedTerms.map(t => t.id)).done(() => {
+                this.addTermsDialog.modal("hide");
+                if (this.saveTermsCallback !== null) {
+                    this.saveTermsCallback.call(this.saveTermsCallback);
+                }
+            }).fail((error) => {
+                const alert = new AlertComponentBuilder(AlertType.Error)
+                    .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+                alertHolder.empty().append(alert);
+            }); 
         });
         
         const termCategoryFilter = $("#termCategoryFilter");
@@ -73,6 +91,10 @@
 
             this.renderSelectedTerms();
         });
+    }
+    
+    setPageId(pageId: number) {
+        this.pageId = pageId;    
     }
     
     private searchTerm(searchedValue: string) {
