@@ -4,11 +4,21 @@
     searchBox.addDataSet("Title", localization.translate("Titles", "ItJakubJs").value);
     searchBox.create();
 
-    $(".searchbar .search").on("click", () => {
+    var submitSearchFunction = () => {
         const searchedValue = $(searchBoxSelector).val();
         if (searchedValue !== "") {
             const url = $("#searchUrl").data("search-url");
             window.location.replace(url + "?search=" + searchedValue);
+        }
+    }
+
+    $(".searchbar .search").on("click", () => {
+        submitSearchFunction();
+    });
+
+    $(searchBoxSelector).on("keypress", e => {
+        if (e.which === 13) { // enter
+            submitSearchFunction();
         }
     });
 });
