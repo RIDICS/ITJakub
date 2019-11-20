@@ -39,6 +39,7 @@ namespace Vokabular.MainService.Core.Works
             {
                 Name = m_newData.Name,
                 ProjectType = projectType,
+                TextType = TextTypeEnum.Transcribed, // TODO get from parameter
                 CreateTime = now,
                 CreatedByUser = currentUser
             };
