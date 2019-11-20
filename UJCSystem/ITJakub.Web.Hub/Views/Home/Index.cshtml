@@ -1,11 +1,14 @@
 ﻿@using ITJakub.Web.Hub.Constants
 @using ITJakub.Web.Hub.Controllers
+@using ITJakub.Web.Hub.Options
+@using Microsoft.Extensions.Options
 @using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
 @using Vokabular.Shared.AspNetCore.Extensions
 
 @inject ILocalizationService Localizer
 @inject IRazorLocalizationService RazorLocalizer
+@inject IOptions<PortalOption> PortalConfig
 
 @{
     ViewBag.Title = Localizer.Translate("IndexTitle", "Home", LocTranslationSource.File);
@@ -27,7 +30,7 @@
 </script>
 
 <div class="top-offset-main-site">
-  
+
     @if (emailConfirmed.HasValue && !emailConfirmed.Value)
     {
         <div class="alert alert-warning">
@@ -39,11 +42,15 @@
                     Localizer.Translate("EmailIsNotConfirmedAlert2", "Home").ToString(),
                     "UserProfile",
                     "Account",
-                    new {actualTab = AccountTab.UpdateContact})
+                    new { actualTab = AccountTab.UpdateContact })
                 )
             @Localizer.Translate("EmailIsNotConfirmedAlertDescription")
         </div>
     }
+
+    <div id="searchUrl" class="hide" data-search-url="@(PortalConfig.Value.PortalType == PortalType.CommunityPortal
+                                                          ? Url.Action("List", "Editions", new {area = "Editions"})
+                                                          : Url.Action("Search", "Bibliographies", new {area = "Bibliographies"}) )"></div>
 
     <form id="homeSearch" role="form" class="form-horizontal">
         <div class="form-group searchbar">
