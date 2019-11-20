@@ -38,6 +38,7 @@ namespace Vokabular.MainService.Core
             services.AddScoped<PermissionManager>();
             services.AddScoped<PersonManager>();
             services.AddScoped<ProjectContentManager>();
+            services.AddScoped<ProjectGroupManager>();
             services.AddScoped<ProjectInfoManager>();
             services.AddScoped<ProjectItemManager>();
             services.AddScoped<ProjectManager>();
@@ -91,6 +92,7 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, OriginalAuthorProfile>();
             services.AddSingleton<Profile, PageProfile>();
             services.AddSingleton<Profile, ProjectProfile>();
+            services.AddSingleton<Profile, ProjectGroupProfile>();
             services.AddSingleton<Profile, ProjectPermissionProfile>();
             services.AddSingleton<Profile, ResourceProfile>();
             services.AddSingleton<Profile, ResourceVersionProfile>();

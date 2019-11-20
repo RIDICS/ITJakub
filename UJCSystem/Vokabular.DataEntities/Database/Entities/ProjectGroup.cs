@@ -5,7 +5,7 @@ namespace Vokabular.DataEntities.Database.Entities
 {
     public class ProjectGroup : IEquatable<ProjectGroup>
     {
-        public virtual long Id { get; set; }
+        public virtual int Id { get; set; }
 
         public virtual DateTime CreateTime { get; set; }
 
