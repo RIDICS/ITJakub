@@ -266,6 +266,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 Name = request.Name,
                 ProjectType = GetDefaultProjectType(),
+                TextType = TextTypeEnumContract.Transcribed,
                 BookTypesForForum = request.SelectedBookTypes,
             };
             var newProjectId = client.CreateProject(newProject);

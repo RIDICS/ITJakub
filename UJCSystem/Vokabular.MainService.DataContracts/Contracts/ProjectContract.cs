@@ -11,6 +11,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public long Id { get; set; }
         public string Name { get; set; }
         public ProjectTypeContract ProjectType { get; set; }
+        public TextTypeEnumContract TextType { get; set; }
         //public string ExternalId { get; set; }
     }
 
