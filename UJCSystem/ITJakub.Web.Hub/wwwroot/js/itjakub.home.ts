@@ -5,10 +5,11 @@
     searchBox.create();
 
     var submitSearchFunction = () => {
-        const searchedValue = $(searchBoxSelector).val();
+        const searchedValue = $(searchBoxSelector).val() as string;
         if (searchedValue !== "") {
             const url = $("#searchUrl").data("search-url");
-            window.location.replace(url + "?search=" + searchedValue);
+            const escapedValue = encodeURIComponent(searchedValue);
+            window.location.replace(url + "?search=" + escapedValue);
         }
     }
 
