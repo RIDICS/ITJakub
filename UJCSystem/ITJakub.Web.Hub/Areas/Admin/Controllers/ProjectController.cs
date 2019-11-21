@@ -497,19 +497,45 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult AssignProjectToGroup(long projectId, long targetProjectId)
+        public IActionResult AssignProjectToGroup([FromQuery] long? projectId, [FromQuery] long? targetProjectId)
         {
+            if (projectId == null || targetProjectId == null)
+            {
+                return BadRequest();
+            }
+
             var client = GetProjectClient();
-            client.AddProjectToGroup(targetProjectId, projectId);
+            client.AddProjectToGroup(targetProjectId.Value, projectId.Value);
             return AjaxOkResponse();
         }
 
         [HttpPost]
-        public IActionResult RemoveProjectFromGroup(long projectId)
+        public IActionResult RemoveProjectFromGroup([FromQuery] long? projectId)
+        {
+            if (projectId == null)
+            {
+                return BadRequest();
+            }
+
+            var client = GetProjectClient();
+            client.RemoveProjectFromGroup(projectId.Value);
+            return AjaxOkResponse();
+        }
+
+        public IActionResult ProjectsForGroupList(string search, int start, int count = PageSizes.ProjectListInDialog)
         {
             var client = GetProjectClient();
-            client.RemoveProjectFromGroup(projectId);
-            return AjaxOkResponse();
+            var result = client.GetProjectList(start, count, GetDefaultProjectType(), ProjectOwnerTypeContract.MyProjects, search);
+            var listViewModel = new ListViewModel<ProjectDetailContract>
+            {
+                TotalCount = result.TotalCount,
+                List = result.List,
+                PageSize = count,
+                Start = start,
+                SearchQuery = search,
+            };
+
+            return PartialView("Work/SubView/_ProjectsForGroupWidget", listViewModel);
         }
 
         #region Typeahead

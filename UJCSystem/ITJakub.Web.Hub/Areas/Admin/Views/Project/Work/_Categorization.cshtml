@@ -211,14 +211,43 @@
                 <h4 class="modal-title">@Localizer.Translate("AddProjectToGroup", "Admin")</h4>
             </div>
             <div class="modal-body">
-                <div class="row">
+                <div class="row" style="margin-bottom: 1rem;">
                     <div class="col-md-12">
                         @Localizer.Translate("SelectProjectForCreatingGroup", "Admin")
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        TODO list here
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="panel-title col col-xs-12 col-sm-2">
+                                        @Localizer.Translate("MyProjects", "Admin")
+                                    </div>
+                                    <div class="col col-xs-12 col col-sm-10">
+                                        <form asp-action="ProjectsForGroupList" asp-controller="Project" method="get" class="project-search-form search-form form-inline">
+                                            <div class="form-group">
+                                                <div class="search-input">
+                                                    <input class="form-control search-value" name="search" placeholder=" " value="" />
+                                                    <i class="fa fa-close reset-search-button"></i>
+                                                </div>
+                                                <div class="search-button">
+                                                    <button class="btn btn-default" type="submit">
+                                                        <i class="fa fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div id="projectForGroupListContainer" class="list-container selectable">
+                                    @*Load content here by AJAX*@
+                                </div>
+                                <div id="projectForGroupPagination" class="text-center"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -118,13 +118,11 @@
     }
 
     assignProjectToGroup(projectId: number, targetProjectId: number): JQuery.jqXHR {
-        return this.post(`${getBaseUrl()}Admin/Project/AssignProjectToGroup`,
-            JSON.stringify({ projectId: projectId, targetProjectId: targetProjectId }));
+        return this.post(`${getBaseUrl()}Admin/Project/AssignProjectToGroup?projectId=${projectId}&targetProjectId=${targetProjectId}`, null);
     }
 
     removeProjectFromGroup(projectId: number): JQuery.jqXHR {
-        return this.post(`${getBaseUrl()}Admin/Project/RemoveProjectFromGroup`,
-            JSON.stringify({ projectId: projectId }));
+        return this.post(`${getBaseUrl()}Admin/Project/RemoveProjectFromGroup?projectId=${projectId}`, null);
     }
 
     createForum(projectId: number): JQuery.jqXHR<IForumViewModel> {

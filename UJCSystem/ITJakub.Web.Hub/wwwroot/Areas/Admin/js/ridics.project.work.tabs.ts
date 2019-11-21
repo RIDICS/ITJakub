@@ -797,9 +797,6 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
 
         this.addProjectToGroupDialog = new BootstrapDialogWrapper({
             element: $("#add-project-to-group-dialog"),
-            // TODO specify clear
-            //autoClearInputs: true,
-            //elementsToClearSelector: ".works-produced .works-list-items, .works-produced .number-of-works-value",
             submitCallback: this.assignProjectToGroup.bind(this)
         });
     }
@@ -1051,6 +1048,10 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
 
         this.addRemoveLiteraryKindEvent();
 
+        const projectList = new ListWithPagination(`Admin/Project/ProjectsForGroupList`, "projectForGroup", ViewType.Partial, false, false, this.onProjectListLoaded.bind(this));
+        projectList.loadFirstPage();
+        projectList.init();
+
         const $saveButton = $("#work-categorization-save-button");
         $saveButton.click(() => {
             this.saveCategorization();
@@ -1076,6 +1077,12 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
             });
     }
 
+    private onProjectListLoaded() {
+        $("#add-project-to-group-dialog .project-row").on("click", (event) => {
+            $(event.currentTarget as Node as Element).addClass("selected").siblings().removeClass("selected");
+        });
+    }
+
     private removeProjectFromGroup() {
         this.projectClient.removeProjectFromGroup(this.projectId).done(() => {
             this.reloadTab();
@@ -1086,9 +1093,17 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
     }
 
     private assignProjectToGroup() {
-        // TODO replace 0 with correct ID
-        this.projectClient.assignProjectToGroup(this.projectId, 0).done(() => {
-            this.reloadTab();
+        const selectedProjectRow = $("#add-project-to-group-dialog .project-row.selected");
+        if (selectedProjectRow.length < 1) {
+            this.addProjectToGroupDialog.showError(localization.translate("ProjectIsNotSelected", "PermissionJs").value);
+            return;
+        }
+        
+        const targetProjectId = selectedProjectRow.data("project-id");
+        this.projectClient.assignProjectToGroup(this.projectId, targetProjectId).done(() => {
+            this.addProjectToGroupDialog.hide(() => {
+                this.reloadTab(); // reload after hiding
+            });
         }).fail((e) => {
             const errorMessage = this.errorHandler.getErrorMessage(e);
             this.addProjectToGroupDialog.showError(errorMessage);
