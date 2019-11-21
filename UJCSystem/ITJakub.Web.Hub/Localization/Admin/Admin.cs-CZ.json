@@ -148,6 +148,7 @@
     "RemoveProjectFromGroup": "Odebrat toto dílo ze skupiny",
     "ProjectsInGroup": "Díla ve skupině",
     "SelectProjectForCreatingGroup": "Vyberte dílo, se kterým stávající dílo vytvoří skupinu",
+    "SelectProjectForCreatingGroupNote": "Poznámka: Zobrazena jsou jenom díla, ke kterým máte oprávnění.",
 
     "EditPageList": "Upravit seznam stránek",
     "AddPage": "Přidat stránku",
