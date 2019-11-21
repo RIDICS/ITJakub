@@ -1014,7 +1014,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                m_client.Delete($"{projectId}/group");
+                m_client.Delete($"project/{projectId}/group");
             }
             catch (HttpRequestException e)
             {
