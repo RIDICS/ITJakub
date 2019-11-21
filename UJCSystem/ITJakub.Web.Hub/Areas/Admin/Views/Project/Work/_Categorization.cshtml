@@ -1,7 +1,9 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Helpers
+@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Areas.Admin.Models.ProjectWorkCategorizationViewModel
 
 @inject ILocalizationService Localizer
+@inject TextTypeLocalizer TextTypeLocalizer
 
 <div class="row resource-tab-row-fix">
     
@@ -167,24 +169,26 @@
                                     <div id="project-group-projects-list">
                                         <div class="list-container selectable page-listing">
                                             <div class="table-responsive">
-                                                <table class="table table-hover">
-                                                    <tbody>
-                                                        @*@for (var i = 0; i < Model.Count; i++)
+                                                @if (Model.ProjectsInGroup == null || Model.ProjectsInGroup.Count == 0)
+                                                {
+                                                    <div>@Localizer.Translate("NoProjects", "Admin")</div>
+                                                }
+                                                else
+                                                {
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                        @foreach (var project in Model.ProjectsInGroup)
                                                         {
-                                                            var pageItem = Model[i];*@
                                                             <tr class="page-row">
                                                                 <td>
-                                                                    <a href="#">ProjectName</a>
+                                                                    <a asp-controller="Project" asp-action="Project" asp-route-id="@project.Id">@project.Name</a>
+                                                                    (@TextTypeLocalizer.TranslateTextType(project.TextType))
                                                                 </td>
                                                             </tr>
-                                                            <tr class="page-row">
-                                                                <td>
-                                                                    <a href="#">ProjectName</a>
-                                                                </td>
-                                                            </tr>
-                                                        @*}*@
-                                                    </tbody>
-                                                </table>
+                                                        }
+                                                        </tbody>
+                                                    </table>
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -220,8 +224,8 @@
             </div>
             <div class="modal-footer">
                 <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("SaveError", "Admin")</div>
-                <button type="button" class="btn btn-default cancel-add-project-to-group" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
-                <button type="button" class="btn btn-default submit-add-project-to-group">@Localizer.Translate("Add", "Admin")</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span> @Localizer.Translate("Add", "Admin")</button>
             </div>
         </div>
     </div>

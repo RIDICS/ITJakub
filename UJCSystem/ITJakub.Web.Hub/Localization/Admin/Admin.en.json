@@ -250,6 +250,7 @@
     "EmptyProjectNameError": "Project name cannot be empty.",
     "NoProjectsSearch": "Sorry, but we could not find any project matching ",
     "NoProjectsFound": "Sorry, but no projects were found",
+    "NoProjects": "translate[Nebyla nalezena žádná díla]",
     "RenameSource": "translate[Přejmenovat zdroj]",
     "SearchQuery": "Showing results for",
     "ResetSearch": "Reset search",

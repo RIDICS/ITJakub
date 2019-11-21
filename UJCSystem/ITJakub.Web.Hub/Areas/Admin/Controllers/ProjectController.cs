@@ -147,10 +147,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     var literaryGenres = codeListClient.GetLiteraryGenreList();
                     var categories = codeListClient.GetCategoryList();
                     var projectCategorization = projectClient.GetProjectMetadata(projectId.Value, false, false, true, true, false, true, true);
+                    var projectGroup = projectClient.GetProjectGroups(projectId.Value);
                     var workCategorizationViewModel = Mapper.Map<ProjectWorkCategorizationViewModel>(projectCategorization);
                     workCategorizationViewModel.AllLiteraryKindList = literaryKinds;
                     workCategorizationViewModel.AllLiteraryGenreList = literaryGenres;
                     workCategorizationViewModel.AllCategoryList = categories;
+                    workCategorizationViewModel.ProjectsInGroup = Mapper.Map<IList<ProjectInfoViewModel>>(projectGroup?.Projects);
                     return PartialView("Work/_Categorization", workCategorizationViewModel);
                 case ProjectModuleTabType.WorkChapters:
                     var chapterList = projectClient.GetChapterList(projectId.Value);
@@ -491,6 +493,22 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 };
             }
 
+            return AjaxOkResponse();
+        }
+
+        [HttpPost]
+        public IActionResult AssignProjectToGroup(long projectId, long targetProjectId)
+        {
+            var client = GetProjectClient();
+            client.AddProjectToGroup(targetProjectId, projectId);
+            return AjaxOkResponse();
+        }
+
+        [HttpPost]
+        public IActionResult RemoveProjectFromGroup(long projectId)
+        {
+            var client = GetProjectClient();
+            client.RemoveProjectFromGroup(projectId);
             return AjaxOkResponse();
         }
 

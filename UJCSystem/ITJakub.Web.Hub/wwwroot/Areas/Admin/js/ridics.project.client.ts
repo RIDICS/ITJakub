@@ -117,6 +117,16 @@
         return $.get(`${getBaseUrl()}Admin/Project/GetProjectsByResponsiblePerson?responsiblePersonId=${responsiblePersonId}&start=${start}&count=${count}`);
     }
 
+    assignProjectToGroup(projectId: number, targetProjectId: number): JQuery.jqXHR {
+        return this.post(`${getBaseUrl()}Admin/Project/AssignProjectToGroup`,
+            JSON.stringify({ projectId: projectId, targetProjectId: targetProjectId }));
+    }
+
+    removeProjectFromGroup(projectId: number): JQuery.jqXHR {
+        return this.post(`${getBaseUrl()}Admin/Project/RemoveProjectFromGroup`,
+            JSON.stringify({ projectId: projectId }));
+    }
+
     createForum(projectId: number): JQuery.jqXHR<IForumViewModel> {
         return $.post(`${getBaseUrl()}Admin/Project/CreateForum?projectId=${projectId}`, {});
     }

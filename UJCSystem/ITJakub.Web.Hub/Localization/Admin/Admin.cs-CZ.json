@@ -250,6 +250,7 @@
     "EmptyProjectNameError": "Název díla nemůže být prázdný.",
     "NoProjectsSearch": "Je nám líto, ale nepodařilo se najít žádné projekty odpovídající dotazu ",
     "NoProjectsFound": "Je nám líto, ale nebyly nalezeny žádné projekty",
+    "NoProjects": "Nebyla nalezena žádná díla",
     "RenameSource": "Přejmenovat zdroj",
     "SearchQuery": "Zobrazují se výsledky pro",
     "ResetSearch": "Zrušit hledání",

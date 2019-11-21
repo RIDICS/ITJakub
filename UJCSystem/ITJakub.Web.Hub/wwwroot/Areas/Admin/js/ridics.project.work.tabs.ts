@@ -797,9 +797,10 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
 
         this.addProjectToGroupDialog = new BootstrapDialogWrapper({
             element: $("#add-project-to-group-dialog"),
+            // TODO specify clear
             //autoClearInputs: true,
             //elementsToClearSelector: ".works-produced .works-list-items, .works-produced .number-of-works-value",
-            //submitCallback: this.addAuthor.bind(this)
+            submitCallback: this.assignProjectToGroup.bind(this)
         });
     }
 
@@ -950,6 +951,13 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
         return categoryTreeEl;
     }
 
+    private reloadTab() {
+        const metadataTabSelector = "#project-work-categorization";
+        const tabPanelEl = $(metadataTabSelector);
+        tabPanelEl.empty();
+        this.workModule.loadTabPanel(metadataTabSelector);
+    }
+
     initTab(): void {
         super.initTab();
         this.initKeywords();
@@ -991,13 +999,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
         });
 
         $("#work-categorization-cancel-button").click(() => {
-            this.disableEdit();
-            const metadataTabSelector = "#project-work-categorization";
-            var tabPanelEl = $(metadataTabSelector);
-            tabPanelEl.empty();
-            this.workModule.loadTabPanel(metadataTabSelector);
-            categoryTreeElement.children("input").prop("disabled", true);
-            categoryTreeLabels.addClass("disabled");
+            this.reloadTab();
         });
 
         $("#add-literary-kind-button").click(() => {
@@ -1038,8 +1040,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
                         label: localization.translate("Unassign", "PermissionJs").value,
                         className: "btn-default",
                         callback: () => {
-                            // TODO
-                            console.log("TODO remove project from group");
+                            this.removeProjectFromGroup();
                         }
                     }
                 }
@@ -1073,6 +1074,25 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
             (event) => {
                 $(event.currentTarget as Node as Element).closest(".lit-kind-item").remove();
             });
+    }
+
+    private removeProjectFromGroup() {
+        this.projectClient.removeProjectFromGroup(this.projectId).done(() => {
+            this.reloadTab();
+        }).fail((e) => {
+            const errorMessage = this.errorHandler.getErrorMessage(e);
+            bootbox.alert(errorMessage);
+        });
+    }
+
+    private assignProjectToGroup() {
+        // TODO replace 0 with correct ID
+        this.projectClient.assignProjectToGroup(this.projectId, 0).done(() => {
+            this.reloadTab();
+        }).fail((e) => {
+            const errorMessage = this.errorHandler.getErrorMessage(e);
+            this.addProjectToGroupDialog.showError(errorMessage);
+        });
     }
 
     private saveCategorization() {
