@@ -140,6 +140,11 @@
     "WorksParticipatedRole": "Works participated - role",
     "WorksParticipatedNumber": "Number of works participated in",
     "SelectTimePeriod": "Select time period",
+    "ProjectGroup": "translate[Skupina děl]",
+    "ProjectGroupDescription":
+      "translate[Skupina děl je tvořena stejnými díly, která se liší v některých parametrech. Nejvýraznější rozdíl může být u textu, který může být transliterovaný nebo transkribovaný. Stejné dílo zároveň může být zpracováváno dvěma různými editory. Tento nástroj umožňuje tato díla provázat pro snadnější vyhledávání.]",
+    "ProjectGroupSavingInfo": "translate[Změny nastavení skupin děl jsou ihned bez potvrzování ukládány.]",
+    "AddProject": "translate[Přidat dílo]",
 
     "EditPageList": "translate[Upravit seznam stránek]",
     "AddPage": "Add page",

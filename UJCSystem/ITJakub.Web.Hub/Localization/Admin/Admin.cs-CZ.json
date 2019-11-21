@@ -140,6 +140,11 @@
     "WorksParticipatedRole": "Spolupráce na pracích - role",
     "WorksParticipatedNumber": "Počet spoluprácí",
     "SelectTimePeriod": "Vyberte časový úsek",
+    "ProjectGroup": "Skupina děl",
+    "ProjectGroupDescription":
+      "Skupina děl je tvořena stejnými díly, která se liší v některých parametrech. Nejvýraznější rozdíl může být u textu, který může být transliterovaný nebo transkribovaný. Stejné dílo zároveň může být zpracováváno dvěma různými editory. Tento nástroj umožňuje tato díla provázat pro snadnější vyhledávání.",
+    "ProjectGroupSavingInfo": "Změny nastavení skupin děl jsou ihned bez potvrzování ukládány.",
+    "AddProject": "Přidat dílo",
 
     "EditPageList": "Upravit seznam stránek",
     "AddPage": "Přidat stránku",

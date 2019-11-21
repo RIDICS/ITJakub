@@ -974,6 +974,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
             }
         });
 
+        $(".project-form-bottom-buttons .btn, #project-group-projects .btn").show();
 
         $("#work-categorization-edit-button").click(() => {
             this.enabledEdit();
