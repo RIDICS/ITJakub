@@ -783,6 +783,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
     private readonly workModule: ProjectWorkModule;
     private readonly adminApiClient: AdminApiClient;
     private readonly errorHandler: ErrorHandler;
+    private readonly addProjectToGroupDialog: BootstrapDialogWrapper;
     private existingGenres: JQuery = null;
     private existingLitKinds: JQuery = null;
 
@@ -793,6 +794,13 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
         this.adminApiClient = new AdminApiClient();
         this.errorHandler = new ErrorHandler();
         this.workModule = workModule;
+
+        this.addProjectToGroupDialog = new BootstrapDialogWrapper({
+            element: $("#add-project-to-group-dialog"),
+            //autoClearInputs: true,
+            //elementsToClearSelector: ".works-produced .works-list-items, .works-produced .number-of-works-value",
+            //submitCallback: this.addAuthor.bind(this)
+        });
     }
 
     getConfiguration(): IProjectMetadataTabConfiguration {
@@ -1010,6 +1018,32 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
 
             const selectBox = this.createGenreKindSelectBoxEl(this.existingGenres, true);
             genreSelectsEl.append(selectBox);
+        });
+
+        $("#add-project-to-group-button").click(() => {
+            this.addProjectToGroupDialog.show();
+        });
+
+        $("#remove-project-from-group-button").click(() => {
+            bootbox.dialog({
+                title: localization.translate("Warning", "PermissionJs").value,
+                message: localization.translate("UnassignProjectFromGroupWarning", "PermissionJs").value,
+                buttons: {
+                    cancel: {
+                        label: localization.translate("Cancel", "PermissionJs").value,
+                        className: "btn-default",
+                        callback: () => { }
+                    },
+                    confirm: {
+                        label: localization.translate("Unassign", "PermissionJs").value,
+                        className: "btn-default",
+                        callback: () => {
+                            // TODO
+                            console.log("TODO remove project from group");
+                        }
+                    }
+                }
+            });
         });
 
         this.addRemoveGenreEvent();
