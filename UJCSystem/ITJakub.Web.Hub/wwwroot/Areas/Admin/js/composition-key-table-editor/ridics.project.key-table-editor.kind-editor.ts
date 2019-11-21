@@ -11,10 +11,10 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        this.createEntryButtonEl.text("Create new literary kind");
-        this.changeEntryButtonEl.text("Rename literary kind");
-        this.deleteEntryButtonEl.text("Delete literary kind");
-        this.titleEl.text("Literary kinds");
+        this.createEntryButtonEl.text(localization.translate("CreateKind", "KeyTable").value);
+        this.changeEntryButtonEl.text(localization.translate("RenameKind", "KeyTable").value);
+        this.deleteEntryButtonEl.text(localization.translate("DeleteKind", "KeyTable").value);
+        this.titleEl.text(localization.translate("KindHeadline", "KeyTable").value);
         this.unbindEventsDialog();
         this.util.getLitararyKindList().done((data: ILiteraryKindContract[]) => {
             this.literaryKindItemList = data;

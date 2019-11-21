@@ -11,10 +11,10 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        this.createEntryButtonEl.text("Create new literary original");
-        this.changeEntryButtonEl.text("Rename literary original");
-        this.deleteEntryButtonEl.text("Delete literary original");
-        this.titleEl.text("Literary originals");
+        this.createEntryButtonEl.text(localization.translate("CreateLiteraryOriginal", "KeyTable").value);
+        this.changeEntryButtonEl.text(localization.translate("RenameLiteraryOriginal", "KeyTable").value);
+        this.deleteEntryButtonEl.text(localization.translate("DeleteLiteraryOriginal", "KeyTable").value);
+        this.titleEl.text(localization.translate("LiteraryOriginalHeadline", "KeyTable").value);
         this.unbindEventsDialog();
         this.util.getLiteraryOriginalList().done((data: ILiteraryOriginalContract[]) => {
             this.literaryOriginalItemList = data;

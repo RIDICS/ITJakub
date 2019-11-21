@@ -11,10 +11,10 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        this.createEntryButtonEl.text("Create new responsible person type");
-        this.changeEntryButtonEl.text("Change responsible person type");
-        this.deleteEntryButtonEl.text("Delete responsible person type");
-        this.titleEl.text("Responsible person types");
+        this.createEntryButtonEl.text(localization.translate("CreateResponsiblePersonType", "KeyTable").value);
+        this.changeEntryButtonEl.text(localization.translate("ChangeResponsiblePersonType", "KeyTable").value);
+        this.deleteEntryButtonEl.text(localization.translate("DeleteResponsiblePersonType", "KeyTable").value);
+        this.titleEl.text(localization.translate("ResponsiblePersonTypeHeadline", "KeyTable").value);
         this.unbindEventsDialog();
         this.util.getResponsiblePersonTypeList().done((data: IResponsibleType[]) => {
             this.responsibleTypeItemList = data;

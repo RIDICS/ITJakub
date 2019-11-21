@@ -11,10 +11,10 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        this.createEntryButtonEl.text("Create new genre");
-        this.changeEntryButtonEl.text("Rename genre");
-        this.deleteEntryButtonEl.text("Delete genre");
-        this.titleEl.text("Literary genres");
+        this.createEntryButtonEl.text(localization.translate("CreateGenre", "KeyTable").value);
+        this.changeEntryButtonEl.text(localization.translate("RenameGenre", "KeyTable").value);
+        this.deleteEntryButtonEl.text(localization.translate("DeleteGenre", "KeyTable").value);
+        this.titleEl.text(localization.translate("GenreHeadline", "KeyTable").value);
         this.unbindEventsDialog();
         this.util.getLiteraryGenreList().done((data: IGenreResponseContract[]) => {
             this.genreItemList = data;

@@ -12,10 +12,10 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        this.createEntryButtonEl.text("Create new category");
-        this.changeEntryButtonEl.text("Change category");
-        this.deleteEntryButtonEl.text("Delete category");
-        this.titleEl.text("Categories");
+        this.createEntryButtonEl.text(localization.translate("CreateCategory", "KeyTable").value);
+        this.changeEntryButtonEl.text(localization.translate("ChangeCategory", "KeyTable").value);
+        this.deleteEntryButtonEl.text(localization.translate("DeleteCategory", "KeyTable").value);
+        this.titleEl.text(localization.translate("CategoryHeadline", "KeyTable").value);
         this.unbindEventsDialog();
         this.util.getCategoryList().done((data: ICategoryContract[]) => {
             this.categoryCreation();

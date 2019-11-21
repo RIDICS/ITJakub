@@ -1,0 +1,63 @@
+{
+  "culture": "en",
+  "scope": "KeyTable",
+  "dictionary": {
+    "KeyTableTitle": "Key table administration",
+
+    "Close": "Close",
+    "Ok": "Ok",
+
+    "Category": "Category",
+    "Genre": "Genre",
+    "Kind": "Kind",
+    "ResponsiblePerson": "Responsible person",
+    "ResponsiblePersonType": "Responsible person type",
+    "LiteraryOriginal": "Literary original",
+    "OriginalAuthor": "Original Author",
+    "Keyword": "Keyword",
+
+    "Unknown": "Unknown",
+    "Editor": "Editor",
+    "Collation": "Collation",
+
+    "CategoryHeadline": "Categories",
+    "CreateCategory": "Create new category",
+    "ChangeCategory": "Change category",
+    "DeleteCategory": "Delete category",
+
+    "GenreHeadline": "Literary genres",
+    "CreateGenre": "Create new genre",
+    "RenameGenre": "Rename genre",
+    "DeleteGenre": "Delete genre",
+
+    "KindHeadline": "Literary kinds",
+    "CreateKind": "Create new literary kind",
+    "RenameKind": "Rename literary kind",
+    "DeleteKind": "Delete literary kind",
+
+    "ResponsiblePersonHeadline": "Responsible people",
+    "CreateResponsiblePerson": "Create new responsible person",
+    "RenameResponsiblePerson": "Rename responsible person",
+    "DeleteResponsiblePerson": "Delete responsible person",
+
+    "ResponsiblePersonTypeHeadline": "Responsible person types",
+    "CreateResponsiblePersonType": "Create new responsible person type",
+    "ChangeResponsiblePersonType": "Change responsible person type",
+    "DeleteResponsiblePersonType": "Delete responsible person type",
+
+    "LiteraryOriginalHeadline": "Literary originals",
+    "CreateLiteraryOriginal": "Create new literary original",
+    "RenameLiteraryOriginal": "Rename literary original",
+    "DeleteLiteraryOriginal": "Delete literary original",
+
+    "OriginalAuthorHeadline": "Original authors",
+    "CreateOriginalAuthor": "Create new original author",
+    "RenameOriginalAuthor": "Rename original author",
+    "DeleteOriginalAuthor": "Delete original author",
+
+    "KeywordHeadline": "Keywords",
+    "CreateKeyword": "Create new keyword",
+    "RenameKeyword": "Rename keyword",
+    "DeleteKeyword": "Delete keyword"
+  }
+}

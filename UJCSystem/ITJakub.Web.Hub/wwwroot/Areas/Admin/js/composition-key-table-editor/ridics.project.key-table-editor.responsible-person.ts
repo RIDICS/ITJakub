@@ -11,10 +11,10 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        this.createEntryButtonEl.text("Create new responsible person");
-        this.changeEntryButtonEl.text("Rename responsible person");
-        this.deleteEntryButtonEl.text("Delete responsible person");
-        this.titleEl.text("Responsible people");
+        this.createEntryButtonEl.text(localization.translate("CreateResponsiblePerson", "KeyTable").value);
+        this.changeEntryButtonEl.text(localization.translate("RenameResponsiblePerson", "KeyTable").value);
+        this.deleteEntryButtonEl.text(localization.translate("DeleteResponsiblePerson", "KeyTable").value);
+        this.titleEl.text(localization.translate("ResponsiblePersonHeadline", "KeyTable").value);
         this.unbindEventsDialog();
         const initialPage = 1;
         const initial = true;

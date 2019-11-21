@@ -1,0 +1,63 @@
+﻿{
+  "culture": "cs-CZ",
+  "scope": "KeyTable",
+  "dictionary": {
+    "KeyTableTitle": "Administrace číselníků",
+
+    "Close": "Zavřít",
+    "Ok": "Ok",
+
+    "Category": "Kategorie",
+    "Genre": "Žánr",
+    "Kind": "Druh",
+    "ResponsiblePerson": "Odpovědá osoba",
+    "ResponsiblePersonType": "Typ odpovědné osoby",
+    "LiteraryOriginal": "Literární originál",
+    "OriginalAuthor": "Původní autor",
+    "Keyword": "Klíčové slovo",
+
+    "Unknown": "Neznámý",
+    "Editor": "Editor",
+    "Collation": "Řazení",
+
+    "CategoryHeadline": "Kategorie",
+    "CreateCategory": "Vytvořit novou kategorii",
+    "ChangeCategory": "Upravit kategorii",
+    "DeleteCategory": "Odstranit kategorii",
+
+    "GenreHeadline": "Literární žánry",
+    "CreateGenre": "Vytvořit nový žánr",
+    "RenameGenre": "Přejmenovat žánr",
+    "DeleteGenre": "Odstranit žánr",
+
+    "KindHeadline": "Literární druhy",
+    "CreateKind": "Vytvořit nový literární druh",
+    "RenameKind": "Přejmenovat literární druh",
+    "DeleteKind": "Odstranit literární druh",
+
+    "ResponsiblePersonHeadline": "Odpovědné osoby",
+    "CreateResponsiblePerson": "Vytvořit novou odpovědnou osobu",
+    "RenameResponsiblePerson": "Přejmenovat odpovědnou osobu",
+    "DeleteResponsiblePerson": "Odstranit odpovědnou osobu",
+
+    "ResponsiblePersonTypeHeadline": "Typy odpovědných osob",
+    "CreateResponsiblePersonType": "Vytvořit nový typ odpovědných osob",
+    "ChangeResponsiblePersonType": "Změnit typ odpovědných osob",
+    "DeleteResponsiblePersonType": "Odstranit typ odpovědných osob",
+
+    "LiteraryOriginalHeadline": "Literární originály",
+    "CreateLiteraryOriginal": "Vytvořit nový literární originál",
+    "RenameLiteraryOriginal": "Přejmenovat literární originál",
+    "DeleteLiteraryOriginal": "Odstranit literární originál",
+
+    "OriginalAuthorHeadline": "Původní autoři",
+    "CreateOriginalAuthor": "Vytvořit nového původního autora",
+    "RenameOriginalAuthor": "Přejmenovat původního autora",
+    "DeleteOriginalAuthor": "Odstranit původního autora",
+
+    "KeywordHeadline": "Klíčová slova",
+    "CreateKeyword": "Vytvořit nové klíčové slovo",
+    "RenameKeyword": "Přejmenovat klíčové slovo",
+    "DeleteKeyword": "Odstranit klíčové slovo"
+  }
+}

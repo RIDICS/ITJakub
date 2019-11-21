@@ -11,10 +11,10 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        this.createEntryButtonEl.text("Create new keyword");
-        this.changeEntryButtonEl.text("Rename keyword");
-        this.deleteEntryButtonEl.text("Delete keyword");
-        this.titleEl.text("Keywords");
+        this.createEntryButtonEl.text(localization.translate("CreateKeyword", "KeyTable").value);
+        this.changeEntryButtonEl.text(localization.translate("RenameKeyword", "KeyTable").value);
+        this.deleteEntryButtonEl.text(localization.translate("DeleteKeyword", "KeyTable").value);
+        this.titleEl.text(localization.translate("KeywordHeadline", "KeyTable").value);
         this.unbindEventsDialog();
             const initialPage = 1;
             const initial = true;

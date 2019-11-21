@@ -10,10 +10,10 @@
 
     init() {
         $("#project-layout-content").find("*").off();
-        this.createEntryButtonEl.text("Create new original author");
-        this.changeEntryButtonEl.text("Rename original author");
-        this.deleteEntryButtonEl.text("Delete original author");
-        this.titleEl.text("Original authors");
+        this.createEntryButtonEl.text(localization.translate("CreateOriginalAuthor", "KeyTable").value);
+        this.changeEntryButtonEl.text(localization.translate("RenameOriginalAuthor", "KeyTable").value);
+        this.deleteEntryButtonEl.text(localization.translate("DeleteOriginalAuthor", "KeyTable").value);
+        this.titleEl.text(localization.translate("OriginalAuthorHeadline", "KeyTable").value);
         this.unbindEventsDialog();
         {
             const initialPage = 1;
