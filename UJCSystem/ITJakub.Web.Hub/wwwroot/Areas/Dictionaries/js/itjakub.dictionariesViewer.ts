@@ -126,8 +126,8 @@
         var backgroundDiv1 = document.createElement("div");
         var backgroundDiv2 = document.createElement("div");
 
-        var loadingDiv1 = lv.create(null, "lv-dots md lv-mid loading-headword-list");
-        var loadingDiv2 = lv.create(null, "lv-dots md lv-mid loading-headword-description");
+        var loadingDiv1 = lv.create(null, "lv-dots md lv-mid loading-headword");
+        var loadingDiv2 = lv.create(null, "lv-dots md lv-mid loading-headword");
 
         $(backgroundDiv1).addClass("dictionary-loading");
         $(backgroundDiv2).addClass("dictionary-loading");
