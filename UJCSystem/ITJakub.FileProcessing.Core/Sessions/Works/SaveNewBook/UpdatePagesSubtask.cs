@@ -232,7 +232,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             }
 
             var projectId = project.Id;
-            var imageResourceGroup = GetOrCreateNamedResourceGroup(projectId, TextTypeEnum.Original, DefaultImportResourceGroupName);
+            var imageResourceGroup = GetOrCreateNamedResourceGroup(projectId, TextTypeEnum.NoneOrOriginal, DefaultImportResourceGroupName);
             var dbImages = m_resourceRepository.GetProjectLatestImages(projectId, imageResourceGroup.Id, false);
             var dbImagesByPageResId = new Dictionary<long, List<ImageResource>>();
             foreach (var imageResourceByPageGroup in dbImages.GroupBy(x => x.ResourcePage.Id))

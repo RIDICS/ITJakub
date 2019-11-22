@@ -24,8 +24,8 @@
         this.ajax("POST", urlPath, JSON.stringify(data), response => callback(response, null), status => callback(null, status));
     }
 
-    public createProject(name: string, selectedBookTypes: BookTypeEnum[], callback: (id: number, error: HttpStatusCode) => void) {
-        this.postAjax("Admin/Project/CreateProject", {name: name, selectedBookTypes: selectedBookTypes}, callback);
+    public createProject(name: string, textType: number|string, selectedBookTypes: BookTypeEnum[], callback: (id: number, error: HttpStatusCode) => void) {
+        this.postAjax("Admin/Project/CreateProject", {name: name, textType: textType, selectedBookTypes: selectedBookTypes}, callback);
     }
 
     public deleteProject(id: number, callback: (error: HttpStatusCode) => void) {
@@ -115,6 +115,14 @@
 
     getProjectsByResponsiblePerson(responsiblePersonId: number, start?: number, count?: number): JQuery.jqXHR<IPagedResult<IProjectDetailContract>> {
         return $.get(`${getBaseUrl()}Admin/Project/GetProjectsByResponsiblePerson?responsiblePersonId=${responsiblePersonId}&start=${start}&count=${count}`);
+    }
+
+    assignProjectToGroup(projectId: number, targetProjectId: number): JQuery.jqXHR {
+        return this.post(`${getBaseUrl()}Admin/Project/AssignProjectToGroup?projectId=${projectId}&targetProjectId=${targetProjectId}`, null);
+    }
+
+    removeProjectFromGroup(projectId: number): JQuery.jqXHR {
+        return this.post(`${getBaseUrl()}Admin/Project/RemoveProjectFromGroup?projectId=${projectId}`, null);
     }
 
     createForum(projectId: number): JQuery.jqXHR<IForumViewModel> {

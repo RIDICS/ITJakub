@@ -147,10 +147,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     var literaryGenres = codeListClient.GetLiteraryGenreList();
                     var categories = codeListClient.GetCategoryList();
                     var projectCategorization = projectClient.GetProjectMetadata(projectId.Value, false, false, true, true, false, true, true);
+                    var projectGroup = projectClient.GetProjectGroups(projectId.Value);
                     var workCategorizationViewModel = Mapper.Map<ProjectWorkCategorizationViewModel>(projectCategorization);
                     workCategorizationViewModel.AllLiteraryKindList = literaryKinds;
                     workCategorizationViewModel.AllLiteraryGenreList = literaryGenres;
                     workCategorizationViewModel.AllCategoryList = categories;
+                    workCategorizationViewModel.ProjectsInGroup = Mapper.Map<IList<ProjectInfoViewModel>>(projectGroup?.Projects);
                     return PartialView("Work/_Categorization", workCategorizationViewModel);
                 case ProjectModuleTabType.WorkChapters:
                     var chapterList = projectClient.GetChapterList(projectId.Value);
@@ -260,12 +262,18 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult CreateProject([FromBody] CreateProjectRequest request)
         {
+            if (request.TextType == null)
+            {
+                return BadRequest();
+            }
+
             var client = GetProjectClient();
 
             var newProject = new CreateProjectContract
             {
                 Name = request.Name,
                 ProjectType = GetDefaultProjectType(),
+                TextType = request.TextType.Value,
                 BookTypesForForum = request.SelectedBookTypes,
             };
             var newProjectId = client.CreateProject(newProject);
@@ -486,6 +494,48 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
 
             return AjaxOkResponse();
+        }
+
+        [HttpPost]
+        public IActionResult AssignProjectToGroup([FromQuery] long? projectId, [FromQuery] long? targetProjectId)
+        {
+            if (projectId == null || targetProjectId == null)
+            {
+                return BadRequest();
+            }
+
+            var client = GetProjectClient();
+            client.AddProjectToGroup(targetProjectId.Value, projectId.Value);
+            return AjaxOkResponse();
+        }
+
+        [HttpPost]
+        public IActionResult RemoveProjectFromGroup([FromQuery] long? projectId)
+        {
+            if (projectId == null)
+            {
+                return BadRequest();
+            }
+
+            var client = GetProjectClient();
+            client.RemoveProjectFromGroup(projectId.Value);
+            return AjaxOkResponse();
+        }
+
+        public IActionResult ProjectsForGroupList(string search, int start, int count = PageSizes.ProjectListInDialog)
+        {
+            var client = GetProjectClient();
+            var result = client.GetProjectList(start, count, GetDefaultProjectType(), ProjectOwnerTypeContract.MyProjects, search);
+            var listViewModel = new ListViewModel<ProjectDetailContract>
+            {
+                TotalCount = result.TotalCount,
+                List = result.List,
+                PageSize = count,
+                Start = start,
+                SearchQuery = search,
+            };
+
+            return PartialView("Work/SubView/_ProjectsForGroupWidget", listViewModel);
         }
 
         #region Typeahead

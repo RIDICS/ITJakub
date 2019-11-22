@@ -6,7 +6,7 @@ namespace Vokabular.MainService.DataContracts.Contracts.Type
     [JsonConverter(typeof(StringEnumConverter))]
     public enum TextTypeEnumContract : short
     {
-        Original = 0,
+        NoneOrOriginal = 0,
         Transliterated = 1,
         Transcribed = 2
     }

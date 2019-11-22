@@ -49,6 +49,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.CreateProject
                         CreateTime = DateTime.UtcNow,
                         CreatedByUser = m_projectRepository.Load<User>(userId),
                         ExternalId = bookData.BookXmlId,
+                        TextType = TextTypeEnum.Transcribed,
                         Categories = new List<Category>(),
                         Keywords = new List<Keyword>(),
                         LiteraryGenres = new List<LiteraryGenre>(),
