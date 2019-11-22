@@ -176,24 +176,28 @@ class BibliographyModule {
     }
 
     public clearLoading() {
-        $(this.booksContainer).removeClass("loader");
+        $("#loader").remove();
     }
 
     public showLoading() {
-        $(this.booksContainer).addClass("loader");
+        if ($("#loader").length === 0) {
+            var loader = lv.create(null, "lv-circles sm lv-mid lvt-5");
+            loader.setId("loader");
+            $(this.booksContainer).append(loader.getElement());
+        }
     }
 
     public showSearchError() {
         var errorDiv = BibliographyFactory.makeError(localization.translate("SearchError", "PluginsJs").value);
         $(this.booksContainer)
-            .removeClass("loader")
+            .empty()
             .append(errorDiv);
     }
 
     public showPageLoadError() {
         var errorDiv = BibliographyFactory.makeError(localization.translate("LoadingBookListError", "PluginsJs").value);
         $(this.booksContainer)
-            .removeClass("loader")
+            .empty()
             .append(errorDiv);
     }
 
@@ -240,9 +244,8 @@ class BibliographyModule {
             if (bibFactory.configuration.containsBottomPanel()) {
                 $(hiddenContent).addClass("not-loaded");
 
-                var loadingDiv = document.createElement("div");
-                $(loadingDiv).addClass("loading");
-                hiddenContent.appendChild(loadingDiv);
+                var loadingDiv = lv.create(null, "lv-circles lv-mid sm lvt-2 lvb-2");
+                hiddenContent.appendChild(loadingDiv.getElement());
             }
 
             $(liElement).append(hiddenContent);

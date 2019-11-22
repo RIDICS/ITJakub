@@ -15,36 +15,44 @@ class ImportStatusManager {
     }
 
     init() {
+        const progressBar = lv.create(null, "lv-determinate_bordered_line lv-mid lvb-2");
+        $("#progress_bar").append(progressBar.getElement());
+        progressBar.setLabel("0%");
+
+        const spinner = lv.create(null, "lv-bars sm lvl-2");
+        $("#extra-spinner").append(spinner.getElement());
+
         this.timer = setInterval(() => {
                 this.client.getImportStatus().done((data) => {
                     let completed = true;
+
                     for (let key in data) {
                         if (data.hasOwnProperty(key)) {
-                            const progressBar = $(`#repository-${data[key].externalRepositoryId}`);
                             const alertElement = $(`#alert-${data[key].externalRepositoryId}`);
 
                             let processed = 0;
                             if (data[key].totalProjectsCount > 0) {
-                                processed = Math.round(data[key].processedProjectsCount / data[key].totalProjectsCount * 100);
+                                processed = Math.round((data[key].processedProjectsCount / data[key].totalProjectsCount) * 1000) / 10;
                             }
 
-                            progressBar.css(`width`, `${processed}%`);
-                            progressBar.html(processed + "%");
+                            progressBar.set(processed, 100);
+                            progressBar.setLabel(processed + "%");
 
                             alertElement.text(localization.translateFormat("ImportStatus", [data[key].processedProjectsCount, data[key].totalProjectsCount], "RepositoryImport").value);
 
                             if (data[key].isCompleted) {
                                 if (data[key].faultedMessage != null) {
-                                    progressBar.addClass("progress-bar-danger");
                                     alertElement.addClass("alert-danger");
+                                    progressBar.addClass("cancel_import");
+                                    spinner.remove();
                                     alertElement.html(data[key].faultedMessage);
                                 } else {
                                     alertElement.addClass("alert-success");
-                                    progressBar.addClass("progress-bar-success");
+                                    progressBar.addClass("success_import");
+                                    spinner.remove();
                                 }
 
                                 alertElement.removeClass("alert-info");
-                                progressBar.removeClass("active");
                                 $(`.cancel-import-button[data-id=\"${data[key].externalRepositoryId}\"]`).addClass("disabled");
                             } else {
                                 completed = false;

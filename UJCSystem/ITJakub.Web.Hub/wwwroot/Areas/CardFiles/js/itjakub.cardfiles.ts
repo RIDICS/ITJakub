@@ -133,12 +133,12 @@ function createDelegate() {
 
 function createListing() {
     var cardFileSelector = $("#card-file-select");
-    var cardFileLoadingDiv = $("div.card-file-select div.loading");
+    var cardFileLoadingDiv = cardFileSelector.parent();
+    var cardFileLoader = lv.create(null, "lv-dots sm lv-mid");
+    cardFileLoadingDiv.append(cardFileLoader.getElement());
     var bucketSelector = $("#bucket-select");
-    var bucketLoadingDiv = $("div.bucket-select div.loading");
+    var bucketLoadingDiv = bucketSelector.parent();
 
-    $(cardFileSelector).hide();
-    $(bucketSelector).hide();
     var cardFileManager = new CardFileManager("#cardfile-result-area");
     var cardFileIdListed: string = "";
     var cardFileNameListed: string = "";
@@ -163,7 +163,7 @@ function createListing() {
                 $(cardFileSelector).append(optionElement);
             }
 
-            $(cardFileLoadingDiv).hide();
+            cardFileLoader.remove();
 
             var cardFileId = getQueryStringParameterByName("cardFileId");
             if(cardFileId){
@@ -171,11 +171,11 @@ function createListing() {
             $(cardFileSelector).find(`option[value = ${cardFileId}]`).prop("selected", "selected");
             }
 
-            $(cardFileSelector).show();
+            $(cardFileSelector).removeClass("hidden");
             $(cardFileSelector).change();
         },
         error: (response) => {
-            $(cardFileLoadingDiv).hide();
+            cardFileLoader.remove();
             bootbox.alert({
                 title: "Error",
                 message: "Not enough permissions to access card files",
@@ -190,11 +190,12 @@ function createListing() {
 
     $(cardFileSelector).change(function() {
         var optionSelected = $("option:selected", this);
+        var bucketLoader = lv.create(null, "lv-dots sm lv-mid");
         cardFileIdListed = optionSelected.val() as string;
         cardFileNameListed = optionSelected.text();
+        $(bucketSelector).addClass("hidden");
         $(bucketSelector).empty();
-        $(bucketSelector).hide();
-        $(bucketLoadingDiv).show();
+        $(bucketLoadingDiv).append(bucketLoader.getElement());
 
         $.ajax({
             type: "GET",
@@ -216,12 +217,12 @@ function createListing() {
                     $(bucketSelector).append(optionElement);
                 }
 
-                $(bucketLoadingDiv).hide();
-                $(bucketSelector).show();
+                bucketLoader.remove();
+                $(bucketSelector).removeClass("hidden");
                 $(bucketSelector).change();
             },
             error: (response) => {
-                $(bucketLoadingDiv).hide();
+                bucketLoader.remove();
                 bootbox.alert({
                     title: "Error",
                     message: "Not enough permissions to access card files",

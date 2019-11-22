@@ -142,9 +142,9 @@
 
         if (this.useLoadingContainer) {
             $listContainer.empty();
-            this.loadingContainer.html("<div class=\"loader\"></div>");
+            this.loadingContainer.html("<div class=\"lv-dots md lv-mid\"></div>");
         } else {
-            $listContainer.html("<div class=\"loader\"></div>");
+            $listContainer.html("<div class=\"lv-dots md lv-mid\"></div>");
         }
         
 

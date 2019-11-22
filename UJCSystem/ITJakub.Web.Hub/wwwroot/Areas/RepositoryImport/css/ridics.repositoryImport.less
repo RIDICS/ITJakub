@@ -5,6 +5,8 @@
 @even-table-row-colour: #eee;
 @odd-table-row-colour: #white;
 @border-color: #E5E5E5;
+@cancel-import-color: #d9534f;
+@success-import-color: #5cb85c;
 
 .row.display-flex {
     display: flex;
@@ -173,4 +175,40 @@ ul.bib-listing li.list-item {
     font-size: 120%;
     width: 200px;
     margin-bottom: 20px;
+}
+
+.float-none {
+    float: none;
+}
+
+.cancel_import {
+    border-color: @cancel-import-color;
+
+    div:nth-child(1) {
+        background-color: @cancel-import-color;
+    }
+
+    div:nth-child(2) {
+        color: @cancel-import-color;
+    }
+
+    &[data-label]:after {
+        color: @cancel-import-color;
+    }
+}
+
+.success_import {
+    border-color: @success-import-color;
+
+    div:nth-child(1) {
+        background-color: @success-import-color;
+    }
+
+    div:nth-child(2) {
+        color: @success-import-color;
+    }
+
+    &[data-label]:after {
+        color: @success-import-color;
+    }
 }

@@ -10,6 +10,7 @@
     }
 
     init() {
+        this.showLoading();
         $("#project-layout-content").find("*").off();
         this.createEntryButtonEl.text("Create new responsible person type");
         this.changeEntryButtonEl.text("Change responsible person type");
@@ -33,6 +34,7 @@
     };
 
     private updateContentAfterChange() {
+        this.showLoading();
         this.util.getResponsiblePersonTypeList().done((data: IResponsibleType[]) => {
             this.responsibleTypeItemList = data;
             this.loadPage(this.currentPage);

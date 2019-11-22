@@ -10,6 +10,7 @@
     }
 
     init() {
+        this.showLoading();
         $("#project-layout-content").find("*").off();
         this.createEntryButtonEl.text("Create new literary original");
         this.changeEntryButtonEl.text("Rename literary original");
@@ -48,6 +49,7 @@
     }
 
     private updateContentAfterChange() {
+        this.showLoading();
         this.util.getLiteraryOriginalList().done((data: ILiteraryOriginalContract[]) => {
             this.literaryOriginalItemList = data;
             this.loadPage(this.currentPage);
