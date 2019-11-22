@@ -8,6 +8,7 @@ using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Managers.Authentication;
 using Vokabular.MainService.Core.Managers.Fulltext;
+using Vokabular.MainService.Core.Managers.Search;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.Shared.Container;
 using Vokabular.TextConverter;
@@ -37,6 +38,7 @@ namespace Vokabular.MainService.Core
             services.AddScoped<PermissionManager>();
             services.AddScoped<PersonManager>();
             services.AddScoped<ProjectContentManager>();
+            services.AddScoped<ProjectGroupManager>();
             services.AddScoped<ProjectInfoManager>();
             services.AddScoped<ProjectItemManager>();
             services.AddScoped<ProjectManager>();
@@ -48,6 +50,9 @@ namespace Vokabular.MainService.Core
             services.AddScoped<TermManager>();
             services.AddScoped<UserDetailManager>();
             services.AddScoped<UserManager>();
+
+            services.AddScoped<MetadataSearchCriteriaDirector>();
+            services.AddScoped<MetadataSearchCriteriaProcessor>();
 
             services.AddSingleton<CodeGenerator>();
             services.AddScoped<CommunicationConfigurationProvider>();
@@ -87,6 +92,7 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, OriginalAuthorProfile>();
             services.AddSingleton<Profile, PageProfile>();
             services.AddSingleton<Profile, ProjectProfile>();
+            services.AddSingleton<Profile, ProjectGroupProfile>();
             services.AddSingleton<Profile, ProjectPermissionProfile>();
             services.AddSingleton<Profile, ResourceProfile>();
             services.AddSingleton<Profile, ResourceVersionProfile>();

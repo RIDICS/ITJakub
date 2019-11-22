@@ -9,9 +9,9 @@
             <div class="col-xs-12 col-md-4">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="work-metadata-last-modification">@Localizer.Translate("LastModification", "Admin")</label>
+                        <label class="col-md-4 control-label">@Localizer.Translate("LastModification", "Admin")</label>
                         <div class="col-md-7">
-                            <span class="text-as-form-control" id="work-metadata-last-modification">
+                            <span class="text-as-form-control work-metadata-last-modification">
                                 @if (Model.LastModification.HasValue)
                                 {
                                     @Model.LastModification.Value.ToLocalTime().ToString(Localizer.GetRequestCulture())

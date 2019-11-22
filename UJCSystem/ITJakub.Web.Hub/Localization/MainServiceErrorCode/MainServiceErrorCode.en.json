@@ -55,6 +55,9 @@
     "change-in-conflict": "Could not save your changes because a conflict changes have already been made by another user.",
     "reserved-username-error": "Username '{0}' is reserved, cannot be used.",
     "group-not-found": "The group was not found",
+    "group-already-assigned-to-project": "The group already has assigned some permission for this work",
+    "user-already-assigned-to-project": "The user already has assigned some permission for this work",
+    "snapshot-must-contain-metadata": "The work must contain metadata otherwise it can't be published.",
 
     //Auth service codes
     "generic-error": "Operation failed",

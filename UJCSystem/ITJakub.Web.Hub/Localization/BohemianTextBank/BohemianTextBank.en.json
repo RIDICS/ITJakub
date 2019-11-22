@@ -22,6 +22,7 @@
     "NumberOfResults": "Number of results",
     "NumberOfResultsOnPage": "Number of results on page",
     "NumberOfProjects": "Number of projects",
+    "CurrentPage": "Current page",
     "UseSearchForResults": "Use search for showing results.",
     "Doc": "Doc",
     "Author": "Author",
@@ -42,6 +43,8 @@
     "NumberOfResultsPerPageWarning": "Number of results on the page should be between {0} and {1}",
     "Warning": "Warning",
     "LastPageOfResults": "Last page of results",
+    "LastPageOfResultsDetail": "Unable to load more results because you are already on the last page.",
+    "FirstPageOfResultsDetail": "Unable to load previous page because you are already on the first page.",
     "AllResults": "All results",
     "PageWithNumberDoesNotExists": "Page {0} does not exist",
     "NoResults": "No results"

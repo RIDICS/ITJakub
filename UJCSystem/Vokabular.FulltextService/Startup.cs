@@ -15,7 +15,6 @@ using Vokabular.Shared.AspNetCore.Middleware;
 using Vokabular.Shared.AspNetCore.WebApiUtils.Documentation;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Options;
-using Vokabular.TextConverter.Options;
 
 namespace Vokabular.FulltextService
 {
@@ -38,7 +37,6 @@ namespace Vokabular.FulltextService
             services.AddOptions();
             services.Configure<EndpointOption>(Configuration.GetSection("Endpoints"));
             services.Configure<IndicesOption>(Configuration.GetSection("ElasticsearchIndices"));
-            services.Configure<SpecialCharsOption>(Configuration.GetSection("SpecialChars"));
 
             // Add framework services
             services.AddMvc();
@@ -77,10 +75,7 @@ namespace Vokabular.FulltextService
 
             app.UseMiddleware<Log4NetPropertiesMiddleware>();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseStatusCodePages();
 
             app.UseMvc();
 

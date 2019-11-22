@@ -1,18 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Nest;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
+using Vokabular.TextConverter.Markdown;
 
 namespace Vokabular.FulltextService.Core.Helpers
 {
     public class QueriesBuilder
     {
-        private const string ReservedChars = ".?+*|{}[]()\"\\#@&<>~";
-        private const string RegexpQueryFlags = "ALL";
+        private readonly IndexType m_indexType;
+        private readonly IMarkdownHtmlEncoder m_markdownHtmlEncoder;
+
+        private const string ReservedChars = "\\.?+*|{}[]()\"#@&<>~";
+        private const string RegexpQueryFlags = "INTERSECTION";
         private const string IdField = "_id";
+
+        public QueriesBuilder(IndexType indexType, IMarkdownHtmlEncoder markdownHtmlEncoder)
+        {
+            m_indexType = indexType;
+            m_markdownHtmlEncoder = markdownHtmlEncoder;
+        }
 
         public QueryContainer GetFilterSearchQuery(IList<SearchCriteriaContract> conditionConjunction, string fieldName)
         {
@@ -152,7 +163,18 @@ namespace Vokabular.FulltextService.Core.Helpers
 
         private string EscapeChars(string text)
         {
-            return text; //TODO escape text
+            switch (m_indexType)
+            {
+                case IndexType.Page:
+                    text = EscapeForPageIndex(text);
+                    break;
+                case IndexType.Snapshot:
+                    text = EscapeForSnapshotIndex(text);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
             foreach (var reservedChar in ReservedChars)
             {
                 text = text.Replace(reservedChar.ToString(), $"\\{reservedChar}");
@@ -160,5 +182,22 @@ namespace Vokabular.FulltextService.Core.Helpers
 
             return text;
         }
+
+        private string EscapeForPageIndex(string text)
+        {
+            return text;
+        }
+
+        private string EscapeForSnapshotIndex(string text)
+        {
+            var htmlEncoded = m_markdownHtmlEncoder.EscapeHtml(text);
+            return htmlEncoded;
+        }
+    }
+
+    public enum IndexType
+    {
+        Page,
+        Snapshot,
     }
 }

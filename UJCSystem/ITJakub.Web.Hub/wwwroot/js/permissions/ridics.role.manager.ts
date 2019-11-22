@@ -282,7 +282,8 @@ class RoleManager {
     }
 
     private initEditRoleForm() {
-        const editRoleForm = $("#editRoleForm");
+        const editRoleFormSelector = "#editRoleForm";
+        const editRoleForm = $(editRoleFormSelector);
         const alertHolder = editRoleForm.find(".alert-holder");
         editRoleForm.on("submit", (event) => {
             event.preventDefault();
@@ -294,7 +295,7 @@ class RoleManager {
                 this.client.editRole(editRoleForm.serialize())
                     .done((response) => {
                         editRoleSection.html(response);
-                        if (editRoleForm.find(".alert-success").length) {
+                        if ($(editRoleFormSelector).find(".alert-success").length) {
                             this.roleList.reloadPage();
                         }
                         this.initEditRoleForm();

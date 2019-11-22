@@ -1,26 +1,17 @@
 ﻿using Markdig;
 using Markdig.Renderers;
-using Microsoft.Extensions.Options;
-using Vokabular.TextConverter.Options;
 
 namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
 {
     public class CommentMarkExtension : IMarkdownExtension
     {
-        private readonly IOptions<SpecialCharsOption> m_options;
-
-        public CommentMarkExtension(IOptions<SpecialCharsOption> options)
-        {
-            m_options = options;
-        }
-
         public void Setup(MarkdownPipelineBuilder pipeline)
         {
             var parsers = pipeline.InlineParsers;
 
             if (!parsers.Contains<CommentMarkParser>())
             {
-                parsers.Add(new CommentMarkParser(m_options));
+                parsers.Add(new CommentMarkParser());
             }
         }
 

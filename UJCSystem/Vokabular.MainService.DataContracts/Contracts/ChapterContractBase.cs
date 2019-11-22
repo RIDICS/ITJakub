@@ -8,7 +8,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public long VersionId { get; set; }
         public string Name { get; set; }
         public int Position { get; set; }
-        public long BeginningPageId { get; set; }
+        public long? BeginningPageId { get; set; }
     }
 
     public class GetChapterContract : ChapterContractBase

@@ -11,6 +11,11 @@
                    not-null="true"
                    type="System.String" />
 
+    <property name="GroupType"
+              column="Discriminator"
+              update="false"
+              insert="false" />
+
     <property name="Name" not-null="false" />
     
     <property name="CreateTime" not-null="true" type="UtcDateTime" />

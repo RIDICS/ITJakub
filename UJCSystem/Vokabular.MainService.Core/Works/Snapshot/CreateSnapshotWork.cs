@@ -5,6 +5,7 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Managers.Fulltext;
+using Vokabular.MainService.DataContracts;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Snapshot
@@ -75,6 +76,10 @@ namespace Vokabular.MainService.Core.Works.Snapshot
 
             var metadataResourceVersion = m_resourceRepository.GetLatestMetadata(m_projectId);
             resourceVersions.Add(metadataResourceVersion);
+            if (metadataResourceVersion == null)
+            {
+                throw new MainServiceException(MainServiceErrorCode.SnapshotMustContainMetadata, $"Project ID={m_projectId} does not contain required Metadata resource");
+            }
 
             var editionNote = m_resourceRepository.GetLatestEditionNote(m_projectId);
             if (editionNote != null)

@@ -29,16 +29,19 @@
     "CreateRoleWithUserError": "An unexpected error occurred when creating the group with the user.",
     "RoleIsNotSelected": "The group is not selected.",
     "UserIsNotSelected": "The user is not selected.",
+    "UserCodeIsNotEntered": "The user code is not entered.",
     "ProjectIsNotSelected": "The project is not selected.",
     "RemoveProjectFromRoleError": "An unexpected error occurred when removing the project's permission from the group.",
     "AddProjectToRoleError": "An unexpected error occurred when adding the project's permission to the group.",
+    "AddProjectToUserError": "An unexpected error occurred when adding the project's permission to the user.",
     "ChangesSavedSuccessfully": "Changes were successfully saved.",
-    
+
     "PasswordResetSuccess": "Link for resetting password was sent to the user's email.",
 
     "Cancel": "Cancel",
     "Delete": "Delete",
     "Warning": "Warning",
+    "Unassign": "Unassign",
     "DeleteRoleConfirm": "Are you sure you want to delete group {0}?",
     "AssignPermission": "Assign permission",
     "UnassignPermission": "Unassign permission",
@@ -50,6 +53,7 @@
       "The group {0} has every user who is not signed in. Are you sure that you wanted to modify it?",
     "RemoveUserFromRegisteredRole":
       "The {0} is a base group for every registered user. Are you sure that you wanted to remove the user from this group?",
+    "UnassignProjectFromGroupWarning": "Translate[Opravdu odebrat dílo ze skupiny?]",
     "Remove": "Remove"
   }
 }

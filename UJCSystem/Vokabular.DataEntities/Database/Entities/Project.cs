@@ -24,6 +24,12 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual ProjectTypeEnum ProjectType { get; set; }
 
+        public virtual bool IsRemoved { get; set; }
+
+        public virtual TextTypeEnum TextType { get; set; }
+
+        public virtual ProjectGroup ProjectGroup { get; set; }
+
         public virtual IList<Resource> Resources { get; set; }
 
         public virtual IList<ProjectOriginalAuthor> Authors { get; set; }

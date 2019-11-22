@@ -1,0 +1,52 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.ProjectDetailContract>
+
+@inject ILocalizationService Localizer
+
+@if (!string.IsNullOrEmpty(Model.SearchQuery))
+{
+    <div class="row reset-search">
+        <div class="query">
+            <span class="text-nowrap">@Localizer.Translate("SearchQuery", "Permission"): <span class="searched-query">@Model.SearchQuery</span></span>
+        </div>
+        <div class="reset-search-form">
+            <form asp-action="ProjectsForGroupList" asp-controller="Project" method="get" class="">
+                <button type="submit" class="btn btn-sm btn-default">@Localizer.Translate("ResetSearch", "Permission")</button>
+            </form>
+        </div>
+    </div>
+}
+
+<div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
+@if (Model != null && Model.List.Count != 0)
+{
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <tbody>
+            @foreach (var project in Model.List)
+            {
+                <tr data-project-id="@project.Id" class="project-row">
+                    <td>
+                        <div class="name">@project.Name</div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        <i class="fa fa-info-circle fa-lg"></i>
+        @if (!string.IsNullOrEmpty(Model.SearchQuery))
+        {
+            @(Localizer.Translate("NoProjectsSearch", "Permission") + "\"")<span class="searched-query">@Model.SearchQuery</span>
+            @("\"")
+        }
+        else
+        {
+            @Localizer.Translate("NoProjectsFound", "Permission")
+        }
+    </div>
+}

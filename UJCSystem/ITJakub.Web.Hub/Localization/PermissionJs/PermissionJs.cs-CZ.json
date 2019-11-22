@@ -29,16 +29,19 @@
     "CreateRoleWithUserError": "Nastala neočekávaná chyba při vytváření skupiny s uživatelem.",
     "RoleIsNotSelected": "Není vybrána skupina.",
     "UserIsNotSelected": "Uživatel není vybrán.",
+    "UserCodeIsNotEntered": "Není zadán kód uživatele.",
     "ProjectIsNotSelected": "Není vybrán projekt.",
     "RemoveProjectFromRoleError": "Nastala neočekávaná chyba při odstraňování práva na projekt ze skupiny.",
     "AddProjectToRoleError": "Nastala neočekávaná chyba při přidávání práva na projekt skupině.",
+    "AddProjectToUserError": "Nastala neočekávaná chyba při přidávání práva na projekt uživateli.",
     "ChangesSavedSuccessfully": "Změny byly úspěšně uloženy.",
-    
+
     "PasswordResetSuccess": "Odkaz pro resetování hesla byl odeslán na email uživatele.",
 
     "Cancel": "Zrušit",
     "Delete": "Smazat",
     "Warning": "Upozornění",
+    "Unassign": "Odebrat",
     "DeleteRoleConfirm": "Opravdu chcete smazat skupinu {0}?",
     "AssignPermission": "Přiřadit právo",
     "UnassignPermission": "Odebrat právo",
@@ -50,6 +53,7 @@
       "Skupinu {0} má každý nepřihlášený uživatel. Jste si jisti, že ji chcete upravit?",
     "RemoveUserFromRegisteredRole":
       "Skupina {0} je základní skupina pro všechny registrované uživatele. Opravdu chcete odstranit uživatele z této skupiny?",
+    "UnassignProjectFromGroupWarning": "Opravdu odebrat dílo ze skupiny?",
     "Remove": "Odstranit"
   }
 }

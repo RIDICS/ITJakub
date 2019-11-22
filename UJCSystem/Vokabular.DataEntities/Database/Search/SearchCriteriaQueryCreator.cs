@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Entities.Enums;
-using Vokabular.Shared.DataContracts.Search.QueryBuilder;
+using Vokabular.DataEntities.Database.QueryBuilder;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.DataEntities.Database.Search
@@ -78,7 +78,12 @@ namespace Vokabular.DataEntities.Database.Search
 
             return queryString;
         }
-        
+
+        public bool HasHeadwordRestrictions()
+        {
+            return m_conjunctionQuery.Any(x => x.CriteriaKey == CriteriaKey.Headword);
+        }
+
         public ICriterion GetHeadwordRestrictions()
         {
             var conjunction = new Conjunction();
@@ -97,7 +102,7 @@ namespace Vokabular.DataEntities.Database.Search
             var whereBuilder = new StringBuilder();
 
             var projectTypeValues = string.Join(",", projectType.Cast<short>());
-            whereBuilder.Append($" where metadata.Id = resource.LatestVersion.Id and project.ProjectType in ({projectTypeValues})");
+            whereBuilder.Append($" where metadata.Id = resource.LatestVersion.Id and project.ProjectType in ({projectTypeValues}) and project.IsRemoved = 0");
 
             foreach (var criteriaQuery in conjunctionQuery.Where(x => x.CriteriaKey != CriteriaKey.Headword))
             {

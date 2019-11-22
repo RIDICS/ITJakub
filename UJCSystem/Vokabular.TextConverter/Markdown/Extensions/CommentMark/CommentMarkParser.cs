@@ -2,7 +2,6 @@
 using Markdig.Helpers;
 using Markdig.Parsers;
 using Markdig.Syntax.Inlines;
-using Microsoft.Extensions.Options;
 using Vokabular.TextConverter.Options;
 
 namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
@@ -14,11 +13,11 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
         private readonly char m_escapeChar;
         private readonly char m_openingChar;
 
-        public CommentMarkParser(IOptions<SpecialCharsOption> options)
+        public CommentMarkParser()
         {
-            m_escapeChar = options.Value.EscapeCharacter[0];
-            m_openingChar = options.Value.CommentMarkOpening[0];
-            m_closingChar = options.Value.CommentMarkClosing[0];
+            m_escapeChar = SpecialCharsOptions.EscapeCharacter[0];
+            m_openingChar = SpecialCharsOptions.CommentMarkOpening[0];
+            m_closingChar = SpecialCharsOptions.CommentMarkClosing[0];
 
             OpeningCharacters = new[] { m_openingChar };
         }
@@ -146,12 +145,14 @@ namespace Vokabular.TextConverter.Markdown.Extensions.CommentMark
         private bool IsBeginningOfTag(StringSlice slice, char tagClosingChar)
         {
             var i = slice.Start + CommentMark.Length + 1;
-            while (slice.Text[i].IsDigit())
+            var maxI = slice.Text.Length - 2; // the last must be closing char
+            while (i <= maxI && slice.Text[i].IsDigit())
             {
                 i++;
             }
 
-            return slice.Text[i] == tagClosingChar;
+            return i < slice.Text.Length &&
+                   slice.Text[i] == tagClosingChar;
         }
     }
 }

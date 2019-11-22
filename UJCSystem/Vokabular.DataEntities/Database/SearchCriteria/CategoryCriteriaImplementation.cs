@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Text;
+using Vokabular.DataEntities.Database.QueryBuilder;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.Shared.DataContracts.Search.Criteria;
-using Vokabular.Shared.DataContracts.Search.QueryBuilder;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 

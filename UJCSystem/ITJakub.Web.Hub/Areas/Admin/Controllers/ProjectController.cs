@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using ITJakub.Web.Hub.Areas.Admin.Controllers.Constants;
@@ -15,7 +16,9 @@ using ITJakub.Web.Hub.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using ITJakub.Web.Hub.Options;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Scalesoft.Localization.AspNetCore;
+using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
@@ -33,10 +36,10 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         public IActionResult List(string search, int start, int count = PageSizes.ProjectList, ViewType viewType = ViewType.Full,
-            ProjectOwnerTypeContract projectOwnerType = ProjectOwnerTypeContract.AllProjects)
+            ProjectOwnerTypeContract projectOwnerType = ProjectOwnerTypeContract.MyProjects)
         {
             var client = GetProjectClient();
-            var result = client.GetProjectList(start, count, GetDefaultProjectType(), projectOwnerType, search, true);
+            var result = client.GetProjectList(start, count, GetDefaultProjectType(), projectOwnerType, search, true, true, true);
             var projectItems = Mapper.Map<List<ProjectItemViewModel>>(result.List);
             var listViewModel = new ListViewModel<ProjectItemViewModel>
             {
@@ -46,16 +49,18 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 Start = start,
                 SearchQuery = search
             };
+            var filterTypes = new List<ProjectOwnerTypeContract>
+            {
+                ProjectOwnerTypeContract.MyProjects,
+                ProjectOwnerTypeContract.ForeignProjects,
+                ProjectOwnerTypeContract.AllProjects,
+            };
             var viewModel = new ProjectListViewModel
             {
                 Projects = listViewModel,
                 AvailableBookTypes = ProjectConstants.AvailableBookTypes,
-                FilterTypes = new List<ProjectOwnerTypeContract>
-                {
-                    ProjectOwnerTypeContract.AllProjects,
-                    ProjectOwnerTypeContract.MyProjects,
-                    ProjectOwnerTypeContract.ForeignProjects,
-                }
+                FilterTypes = filterTypes.Select(x =>
+                    new SelectListItem(m_localization.Translate(x.ToString(), "Admin"), x.ToString(), x == projectOwnerType)).ToList()
             };
 
             switch (viewType)
@@ -100,11 +105,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var projectClient = GetProjectClient();
             var codeListClient = GetCodeListClient();
 
+            var search = string.Empty;
+            var start = 0;
+            
             switch (tabType)
             {
                 case ProjectModuleTabType.WorkPublications:
-                    var search = string.Empty;
-                    var start = 0;
                     var snapshotList = projectClient.GetSnapshotList(projectId.Value, start, PageSizes.SnapshotList, search);
                     var listModel = CreateListViewModel<SnapshotViewModel, SnapshotAggregatedInfoContract>(snapshotList, start, PageSizes.SnapshotList, search);
                     var model = new SnapshotListViewModel
@@ -117,7 +123,17 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     var pages = projectClient.GetAllPageList(projectId.Value);
                     return PartialView("Work/_PageList", pages);
                 case ProjectModuleTabType.WorkCooperation:
-                    return PartialView("Work/_Cooperation");
+                    var result = projectClient.GetUserGroupsByProject(projectId.Value, start, PageSizes.CooperationList, search);
+                    var cooperationViewModel = new ListViewModel<UserGroupContract>
+                    {
+                        TotalCount = result.TotalCount,
+                        List = result.List,
+                        PageSize = PageSizes.CooperationList,
+                        Start = start,
+                        SearchQuery = search
+                    };
+                    
+                    return PartialView("Work/_Cooperation", cooperationViewModel);
                 case ProjectModuleTabType.WorkMetadata:
                     var literaryOriginals = codeListClient.GetLiteraryOriginalList();
                     var responsibleTypes = codeListClient.GetResponsibleTypeList();
@@ -131,10 +147,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     var literaryGenres = codeListClient.GetLiteraryGenreList();
                     var categories = codeListClient.GetCategoryList();
                     var projectCategorization = projectClient.GetProjectMetadata(projectId.Value, false, false, true, true, false, true, true);
+                    var projectGroup = projectClient.GetProjectGroups(projectId.Value);
                     var workCategorizationViewModel = Mapper.Map<ProjectWorkCategorizationViewModel>(projectCategorization);
                     workCategorizationViewModel.AllLiteraryKindList = literaryKinds;
                     workCategorizationViewModel.AllLiteraryGenreList = literaryGenres;
                     workCategorizationViewModel.AllCategoryList = categories;
+                    workCategorizationViewModel.ProjectsInGroup = Mapper.Map<IList<ProjectInfoViewModel>>(projectGroup?.Projects);
                     return PartialView("Work/_Categorization", workCategorizationViewModel);
                 case ProjectModuleTabType.WorkChapters:
                     var chapterList = projectClient.GetChapterList(projectId.Value);
@@ -163,9 +181,18 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult GetImageViewer()
+        public IActionResult GetImageViewer(long projectId)
         {
-            return PartialView("Resource/_Images");
+            var client = GetProjectClient();
+            var pages = client.GetAllPagesWithImageInfoList(projectId);
+            return PartialView("Resource/_Images", pages);
+        }
+        
+        public IActionResult ImagesPageList(long projectId)
+        {
+            var client = GetProjectClient();
+            var pages = client.GetAllPagesWithImageInfoList(projectId);
+            return PartialView("Work/SubView/_PageWithImagesTable", pages);
         }
 
         public IActionResult GetTextPreview()
@@ -203,6 +230,23 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var model = CreateListViewModel<SnapshotViewModel, SnapshotAggregatedInfoContract>(snapshotList, start, count, search);
 
             return PartialView("Work/SubView/_PublicationListPage", model);
+        } 
+        
+        public IActionResult CooperationList(long projectId, string search, int start, int count = PageSizes.CooperationList)
+        {
+            var client = GetProjectClient();
+
+            search = search ?? string.Empty;
+            var result = client.GetUserGroupsByProject(projectId, start, count, search);
+            var viewModel = new ListViewModel<UserGroupContract>
+            {
+                TotalCount = result.TotalCount,
+                List = result.List,
+                PageSize = count,
+                Start = start,
+                SearchQuery = search
+            };
+            return PartialView("Work/SubView/_CooperationList", viewModel);
         }
 
         [HttpPost]
@@ -218,12 +262,18 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult CreateProject([FromBody] CreateProjectRequest request)
         {
+            if (request.TextType == null)
+            {
+                return BadRequest();
+            }
+
             var client = GetProjectClient();
 
             var newProject = new CreateProjectContract
             {
                 Name = request.Name,
                 ProjectType = GetDefaultProjectType(),
+                TextType = request.TextType.Value,
                 BookTypesForForum = request.SelectedBookTypes,
             };
             var newProjectId = client.CreateProject(newProject);
@@ -235,8 +285,20 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             var client = GetProjectClient();
 
-            client.DeleteProject(request.Id);
+            client.RemoveProject(request.Id);
             return Json(new { });
+        }
+        
+        [HttpPost]
+        public IActionResult RenameProject([FromBody] RenameProjectRequest request)
+        {
+            var client = GetProjectClient();
+
+            client.UpdateProject(request.Id, new ItemNameContract
+            {
+                Name = request.NewProjectName,
+            });
+            return AjaxOkResponse();
         }
         
         [HttpPost]
@@ -432,6 +494,48 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
 
             return AjaxOkResponse();
+        }
+
+        [HttpPost]
+        public IActionResult AssignProjectToGroup([FromQuery] long? projectId, [FromQuery] long? targetProjectId)
+        {
+            if (projectId == null || targetProjectId == null)
+            {
+                return BadRequest();
+            }
+
+            var client = GetProjectClient();
+            client.AddProjectToGroup(targetProjectId.Value, projectId.Value);
+            return AjaxOkResponse();
+        }
+
+        [HttpPost]
+        public IActionResult RemoveProjectFromGroup([FromQuery] long? projectId)
+        {
+            if (projectId == null)
+            {
+                return BadRequest();
+            }
+
+            var client = GetProjectClient();
+            client.RemoveProjectFromGroup(projectId.Value);
+            return AjaxOkResponse();
+        }
+
+        public IActionResult ProjectsForGroupList(string search, int start, int count = PageSizes.ProjectListInDialog)
+        {
+            var client = GetProjectClient();
+            var result = client.GetProjectList(start, count, GetDefaultProjectType(), ProjectOwnerTypeContract.MyProjects, search);
+            var listViewModel = new ListViewModel<ProjectDetailContract>
+            {
+                TotalCount = result.TotalCount,
+                List = result.List,
+                PageSize = count,
+                Start = start,
+                SearchQuery = search,
+            };
+
+            return PartialView("Work/SubView/_ProjectsForGroupWidget", listViewModel);
         }
 
         #region Typeahead

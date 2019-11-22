@@ -36,13 +36,22 @@ interface IUserDetail extends IUser {
     createTime: string;
 }
 
-interface IAddProjectToRoleRequest {
+interface IPermissionsConfiguration {
     bookId: number;
-    roleId: number;
     showPublished: boolean;
     readProject: boolean;
     adminProject: boolean;
     editProject: boolean;
+}
+
+interface IAddProjectToUserGroupRequest {
+    roleId: number;
+    permissionsConfiguration: IPermissionsConfiguration;
+}
+
+interface IAddProjectToSingleUserGroupRequest {
+    userCode: string;
+    permissionsConfiguration: IPermissionsConfiguration;
 }
 
 interface INewsSyndicationItemContract {

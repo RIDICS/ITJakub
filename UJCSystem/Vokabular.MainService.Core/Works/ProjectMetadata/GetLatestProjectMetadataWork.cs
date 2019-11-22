@@ -10,6 +10,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
         private readonly MetadataRepository m_metadataRepository;
         private readonly long m_projectId;
         private readonly GetProjectMetadataParameter m_parameters;
+        private Project m_project;
 
         public GetLatestProjectMetadataWork(MetadataRepository metadataRepository, long projectId, GetProjectMetadataParameter parameters) : base(metadataRepository)
         {
@@ -24,11 +25,16 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
 
             if (m_parameters.IsAnyAdditionalParameter())
             {
-                m_metadataRepository.GetAdditionalProjectMetadata(m_projectId, m_parameters.IncludeAuthor, m_parameters.IncludeResponsiblePerson,
+                m_project = m_metadataRepository.GetAdditionalProjectMetadata(m_projectId, m_parameters.IncludeAuthor, m_parameters.IncludeResponsiblePerson,
                     m_parameters.IncludeKind, m_parameters.IncludeGenre, m_parameters.IncludeOriginal, m_parameters.IncludeKeyword, m_parameters.IncludeCategory);
             }
             
             return result;
+        }
+
+        public Project GetProjectWithAdditionalData()
+        {
+            return m_project;
         }
     }
 }

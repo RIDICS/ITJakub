@@ -4,6 +4,7 @@
     public static getDefaultConfiguration(): Dropzone.DropzoneOptions {
         var options: Dropzone.DropzoneOptions = {
             maxFilesize: 10000, // size in MB
+            timeout: 0, // disable timeout
             uploadMultiple: true,
             autoProcessQueue: true,
             parallelUploads: 5,
@@ -59,7 +60,8 @@ class BootstrapDialogWrapper {
         errorElementSelector: ".dialog-error",
         progressElementSelector: ".saving-icon",
         submitElementSelector: ".save-button"
-    }
+    };
+    private onHiddenCallback: () => void = null;
 
     constructor(options: IBootstrapDialogWrapperOptions) {
         this.options = $.extend({}, this.defaultOptions, options);
@@ -78,6 +80,12 @@ class BootstrapDialogWrapper {
             this.clear();
         });
 
+        this.$element.on("hidden.bs.modal", () => {
+            if (this.onHiddenCallback != null) {
+                this.onHiddenCallback();
+            }
+        });
+
         $(this.options.submitElementSelector, this.$element).click(() => {
             this.showSaving();
             var callback = this.options.submitCallback;
@@ -88,6 +96,7 @@ class BootstrapDialogWrapper {
     }
 
     public show() {
+        this.onHiddenCallback = null;
         $(this.options.errorElementSelector + ", " + this.options.progressElementSelector, this.$element).hide();
 
         this.$element.modal({
@@ -96,7 +105,8 @@ class BootstrapDialogWrapper {
         });
     }
 
-    public hide() {
+    public hide(onHidden: () => void = null) {
+        this.onHiddenCallback = onHidden;
         this.$element.modal("hide");
     }
 
@@ -105,6 +115,13 @@ class BootstrapDialogWrapper {
             $("input", this.$element).val("");
             $("textarea", this.$element).val("");
             $("select", this.$element).val("");
+
+            $("select", this.$element).each((index, element: HTMLSelectElement) => {
+                const option = $("option[selected]", element);
+                if (option.length === 0) return;
+
+                $(element).val(option.attr("value"));
+            });
 
             if (this.options.elementsToClearSelector) {
                 $(this.options.elementsToClearSelector).empty();

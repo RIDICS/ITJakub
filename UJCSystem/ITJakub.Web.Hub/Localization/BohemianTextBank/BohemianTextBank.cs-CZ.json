@@ -22,6 +22,7 @@
     "NumberOfResults": "Počet výsledků",
     "NumberOfResultsOnPage": "Počet výsledků na stránce",
     "NumberOfProjects": "Počet děl",
+    "CurrentPage": "Aktuální stránka",
     "UseSearchForResults": "Pro zobrazení výsledků použijte vyhledávání",
     "Doc": "Doc",
     "Author": "Autor",
@@ -42,6 +43,8 @@
     "NumberOfResultsPerPageWarning": "Počet výsledků na stránce by měl být mezi {0} a {1}.",
     "Warning": "Upozornění",
     "LastPageOfResults": "Poslední stránka výsledků",
+    "LastPageOfResultsDetail": "Nelze načíst další výsledky, protože se již nacházíte na poslední stránce.",
+    "FirstPageOfResultsDetail": "Nelze načíst předchozí stránku, protože se již nacházíte na první stránce.",
     "AllResults": "Všechny výsledky",
     "PageWithNumberDoesNotExists": "Stránka {0} neexistuje",
     "NoResults": "Žádné výsledky"

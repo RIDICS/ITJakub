@@ -49,6 +49,9 @@
 
                 this.viewer.addImageContent(pageImageEl, resultData.imageUrl);
                 this.addImageDropzoneDialog.hide();
+
+                const pageId = pageImageEl.data("page-id");
+                $(`.page-row[data-page-id="${pageId}"]`).find(".fa-image").removeClass("hide");
             },
             sending: (file, xhr, formData) => {
                 xhr.onreadystatechange = () => {

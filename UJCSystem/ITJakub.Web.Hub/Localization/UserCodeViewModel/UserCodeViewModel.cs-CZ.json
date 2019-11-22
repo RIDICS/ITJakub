@@ -1,0 +1,7 @@
+{
+  "culture": "cs-CZ",
+  "scope": "UserCodeViewModel",
+  "dictionary": {
+    "UserCode": "Kód uživatele"
+  }
+}

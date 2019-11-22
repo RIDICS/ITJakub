@@ -73,7 +73,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             foreach (var bookContentItem in bookContentItems)
             {
                 PageResource dbPage;
-                if (!dbPagesByPosition.TryGetValue(bookContentItem.Page.Position, out dbPage))
+                if (bookContentItem.Page == null)
+                {
+                    dbPage = null;
+                }
+                else if (!dbPagesByPosition.TryGetValue(bookContentItem.Page.Position, out dbPage))
                 {
                     throw new ArgumentException($"Trying assign Chapter to non-existent Page with position {bookContentItem.Page.Position} (page name: {bookContentItem.Page.Text})");
                 }
@@ -91,7 +95,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 {
                     Resource = null,
                     Name = bookContentItem.Text,
-                    ResourceBeginningPage = dbPage.Resource,
+                    ResourceBeginningPage = dbPage?.Resource,
                     Comment = string.Empty,
                     CreateTime = now,
                     CreatedByUser = user,

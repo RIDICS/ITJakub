@@ -108,7 +108,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinQueryOver(x => permissionAlias.UserGroup, () => groupAlias)
                 .JoinQueryOver(x => groupAlias.Users, () => userAlias)
                 .Select(Projections.Distinct(Projections.Property(() => projectAlias.Id)))
-                .Where(() => userAlias.Id == userId)
+                .Where(() => userAlias.Id == userId && projectAlias.IsRemoved == false)
                 .AndRestrictionOn(() => projectAlias.Id).IsInG(bookIds)
                 .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(permission))
                 .List<long>();
@@ -126,7 +126,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinQueryOver(x => x.Permissions, () => permissionAlias)
                 .JoinQueryOver(x => permissionAlias.UserGroup, () => groupAlias)
                 .Select(Projections.Distinct(Projections.Property(() => projectAlias.Id)))
-                .Where(() => groupAlias.Id == groupId)
+                .Where(() => groupAlias.Id == groupId && projectAlias.IsRemoved == false)
                 .AndRestrictionOn(() => projectAlias.Id).IsInG(bookIds)
                 .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(permission))
                 .List<long>();
@@ -147,7 +147,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinQueryOver(x => x.Permissions, () => permissionAlias)
                 .JoinQueryOver(x => x.UserGroup, () => groupAlias)
                 .JoinQueryOver(x => x.Users, () => userAlias)
-                .Where(() => userAlias.Id == userId && resourceAlias.Id == resourceId)
+                .Where(() => userAlias.Id == userId && resourceAlias.Id == resourceId && projectAlias.IsRemoved == false)
                 .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(permission))
                 .SingleOrDefault();
 
@@ -165,7 +165,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinQueryOver(x => x.Project, () => projectAlias)
                 .JoinQueryOver(x => x.Permissions, () => permissionAlias)
                 .JoinQueryOver(x => x.UserGroup, () => groupAlias)
-                .Where(() => groupAlias.Id == groupId && resourceAlias.Id == resourceId)
+                .Where(() => groupAlias.Id == groupId && resourceAlias.Id == resourceId && projectAlias.IsRemoved == false)
                 .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(permission))
                 .SingleOrDefault();
 
@@ -181,7 +181,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             var permissions = GetSession().QueryOver(() => permissionAlias)
                 .JoinQueryOver(x => permissionAlias.Project, () => projectAlias)
                 .JoinQueryOver(x => permissionAlias.UserGroup, () => groupAlias)
-                .Where(() => groupAlias.Id == groupId)
+                .Where(() => groupAlias.Id == groupId && projectAlias.IsRemoved == false)
                 .AndRestrictionOn(() => projectAlias.Id).IsInG(bookIds)
                 .List<Permission>();
 
@@ -229,16 +229,17 @@ namespace Vokabular.DataEntities.Database.Repositories
             UserGroup groupAlias = null;
 
             var query = GetSession().QueryOver(() => groupAlias)
-                .JoinQueryOver(x => groupAlias.Permissions, () => permissionAlias)
-                .JoinQueryOver(x => permissionAlias.Project, () => projectAlias)
-                .Where(() => projectAlias.Id == bookId);
+                .JoinAlias(x => groupAlias.Permissions, () => permissionAlias)
+                .JoinAlias(x => permissionAlias.Project, () => projectAlias)
+                .Where(() => projectAlias.Id == bookId && projectAlias.IsRemoved == false);
 
             if (!string.IsNullOrEmpty(filterByName))
             {
                 query.WhereRestrictionOn( () => groupAlias.Name).IsInsensitiveLike(filterByName, MatchMode.Anywhere);
             }
 
-            query.OrderBy(x => x.Name).Asc
+            query.OrderBy(x => x.GroupType).Asc
+                .OrderBy(x => x.Name).Asc
                 .Skip(start)
                 .Take(count);
 
@@ -274,7 +275,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => userGroupAlias.Users, () => userAlias)
                 .JoinAlias(x => x.Project, () => projectAlias)
                 .JoinAlias(() => projectAlias.Snapshots, () => snapshotAlias)
-                .Where(() => snapshotAlias.Id == snapshotId && userAlias.Id == userId)
+                .Where(() => snapshotAlias.Id == snapshotId && userAlias.Id == userId && projectAlias.IsRemoved == false)
                 .List();
         }
 
@@ -288,7 +289,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.UserGroup, () => userGroupAlias)
                 .JoinAlias(x => x.Project, () => projectAlias)
                 .JoinAlias(() => projectAlias.Snapshots, () => snapshotAlias)
-                .Where(() => snapshotAlias.Id == snapshotId && userGroupAlias.Id == userGroupId)
+                .Where(() => snapshotAlias.Id == snapshotId && userGroupAlias.Id == userGroupId && projectAlias.IsRemoved == false)
                 .SingleOrDefault();
         }
     }

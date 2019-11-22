@@ -7,6 +7,7 @@
     private readonly apiClient: EditorsApiClient;
     private readonly commentArea: CommentArea;
     private readonly editModeSelector = "is-edited";
+    private readonly alertHolderSelector = ".alert-holder";
     private readonly client: TextApiClient;
     private readonly simpleMdeTools: SimpleMdeTools;
     private readonly errorHandler: ErrorHandler;
@@ -165,6 +166,8 @@
                                 label: localization.translate("CloseWithoutSaving", "RidicsProject").value,
                                 className: "btn-default",
                                 callback: () => {
+                                    const alertHolder = previousPageEl.find(this.alertHolderSelector);
+                                    alertHolder.empty();
                                     this.editorChangePage(previousPageEl, selectedPageRow);
                                 }
                             },
@@ -209,6 +212,8 @@
                             label: localization.translate("CloseWithoutSaving", "RidicsProject").value,
                             className: "btn-default",
                             callback: () => {
+                                const alertHolder = pageRows.find(this.alertHolderSelector);
+                                alertHolder.empty();
                                 this.simplemde.toTextArea();
                                 this.simplemde = null;
                                 this.togglePageRows(pageRows);
@@ -284,7 +289,7 @@
 
     saveContents(textId: number, contents: string, pageRow: JQuery<HTMLElement>, mode = SaveTextModeType.FullValidateOrDeny, doneCallback: () => void = null): void {
         const saveAjax = this.saveText(textId, contents, mode);
-        const alertHolder = pageRow.find(".alert-holder");
+        const alertHolder = pageRow.find(this.alertHolderSelector);
         alertHolder.empty();
         const pageElement = pageRow.find(".page");
         

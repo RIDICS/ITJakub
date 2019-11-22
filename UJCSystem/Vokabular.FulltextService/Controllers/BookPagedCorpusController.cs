@@ -8,7 +8,7 @@ using Vokabular.Shared.DataContracts.Search.Request;
 namespace Vokabular.FulltextService.Controllers
 {
     [Route("api/[controller]")]
-    public class BookPagedCorpusController : Controller
+    public class BookPagedCorpusController : ApiControllerBase
     {
         private readonly SearchManager m_searchManager;
 
@@ -36,22 +36,37 @@ namespace Vokabular.FulltextService.Controllers
         /// </param>
         /// <returns></returns>
         [HttpPost("search")]
-        public CorpusSearchSnapshotsResultContract SearchCorpusSnapshots([FromBody] BookPagedCorpusSearchRequestContract searchRequest)
+        public ActionResult<CorpusSearchSnapshotsResultContract> SearchCorpusSnapshots([FromBody] BookPagedCorpusSearchRequestContract searchRequest)
         {
+            if (ContainsAnyUnsupportedCriteria(searchRequest))
+            {
+                return BadRequest("Request contains unsupported criteria");
+            }
+
             var result = m_searchManager.SearchCorpusSnapshotsByCriteria(searchRequest);
             return result;
         }
 
         [HttpPost("snapshot/{snapshotId}/search")]
-        public List<CorpusSearchResultContract> SearchCorpusSnapshot(long snapshotId, [FromBody] BookPagedCorpusSearchInSnapshotRequestContract searchRequest)
+        public ActionResult<List<CorpusSearchResultContract>> SearchCorpusSnapshot(long snapshotId, [FromBody] BookPagedCorpusSearchInSnapshotRequestContract searchRequest)
         {
+            if (ContainsAnyUnsupportedCriteria(searchRequest))
+            {
+                return BadRequest("Request contains unsupported criteria");
+            }
+
             var result = m_searchManager.SearchCorpusSnapshotByCriteria(snapshotId, searchRequest);
             return result;
         }
 
         [HttpPost("search-count")]
-        public long SearchCorpusSnapshotsCount([FromBody] SearchRequestContractBase searchRequest)
+        public ActionResult<long> SearchCorpusSnapshotsCount([FromBody] SearchRequestContractBase searchRequest)
         {
+            if (ContainsAnyUnsupportedCriteria(searchRequest))
+            {
+                return BadRequest("Request contains unsupported criteria");
+            }
+
             var result = m_searchManager.SearchCorpusSnapshotsByCriteriaCount(searchRequest);
             return result.Result;
         }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Vokabular.Core.Search;
 using Vokabular.Core.Storage;
 using Vokabular.Core.Storage.PathResolvers;
 using Vokabular.Shared.Container;
@@ -10,9 +9,6 @@ namespace Vokabular.Core
     {
         public void Install(IServiceCollection services)
         {
-            services.AddScoped<MetadataSearchCriteriaDirector>();
-            services.AddScoped<MetadataSearchCriteriaProcessor>();
-
             services.AddScoped<IFileSystemManager, FileSystemManager>();
             services.AddScoped<IResourceTypePathResolver, ConvertedMetadataPathResolver>();
             services.AddScoped<IResourceTypePathResolver, UploadedMetaDataPathResolver>();
