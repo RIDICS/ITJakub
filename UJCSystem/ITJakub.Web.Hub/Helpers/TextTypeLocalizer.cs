@@ -24,5 +24,18 @@ namespace ITJakub.Web.Hub.Helpers
                     return textType.ToString();
             }
         }
+
+        public string TranslateTextTypeFull(TextTypeEnumContract textType)
+        {
+            switch (textType)
+            {
+                case TextTypeEnumContract.Transliterated:
+                    return m_localizationService.Translate("TransliteratedText", "Admin");
+                case TextTypeEnumContract.Transcribed:
+                    return m_localizationService.Translate("TranscribedText", "Admin");
+                default:
+                    return textType.ToString();
+            }
+        }
     }
 }

@@ -171,6 +171,8 @@
     "Generate": "translate[Generovat]",
     "Transcribed": "Transcribed",
     "Transliterated": "Transliterated",
+    "TranscribedText": "Transcribed text",
+    "TransliteratedText": "Transliterated text",
 
     "PublishedSnapshots": "Published publications",
     "Date": "translate[Datum]",
