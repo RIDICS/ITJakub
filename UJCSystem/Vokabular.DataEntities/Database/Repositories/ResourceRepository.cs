@@ -203,6 +203,17 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
+        public virtual Term GetTermByNameAndCategoryName(string termName, string termCategoryName)
+        {
+            TermCategory termCategoryAlias = null;
+
+            return GetSession().QueryOver<Term>()
+                .JoinAlias(x => x.TermCategory, () => termCategoryAlias)
+                .Where(x => x.Text == termName)
+                .And(() => termCategoryAlias.Name == termCategoryName)
+                .SingleOrDefault();
+        }
+
         public virtual TermCategory GetTermCategoryByName(string termCategoryName)
         {
             return GetSession().QueryOver<TermCategory>()
