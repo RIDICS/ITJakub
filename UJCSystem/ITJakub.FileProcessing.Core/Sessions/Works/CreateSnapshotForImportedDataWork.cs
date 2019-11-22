@@ -45,12 +45,13 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
                 m_resourceVersionIds.Select(x => m_projectRepository.Load<ResourceVersion>(x)).ToList();
 
             var bookTypes = CreateBookTypes();
+            var defaultBookType = bookTypes.First();
             var versionNumber = latestSnapshot != null ? latestSnapshot.VersionNumber : 0;
             var newDbSnapshot = new Snapshot
             {
                 Project = project,
                 BookTypes = bookTypes,
-                DefaultBookType = bookTypes.FirstOrDefault(),
+                DefaultBookType = defaultBookType,
                 Comment = m_comment,
                 CreateTime = now,
                 PublishTime = now,
@@ -83,21 +84,36 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
 
                 bookTypes.Add(bookTypeEnum);
 
-                var dbBookType = m_projectRepository.GetBookTypeByEnum(bookTypeEnum);
-                if (dbBookType == null)
-                {
-                    dbBookType = new BookType
-                    {
-                        Type = bookTypeEnum
-                    };
-                    m_projectRepository.Create(dbBookType);
-                }
+                var dbBookType = GetOrCreateBookTypeForEnum(bookTypeEnum);
 
                 resultList.Add(dbBookType);
             }
 
+            if (bookTypes.Count == 0)
+            {
+                var defaultBookTypeEnum = BookTypeEnum.BibliographicalItem;
+
+                bookTypes.Add(defaultBookTypeEnum);
+                resultList.Add(GetOrCreateBookTypeForEnum(defaultBookTypeEnum));
+            }
+
             BookTypes = bookTypes;
             return resultList;
+        }
+
+        private BookType GetOrCreateBookTypeForEnum(BookTypeEnum bookTypeEnum)
+        {
+            var dbBookType = m_projectRepository.GetBookTypeByEnum(bookTypeEnum);
+            if (dbBookType == null)
+            {
+                dbBookType = new BookType
+                {
+                    Type = bookTypeEnum
+                };
+                m_projectRepository.Create(dbBookType);
+            }
+
+            return dbBookType;
         }
 
         private void FillCategories(Dictionary<string, BookTypeEnum> xmlIdToBookType, List<CategoryData> categoryDataList)
