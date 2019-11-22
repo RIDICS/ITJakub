@@ -73,7 +73,7 @@
         const container = roleSection.find(".list-container");
         const searchForm = roleSection.find(".role-search-form");
         searchForm.find("input.search-value").val("");
-        container.html("<div class=\"lv-dots sm lv-mid\"></div>");
+        container.html("<div class=\"lv-dots md lv-mid\"></div>");
         roleSection.removeClass("hide");
 
         this.client.getRolesByProject(projectId).done(response => {

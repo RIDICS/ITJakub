@@ -68,7 +68,7 @@ class RoleManager {
         const container = userSection.find(".list-container");
         const searchForm = userSection.find(".user-search-form");
         searchForm.find("input.search-value").val("");
-        var loader = lv.create(null, "lv-dots lv-mid sm");
+        var loader = lv.create(null, "lv-dots lv-mid md");
         container.empty();
         container.append(loader.getElement());
         userSection.removeClass("hide");
@@ -97,7 +97,7 @@ class RoleManager {
     private loadPermissions(roleId: number) {
         const permissionSection = $("#permission-section .section");
         const container = permissionSection.find(".list-container");
-        var loader = lv.create(null, "lv-dots lv-mid sm");
+        var loader = lv.create(null, "lv-dots lv-mid md");
         container.empty();
         container.append(loader.getElement());
         const searchForm = permissionSection.find(".permission-search-form");
