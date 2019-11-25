@@ -181,7 +181,7 @@
 
 function listProfLitBookReadClicked(target) {
     return context => {
-        var bookId = $(target).parents("li.list-item").attr("data-bookid");
+        var bookId = $(target).parents("li.list-item").attr("data-id");
         if (context.search.isLastQueryJson()) { //only text seach criteria we should propagate
             onClickHref(context.event, getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
         } else {
@@ -192,7 +192,7 @@ function listProfLitBookReadClicked(target) {
 
 function searchProfLitBookReadClicked(target) {
     return context => {
-        var bookId = $(target).parents("li.list-item").attr("data-bookid");
+        var bookId = $(target).parents("li.list-item").attr("data-id");
         onClickHref(context.event, getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
     }
 }

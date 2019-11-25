@@ -213,7 +213,6 @@ class BibliographyModule {
         var liElement: HTMLLIElement = document.createElement('li');
         $(liElement).addClass('list-item');
         $(liElement).attr("data-id", bibItem.BookId);
-        $(liElement).attr("data-bookid", bibItem.BookXmlId);
         $(liElement).attr("data-booktype", bibItem.BookType);
         $(liElement).attr("data-name", bibItem.Title);
         $(liElement).attr("data-century", bibItem.Century);
@@ -379,7 +378,6 @@ interface IBookRenderData {
 
 interface IBookInfo {
     BookId: number;
-    BookXmlId: string;
     BookType: BookTypeEnum;
     Title: string;
     Editor: string;
