@@ -9,6 +9,7 @@
     }
 
     init() {
+        this.showLoading();
         $("#project-layout-content").find("*").off();
         this.createEntryButtonEl.text(localization.translate("CreateOriginalAuthor", "KeyTable").value);
         this.changeEntryButtonEl.text(localization.translate("RenameOriginalAuthor", "KeyTable").value);
@@ -27,6 +28,7 @@
     };
 
     private updateContentAfterChange() {
+        this.showLoading();
         const initial = true;
         this.loadPage(this.currentPage, initial);
     }

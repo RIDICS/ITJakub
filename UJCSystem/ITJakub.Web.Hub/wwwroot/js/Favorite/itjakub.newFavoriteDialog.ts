@@ -74,12 +74,14 @@
         };
         var queryString = $.param(queryParameters);
         var url = getBaseUrl() + "Favorite/NewFavorite?" + queryString;
+        var loader = lv.create(null, "lv-circles sm lv-mid lvt-1 lvb-1");
 
         $(this.saveTitle)
             .text(localization.translate("Confirm", this.localizationScope).value);
         $(".modal-body", this.container)
-            .addClass("loading")
             .empty();
+        $(".modal-body", this.container).append(loader.getElement());
+        
         $(".modal-body", this.container).load(url, null, (responseTxt, statusTxt, xhr) => {
             if (statusTxt === "success") {
                 this.finishInnerInitialization();

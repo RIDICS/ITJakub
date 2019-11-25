@@ -28,6 +28,7 @@
     <link asp-append-version="true" href="~/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker-plus.min.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/lib/s-pagination/dist/pagination.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/css/ITJakubStyle.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/css/lib.loading-visualization.css" rel="stylesheet" />
     @RenderSection("styles", false)
     <partial name="_AutoLogin" />
 </head>
@@ -110,6 +111,14 @@
         <script asp-append-version="true" src="~/js/itjakub.bundle.js"></script>
         <script asp-append-version="true" src="~/js/Plugins/itjakub.plugins.bundle.js"></script>
         <script asp-append-version="true" src="~/js/Favorite/itjakub.favorite.bundle.js"></script>
+        <script asp-append-version="true" src="~/lib/loading-visualization/dist/main.js"></script>
+        <script>
+            $(document).ready(function() {
+                var loader = new lv();
+                loader.initLoaderAll();
+                loader.startObserving();
+            });
+        </script>
 
         @RenderSection("scripts", false)
 

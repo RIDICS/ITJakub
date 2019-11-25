@@ -10,6 +10,7 @@
     }
 
     init() {
+        this.showLoading();
         $("#project-layout-content").find("*").off();
         this.createEntryButtonEl.text(localization.translate("CreateGenre", "KeyTable").value);
         this.changeEntryButtonEl.text(localization.translate("RenameGenre", "KeyTable").value);
@@ -33,6 +34,7 @@
     }
 
     private updateContentAfterChange() {
+        this.showLoading();
         this.util.getLiteraryGenreList().done((data: IGenreResponseContract[]) => {
             this.genreItemList = data;
             this.loadPage(this.currentPage);

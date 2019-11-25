@@ -10,6 +10,7 @@
     }
 
     init() {
+        this.showLoading();
         $("#project-layout-content").find("*").off();
         this.createEntryButtonEl.text(localization.translate("CreateKeyword", "KeyTable").value);
         this.changeEntryButtonEl.text(localization.translate("RenameKeyword", "KeyTable").value);
@@ -45,6 +46,7 @@
     }
 
     private updateContentAfterChange() {
+        this.showLoading();
         const initial = true;
         this.loadPage(this.currentPage, initial);
     }

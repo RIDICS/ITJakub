@@ -19,9 +19,13 @@
 
     <property name="IsRemoved" not-null="true" />
 
+    <property name="TextType" not-null="true" />
+
     <many-to-one name="LatestPublishedSnapshot" class="Snapshot" lazy="proxy" />
 
     <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
+
+    <many-to-one name="ProjectGroup" class="ProjectGroup" lazy="proxy" not-null="false" />
     
     <bag name="Snapshots">
       <key column="Project" />

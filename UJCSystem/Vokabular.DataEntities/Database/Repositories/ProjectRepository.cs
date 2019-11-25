@@ -269,5 +269,17 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(() => userAlias.Id == userId && projectAlias.IsRemoved == false)
                 .List();
         }
+
+        public virtual ProjectGroup GetProjectGroupWithProjects(long projectId)
+        {
+            var subquery = QueryOver.Of<Project>()
+                .Where(x => x.Id == projectId)
+                .Select(x => x.ProjectGroup.Id);
+
+            return GetSession().QueryOver<ProjectGroup>()
+                .WithSubquery.Where(x => x.Id == subquery.As<int>())
+                .Fetch(SelectMode.Fetch, x => x.Projects)
+                .SingleOrDefault<ProjectGroup>();
+        }
     }
 }

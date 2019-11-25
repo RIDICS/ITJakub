@@ -11,6 +11,7 @@
     }
 
     init() {
+        this.showLoading();
         $("#project-layout-content").find("*").off();
         this.createEntryButtonEl.text(localization.translate("CreateCategory", "KeyTable").value);
         this.changeEntryButtonEl.text(localization.translate("ChangeCategory", "KeyTable").value);
@@ -36,7 +37,7 @@
     }
 
     private updateContentAfterChange() {
-
+        this.showLoading();
         this.util.getCategoryList().done((data: ICategoryContract[]) => {
             this.categoryItemList = this.generateListStructure(data);
             const numberOfParentCategories = this.categoryItemList.children(".page-list-item").length;

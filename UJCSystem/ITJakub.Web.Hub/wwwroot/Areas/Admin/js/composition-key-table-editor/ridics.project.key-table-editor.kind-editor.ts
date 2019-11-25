@@ -10,6 +10,7 @@
     }
 
     init() {
+        this.showLoading();
         $("#project-layout-content").find("*").off();
         this.createEntryButtonEl.text(localization.translate("CreateKind", "KeyTable").value);
         this.changeEntryButtonEl.text(localization.translate("RenameKind", "KeyTable").value);
@@ -48,6 +49,7 @@
     }
 
     private updateContentAfterChange() {
+        this.showLoading();
         this.util.getLitararyKindList().done((data: ILiteraryKindContract[]) => {
             this.literaryKindItemList = data;
             this.loadPage(this.currentPage);

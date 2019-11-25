@@ -10,6 +10,7 @@
     }
 
     init() {
+        this.showLoading();
         $("#project-layout-content").find("*").off();
         this.createEntryButtonEl.text(localization.translate("CreateResponsiblePerson", "KeyTable").value);
         this.changeEntryButtonEl.text(localization.translate("RenameResponsiblePerson", "KeyTable").value);
@@ -26,6 +27,7 @@
     };
 
     private updateContentAfterChange() {
+        this.showLoading();
         const initial = true;
         this.loadPage(this.currentPage, initial);
     }

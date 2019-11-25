@@ -10,7 +10,8 @@
     "wwwroot/js",
     "wwwroot/Areas",
     "wwwroot/lib/scalesoft-localization-web",
-    "wwwroot/lib/s-pagination"
+    "wwwroot/lib/s-pagination",
+    "wwwroot/lib/loading-visualization/dist/main.d.ts"
   ],
   "compileOnSave": false
 }

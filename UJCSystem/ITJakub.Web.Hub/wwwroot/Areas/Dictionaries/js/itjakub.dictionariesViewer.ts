@@ -18,8 +18,7 @@
     private searchCriteria: string;
     private isCriteriaJson: boolean;
     private defaultPageNumber: number;
-
-    private localization : Localization;
+    private localization: Localization;
 
     constructor(headwordListContainer: string, paginationContainer: string, headwordDescriptionContainer: string, lazyLoad: boolean) {
         this.headwordDescriptionContainer = headwordDescriptionContainer;
@@ -33,7 +32,6 @@
             maxVisibleElements: 11,
             showInput: true
         });
-
         this.localization = localization;
     }
 
@@ -127,12 +125,15 @@
 
         var backgroundDiv1 = document.createElement("div");
         var backgroundDiv2 = document.createElement("div");
-        var loadingDiv = document.createElement("div");
+
+        var loadingDiv1 = lv.create(null, "lv-dots md lv-mid loading-headword");
+        var loadingDiv2 = lv.create(null, "lv-dots md lv-mid loading-headword");
 
         $(backgroundDiv1).addClass("dictionary-loading");
         $(backgroundDiv2).addClass("dictionary-loading");
-        $(backgroundDiv1).append(loadingDiv);
-        $(loadingDiv).addClass("loader");
+        $(backgroundDiv1).append(loadingDiv1.getElement());
+        $(backgroundDiv2).append(loadingDiv2.getElement());
+
         $(this.headwordListContainer).append(backgroundDiv1);
         $(this.headwordDescriptionContainer).append(backgroundDiv2);
     }
@@ -180,7 +181,6 @@
             
             var dictionaryListDiv = document.createElement("div");
             $(dictionaryListDiv).addClass("dictionary-result-book-list");
-
             for (var j = 0; j < record.dictionaries.length; j++) {
                 var dictionary = record.dictionaries[j];
                 var dictionaryMetadata = this.dictionariesMetadataList[dictionary.bookId];
@@ -188,6 +188,9 @@
 
                 // create description
                 var mainHeadwordDiv = document.createElement("div");
+
+                var bar = lv.create(null, "lv-circles lv-mid sm");
+                $(mainHeadwordDiv).append(bar.getElement());
 
                 if (dictionary.pageId) { //image may be exists
                     var imageCheckBoxDiv = document.createElement("div");
@@ -222,7 +225,7 @@
                 $(imageContainerDiv).addClass("dictionary-entry-image");
 
                 var descriptionDiv = document.createElement("div");
-                $(mainHeadwordDiv).addClass("loading-background");
+                
                 $(descriptionDiv).addClass("dictionary-entry-description-container");
                 
                 var commentsDiv = document.createElement("div");
@@ -294,20 +297,20 @@
                 imageContainer.removeClass("hidden");
                 return;
             }
+            var imageLoader = lv.create(null, "lv-circles tiny lv-mid lvt-1");
+            $(imageContainer).append(imageLoader.getElement());
 
             var index = $(mainDiv).data("entry-index");
             var entryInfo = this.dictionariesInfo[index];
             var imageLink = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordImage?pageId=" + entryInfo.pageId;
             var imageElement = document.createElement("img");
             imageElement.setAttribute("src", imageLink);
-            imageContainer.append(imageElement);
 
-            $(imageContainer).addClass("loading");
             imageElement.onload = () => {
-                $(imageContainer).removeClass("loading");
+                imageContainer.append(imageElement);
+                imageLoader.remove();
             };
             imageElement.onerror = () => {
-                $(imageContainer).removeClass("loading");
                 $(imageContainer).empty();
 
                 var errorDiv = document.createElement("div");
@@ -372,7 +375,7 @@
 
     private showLoadHeadword(response: string, container: HTMLDivElement) {
         $(container).empty();
-        $(container).parent().removeClass("loading-background");
+        $(container).siblings().remove('.lv-circles');
         container.innerHTML = response;
         if (this.isRequestToPrint)
             this.print();
@@ -380,7 +383,7 @@
 
     private showLoadError(headword: string, container: HTMLDivElement) {
         $(container).empty();
-        $(container).parent().removeClass("loading-background");
+        $(container).siblings().remove('.lv-circles');
 
         var errorDiv = document.createElement("div");
         //$(errorDiv).text("Chyba při náčítání hesla '" + headword + "'.");
@@ -395,7 +398,7 @@
 
     private loadImageOnError(index: number, container: HTMLDivElement) {
         $(container).empty();
-        $(container).parent().removeClass("loading-background");
+        $(container).siblings().remove('.lv-circles');
 
         var mainDiv = this.headwordDescriptionDivs[index];
         var headwordDescriptionContainer = $(".dictionary-entry-description-container", mainDiv);
@@ -485,7 +488,7 @@
 
     private isAllLoaded(): boolean {
         var descriptions = $(this.headwordDescriptionContainer);
-        var notLoaded = $(".loading-background", descriptions);
+        var notLoaded = $(".lv-circles", descriptions);
         var notLoadedVisible = notLoaded.filter(":not(.hidden)");
         return notLoadedVisible.length === 0;
     }

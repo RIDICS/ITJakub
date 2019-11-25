@@ -13,6 +13,8 @@
     protected readyForInit = false;
     protected notInitialized = true;
 
+    protected firstLoad: boolean = true;
+
     protected configuration: IModulInicializatorConfiguration;
     protected defaultConfiguration = {
         base: {
@@ -171,8 +173,12 @@
         const count = bibliographyModule.getBooksCountOnPage();
         const sortAsc = bibliographyModule.isSortedAsc();
         const sortingEnum = bibliographyModule.getSortCriteria();
-        bibliographyModule.clearBooks();
-        bibliographyModule.showLoading();
+
+        if (!this.firstLoad) {
+            bibliographyModule.clearBooks();
+            bibliographyModule.showLoading();
+        }
+        this.firstLoad = false;
 
         $.ajax({
             type: "GET",
@@ -204,8 +210,12 @@
             const count = bibliographyModule.getBooksCountOnPage();
             const sortAsc = bibliographyModule.isSortedAsc();
             const sortingEnum = bibliographyModule.getSortCriteria();
-            bibliographyModule.clearBooks();
-            bibliographyModule.showLoading();
+
+            if (!this.firstLoad) {
+                bibliographyModule.clearBooks();
+                bibliographyModule.showLoading();
+            }
+            this.firstLoad = false;
 
             $.ajax({
                 type: "GET",
