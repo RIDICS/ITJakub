@@ -14,6 +14,7 @@ class BookTypeConfiguration {
     bookType: BookTypeEnum;
     rightPanelConfig: RightPanelConfiguration;
     middlePanelConfig: MiddlePanelConfiguration;
+    midRightPanelConfig: MidRightPanelConfiguration;
     bottomPanelConfig: BottomPanelConfiguration;
 
     private exists: boolean;
@@ -25,6 +26,7 @@ class BookTypeConfiguration {
             this.exists = true;
             this.rightPanelConfig = new RightPanelConfiguration(bookTypeConfig['right-panel']);
             this.middlePanelConfig = new MiddlePanelConfiguration(bookTypeConfig['middle-panel']);
+            this.midRightPanelConfig = new MidRightPanelConfiguration(bookTypeConfig['middle-right-panel']);
             this.bottomPanelConfig = new BottomPanelConfiguration(bookTypeConfig['bottom-panel']);
         } else {
             this.exists = false;
@@ -35,11 +37,15 @@ class BookTypeConfiguration {
 
     containsMiddlePanel() { return this.middlePanelConfig.exist(); }
 
+    containsMiddleRightPanel() { return this.midRightPanelConfig.exist(); }
+
     containsBottomPanel() { return this.bottomPanelConfig.exist(); }
 
     containsRightPanel() { return this.rightPanelConfig.exist(); }
 
-    getMidllePanelConfig() { return this.middlePanelConfig; }
+    getMiddlePanelConfig() { return this.middlePanelConfig; }
+
+    getMiddleRightPanelConfig() { return this.midRightPanelConfig; }
 
     getBottomPanelConfig() { return this.bottomPanelConfig; }
 
@@ -108,6 +114,19 @@ class MiddlePanelConfiguration extends Configuration {
     getShortInfo(bibItem: IBookInfo): string { return this.interpret(this.configObject['short-info'], bibItem); }
     getBody(bibItem: IBookInfo): string { return this.interpret(this.configObject['body'], bibItem); }
     getFavoritesMaxCount(): number { return this.configObject['favorites']['maxCount']; }
+}
+
+class MidRightPanelConfiguration extends Configuration {
+
+    constructor(configObj: Object) {
+        super(configObj);
+    }
+
+    containsBody() { return typeof this.configObject['body'] !== 'undefined'; }
+    containsCustom() { return typeof this.configObject['custom'] !== 'undefined'; }
+
+    getCustom(bibItem: IBookInfo): string { return this.interpret(this.configObject['custom'], bibItem); }
+    getBody(bibItem: IBookInfo): string { return this.interpret(this.configObject['body'], bibItem); }
 }
 
 class BottomPanelConfiguration extends Configuration {

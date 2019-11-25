@@ -72,7 +72,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
                     result.Add(new SearchResultContract
                     {
                         Title = cardFile.Name,
-                        BookXmlId = cardFile.Id,
+                        BookId = cardFile.Id,
                         SubTitle = cardFile.Description,
                         BookType = AreaBookType
                     });

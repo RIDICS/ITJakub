@@ -173,7 +173,7 @@ namespace ITJakub.Web.Hub.Controllers
             return count;
         }
 
-        protected List<SearchResultContract> SearchByCriteriaText(CriteriaKey key, string text, int start, int count, short sortingEnum,
+        protected List<SearchResultExtendedContract> SearchByCriteriaText(CriteriaKey key, string text, int start, int count, short sortingEnum,
             bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds, SearchAdvancedParametersContract parameters = null)
         {
             var listSearchCriteriaContracts = CreateTextCriteriaList(key, text);
@@ -181,7 +181,7 @@ namespace ITJakub.Web.Hub.Controllers
             return SearchByCriteria(listSearchCriteriaContracts, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds, parameters);
         }
 
-        protected List<SearchResultContract> SearchByCriteriaJson(string json, int start, int count, short sortingEnum, bool sortAsc,
+        protected List<SearchResultExtendedContract> SearchByCriteriaJson(string json, int start, int count, short sortingEnum, bool sortAsc,
             IList<long> selectedBookIds, IList<int> selectedCategoryIds, SearchAdvancedParametersContract parameters = null)
         {
             var deserialized =
@@ -191,7 +191,7 @@ namespace ITJakub.Web.Hub.Controllers
             return SearchByCriteria(listSearchCriteriaContracts, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds, parameters);
         }
 
-        protected List<SearchResultContract> SearchByCriteria(List<SearchCriteriaContract> listSearchCriteriaContracts, int start,
+        protected List<SearchResultExtendedContract> SearchByCriteria(List<SearchCriteriaContract> listSearchCriteriaContracts, int start,
             int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds, SearchAdvancedParametersContract parameters)
         {
@@ -209,7 +209,8 @@ namespace ITJakub.Web.Hub.Controllers
                 Parameters = parameters,
             };
             var result = client.SearchBook(request, GetDefaultProjectType());
-            return result;
+            var resultContract = Mapper.Map<List<SearchResultExtendedContract>>(result);
+            return resultContract;
         }
 
         protected List<SearchCriteriaContract> GetOnlyPageCriteria(IList<SearchCriteriaContract> criteriaList)
