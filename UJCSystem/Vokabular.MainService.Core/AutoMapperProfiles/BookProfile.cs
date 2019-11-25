@@ -24,7 +24,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 //.ForMember(dest => dest.Authors, opt => opt.MapFrom(src => src.Resource.Project.ExternalId)) // Missing fetch
                 .ForMember(dest => dest.BiblText, opt => opt.MapFrom(src => src.BiblText))
                 .ForMember(dest => dest.Copyright, opt => opt.MapFrom(src => src.Copyright))
-                .ForMember(dest => dest.CreateTime, opt => opt.MapFrom(src => src.CreateTime))
+                .ForMember(dest => dest.CreateTime, opt => opt.MapFrom(src => src.Resource.Project.LatestPublishedSnapshot.PublishTime))
                 .ForMember(dest => dest.ManuscriptCountry, opt => opt.MapFrom(src => src.ManuscriptCountry))
                 .ForMember(dest => dest.ManuscriptTitle, opt => opt.MapFrom(src => src.ManuscriptTitle))
                 .ForMember(dest => dest.ManuscriptExtent, opt => opt.MapFrom(src => src.ManuscriptExtent))

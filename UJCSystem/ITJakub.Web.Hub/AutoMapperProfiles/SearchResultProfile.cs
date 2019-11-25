@@ -12,11 +12,11 @@ namespace ITJakub.Web.Hub.AutoMapperProfiles
         {
             CreateMap<SearchResultContract, SearchResultExtendedContract>()
                 .ForMember(dest => dest.ProjectTypeString, opt => opt.MapFrom(src => projectTypeLocalizer.TranslateProjectType(src.ProjectType)))
-                .ForMember(dest => dest.CreateTimeString, opt => opt.MapFrom(src => src.CreateTime.ToString(localizationService.GetRequestCulture())));
+                .ForMember(dest => dest.CreateTimeString, opt => opt.MapFrom(src => src.CreateTime.ToLocalTime().ToString(localizationService.GetRequestCulture())));
 
             CreateMap<SearchResultDetailContract, SearchResultDetailExtendedContract>()
                 .ForMember(dest => dest.ProjectTypeString, opt => opt.MapFrom(src => projectTypeLocalizer.TranslateProjectType(src.ProjectType)))
-                .ForMember(dest => dest.CreateTimeString, opt => opt.MapFrom(src => src.CreateTime.ToString(localizationService.GetRequestCulture())));
+                .ForMember(dest => dest.CreateTimeString, opt => opt.MapFrom(src => src.CreateTime.ToLocalTime().ToString(localizationService.GetRequestCulture())));
         }
     }
 }
