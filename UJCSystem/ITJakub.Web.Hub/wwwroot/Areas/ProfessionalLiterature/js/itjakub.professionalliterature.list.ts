@@ -11,6 +11,7 @@
                 SearchTypeEnum.Editor,
                 SearchTypeEnum.Dating
             ],
+            enabledSearchInSecondPortal: true,
             url: {
                 advanced: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/AdvancedSearchPaged",
                 text: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/TextSearchPaged",

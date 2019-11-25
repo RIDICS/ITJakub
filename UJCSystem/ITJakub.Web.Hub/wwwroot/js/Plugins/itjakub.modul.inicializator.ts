@@ -155,7 +155,7 @@
             this.configuration.search.processSearchTextCallback,
             this.configuration.search.favoriteQueries
         );
-        search.makeSearch(this.configuration.search.enabledOptions);
+        search.makeSearch(this.configuration.search.enabledOptions, this.configuration.search.enabledSearchInSecondPortal);
 
         return search;
     }
@@ -444,6 +444,7 @@ interface IModulInicializatorConfigurationSearch {
     processSearchTextCallback?: (text: string) => void;
 
     enabledOptions: Array<SearchTypeEnum>;
+    enabledSearchInSecondPortal: boolean;
 
     url: IModulInicializatorConfigurationSearchUrl;
     favoriteQueries: IModulInicializatorConfigurationSearchFavorites;

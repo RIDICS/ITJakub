@@ -74,7 +74,7 @@ class Search {
         this.fulltextIsLimited = true;
     }
 
-    makeSearch(enabledOptions: Array<SearchTypeEnum>) {
+    makeSearch(enabledOptions: Array<SearchTypeEnum>, enabledSearchInSecondPortal: boolean) {
         this.enabledOptions = enabledOptions;
 
         var searchAreaDiv = document.createElement("div");
@@ -144,7 +144,23 @@ class Search {
                 }
             });
 
-        } 
+        }
+
+        if (enabledSearchInSecondPortal) {
+            var secondPortalButton = document.createElement("button");
+            secondPortalButton.type = "button";
+            $(secondPortalButton).html("<i class='fa fa-external-link'></i> SECOND PORTAL"); //TODO add correct localization
+            secondPortalButton.classList.add("btn");
+            secondPortalButton.classList.add("btn-default");
+            secondPortalButton.classList.add("searchbar-button");
+            searchbarButtonsDiv.appendChild(secondPortalButton);
+
+            $(secondPortalButton).click(() => {
+                //TODO
+                var searchboxValue = $(this.searchInputTextbox).val() as string;
+                console.log(searchboxValue);
+            });
+        }
 
         var searchbarInputDiv = document.createElement("div");
         searchbarInputDiv.classList.add("regex-searchbar-inputs");

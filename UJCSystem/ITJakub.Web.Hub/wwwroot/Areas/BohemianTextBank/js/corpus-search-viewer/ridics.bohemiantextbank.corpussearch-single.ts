@@ -530,7 +530,7 @@ class BohemianTextBankSingleLazyload extends BohemianTextBankSingle {
             this.startBasicSearch.bind(this),
             favoritesQueriesConfig);
         this.search.limitFullTextSearchToOne();
-        this.search.makeSearch(this.enabledOptions);
+        this.search.makeSearch(this.enabledOptions, false);
 
         $(".results-refresh-button").on("click", () => {
             const query = this.search.getLastQuery();
@@ -764,7 +764,7 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
             this.startBasicSearch.bind(this),
             favoritesQueriesConfig);
         this.search.limitFullTextSearchToOne();
-        this.search.makeSearch(this.enabledOptions);
+        this.search.makeSearch(this.enabledOptions, false);
 
         $(".results-refresh-button").on("click", () => {
             const query = this.search.getLastQuery();
