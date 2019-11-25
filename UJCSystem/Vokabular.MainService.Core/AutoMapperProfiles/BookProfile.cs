@@ -18,6 +18,8 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
 
             CreateMap<MetadataResource, SearchResultContract>()
                 .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.Resource.Project.Id))
+                .ForMember(dest => dest.ProjectType, opt => opt.MapFrom(src => src.Resource.Project.ProjectType))
+                .ForMember(dest => dest.TextType, opt => opt.MapFrom(src => src.Resource.Project.TextType))
                 .ForMember(dest => dest.BookType, opt => opt.MapFrom(src => src.Resource.Project.LatestPublishedSnapshot.DefaultBookType.Type))
                 .ForMember(dest => dest.AuthorsLabel, opt => opt.MapFrom(src => src.AuthorsLabel))
                 //.ForMember(dest => dest.Authors, opt => opt.MapFrom(src => src.Resource.Project.ExternalId)) // Missing fetch

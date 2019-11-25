@@ -378,6 +378,8 @@ interface IBookRenderData {
 
 interface IBookInfo {
     BookId: string;
+    ProjectType: ProjectType;
+    TextType: ProjectTextType;
     BookType: BookTypeEnum;
     Title: string;
     Editor: string;
@@ -407,6 +409,18 @@ enum BookTypeEnum {
     BibliographicalItem = "BibliographicalItem",
     CardFile = "CardFile",
     AudioBook = "AudioBook"
+}
+
+enum ProjectType {
+    Research = "Research",
+    Community = "Community",
+    Bibliography = "Bibliography",
+}
+
+enum ProjectTextType {
+    NoneOrOriginal = "NoneOrOriginal",
+    Transliterated = "Transliterated",
+    Transcribed = "Transcribed",
 }
 
 //interface IPage {

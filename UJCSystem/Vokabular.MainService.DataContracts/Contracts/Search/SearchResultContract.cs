@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.DataContracts.Contracts.Search
@@ -7,6 +8,10 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
     public class SearchResultContract
     {
         public string BookId { get; set; }
+
+        public ProjectTypeContract ProjectType { get; set; }
+
+        public TextTypeEnumContract TextType { get; set; }
 
         public BookTypeEnumContract BookType { get; set; }
 
