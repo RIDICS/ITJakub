@@ -72,7 +72,7 @@
       }
     },
     "bottom-panel": {
-      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
+      "body": "{$printSearchResultsCondition}{$editionTable}<a href='{$baseUrl}EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
       "variables": {
         "$editionTable": {
           "type": "table",
