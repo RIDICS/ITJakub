@@ -71,6 +71,9 @@
         }
       }
     },
+    "middle-right-panel": {
+      "body": "<img src='/images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
+    },
     "bottom-panel": {
       "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
       "variables": {

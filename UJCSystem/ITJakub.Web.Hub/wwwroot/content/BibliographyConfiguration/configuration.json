@@ -71,6 +71,9 @@
         }
       }
     },
+    "middle-right-panel": {
+      "body": "<img src='/images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
+    },
     "bottom-panel": {
       "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
       "variables": {
@@ -216,6 +219,9 @@
         }
       }
     },
+    "middle-right-panel": {
+      "body": "<img src='/images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
+    },
     "right-panel": {
       "read-button": {
         "url": "Dictionaries\\Dictionaries\\Listing?books=[{BookId}]"
@@ -296,6 +302,9 @@
           "printIfNullValue": false
         }
       }
+    },
+    "middle-right-panel": {
+      "body": "<img src='/images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
     },
     "bottom-panel": {
       "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
@@ -502,6 +511,9 @@
         }
       }
     },
+    "middle-right-panel": {
+      "body": "<img src='/images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
+    },
     "right-panel": {
       "favorite-button": {},
       "load-detail-url": "Bibliography/GetAudioBookDetailInfo?bookId={BookId}"
@@ -626,6 +638,9 @@
           "printIfNullValue": false
         }
       }
+    },
+    "middle-right-panel": {
+      "body": "<img src='/images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
     },
     "bottom-panel": {
       "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
@@ -812,6 +827,9 @@
         }
       }
     },
+    "middle-right-panel": {
+      "body": "<img src='/images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
+    },
     "bottom-panel": {
       "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
       "variables": {
@@ -996,6 +1014,9 @@
           "printIfNullValue": false
         }
       }
+    },
+    "middle-right-panel": {
+      "body": "<img src='/images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
     },
     "bottom-panel": {
       "body": "{$printSearchResultsCondition}{$editionTable}{@Copyright}: {Copyright}",
