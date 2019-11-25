@@ -8,4 +8,11 @@ namespace ITJakub.Web.Hub.DataContracts
 
         public string CreateTimeString { get; set; }
     }
+
+    public class SearchResultDetailExtendedContract : SearchResultDetailContract
+    {
+        public string ProjectTypeString { get; set; }
+
+        public string CreateTimeString { get; set; }
+    }
 }
