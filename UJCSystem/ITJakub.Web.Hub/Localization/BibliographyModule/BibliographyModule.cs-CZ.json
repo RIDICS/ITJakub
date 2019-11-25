@@ -23,6 +23,9 @@
     "DownloadChapter": "Stáhnout kapitolu",
     "LinkToOriginal": "Odkaz na originál",
 
+    "BookFromResearchPortal": "Dílo z Vokabuláře webového",
+    "BookFromCommunityPortal": "Dílo z komunitního portálu",
+    "BibliographicRecord": "Bibliografický záznam",
     "NotFilled": "&lt;Nezadáno&gt;"
   }
 }

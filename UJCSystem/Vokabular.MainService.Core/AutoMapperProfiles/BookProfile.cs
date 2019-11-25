@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -26,7 +25,6 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.BiblText, opt => opt.MapFrom(src => src.BiblText))
                 .ForMember(dest => dest.Copyright, opt => opt.MapFrom(src => src.Copyright))
                 .ForMember(dest => dest.CreateTime, opt => opt.MapFrom(src => src.CreateTime))
-                .ForMember(dest => dest.CreateTimeString, opt => opt.MapFrom(src => src.CreateTime.ToString(CultureInfo.GetCultureInfo("cs")))) // Czech is the main language
                 .ForMember(dest => dest.ManuscriptCountry, opt => opt.MapFrom(src => src.ManuscriptCountry))
                 .ForMember(dest => dest.ManuscriptTitle, opt => opt.MapFrom(src => src.ManuscriptTitle))
                 .ForMember(dest => dest.ManuscriptExtent, opt => opt.MapFrom(src => src.ManuscriptExtent))

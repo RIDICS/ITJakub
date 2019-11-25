@@ -23,6 +23,9 @@
     "DownloadChapter": "translate[Stáhnout kapitolu]",
     "LinkToOriginal": "translate[Odkaz na originál]",
 
+    "BookFromResearchPortal": "translate[Dílo z Vokabuláře webového]",
+    "BookFromCommunityPortal": "translate[Dílo z komunitního portálu]",
+    "BibliographicRecord": "translate[Bibliografický záznam]",
     "NotFilled": "&lt;translate[Nezadáno]&gt;"
   }
 }

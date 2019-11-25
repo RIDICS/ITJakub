@@ -19,8 +19,6 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
 
         public string SubTitle { get; set; }
 
-        //public string Acronym { get; set; }
-
         public string BiblText { get; set; }
 
         public string OriginDate { get; set; }
@@ -39,17 +37,11 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
 
         public string AuthorsLabel { get; set; }
         
-        //public PublisherContract Publisher { get; set; }
-
         public string Copyright { get; set; }
 
         public int PageCount { get; set; }
 
         public DateTime CreateTime { get; set; }
-
-        public string CreateTimeString { get; set; }
-
-        //public List<ManuscriptContract> Manuscripts { get; set; }
 
         public string ManuscriptIdno { get; set; }
 

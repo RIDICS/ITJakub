@@ -215,7 +215,6 @@ class BibliographyModule {
         $(liElement).attr("data-id", bibItem.BookId);
         $(liElement).attr("data-booktype", bibItem.BookType);
         $(liElement).attr("data-name", bibItem.Title);
-        $(liElement).attr("data-century", bibItem.Century);
 
         var visibleContent: HTMLDivElement = document.createElement('div');
         $(visibleContent).addClass('visible-content');
@@ -385,22 +384,9 @@ interface IBookInfo {
     TextType: ProjectTextType;
     BookType: BookTypeEnum;
     Title: string;
-    Editor: string;
-    Pattern: string;
-    SourceAbbreviation: string;
     RelicAbbreviation: string;
-    LiteraryType: string;
-    LiteraryGenre: string;
-    LastEditation: string;
-    EditationNote: string; //anchor href?
-    Copyright: string;
-    //Pages: IPage[];
-    Archive: IArchive;
-    Century: number;
-    Sign: string;
-    Authors: IAuthor[];
-    Description: string;
-    Year: number;
+    SourceAbbreviation: string;
+    // there are other properties but they are not required in TypeScript because they are used in configuration JSON file
 }
 
 enum BookTypeEnum {
@@ -430,12 +416,6 @@ enum ProjectTextType {
 //    Start: number;
 //    End: number;
 //}
-
-interface IArchive {
-    Name: string;
-    City: string;
-    State: string;
-}
 
 interface IAuthor {
     FirstName: string;
