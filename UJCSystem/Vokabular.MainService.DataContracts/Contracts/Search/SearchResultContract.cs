@@ -6,11 +6,7 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
 {
     public class SearchResultContract
     {
-        public long BookId { get; set; }
-
-        public string BookXmlId { get; set; }
-
-        public string VersionXmlId { get; set; }
+        public string BookId { get; set; }
 
         public BookTypeEnumContract BookType { get; set; }
 

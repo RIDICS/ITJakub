@@ -429,7 +429,7 @@
     },
     "right-panel": {
       "read-button": {
-        "url": "CardFiles\\CardFiles\\Listing?cardFileId={BookXmlId}"
+        "url": "CardFiles\\CardFiles\\Listing?cardFileId={BookId}"
       },
       "variables": {
         "$test": {

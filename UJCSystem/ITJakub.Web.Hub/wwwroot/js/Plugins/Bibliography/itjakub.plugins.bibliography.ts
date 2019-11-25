@@ -116,7 +116,7 @@ class BibliographyModule {
             bookData.$favoritesContainer = $(".favorites", bookData.element);
             bookData.$favoriteButton = $(".favorite-button", bookData.element);
             if (bookData.$favoritesContainer.length > 0 || bookData.$favoriteButton.length > 0) {
-                bookIds.push(bookData.bookId);
+                bookIds.push(Number(bookData.bookId));
             }
         });
         if (bookIds.length === 0) return;
@@ -368,7 +368,7 @@ function getAudioLengthString(value: string): string {
 }
 
 interface IBookRenderData {
-    bookId: number;
+    bookId: string;
     bookType: BookTypeEnum;
     bookName: string;
     element: HTMLLIElement;
@@ -377,7 +377,7 @@ interface IBookRenderData {
 }
 
 interface IBookInfo {
-    BookId: number;
+    BookId: string;
     BookType: BookTypeEnum;
     Title: string;
     Editor: string;

@@ -17,8 +17,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Resource.Project.Id));
 
             CreateMap<MetadataResource, SearchResultContract>()
-                .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.Resource.Project.Id)) // TODO try convert property from BookId to ProjectId (including TypeScript)
-                .ForMember(dest => dest.BookXmlId, opt => opt.MapFrom(src => src.Resource.Project.ExternalId))
+                .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.Resource.Project.Id))
                 .ForMember(dest => dest.BookType, opt => opt.MapFrom(src => src.Resource.Project.LatestPublishedSnapshot.DefaultBookType.Type))
                 .ForMember(dest => dest.AuthorsLabel, opt => opt.MapFrom(src => src.AuthorsLabel))
                 //.ForMember(dest => dest.Authors, opt => opt.MapFrom(src => src.Resource.Project.ExternalId)) // Missing fetch
