@@ -231,6 +231,9 @@ class BibliographyModule {
             var middlePanel = bibFactory.makeMiddlePanel(bibItem);
             if (middlePanel != null) visibleWrapper.appendChild(middlePanel);
 
+            var midRightPanel = bibFactory.makeMidRightPanel(bibItem);
+            if (midRightPanel != null) visibleWrapper.appendChild(midRightPanel);
+
             var rightPanel = bibFactory.makeRightPanel(bibItem);
             if (rightPanel != null) visibleWrapper.appendChild(rightPanel);
 
