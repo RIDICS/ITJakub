@@ -82,18 +82,15 @@ class Search {
 
         var form: HTMLFormElement = document.createElement("form");
         form.setAttribute("role", "form");
-        
-        form.classList.add("form-horizontal");
         searchAreaDiv.appendChild(form);
 
         var formGroupDiv = document.createElement("div");
-        formGroupDiv.classList.add("form-group");
         formGroupDiv.classList.add("searchbar");
         form.appendChild(formGroupDiv);
 
         var searchbarButtonsDiv = document.createElement("div");
         searchbarButtonsDiv.classList.add("searchbar-buttons");
-        formGroupDiv.appendChild(searchbarButtonsDiv);
+        // append buttons after appending input
         
         var searchButton = document.createElement("button");
         searchButton.type = "button";
@@ -166,6 +163,8 @@ class Search {
         searchbarInputDiv.classList.add("regex-searchbar-inputs");
         searchbarInputDiv.classList.add("input_container");
         formGroupDiv.appendChild(searchbarInputDiv);
+
+        formGroupDiv.appendChild(searchbarButtonsDiv);
         
         var searchbarInput: HTMLInputElement = document.createElement("input");
         searchbarInput.type = "text";

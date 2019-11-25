@@ -1,9 +1,8 @@
 ﻿@import "ITJakub.Colors.less";
 
 .searchbar {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
     margin-bottom: 1rem;
+    display: table;
 }
 
 .searchbar-inputs {
@@ -19,7 +18,17 @@
 }
 
 .searchbar-buttons {
-    float: right;
+    display: table-cell;
+    white-space: nowrap;
+    vertical-align: top;
+
+    @media screen and (max-width: 991px) {
+        white-space: initial;
+
+        .btn {
+            width: 100%;
+        }
+    }
 }
 
 .searchbar-button,
