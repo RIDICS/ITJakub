@@ -189,19 +189,12 @@
   },
   "Dictionary": {
     "middle-panel": {
-      "short-info": "{$linked}",
       "title": "{Title} <span class=\"acronym\">[{SourceAbbreviation}]</span>",
       "body": "{BiblText} <br> {PublishPlace}, {PublishDate} <br> {$authors}{$description}{$year}",
       "favorites": {
         "maxCount": 5
       },
       "variables": {
-        "$linked": {
-          "type": "if",
-          "pattern": "{Linked}",
-          "onTrue": "LinkedDictionary",
-          "onFalse": "UnlinkedDictionary"
-        },
         "$authors": {
           "type": "basic",
           "pattern": "{AuthorsLabel}",
