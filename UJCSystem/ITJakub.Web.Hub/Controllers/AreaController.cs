@@ -19,6 +19,15 @@ namespace ITJakub.Web.Hub.Controllers
     {
         private const int FetchBookCount = 200;
 
+        private readonly CriteriaKey[] m_pageCriteriaKeys =
+        {
+            CriteriaKey.Fulltext,
+            CriteriaKey.Heading,
+            CriteriaKey.Sentence,
+            CriteriaKey.Term,
+            CriteriaKey.TokenDistance,
+        };
+
         protected AreaController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
@@ -186,20 +195,6 @@ namespace ITJakub.Web.Hub.Controllers
             int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds, SearchAdvancedParametersContract parameters)
         {
-            //listSearchCriteriaContracts.Add(new ResultCriteriaContract
-            //{
-            //    Start = start,
-            //    Count = count,
-            //    Sorting = (SortEnum)sortingEnum,
-            //    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
-            //    //HitSettingsContract = new HitSettingsContract // TODO currently not used
-            //    //{
-            //    //    ContextLength = 50,
-            //    //    Count = 3,
-            //    //    Start = 1
-            //    //}
-            //});
-
             AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
 
             var client = GetBookClient();
@@ -215,6 +210,12 @@ namespace ITJakub.Web.Hub.Controllers
             };
             var result = client.SearchBook(request, GetDefaultProjectType());
             return result;
+        }
+
+        protected List<SearchCriteriaContract> GetOnlyPageCriteria(IList<SearchCriteriaContract> criteriaList)
+        {
+            var resultList = criteriaList.Where(x => m_pageCriteriaKeys.Contains(x.Key)).ToList();
+            return resultList;
         }
     }
 }

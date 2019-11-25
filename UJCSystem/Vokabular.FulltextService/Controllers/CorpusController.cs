@@ -9,11 +9,11 @@ namespace Vokabular.FulltextService.Controllers
 {
     [Obsolete("This function has never worked as intended. It was replaced by BookPagedCorpus.")]
     [Route("api/[controller]")]
-    public class CorpusController : Controller
+    public class CorpusController : ApiControllerBase
     {
-        private readonly SearchManager m_searchManager;
+        private readonly UnfinishedSearchManager m_searchManager;
 
-        public CorpusController(SearchManager searchManager)
+        public CorpusController(UnfinishedSearchManager searchManager)
         {
             m_searchManager = searchManager;
         }
@@ -37,8 +37,13 @@ namespace Vokabular.FulltextService.Controllers
         /// </param>
         /// <returns></returns>
         [HttpPost("search")]
-        public List<CorpusSearchResultContract> SearchCorpus([FromBody] CorpusSearchRequestContract searchRequest)
+        public ActionResult<List<CorpusSearchResultContract>> SearchCorpus([FromBody] CorpusSearchRequestContract searchRequest)
         {
+            if (ContainsAnyUnsupportedCriteria(searchRequest))
+            {
+                return BadRequest("Request contains unsupported criteria");
+            }
+
             var result = m_searchManager.SearchCorpusByCriteria(searchRequest);
             return result;
         }
@@ -49,8 +54,13 @@ namespace Vokabular.FulltextService.Controllers
         /// <param name="searchRequest"></param>
         /// <returns></returns>
         [HttpPost("search-count")]
-        public long SearchCorpusResultCount([FromBody] CorpusSearchRequestContract searchRequest)
+        public ActionResult<long> SearchCorpusResultCount([FromBody] CorpusSearchRequestContract searchRequest)
         {
+            if (ContainsAnyUnsupportedCriteria(searchRequest))
+            {
+                return BadRequest("Request contains unsupported criteria");
+            }
+
             var result = m_searchManager.SearchCorpusByCriteriaCount(searchRequest);
             return result.Count;
         }

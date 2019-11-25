@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="ProjectGroup" table="[ProjectGroup]" >
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+
+    <property name="CreateTime" not-null="true" type="UtcDateTime" />
+
+    <bag name="Projects" lazy="true">
+      <key column="ProjectGroup" />
+      <one-to-many class="Project" />
+    </bag>
+
+  </class>
+</hibernate-mapping>

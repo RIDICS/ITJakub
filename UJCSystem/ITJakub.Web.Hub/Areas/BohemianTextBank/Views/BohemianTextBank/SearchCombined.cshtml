@@ -17,6 +17,7 @@
     ViewBag.Title = Localization.Translate("SearchCombined", "BohemianTextBank");
 }
 
+@await Html.PartialAsync("_SearchConfiguration")
 @await Html.PartialAsync("_BibliographySearch")
 
 <div class="search-result-section container-fluid" id="corpus-search-div">
@@ -60,13 +61,20 @@
                 </div>
             </div>
             <div class="corpus-search-setting-div-results-count">
-                <div>@Localization.Translate("NumberOfProjects", "BohemianTextBank"):</div>
-                <div id="totalCompositionsCountDiv"></div>
+                <div>
+                    @Localization.Translate("NumberOfProjects", "BohemianTextBank"):
+                    <span id="totalCompositionsCountDiv"></span>
+                </div>
                 <div class="total-results-count" style="display: none">
-                    <div>@Localization.Translate("NumberOfResults", "BohemianTextBank"):</div>
-                    <div id="totalResultCountDiv"></div>
+                    <span>@Localization.Translate("NumberOfResults", "BohemianTextBank"):</span>
+                    <span id="totalResultCountDiv"></span>
+                </div>
+                <div id="currentPageContainer">
+                    <span>@Localization.Translate("CurrentPage", "BohemianTextBank"):</span>
+                    <span id="currentPageValue"></span>
                 </div>
             </div>
+
             <div class="corpus-search-setting-div-pagination pagination-extra-small" id="paginationContainer">
             </div>
         </div>

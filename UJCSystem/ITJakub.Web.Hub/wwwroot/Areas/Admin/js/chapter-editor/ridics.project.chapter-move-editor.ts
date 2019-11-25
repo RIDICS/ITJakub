@@ -28,28 +28,37 @@
     
     checkMoveButtonsAvailability() {
         if (this.checkSameSubChapter()) {
-            this.moveChapterDownButton.removeAttr("disabled");
-            this.moveChapterUpButton.removeAttr("disabled");
+            if (this.checkVerticalMoving(ChapterVerticalMoveDirection.Up)) {
+                this.moveChapterUpButton.prop("disabled", false);
+            } else {
+                this.moveChapterUpButton.prop("disabled", true);
+            }
+
+            if (this.checkVerticalMoving(ChapterVerticalMoveDirection.Down)) {
+                this.moveChapterDownButton.prop("disabled", false);
+            } else {
+                this.moveChapterDownButton.prop("disabled", true);
+            }
         } else {
-            this.moveChapterDownButton.attr("disabled", "disabled");
-            this.moveChapterUpButton.attr("disabled", "disabled");
+            this.moveChapterDownButton.prop("disabled", true);
+            this.moveChapterUpButton.prop("disabled", true);
         }
 
         if (this.checkHierarchyMoving()) {
             if (this.checkHierarchyMovingToLeft()) {
-                this.moveChapterLeftButton.removeAttr("disabled");
+                this.moveChapterLeftButton.prop("disabled", false);
             } else {
-                this.moveChapterLeftButton.attr("disabled", "disabled");
+                this.moveChapterLeftButton.prop("disabled", true);
             }
 
             if (this.checkHierarchyMovingToRight()) {
-                this.moveChapterRightButton.removeAttr("disabled");
+                this.moveChapterRightButton.prop("disabled", false);
             } else {
-                this.moveChapterRightButton.attr("disabled", "disabled");
+                this.moveChapterRightButton.prop("disabled", true);
             }
         } else {
-            this.moveChapterLeftButton.attr("disabled", "disabled");
-            this.moveChapterRightButton.attr("disabled", "disabled");
+            this.moveChapterLeftButton.prop("disabled", true);
+            this.moveChapterRightButton.prop("disabled", true);
         }
     }
 
@@ -109,8 +118,7 @@
         for (let chapter of chapters) {
             if (selectedLevel !== $(chapter).data("level")) {
                 return false;
-            }
-            else if ($(chapter).children(".chapter-row").children(".ridics-checkbox").find(".selection-checkbox")
+            } else if ($(chapter).children(".chapter-row").children(".ridics-checkbox").find(".selection-checkbox")
                 .is(":checked")) {
                 selectedChapters++;
                 if (selectedChapters === selectedCheckboxes.length) {
@@ -142,7 +150,36 @@
         const chapterContainerBefore = $(chapterRow).parent(".chapter-container").prev();
         return chapterContainerBefore.length > 0;
     }
+    
+    private checkVerticalMoving(direction: ChapterVerticalMoveDirection): boolean {
+        const selectedCheckboxes = $(".chapter-row .selection-checkbox:checked");
+        if (selectedCheckboxes.length === 0)
+            return true;
 
+        
+        let containerSelector = "div";        
+        if (direction === ChapterVerticalMoveDirection.Up) {
+            containerSelector += ":first-of-type";
+        }
+        else {
+            containerSelector += ":last-of-type";
+        }
+
+        const subChaptersElement = selectedCheckboxes.parents(".sub-chapters").get(0);
+        const firstCheckbox = $(subChaptersElement).children(containerSelector)
+            .children("div:first-of-type")
+            .find(".selection-checkbox")[0];
+                
+        for (let selectedCheckbox of selectedCheckboxes.toArray()) {
+            if((firstCheckbox == selectedCheckbox))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
     private moveList(down: boolean, context: JQuery) {
         if ($(".chapter-row .selection-checkbox:checked").length === 0 || !this.checkSameSubChapter()) {
             return;
@@ -200,6 +237,11 @@
     }
 
     private showUnsavedChangesAlert() {
-        $("#unsavedChanges").removeClass("hide");
+        $("#chaptersUnsavedChanges").removeClass("hide");
     }
+}
+
+enum ChapterVerticalMoveDirection {
+    Down,
+    Up,
 }

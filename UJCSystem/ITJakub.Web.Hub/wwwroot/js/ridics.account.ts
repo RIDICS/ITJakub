@@ -15,6 +15,7 @@ class AccountManager {
     private readonly accountSection: JQuery;
     private readonly passwordSection: JQuery;
     private readonly twoFactorSection: JQuery;
+    private readonly userCodeSection: JQuery;
     //Email confirm
     private readonly oldEmailValue: string;
     private newEmailValue: string;
@@ -41,6 +42,7 @@ class AccountManager {
         this.accountSection = $("#updateAccount");
         this.passwordSection = $("#updatePassword");
         this.twoFactorSection = $("#updateTwoFactorVerification");
+        this.userCodeSection = $("#userCode");
 
         this.oldEmailValue = String($("#oldEmailValue").val());
 
@@ -86,10 +88,13 @@ class AccountManager {
         this.initAccountDataForm();
         this.initPasswordForm();
         this.initTwoFactorSettingsForm();
-
+        this.initRegenerateUserCodeForm();
+        
         $("#updateTwoFactorVerificationButton").on("click",
             () => {
-                this.twoFactorSection.html("<div class=\"loader\"></div>");
+                var loader = lv.create(null, "lv-circles sm lv-mid lvt-3");
+                this.twoFactorSection.empty();
+                this.twoFactorSection.append(loader.getElement());
                 this.client.getTwoFactor().done((response) => {
                     this.twoFactorSection.html(response);
                     this.initTwoFactorSettingsForm();
@@ -253,6 +258,26 @@ class AccountManager {
             const alert = new AlertComponentBuilder(AlertType.Error)
                 .addContent(this.errorHandler.getErrorMessage(response)).buildElement();
             alertHolder.empty().append(alert);
+        });
+    }
+
+    initRegenerateUserCodeForm() {
+        const regenerateUserCodeForm = $("#regenerateUserCode");
+        const alertHolder = regenerateUserCodeForm.find(this.alertHolderSelector);
+        regenerateUserCodeForm.on("submit", (event) => {
+            event.preventDefault();
+            alertHolder.empty();
+            
+            this.client.regenerateUserCode()
+                .done((response) => {
+                    this.userCodeSection.html(response);
+                    this.initRegenerateUserCodeForm();
+                })
+                .fail((response) => {
+                    const alert = new AlertComponentBuilder(AlertType.Error)
+                        .addContent(this.errorHandler.getErrorMessage(response)).buildElement();
+                    alertHolder.empty().append(alert);
+                });
         });
     }
 

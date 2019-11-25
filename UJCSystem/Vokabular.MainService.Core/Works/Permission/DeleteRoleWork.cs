@@ -1,5 +1,7 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using Ridics.Authentication.DataContracts;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Authentication;
@@ -29,20 +31,26 @@ namespace Vokabular.MainService.Core.Works.Permission
             CheckRoleForDeleting(m_defaultUserProvider.GetDefaultUnregisteredRole());
             CheckRoleForDeleting(m_defaultUserProvider.GetDefaultRegisteredRole());
 
-            var group = m_permissionRepository.FindGroupByExternalId(m_roleId);
-            if (group != null)
-            {
-                m_permissionRepository.Delete(group);
-                m_permissionRepository.Flush();
-            }
+            var group = m_permissionRepository.FindById<UserGroup>(m_roleId);
+            m_permissionRepository.Delete(group);
+            m_permissionRepository.Flush();
 
-            var client = m_communicationProvider.GetAuthRoleApiClient();
-            client.DeleteRoleAsync(m_roleId).GetAwaiter().GetResult();
+            if (group is RoleUserGroup roleUserGroup)
+            {
+                var client = m_communicationProvider.GetAuthRoleApiClient();
+                client.DeleteRoleAsync(roleUserGroup.ExternalId).GetAwaiter().GetResult();
+            }
+            else
+            {
+                throw new InvalidOperationException($"Only RoleUserGroup can be updated by this method, argument type was: {group.GetType()}");
+            }
         }
 
         private void CheckRoleForDeleting(RoleContractBase defaultRole)
         {
-            if (defaultRole.Id == m_roleId)
+            var dbRole = m_permissionRepository.FindById<RoleUserGroup>(m_roleId);
+
+            if (dbRole != null && defaultRole.Id == dbRole.ExternalId)
             {
                 throw new MainServiceException(MainServiceErrorCode.DeleteDefaultRole,
                     $"The default role {defaultRole.Name} cannot be deleted.",

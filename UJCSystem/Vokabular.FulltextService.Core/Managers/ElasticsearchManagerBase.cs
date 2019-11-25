@@ -7,7 +7,7 @@ namespace Vokabular.FulltextService.Core.Managers
 {
     public abstract class ElasticsearchManagerBase
     {
-        protected readonly CommunicationProvider CommunicationProvider;
+        protected readonly CommunicationProvider m_communicationProvider;
         private readonly IOptions<IndicesOption> m_indicesOptions;
 
         protected const string PageType = "page";
@@ -24,7 +24,7 @@ namespace Vokabular.FulltextService.Core.Managers
         
         protected ElasticsearchManagerBase(CommunicationProvider communicationProvider, IOptions<IndicesOption> indicesOptions)
         {
-            CommunicationProvider = communicationProvider;
+            m_communicationProvider = communicationProvider;
             m_indicesOptions = indicesOptions;
         }
 

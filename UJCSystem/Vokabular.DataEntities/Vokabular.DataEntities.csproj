@@ -28,6 +28,7 @@
     <None Remove="Database\Entities\OriginalAuthor.hbm.xml" />
     <None Remove="Database\Entities\Permission.hbm.xml" />
     <None Remove="Database\Entities\Project.hbm.xml" />
+    <None Remove="Database\Entities\ProjectGroup.hbm.xml" />
     <None Remove="Database\Entities\ProjectOriginalAuthor.hbm.xml" />
     <None Remove="Database\Entities\ProjectResponsiblePerson.hbm.xml" />
     <None Remove="Database\Entities\Resource.hbm.xml" />
@@ -51,6 +52,7 @@
     <EmbeddedResource Include="Database\Entities\ImportedRecordMetadata.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ImportHistory.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ExternalRepository.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\ProjectGroup.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\UserGroup.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Permission.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\TextComment.hbm.xml" />

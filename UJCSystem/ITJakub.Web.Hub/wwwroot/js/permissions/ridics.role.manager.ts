@@ -68,7 +68,9 @@ class RoleManager {
         const container = userSection.find(".list-container");
         const searchForm = userSection.find(".user-search-form");
         searchForm.find("input.search-value").val("");
-        container.html("<div class=\"loader\"></div>");
+        var loader = lv.create(null, "lv-dots lv-mid md");
+        container.empty();
+        container.append(loader.getElement());
         userSection.removeClass("hide");
 
         this.client.getUsersByRole(roleId).done(response => {
@@ -95,7 +97,9 @@ class RoleManager {
     private loadPermissions(roleId: number) {
         const permissionSection = $("#permission-section .section");
         const container = permissionSection.find(".list-container");
-        container.html("<div class=\"loader\"></div>");
+        var loader = lv.create(null, "lv-dots lv-mid md");
+        container.empty();
+        container.append(loader.getElement());
         const searchForm = permissionSection.find(".permission-search-form");
         searchForm.find("input.search").val("");
         permissionSection.removeClass("hide");
@@ -170,9 +174,16 @@ class RoleManager {
         alert.hide();
         const specialPermissionId = permissionRow.data("permission-id");
         const roleId = $(".role-row.active").data("role-id");
+        const wrappedSpinnerContainer = permissionRow.find(".permission-loader-wrapped");
+        const spinnerContainer = permissionRow.find(".permission-loader");
+        const spinner = lv.create(null, "lv-circles tiniest lv-right");
+        const spinnerWrapped = lv.create(null, "lv-circles tiniest lv-left");
 
-        const spinner = permissionRow.find(".loading-spinner");
-        spinner.show();
+        if (spinnerContainer.children(".lv-circles").length === 0) {
+            wrappedSpinnerContainer.append(spinnerWrapped.getElement());
+            spinnerContainer.append(spinner.getElement());
+        }
+
         const successLabel = permissionRow.find(".success");
         successLabel.hide();
 
@@ -195,7 +206,8 @@ class RoleManager {
             }, this.delayForShowResponse);
         }).always(() => {
             setTimeout(() => {
-                spinner.hide();
+                spinner.remove();
+                spinnerWrapped.remove();
             }, this.delayForShowResponse);
         });
     }
@@ -270,7 +282,8 @@ class RoleManager {
     }
 
     private initEditRoleForm() {
-        const editRoleForm = $("#editRoleForm");
+        const editRoleFormSelector = "#editRoleForm";
+        const editRoleForm = $(editRoleFormSelector);
         const alertHolder = editRoleForm.find(".alert-holder");
         editRoleForm.on("submit", (event) => {
             event.preventDefault();
@@ -282,7 +295,7 @@ class RoleManager {
                 this.client.editRole(editRoleForm.serialize())
                     .done((response) => {
                         editRoleSection.html(response);
-                        if (editRoleForm.find(".alert-success").length) {
+                        if ($(editRoleFormSelector).find(".alert-success").length) {
                             this.roleList.reloadPage();
                         }
                         this.initEditRoleForm();
@@ -422,7 +435,7 @@ class RoleManager {
                 this.client.createRole(createRoleForm.serialize())
                     .done((response) => {
                         createRoleSection.html(response);
-                        if (createRoleForm.find(".alert-success").length) {
+                        if ($("#createRoleForm").find(".alert-success").length) {
                             this.roleList.reloadPage();
                         }
                         this.initCreateRoleForm();
@@ -437,8 +450,9 @@ class RoleManager {
     }
 
     private clearSections() {
-        this.userList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
-        this.permissionList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
+        if (this.userList) this.userList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
+        if (this.permissionList) this.permissionList.clear(localization.translate("RoleIsNotSelected", "PermissionJs").value);
+
         $("#addRoleButton").addClass("disabled");
     }
 }

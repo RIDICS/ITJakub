@@ -16,6 +16,8 @@ namespace Vokabular.MainService.Core.Managers
         private const int CorpusMaxCount = 200;
         private const int CorpusDefaultCount = 50;
         private const int CorpusDefaultStart = 0;
+        private const int MaxContextLength = 500;
+        private const int ContextDefaultLength = 100;
         private readonly MetadataRepository m_metadataRepository;
         private readonly BookViewRepository m_bookRepository;
         private readonly IMapper m_mapper;
@@ -35,6 +37,11 @@ namespace Vokabular.MainService.Core.Managers
         public int GetCorpusCount(int? count)
         {
             return count != null ? Math.Min(count.Value, CorpusMaxCount) : CorpusDefaultCount;
+        }
+
+        public int GetContextLength(int? length)
+        {
+            return length != null ? Math.Min(length.Value, MaxContextLength) : ContextDefaultLength;
         }
 
         public List<CorpusSearchResultContract> GetCorpusSearchResultByStandardIds(List<CorpusSearchResultData> list)

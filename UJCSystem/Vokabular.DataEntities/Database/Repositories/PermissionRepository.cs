@@ -26,21 +26,33 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public virtual UserGroup FindGroupByExternalId(int externalId)
+        public virtual IList<UserGroup> GetUserGroupsByUser(int userId)
         {
-            var group = GetSession().QueryOver<UserGroup>()
+            User userAlias = null;
+
+            var result = GetSession().QueryOver<UserGroup>()
+                .JoinAlias(x => x.Users, () => userAlias)
+                .Where(() => userAlias.Id == userId)
+                .OrderBy(x => x.Name).Asc
+                .List();
+            return result;
+        }
+
+        public virtual RoleUserGroup FindGroupByExternalId(int externalId)
+        {
+            var group = GetSession().QueryOver<RoleUserGroup>()
                 .Where(g => g.ExternalId == externalId)
                 .SingleOrDefault();
 
             return group;
         }
 
-        public virtual UserGroup FindGroupByExternalIdOrCreate(int externalId)
+        public virtual RoleUserGroup FindGroupByExternalIdOrCreate(int externalId)
         {
             return FindGroupByExternalIdOrCreate(externalId, null);
         }
 
-        public virtual UserGroup FindGroupByExternalIdOrCreate(int externalId, string roleName)
+        public virtual RoleUserGroup FindGroupByExternalIdOrCreate(int externalId, string roleName)
         {
             var group = FindGroupByExternalId(externalId);
             if (group != null)
@@ -49,7 +61,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             }
 
             var now = DateTime.UtcNow;
-            var newGroup = new UserGroup
+            var newGroup = new RoleUserGroup
             {
                 ExternalId = externalId,
                 CreateTime = now,
@@ -64,10 +76,18 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public virtual IList<int> GetGroupIdsByExternalIds(IEnumerable<int> externalIds)
         {
-            var result = GetSession().QueryOver<UserGroup>()
+            var result = GetSession().QueryOver<RoleUserGroup>()
                 .WhereRestrictionOn(x => x.ExternalId).IsInG(externalIds)
                 .Select(x => x.Id)
                 .List<int>();
+            return result;
+        }
+
+        public virtual SingleUserGroup FindSingleUserGroupByName(string name)
+        {
+            var result = GetSession().QueryOver<SingleUserGroup>()
+                .Where(x => x.Name == name)
+                .SingleOrDefault();
             return result;
         }
 
@@ -88,7 +108,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinQueryOver(x => permissionAlias.UserGroup, () => groupAlias)
                 .JoinQueryOver(x => groupAlias.Users, () => userAlias)
                 .Select(Projections.Distinct(Projections.Property(() => projectAlias.Id)))
-                .Where(() => userAlias.Id == userId)
+                .Where(() => userAlias.Id == userId && projectAlias.IsRemoved == false)
                 .AndRestrictionOn(() => projectAlias.Id).IsInG(bookIds)
                 .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(permission))
                 .List<long>();
@@ -106,7 +126,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinQueryOver(x => x.Permissions, () => permissionAlias)
                 .JoinQueryOver(x => permissionAlias.UserGroup, () => groupAlias)
                 .Select(Projections.Distinct(Projections.Property(() => projectAlias.Id)))
-                .Where(() => groupAlias.Id == groupId)
+                .Where(() => groupAlias.Id == groupId && projectAlias.IsRemoved == false)
                 .AndRestrictionOn(() => projectAlias.Id).IsInG(bookIds)
                 .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(permission))
                 .List<long>();
@@ -127,7 +147,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinQueryOver(x => x.Permissions, () => permissionAlias)
                 .JoinQueryOver(x => x.UserGroup, () => groupAlias)
                 .JoinQueryOver(x => x.Users, () => userAlias)
-                .Where(() => userAlias.Id == userId && resourceAlias.Id == resourceId)
+                .Where(() => userAlias.Id == userId && resourceAlias.Id == resourceId && projectAlias.IsRemoved == false)
                 .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(permission))
                 .SingleOrDefault();
 
@@ -145,7 +165,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinQueryOver(x => x.Project, () => projectAlias)
                 .JoinQueryOver(x => x.Permissions, () => permissionAlias)
                 .JoinQueryOver(x => x.UserGroup, () => groupAlias)
-                .Where(() => groupAlias.Id == groupId && resourceAlias.Id == resourceId)
+                .Where(() => groupAlias.Id == groupId && resourceAlias.Id == resourceId && projectAlias.IsRemoved == false)
                 .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(permission))
                 .SingleOrDefault();
 
@@ -161,7 +181,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             var permissions = GetSession().QueryOver(() => permissionAlias)
                 .JoinQueryOver(x => permissionAlias.Project, () => projectAlias)
                 .JoinQueryOver(x => permissionAlias.UserGroup, () => groupAlias)
-                .Where(() => groupAlias.Id == groupId)
+                .Where(() => groupAlias.Id == groupId && projectAlias.IsRemoved == false)
                 .AndRestrictionOn(() => projectAlias.Id).IsInG(bookIds)
                 .List<Permission>();
 
@@ -190,7 +210,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public virtual Permission FindPermissionByBookAndGroupExternalId(long projectId, int externalId)
         {
-            UserGroup groupAlias = null;
+            RoleUserGroup groupAlias = null;
 
             return
                 GetSession().QueryOver<Permission>()
@@ -202,34 +222,45 @@ namespace Vokabular.DataEntities.Database.Repositories
                     .SingleOrDefault<Permission>();
         }
 
-        public virtual ListWithTotalCountResult<UserGroup> FindGroupsByBook(long bookId, int start, int count, string filterByName)
+        public virtual ListWithTotalCountResult<UserGroup> FindGroupsByBook(long bookId, int start, int count, string filterByName, bool fetchUser = false)
         {
             Project projectAlias = null;
             Permission permissionAlias = null;
             UserGroup groupAlias = null;
 
             var query = GetSession().QueryOver(() => groupAlias)
-                .JoinQueryOver(x => groupAlias.Permissions, () => permissionAlias)
-                .JoinQueryOver(x => permissionAlias.Project, () => projectAlias)
-                .Where(() => projectAlias.Id == bookId);
+                .JoinAlias(x => groupAlias.Permissions, () => permissionAlias)
+                .JoinAlias(x => permissionAlias.Project, () => projectAlias)
+                .Where(() => projectAlias.Id == bookId && projectAlias.IsRemoved == false);
 
             if (!string.IsNullOrEmpty(filterByName))
             {
                 query.WhereRestrictionOn( () => groupAlias.Name).IsInsensitiveLike(filterByName, MatchMode.Anywhere);
             }
 
-            query.OrderBy(x => x.Name).Asc
+            query.OrderBy(x => x.GroupType).Asc
+                .OrderBy(x => x.Name).Asc
                 .Skip(start)
                 .Take(count);
 
             var list = query.Future();
             var totalCount = query.ToRowCountQuery().FutureValue<int>();
 
-            return new ListWithTotalCountResult<UserGroup>
+            var result = new ListWithTotalCountResult<UserGroup>
             {
                 List = list.ToList(),
                 Count = totalCount.Value
             };
+
+            if (fetchUser)
+            {
+                GetSession().QueryOver<SingleUserGroup>()
+                    .WhereRestrictionOn(x => x.Id).IsInG(result.List.Select(x => x.Id))
+                    .Fetch(SelectMode.Fetch, x => x.User)
+                    .List();
+            }
+
+            return result;
         }
 
         public virtual IList<Permission> FindPermissionsForSnapshotByUserId(long snapshotId, int userId)
@@ -244,7 +275,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => userGroupAlias.Users, () => userAlias)
                 .JoinAlias(x => x.Project, () => projectAlias)
                 .JoinAlias(() => projectAlias.Snapshots, () => snapshotAlias)
-                .Where(() => snapshotAlias.Id == snapshotId && userAlias.Id == userId)
+                .Where(() => snapshotAlias.Id == snapshotId && userAlias.Id == userId && projectAlias.IsRemoved == false)
                 .List();
         }
 
@@ -258,7 +289,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.UserGroup, () => userGroupAlias)
                 .JoinAlias(x => x.Project, () => projectAlias)
                 .JoinAlias(() => projectAlias.Snapshots, () => snapshotAlias)
-                .Where(() => snapshotAlias.Id == snapshotId && userGroupAlias.Id == userGroupId)
+                .Where(() => snapshotAlias.Id == snapshotId && userGroupAlias.Id == userGroupId && projectAlias.IsRemoved == false)
                 .SingleOrDefault();
         }
     }

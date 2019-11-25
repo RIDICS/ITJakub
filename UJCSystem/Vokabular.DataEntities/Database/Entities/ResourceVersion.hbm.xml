@@ -156,7 +156,7 @@ SELECT TOP (1) __hibernate_sort_row FROM
       inner join Snapshot_ResourceVersion snapshots5_ on headwordre0_.ResourceVersionId=snapshots5_.ResourceVersion 
       inner join [Snapshot] snapshotal2_ on snapshots5_.Snapshot=snapshotal2_.Id 
       inner join [Project] projectali3_ on snapshotal2_.Project=projectali3_.Id 
-      inner join [HeadwordItem] headwordit2_ on headwordre0_.ResourceVersionId=headwordit2_.HeadwordResource
+      --inner join [HeadwordItem] headwordit2_ on headwordre0_.ResourceVersionId=headwordit2_.HeadwordResource --not required
     where snapshotal2_.Id = projectali3_.LatestPublishedSnapshot and (projectali3_.Id in (:projectIds))
 	   group by headwordre0_.ResourceVersionId
  ) as query

@@ -26,7 +26,9 @@ namespace Vokabular.MainService.DataContracts.Clients
             m_client = client;
         }
 
-        public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, ProjectTypeContract projectType, string filterByName = null, bool fetchPageCount = false)
+        public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, ProjectTypeContract projectType,
+            ProjectOwnerTypeContract projectOwnerType = ProjectOwnerTypeContract.AllProjects, string filterByName = null, bool fetchPageCount = false,
+            bool fetchLatestChangedResource = false, bool fetchPermissions = false)
         {
             try
             {
@@ -34,8 +36,11 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("start", start)
                     .AddParameter("count", count)
                     .AddParameter("projectType", projectType)
+                    .AddParameter("projectOwnerType", projectOwnerType)
                     .AddParameter("filterByName", filterByName)
                     .AddParameter("fetchPageCount", fetchPageCount)
+                    .AddParameter("fetchLatestChangedResource", fetchLatestChangedResource)
+                    .AddParameter("fetchPermissions", fetchPermissions)
                     .ToResult();
                 var result = m_client.GetPagedList<ProjectDetailContract>(url);
                 return result;
@@ -65,7 +70,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long CreateProject(ProjectContract project)
+        public long CreateProject(CreateProjectContract project)
         {
             try
             {
@@ -81,11 +86,26 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void DeleteProject(long projectId)
+        public void RemoveProject(long projectId)
         {
             try
             {
                 m_client.Delete($"project/{projectId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
+        public void UpdateProject(long projectId, ItemNameContract data)
+        {
+            try
+            {
+                m_client.Put<object>($"project/{projectId}", data);
             }
             catch (HttpRequestException e)
             {
@@ -332,6 +352,22 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+        
+        public List<PageWithImageInfoContract> GetAllPagesWithImageInfoList(long projectId)
+        {
+            try
+            {
+                var result = m_client.Get<List<PageWithImageInfoContract>>($"project/{projectId}/page-image-info");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
         public List<TextWithPageContract> GetAllTextResourceList(long projectId, long? resourceGroupId)
         {
             try
@@ -491,6 +527,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
         
+        public long CreatePage(long projectId, CreatePageContract request)
+        {
+            try
+            {
+                var result = m_client.Post<long>($"project/{projectId}/page", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
         public long CreateTextResource(long pageId, CreateTextRequestContract request)
         {
             try
@@ -547,17 +599,17 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public PagedResultList<RoleContract> GetRolesByProject(int projectId, int start, int count, string query)
+        public PagedResultList<UserGroupContract> GetUserGroupsByProject(long projectId, int start, int count, string query)
         {
             try
             {
-                var url = UrlQueryBuilder.Create($"project/{projectId}/role")
+                var url = UrlQueryBuilder.Create($"project/{projectId}/user-group")
                     .AddParameter("start", start)
                     .AddParameter("count", count)
                     .AddParameter("filterByName", query)
                     .ToResult();
 
-                var result = m_client.GetPagedList<RoleContract>(url);
+                var result = m_client.GetPagedList<UserGroupContract>(url);
                 return result;
             }
             catch (HttpRequestException e)
@@ -591,6 +643,21 @@ namespace Vokabular.MainService.DataContracts.Clients
             {
                 var result = m_client.Get<ForumContract>($"project/{projectId}/forum");
                 return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
+        public void AddProjectToUserGroupByCode(long projectId, AssignPermissionToSingleUserGroupContract data)
+        {
+            try
+            {
+                m_client.Post<object>($"project/{projectId}/single-user-group", data);
             }
             catch (HttpRequestException e)
             {
@@ -898,6 +965,56 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 m_client.Post<object>($"project/{projectId}/chapter/generator", null);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Project groups
+
+        public ProjectGroupContract GetProjectGroups(long projectId)
+        {
+            try
+            {
+                var result = m_client.Get<ProjectGroupContract>($"project/{projectId}/group");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void AddProjectToGroup(long targetProjectId, long selectedProjectId)
+        {
+            try
+            {
+                m_client.Put<object>($"project/{targetProjectId}/group?selectedProjectId={selectedProjectId}", null);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void RemoveProjectFromGroup(long projectId)
+        {
+            try
+            {
+                m_client.Delete($"project/{projectId}/group");
             }
             catch (HttpRequestException e)
             {

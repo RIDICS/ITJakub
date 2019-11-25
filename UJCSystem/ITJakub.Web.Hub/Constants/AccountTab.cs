@@ -6,5 +6,6 @@
         UpdateAccount,
         UpdateContact,
         UpdateTwoFactorVerification,
+        UserCode,
     }
 }

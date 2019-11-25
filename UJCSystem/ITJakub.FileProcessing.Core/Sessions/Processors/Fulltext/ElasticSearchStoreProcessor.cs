@@ -49,7 +49,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
         {
             var snapshotResource = new SnapshotPageIdsResourceContract
             {
-                PageIds = externalPageIds,
+                OrderedPageIds = externalPageIds,
                 SnapshotId = snapshotId,
                 ProjectId = projectId,
                 MetadataResource = new SnapshotMetadataResourceContract

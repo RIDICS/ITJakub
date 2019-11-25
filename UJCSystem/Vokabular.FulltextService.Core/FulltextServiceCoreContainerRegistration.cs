@@ -13,14 +13,16 @@ namespace Vokabular.FulltextService.Core
     {
         public void Install(IServiceCollection services)
         {
-            services.AddScoped<CommunicationConfigurationProvider>();
-            services.AddScoped<CommunicationProvider>();
+            services.AddSingleton<CommunicationConfigurationProvider>();
+            services.AddSingleton<CommunicationProvider>();
             services.AddScoped<TextResourceManager>();
             services.AddScoped<SnapshotResourceManager>();
             services.AddScoped<SearchManager>();
+            services.AddScoped<UnfinishedSearchManager>();
+            services.AddScoped<UnfinishedSearchResultProcessor>();
             services.AddScoped<SearchResultProcessor>();
-            services.AddScoped<QueriesBuilder>();
             services.AddScoped<SnapshotResourceBuilder>();
+            services.AddScoped<QueriesBuilderFactory>();
 
             services.AddTextConverterServices();
             services.AddScoped<ITextConverter, Helpers.Converters.TextConverter>();

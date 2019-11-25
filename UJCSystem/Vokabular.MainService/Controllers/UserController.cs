@@ -52,13 +52,13 @@ namespace Vokabular.MainService.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("external")]
+        [HttpPost("current/local-data")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-        public IActionResult CreateUserIfNotExist([FromBody] int externalId)
+        public IActionResult CreateUserIfNotExist([FromBody] CreateUserIfNotExistContract data)
         {
             try
             {
-                var userId = m_userManager.CreateUserIfNotExist(externalId);
+                var userId = m_userManager.CreateUserIfNotExist(data);
                 return Ok(userId);
             }
             catch (HttpErrorCodeException exception)
@@ -147,10 +147,10 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
-        [HttpGet("{userId}/role")]
-        public List<RoleContract> GetRolesByUser(int userId)
+        [HttpGet("{userId}/group")]
+        public List<UserGroupContract> GetUserGroupsByUser(int userId)
         {
-            var result = m_roleManager.GetRolesByUser(userId);
+            var result = m_roleManager.GetUserGroupsByUser(userId);
             return result;
         }
 
@@ -263,6 +263,20 @@ namespace Vokabular.MainService.Controllers
             {
                 return StatusCode(exception.StatusCode, exception.Description);
             }
+        }
+
+        [HttpPost("current/single-user-group/regenerate-name")]
+        public ActionResult<string> RegenerateSingleUserGroupName()
+        {
+            var newCode = m_roleManager.RegenerateSingleUserGroupName();
+            return Ok(newCode);
+        }
+        
+        [HttpGet("current/single-user-group/name")]
+        public ActionResult<string> GetCurrentUserSingleUserGroupName()
+        {
+            var userCode = m_roleManager.GetCurrentUserSingleUserGroupName();
+            return Ok(userCode);
         }
     }
 }

@@ -40,6 +40,10 @@
     }
 }
 
+#new-project-button {
+    margin-right: 4px;
+}
+
 .project-item-buttons {
     a {
         display: block;
@@ -92,6 +96,11 @@
 
 .project-layout,
 .snapshot-layout {
+    .back-button {
+        margin-top: -1rem;
+        margin-bottom: 0.7rem;
+    }
+    
     .left-menu, .vertical-splitter, .vertical-splitter-control, .content {
         display: table-cell;
     }
@@ -151,6 +160,11 @@
     font-size: 120%;
     width: 200px;
     margin-bottom: 20px;
+
+    .text-type {
+        color: gray;
+        font-size: 80%;
+    }
 }
 
 .resource-panel {
@@ -184,25 +198,6 @@
     .form-group {
         margin-bottom: 0;
     }
-}
-
-.project-layout-box {
-    padding: 0.2rem 1rem 0.5rem 1rem;
-    margin-left: 0.5rem;
-    float: left;
-    width: 500px;
-
-    .control-label {
-        text-align: left;
-    }
-}
-
-.project-layout-box-500 {
-    max-width: 500px;
-}
-
-.project-layout-box-200 {
-    max-width: 200px;
 }
 
 .resource-version-button-icon {
@@ -596,6 +591,22 @@ table {
 
     #work-categorization-invalid-keyword-fail {
         display: none;
+    }
+
+    .page-listing {
+        height: auto;
+        min-height: 200px;
+    }
+
+    .list-container {
+        td {
+            padding: 4px 8px;
+            text-align: left;
+        }
+
+        tr.selected {
+            background-color: @selected-row-color;
+        }
     }
 }
 
@@ -999,30 +1010,28 @@ table {
     .go-to-page-field-group {
         user-select: none; //page selection arrows on the same row select text here on double click
     }
-
-    .page-image {
-        margin: 10px 0;
+    
+    .page-listing {
+        height: auto;
+        max-height: 56vh;
     }
-
-    .page-menu-row {
-        height: 5%;
-    }
-
+    
     .content-images {
-        height: 90%; //TODO
-        overflow-y: auto;
+        text-align: center;
+        
+        .page-image {
+            overflow-y: auto;
 
-        .image-container {
-            height: 100%;
-
-            .image-row {
-                height: 100%;
-
-                .page-image {
-                    height: 95%;
-                    overflow-y: auto;
-                }
+            img {
+                max-width: 100%;
+                max-height: 56vh;
             }
+        }
+    }
+        
+    .page-row {
+        .fa-image {
+            float: right;
         }
     }
 }
@@ -1184,6 +1193,10 @@ table {
                                 background-color: @odd-comment-area-background-color;
                             }
                         }
+
+                        .respond-to-comment-textarea {
+                            margin-top: 5px;
+                        }
                     }
 
                     .composition-area {
@@ -1264,11 +1277,16 @@ table {
     }
 
     .page-menu-row {
-        margin: 0 0 5px 0;
+        margin: 0;
+        
+        > div {
+            margin: 1em 0 1em 0;
+        }
 
         .page-navigation-arrow {
             cursor: pointer;
             color: @page-arrows-color;
+            margin: 0 1em;
         }
 
         .page-indicator {
@@ -1618,10 +1636,21 @@ table {
     .image-preview {
         flex: 1 0 45%;
         text-align: center;
+        
+        img {
+            width: 100%;
+        }
     }
 
     .sub-content {
         width: 100%;
+    }
+}
+
+.project-chapter-list {
+    .body-content {
+        flex-wrap: nowrap;
+        flex-direction: column;
     }
 }
 
@@ -1633,6 +1662,9 @@ table {
     margin-left: 0.5em;
 }
 
+.chapter-move-distance-label {
+    margin-left: 2em;
+}
 
 .editor-toolbar,
 .CodeMirror {
@@ -1711,6 +1743,8 @@ table {
                     max-width: 5em;
 
                     .dropdown-menu {
+                        z-index: 1035;
+
                         .active {
                             a,
                             a:hover,

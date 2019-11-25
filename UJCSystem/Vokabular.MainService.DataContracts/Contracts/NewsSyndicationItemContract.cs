@@ -17,7 +17,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
 
         public DateTime CreateTime { get; set; }
         
-        public UserDetailContract CreatedByUser { get; set; }
+        public UserWithContactContract CreatedByUser { get; set; }
     }
 
     public class CreateNewsSyndicationItemContract

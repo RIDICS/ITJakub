@@ -164,6 +164,7 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
             var deserialized =
                 JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+            listSearchCriteriaContracts = GetOnlyPageCriteria(listSearchCriteriaContracts);
 
             var client = GetBookClient();
             var result = client.SearchHitsWithPageContext(projectId, new SearchHitsRequestContract
@@ -182,6 +183,7 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
             var deserialized =
                 JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+            listSearchCriteriaContracts = GetOnlyPageCriteria(listSearchCriteriaContracts);
 
             var client = GetBookClient();
 

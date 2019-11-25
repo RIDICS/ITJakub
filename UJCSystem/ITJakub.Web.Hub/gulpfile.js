@@ -344,6 +344,9 @@ gulp.task("bundle:ridics_admin_project-editor", function () {
             paths.webroot + "Areas/Admin/js/ridics.project.client.js",
             paths.webroot + "Areas/Admin/js/ridics.project.module.js",
             paths.webroot + "Areas/Admin/js/ridics.project.work.tabs.js",
+            paths.webroot + "js/permissions/ridics.permission-api-client.js",
+            paths.webroot + "js/permissions/ridics.project-permission.manager.js",
+            paths.webroot + "Areas/Admin/js/ridics.cooperation.manager.js",
             paths.webroot + "Areas/Admin/js/snapshot/ridics.snapshot.api-client.js",
             paths.webroot + "Areas/Admin/js/snapshot/ridics.snapshot.list.js"
         ])
@@ -406,7 +409,7 @@ gulp.task("bundle:ridics_admin_composition-key-table-editor", function () {
     return gulp.src([
             paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor.table-base.js",
             paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor!(table-base)*.js",
-            "!" + paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor.bundle.js.js"
+            "!" + paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor.bundle.js"
         ])
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat("ridics.project.key-table-editor.bundle.js"))

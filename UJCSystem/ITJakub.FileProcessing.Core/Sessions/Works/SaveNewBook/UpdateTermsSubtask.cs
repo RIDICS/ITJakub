@@ -49,6 +49,22 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 return dbTerm;
             }
 
+            // some books can use different XmlId
+            var dbTerm2 = m_resourceRepository.GetTermByNameAndCategoryName(data.Text, data.TermCategoryName);
+            if (dbTerm2 != null)
+            {
+                if (dbTerm2.Position != data.Position || dbTerm2.ExternalId != data.XmlId)
+                {
+                    dbTerm2.Position = data.Position;
+                    dbTerm2.ExternalId = data.XmlId;
+
+                    m_resourceRepository.Update(dbTerm2);
+                }
+
+                return dbTerm2;
+            }
+
+            // create new Term
             var newDbTerm = new Term
             {
                 ExternalId = data.XmlId,

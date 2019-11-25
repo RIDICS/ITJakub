@@ -16,6 +16,7 @@
 
 @section scripts{
     <script asp-append-version="true" src="~/js/permissions/ridics.permission-api-client.js"></script>
+    <script asp-append-version="true" src="~/js/permissions/ridics.project-permission.manager.js"></script>
     <script asp-append-version="true" src="~/js/permissions/ridics.project.manager.js"></script>
 }
 
@@ -89,41 +90,9 @@
             </div>
         </div>
     </div>
-    @await Html.PartialAsync("Widget/_ProjectPermissionsPanel")
-</div>
-
-<div id="addProjectPermissionToRoleDialog" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">@Localizer.Translate("AddProjectPermissionToGroup", "Permission", LocTranslationSource.File)</h4>
-                <h5 id="specificProjectName" class="modal-title"></h5>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="roleSearchInput">@Localizer.Translate("SearchGroupLabel", "Permission", LocTranslationSource.File)</label>
-                    <input type="text" class="form-control role-search-input" id="roleSearchInput" placeholder="@Localizer.Translate("SearchGroup", "Permission", LocTranslationSource.File)" />
-                </div>
-
-                <div class="form-group">
-                    <label for="selectedRole">@Localizer.Translate("SelectedGroup", "Permission")</label>
-                    <p class="form-control-static" id="selectedRole">@Localizer.Translate("RoleIsNotSelected", "PermissionJs")</p>
-                </div>
-                
-                <fieldset class="form-group">
-                    <label>@Localizer.Translate("Permissions", "Permission")</label>
-                    <div>
-                        @await Html.PartialAsync("Widget/_ProjectPermissionsWidget", new PermissionDataContract())
-                    </div>
-                </fieldset>
-
-                <div id="addProjectToRoleError"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>
-                <button type="button" class="btn btn-default" id="addPermission" data-init="false">@Localizer.Translate("AddPermissionToGroup", "Permission", LocTranslationSource.File)</button>
-            </div>
-        </div>
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 project-permission-section" id="project-permission-section">
+        @await Html.PartialAsync("Widgets/_ProjectPermissionsPanel")
     </div>
 </div>
+
+@await Html.PartialAsync("Widgets/_AddProjectPermissionsDialog")

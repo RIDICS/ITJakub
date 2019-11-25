@@ -7,13 +7,13 @@ namespace Vokabular.DataEntities.Database.Entities
     {
         public virtual int Id { get; set; }
 
+        public virtual string GroupType { get; protected set; }
+
         public virtual string Name { get; set; }
         
         public virtual DateTime CreateTime { get; set; }
 
         public virtual DateTime LastChange { get; set; }
-
-        public virtual int ExternalId { get; set; }
 
         public virtual IList<User> Users { get; set; }
 
@@ -38,5 +38,15 @@ namespace Vokabular.DataEntities.Database.Entities
         {
             return Id.GetHashCode();
         }
+    }
+
+    public class SingleUserGroup : UserGroup
+    {
+        public virtual User User { get; set; }
+    }
+
+    public class RoleUserGroup : UserGroup
+    {
+        public virtual int ExternalId { get; set; }
     }
 }

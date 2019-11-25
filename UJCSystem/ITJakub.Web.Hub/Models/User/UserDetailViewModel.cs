@@ -19,8 +19,11 @@ namespace ITJakub.Web.Hub.Models.User
 
         [Display(Name = "LastName")]
         public string LastName { get; set; }
+        
+        [Display(Name = "UserCode")]
+        public string UserCode { get; set; }
 
         [Display(Name = "Roles")]
-        public ListViewModel<RoleContract> Roles { get; set; }
+        public ListViewModel<UserGroupContract> Roles { get; set; }
     }
 }

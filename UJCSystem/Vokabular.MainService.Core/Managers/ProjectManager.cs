@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
@@ -15,7 +14,6 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Results;
-using AuthRoleContract = Ridics.Authentication.DataContracts.RoleContract;
 using Vokabular.Shared.DataEntities.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Managers
@@ -27,64 +25,78 @@ namespace Vokabular.MainService.Core.Managers
         private readonly PermissionRepository m_permissionRepository;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly UserDetailManager m_userDetailManager;
+        private readonly ForumSiteManager m_forumSiteManager;
         private readonly CommunicationProvider m_communicationProvider;
         private readonly DefaultUserProvider m_defaultUserProvider;
         private readonly IMapper m_mapper;
 
         public ProjectManager(ProjectRepository projectRepository, MetadataRepository metadataRepository,
             PermissionRepository permissionRepository, AuthenticationManager authenticationManager,
-            UserDetailManager userDetailManager, CommunicationProvider communicationProvider, DefaultUserProvider defaultUserProvider,
-            IMapper mapper)
+            UserDetailManager userDetailManager, ForumSiteManager forumSiteManager, CommunicationProvider communicationProvider,
+            DefaultUserProvider defaultUserProvider, IMapper mapper)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_permissionRepository = permissionRepository;
             m_authenticationManager = authenticationManager;
             m_userDetailManager = userDetailManager;
+            m_forumSiteManager = forumSiteManager;
             m_communicationProvider = communicationProvider;
             m_defaultUserProvider = defaultUserProvider;
             m_mapper = mapper;
         }
 
-        public long CreateProject(ProjectContract projectData)
+        public long CreateProject(CreateProjectContract projectData)
         {
             var currentUserId = m_authenticationManager.GetCurrentUserId();
             var work = new CreateProjectWork(m_projectRepository, projectData, currentUserId, m_defaultUserProvider, m_mapper);
-
             var resultId = work.Execute();
+            
+            if (projectData.ProjectType == ProjectTypeContract.Community && projectData.BookTypesForForum != null)
+            {
+                m_forumSiteManager.CreateOrUpdateForums(resultId, projectData.BookTypesForForum.Select(x => (short) x).ToArray());
+            }
+
             return resultId;
         }
 
-        public void UpdateProject(long projectId, ProjectContract data)
+        public void UpdateProject(long projectId, ItemNameContract data)
         {
-            var currentUserId = m_authenticationManager.GetCurrentUserId();
-            var work = new UpdateProjectWork(m_projectRepository, projectId, data, currentUserId);
+            // TODO check permission (not only here)
+            var work = new UpdateProjectWork(m_projectRepository, projectId, data.Name);
             work.Execute();
         }
 
-        public void DeleteProject(long projectId)
+        public void RemoveProject(long projectId)
         {
-            // TODO probably only set Project as removed
-            throw new NotImplementedException();
+            var work = new RemoveProjectWork(m_projectRepository, projectId);
+            work.Execute();
         }
 
         public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, ProjectTypeContract? projectType,
-            string filterByName, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons)
+            ProjectOwnerTypeContract projectOwnerType, string filterByName, bool fetchPageCount, bool fetchAuthors,
+            bool fetchResponsiblePersons, bool fetchLatestChangedResource, bool fetchPermissions)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCountForProject(count);
             var projectTypeEnum = m_mapper.Map<ProjectTypeEnum?>(projectType);
-
-            var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, projectTypeEnum, filterByName, fetchPageCount, fetchAuthors, fetchResponsiblePersons);
+            
+            var userId = m_authenticationManager.GetCurrentUserId();
+            
+            var work = new GetProjectListWork(m_projectRepository, m_metadataRepository, startValue, countValue, projectTypeEnum,
+                projectOwnerType, userId, filterByName, fetchPageCount, fetchAuthors, fetchResponsiblePersons, fetchLatestChangedResource, fetchPermissions);
             var resultEntities = work.Execute();
 
             var metadataList = work.GetMetadataResources();
             var pageCountList = work.GetPageCountList();
+            var latestChangesList = work.GetLatestChangedResources();
+            var userPermissionDict = work.GetUserPermission();
             var resultList = m_mapper.Map<List<ProjectDetailContract>>(resultEntities);
             foreach (var projectContract in resultList)
             {
                 var metadataResource = metadataList.FirstOrDefault(x => x.Resource.Project.Id == projectContract.Id);
                 var pageCountResult = pageCountList.FirstOrDefault(x => x.ProjectId == projectContract.Id);
+                var latestChangeResult = latestChangesList.FirstOrDefault(x => x.ProjectId == projectContract.Id);
 
                 var metadataContract = m_mapper.Map<ProjectMetadataContract>(metadataResource);
                 projectContract.LatestMetadata = metadataContract;
@@ -97,6 +109,26 @@ namespace Vokabular.MainService.Core.Managers
                 if (fetchResponsiblePersons && metadataResource != null)
                     projectContract.ResponsiblePersons =
                         m_mapper.Map<List<ProjectResponsiblePersonContract>>(metadataResource.Resource.Project.ResponsiblePersons);
+
+                if (fetchLatestChangedResource && latestChangeResult != null)
+                {
+                    projectContract.LatestChangeTime = latestChangeResult.CreateTime;
+                    projectContract.EditedByUser = m_userDetailManager.GetUserContract(latestChangeResult.CreatedByUserId);
+                }
+
+                if (fetchPermissions)
+                {
+                    var joinedFlags = PermissionFlag.None;
+                    if (userPermissionDict.TryGetValue(projectContract.Id, out var permissions))
+                    {
+                        foreach (var permission in permissions)
+                        {
+                            joinedFlags |= permission.Flags;
+                        }
+                    }
+
+                    projectContract.CurrentUserPermissions = m_mapper.Map<PermissionDataContract>(joinedFlags);
+                }
             }
 
             return new PagedResultList<ProjectDetailContract>
@@ -108,7 +140,8 @@ namespace Vokabular.MainService.Core.Managers
 
         public ProjectDetailContract GetProject(long projectId, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons)
         {
-            var work = new GetProjectWork(m_projectRepository, m_metadataRepository, projectId, fetchPageCount, fetchAuthors, fetchResponsiblePersons, false);
+            var work = new GetProjectWork(m_projectRepository, m_metadataRepository, projectId, fetchPageCount, fetchAuthors,
+                fetchResponsiblePersons, false);
             var project = work.Execute();
 
             if (project == null)
@@ -182,31 +215,42 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
-        public PagedResultList<RoleContract> GetRolesByProject(long projectId, int? start, int? count, string filterByName)
+        public PagedResultList<UserGroupContract> GetUserGroupsByProject(long projectId, int? start, int? count, string filterByName)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
 
-            var result = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupsByBook(projectId, startValue, countValue, filterByName));
+            var result = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupsByBook(projectId, startValue, countValue, filterByName, true));
 
             if (result == null)
             {
                 return null;
             }
 
-            var authRoles = new List<AuthRoleContract>();
+            var resultRoles = new List<UserGroupContract>();
             foreach (var group in result.List)
             {
-                var work = new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, group.ExternalId);
-                work.Execute();
-                authRoles.Add(work.GetRoleContract());
+                if (group is RoleUserGroup roleUserGroup)
+                {
+                    var work = new SynchronizeRoleWork(m_permissionRepository, m_communicationProvider, roleUserGroup.ExternalId);
+                    work.Execute();
+                    var authRoleContract = work.GetRoleContract();
+
+                    var roleContract = m_mapper.Map<UserGroupContract>(authRoleContract);
+                    roleContract.Id = group.Id;
+
+                    resultRoles.Add(roleContract);
+                }
+                else
+                {
+                    var roleContract = m_mapper.Map<UserGroupContract>(group);
+                    resultRoles.Add(roleContract);
+                }
             }
 
-            var roles = m_mapper.Map<List<RoleContract>>(authRoles);
-
-            return new PagedResultList<RoleContract>
+            return new PagedResultList<UserGroupContract>
             {
-                List = roles,
+                List = resultRoles,
                 TotalCount = result.Count,
             };
         }

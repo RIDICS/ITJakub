@@ -12,7 +12,6 @@ namespace Vokabular.ForumSite.Core
         public void Install(IServiceCollection services)
         {
             services.AddScoped<ForumManager>();
-            services.AddScoped<SubForumManager>();
 
             services.AddScoped<ForumAccessSubwork>();
             services.AddScoped<MessageSubwork>();

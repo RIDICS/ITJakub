@@ -1,4 +1,4 @@
-﻿class ProjectClient {
+﻿class ProjectClient extends WebHubApiClient {
     private ajax(type: string, urlPath: string, data: Object|string, success: (response: any) => void, error: (status: HttpStatusCode) => void) {
         $.ajax({
             type: type,
@@ -24,14 +24,18 @@
         this.ajax("POST", urlPath, JSON.stringify(data), response => callback(response, null), status => callback(null, status));
     }
 
-    public createProject(name: string, callback: (id: number, error: HttpStatusCode) => void) {
-        this.postAjax("Admin/Project/CreateProject", {name: name}, callback);
+    public createProject(name: string, textType: number|string, selectedBookTypes: BookTypeEnum[], callback: (id: number, error: HttpStatusCode) => void) {
+        this.postAjax("Admin/Project/CreateProject", {name: name, textType: textType, selectedBookTypes: selectedBookTypes}, callback);
     }
 
     public deleteProject(id: number, callback: (error: HttpStatusCode) => void) {
         this.postAjax("Admin/Project/DeleteProject", {id: id}, (response, errorCode) => callback(errorCode));
     }
-
+    
+    public renameProject(id: number, newProjectName: string): JQuery.jqXHR {
+        return this.post(`${getBaseUrl()}Admin/Project/RenameProject`, JSON.stringify({id: id, newProjectName: newProjectName}));
+    }
+        
     public createPublisher(name: string, email: string, callback: (newPublisherId: number, errorCode: HttpStatusCode) => void) {
         var data = {
             text: name,
@@ -113,7 +117,19 @@
         return $.get(`${getBaseUrl()}Admin/Project/GetProjectsByResponsiblePerson?responsiblePersonId=${responsiblePersonId}&start=${start}&count=${count}`);
     }
 
+    assignProjectToGroup(projectId: number, targetProjectId: number): JQuery.jqXHR {
+        return this.post(`${getBaseUrl()}Admin/Project/AssignProjectToGroup?projectId=${projectId}&targetProjectId=${targetProjectId}`, null);
+    }
+
+    removeProjectFromGroup(projectId: number): JQuery.jqXHR {
+        return this.post(`${getBaseUrl()}Admin/Project/RemoveProjectFromGroup?projectId=${projectId}`, null);
+    }
+
     createForum(projectId: number): JQuery.jqXHR<IForumViewModel> {
         return $.post(`${getBaseUrl()}Admin/Project/CreateForum?projectId=${projectId}`, {});
+    }
+    
+    private getAdminProjectUrl(): string {
+        return `${getBaseUrl()}Admin/Project/`;
     }
 }

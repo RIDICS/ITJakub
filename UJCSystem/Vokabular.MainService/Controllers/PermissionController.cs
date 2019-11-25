@@ -21,7 +21,7 @@ namespace Vokabular.MainService.Controllers
 
         [HttpGet("")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
-        public List<PermissionContract> GetPermissionList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
+        public List<SpecialPermissionContract> GetPermissionList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByName)
         {
             var result = m_permissionManager.GetPermissions(start, count, filterByName);
 

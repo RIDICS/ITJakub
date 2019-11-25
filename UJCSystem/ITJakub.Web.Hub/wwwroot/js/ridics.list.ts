@@ -1,8 +1,6 @@
 ﻿class ListWithPagination {
     private readonly firstPageNumber = 1;
     private readonly pagingInfoSelector = ".paging-info";
-
-    private readonly urlPath: string;
     private readonly selector: string;
     private readonly viewType: ViewType;
     private readonly saveStateToUrl: boolean;
@@ -15,15 +13,17 @@
     private readonly searchForm: JQuery;
     private readonly apiClient = new WebHubApiClient();
 
+    private urlPath: string;
     private resetSearchForm: JQuery;
     private pageSize: number;
     private totalCount: number;
     private search: string;
+    private additionalUrlParameters: Array<IKeyValue<string, string>>;
     
 
     constructor(urlPath: string, selector: string, viewType: ViewType, saveStateToUrl: boolean = true, useLoadingContainer: boolean = false,
         pageLoadCallback: (list?: ListWithPagination) => void = null, contextForCallback: any = null) {
-    this.urlPath = urlPath;
+        this.urlPath = urlPath;
         this.selector = selector;
         this.viewType = viewType;
         this.saveStateToUrl = saveStateToUrl;
@@ -38,6 +38,7 @@
         });
         this.searchForm = $(`.${this.selector}-search-form`);
         this.search = null;
+        this.additionalUrlParameters = null;
     }
 
     public init() {
@@ -50,7 +51,8 @@
         });
 
         const resetSearchButton = this.searchForm.find(`.reset-search-button`);
-        resetSearchButton.click(() => {
+        resetSearchButton.off("click");
+        resetSearchButton.on("click", () => {
             if (this.search == null) {
                 this.searchForm.find(".search-value").val("");
             } else {
@@ -84,6 +86,18 @@
         this.loadPage(this.pagination.getCurrentPage());
     }
 
+    public loadFirstPage() {
+        this.loadPage(this.firstPageNumber);
+    }
+
+    public setNewUrlPath(urlPath: string) {
+        this.urlPath = urlPath;
+    }
+
+    public setAdditionalUrlParameters(parameters: Array<IKeyValue<string, string>>) {
+        this.additionalUrlParameters = parameters;
+    }
+    
     public clear(emptyListMessage: string) {
         const section = $(`#${this.selector}-section .section`);
         this.setSearchFormDisabled();
@@ -128,9 +142,9 @@
 
         if (this.useLoadingContainer) {
             $listContainer.empty();
-            this.loadingContainer.html("<div class=\"loader\"></div>");
+            this.loadingContainer.html("<div class=\"lv-dots md lv-mid\"></div>");
         } else {
-            $listContainer.html("<div class=\"loader\"></div>");
+            $listContainer.html("<div class=\"lv-dots md lv-mid\"></div>");
         }
         
 
@@ -190,8 +204,15 @@
                 if (search != null) {
                     query.search = search;
                 }
-            }).toString();
-            history.replaceState(null, null, newUri);
+            });
+
+            if (this.additionalUrlParameters != null) {
+                for (let param of this.additionalUrlParameters) {
+                    newUri.setQuery(param.key, param.value);
+                }
+            }
+            
+            history.replaceState(null, null, newUri.toString());
         }
     }
 

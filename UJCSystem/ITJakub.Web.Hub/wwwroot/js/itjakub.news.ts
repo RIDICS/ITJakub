@@ -2,6 +2,8 @@
     private paginator: Pagination;
     private newsOnPage = 5;
     private newsContainer: HTMLElement;
+    private loaderElement = lv.create(null, "lv-dots md lv-mid lvt-3 lvb-3");
+    private errorHandler: ErrorHandler;
 
     public initNews() {
         this.paginator = new Pagination({
@@ -9,6 +11,8 @@
             pageClickCallback: this.paginatorClickedCallback.bind(this),
             callPageClickCallbackOnInit: false
         });
+
+        this.errorHandler = new ErrorHandler();
 
         this.newsContainer = document.getElementById("news-container");
 
@@ -20,6 +24,7 @@
 
     private sendGetNewsRequest(start: number, callback: (response: IPagedResultArray<INewsSyndicationItemContract>) => void) {
         this.showLoading();
+        var self = this;
         $.ajax({
             type: "GET",
             traditional: true,
@@ -30,10 +35,17 @@
             } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
-            success: callback
-        });
+            success: callback,
+            error: function(error) {
+                $("#news-container").empty();
+                var emptyElement = document.createElement('div');
+                $(emptyElement).addClass("bib-listing-empty");
+                $(emptyElement).text(self.errorHandler.getErrorMessage(error));
+                $("#news-container").append(emptyElement);
+            }
+    });
     }
-    
+
     private paginatorClickedCallback(pageNumber: number) {
         var start = (pageNumber - 1) * this.newsOnPage;
         this.loadNews(start);
@@ -48,40 +60,42 @@
     };
 
     private showNews(items: Array<INewsSyndicationItemContract>) {
-        this.clearLoading();
+        $(this.newsContainer).empty();
+        if (items.length === 0) {
+            var noNews = document.createElement('div');
+            $(noNews).addClass("home-no-news");
+            $(noNews).text(localization.translate("NoResultsToShow", "PluginsJs").value);
+            $(this.newsContainer).append(noNews);
+        } else {
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
 
-        for (var i = 0; i < items.length; i++) {
-            var item = items[i];
+                var itemDiv = document.createElement("div");
+                $(itemDiv).addClass("message");
 
-            var itemDiv = document.createElement("div");
-            $(itemDiv).addClass("message");
+                var date = new Date(item.createTime);
+                var titleHeader = document.createElement("h2");
+                titleHeader.innerHTML = item.title;
 
-            var date = new Date(item.createTime);
-            var titleHeader = document.createElement("h2");
-            titleHeader.innerHTML = item.title;
+                itemDiv.appendChild(titleHeader);
 
-            itemDiv.appendChild(titleHeader);
+                var dateDiv = document.createElement("div");
+                $(dateDiv).addClass("news-date");
+                dateDiv.innerHTML = date.toLocaleDateString();
 
-            var dateDiv = document.createElement("div");
-            $(dateDiv).addClass("news-date");
-            dateDiv.innerHTML = date.toLocaleDateString();
+                itemDiv.appendChild(dateDiv);
 
-            itemDiv.appendChild(dateDiv);
+                var itemMessage = document.createElement("p");
+                itemMessage.innerHTML = item.text;
 
-            var itemMessage = document.createElement("p");
-            itemMessage.innerHTML = item.text;
+                itemDiv.appendChild(itemMessage);
 
-            itemDiv.appendChild(itemMessage);
-
-            $(this.newsContainer).append(itemDiv);
+                $(this.newsContainer).append(itemDiv);
+            }
         }
     }
 
-    private clearLoading() {
-        $(this.newsContainer).removeClass("loader");
-    }
-
     private showLoading() {
-        $(this.newsContainer).addClass("loader");
+        $(this.newsContainer).append(this.loaderElement.getElement());
     }
 }

@@ -147,7 +147,7 @@ class ProjectImageViewerModule {
     }
 
     init() {
-        const url = getBaseUrl() + "Admin/Project/GetImageViewer";
+        const url = getBaseUrl() + `Admin/Project/GetImageViewer?projectId=${this.projectId}`;
         const loadingSpinner = $(`<div class="loading"></div>`);
         const projectLayoutEl = $("#project-layout-content");
         projectLayoutEl.empty();

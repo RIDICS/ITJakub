@@ -17,6 +17,7 @@
     "SelectedResources": "Selected {0}/{1} texts, {2}/{3} images, {4}/{5} audio resources.",
     "CreateSnapshotWithoutResources": "No resource was selected for publication. Are you sure that you want to publish the work?",
 
+    "BackToProject": "Back to the editor of the work",
     "Track": "Track",
     "Chapter": "Chapter",
 
@@ -36,18 +37,20 @@
     "AddingGeneratedNames": "Page names already exist for this project. Appending generated names to the end of the list.",
     "Shift": "Shift",
     "ShiftPageUp": "Shift selected pages up",
-    "ShiftChapterUp": "Shift selected chapters up",
     "ShiftPageDown": "Shift selected pages down",
-    "ShiftChapterDown": "Shift selected chapters down",
     "EditPageName": "Edit page name",
     "DeletePage": "Delete page",
+    "PageListSaveSuccess": "Pages saved successfully.",
+    "ShiftChapterUp": "Shift selected chapters up",
+    "ShiftChapterDown": "Shift selected chapters down",
+    "IncludeChapterToTheSubCategory": "Include selected chapters to the subcategory",
+    "ExcludeChapterFromTheSubCategory": "Exclude selected chapters from the subcategory",
     "EditChapter": "Edit chapter",
     "DiscardChapterChanges": "Discard changes",
     "DeleteChapter": "Delete chapter",
     "ChapterNameRequired": "Chapter name is required",
-    "PageListSaveSuccess": "Pages saved successfully.",
     "ConfirmOrDiscardChapterChanges": "Please confirm or discard changes in chapter names and their pages.",
-    
+
     "Fail": "Fail",
     "Success": "Success",
     "Warning": "Warning",

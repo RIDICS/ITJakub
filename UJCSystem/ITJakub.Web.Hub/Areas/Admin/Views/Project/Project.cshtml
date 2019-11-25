@@ -1,7 +1,9 @@
 ﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectItemViewModel
+@using ITJakub.Web.Hub.Helpers
 @using Scalesoft.Localization.AspNetCore
 
 @inject ILocalizationService Localizer
+@inject TextTypeLocalizer TextTypeLocalizer
 
 @{
     ViewBag.Title = Localizer.Translate("ProjectHeader", "Admin") + Model.Name;
@@ -9,6 +11,8 @@
 
 @section styles {
     <link asp-append-version="true" rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/css/ridics.permissions.css" />
+    <link asp-append-version="true" rel="stylesheet" href="~/css/ridics.checkbox.css" />
     <link asp-append-version="true" rel="stylesheet" href="~/css/ridics.list.css" />
     <link asp-append-version="true" rel="stylesheet" href="~/lib/bootstrap-select/dist/css/bootstrap-select.css" />
     <link asp-append-version="true" rel="stylesheet" href="~/lib/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css" />
@@ -39,7 +43,7 @@
 <div class="content-container">
     <div class="row project-layout">
         <div class="left-menu" id="left-menu">
-            <div class="project-title">@Localizer.Translate("ProjectTitle", "Admin")</div>
+            <div class="project-title">@Model.Name<br/><span class="text-type">@TextTypeLocalizer.TranslateTextTypeFull(Model.TextType)</span></div>
             <div class="list-group list-group-root" id="project-navigation">
                 <a href="#" class="list-group-item active" id="project-navigation-root">@Localizer.Translate("Project", "Admin")</a>
                 <div class="list-group">

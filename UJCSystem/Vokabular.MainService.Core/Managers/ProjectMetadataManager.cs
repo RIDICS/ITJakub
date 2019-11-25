@@ -40,9 +40,9 @@ namespace Vokabular.MainService.Core.Managers
                 ? m_mapper.Map<ProjectMetadataResultContract>(result)
                 : new ProjectMetadataResultContract();
 
-            if (result != null && parameters.IsAnyAdditionalParameter())
+            if (parameters.IsAnyAdditionalParameter())
             {
-                var project = result.Resource.Project;
+                var project = work.GetProjectWithAdditionalData();
 
                 if (parameters.IncludeAuthor)
                 {

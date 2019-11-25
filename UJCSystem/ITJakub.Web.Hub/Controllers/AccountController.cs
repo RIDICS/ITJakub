@@ -108,7 +108,7 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdateBasicData(UpdateUserViewModel updateUserViewModel)
         {
-            ViewData.Add(AccountConstants.SuccessUserUpdate, false);
+            ViewData[AccountConstants.SuccessUserUpdate] = false;
             if (ModelState.IsValid)
             {
                 try
@@ -121,7 +121,7 @@ namespace ITJakub.Web.Hub.Controllers
                     };
 
                     client.UpdateCurrentUser(updateUserContract);
-                    ViewData.Add(AccountConstants.SuccessUserUpdate, true);
+                    ViewData[AccountConstants.SuccessUserUpdate] = true;
                 }
                 catch (HttpErrorCodeException e)
                 {
@@ -143,7 +143,7 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdatePassword(UpdatePasswordViewModel model)
         {
-            ViewData.Add(AccountConstants.SuccessPasswordUpdate, false);
+            ViewData[AccountConstants.SuccessPasswordUpdate] = false;
             if (ModelState.IsValid)
             {
                 try
@@ -156,7 +156,7 @@ namespace ITJakub.Web.Hub.Controllers
 
                     var client = GetUserClient();
                     client.UpdateCurrentPassword(updateUserPasswordContract);
-                    ViewData.Add(AccountConstants.SuccessPasswordUpdate, true);
+                    ViewData[AccountConstants.SuccessPasswordUpdate] = true;
                     return PartialView("UserProfile/_UpdatePassword", null);
                 }
                 catch (HttpErrorCodeException e)
@@ -249,7 +249,7 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SetTwoFactor(UpdateTwoFactorVerificationViewModel twoFactorVerificationViewModel)
         {
-            ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
+            ViewData[AccountConstants.SuccessTwoFactorUpdate] = false;
             if (ModelState.IsValid)
             {
                 try
@@ -260,7 +260,7 @@ namespace ITJakub.Web.Hub.Controllers
                     };
                     var client = GetUserClient();
                     client.SetTwoFactor(contract);
-                    ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
+                    ViewData[AccountConstants.SuccessTwoFactorUpdate] = true;
                 }
                 catch (HttpErrorCodeException e)
                 {
@@ -280,7 +280,7 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeTwoFactorProvider(UpdateTwoFactorVerificationViewModel twoFactorVerificationViewModel)
         {
-            ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, false);
+            ViewData[AccountConstants.SuccessTwoFactorUpdate] = false;
             if (ModelState.IsValid)
             {
                 try
@@ -292,7 +292,7 @@ namespace ITJakub.Web.Hub.Controllers
 
                     var client = GetUserClient();
                     client.SelectTwoFactorProvider(contract);
-                    ViewData.Add(AccountConstants.SuccessTwoFactorUpdate, true);
+                    ViewData[AccountConstants.SuccessTwoFactorUpdate] = true;
                 }
                 catch (HttpErrorCodeException e)
                 {
@@ -306,6 +306,14 @@ namespace ITJakub.Web.Hub.Controllers
 
             twoFactorVerificationViewModel = CreateUpdateTwoFactorVerificationViewModel();
             return PartialView("UserProfile/_UpdateTwoFactorVerification", twoFactorVerificationViewModel);
+        }
+        
+        [HttpPost]
+        public IActionResult RegenerateUserCode()
+        {
+            var client = GetUserClient();
+            var userCode = client.RegenerateSingleUserGroupName();
+            return PartialView("UserProfile/_UserCode", new UserCodeViewModel{UserCode = userCode});
         }
 
         //
@@ -340,12 +348,15 @@ namespace ITJakub.Web.Hub.Controllers
         {
             var client = GetUserClient();
             var user = client.GetCurrentUser();
+            var userCode = client.GetSingleUserGroupName();
+
             return new AccountDetailViewModel
             {
                 UpdateUserViewModel = Mapper.Map<UpdateUserViewModel>(user),
                 UpdatePasswordViewModel = null,
                 UpdateContactViewModel = Mapper.Map<UpdateContactViewModel>(user),
                 UpdateTwoFactorVerificationViewModel = CreateUpdateTwoFactorVerificationViewModel(user),
+                UserCodeViewModel = new UserCodeViewModel {UserCode = userCode},
                 ActualTab = accountTab
             };
         }

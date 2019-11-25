@@ -29,7 +29,7 @@ namespace Vokabular.MainService.DataContracts
             services.AddTransient<MainServiceNewsClient>();
             services.AddTransient<MainServicePermissionClient>();
             services.AddTransient<MainServiceProjectClient>();
-            services.AddTransient<MainServiceRoleClient>();
+            services.AddTransient<MainServiceUserGroupClient>();
             services.AddTransient<MainServiceSessionClient>();
             services.AddTransient<MainServiceSnapshotClient>();
             services.AddTransient<MainServiceTermClient>();

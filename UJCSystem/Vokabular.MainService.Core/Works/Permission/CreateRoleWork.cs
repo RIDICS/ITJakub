@@ -38,7 +38,7 @@ namespace Vokabular.MainService.Core.Works.Permission
             var response = client.CreateRoleAsync(roleContract).GetAwaiter().GetResult();
             var externalRoleId = response.Content.ReadAsInt();
 
-            var group = new UserGroup
+            var group = new RoleUserGroup
             {
                 Name = m_roleName,
                 CreateTime = now,
@@ -46,8 +46,8 @@ namespace Vokabular.MainService.Core.Works.Permission
                 ExternalId = externalRoleId,
             };
 
-            m_permissionRepository.CreateGroup(group);
-            return externalRoleId;
+            var roleId = m_permissionRepository.CreateGroup(group);
+            return roleId;
         }
     }
 }

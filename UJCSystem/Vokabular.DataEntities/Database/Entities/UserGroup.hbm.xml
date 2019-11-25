@@ -6,15 +6,22 @@
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
-    
+
+    <discriminator column="Discriminator"
+                   not-null="true"
+                   type="System.String" />
+
+    <property name="GroupType"
+              column="Discriminator"
+              update="false"
+              insert="false" />
+
     <property name="Name" not-null="false" />
     
     <property name="CreateTime" not-null="true" type="UtcDateTime" />
 
     <property name="LastChange" not-null="true" type="UtcDateTime" />
     
-    <property name="ExternalId" not-null="true" unique="true" />
-
     <bag name="Users" table="User_UserGroup" lazy="true" inverse="true">
       <key column="[UserGroup]" />
       <many-to-many class="User" column="[User]" />
@@ -24,5 +31,24 @@
       <key column="[UserGroup]" />
       <one-to-many class="Permission" />
     </bag>
+
+    <subclass
+      name="SingleUserGroup"
+      discriminator-value="Single">
+
+      <many-to-one name="User"
+                   column="[User]"
+                   class="User"
+                   lazy="proxy" />
+
+    </subclass>
+
+    <subclass
+      name="RoleUserGroup"
+      discriminator-value="Group">
+
+      <property name="ExternalId" not-null="true" unique="true" />
+
+    </subclass>
   </class>
 </hibernate-mapping>

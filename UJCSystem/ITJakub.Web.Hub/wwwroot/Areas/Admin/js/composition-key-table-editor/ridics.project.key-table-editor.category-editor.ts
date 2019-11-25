@@ -11,6 +11,7 @@
     }
 
     init() {
+        this.showLoading();
         $("#project-layout-content").find("*").off();
         this.createEntryButtonEl.text("Create new category");
         this.changeEntryButtonEl.text("Change category");
@@ -36,7 +37,7 @@
     }
 
     private updateContentAfterChange() {
-
+        this.showLoading();
         this.util.getCategoryList().done((data: ICategoryContract[]) => {
             this.categoryItemList = this.generateListStructure(data);
             const numberOfParentCategories = this.categoryItemList.children(".page-list-item").length;
@@ -142,7 +143,7 @@
                 const parentCategoryIdSelectEl = dialogEl.find(".id-method-selection");
                 parentCategoryIdSelectEl.empty();
                 const newCategoryOption =
-                    `<option value="null" data-parent-category-id="null">No parent category</option>`;
+                    `<option value="null" data-parent-category-id="null">(No parent category)</option>`;
                 parentCategoryIdSelectEl.append(newCategoryOption);
                 parentCategoryIdSelectEl.append(this.generateComboboxFromList(this.categoryItemListArray));
                 const selectedPageEl = $(".list-group").find(".page-list-item-selected");
@@ -186,6 +187,9 @@
                     const textareaEl = dialogEl.find(".primary-input-dialog-textarea");
                     const parentCategoryIdSelectEl = dialogEl.find(".id-method-selection");
                     parentCategoryIdSelectEl.empty();
+                    const newCategoryOption =
+                        `<option value="null" data-parent-category-id="null">(No parent category)</option>`;
+                    parentCategoryIdSelectEl.append(newCategoryOption);
                     parentCategoryIdSelectEl.append(this.generateComboboxFromList(this.categoryItemListArray));
                     const originalText = selectedPageEl.clone().children().remove().end().text();
                     textareaEl.val(originalText);

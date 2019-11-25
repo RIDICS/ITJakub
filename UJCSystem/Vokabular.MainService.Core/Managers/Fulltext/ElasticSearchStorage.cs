@@ -212,11 +212,11 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             return result;
         }
 
-        public void CreateSnapshot(Snapshot snapshot, IList<TextResource> textResources, MetadataResource metadata)
+        public void CreateSnapshot(Snapshot snapshot, IList<TextResource> orderedTextResources, MetadataResource metadata)
         {
             var snapshotResource = new SnapshotPageIdsResourceContract
             {
-                PageIds = textResources.Select(x => x.ExternalId).ToList(),
+                OrderedPageIds = orderedTextResources.Select(x => x.ExternalId).ToList(),
                 SnapshotId = snapshot.Id,
                 ProjectId = snapshot.Project.Id,
                 MetadataResource = new SnapshotMetadataResourceContract

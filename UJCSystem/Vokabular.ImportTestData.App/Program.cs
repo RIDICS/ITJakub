@@ -2,9 +2,12 @@
 using DryIoc;
 using DryIoc.Microsoft.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Vokabular.AppAuthentication.Shared;
+using Vokabular.ImportTestData.App.Logging;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared;
 
 namespace Vokabular.ImportTestData.App
 {
@@ -34,6 +37,8 @@ namespace Vokabular.ImportTestData.App
             services.AddSingleton(new DataProvider(Console.Out, Console.In));
 
             container.Populate(services);
+
+            ApplicationLogging.LoggerFactory = new LoggerFactory(new[] {new ConsoleLoggerProvider()});
 
             var app = container.Resolve<ImportTestDataApp>();
             app.Run();

@@ -1,16 +1,16 @@
 ﻿class BohemianTextBankBase {
-    protected searchResultsOnPage = 10;//corresponds to amount of results per page that should be on screen
-    protected contextLength = 50;
+    protected searchResultsOnPage = this.getNumberFromConfig("page-size");//corresponds to amount of results per page that should be on screen
+    protected contextLength = this.getNumberFromConfig("context-length");
 
-    protected minContextLength = 40;//search backend may crash if context is too short
-    protected maxContextLength = 100;
-    protected minResultsPerPage = 1;
-    protected maxResultsPerPage = 50;
+    protected minContextLength = this.getNumberFromConfig("min-context-length");//search backend may crash if context is too short
+    protected maxContextLength = this.getNumberFromConfig("max-context-length");
+    protected minResultsPerPage = this.getNumberFromConfig("min-page-size");
+    protected maxResultsPerPage = this.getNumberFromConfig("max-page-size");
 
     protected hitBookIds:number[] = [];
 
     protected compositionResultListStart = -1;
-    protected compositionsPerPage = 10;
+    protected compositionsPerPage = this.getNumberFromConfig("composition-page-size");
     protected compositionPageIsLast = false;
 
     protected currentBookId = -1;
@@ -47,18 +47,24 @@
 
     protected basicApiClient = new TextBankApiClient();
 
+    private getNumberFromConfig(key: string): number {
+        return Number($("#corpus-search-configuration").data(key));
+    }
+
     protected showLoading(tableEl: JQuery) {
         const loaderEl = tableEl.siblings(".corpus-search-results-table-div-loader");
+        var loaderElement = lv.create(null, "lv-circles sm lv-mid lvt-2 lvb-2");
         tableEl.hide();
         loaderEl.empty();
         loaderEl.show();
-        loaderEl.removeClass("alert alert-info").addClass("loader");
+        loaderEl.removeClass("alert alert-info");
+        loaderEl.append(loaderElement.getElement());
     }
 
 
     protected hideLoading(tableEl: JQuery) {
         const loaderEl = tableEl.siblings(".corpus-search-results-table-div-loader");
-        loaderEl.removeClass("loader");
+        loaderEl.empty();
         loaderEl.hide();
         tableEl.show();
     }

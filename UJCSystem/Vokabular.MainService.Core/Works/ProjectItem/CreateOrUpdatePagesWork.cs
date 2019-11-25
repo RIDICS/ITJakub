@@ -34,39 +34,49 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
 
             foreach (var newPage in m_newPages)
             {
-                PageResource pageResource;
+                var pageResource = new PageResource
+                {
+                    Name = newPage.Name,
+                    Comment = null,
+                    Position = newPage.Position,
+                    Resource = null,
+                    VersionNumber = 0,
+                    CreateTime = now,
+                    CreatedByUser = user,
+                    Terms = null, // Terms must be also updated
+                };
+
                 if (newPage.Id == null)
                 {
-                    pageResource = new PageResource
+                    var resource = new Resource
                     {
-                        VersionNumber = 0,
-                        Resource = new Resource
-                        {
-                            ContentType = ContentTypeEnum.Page,
-                            ResourceType = ResourceTypeEnum.Page,
-                            Project = m_resourceRepository.Load<Project>(m_projectId),
-                        }
+                        ContentType = ContentTypeEnum.Page,
+                        ResourceType = ResourceTypeEnum.Page,
+                        Project = m_resourceRepository.Load<Project>(m_projectId),
                     };
+
+                    pageResource.Resource = resource;
+                    pageResource.VersionNumber = 1;
                 }
                 else
                 {
-                    pageResource = m_resourceRepository.GetLatestResourceVersion<PageResource>(newPage.Id.Value);
-                    if (pageResource == null)
+                    var latestPageResource = m_resourceRepository.GetLatestResourceVersion<PageResource>(newPage.Id.Value);
+                    if (latestPageResource == null)
                     {
                         throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
                     }
+
+                    pageResource.Resource = latestPageResource.Resource;
+                    pageResource.VersionNumber = latestPageResource.VersionNumber + 1;
+                    pageResource.Terms = new List<Term>(latestPageResource.Terms); // Lazy fetch
+
                     updatedResourcePageIds.Add(newPage.Id.Value);
                 }
 
-                pageResource.Name = newPage.Name;
-                pageResource.Position = newPage.Position;
                 pageResource.Resource.Name = newPage.Name;
                 pageResource.Resource.LatestVersion = pageResource;
-                pageResource.VersionNumber++;
-                pageResource.CreateTime = now;
-                pageResource.CreatedByUser = user;
 
-                m_resourceRepository.Save(pageResource);
+                m_resourceRepository.Create(pageResource);
             }
 
             var removeResourceSubwork = new RemoveResourceSubwork(m_resourceRepository);

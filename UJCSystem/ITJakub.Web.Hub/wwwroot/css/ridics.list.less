@@ -1,6 +1,56 @@
 ﻿@import "ITJakub.Images.less";
 @import "ITJakub.Colors.less";
 
+.list-container {
+    min-height: 446px;
+
+    &.selectable {
+        tbody {
+            cursor: pointer;
+
+            .active {
+                td {
+                    background-color: #DCDCDC !important;
+                }
+            }
+        }
+    }
+
+    table {
+        tr {
+            border-bottom: 1px solid @separation-line-color;
+
+            td {
+                border: none;
+            }
+
+            .alert {
+                padding: 3px 7px;
+                margin: 1px 0 0 0;
+            }
+        }
+    }
+
+    .buttons {
+        vertical-align: middle;
+        text-align: right;
+
+        .btn-default {
+            margin-left: 0.5em;
+            margin-bottom: 0.5em;
+
+            &:first-of-type {
+                margin-left: 0;
+            }
+        }
+    }
+}
+
+.button-menu {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
 .reset-search {
     padding-bottom: 0.5em;
     padding-top: 0.5em;

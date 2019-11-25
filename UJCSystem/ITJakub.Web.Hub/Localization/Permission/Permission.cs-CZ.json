@@ -48,7 +48,7 @@
     "NoRolesFound": "Je nám líto, ale nebyly nalezeny žádné skupiny",
     "NoPermissionsSearch": "Je nám líto, ale nepodařilo se najít žádné oprávnění odpovídající dotazu ",
     "NoPermissionsFound": "Je nám líto, ale nebyla nalezena žádná oprávnění",
-    "NoProjectsSearch": "Je nám líto, ale nepodařilo se najít žádné projekty odpovídající dotazu  ",
+    "NoProjectsSearch": "Je nám líto, ale nepodařilo se najít žádné projekty odpovídající dotazu ",
     "NoProjectsFound": "Je nám líto, ale nebyly nalezeny žádné projekty",
     "SearchQuery": "Zobrazují se výsledky pro",
     "ResetSearch": "Zrušit hledání",
@@ -57,6 +57,8 @@
     "AssignedGroups": "Přiřazené skupiny",
     "AssignToGroup": "Přiřadit do skupiny",
     "User": "Uživatel",
+    "UserCode": "Kód uživatele",
+    "GroupsAndUsers": "Skupiny a uživatelé",
     "ManagePermissions": "Spravovat práva",
     "Permissions": "Oprávnění",
     "SuccessGroupCreate": "Skupina úspěšně vytvořena.",
@@ -68,13 +70,16 @@
     "ProjectPermissionManagementHeadline": "Správa práv projektů",
     "Projects": "Projekty",
     "AddProjectPermissionToGroup": "Přidat skupině právo na projekt",
+    "AddProjectPermissionToUser": "Přidat uživateli právo na projekt",
     "SelectedProject": "Vybraný projekt",
     "AddPermissionToGroup": "Přidat oprávnění skupině",
+    "AddPermissionToUser": "Přidat oprávnění uživateli",
     "ResetPassword": "Resetovat heslo",
 
     "ReadProjectPermission": "Právo číst projekt",
     "ReadPublishedProjectPermission": "Právo číst publikovaný projekt",
     "EditProjectPermission": "Právo editovat projekt",
-    "AdminProjectPermission": "Právo spravovat projekt"
+    "AdminProjectPermission": "Právo spravovat projekt",
+    "AddPermissionOnProjectHelp": "Pokud chcete přidat právo pouze jedné osobě, požádejte ji, aby Vám sdělila svůj kód uživatele, který zadáte do pole níže. Kód uživatele lze nalézt v profilu uživatele pod záložkou \"Kód uživatele\"."
   }
 }

@@ -5,11 +5,19 @@
     protected changeEntryButtonEl = $(".rename-key-table-entry-description");
     protected deleteEntryButtonEl = $(".delete-key-table-entry-description");
     protected titleEl = $(".table-of-keys-title");
+    protected listElement = $(".selectable-list-div");
+    protected loaderElement = lv.create(null, "lv-circles sm lv-mid lvt-1");
+
+    protected showLoading() {
+        this.listElement.empty();
+        this.listElement.append(this.loaderElement.getElement());
+    }
 
     protected initPagination(itemsCount: number, itemsOnPage: number, callback : Function) {
         const pagination = new Pagination({
-            container: document.getElementById(".key-table-pagination") as HTMLDivElement,
+            container: document.getElementById("key-table-pagination") as HTMLDivElement,
             pageClickCallback: (pageNumber) => {
+                this.showLoading();
                 callback(pageNumber);
                 this.currentPage = pageNumber;
             }

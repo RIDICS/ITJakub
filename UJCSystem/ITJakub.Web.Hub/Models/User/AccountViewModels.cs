@@ -11,6 +11,8 @@ namespace ITJakub.Web.Hub.Models.User
         public UpdateContactViewModel UpdateContactViewModel;
 
         public UpdateTwoFactorVerificationViewModel UpdateTwoFactorVerificationViewModel;
+        
+        public UserCodeViewModel UserCodeViewModel;
 
         public AccountTab ActualTab { get; set; }
     }

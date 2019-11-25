@@ -39,42 +39,49 @@ namespace Vokabular.MainService.Core.Works.ProjectItem
                     ? m_resourceRepository.Load<Resource>(chapter.ParentChapterId.Value)
                     : null;
 
-                ChapterResource chapterResource;
+                var chapterResource = new ChapterResource
+                {
+                    Name = chapter.Name,
+                    Comment = chapter.Comment,
+                    Position = chapter.Position,
+                    Resource = null,
+                    ParentResource = resourceParentChapter,
+                    ResourceBeginningPage = resourceBeginningPage,
+                    VersionNumber = 0,
+                    CreateTime = now,
+                    CreatedByUser = user,
+                };
+
                 if (chapter.Id == null)
                 {
-                    chapterResource = new ChapterResource
+                    var resource = new Resource
                     {
-                        VersionNumber = 0,
-                        Resource = new Resource
-                        {
-                            ContentType = ContentTypeEnum.Chapter,
-                            ResourceType = ResourceTypeEnum.Chapter,
-                            Project = m_resourceRepository.Load<Project>(m_projectId),
-                        }
+                        ContentType = ContentTypeEnum.Chapter,
+                        ResourceType = ResourceTypeEnum.Chapter,
+                        Project = m_resourceRepository.Load<Project>(m_projectId),
                     };
+
+                    chapterResource.Resource = resource;
+                    chapterResource.VersionNumber = 1;
                 }
                 else
                 {
-                    chapterResource = m_resourceRepository.GetLatestResourceVersion<ChapterResource>(chapter.Id.Value);
-                    if (chapterResource == null)
+                    var latestChapterResource = m_resourceRepository.GetLatestResourceVersion<ChapterResource>(chapter.Id.Value);
+                    if (latestChapterResource == null)
                     {
                         throw new MainServiceException(MainServiceErrorCode.EntityNotFound, "The entity was not found.");
                     }
+
+                    chapterResource.Resource = latestChapterResource.Resource;
+                    chapterResource.VersionNumber = latestChapterResource.VersionNumber + 1;
+
                     updatedResourceChapterIds.Add(chapter.Id.Value);
                 }
 
-                chapterResource.Name = chapter.Name;
-                chapterResource.Comment = chapter.Comment;
-                chapterResource.Position = chapter.Position;
-                chapterResource.ParentResource = resourceParentChapter;
-                chapterResource.ResourceBeginningPage = resourceBeginningPage;
                 chapterResource.Resource.Name = chapter.Name;
                 chapterResource.Resource.LatestVersion = chapterResource;
-                chapterResource.VersionNumber++;
-                chapterResource.CreateTime = now;
-                chapterResource.CreatedByUser = user;
 
-                m_resourceRepository.Save(chapterResource);
+                m_resourceRepository.Create(chapterResource);
             }
 
             var removeResourceSubwork = new RemoveResourceSubwork(m_resourceRepository); 

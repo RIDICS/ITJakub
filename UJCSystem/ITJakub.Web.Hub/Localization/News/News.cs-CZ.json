@@ -2,6 +2,7 @@
   "culture": "cs-CZ",
   "scope": "News",
   "dictionary": {
+    "LoadingError":  "Chyba při načítání novinek", 
     "NewsManagementTitle": "Administrace - Přidat novinku",
     "AddNews": "Přidat novinku",
     "NewsTextPlaceholder": "Zde napište text novinky...",

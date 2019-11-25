@@ -12,6 +12,11 @@ interface IKeyValue<TKey, TValue> {
     value: TValue;
 }
 
+interface ITuple<T1, T2> {
+    item1: T1;
+    item2: T2;
+}
+
 interface IDictionary<T> {
     [key: number]: T;
     [key: string]: T;

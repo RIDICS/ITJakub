@@ -8,10 +8,12 @@
     protected categoryIdsInQuery = new Array();
     
     protected initPage: number = null;
-    protected booksCountOnPage = 5;
+    protected booksCountOnPage = Number($("#bibliography-configuration").data("page-size"));
 
     protected readyForInit = false;
     protected notInitialized = true;
+
+    protected firstLoad: boolean = true;
 
     protected configuration: IModulInicializatorConfiguration;
     protected defaultConfiguration = {
@@ -171,8 +173,12 @@
         const count = bibliographyModule.getBooksCountOnPage();
         const sortAsc = bibliographyModule.isSortedAsc();
         const sortingEnum = bibliographyModule.getSortCriteria();
-        bibliographyModule.clearBooks();
-        bibliographyModule.showLoading();
+
+        if (!this.firstLoad) {
+            bibliographyModule.clearBooks();
+            bibliographyModule.showLoading();
+        }
+        this.firstLoad = false;
 
         $.ajax({
             type: "GET",
@@ -204,8 +210,12 @@
             const count = bibliographyModule.getBooksCountOnPage();
             const sortAsc = bibliographyModule.isSortedAsc();
             const sortingEnum = bibliographyModule.getSortCriteria();
-            bibliographyModule.clearBooks();
-            bibliographyModule.showLoading();
+
+            if (!this.firstLoad) {
+                bibliographyModule.clearBooks();
+                bibliographyModule.showLoading();
+            }
+            this.firstLoad = false;
 
             $.ajax({
                 type: "GET",

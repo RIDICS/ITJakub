@@ -32,7 +32,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         CorpusSearchSnapshotsResultContract SearchCorpusGetSnapshotListByCriteria(int start, int count, SortTypeEnumContract? sort, SortDirectionEnumContract? sortDirection, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects, bool fetchNumberOfresults);
         CorpusSearchResultDataList SearchCorpusInSnapshotByCriteria(long snapshotId, int start, int count, int contextLength, List<SearchCriteriaContract> criteria);
         long SearchCorpusTotalResultCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects);
-        void CreateSnapshot(Snapshot snapshot, IList<TextResource> textResources, MetadataResource metadata);
+        void CreateSnapshot(Snapshot snapshot, IList<TextResource> orderedTextResources, MetadataResource metadata);
         IList<MarkdownHeadingData> GetHeadingsFromPageText(TextResource textResource);
     }
 }
