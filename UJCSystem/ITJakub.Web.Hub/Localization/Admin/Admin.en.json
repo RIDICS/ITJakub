@@ -275,6 +275,8 @@
     "SelectResponsiblePerson": "Please select one responsible person from list.",
     "SelectResponsibleType": "Please select responsible type.",
 
+    "SelectPage": "Select page",
+    "TermsOnPage": "Terms on the page",
     "EditTerms": "Edit terms",
     "EditTermsTitle": "Terms editing - page {0}",
     "RemoveTerm": "Remove term",
