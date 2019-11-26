@@ -1,10 +1,10 @@
 ﻿class PageNavigation {
     private readonly gui: EditorsGui;
-    private readonly pageLoadCallback: (pageId: number) => void;
+    private readonly pageLoadCallback: (pageId: number, pageName: string) => void;
     private pages: IPage[];
     private index: number;
 
-    constructor(gui: EditorsGui, pageLoadCallback: (pageId: number) => void = null) {
+    constructor(gui: EditorsGui, pageLoadCallback: (pageId: number, pageName: string) => void = null) {
         this.gui = gui;
         this.pageLoadCallback = pageLoadCallback;
     }
@@ -142,7 +142,7 @@
         this.updatePageIndicator(pageName);
         
         if (this.pageLoadCallback !== null) {
-            this.pageLoadCallback.call(null, this.pages[index].id);
+            this.pageLoadCallback.call(null, this.pages[index].id, pageName);
         }
     }
 }

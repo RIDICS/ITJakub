@@ -260,7 +260,10 @@
     "SelectResponsiblePerson": "Please select one responsible person from list.",
     "SelectResponsibleType": "Please select responsible type.",
 
-    "AddTerms": "Add terms",
-    "AllCategories": "All categories"
+    "EditTerms": "Edit terms",
+    "EditTermsTitle": "Terms editing - page {0}",
+    "SelectedTerms": "Selected terms",
+    "AllCategories": "All categories",
+    "Search..." : "Search..." 
   }
 }

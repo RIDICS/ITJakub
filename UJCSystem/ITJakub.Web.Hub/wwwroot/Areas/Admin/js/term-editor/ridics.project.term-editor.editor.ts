@@ -2,6 +2,7 @@
     private readonly client: EditorsApiClient;
     private readonly errorHandler: ErrorHandler;
     private pageId: number;
+    private pageName: string;
     private selectedTerms: Array<ITermContract>;
     private addTermsDialog: JQuery;
     private termListContainer: JQuery;
@@ -19,6 +20,7 @@
         this.termListContainer = this.addTermsDialog.find("#termsList");
 
         $(".manage-terms-button").on("click", () => {
+            this.addTermsDialog.find(".modal-title").text(localization.translateFormat("EditTermsTitle", [this.pageName], "Admin").value);
             this.selectedTerms = this.parseTerms();
             this.renderSelectedTerms();
             
@@ -91,6 +93,11 @@
     setPageId(pageId: number) {
         this.pageId = pageId;    
     }
+
+    setPageName(pageName: string) {
+        this.pageName = pageName;    
+    }
+    
     private removeTerm(termId: number) {
         for( let i = 0; i < this.selectedTerms.length; i++){
             if ( this.selectedTerms[i].id === termId) {

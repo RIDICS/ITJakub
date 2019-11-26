@@ -260,7 +260,10 @@
     "SelectResponsiblePerson": "Prosím vyberte odpovědnou osobu ze seznamu.",
     "SelectResponsibleType": "Prosím vyberte typ odpovědnosti.",
 
-    "AddTerms": "Přidat termíny",
-    "AllCategories": "Všechny kategorie"
+    "EditTerms": "Upravit termíny",
+    "EditTermsTitle": "Úprava termínů - strana {0}",
+    "SelectedTerms": "Vybrané termíny",
+    "AllCategories": "Všechny kategorie",
+    "Search...": "Hledat..."
   }
 }

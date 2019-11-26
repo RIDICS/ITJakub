@@ -18,11 +18,12 @@
         this.projectId = projectId;
         const gui = new EditorsGui();
         
-        this.navigation = new PageNavigation(gui, (pageId: number) => {
+        this.navigation = new PageNavigation(gui, (pageId: number, pageName: string) => {
             this.pageId = pageId;
             this.loadTerms(pageId);
             this.loadPage(pageId);
             this.termEditor.setPageId(pageId);
+            this.termEditor.setPageName(pageName);
         });
 
         this.navigation.init();

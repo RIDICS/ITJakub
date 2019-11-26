@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 panel-buttons text-right">
-                            <button type="button" class="btn btn-default manage-terms-button">@Localization.Translate("AddTerms", "Admin")</button>
+                            <button type="button" class="btn btn-default manage-terms-button">@Localization.Translate("EditTerms", "Admin")</button>
                         </div>
                     </div>
                 </div>
@@ -92,10 +92,13 @@
                                     </select>
                                 </div>
                                 <div class="col-xs-6">
-                                    <input id="searchTerm" type="text" class="form-control"/>
+                                    <input id="searchTerm" type="text" class="form-control" placeholder="@Localization.Translate("Search...", "Admin")"/>
                                     <i class="fa fa-close reset-search-button"></i>
                                 </div>
                             </div>
+                        </div>
+                        <div class="selected-terms-title col-xs-6 col-sm-5 col-md-4">
+                             @Localization.Translate("SelectedTerms", "Admin")                       
                         </div>
                     </div>
                     <div class="row">
@@ -112,7 +115,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">
-                        @Localization.Translate("Close", "Admin")
+                        @Localization.Translate("Close2", "Admin")
                     </button>
                     <button type="button" class="btn btn-default save-terms">
                         @Localization.Translate("Save", "Admin")
