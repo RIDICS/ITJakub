@@ -986,6 +986,8 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
                 }
             }
         });
+        
+        this.categoryTree.expandAll();
 
         $(".project-form-bottom-buttons .btn, #project-group-projects .btn").show();
 
