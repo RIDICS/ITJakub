@@ -262,6 +262,7 @@
 
     "EditTerms": "Edit terms",
     "EditTermsTitle": "Terms editing - page {0}",
+    "RemoveTerm": "Remove term",
     "SelectedTerms": "Selected terms",
     "AllCategories": "All categories",
     "Search..." : "Search..." 

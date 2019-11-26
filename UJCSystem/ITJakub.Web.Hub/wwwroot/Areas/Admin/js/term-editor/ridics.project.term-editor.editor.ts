@@ -148,7 +148,9 @@
     
     private renderSelectedTerm(term: ITermContract)
     {
-        $(this.selectedTermsSelector).append(`<div data-id="${term.id}" class="selected-term">${term.name} <span><i class="fa fa-minus"></i></span></div>`);
+        $(this.selectedTermsSelector).append(`<div data-id="${term.id}" class="selected-term" title="${localization.translate("RemoveTerm", "Admin").value}">
+                                                ${term.name} <span><i class="fa fa-minus"></i></span>
+                                              </div>`);
     }
 
     private showAllTerms() {
