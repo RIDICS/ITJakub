@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using ITJakub.Web.Hub.Core;
+using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.RestClient.Results;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -35,7 +37,8 @@ namespace ITJakub.Web.Hub.Controllers
             var sortDirection = sortAsc ? SortDirectionEnumContract.Asc : SortDirectionEnumContract.Desc;
             var client = GetFeedbackClient();
             var feedbacks = client.GetFeedbackList(start, count, sortValue, sortDirection, categories);
-            return Json(feedbacks.List);
+            var result = Mapper.Map<List<FeedbackExtendedContract>>(feedbacks.List);
+            return Json(result);
         }
 
         [HttpPost]
