@@ -51,6 +51,7 @@
     "Save": "Save",
     
     "UserCode": "User code",
-    "GenerateNewUserCode": "Generate new user code"
+    "GenerateNewUserCode": "Generate new user code",
+    "UserCodeHelp" : "User code serves to enable collaboration on works of other users. Tell your user code to the owner of the work, on which you will collaborate."
   }
 }

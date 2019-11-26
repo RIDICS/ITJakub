@@ -80,6 +80,7 @@
     "ReadPublishedProjectPermission": "Permission to read the published project",
     "EditProjectPermission": "Permission to edit the project",
     "AdminProjectPermission": "Permission to admin the project",
-    "AddPermissionOnProjectHelp": "translate[Pokud chcete přidat právo pouze jedné osobě, požádejte ji, aby Vám sdělila svůj kód uživatele, který zadáte do pole níže. Kód uživatele lze nalézt v profilu uživatele pod záložkou \"Kód uživatele\".]"
+    "AddPermissionOnProjectHelp": "translate[Pokud chcete přidat právo pouze jedné osobě, požádejte ji, aby Vám sdělila svůj kód uživatele, který zadáte do pole níže. Kód uživatele lze nalézt v profilu uživatele pod záložkou \"Kód uživatele\".]",
+    "UserCodeHelp" : "User code serves to enable collaboration on works of other users."
   }
 }
