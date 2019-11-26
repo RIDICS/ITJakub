@@ -36,6 +36,7 @@ class Search {
 
     private searchButton: HTMLButtonElement;
     private advancedButton: HTMLButtonElement;
+    private searchInSecondPortalButton: HTMLButtonElement;
     private searchInputTextbox: HTMLInputElement;
     private searchbarAdvancedEditorContainer: HTMLDivElement;
     private favoritesContainer: HTMLDivElement;
@@ -134,6 +135,7 @@ class Search {
                     $searchInputTextbox.closest(".input_container").find(".keyboard-icon-img").addClass("disabled");
                     $searchInputTextbox.closest(".input_container").find(".regexsearch-input-button").prop("disabled", true);
                     $(this.searchButton).prop("disabled", true);
+                    $(this.searchInSecondPortalButton).prop("disabled", true);
 
                     if (!this.favoriteQueryComponent.isHidden()) {
                         this.favoriteQueryComponent.hide();
@@ -153,6 +155,8 @@ class Search {
             secondPortalButton.classList.add("searchbar-button");
             secondPortalButton.classList.add("separated");
             searchbarButtonsDiv.appendChild(secondPortalButton);
+
+            this.searchInSecondPortalButton = secondPortalButton;
 
             $(secondPortalButton).click(() => {
                 //TODO resolve correct link
@@ -277,6 +281,7 @@ class Search {
         $searchInputTextbox.closest(".input_container").find(".regexsearch-input-button").prop("disabled", false);
         $(this.searchButton).prop("disabled", false);
         $(this.advancedButton).css("visibility", "visible");
+        $(this.searchInSecondPortalButton).prop("disabled", false);
         $searchInputTextbox.focus();
     }
 
