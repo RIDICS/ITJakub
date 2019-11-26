@@ -145,7 +145,7 @@ class BibliographyFactory {
 
     makeMiddlePanel(bookInfo: IBookInfo): HTMLDivElement {
         if (!this.configuration.containsMiddlePanel()) return null;
-        var config = this.configuration.getMidllePanelConfig();
+        var config = this.configuration.getMiddlePanelConfig();
 
         var middlePanel: HTMLDivElement = document.createElement('div');
         $(middlePanel).addClass('middle-panel');
@@ -186,6 +186,30 @@ class BibliographyFactory {
         return middlePanel;
     }
 
+    makeMidRightPanel(bookInfo: IBookInfo): HTMLDivElement {
+        if (!this.configuration.containsMiddleRightPanel()) return null;
+        var config = this.configuration.getMiddleRightPanelConfig();
+
+        var midRightPanel: HTMLDivElement = document.createElement('div');
+        $(midRightPanel).addClass('middle-right-panel');
+
+        if (config.containsBody()) {
+            var middlePanelBody: HTMLDivElement = document.createElement('div');
+            $(middlePanelBody).addClass('body');
+            middlePanelBody.innerHTML = config.getBody(bookInfo);
+            midRightPanel.appendChild(middlePanelBody);
+        }
+
+        if (config.containsCustom()) {
+            var customDiv: HTMLDivElement = document.createElement('div');
+            $(customDiv).addClass('custom');
+            customDiv.innerHTML = config.getCustom(bookInfo);
+            midRightPanel.appendChild(customDiv);
+        }
+
+        return midRightPanel;
+    }
+
     makeBottomPanel(bookInfo: IBookInfo): HTMLDivElement {
         if (!this.configuration.containsBottomPanel()) return null;
         var config = this.configuration.getBottomPanelConfig();
@@ -212,7 +236,7 @@ class BibliographyFactory {
 
     makeFavoriteBookInfo(bookFavorites: IFavoriteBaseInfoWithLabel[]): HTMLElement[] {
         var resultList = new Array<HTMLElement>();
-        var config = this.configuration.getMidllePanelConfig();
+        var config = this.configuration.getMiddlePanelConfig();
         var maxFavLabels = bookFavorites.length;
         if (config.containsFavorites() && config.containsFavoritesMaxCount()) {
             maxFavLabels = config.getFavoritesMaxCount();

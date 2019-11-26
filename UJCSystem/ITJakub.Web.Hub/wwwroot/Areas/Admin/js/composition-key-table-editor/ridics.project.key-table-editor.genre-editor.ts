@@ -10,6 +10,7 @@
     }
 
     init() {
+        this.showLoading();
         $("#project-layout-content").find("*").off();
         this.createEntryButtonEl.text("Create new genre");
         this.changeEntryButtonEl.text("Rename genre");
@@ -33,6 +34,7 @@
     }
 
     private updateContentAfterChange() {
+        this.showLoading();
         this.util.getLiteraryGenreList().done((data: IGenreResponseContract[]) => {
             this.genreItemList = data;
             this.loadPage(this.currentPage);

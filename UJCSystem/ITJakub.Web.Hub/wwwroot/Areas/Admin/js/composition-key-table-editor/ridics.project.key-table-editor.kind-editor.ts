@@ -10,6 +10,7 @@
     }
 
     init() {
+        this.showLoading();
         $("#project-layout-content").find("*").off();
         this.createEntryButtonEl.text("Create new literary kind");
         this.changeEntryButtonEl.text("Rename literary kind");
@@ -48,6 +49,7 @@
     }
 
     private updateContentAfterChange() {
+        this.showLoading();
         this.util.getLitararyKindList().done((data: ILiteraryKindContract[]) => {
             this.literaryKindItemList = data;
             this.loadPage(this.currentPage);

@@ -6,11 +6,11 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
     [DatabaseTags(DatabaseTagTypes.VokabularDB)]
     [MigrationTypeTags(CoreMigrationTypeTagTypes.Structure, CoreMigrationTypeTagTypes.All)]
     [Migration(016)]
-    public class M_016_FixFeedbackAuthorEmail : ForwardOnlyMigration
+    public class M_016_RemoveProject : ForwardOnlyMigration
     {
         public override void Up()
         {
-            Rename.Column("AuthorTitle").OnTable("Feedback").To("AuthorEmail");
+            Alter.Table("Project").AddColumn("IsRemoved").AsBoolean().NotNullable().SetExistingRowsTo(0);
         }
     }
 }

@@ -86,7 +86,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void DeleteProject(long projectId)
+        public void RemoveProject(long projectId)
         {
             try
             {
@@ -996,6 +996,56 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 m_client.Post<object>($"project/{projectId}/chapter/generator", null);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Project groups
+
+        public ProjectGroupContract GetProjectGroups(long projectId)
+        {
+            try
+            {
+                var result = m_client.Get<ProjectGroupContract>($"project/{projectId}/group");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void AddProjectToGroup(long targetProjectId, long selectedProjectId)
+        {
+            try
+            {
+                m_client.Put<object>($"project/{targetProjectId}/group?selectedProjectId={selectedProjectId}", null);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void RemoveProjectFromGroup(long projectId)
+        {
+            try
+            {
+                m_client.Delete($"project/{projectId}/group");
             }
             catch (HttpRequestException e)
             {

@@ -33,12 +33,14 @@ namespace Vokabular.MainService.Core.Works
             var now = DateTime.UtcNow;
             var currentUser = m_projectRepository.Load<User>(m_userId);
             var projectType = m_mapper.Map<ProjectTypeEnum>(m_newData.ProjectType);
+            var textType = m_mapper.Map<TextTypeEnum>(m_newData.TextType);
 
             // Create project
             var project = new Project
             {
                 Name = m_newData.Name,
                 ProjectType = projectType,
+                TextType = textType,
                 CreateTime = now,
                 CreatedByUser = currentUser
             };

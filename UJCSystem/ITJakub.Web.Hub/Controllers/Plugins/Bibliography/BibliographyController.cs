@@ -1,4 +1,5 @@
 ﻿using ITJakub.Web.Hub.Core;
+using ITJakub.Web.Hub.DataContracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers.Plugins.Bibliography
@@ -13,7 +14,8 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Bibliography
         {
             var client = GetBookClient();
             var result = client.GetBookDetail(bookId);
-            return Json(result, GetJsonSerializerSettingsForBiblModule());
+            var resultContract = Mapper.Map<SearchResultDetailExtendedContract>(result);
+            return Json(resultContract, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult GetAudioBookDetailInfo(long bookId)

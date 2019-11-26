@@ -102,7 +102,7 @@ namespace Vokabular.DataEntities.Database.Search
             var whereBuilder = new StringBuilder();
 
             var projectTypeValues = string.Join(",", projectType.Cast<short>());
-            whereBuilder.Append($" where metadata.Id = resource.LatestVersion.Id and project.ProjectType in ({projectTypeValues})");
+            whereBuilder.Append($" where metadata.Id = resource.LatestVersion.Id and project.ProjectType in ({projectTypeValues}) and project.IsRemoved = 0");
 
             foreach (var criteriaQuery in conjunctionQuery.Where(x => x.CriteriaKey != CriteriaKey.Headword))
             {

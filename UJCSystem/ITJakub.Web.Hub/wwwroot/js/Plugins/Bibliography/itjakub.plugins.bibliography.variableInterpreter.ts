@@ -74,6 +74,8 @@
             if (varName.indexOf("$") === 0) { //is config variable
                 if (varName === "$this") {
                     result = <string>actualScopeObject; //if config variable is this, return this as value (can be used for primitive types like array of numbers or strings)
+                } else if (varName === "$baseUrl") {
+                    result = getBaseUrl();
                 } else {
                     result = this.interpretConfigurationVariable(varName, variables, actualScopeObject);
                 }

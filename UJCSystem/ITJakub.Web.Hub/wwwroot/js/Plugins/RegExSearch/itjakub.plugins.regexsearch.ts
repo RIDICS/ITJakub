@@ -36,6 +36,7 @@ class Search {
 
     private searchButton: HTMLButtonElement;
     private advancedButton: HTMLButtonElement;
+    private searchInSecondPortalButton: HTMLButtonElement;
     private searchInputTextbox: HTMLInputElement;
     private searchbarAdvancedEditorContainer: HTMLDivElement;
     private favoritesContainer: HTMLDivElement;
@@ -74,7 +75,7 @@ class Search {
         this.fulltextIsLimited = true;
     }
 
-    makeSearch(enabledOptions: Array<SearchTypeEnum>) {
+    makeSearch(enabledOptions: Array<SearchTypeEnum>, enabledSearchInSecondPortal: boolean) {
         this.enabledOptions = enabledOptions;
 
         var searchAreaDiv = document.createElement("div");
@@ -82,18 +83,15 @@ class Search {
 
         var form: HTMLFormElement = document.createElement("form");
         form.setAttribute("role", "form");
-        
-        form.classList.add("form-horizontal");
         searchAreaDiv.appendChild(form);
 
         var formGroupDiv = document.createElement("div");
-        formGroupDiv.classList.add("form-group");
         formGroupDiv.classList.add("searchbar");
         form.appendChild(formGroupDiv);
 
         var searchbarButtonsDiv = document.createElement("div");
         searchbarButtonsDiv.classList.add("searchbar-buttons");
-        formGroupDiv.appendChild(searchbarButtonsDiv);
+        // append buttons after appending input
         
         var searchButton = document.createElement("button");
         searchButton.type = "button";
@@ -137,6 +135,7 @@ class Search {
                     $searchInputTextbox.closest(".input_container").find(".keyboard-icon-img").addClass("disabled");
                     $searchInputTextbox.closest(".input_container").find(".regexsearch-input-button").prop("disabled", true);
                     $(this.searchButton).prop("disabled", true);
+                    $(this.searchInSecondPortalButton).prop("disabled", true);
 
                     if (!this.favoriteQueryComponent.isHidden()) {
                         this.favoriteQueryComponent.hide();
@@ -144,12 +143,36 @@ class Search {
                 }
             });
 
-        } 
+        }
+
+        if (enabledSearchInSecondPortal) {
+            var secondPortalButton = document.createElement("button");
+            secondPortalButton.type = "button";
+            var text = $("#bibliography-configuration").data("second-portal-search-label") as string;
+            $(secondPortalButton).html("<i class='fa fa-external-link'></i> " + text);
+            secondPortalButton.classList.add("btn");
+            secondPortalButton.classList.add("btn-default");
+            secondPortalButton.classList.add("searchbar-button");
+            secondPortalButton.classList.add("separated");
+            searchbarButtonsDiv.appendChild(secondPortalButton);
+
+            this.searchInSecondPortalButton = secondPortalButton;
+
+            $(secondPortalButton).click(() => {
+                var targetUrl = $("#bibliography-configuration").data("second-portal-search-url") as string;
+                var searchboxValue = $(this.searchInputTextbox).val() as string;
+                var parameter = encodeURIComponent(searchboxValue);
+                var redirectUrl = `${targetUrl}?search=${parameter}`;
+                window.open(redirectUrl, "_blank");
+            });
+        }
 
         var searchbarInputDiv = document.createElement("div");
         searchbarInputDiv.classList.add("regex-searchbar-inputs");
         searchbarInputDiv.classList.add("input_container");
         formGroupDiv.appendChild(searchbarInputDiv);
+
+        formGroupDiv.appendChild(searchbarButtonsDiv);
         
         var searchbarInput: HTMLInputElement = document.createElement("input");
         searchbarInput.type = "text";
@@ -260,6 +283,7 @@ class Search {
         $searchInputTextbox.closest(".input_container").find(".regexsearch-input-button").prop("disabled", false);
         $(this.searchButton).prop("disabled", false);
         $(this.advancedButton).css("visibility", "visible");
+        $(this.searchInSecondPortalButton).prop("disabled", false);
         $searchInputTextbox.focus();
     }
 

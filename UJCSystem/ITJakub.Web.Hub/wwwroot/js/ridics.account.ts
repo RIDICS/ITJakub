@@ -92,7 +92,9 @@ class AccountManager {
         
         $("#updateTwoFactorVerificationButton").on("click",
             () => {
-                this.twoFactorSection.html("<div class=\"loader\"></div>");
+                var loader = lv.create(null, "lv-circles sm lv-mid lvt-3");
+                this.twoFactorSection.empty();
+                this.twoFactorSection.append(loader.getElement());
                 this.client.getTwoFactor().done((response) => {
                     this.twoFactorSection.html(response);
                     this.initTwoFactorSettingsForm();

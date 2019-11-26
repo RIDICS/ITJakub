@@ -25,7 +25,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual Project GetProjectWithCategories(long projectId)
         {
             return GetSession().QueryOver<Project>()
-                .Where(x => x.Id == projectId)
+                .Where(x => x.Id == projectId && x.IsRemoved == false)
                 .Fetch(SelectMode.Fetch, x => x.Categories)
                 .SingleOrDefault();
         }

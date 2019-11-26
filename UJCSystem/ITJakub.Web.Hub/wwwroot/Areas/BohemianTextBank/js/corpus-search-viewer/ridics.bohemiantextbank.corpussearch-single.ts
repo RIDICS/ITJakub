@@ -199,7 +199,9 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
      */
     protected showPageLoading() {
         const pageLoaderEl = $(".page-loader");
-        pageLoaderEl.removeClass("alert alert-info").addClass("loader");
+        var loaderElement = lv.create(null, "lv-circles sm lv-mid lvt-2 lvb-2");
+        pageLoaderEl.removeClass("alert alert-info");
+        pageLoaderEl.append(loaderElement.getElement());
         pageLoaderEl.show();
     }
     /**
@@ -208,7 +210,7 @@ class BohemianTextBankSingle extends BohemianTextBankBase {
     protected hidePageLoading() {
         const pageLoaderEl = $(".page-loader");
         pageLoaderEl.hide();
-        pageLoaderEl.removeClass("loader");
+        pageLoaderEl.empty();
     }
 
     protected resultRowClickAttach() {
@@ -528,7 +530,7 @@ class BohemianTextBankSingleLazyload extends BohemianTextBankSingle {
             this.startBasicSearch.bind(this),
             favoritesQueriesConfig);
         this.search.limitFullTextSearchToOne();
-        this.search.makeSearch(this.enabledOptions);
+        this.search.makeSearch(this.enabledOptions, false);
 
         $(".results-refresh-button").on("click", () => {
             const query = this.search.getLastQuery();
@@ -762,7 +764,7 @@ class BohemianTextBankSinglePaged extends BohemianTextBankSingle {
             this.startBasicSearch.bind(this),
             favoritesQueriesConfig);
         this.search.limitFullTextSearchToOne();
-        this.search.makeSearch(this.enabledOptions);
+        this.search.makeSearch(this.enabledOptions, false);
 
         $(".results-refresh-button").on("click", () => {
             const query = this.search.getLastQuery();

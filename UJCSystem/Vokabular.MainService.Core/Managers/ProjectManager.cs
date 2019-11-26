@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
@@ -68,10 +67,10 @@ namespace Vokabular.MainService.Core.Managers
             work.Execute();
         }
 
-        public void DeleteProject(long projectId)
+        public void RemoveProject(long projectId)
         {
-            // TODO probably only set Project as removed
-            throw new NotImplementedException();
+            var work = new RemoveProjectWork(m_projectRepository, projectId);
+            work.Execute();
         }
 
         public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, ProjectTypeContract? projectType,

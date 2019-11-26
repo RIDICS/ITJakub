@@ -30,7 +30,7 @@ namespace Vokabular.MainService.Core.Works
 
         protected override Project ExecuteWorkImplementation()
         {
-            var dbResult = m_projectRepository.GetProject(m_projectId);
+            var dbResult = m_projectRepository.GetProjectWithUser(m_projectId);
             m_metadata = m_metadataRepository
                 .GetMetadataByProjectIds(new[] {m_projectId}, m_fetchAuthors, m_fetchResponsiblePersons, m_fetchBookTypes)
                 .FirstOrDefault();

@@ -13,7 +13,8 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
             CreateMap<Project, ProjectContract>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(dest => dest.ProjectType, opt => opt.MapFrom(src => src.ProjectType));
+                .ForMember(dest => dest.ProjectType, opt => opt.MapFrom(src => src.ProjectType))
+                .ForMember(dest => dest.TextType, opt => opt.MapFrom(src => src.TextType));
                 //.ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.ExternalId));
 
             CreateMap<Project, GetProjectContract>()
@@ -33,6 +34,8 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
 
 
             CreateMap<ProjectTypeEnum, ProjectTypeContract>().ReverseMap();
+
+            CreateMap<TextTypeEnum, TextTypeEnumContract>().ReverseMap();
         }
     }
 }

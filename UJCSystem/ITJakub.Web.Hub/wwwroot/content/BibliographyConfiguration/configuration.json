@@ -71,8 +71,11 @@
         }
       }
     },
+    "middle-right-panel": {
+      "body": "<img src='{$baseUrl}images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
+    },
     "bottom-panel": {
-      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
+      "body": "{$printSearchResultsCondition}{$editionTable}<a href='{$baseUrl}EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
       "variables": {
         "$editionTable": {
           "type": "table",
@@ -186,19 +189,12 @@
   },
   "Dictionary": {
     "middle-panel": {
-      "short-info": "{$linked}",
       "title": "{Title} <span class=\"acronym\">[{SourceAbbreviation}]</span>",
       "body": "{BiblText} <br> {PublishPlace}, {PublishDate} <br> {$authors}{$description}{$year}",
       "favorites": {
         "maxCount": 5
       },
       "variables": {
-        "$linked": {
-          "type": "if",
-          "pattern": "{Linked}",
-          "onTrue": "LinkedDictionary",
-          "onFalse": "UnlinkedDictionary"
-        },
         "$authors": {
           "type": "basic",
           "pattern": "{AuthorsLabel}",
@@ -215,6 +211,9 @@
           "printIfNullValue": false
         }
       }
+    },
+    "middle-right-panel": {
+      "body": "<img src='{$baseUrl}images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
     },
     "right-panel": {
       "read-button": {
@@ -297,8 +296,11 @@
         }
       }
     },
+    "middle-right-panel": {
+      "body": "<img src='{$baseUrl}images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
+    },
     "bottom-panel": {
-      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
+      "body": "{$printSearchResultsCondition}{$editionTable}<a href='{$baseUrl}EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
       "variables": {
         "$editionTable": {
           "type": "table",
@@ -429,7 +431,7 @@
     },
     "right-panel": {
       "read-button": {
-        "url": "CardFiles\\CardFiles\\Listing?cardFileId={BookXmlId}"
+        "url": "CardFiles\\CardFiles\\Listing?cardFileId={BookId}"
       },
       "variables": {
         "$test": {
@@ -501,6 +503,9 @@
           "printIfNullValue": false
         }
       }
+    },
+    "middle-right-panel": {
+      "body": "<img src='{$baseUrl}images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
     },
     "right-panel": {
       "favorite-button": {},
@@ -627,8 +632,11 @@
         }
       }
     },
+    "middle-right-panel": {
+      "body": "<img src='{$baseUrl}images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
+    },
     "bottom-panel": {
-      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
+      "body": "{$printSearchResultsCondition}{$editionTable}<a href='{$baseUrl}EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
       "variables": {
         "$editionTable": {
           "type": "table",
@@ -812,8 +820,11 @@
         }
       }
     },
+    "middle-right-panel": {
+      "body": "<img src='{$baseUrl}images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
+    },
     "bottom-panel": {
-      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
+      "body": "{$printSearchResultsCondition}{$editionTable}<a href='{$baseUrl}EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
       "variables": {
         "$editionTable": {
           "type": "table",
@@ -996,6 +1007,9 @@
           "printIfNullValue": false
         }
       }
+    },
+    "middle-right-panel": {
+      "body": "<img src='{$baseUrl}images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
     },
     "bottom-panel": {
       "body": "{$printSearchResultsCondition}{$editionTable}{@Copyright}: {Copyright}",
