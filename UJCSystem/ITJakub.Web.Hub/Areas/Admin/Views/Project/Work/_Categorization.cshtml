@@ -10,13 +10,14 @@
 @*<div class="panel-group" id="work-categorization-container">*@
 <div id="work-categorization-container">
 <div class="row">
-<div class="col-xs-12 col-lg-6">
-    <div class="panel panel-default">
+<div class="col-xs-12 col-md-6 col-lg-6">
+    <div class="categorization-panel panel panel-default">
         <div class="panel-heading">
             @Localizer.Translate("Categorization", "Admin")
         </div>
         <div class="panel-body">
             <div class="form-horizontal">
+                @await Html.PartialAsync("Work/SubView/_EditCategorizationButtons")
                 <div class="form-group">
                     <div id="all-existing-genres" class="hidden">
                        @foreach (var genre in Model.AllLiteraryGenreList)
@@ -24,15 +25,15 @@
                            <div class="existing-genre" data-id="@genre.Id" data-name="@genre.Name"></div>
                        }
                     </div>
-                    <label class="col-sm-3 col-md-4 control-label">@Localizer.Translate("LiteraryGenre", "Admin")</label>
-                    <div class="col-sm-9 col-md-8">
+                    <label class="col-sm-3 col-md-4 col-lg-3 control-label">@Localizer.Translate("LiteraryGenre", "Admin")</label>
+                    <div class="col-sm-9 col-md-8 col-lg-9">
                         <div id="work-categorization-literary-genre">
                             @if (Model.SelectedLiteraryGenreIds.Count > 0)
                             {
                                 @foreach (var kindSelected in Model.SelectedLiteraryGenreIds)
                                 {
                                     <div class="lit-kind-item clearfix">
-                                        <div class="col-xs-9">
+                                        <div class="col col-xs-9 col-sm-10 col-md-8 col-lg-9">
                                             <select class="item-select-box form-control">
                                                 @foreach (var kind in Model.AllLiteraryKindList)
                                                 {
@@ -56,7 +57,7 @@
                             }
                         </div>
                     </div>
-                    <div class="add-button col-md-offset-4 col-md-8">
+                    <div class="add-button col-sm-offset-3 col-md-offset-4 col-lg-offset-3 col-sm-8">
                         <button class="btn btn-default" id="add-literary-genre-button">@Localizer.Translate("Add", "Admin")</button>
                     </div>
                 </div>
@@ -67,15 +68,15 @@
                             <div class="existing-kind" data-id="@kind.Id" data-name="@kind.Name"></div>
                         }
                     </div>
-                    <label class="col-md-4 control-label">@Localizer.Translate("LiteraryKind", "Admin")</label>
-                    <div class="col-md-8">
+                    <label class="col-sm-3 col-md-4 col-lg-3 control-label">@Localizer.Translate("LiteraryKind", "Admin")</label>
+                    <div class="col-sm-9 col-md-8 col-lg-9">
                         <div id="work-categorization-literary-kind">
                             @if (Model.AllLiteraryKindList.Count > 0)
                             {
                                 @foreach (var kindSelected in Model.SelectedLiteraryKindIds)
                                 {
                                     <div class="lit-kind-item clearfix">
-                                        <div class="col-xs-9">
+                                        <div class="col col-xs-9 col-sm-10 col-md-8 col-lg-9">
                                             <select class="item-select-box form-control">
                                                 @foreach (var kind in Model.AllLiteraryKindList)
                                                 {
@@ -99,13 +100,13 @@
                             }
                         </div>
                     </div>
-                    <div class="add-button col-md-offset-4 col-md-8">
+                    <div class="add-button col-sm-offset-3 col-md-offset-4 col-lg-offset-3 col-sm-8">
                         <button class="btn btn-default" id="add-literary-kind-button">@Localizer.Translate("Add", "Admin")</button>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label">@Localizer.Translate("Category", "Admin")</label>
-                    <div class="col-md-8 category-container">
+                    <label class="col-sm-3 col-md-4 col-lg-3 control-label">@Localizer.Translate("Category", "Admin")</label>
+                    <div class="col-sm-9 col-md-8 col-lg-9 category-container">
                         <div id="category-tree"></div>
                     </div>
                     <div class="all-category-list hidden">
@@ -124,8 +125,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label">@Localizer.Translate("Keywords", "Admin")</label>
-                    <div class="col-md-8 keywords-container">
+                    <label class="col-sm-3 col-md-4 col-lg-3 control-label">@Localizer.Translate("Keywords", "Admin")</label>
+                    <div class="col-sm-9 col-md-8 col-lg-9 keywords-container">
                         <div class="keywords-list-selected hidden">
                             @foreach (var selectedKeyword in Model.SelectedKeywords)
                             {
@@ -137,29 +138,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="project-form-bottom-buttons col-md-12">
-                        <div id="work-categorization-view-button-panel">
-                            <button class="btn btn-default" id="work-categorization-edit-button">
-                                @Localizer.Translate("Edit", "Admin")
-                            </button>
-                        </div>
-                        <div id="work-categorization-editor-button-panel">
-                            <div class="alert alert-success" id="work-categorization-save-success">@Localizer.Translate("DataSaveSuccess", "Admin")</div>
-                            <div class="alert alert-danger" id="work-categorization-save-error">@Localizer.Translate("DataSaveError", "Admin")</div>
-                            <div class="alert alert-danger" id="work-categorization-invalid-keyword-fail">@Localizer.Translate("KeywordsSaveError", "Admin")</div>
-                            <button class="btn btn-default" id="work-categorization-cancel-button">@Localizer.Translate("Cancel", "Admin")</button>
-                            <button class="btn btn-default" id="work-categorization-save-button">
-                                <span class="saving-icon loading-small-button"></span> @Localizer.Translate("Save", "Admin")</button>
-                        </div>
-                    </div>
-                </div>
+                @await Html.PartialAsync("Work/SubView/_EditCategorizationButtons")
             </div>
         </div>
     </div>
 </div>
 
-<div class="col-xs-12 col-lg-6">
+<div class="col-xs-12 col-md-6 col-lg-6">
     <div class="panel panel-default">
         <div class="panel-heading">
             @Localizer.Translate("ProjectGroup", "Admin")
