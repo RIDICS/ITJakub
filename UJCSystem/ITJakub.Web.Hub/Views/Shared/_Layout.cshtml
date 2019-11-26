@@ -81,7 +81,8 @@
                                                                                                     } "></div>
     <div id="bibliography-configuration-default-url" data-url="@FileVersionProvider.AddFileVersionToPath(Context.Request.PathBase, Url.Content("~/content/BibliographyConfiguration/configuration.json"))"></div>
     <div id="bibliography-configuration" data-page-size="@PageSizes.BibliographyModule"
-         data-search-in-second-portal-label="@Localizer.Translate(PortalConfig.Value.PortalType == PortalType.CommunityPortal ? "SearchInResearchPortal" : "SearchInCommunityPortal", "BibliographyModule")"></div>
+         data-second-portal-search-label="@Localizer.Translate(PortalConfig.Value.PortalType == PortalType.CommunityPortal ? "SearchInResearchPortal" : "SearchInCommunityPortal", "BibliographyModule")"
+         data-second-portal-search-url="@UrlHelpers.ConvertCurrentUrlToSecondPortal(Context.Request, PortalConfig.Value)"></div>
     <div class="page-body-content">
 
         <script asp-append-version="true" src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -148,7 +148,7 @@ class Search {
         if (enabledSearchInSecondPortal) {
             var secondPortalButton = document.createElement("button");
             secondPortalButton.type = "button";
-            var text = $("#bibliography-configuration").data("search-in-second-portal-label") as string;
+            var text = $("#bibliography-configuration").data("second-portal-search-label") as string;
             $(secondPortalButton).html("<i class='fa fa-external-link'></i> " + text);
             secondPortalButton.classList.add("btn");
             secondPortalButton.classList.add("btn-default");
@@ -159,9 +159,11 @@ class Search {
             this.searchInSecondPortalButton = secondPortalButton;
 
             $(secondPortalButton).click(() => {
-                //TODO resolve correct link
+                var targetUrl = $("#bibliography-configuration").data("second-portal-search-url") as string;
                 var searchboxValue = $(this.searchInputTextbox).val() as string;
-                console.log(searchboxValue);
+                var parameter = encodeURIComponent(searchboxValue);
+                var redirectUrl = `${targetUrl}?search=${parameter}`;
+                window.open(redirectUrl, "_blank");
             });
         }
 
