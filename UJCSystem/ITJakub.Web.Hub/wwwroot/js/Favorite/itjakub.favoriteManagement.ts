@@ -198,7 +198,8 @@ class FavoriteManagement {
 
     private showLoader() {
         var loaderDiv = document.createElement("div");
-        $(loaderDiv).addClass("loader");
+        var loaderClass = "lv-dots md lv-mid";
+        $(loaderDiv).addClass(loaderClass);
 
         $("#favorite-item-container")
             .empty()

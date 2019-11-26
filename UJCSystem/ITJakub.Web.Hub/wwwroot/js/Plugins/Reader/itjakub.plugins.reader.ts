@@ -26,7 +26,6 @@
     settingsPanelIdentificator: string = "SettingsPanel";
     contentPanelIdentificator: string = "ContentPanel";
 
-
     imagePanel: ImagePanel;
     textPanel: TextPanel;
     searchPanel: SearchResultPanel;
@@ -2061,7 +2060,7 @@ class TextPanel extends RightSidePanel {
         var pageDiv = document.getElementById(page.pageId.toString());
         var pageLoaded: boolean = !($(pageDiv).hasClass("unloaded"));
         var pageSearchUnloaded: boolean = $(pageDiv).hasClass("search-unloaded");
-        var pageLoading: boolean = $(pageDiv).hasClass("loading");
+        var pageLoading: boolean = $(pageDiv).hasClass("load");
         if (!pageLoading) {
             if (pageSearchUnloaded) {
                 this.downloadSearchPageByXmlId(this.query, this.queryIsJson, page, onSuccess, onFailed);
@@ -2112,9 +2111,11 @@ class TextPanel extends RightSidePanel {
 
     private downloadPageByXmlId(page: BookPage, onSuccess: () => any = null, onFailed: () => any = null) {
         var pageContainer = document.getElementById(page.pageId.toString());
-        $(pageContainer).addClass("loading");
+        var loader = '<div class="lv-circles lv-mid sm"></div>';
+        $(pageContainer).addClass("load");
+        $(pageContainer).html(loader);
         if (typeof this.windowBody !== "undefined") {
-            $(this.windowBody).find("#" + page.pageId).addClass("loading");
+            $(this.windowBody).find("#" + page.pageId).html(loader);
         }
         $.ajax({
             type: "GET",
@@ -2126,11 +2127,13 @@ class TextPanel extends RightSidePanel {
             success: (response) => {
                 $(pageContainer).empty();
                 $(pageContainer).append(response["pageText"]);
-                $(pageContainer).removeClass("loading");
+                $(pageContainer).removeClass("load");
+                $(pageContainer).css("display", "inline");
                 $(pageContainer).removeClass("unloaded");
 
                 if (typeof this.windowBody !== "undefined") {
-                    $(this.windowBody).find("#" + page.pageId).removeClass("loading");
+                    $(this.windowBody).find("#" + page.pageId).removeClass("load");
+                    $(pageContainer).css("display", "inline");
                     $(this.windowBody).find("#" + page.pageId).append(response["pageText"]);
                 }
 
@@ -2144,7 +2147,7 @@ class TextPanel extends RightSidePanel {
             },
             error: (response) => {
                 $(pageContainer).empty();
-                $(pageContainer).removeClass("loading");
+                $(pageContainer).css("display", "inline");
                 $(pageContainer).append(localization.translateFormat("PageLoadingError", new Array<string>(page.text), "PluginsJs").value);
 
                 if (onFailed != null) {
@@ -2156,9 +2159,11 @@ class TextPanel extends RightSidePanel {
 
     private downloadSearchPageByXmlId(query: string, queryIsJson: boolean, page: BookPage, onSuccess: () => any = null, onFailed: () => any = null) {
         var pageContainer = document.getElementById(page.pageId.toString());
-        $(pageContainer).addClass("loading");
+        var loader = '<div class="lv-circles lv-mid sm"></div>';
+        $(pageContainer).addClass("load");
+        $(pageContainer).html(loader);
         if (typeof this.windowBody !== "undefined") {
-            $(this.windowBody).find("#" + page.pageId).addClass("loading");
+            $(this.windowBody).find("#" + page.pageId).html(loader);
         }
         $.ajax({
             type: "GET",
@@ -2170,13 +2175,15 @@ class TextPanel extends RightSidePanel {
             success: (response) => {
                 $(pageContainer).empty();
                 $(pageContainer).append(response["pageText"]);
-                $(pageContainer).removeClass("loading");
+                $(pageContainer).removeClass("load");
+                $(pageContainer).css("display", "inline");
                 $(pageContainer).removeClass("unloaded");
                 $(pageContainer).removeClass("search-unloaded");
                 $(pageContainer).addClass("search-loaded");
 
                 if (typeof this.windowBody !== "undefined") {
-                    $(this.windowBody).find("#" + page.pageId).removeClass("loading");
+                    $(this.windowBody).find("#" + page.pageId).removeClass("load");
+                    $(pageContainer).css("display", "inline");
                     $(this.windowBody).find("#" + page.pageId).append(response["pageText"]);
                 }
 
@@ -2190,7 +2197,8 @@ class TextPanel extends RightSidePanel {
             },
             error: (response) => {
                 $(pageContainer).empty();
-                $(pageContainer).removeClass("loading");
+                $(pageContainer).removeClass("load");
+                $(pageContainer).css("display", "inline");
                 $(pageContainer).append(localization.translateFormat("PageLoadingErrorWithSearchResults", new Array<string>(page.text), "PluginsJs").value);
 
                 if (onFailed != null) {

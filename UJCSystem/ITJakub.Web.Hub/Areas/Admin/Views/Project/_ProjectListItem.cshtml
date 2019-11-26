@@ -1,6 +1,8 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Helpers
+@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Areas.Admin.Models.ProjectItemViewModel>
 @inject ILocalizationService Localizer
+@inject TextTypeLocalizer TextTypeLocalizer
 
 <style>
     a.disabled {
@@ -18,6 +20,7 @@
             <a href="@Url.Action("Project", "Project", new {id = viewModel.Id})" class="@(permissions.ReadProject ? string.Empty : "disabled")">
                 <div>
                     <strong>@viewModel.Name</strong>
+                    <small>- @TextTypeLocalizer.TranslateTextTypeFull(viewModel.TextType)</small>
                 </div>
                 <div>@viewModel.PublisherString</div>
                 <div>@viewModel.LiteraryOriginalString</div>
@@ -28,7 +31,7 @@
             @{
                 var lastEditDate = viewModel.LastEditDate?.ToLocalTime().ToString(Localizer.GetRequestCulture()) ?? $"({Localizer.Translate("NotFilled")})";
             }
-            @Localizer.Translate("LastEdited", "Admin"): @lastEditDate @Localizer.Translate("ByUser", "Admin") @viewModel.LastEditUser<br/>
+            @Localizer.Translate("LastEdited", "Admin"): @lastEditDate @Localizer.Translate("ByUser", "Admin") @viewModel.LastEditUser<br />
             @Localizer.Translate("Created", "Admin"): @viewModel.CreateDate.ToLocalTime().ToString(Localizer.GetRequestCulture()) @Localizer.Translate("ByUser", "Admin") @viewModel.CreateUser
         </div>
         <div class="col-md-2 project-item-buttons">

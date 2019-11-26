@@ -1,134 +1,265 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Helpers
+@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Areas.Admin.Models.ProjectWorkCategorizationViewModel
 
 @inject ILocalizationService Localizer
+@inject TextTypeLocalizer TextTypeLocalizer
 
 <div class="row resource-tab-row-fix">
-    <div class="project-layout-box project-layout-box-500">
-        <div class="panel-group" id="work-categorization-container">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    @Localizer.Translate("Categorization", "Admin")
-                </div>
-                <div class="panel-body">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <div id="all-existing-genres" class="hidden">
-                            @foreach (var genre in Model.AllLiteraryGenreList)
-                            {
-                                <div class="existing-genre" data-id="@genre.Id" data-name="@genre.Name"></div>
-                            }
-                            </div>
-                            <label class="col-md-4 control-label">@Localizer.Translate("LiteraryGenre", "Admin")</label>
-                            <div class="col-md-8">
-                                <div id="work-categorization-literary-genre">
-                                @foreach (var genreSelected in Model.SelectedLiteraryGenreIds)
-                                {
-                                    <div class="genre-item clearfix">
-                                        <div class="col-xs-9">
-                                            <select class="item-select-box form-control">
-                                            @foreach (var genre in Model.AllLiteraryGenreList)
-                                            {
-                                                <option value="@genre.Id" selected="@(genre.Id == genreSelected)">@genre.Name</option>
-                                            }
-                                            </select>
-                                        </div>
-                                        <div class="button-float-right">
-                                            <button class="btn btn-default remove-button">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </button>
-                                        </div>
+    
+    @*<div class="panel-group" id="work-categorization-container">*@
+    <div id="work-categorization-container">
+        <div class="row">
+            <div class="col-xs-12 col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        @Localizer.Translate("Categorization", "Admin")
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div id="all-existing-genres" class="hidden">
+                                    @foreach (var genre in Model.AllLiteraryGenreList)
+                                    {
+                                        <div class="existing-genre" data-id="@genre.Id" data-name="@genre.Name"></div>
+                                    }
+                                </div>
+                                <label class="col-md-4 control-label">@Localizer.Translate("LiteraryGenre", "Admin")</label>
+                                <div class="col-md-8">
+                                    <div id="work-categorization-literary-genre">
+                                        @foreach (var genreSelected in Model.SelectedLiteraryGenreIds)
+                                        {
+                                            <div class="genre-item clearfix">
+                                                <div class="col-xs-9">
+                                                    <select class="item-select-box form-control">
+                                                        @foreach (var genre in Model.AllLiteraryGenreList)
+                                                        {
+                                                            <option value="@genre.Id" selected="@(genre.Id == genreSelected)">@genre.Name</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="button-float-right">
+                                                    <button class="btn btn-default remove-button">
+                                                        <span class="glyphicon glyphicon-remove"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
-                                }
+                                </div>
+                                <div class="add-button col-md-offset-4 col-md-8">
+                                    <button class="btn btn-default" id="add-literary-genre-button">@Localizer.Translate("Add", "Admin")</button>
                                 </div>
                             </div>
-                            <div class="add-button col-md-offset-4 col-md-8">
-                                <button class="btn btn-default" id="add-literary-genre-button">@Localizer.Translate("Add", "Admin")</button>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div id="all-existing-lit-kinds" class="hidden">
-                                @foreach (var kind in Model.AllLiteraryKindList)
-                            {
-                                <div class="existing-kind" data-id="@kind.Id" data-name="@kind.Name"></div>
-                            }
-                            </div>
-                            <label class="col-md-4 control-label">@Localizer.Translate("LiteraryKind", "Admin")</label>
-                            <div class="col-md-8">
-                                <div id="work-categorization-literary-kind">
-                                    @foreach (var kindSelected in Model.SelectedLiteraryKindIds)
+                            <div class="form-group">
+                                <div id="all-existing-lit-kinds" class="hidden">
+                                    @foreach (var kind in Model.AllLiteraryKindList)
                                     {
-                                    <div class="lit-kind-item clearfix">
-                                        <div class="col-xs-9">
-                                            <select class="item-select-box form-control">
-                                            @foreach (var kind in Model.AllLiteraryKindList)
-                                            {
-                                                <option value="@kind.Id" selected="@(kind.Id == kindSelected)">@kind.Name</option>
-                                            }
-                                            </select>
-                                        </div>
-                                        <div class="button-float-right">
-                                            <button class="btn btn-default remove-button">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </button>
-                                        </div>
+                                        <div class="existing-kind" data-id="@kind.Id" data-name="@kind.Name"></div>
+                                    }
+                                </div>
+                                <label class="col-md-4 control-label">@Localizer.Translate("LiteraryKind", "Admin")</label>
+                                <div class="col-md-8">
+                                    <div id="work-categorization-literary-kind">
+                                        @foreach (var kindSelected in Model.SelectedLiteraryKindIds)
+                                        {
+                                            <div class="lit-kind-item clearfix">
+                                                <div class="col-xs-9">
+                                                    <select class="item-select-box form-control">
+                                                        @foreach (var kind in Model.AllLiteraryKindList)
+                                                        {
+                                                            <option value="@kind.Id" selected="@(kind.Id == kindSelected)">@kind.Name</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="button-float-right">
+                                                    <button class="btn btn-default remove-button">
+                                                        <span class="glyphicon glyphicon-remove"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
+                                </div>
+                                <div class="add-button col-md-offset-4 col-md-8">
+                                    <button class="btn btn-default" id="add-literary-kind-button">@Localizer.Translate("Add", "Admin")</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">@Localizer.Translate("Category", "Admin")</label>
+                                <div class="col-md-8 category-container">
+                                    <div id="category-tree"></div>
+                                </div>
+                                <div class="all-category-list hidden">
+                                    @foreach (var category in Model.AllCategoryList)
+                                    {
+                                        <div class="existing-category-list-item" data-category-id="@category.Id" data-category-description="@category.Description" data-parent-category-id="@category.ParentCategoryId" data-external-id="@category.ExternalId">
+                                        </div>
+                                    }
+                                </div>
+                                <div class="selected-category-list hidden">
+                                    @foreach (var categoryId in Model.SelectedCategoryIds)
+                                    {
+                                        <div class="selected-category-list-item" data-category-id="@categoryId">
+                                        </div>
                                     }
                                 </div>
                             </div>
-                            <div class="add-button col-md-offset-4 col-md-8">
-                                <button class="btn btn-default" id="add-literary-kind-button">@Localizer.Translate("Add", "Admin")</button>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">@Localizer.Translate("Keywords", "Admin")</label>
+                                <div class="col-md-7 keywords-container">
+                                    <div class="keywords-list-selected hidden">
+                                        @foreach (var selectedKeyword in Model.SelectedKeywords)
+                                        {
+                                            <div data-id="@selectedKeyword.Id" data-name="@selectedKeyword.Name"></div>
+                                        }
+                                    </div>
+                                    <input class="keywords-textarea form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="project-form-bottom-buttons col-md-12">
+                                    <div id="work-categorization-view-button-panel">
+                                        <button class="btn btn-default" id="work-categorization-edit-button">
+                                            @Localizer.Translate("Edit", "Admin")
+                                        </button>
+                                    </div>
+                                    <div id="work-categorization-editor-button-panel">
+                                        <div class="alert alert-success" id="work-categorization-save-success">@Localizer.Translate("DataSaveSuccess", "Admin")</div>
+                                        <div class="alert alert-danger" id="work-categorization-save-error">@Localizer.Translate("DataSaveError", "Admin")</div>
+                                        <div class="alert alert-danger" id="work-categorization-invalid-keyword-fail">@Localizer.Translate("KeywordsSaveError", "Admin")</div>
+                                        <button class="btn btn-default" id="work-categorization-cancel-button">@Localizer.Translate("Cancel", "Admin")</button>
+                                        <button class="btn btn-default" id="work-categorization-save-button"><span class="saving-icon loading-small-button"></span> @Localizer.Translate("Save", "Admin")</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">@Localizer.Translate("Category", "Admin")</label>
-                        <div class="col-md-8 category-container">
-                            <div id="category-tree"></div>
-                        </div>
-                        <div class="all-category-list hidden">
-                            @foreach (var category in Model.AllCategoryList)
-                            {
-                                <div class="existing-category-list-item" data-category-id="@category.Id" data-category-description="@category.Description" data-parent-category-id="@category.ParentCategoryId" data-external-id="@category.ExternalId">
-                                </div>
-                            }
-                        </div>
-                        <div class="selected-category-list hidden">
-                            @foreach (var categoryId in Model.SelectedCategoryIds)
-                            {
-                                <div class="selected-category-list-item" data-category-id="@categoryId">
-                                </div>
-                            }
-                        </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        @Localizer.Translate("ProjectGroup", "Admin")
                     </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">@Localizer.Translate("Keywords", "Admin")</label>
-                        <div class="col-md-7 keywords-container">
-                            <div class="keywords-list-selected hidden">
-                                @foreach (var selectedKeyword in Model.SelectedKeywords)
-                                {
-                                    <div data-id="@selectedKeyword.Id" data-name="@selectedKeyword.Name"></div>
-                                }
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    @Localizer.Translate("ProjectGroupDescription", "Admin")
+                                </div>
                             </div>
-                            <input class="keywords-textarea form-control" type="text" />
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="alert alert-warning" style="margin-bottom: 0">
+                                        @Localizer.Translate("ProjectGroupSavingInfo", "Admin")
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" id="project-group-projects">
+                                <div class="col-md-12">
+                                    <div>
+                                        <button class="btn btn-default" id="add-project-to-group-button">@Localizer.Translate("AddProjectToGroup", "Admin")</button>
+                                        <button class="btn btn-default" id="remove-project-from-group-button">@Localizer.Translate("RemoveProjectFromGroup", "Admin")</button>
+                                    </div>
+                                    <div style="margin-top: 3rem;">
+                                        <h4>@Localizer.Translate("ProjectsInGroup", "Admin")</h4>
+                                    </div>
+                                    <div id="project-group-projects-list">
+                                        <div class="list-container selectable page-listing">
+                                            <div class="table-responsive">
+                                                @if (Model.ProjectsInGroup == null || Model.ProjectsInGroup.Count == 0)
+                                                {
+                                                    <div>@Localizer.Translate("NoProjects", "Admin")</div>
+                                                }
+                                                else
+                                                {
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                        @foreach (var project in Model.ProjectsInGroup)
+                                                        {
+                                                            <tr class="page-row">
+                                                                <td>
+                                                                    <a asp-controller="Project" asp-action="Project" asp-route-id="@project.Id">@project.Name</a>
+                                                                    (@TextTypeLocalizer.TranslateTextType(project.TextType))
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                        </tbody>
+                                                    </table>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="project-group-projects-pagination"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="project-form-bottom-buttons" style="margin-top: 10px;">
-            <div id="work-categorization-view-button-panel">
-                <button class="btn btn-default" id="work-categorization-edit-button">
-                    @Localizer.Translate("Edit", "Admin")
-                </button>
+<div class="modal fade" role="dialog" id="add-project-to-group-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Localizer.Translate("AddProjectToGroup", "Admin")</h4>
             </div>
-            <div id="work-categorization-editor-button-panel">
-                <div class="alert alert-success" id="work-categorization-save-success">@Localizer.Translate("DataSaveSuccess", "Admin")</div>
-                <div class="alert alert-danger" id="work-categorization-save-error">@Localizer.Translate("DataSaveError", "Admin")</div>
-                <div class="alert alert-danger" id="work-categorization-invalid-keyword-fail">@Localizer.Translate("KeywordsSaveError", "Admin")</div>
-                <button class="btn btn-default" id="work-categorization-cancel-button">@Localizer.Translate("Cancel", "Admin")</button>
-                <button class="btn btn-default" id="work-categorization-save-button"><span class="saving-icon loading-small-button"></span> @Localizer.Translate("Save", "Admin")</button>
+            <div class="modal-body">
+                <div class="row" style="margin-bottom: 1rem;">
+                    <div class="col-md-12">
+                        @Localizer.Translate("SelectProjectForCreatingGroup", "Admin")
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="panel-title col col-xs-12 col-sm-2">
+                                        @Localizer.Translate("MyProjects", "Admin")
+                                    </div>
+                                    <div class="col col-xs-12 col col-sm-10">
+                                        <form asp-action="ProjectsForGroupList" asp-controller="Project" method="get" class="projectForGroup-search-form search-form form-inline">
+                                            <div class="form-group">
+                                                <div class="search-input">
+                                                    <input class="form-control search-value" name="search" placeholder=" " value="" />
+                                                    <i class="fa fa-close reset-search-button"></i>
+                                                </div>
+                                                <div class="search-button">
+                                                    <button class="btn btn-default" type="submit">
+                                                        <i class="fa fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div id="projectForGroupListContainer" class="list-container selectable">
+                                    @*Load content here by AJAX*@
+                                </div>
+                                <div id="projectForGroupPagination" class="text-center"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="alert alert-warning">
+                                @Localizer.Translate("SelectProjectForCreatingGroupNote", "Admin")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("SaveError", "Admin")</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Cancel", "Admin")</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span> @Localizer.Translate("Add", "Admin")</button>
             </div>
         </div>
     </div>

@@ -13,5 +13,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public HashSet<int> SelectedLiteraryGenreIds { get; set; }       
         public HashSet<int> SelectedCategoryIds { get; set; }
         public IList<KeywordContract> SelectedKeywords { get; set; }
+
+        public IList<ProjectInfoViewModel> ProjectsInGroup { get; set; }
     }
 }

@@ -19,15 +19,18 @@ namespace Vokabular.MainService.Controllers
         private readonly ProjectInfoManager m_projectInfoManager;
         private readonly ForumSiteManager m_forumSiteManager;
         private readonly PermissionManager m_permissionManager;
+        private readonly ProjectGroupManager m_projectGroupManager;
 
         public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager,
-            ProjectInfoManager projectInfoManager, ForumSiteManager forumSiteManager, PermissionManager permissionManager)
+            ProjectInfoManager projectInfoManager, ForumSiteManager forumSiteManager, PermissionManager permissionManager,
+            ProjectGroupManager projectGroupManager)
         {
             m_projectManager = projectManager;
             m_projectMetadataManager = projectMetadataManager;
             m_projectInfoManager = projectInfoManager;
             m_forumSiteManager = forumSiteManager;
             m_permissionManager = permissionManager;
+            m_projectGroupManager = projectGroupManager;
         }
         
         [HttpGet]
@@ -84,9 +87,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpDelete("{projectId}")]
-        public void DeleteProject(long projectId)
+        public void RemoveProject(long projectId)
         {
-            m_projectManager.DeleteProject(projectId);
+            m_projectManager.RemoveProject(projectId);
         }
 
         [HttpGet("{projectId}/metadata")]
@@ -234,6 +237,26 @@ namespace Vokabular.MainService.Controllers
         public IActionResult AddProjectToUserGroupByCode(long projectId, [FromBody] AssignPermissionToSingleUserGroupContract data)
         {
             m_permissionManager.AddBookToSingleUserGroup(projectId, data.Code, data.Permissions);
+            return Ok();
+        }
+
+        [HttpGet("{projectId}/group")]
+        public ActionResult<ProjectGroupContract> GetProjectGroups(long projectId)
+        {
+            return m_projectGroupManager.GetProjectGroups(projectId);
+        }
+
+        [HttpPut("{targetProjectId}/group")]
+        public IActionResult AddProjectToGroup(long targetProjectId, [FromQuery] long selectedProjectId)
+        {
+            m_projectGroupManager.AddProjectToGroup(targetProjectId, selectedProjectId);
+            return Ok();
+        }
+
+        [HttpDelete("{projectId}/group")]
+        public IActionResult RemoveProjectFromGroup(long projectId)
+        {
+            m_projectGroupManager.RemoveProjectFromGroup(projectId);
             return Ok();
         }
     }

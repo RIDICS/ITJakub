@@ -65,7 +65,6 @@ $(document.documentElement).ready(() => {
     }
 
     function showFeedbacks(start: number, count: number) {
-
         $.ajax({
             type: "GET",
             traditional: true,
@@ -74,6 +73,7 @@ $(document.documentElement).ready(() => {
             dataType: "json",
             contentType: "application/json",
             success: (results: IFeedback[]) => {
+                $(".lv-circles").hide();
                 var feedbacksContainer = document.getElementById("feedbacks");
                 $(feedbacksContainer).empty();
 

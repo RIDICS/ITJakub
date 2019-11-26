@@ -119,7 +119,9 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
                 IncludeAdditionalProjectTypes = true,
                 AdditionalProjectTypes = new List<ProjectTypeContract>
                 {
-                    ProjectTypeContract.Bibliography
+                    ProjectTypeContract.Research,
+                    ProjectTypeContract.Bibliography,
+                    ProjectTypeContract.Community,
                 }
             };
         }

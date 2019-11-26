@@ -728,7 +728,7 @@
         $errorAlert.hide();
         this.projectClient.saveMetadata(this.projectId, data).done((responseData) => {
             $successAlert.show().delay(3000).fadeOut(2000);
-            $("#work-metadata-last-modification").text(responseData.lastModificationText.toLocaleString());
+            $(".work-metadata-last-modification").text(responseData.lastModificationText.toLocaleString());
             if (responseData.literaryOriginalText == null || responseData.literaryOriginalText === "") {
                 $("#work-metadata-literary-original").text(localization.translate("NoLiteraryOriginal", "Admin").value);
             } else {
@@ -783,6 +783,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
     private readonly workModule: ProjectWorkModule;
     private readonly adminApiClient: AdminApiClient;
     private readonly errorHandler: ErrorHandler;
+    private readonly addProjectToGroupDialog: BootstrapDialogWrapper;
     private existingGenres: JQuery = null;
     private existingLitKinds: JQuery = null;
 
@@ -793,6 +794,11 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
         this.adminApiClient = new AdminApiClient();
         this.errorHandler = new ErrorHandler();
         this.workModule = workModule;
+
+        this.addProjectToGroupDialog = new BootstrapDialogWrapper({
+            element: $("#add-project-to-group-dialog"),
+            submitCallback: this.assignProjectToGroup.bind(this)
+        });
     }
 
     getConfiguration(): IProjectMetadataTabConfiguration {
@@ -942,6 +948,13 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
         return categoryTreeEl;
     }
 
+    private reloadTab() {
+        const metadataTabSelector = "#project-work-categorization";
+        const tabPanelEl = $(metadataTabSelector);
+        tabPanelEl.empty();
+        this.workModule.loadTabPanel(metadataTabSelector);
+    }
+
     initTab(): void {
         super.initTab();
         this.initKeywords();
@@ -974,6 +987,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
             }
         });
 
+        $(".project-form-bottom-buttons .btn, #project-group-projects .btn").show();
 
         $("#work-categorization-edit-button").click(() => {
             this.enabledEdit();
@@ -982,13 +996,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
         });
 
         $("#work-categorization-cancel-button").click(() => {
-            this.disableEdit();
-            const metadataTabSelector = "#project-work-categorization";
-            var tabPanelEl = $(metadataTabSelector);
-            tabPanelEl.empty();
-            this.workModule.loadTabPanel(metadataTabSelector);
-            categoryTreeElement.children("input").prop("disabled", true);
-            categoryTreeLabels.addClass("disabled");
+            this.reloadTab();
         });
 
         $("#add-literary-kind-button").click(() => {
@@ -1011,9 +1019,38 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
             genreSelectsEl.append(selectBox);
         });
 
+        $("#add-project-to-group-button").click(() => {
+            this.addProjectToGroupDialog.show();
+        });
+
+        $("#remove-project-from-group-button").click(() => {
+            bootbox.dialog({
+                title: localization.translate("Warning", "PermissionJs").value,
+                message: localization.translate("UnassignProjectFromGroupWarning", "PermissionJs").value,
+                buttons: {
+                    cancel: {
+                        label: localization.translate("Cancel", "PermissionJs").value,
+                        className: "btn-default",
+                        callback: () => { }
+                    },
+                    confirm: {
+                        label: localization.translate("Unassign", "PermissionJs").value,
+                        className: "btn-default",
+                        callback: () => {
+                            this.removeProjectFromGroup();
+                        }
+                    }
+                }
+            });
+        });
+
         this.addRemoveGenreEvent();
 
         this.addRemoveLiteraryKindEvent();
+
+        const projectList = new ListWithPagination(`Admin/Project/ProjectsForGroupList`, "projectForGroup", ViewType.Partial, false, false, this.onProjectListLoaded.bind(this));
+        projectList.loadFirstPage();
+        projectList.init();
 
         const $saveButton = $("#work-categorization-save-button");
         $saveButton.click(() => {
@@ -1038,6 +1075,39 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
             (event) => {
                 $(event.currentTarget as Node as Element).closest(".lit-kind-item").remove();
             });
+    }
+
+    private onProjectListLoaded() {
+        $("#add-project-to-group-dialog .project-row").on("click", (event) => {
+            $(event.currentTarget as Node as Element).addClass("selected").siblings().removeClass("selected");
+        });
+    }
+
+    private removeProjectFromGroup() {
+        this.projectClient.removeProjectFromGroup(this.projectId).done(() => {
+            this.reloadTab();
+        }).fail((e) => {
+            const errorMessage = this.errorHandler.getErrorMessage(e);
+            bootbox.alert(errorMessage);
+        });
+    }
+
+    private assignProjectToGroup() {
+        const selectedProjectRow = $("#add-project-to-group-dialog .project-row.selected");
+        if (selectedProjectRow.length < 1) {
+            this.addProjectToGroupDialog.showError(localization.translate("ProjectIsNotSelected", "PermissionJs").value);
+            return;
+        }
+        
+        const targetProjectId = selectedProjectRow.data("project-id");
+        this.projectClient.assignProjectToGroup(this.projectId, targetProjectId).done(() => {
+            this.addProjectToGroupDialog.hide(() => {
+                this.reloadTab(); // reload after hiding
+            });
+        }).fail((e) => {
+            const errorMessage = this.errorHandler.getErrorMessage(e);
+            this.addProjectToGroupDialog.showError(errorMessage);
+        });
     }
 
     private saveCategorization() {

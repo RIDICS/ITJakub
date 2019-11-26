@@ -10,6 +10,7 @@
     }
 
     init() {
+        this.showLoading();
         $("#project-layout-content").find("*").off();
         this.createEntryButtonEl.text("Create new keyword");
         this.changeEntryButtonEl.text("Rename keyword");
@@ -45,6 +46,7 @@
     }
 
     private updateContentAfterChange() {
+        this.showLoading();
         const initial = true;
         this.loadPage(this.currentPage, initial);
     }

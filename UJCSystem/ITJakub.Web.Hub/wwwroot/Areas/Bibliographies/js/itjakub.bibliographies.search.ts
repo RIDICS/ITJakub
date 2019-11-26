@@ -22,6 +22,8 @@ class BibliographiesSearch {
     private notInitialized = true;
     private initPage: number = null;
 
+    private firstLoad: boolean = true;
+
     constructor(bookCountPerPage: number) {
         this.bookCountPerPage = bookCountPerPage;
 
@@ -40,7 +42,7 @@ class BibliographiesSearch {
             queryType: QueryTypeEnum.Search
         };
         this.search = new Search(<any>$("#listSearchDiv")[0], (json: string) => { this.advancedSearch(json) }, (text: string) => { this.basicSearch(text) }, favoriteQueriesConfig);
-        this.search.makeSearch(enabledOptions);
+        this.search.makeSearch(enabledOptions, false);
         this.search.setOverrideQueryCallback(newQuery => this.typeaheadSearchBox.value(newQuery));
 
         this.typeaheadSearchBox = new SearchBox(".searchbar-input", "Bibliographies/Bibliographies");
@@ -92,8 +94,11 @@ class BibliographiesSearch {
         var sortAsc = this.bibliographyModule.isSortedAsc();
         var sortingEnum = this.bibliographyModule.getSortCriteria();
 
-        this.bibliographyModule.clearBooks();
-        this.bibliographyModule.showLoading();
+        if (!this.firstLoad) {
+            this.bibliographyModule.clearBooks();
+            this.bibliographyModule.showLoading();
+        }
+        this.firstLoad = false;
 
         $.ajax({
             type: "GET",
@@ -121,8 +126,11 @@ class BibliographiesSearch {
         var sortAsc = this.bibliographyModule.isSortedAsc();
         var sortingEnum = this.bibliographyModule.getSortCriteria();
 
-        this.bibliographyModule.clearBooks();
-        this.bibliographyModule.showLoading();
+        if (!this.firstLoad) {
+            this.bibliographyModule.clearBooks();
+            this.bibliographyModule.showLoading();
+        }
+        this.firstLoad = false;
 
         $.ajax({
             type: "GET",

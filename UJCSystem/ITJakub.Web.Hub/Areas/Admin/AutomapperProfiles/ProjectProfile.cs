@@ -9,6 +9,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles
     {
         public ProjectProfile()
         {
+            CreateMap<ProjectContract, ProjectInfoViewModel>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.ProjectType, opt => opt.MapFrom(src => src.ProjectType))
+                .ForMember(dest => dest.TextType, opt => opt.MapFrom(src => src.TextType));
+
             CreateMap<ProjectDetailContract, ProjectItemViewModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
@@ -19,6 +25,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles
                 .ForMember(dest => dest.LiteraryOriginalString, opt => opt.MapFrom(src => GetManuscriptText(src.LatestMetadata)))
                 .ForMember(dest => dest.PageCount, opt => opt.MapFrom(src => src.PageCount))
                 .ForMember(dest => dest.PublisherString, opt => opt.MapFrom(src => GetPublisherText(src.LatestMetadata)))
+                .ForMember(dest => dest.TextType, opt => opt.MapFrom(src => src.TextType))
                 .ForMember(dest => dest.Permissions, opt => opt.MapFrom(src => src.CurrentUserPermissions));
 
             CreateMap<ProjectMetadataContract, ProjectWorkMetadataViewModel>()

@@ -116,7 +116,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => latestSnapshotAlias.BookTypes, () => bookTypeAlias)
                 .Fetch(SelectMode.Fetch, x => x.FavoriteLabel)
                 .Where(restriction)
-                .And(() => favoriteLabelAlias.User.Id == userId);
+                .And(() => favoriteLabelAlias.User.Id == userId && projectAlias.IsRemoved == false);
 
             if (projectType != null)
             {
@@ -305,7 +305,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Project, () => projectAlias)
                 .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => latestSnapshotAlias)
                 .JoinAlias(() => latestSnapshotAlias.BookTypes, () => bookTypeAlias)
-                .Where(() => favoriteLabelAlias.User.Id == userId && bookTypeAlias.Type == bookType);
+                .Where(() => favoriteLabelAlias.User.Id == userId && bookTypeAlias.Type == bookType && projectAlias.IsRemoved == false);
 
             if (projectType != null)
             {

@@ -11,6 +11,7 @@
                     SearchTypeEnum.Editor,
                     SearchTypeEnum.Dating
                 ],
+                enabledSearchInSecondPortal: false,
                 url: {
                     advanced: getBaseUrl() + "Dictionaries/Dictionaries/DictionaryAdvancedSearchPaged",
                     text: getBaseUrl() + "Dictionaries/Dictionaries/DictionaryBasicSearchPaged",

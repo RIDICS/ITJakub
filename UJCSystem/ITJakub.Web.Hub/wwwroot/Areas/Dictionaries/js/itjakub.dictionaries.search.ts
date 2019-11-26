@@ -68,7 +68,7 @@ class DictionarySearch {
         enabledOptions.push(SearchTypeEnum.Title);
 
         this.dictionarySelector.makeDropdown();
-        this.search.makeSearch(enabledOptions);
+        this.search.makeSearch(enabledOptions, false);
 
         this.typeaheadSearchBox.addDataSet("DictionaryHeadword", this.localization.translate("DictionaryTerms", "Dictionaries").value);
         this.typeaheadSearchBox.create();
