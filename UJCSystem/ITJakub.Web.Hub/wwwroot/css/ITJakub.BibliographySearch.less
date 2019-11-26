@@ -24,10 +24,17 @@
     vertical-align: top;
 
     @media screen and (max-width: 991px) {
-        white-space: initial;
+        white-space: normal;
 
         .btn {
             width: 100%;
+        }
+    }
+
+    @media screen and (max-width: 600px) {
+        .btn {
+            white-space: normal;
+            width: 150px;
         }
     }
 }
@@ -41,12 +48,17 @@
 
 .searchbar-button {
     margin-left: 4px;
+
+    @media screen and (min-width: 992px) {
+        &.separated {
+            margin-left: 12px;
+        }
+    }
 }
 
 .list-search-div {
-    width: 75%;
     float: left;
-    width: calc(~'100% - 230px');
+    width: calc(~'100% - 210px');
 
     @media screen and (max-width: 991px) {
         width: 100%;
@@ -55,10 +67,9 @@
 }
 
 .list-results-header {
-    width: 25%;
     float: right;
     text-align: right;
-    width: calc(~'0% + 230px');
+    width: calc(~'0% + 210px');
     margin-top: .25rem;
 
     @media screen and (max-width: 991px) {
