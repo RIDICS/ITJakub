@@ -1829,6 +1829,22 @@ table {
         margin-bottom: 2em;
     }
     
+    .selected-term {
+        padding: 0.3em;
+        border: 1px solid #ddd;
+        border-top: none;
+        
+        &:first-of-type {
+            border-top: 1px solid #ddd;    
+        }
+        
+        span {
+            float: right;
+            margin-right: 0.2em;  
+            cursor: pointer;
+        }
+    }
+
     .reset-search-button {
         font-size: 1em;
         position: absolute;

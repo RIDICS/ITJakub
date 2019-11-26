@@ -6,6 +6,7 @@
     private addTermsDialog: JQuery;
     private termListContainer: JQuery;
     private saveTermsCallback: () => void;
+    private selectedTermsSelector = "#selectedTerms";
 
     constructor(saveTermsCallback: () => void = null) {
         this.client = new EditorsApiClient();
@@ -25,8 +26,7 @@
             checkboxes.prop("checked", false);
             
             for (let term of this.selectedTerms){
-                const checkbox = this.termListContainer.find(`input[name="term-${term.id}"]`);
-                checkbox.prop("checked", true);
+                this.setTermCheckbox(term.id, true);
             }
             
             this.addTermsDialog.modal();
@@ -71,22 +71,17 @@
         this.termListContainer.find(".ridics-checkbox").on("change", (event) => {
             const checkbox = $(event.currentTarget).find(`input[type="checkbox"]`);
             const termRow = checkbox.parents(".term-row");
-
+            const termId = termRow.data("term-id") as number;
+            
             if(checkbox.is(":checked")) {
                 this.selectedTerms.push({
-                    id: termRow.data("term-id"),
+                    id: termId,
                     name: termRow.data("term-name"),
                     categoryId: termRow.data("term-category-id"),
                     position: termRow.data("term-position"),
                 });
             } else {
-                const termId = termRow.data("term-id") as number;
-                for( let i = 0; i < this.selectedTerms.length; i++){
-                    if ( this.selectedTerms[i].id === termId) {
-                        this.selectedTerms.splice(i, 1);
-                        i--;
-                    }
-                }
+                this.removeTerm(termId);
             }
 
             this.renderSelectedTerms();
@@ -95,6 +90,14 @@
     
     setPageId(pageId: number) {
         this.pageId = pageId;    
+    }
+    private removeTerm(termId: number) {
+        for( let i = 0; i < this.selectedTerms.length; i++){
+            if ( this.selectedTerms[i].id === termId) {
+                this.selectedTerms.splice(i, 1);
+                i--;
+            }
+        }
     }
     
     private searchTerm(searchedValue: string) {
@@ -115,16 +118,30 @@
     }
     
     private renderSelectedTerms() {
-        $("#selectedTerms").empty();
+        $(this.selectedTermsSelector).empty();
         for (let term of this.selectedTerms)
         {
             this.renderSelectedTerm(term);
         }
+        
+        $(".selected-term span").on("click", (event) => {
+            const termId = $(event.currentTarget).parent(".selected-term").data("id") as number;
+            
+            this.setTermCheckbox(termId, false);
+            
+            this.removeTerm(termId);
+            this.renderSelectedTerms();
+        });
+    }
+    
+    private setTermCheckbox(termId: number, isChecked: boolean) {
+        const checkbox = this.termListContainer.find(`input[name="term-${termId}"]`);
+        checkbox.prop("checked", isChecked);
     }
     
     private renderSelectedTerm(term: ITermContract)
     {
-        $("#selectedTerms").append(`<div data-id="${term.id}">${term.name}</div>`)
+        $(this.selectedTermsSelector).append(`<div data-id="${term.id}" class="selected-term">${term.name} <span><i class="fa fa-minus"></i></span></div>`);
     }
 
     private showAllTerms() {
