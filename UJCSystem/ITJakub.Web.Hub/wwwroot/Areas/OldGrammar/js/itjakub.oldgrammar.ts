@@ -91,7 +91,7 @@
         queryType: QueryTypeEnum.Reader
     };
     search = new Search(<any>$("#SearchDiv")[0], advancedSearch, basicSearch, favoriteQueriesConfig);
-    search.makeSearch(enabledOptions);
+    search.makeSearch(enabledOptions, false);
 
     var typeaheadSearchBox = new SearchBox(".searchbar-input", "OldGrammar/OldGrammar");
     typeaheadSearchBox.addDataSet("Term", this.localization.translate("Term", "Lemmatization").value, `selectedBookIds=${bookId}`);

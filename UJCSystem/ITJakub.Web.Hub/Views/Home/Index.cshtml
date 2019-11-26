@@ -52,17 +52,16 @@
                                                           ? Url.Action("List", "Editions", new {area = "Editions"})
                                                           : Url.Action("Search", "Bibliographies", new {area = "Bibliographies"}) )"></div>
 
-    <form id="homeSearch" role="form" class="form-horizontal">
-        <div class="form-group searchbar">
+    <form id="homeSearch" role="form">
+        <div class="searchbar">
+            <div class="searchbar-inputs">
+                <input type="text" class="form-control searchbar-input" id="searchbox" placeholder=" @Localizer.Translate("Find...", "Home", LocTranslationSource.File)" style="max-width: 100%;" />
+            </div>
             <div class="searchbar-buttons">
                 <button type="button" class="btn btn-default searchbar-button search">
                     @Localizer.Translate("Search", "Home", LocTranslationSource.File)
                 </button>
             </div>
-            <div class="searchbar-inputs">
-                <input type="text" class="form-control searchbar-input" id="searchbox" placeholder=" @Localizer.Translate("Find...", "Home", LocTranslationSource.File)" style="max-width: 100%;" />
-            </div>
-
         </div>
     </form>
 
