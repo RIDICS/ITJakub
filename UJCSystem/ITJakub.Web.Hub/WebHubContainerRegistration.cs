@@ -22,6 +22,7 @@ namespace ITJakub.Web.Hub
             services.AddScoped<CommunicationConfigurationProvider>();
             services.AddScoped<StaticTextManager>();
             services.AddScoped<FeedbacksManager>();
+            services.AddScoped<PortalTypeManager>();
             services.AddScoped<RefreshUserManager>();
             services.AddScoped<PermissionLocalizer>();
             services.AddScoped<ProjectTypeLocalizer>();
