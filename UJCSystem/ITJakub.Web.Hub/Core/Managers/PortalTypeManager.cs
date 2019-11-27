@@ -17,6 +17,8 @@ namespace ITJakub.Web.Hub.Core.Managers
             m_mapper = mapper;
         }
 
+        public PortalOption Options => m_portalOptions.Value;
+
         public PortalTypeContract GetPortalType()
         {
             return m_mapper.Map<PortalTypeContract>(m_portalOptions.Value.PortalType);

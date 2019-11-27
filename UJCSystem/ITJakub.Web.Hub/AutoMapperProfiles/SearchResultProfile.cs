@@ -11,15 +11,15 @@ namespace ITJakub.Web.Hub.AutoMapperProfiles
         public SearchResultProfile(ILocalizationService localizationService, ProjectTypeLocalizer projectTypeLocalizer)
         {
             CreateMap<SearchResultContract, SearchResultExtendedContract>()
-                .ForMember(dest => dest.ProjectTypeString, opt => opt.MapFrom(src => projectTypeLocalizer.TranslateProjectType(src.ProjectType)))
+                .ForMember(dest => dest.ProjectTypeString, opt => opt.MapFrom(src => projectTypeLocalizer.TranslateBookFrom(src.ProjectType)))
                 .ForMember(dest => dest.CreateTimeString, opt => opt.MapFrom(src => src.CreateTime.ToLocalTime().ToString(localizationService.GetRequestCulture())));
 
             CreateMap<SearchResultDetailContract, SearchResultDetailExtendedContract>()
-                .ForMember(dest => dest.ProjectTypeString, opt => opt.MapFrom(src => projectTypeLocalizer.TranslateProjectType(src.ProjectType)))
+                .ForMember(dest => dest.ProjectTypeString, opt => opt.MapFrom(src => projectTypeLocalizer.TranslateBookFrom(src.ProjectType)))
                 .ForMember(dest => dest.CreateTimeString, opt => opt.MapFrom(src => src.CreateTime.ToLocalTime().ToString(localizationService.GetRequestCulture())));
 
             CreateMap<AudioBookSearchResultContract, AudioBookSearchResultExtendedContract>()
-                .ForMember(dest => dest.ProjectTypeString, opt => opt.MapFrom(src => projectTypeLocalizer.TranslateProjectType(src.ProjectType)))
+                .ForMember(dest => dest.ProjectTypeString, opt => opt.MapFrom(src => projectTypeLocalizer.TranslateBookFrom(src.ProjectType)))
                 .ForMember(dest => dest.CreateTimeString, opt => opt.MapFrom(src => src.CreateTime.ToLocalTime().ToString(localizationService.GetRequestCulture())));
         }
     }

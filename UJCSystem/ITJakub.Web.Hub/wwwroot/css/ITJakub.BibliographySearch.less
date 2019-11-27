@@ -83,3 +83,34 @@
     margin-left: 1rem;
     display: inline-block;
 }
+
+#otherDropdownSelectDiv {
+    display: inline-block;
+
+    @media screen and (max-width: 991px) {
+        display: block;
+        clear: both;
+    }
+}
+
+.dropdown-select-div .search-areas-label {
+    line-height: calc(22px + 1rem);
+    margin-right: 0.5rem;
+
+    @media screen and (max-width: 991px) {
+        display: block;
+    }
+}
+
+.dropdown-select-div .bootstrap-select {
+    width: 280px !important;
+
+    .btn-default {
+        background-color: @menu-background-color;
+        height: calc(22px + 1rem);
+    }
+
+    .btn-default:hover {
+        background-color: @menu-hover-color;
+    }
+}

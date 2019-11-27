@@ -1,10 +1,11 @@
-﻿@using ITJakub.Web.Hub.Options
-@using Microsoft.Extensions.Options
+﻿@using ITJakub.Web.Hub.Core.Managers
+@using ITJakub.Web.Hub.Helpers
 @using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
 
 @inject ILocalizationService Localizer
-@inject IOptions<PortalOption> PortalOption
+@inject ProjectTypeLocalizer ProjectTypeLocalizer
+@inject PortalTypeManager PortalTypeManager
 
 <div id="listHeader">
     <div id="listSearchDiv" class="list-search-div">
@@ -16,9 +17,20 @@
     </div>
 </div>
 
-<div id="allowedSearchOptions" class="hide" data-options="@Html.Encode(Json.Serialize(PortalOption.Value.AllowedSearchOptions.ToArray()))"></div>
+<div id="allowedSearchOptions" class="hide" data-options="@Html.Encode(Json.Serialize(PortalTypeManager.Options.AllowedSearchOptions.ToArray()))"></div>
 
-<div id="dropdownSelectDiv" class="dropdown-select-div">
+<div class="dropdown-select-div">
+    <div id="dropdownSelectDiv"></div>
+    <div id="otherDropdownSelectDiv">
+        <span class="search-areas-label">@Localizer.Translate("SearchedAreas", "BibliographyModule"):</span>
+        <select class="selectpicker" multiple data-show-content="false">
+            @foreach (var projectType in ProjectTypeLocalizer.GetProjectTypeList())
+            {
+                var isDefault = projectType == PortalTypeManager.GetDefaultProjectType();
+                <option value="@projectType" data-content="@ProjectTypeLocalizer.TranslatePortal(projectType)" disabled="@isDefault" selected="@isDefault">@ProjectTypeLocalizer.TranslatePortalShort(projectType)</option>
+            }
+        </select>
+    </div>
 </div>
 
 <div id="listResults" style="clear: both;">
