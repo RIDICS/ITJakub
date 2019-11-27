@@ -52,6 +52,6 @@
     
     "UserCode": "User code",
     "GenerateNewUserCode": "Generate new user code",
-    "UserCodeHelp" : "User code serves to enable collaboration on works of other users. Tell your user code to the owner of the work, on which you will collaborate."
+    "UserCodeHelp": "User code is used for enabling cooperation on works of other users. Provide your user code to the editor of the work on which you will cooperate."
   }
 }

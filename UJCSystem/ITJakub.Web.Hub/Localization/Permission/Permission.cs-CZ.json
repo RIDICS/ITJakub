@@ -81,6 +81,6 @@
     "EditProjectPermission": "Právo editovat projekt",
     "AdminProjectPermission": "Právo spravovat projekt",
     "AddPermissionOnProjectHelp": "Pokud chcete přidat právo pouze jedné osobě, požádejte ji, aby Vám sdělila svůj kód uživatele, který zadáte do pole níže. Kód uživatele lze nalézt v profilu uživatele pod záložkou \"Kód uživatele\".",
-    "UserCodeHelp" : "Kód uživatele slouží k umožnění spolupráce na dílech ostatních uživatelů."
+    "UserCodeHelp": "Kód uživatele slouží k umožnění spolupráce na dílech ostatních uživatelů."
   }
 }
