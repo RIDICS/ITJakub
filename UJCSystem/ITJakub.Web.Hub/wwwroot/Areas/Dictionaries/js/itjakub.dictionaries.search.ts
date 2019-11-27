@@ -69,6 +69,7 @@ class DictionarySearch {
 
         this.dictionarySelector.makeDropdown();
         this.search.makeSearch(enabledOptions, false);
+        this.search.setPlaceholder(localization.translate("SearchInDictionaries...", "PluginsJs").value);
 
         this.typeaheadSearchBox.addDataSet("DictionaryHeadword", this.localization.translate("DictionaryTerms", "Dictionaries").value);
         this.typeaheadSearchBox.create();

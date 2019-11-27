@@ -1,31 +1,27 @@
 ﻿using AutoMapper;
 using ITJakub.Web.Hub.Core.Communication;
-using ITJakub.Web.Hub.Options;
-using Microsoft.Extensions.Options;
+using ITJakub.Web.Hub.Core.Managers;
 using Scalesoft.Localization.AspNetCore;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Core
 {
     public class ControllerDataProvider
     {
-        private readonly IOptions<PortalOption> m_portalOption;
-
-        public ControllerDataProvider(CommunicationProvider communicationProvider, IOptions<PortalOption> portalOption, IMapper mapper,
-            ILocalizationService localizationService)
+        public ControllerDataProvider(CommunicationProvider communicationProvider, IMapper mapper,
+            ILocalizationService localizationService, PortalTypeManager portalTypeManager)
         {
-            m_portalOption = portalOption;
             CommunicationProvider = communicationProvider;
             Mapper = mapper;
             Localizer = localizationService;
+            PortalTypeManager = portalTypeManager;
         }
-        
+
         public CommunicationProvider CommunicationProvider { get; }
-
-        public PortalTypeContract PortalType => Mapper.Map<PortalTypeContract>(m_portalOption.Value.PortalType);
-
+        
         public IMapper Mapper { get; }
 
         public ILocalizationService Localizer { get; }
+
+        public PortalTypeManager PortalTypeManager { get; }
     }
 }

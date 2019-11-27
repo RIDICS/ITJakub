@@ -88,41 +88,36 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
             return Json(result);
         }
 
-        public ActionResult AdvancedSearchResultsCount(string json)
+        public ActionResult AdvancedSearchResultsCount(string json, IList<ProjectTypeContract> searchArea)
         {
-            var count = SearchByCriteriaJsonCount(json, null, null, GetAdvancedSearchParameters());
+            var count = SearchByCriteriaJsonCount(json, null, null, GetAdvancedSearchParameters(searchArea));
             return Json(new {count});
         }
 
-        public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc)
+        public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<ProjectTypeContract> searchArea)
         {
-            var result = SearchByCriteriaJson(json, start, count, sortingEnum, sortAsc, null, null, GetAdvancedSearchParameters());
+            var result = SearchByCriteriaJson(json, start, count, sortingEnum, sortAsc, null, null, GetAdvancedSearchParameters(searchArea));
             return Json(new {results = result}, GetJsonSerializerSettingsForBiblModule());
         }
 
-        public ActionResult TextSearchCount(string text)
+        public ActionResult TextSearchCount(string text, IList<ProjectTypeContract> searchArea)
         {
-            var count = SearchByCriteriaTextCount(CriteriaKey.Title, text, null, null, GetAdvancedSearchParameters());
+            var count = SearchByCriteriaTextCount(CriteriaKey.Title, text, null, null, GetAdvancedSearchParameters(searchArea));
             return Json(new {count});
         }
 
-        public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc)
+        public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<ProjectTypeContract> searchArea)
         {
-            var result = SearchByCriteriaText(CriteriaKey.Title, text, start, count, sortingEnum, sortAsc, null, null, GetAdvancedSearchParameters());
+            var result = SearchByCriteriaText(CriteriaKey.Title, text, start, count, sortingEnum, sortAsc, null, null, GetAdvancedSearchParameters(searchArea));
             return Json(new {results = result}, GetJsonSerializerSettingsForBiblModule());
         }
 
-        private SearchAdvancedParametersContract GetAdvancedSearchParameters()
+        private SearchAdvancedParametersContract GetAdvancedSearchParameters(IList<ProjectTypeContract> additionalProjectTypes)
         {
             return new SearchAdvancedParametersContract
             {
                 IncludeAdditionalProjectTypes = true,
-                AdditionalProjectTypes = new List<ProjectTypeContract>
-                {
-                    ProjectTypeContract.Research,
-                    ProjectTypeContract.Bibliography,
-                    ProjectTypeContract.Community,
-                }
+                AdditionalProjectTypes = additionalProjectTypes,
             };
         }
     }

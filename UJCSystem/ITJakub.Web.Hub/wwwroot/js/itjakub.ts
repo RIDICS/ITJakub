@@ -11,6 +11,10 @@ $(document as Node as Element).ready(() => {
     localization = new Localization();
     localization.configureSiteUrl(getBaseUrl());
 
+    var loader = new lv();
+    loader.initLoaderAll();
+    loader.startObserving();
+
     // Fix navigation menu behavior for touch devices
     var collapsibleMenu = $(".main-navbar-container .navbar-collapse.collapse");
     var navbarItems = $(".secondary-navbar-toggle");

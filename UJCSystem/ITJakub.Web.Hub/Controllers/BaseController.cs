@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -31,7 +30,7 @@ namespace ITJakub.Web.Hub.Controllers
             m_communication = controllerDataProvider.CommunicationProvider;
         }
 
-        protected PortalTypeContract PortalTypeValue => m_controllerDataProvider.PortalType;
+        protected PortalTypeContract PortalTypeValue => m_controllerDataProvider.PortalTypeManager.GetPortalType();
 
         protected IMapper Mapper => m_controllerDataProvider.Mapper;
 
@@ -39,15 +38,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ProjectTypeContract GetDefaultProjectType()
         {
-            switch (PortalTypeValue)
-            {
-                case PortalTypeContract.Research:
-                    return ProjectTypeContract.Research;
-                case PortalTypeContract.Community:
-                    return ProjectTypeContract.Community;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            return m_controllerDataProvider.PortalTypeManager.GetDefaultProjectType();
         }
 
         public MainServiceBookClient GetBookClient()

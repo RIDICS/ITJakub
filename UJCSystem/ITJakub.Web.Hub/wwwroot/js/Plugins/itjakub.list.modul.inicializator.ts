@@ -15,6 +15,9 @@
                     groupHeader: localization.translate("TitleSearchBox", "PluginsJs").value,
                     parameterUrlString: null
                 }
+            },
+            search: {
+                placeholder: localization.translate("SearchInTitles...", "PluginsJs").value
             }
         }, super.getDefaultConfiguration());
     }

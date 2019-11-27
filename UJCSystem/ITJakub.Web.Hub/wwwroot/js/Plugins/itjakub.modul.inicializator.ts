@@ -156,6 +156,7 @@
             this.configuration.search.favoriteQueries
         );
         search.makeSearch(this.configuration.search.enabledOptions, this.configuration.search.enabledSearchInSecondPortal);
+        search.setPlaceholder(this.configuration.search.placeholder);
 
         return search;
     }
@@ -445,6 +446,7 @@ interface IModulInicializatorConfigurationSearch {
 
     enabledOptions: Array<SearchTypeEnum>;
     enabledSearchInSecondPortal: boolean;
+    placeholder?: string;
 
     url: IModulInicializatorConfigurationSearchUrl;
     favoriteQueries: IModulInicializatorConfigurationSearchFavorites;
