@@ -55,7 +55,7 @@ class BibliographiesSearch {
 
         this.bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", () => { this.sortOrderChanged() });
 
-        this.searchAreaSelector = new SearchAreaSelectorWrapper($("#dropdown-search-area-selector"));
+        this.searchAreaSelector = new SearchAreaSelectorWrapper($("#dropdown-search-area-selector"), () => { this.search.processSearch() });
         
         this.initializeFromUrlParams();
     }

@@ -371,8 +371,14 @@ class Search {
 class SearchAreaSelectorWrapper {
     private element: JQuery;
 
-    constructor(element: JQuery) {
+    constructor(element: JQuery, onChanged: () => void) {
         this.element = element;
+
+        element.on("changed.bs.select", () => {
+            if (onChanged != null) {
+                onChanged();
+            }
+        });
     }
 
     getValues() {
