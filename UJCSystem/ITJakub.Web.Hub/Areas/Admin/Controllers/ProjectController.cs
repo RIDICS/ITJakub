@@ -88,8 +88,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             
             switch (moduleType)
             {
-                case ProjectModuleType.Work:
-                    return PartialView("_ProjectWork");
                 case ProjectModuleType.Resource:
                     return PartialView("_ProjectResource");
                 case ProjectModuleType.Preview:
@@ -109,7 +107,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     var pagesWithImageInfo = client.GetAllPagesWithImageInfoList(projectId);
                     return PartialView("Resource/_Images", pagesWithImageInfo);
                 default:
-                    return PartialView("_ProjectWork");
+                    return PartialView("_ProjectResource");
             }
         }
 

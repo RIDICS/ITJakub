@@ -17,10 +17,10 @@ class ProjectModule {
         $splitterButton.on("click", () => {
             const $leftMenu = $("#left-menu");
             if ($leftMenu.is(":visible")) {
-                $leftMenu.hide("slide", { direction: "left" });
+                $leftMenu.hide("slide", {direction: "left"});
                 $splitterButton.html("<span class=\"glyphicon glyphicon-menu-right\"></span>");
             } else {
-                $leftMenu.show("slide", { direction: "left" });
+                $leftMenu.show("slide", {direction: "left"});
                 $splitterButton.html("<span class=\"glyphicon glyphicon-menu-left\"></span>");
             }
         });
@@ -29,35 +29,31 @@ class ProjectModule {
         $projectNavigationLinks.on("click", (e) => {
             e.preventDefault();
             $projectNavigationLinks.removeClass("active");
-            $(e.currentTarget).addClass("active");
-            this.showModule($(e.currentTarget as Node as Element).attr("id"));
+            const navigationLink = $(e.currentTarget);
+            navigationLink.addClass("active");
+            this.showModule(navigationLink.attr("id"));
         });
-        
-        this.showModule(null);
+
+        const activeLink = $("#project-navigation a.active");
+        this.showModule(activeLink.attr("id"));
     }
 
     public showModule(identificator: string) {
         $("#resource-panel").hide();
         switch (identificator) {
-        case "project-navigation-root":
-            this.currentModule = new ProjectWorkModule(this.projectId, identificator);
-            break;
-        case "project-navigation-image":
-            this.currentModule = new ProjectImageViewerModule(this.projectId);
-            break;
-        case "project-navigation-text":
-            this.currentModule = new ProjectTextPreviewModule(this.projectId);
-            break;
-        case "project-navigation-audio":
-            this.currentModule = null;
-            break;
-        case "project-navigation-terms":
-            this.currentModule = new ProjectTermEditorModule(this.projectId);
-            break;
-        default:
-            this.currentModule = new ProjectWorkModule(this.projectId, identificator);
+            case "project-navigation-image":
+                this.currentModule = new ProjectImageViewerModule(this.projectId);
+                break;
+            case "project-navigation-text":
+                this.currentModule = new ProjectTextPreviewModule(this.projectId);
+                break;
+            case "project-navigation-terms":
+                this.currentModule = new ProjectTermEditorModule(this.projectId);
+                break;
+            default:
+                this.currentModule = new ProjectWorkModule(this.projectId, identificator);
         }
-        
+
         if (this.currentModule !== null) {
             this.currentModule.init();
         }
@@ -66,7 +62,7 @@ class ProjectModule {
 
 abstract class ProjectModuleBase {
     protected readonly projectId: number;
-    
+
     protected constructor(projectId: number) {
         this.projectId = projectId;
     }
@@ -98,10 +94,10 @@ abstract class ProjectModuleBase {
     }
 }
 
-class ProjectImageViewerModule extends  ProjectModuleBase {
+class ProjectImageViewerModule extends ProjectModuleBase {
 
     constructor(projectId: number) {
-       super(projectId);
+        super(projectId);
     }
 
     getModuleType(): ProjectModuleType {
@@ -115,7 +111,7 @@ class ProjectImageViewerModule extends  ProjectModuleBase {
 }
 
 class ProjectTextPreviewModule extends ProjectModuleBase {
-    
+
     constructor(projectId: number) {
         super(projectId);
     }
@@ -123,11 +119,11 @@ class ProjectTextPreviewModule extends ProjectModuleBase {
     getModuleType(): ProjectModuleType {
         return ProjectModuleType.Preview;
     }
-    
+
     initModule() {
         const main = new TextEditorMain();
         main.init(this.projectId);
-    }   
+    }
 }
 
 class ProjectTermEditorModule extends ProjectModuleBase {
@@ -155,9 +151,12 @@ class ProjectWorkModule extends ProjectModuleBase {
         this.moduleIdentificator = moduleIdentificator;
     }
 
-    getModuleType(): ProjectModuleType { return ProjectModuleType.Work; }
+    getModuleType(): ProjectModuleType {
+        return null
+    }
 
-    initModule(): void { }
+    initModule(): void {
+    }
 
     getTabPanelType(panelSelector: string): ProjectModuleTabType {
         return <ProjectModuleTabType>$(`#${panelSelector}`).data("panel-type");
@@ -173,29 +172,29 @@ class ProjectWorkModule extends ProjectModuleBase {
 
     makeProjectModuleTab(tabPanelType: ProjectModuleTabType): ProjectModuleTabBase {
         switch (tabPanelType) {
-        case ProjectModuleTabType.WorkMetadata:
-            return new ProjectWorkMetadataTab(this.projectId, this);
-        case ProjectModuleTabType.WorkPageList:
-            return new ProjectWorkPageListTab(this.projectId);
-        case ProjectModuleTabType.WorkPublications:
-            return new ProjectWorkPublicationsTab(this.projectId);
-        case ProjectModuleTabType.WorkCooperation:
-            return new ProjectWorkCooperationTab(this.projectId);
-        case ProjectModuleTabType.WorkHistory:
-            return new ProjectWorkHistoryTab(this.projectId);
-        case ProjectModuleTabType.WorkNote:
-            return new ProjectWorkNoteTab(this.projectId);
-        case ProjectModuleTabType.Forum:
-            return new ProjectWorkForumTab(this.projectId);
-        case ProjectModuleTabType.WorkCategorization:
+            case ProjectModuleTabType.WorkMetadata:
+                return new ProjectWorkMetadataTab(this.projectId, this);
+            case ProjectModuleTabType.WorkPageList:
+                return new ProjectWorkPageListTab(this.projectId);
+            case ProjectModuleTabType.WorkPublications:
+                return new ProjectWorkPublicationsTab(this.projectId);
+            case ProjectModuleTabType.WorkCooperation:
+                return new ProjectWorkCooperationTab(this.projectId);
+            case ProjectModuleTabType.WorkHistory:
+                return new ProjectWorkHistoryTab(this.projectId);
+            case ProjectModuleTabType.WorkNote:
+                return new ProjectWorkNoteTab(this.projectId);
+            case ProjectModuleTabType.Forum:
+                return new ProjectWorkForumTab(this.projectId);
+            case ProjectModuleTabType.WorkCategorization:
                 return new ProjectWorkCategorizationTab(this.projectId, this);
-        case ProjectModuleTabType.WorkChapters:
-            return new ProjectWorkChapterEditorTab(this.projectId);
-        default:
-            return null;
+            case ProjectModuleTabType.WorkChapters:
+                return new ProjectWorkChapterEditorTab(this.projectId);
+            default:
+                return null;
         }
     }
-    
+
     init() {
         const tabPanelType = this.getTabPanelType(this.moduleIdentificator);
         const $contentContainer = $("#project-layout-content");
@@ -245,7 +244,7 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
     }
 
     protected enabledEdit() {
-        ($(".keywords-textarea")as any).tokenfield("enable");
+        ($(".keywords-textarea") as any).tokenfield("enable");
         var config = this.getConfiguration();
         const copyrightTextarea = $("#work-metadata-copyright");
         var $inputs = $("input", config.$panel);
@@ -259,7 +258,7 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
     }
 
     protected disableEdit() {
-        ($(".keywords-textarea")as any).tokenfield("disable");
+        ($(".keywords-textarea") as any).tokenfield("disable");
         var config = this.getConfiguration();
         const copyrightTextarea = $("#work-metadata-copyright");
         var $inputs = $("input", config.$panel);
@@ -274,11 +273,10 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
 }
 
 enum ProjectModuleType {
-    Work = 0,
-    Resource = 1,
-    Preview = 2,
-    TermEditor = 3,
-    ImageEditor = 4,
+    Resource = 0,
+    Preview = 1,
+    TermEditor = 2,
+    ImageEditor = 3,
 }
 
 enum ProjectModuleTabType {
