@@ -4,8 +4,8 @@
 });
 
 class ProjectModule {
+    private readonly projectId: number;
     private currentModule: ProjectModuleBase;
-    private projectId: number;
 
     constructor() {
         this.currentModule = null;
@@ -13,10 +13,9 @@ class ProjectModule {
     }
 
     public init() {
-        var self = this;
-        var $splitterButton = $("#splitter-button");
-        $splitterButton.click(() => {
-            var $leftMenu = $("#left-menu");
+        const $splitterButton = $("#splitter-button");
+        $splitterButton.on("click", () => {
+            const $leftMenu = $("#left-menu");
             if ($leftMenu.is(":visible")) {
                 $leftMenu.hide("slide", { direction: "left" });
                 $splitterButton.html("<span class=\"glyphicon glyphicon-menu-right\"></span>");
@@ -26,12 +25,12 @@ class ProjectModule {
             }
         });
 
-        var $projectNavigationLinks = $("#project-navigation a");
-        $projectNavigationLinks.click(function(e) {
+        const $projectNavigationLinks = $("#project-navigation a");
+        $projectNavigationLinks.on("click", (e) => {
             e.preventDefault();
             $projectNavigationLinks.removeClass("active");
-            $(this).addClass("active");
-            self.showModule($(e.currentTarget as Node as Element).attr("id"));
+            $(e.currentTarget).addClass("active");
+            this.showModule($(e.currentTarget as Node as Element).attr("id"));
         });
         
         this.showModule(null);
@@ -41,29 +40,24 @@ class ProjectModule {
         $("#resource-panel").hide();
         switch (identificator) {
         case "project-navigation-root":
-            this.currentModule = new ProjectWorkModule(this.projectId);
+            this.currentModule = new ProjectWorkModule(this.projectId, identificator);
             break;
-        case "project-navigation-image": //TODO
-            this.currentModule = null;
-            const imageViewer = new ProjectImageViewerModule(this.projectId);
-            imageViewer.init();
+        case "project-navigation-image":
+            this.currentModule = new ProjectImageViewerModule(this.projectId);
             break;
-        case "project-navigation-text": //TODO
-            this.currentModule = null;
-            const textPreview = new ProjectTextPreviewModule(this.projectId);
-            textPreview.init();
+        case "project-navigation-text":
+            this.currentModule = new ProjectTextPreviewModule(this.projectId);
             break;
         case "project-navigation-audio":
             this.currentModule = null;
             break;
         case "project-navigation-terms":
-            this.currentModule = null;
-            const termEditor = new ProjectTermEditorModule(this.projectId);
-            termEditor.init();
+            this.currentModule = new ProjectTermEditorModule(this.projectId);
             break;
         default:
-            this.currentModule = new ProjectWorkModule(this.projectId);
+            this.currentModule = new ProjectWorkModule(this.projectId, identificator);
         }
+        
         if (this.currentModule !== null) {
             this.currentModule.init();
         }
@@ -71,33 +65,19 @@ class ProjectModule {
 }
 
 abstract class ProjectModuleBase {
-    protected moduleTab: ProjectModuleTabBase;
+    protected readonly projectId: number;
+    
+    protected constructor(projectId: number) {
+        this.projectId = projectId;
+    }
 
     public abstract getModuleType(): ProjectModuleType;
 
-    public abstract getTabsId(): string;
-
     public abstract initModule(): void;
 
-    public abstract getTabPanelType(panelSelector: string): ProjectModuleTabType;
-
-    public abstract getLoadTabPanelContentUrl(panelType: ProjectModuleTabType): string;
-
-    public abstract makeProjectModuleTab(panelType: ProjectModuleTabType): ProjectModuleTabBase;
-
-    protected initTabs() {
-        var self = this;
-        $(`#${this.getTabsId()} a`).click(function(e) {
-            e.preventDefault();
-            $(this).tab('show');
-            var tabPanelSelector = $(this).attr("href");
-            self.loadTabPanel(tabPanelSelector);
-        });
-    }
-
     public init() {
-        var $contentContainer = $("#project-layout-content");
-        var url = getBaseUrl() + "Admin/Project/ProjectModule?moduleType=" + Number(this.getModuleType());
+        const $contentContainer = $("#project-layout-content");
+        const url = `${getBaseUrl()}Admin/Project/ProjectModule?moduleType=${Number(this.getModuleType())}&projectId=${this.projectId}`;
 
         $contentContainer
             .empty()
@@ -107,7 +87,6 @@ abstract class ProjectModuleBase {
                 (responseText, textStatus, xmlHttpRequest) => {
                     $contentContainer.removeClass("loading");
                     if (xmlHttpRequest.status === HttpStatusCode.Success) {
-                        this.initTabs();
                         this.initModule();
                     } else {
                         var alert = new AlertComponentBuilder(AlertType.Error)
@@ -117,136 +96,71 @@ abstract class ProjectModuleBase {
                     }
                 });
     }
+}
 
-    loadTabPanel(tabPanelSelector: string) {
-        var tabPanelType = this.getTabPanelType(tabPanelSelector);
-        var $tabPanel = $(tabPanelSelector);
-        var url = this.getLoadTabPanelContentUrl(tabPanelType);
-        $tabPanel
-            .html("<div class=\"loader\"></div>")
-            .load(url,
-                null,
-                (responseText, textStatus, xmlHttpRequest) => {
-                    if (xmlHttpRequest.status !== HttpStatusCode.Success) {
-                        var errorDiv = new AlertComponentBuilder(AlertType.Error)
-                            .addContent(localization.translate("BookmarkError", "RidicsProject").value)
-                            .buildElement();
-                        $tabPanel.empty().append(errorDiv);
-                        this.moduleTab = null;
-                        return;
-                    }
+class ProjectImageViewerModule extends  ProjectModuleBase {
 
-                    this.moduleTab = this.makeProjectModuleTab(tabPanelType);
-                    if (this.moduleTab != null) {
-                        this.moduleTab.initTab();
-                    }
-                });
+    constructor(projectId: number) {
+       super(projectId);
+    }
+
+    getModuleType(): ProjectModuleType {
+        return ProjectModuleType.ImageEditor;
+    }
+
+    initModule(): void {
+        const imageViewer = new ImageViewerMain();
+        imageViewer.init(this.projectId);
     }
 }
 
-class ProjectImageViewerModule {
-    private readonly projectId: number;
-
+class ProjectTextPreviewModule extends ProjectModuleBase {
+    
     constructor(projectId: number) {
-        this.projectId = projectId;
+        super(projectId);
     }
 
-    init() {
-        const url = getBaseUrl() + `Admin/Project/GetImageViewer?projectId=${this.projectId}`;
-        const loadingSpinner = $(`<div class="loading"></div>`);
-        const projectLayoutEl = $("#project-layout-content");
-        projectLayoutEl.empty();
-        projectLayoutEl.append(loadingSpinner);
-        projectLayoutEl.load(url,
-            (response, status, xhr) => {
-                if (status === "error") {
-                    const error = new AlertComponentBuilder(AlertType.Error).addContent("Image viewer loading error");
-                    $("#project-layout-content").empty().append(error.buildElement());
-                } else {
-                    loadingSpinner.hide();
-                    $("#project-resource-images").off();
-                    const imageViewer = new ImageViewerMain();
-                    imageViewer.init(this.projectId);
-                }
-            });
+    getModuleType(): ProjectModuleType {
+        return ProjectModuleType.Preview;
     }
+    
+    initModule() {
+        const main = new TextEditorMain();
+        main.init(this.projectId);
+    }   
 }
 
-class ProjectTextPreviewModule {
-    private readonly projectId: number;
+class ProjectTermEditorModule extends ProjectModuleBase {
 
     constructor(projectId: number) {
-        this.projectId = projectId;
+        super(projectId)
     }
 
-    init() {
-        const url = getBaseUrl() + "Admin/Project/GetTextPreview";
-        const projectLayoutEl = $("#project-layout-content");
-        const loadingSpinner = $(`<div class="loading"></div>`);
-        projectLayoutEl.empty();
-        projectLayoutEl.append(loadingSpinner);
-        projectLayoutEl.load(url,
-            (response, status, xhr) => {
-                if (status === "error") {
-                    const error = new AlertComponentBuilder(AlertType.Error).addContent("Text preview loading error");
-                    $("#project-layout-content").empty().append(error.buildElement());
-                } else {
-                    loadingSpinner.hide();
-                    $("#project-resource-preview").off();
-                    const main = new TextEditorMain();
-                    main.init(this.projectId);
-                }
-            });
-    }
-}
-
-class ProjectTermEditorModule {
-    private readonly projectId: number;
-
-    constructor(projectId: number) {
-        this.projectId = projectId;
+    getModuleType(): ProjectModuleType {
+        return ProjectModuleType.TermEditor;
     }
 
-    init() {
-        const url = getBaseUrl() + `Admin/Project/GetTermsEditor?projectId=${this.projectId}`;
-        const loadingSpinner = $(`<div class="loading"></div>`);
-        const projectLayoutEl = $("#project-layout-content");
-        projectLayoutEl.empty();
-        projectLayoutEl.append(loadingSpinner);
-        projectLayoutEl.load(url,
-            (response, status, xhr) => {
-                if (status === "error") {
-                    const error = new AlertComponentBuilder(AlertType.Error).addContent("Term editor loading error");
-                    $("#project-layout-content").empty().append(error.buildElement());
-                } else {
-                    loadingSpinner.hide();
-                    $("#project-resource-terms").off();
-                    const termEditorMain = new TermEditorMain();
-                    termEditorMain.init(this.projectId);
-                }
-            });
+    initModule(): void {
+        const termEditorMain = new TermEditorMain();
+        termEditorMain.init(this.projectId);
     }
 }
 
 class ProjectWorkModule extends ProjectModuleBase {
-    private projectId: number;
+    private moduleIdentificator: string;
+    private moduleTab: ProjectModuleTabBase;
 
-    constructor(projectId: number) {
-        super();
-        this.projectId = projectId;
+    constructor(projectId: number, moduleIdentificator: string) {
+        super(projectId);
+        this.moduleIdentificator = moduleIdentificator;
     }
 
     getModuleType(): ProjectModuleType { return ProjectModuleType.Work; }
 
-    getTabsId(): string { return "project-work-tabs" }
-
-    initModule(): void {
-        $("#resource-panel").hide();
-        $("#project-work-tabs .active a").trigger("click");
-    }
+    initModule(): void { }
 
     getTabPanelType(panelSelector: string): ProjectModuleTabType {
-        return <ProjectModuleTabType>$(panelSelector).data("panel-type");
+        return <ProjectModuleTabType>$(`#${panelSelector}`).data("panel-type");
     }
 
     getLoadTabPanelContentUrl(tabPanelType: ProjectModuleTabType): string {
@@ -280,6 +194,36 @@ class ProjectWorkModule extends ProjectModuleBase {
         default:
             return null;
         }
+    }
+    
+    init() {
+        const tabPanelType = this.getTabPanelType(this.moduleIdentificator);
+        const $contentContainer = $("#project-layout-content");
+        const url = this.getLoadTabPanelContentUrl(tabPanelType);
+        $contentContainer
+            .html("<div class=\"loader\"></div>")
+            .load(url,
+                null,
+                (responseText, textStatus, xmlHttpRequest) => {
+                    if (xmlHttpRequest.status !== HttpStatusCode.Success) {
+                        var errorDiv = new AlertComponentBuilder(AlertType.Error)
+                            .addContent(localization.translate("BookmarkError", "RidicsProject").value)
+                            .buildElement();
+                        $contentContainer.empty().append(errorDiv);
+                        this.moduleTab = null;
+                        return;
+                    }
+
+                    this.moduleTab = this.makeProjectModuleTab(tabPanelType);
+                    if (this.moduleTab != null) {
+                        this.moduleTab.initTab();
+                    }
+                });
+    }
+
+    loadTabPanel(moduleIdentificator: string) {
+        this.moduleIdentificator = moduleIdentificator;
+        this.init();
     }
 }
 
@@ -332,6 +276,9 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
 enum ProjectModuleType {
     Work = 0,
     Resource = 1,
+    Preview = 2,
+    TermEditor = 3,
+    ImageEditor = 4,
 }
 
 enum ProjectModuleTabType {
@@ -346,9 +293,4 @@ enum ProjectModuleTabType {
     ResourceDiscussion = 102,
     ResourceMetadata = 103,
     Forum = 200,
-}
-
-interface IProjectResource {
-    id: number;
-    name: string;
 }

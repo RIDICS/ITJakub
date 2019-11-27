@@ -1,4 +1,5 @@
 ﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectItemViewModel
+@using ITJakub.Web.Hub.Areas.Admin.Models.Type
 @using ITJakub.Web.Hub.Helpers
 @using Scalesoft.Localization.AspNetCore
 
@@ -52,6 +53,7 @@
                     <a href="#" class="list-group-item" id="project-navigation-text">@Localizer.Translate("Texts", "Admin")</a>
                     <a href="#" class="list-group-item" id="project-navigation-audio">@Localizer.Translate("Audio", "Admin")</a>
                     <a href="#" class="list-group-item" id="project-navigation-terms">@Localizer.Translate("Terms", "Admin")</a>
+                    <a href="#" class="list-group-item" id="project-work-metadata" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkMetadata)">Metadata</a>
                 </div>
             </div>
 
