@@ -368,6 +368,27 @@ class Search {
     }
 }
 
+class SearchAreaSelectorWrapper {
+    private element: JQuery;
+
+    constructor(element: JQuery) {
+        this.element = element;
+    }
+
+    getValues() {
+        const val = this.element.val() as string | string[];
+        return val;
+    }
+
+    getSerializedValues() {
+        const val = this.getValues();
+        const result = $.param({
+            searchArea: val
+        });
+        return result;
+    }
+}
+
 class RegExAdvancedSearchEditor {
     private fulltextIsLimited = false;
     private regexDoneCallback: (jsonData: string) => void;

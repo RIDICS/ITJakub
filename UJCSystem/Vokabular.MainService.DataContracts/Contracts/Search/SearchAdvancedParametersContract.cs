@@ -7,6 +7,6 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
     {
         public bool IncludeAdditionalProjectTypes { get; set; }
 
-        public List<ProjectTypeContract> AdditionalProjectTypes { get; set; }
+        public IList<ProjectTypeContract> AdditionalProjectTypes { get; set; }
     }
 }

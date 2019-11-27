@@ -26,7 +26,7 @@
     {
         <div id="otherDropdownSelectDiv">
             <span class="search-areas-label">@Localizer.Translate("SearchedAreas", "BibliographyModule"):</span>
-            <select class="selectpicker" multiple data-show-content="false">
+            <select class="selectpicker" id="dropdown-search-area-selector" multiple data-show-content="false">
                 @foreach (var projectType in ProjectTypeLocalizer.GetProjectTypeList())
                 {
                     var isDefault = projectType == PortalTypeManager.GetDefaultProjectType();
