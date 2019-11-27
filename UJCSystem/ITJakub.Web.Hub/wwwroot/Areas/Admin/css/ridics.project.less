@@ -96,19 +96,19 @@
 
 .project-layout,
 .snapshot-layout {
+    display: flex;
+    flex-wrap: wrap;
+    
     .back-button {
         margin-top: -1rem;
         margin-bottom: 0.7rem;
     }
-    
-    .left-menu, .vertical-splitter, .vertical-splitter-control, .content {
-        display: table-cell;
-    }
 
     .left-menu {
-        width: 200px;
-        padding-right: 10px;
-        vertical-align: top;
+        flex-grow: 1;
+        flex-shrink: 0;
+        flex-basis: 6em;
+        margin: 1em;
     }
     
     .parent-item {
@@ -122,6 +122,7 @@
             padding: 10px 2px;
             margin-right: 3px;
             transform: scaleY(2);
+            margin-top: 30vh;
         }
     }
 
@@ -130,7 +131,11 @@
     }
 
     .content {
-        width: 100%;
+        min-width: 60%;
+        flex-grow: 10;
+        flex-basis: 0;
+        margin: 1em 1em 1em 0em;
+        padding-left: 1em;
     }
 
     .tab-content {
@@ -163,7 +168,6 @@
 .project-title {
     font-weight: bold;
     font-size: 120%;
-    width: 200px;
     margin-bottom: 20px;
 
     .text-type {

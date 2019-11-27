@@ -76,19 +76,17 @@ abstract class ProjectModuleBase {
         const url = `${getBaseUrl()}Admin/Project/ProjectModule?moduleType=${Number(this.getModuleType())}&projectId=${this.projectId}`;
 
         $contentContainer
-            .empty()
-            .addClass("loading")
+            .html("<div class=\"loader\"></div>")
             .load(url,
                 null,
                 (responseText, textStatus, xmlHttpRequest) => {
-                    $contentContainer.removeClass("loading");
                     if (xmlHttpRequest.status === HttpStatusCode.Success) {
                         this.initModule();
                     } else {
                         var alert = new AlertComponentBuilder(AlertType.Error)
                             .addContent(localization.translate("ModuleError", "RidicsProject").value)
                             .buildElement();
-                        $contentContainer.append(alert);
+                        $contentContainer.empty().append(alert);
                     }
                 });
     }
@@ -204,19 +202,19 @@ class ProjectWorkModule extends ProjectModuleBase {
             .load(url,
                 null,
                 (responseText, textStatus, xmlHttpRequest) => {
-                    if (xmlHttpRequest.status !== HttpStatusCode.Success) {
-                        var errorDiv = new AlertComponentBuilder(AlertType.Error)
+                    if (xmlHttpRequest.status == HttpStatusCode.Success) {
+                        this.moduleTab = this.makeProjectModuleTab(tabPanelType);
+                        if (this.moduleTab != null) {
+                            this.moduleTab.initTab();
+                        }
+                    }
+                    else {
+                        const errorDiv = new AlertComponentBuilder(AlertType.Error)
                             .addContent(localization.translate("BookmarkError", "RidicsProject").value)
                             .buildElement();
                         $contentContainer.empty().append(errorDiv);
                         this.moduleTab = null;
-                        return;
-                    }
-
-                    this.moduleTab = this.makeProjectModuleTab(tabPanelType);
-                    if (this.moduleTab != null) {
-                        this.moduleTab.initTab();
-                    }
+                    }                    
                 });
     }
 
