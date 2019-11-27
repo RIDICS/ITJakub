@@ -18,6 +18,7 @@
         <div class="panel-body">
             <div class="form-horizontal">
                 @await Html.PartialAsync("Work/SubView/_EditCategorizationButtons")
+                <hr style="margin-top: 10px;"/>
                 <div class="form-group">
                     <div id="all-existing-genres" class="hidden">
                        @foreach (var genre in Model.AllLiteraryGenreList)
@@ -107,7 +108,13 @@
                 <div class="form-group">
                     <label class="col-sm-3 col-md-4 col-lg-3 control-label">@Localizer.Translate("Category", "Admin")</label>
                     <div class="col-sm-9 col-md-8 col-lg-9 category-container">
-                        <div id="category-tree"></div>
+                        <div class="col-xs-12">
+                            <div class="panel panel-default" style="margin-bottom: 0">
+                                <div class="panel-body">
+                                    <div id="category-tree"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="all-category-list hidden">
                         @foreach (var category in Model.AllCategoryList)
@@ -138,6 +145,7 @@
                         </div>
                     </div>
                 </div>
+                <hr style="margin-bottom: 10px;"/>
                 @await Html.PartialAsync("Work/SubView/_EditCategorizationButtons")
             </div>
         </div>
