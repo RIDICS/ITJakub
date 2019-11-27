@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+﻿using System;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Type;
 using Scalesoft.Localization.AspNetCore;
@@ -84,7 +84,7 @@ namespace ITJakub.Web.Hub.Core.Managers
 
             var result = new ModificationUpdateViewModel
             {
-                ModificationTime = dynamicText.ModificationTime.ToString(new CultureInfo(culture)),
+                ModificationTime = DateTime.Now.ToString(m_localizationService.GetRequestCulture()),
                 User = username
             };
 

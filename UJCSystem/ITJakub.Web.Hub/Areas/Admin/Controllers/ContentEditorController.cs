@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Types;
 using ITJakub.Web.Hub.Options;
+using Scalesoft.Localization.AspNetCore;
 using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
@@ -22,11 +23,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     [Area("Admin")]
     public class ContentEditorController : BaseController
     {
+        private readonly ILocalizationService m_localizationService;
         private readonly TextManager m_textManager;
 
-        public ContentEditorController(ControllerDataProvider controllerDataProvider, TextManager textManager) : base(
-            controllerDataProvider)
+        public ContentEditorController(ILocalizationService localizationService, ControllerDataProvider controllerDataProvider, TextManager textManager) : base(controllerDataProvider)
         {
+            m_localizationService = localizationService;
             m_textManager = textManager;
         }
 
@@ -60,12 +62,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return Json(parts);
         }
 
-        private static CommentStructureResponse CreateComment(int order, GetTextCommentContract textComment, bool nested, long textId)
+        private CommentStructureResponse CreateComment(int order, GetTextCommentContract textComment, bool nested, long textId)
         {
             var comment = new CommentStructureResponse
             {
                 Order = order,
                 Time = ((DateTimeOffset) textComment.CreateTime).ToUnixTimeMilliseconds(),
+                TimeString = textComment.CreateTime.ToLocalTime().ToString(m_localizationService.GetRequestCulture()),
                 Text = textComment.Text,
                 Picture = null, // Picture is not supported
                 Id = textComment.Id,

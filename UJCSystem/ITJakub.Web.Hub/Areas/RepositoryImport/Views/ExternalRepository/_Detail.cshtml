@@ -12,7 +12,7 @@
 {
     <div class="bib-table-row">
         <div class="bib-table-cell bib-label">@Localizer.Translate("LastImport", "RepositoryImport")</div>
-        <div class="bib-table-cell">@Model.LastUpdateDate.Value</div>
+        <div class="bib-table-cell">@Model.LastUpdateDate.Value.ToLocalTime().ToString(Localizer.GetRequestCulture())</div>
     </div>
 }
 else
