@@ -12,19 +12,17 @@
     ViewBag.Title = @Localizer.Translate("CardFilesSearching", "CardFiles");
 }
 
-
-
     <div class="search-area">
         <div id="cardfileSearchDiv">
-            <form role="form" class="form-horizontal">
-                <div class="form-group searchbar">
+            <form role="form">
+                <div class="searchbar">
+                    <div class="searchbar-inputs">
+                        <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="@Localizer.Translate("Find", "CardFiles")..." style="max-width: 100%;" />
+                    </div>
                     <div class="searchbar-buttons">
                         <button id="searchButton" type="button" class="btn btn-default searchbar-button">
                             @Localizer.Translate("Search", "CardFiles")
                         </button>
-                    </div>
-                    <div class="searchbar-inputs">
-                        <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="@Localizer.Translate("Find", "CardFiles")..." style="max-width: 100%;" />
                     </div>
                 </div>
             </form>
@@ -45,8 +43,6 @@
     <div class="cardfile-result-area">
 
     </div>
-
-
 
 <script>
     $(document).ready(createSearch);

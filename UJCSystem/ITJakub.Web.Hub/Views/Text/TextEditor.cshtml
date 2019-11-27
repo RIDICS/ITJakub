@@ -72,7 +72,7 @@
 
                             @Localizer.Translate("LastModificationTime", "Text", LocTranslationSource.File):
                             <span id="modification-time">
-                                @Model.LastModificationTime.ToLocalTime()
+                                @Model.LastModificationTime.ToLocalTime().ToString(Localizer.GetRequestCulture())
                             </span>
                         </div>
                     </div>

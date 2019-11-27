@@ -96,7 +96,6 @@ $(document.documentElement).ready(() => {
                     var email = "";
                     var signed = "";
                     var category = actualFeedback.feedbackCategory;
-                    var date = new Date(actualFeedback.createTime);
 
                     var user = actualFeedback.authorUser;
                     if (typeof user !== "undefined" && user !== null) {
@@ -147,18 +146,25 @@ $(document.documentElement).ready(() => {
 
                     feedbackHeaderInfosDiv.appendChild(feedbackCategorySpan);
 
+                    const splittedCreateTime = actualFeedback.createTimeString.split(" ");
+                    const localizedDate = splittedCreateTime[0];
+                    let localizedTime = splittedCreateTime[1];
+                    for (let j = 2; j < splittedCreateTime.length; j++) {
+                        localizedTime += " " + splittedCreateTime[j];
+                    }
+                    
                     var feedbackDateSpan = document.createElement("span");
                     $(feedbackDateSpan).addClass("feedback-date");
                     feedbackDateSpan.innerHTML = 
-                        localization.translateFormat("Date:", new Array<string>(date.toLocaleDateString()), "ItJakubJs").value;
+                        localization.translateFormat("Date:", new Array<string>(localizedDate), "ItJakubJs").value;
 
 
                     feedbackHeaderInfosDiv.appendChild(feedbackDateSpan);
-
+                    
                     var feedbackTimeSpan = document.createElement("span");
                     $(feedbackTimeSpan).addClass("feedback-time");
                     feedbackTimeSpan.innerHTML = 
-                        localization.translateFormat("Time:", new Array<string>(date.toLocaleTimeString()), "ItJakubJs").value;
+                        localization.translateFormat("Time:", new Array<string>(localizedTime), "ItJakubJs").value;
 
                     feedbackHeaderInfosDiv.appendChild(feedbackTimeSpan);
 

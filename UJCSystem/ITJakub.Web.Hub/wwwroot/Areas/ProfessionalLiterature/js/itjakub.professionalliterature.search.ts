@@ -16,6 +16,7 @@
                     SearchTypeEnum.Heading,
                     SearchTypeEnum.Sentence
                 ],
+                enabledSearchInSecondPortal: false,
                 url: {
                     advanced: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/AdvancedSearchPaged",
                     text: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/TextSearchFulltextPaged",

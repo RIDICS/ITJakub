@@ -42,7 +42,7 @@ class BibliographiesSearch {
             queryType: QueryTypeEnum.Search
         };
         this.search = new Search(<any>$("#listSearchDiv")[0], (json: string) => { this.advancedSearch(json) }, (text: string) => { this.basicSearch(text) }, favoriteQueriesConfig);
-        this.search.makeSearch(enabledOptions);
+        this.search.makeSearch(enabledOptions, false);
         this.search.setOverrideQueryCallback(newQuery => this.typeaheadSearchBox.value(newQuery));
 
         this.typeaheadSearchBox = new SearchBox(".searchbar-input", "Bibliographies/Bibliographies");

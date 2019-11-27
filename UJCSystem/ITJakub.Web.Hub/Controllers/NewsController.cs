@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ITJakub.Web.Hub.Core;
+using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Config;
 using ITJakub.Web.Hub.Models.FeedResults;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.SyndicationFeed;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.RestClient.Results;
 using Vokabular.Shared.Const;
 
 namespace ITJakub.Web.Hub.Controllers
@@ -84,7 +86,14 @@ namespace ITJakub.Web.Hub.Controllers
         {
             var client = GetNewsClient();
             var feeds = client.GetNewsSyndicationItems(start, count, NewsTypeEnumContract.Web);
-            return Json(feeds);
+            
+            var result = new PagedResultList<NewsSyndicationItemExtendedContract>
+            {
+                TotalCount = feeds.TotalCount,
+                List = Mapper.Map<List<NewsSyndicationItemExtendedContract>>(feeds.List),
+            };
+
+            return Json(result);
         }
 
         public ActionResult Add()

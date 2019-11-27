@@ -22,6 +22,7 @@
     "Texts": "Texty",
     "Audio": "Audio",
     "Video": "Video",
+    "Terms": "Termíny",
     "AddResource": "Přidat zdroj",
     "DeleteResource": "Smazat zdroj",
     "RenameResource": "Přejmenovat zdroj",
@@ -272,6 +273,16 @@
     "WorksLoadFailed": "Při načítání prací nastala neočekávaná chyba.",
     "SelectAuthor": "Prosím vyberte autora ze seznamu.",
     "SelectResponsiblePerson": "Prosím vyberte odpovědnou osobu ze seznamu.",
-    "SelectResponsibleType": "Prosím vyberte typ odpovědnosti."
+    "SelectResponsibleType": "Prosím vyberte typ odpovědnosti.",
+
+    "SelectPage": "Vyberte stránku",
+    "TermsOnPage": "Termíny na stránce",
+    "TermList": "Seznam termínů",
+    "EditTerms": "Upravit termíny",
+    "EditTermsTitle": "Úprava termínů - strana {0}",
+    "RemoveTerm": "Odebrat termín",
+    "SelectedTerms": "Vybrané termíny",
+    "AllCategories": "Všechny kategorie",
+    "Search...": "Hledat..."
   }
 }

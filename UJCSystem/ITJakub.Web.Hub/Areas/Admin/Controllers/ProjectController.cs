@@ -192,12 +192,27 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             var client = GetProjectClient();
             var pages = client.GetAllPagesWithImageInfoList(projectId);
-            return PartialView("Work/SubView/_PageWithImagesTable", pages);
+            return PartialView("Resource/SubView/_PageWithImagesTable", pages);
         }
 
         public IActionResult GetTextPreview()
         {
             return PartialView("Resource/_Preview");
+        }
+
+        public IActionResult GetTermsEditor(long projectId)
+        {
+            var client = GetProjectClient();
+            var pages = client.GetAllPageList(projectId);
+            
+            var termClient = GetTermClient();
+            var termCategories = termClient.GetTermCategoriesWithTerms();
+            
+            return PartialView("Resource/_Terms",  new TermEditorViewModel
+            {
+                TermCategories = termCategories,
+                Pages = pages,
+            });
         }
 
         public IActionResult PageList(long projectId)

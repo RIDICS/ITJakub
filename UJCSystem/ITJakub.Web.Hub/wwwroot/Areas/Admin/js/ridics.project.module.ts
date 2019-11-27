@@ -56,6 +56,11 @@ class ProjectModule {
         case "project-navigation-audio":
             this.currentModule = null;
             break;
+        case "project-navigation-terms":
+            this.currentModule = null;
+            const termEditor = new ProjectTermEditorModule(this.projectId);
+            termEditor.init();
+            break;
         default:
             this.currentModule = new ProjectWorkModule(this.projectId);
         }
@@ -190,6 +195,34 @@ class ProjectTextPreviewModule {
                     $("#project-resource-preview").off();
                     const main = new TextEditorMain();
                     main.init(this.projectId);
+                }
+            });
+    }
+}
+
+class ProjectTermEditorModule {
+    private readonly projectId: number;
+
+    constructor(projectId: number) {
+        this.projectId = projectId;
+    }
+
+    init() {
+        const url = getBaseUrl() + `Admin/Project/GetTermsEditor?projectId=${this.projectId}`;
+        const loadingSpinner = $(`<div class="loading"></div>`);
+        const projectLayoutEl = $("#project-layout-content");
+        projectLayoutEl.empty();
+        projectLayoutEl.append(loadingSpinner);
+        projectLayoutEl.load(url,
+            (response, status, xhr) => {
+                if (status === "error") {
+                    const error = new AlertComponentBuilder(AlertType.Error).addContent("Term editor loading error");
+                    $("#project-layout-content").empty().append(error.buildElement());
+                } else {
+                    loadingSpinner.hide();
+                    $("#project-resource-terms").off();
+                    const termEditorMain = new TermEditorMain();
+                    termEditorMain.init(this.projectId);
                 }
             });
     }

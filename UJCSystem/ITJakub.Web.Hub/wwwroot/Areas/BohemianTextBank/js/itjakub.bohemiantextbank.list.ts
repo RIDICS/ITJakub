@@ -15,6 +15,7 @@
                 SearchTypeEnum.Term,
                // SearchTypeEnum.TokenDistance
             ],
+            enabledSearchInSecondPortal: true,
             url: {
                 advanced: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchPaged",
                 text: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchPaged",

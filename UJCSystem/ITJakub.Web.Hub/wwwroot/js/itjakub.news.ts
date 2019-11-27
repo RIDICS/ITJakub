@@ -72,8 +72,7 @@
 
                 var itemDiv = document.createElement("div");
                 $(itemDiv).addClass("message");
-
-                var date = new Date(item.createTime);
+                
                 var titleHeader = document.createElement("h2");
                 titleHeader.innerHTML = item.title;
 
@@ -81,7 +80,8 @@
 
                 var dateDiv = document.createElement("div");
                 $(dateDiv).addClass("news-date");
-                dateDiv.innerHTML = date.toLocaleDateString();
+                                
+                dateDiv.innerHTML = item.createTimeString.split(" ")[0];
 
                 itemDiv.appendChild(dateDiv);
 

@@ -1,12 +1,12 @@
-﻿class ImageViewerPageNavigation {
-    private readonly contentAddition: ImageViewerContentAddition;
+﻿class PageNavigation {
     private readonly gui: EditorsGui;
+    private readonly pageLoadCallback: (pageId: number, pageName: string) => void;
     private pages: IPage[];
     private index: number;
 
-    constructor(contentAddition: ImageViewerContentAddition, gui: EditorsGui) {
-        this.contentAddition = contentAddition;
+    constructor(gui: EditorsGui, pageLoadCallback: (pageId: number, pageName: string) => void = null) {
         this.gui = gui;
+        this.pageLoadCallback = pageLoadCallback;
     }
 
     init() {
@@ -27,17 +27,17 @@
             }
         });
 
-        const uploadImageBtn = $(".upload-new-image-button");
-        if(this.pages.length) {
+        if (this.hasPages()) {
             this.loadPage(this.index);
             $(`.page-row`).on("click", (event) => {
                 const index = Number($(event.currentTarget).data("index"));
                 this.loadPage(index);
             });
-            uploadImageBtn.removeAttr("disabled")
-        } else {
-            uploadImageBtn.attr("disabled", "true")
         }
+    }
+    
+    public hasPages(): boolean {
+        return this.pages.length > 0;
     }
     
     private getPageIdByPageName(pageName: string, pages: string[]): number {
@@ -140,6 +140,9 @@
         const pageName = this.pages[index].name;
         this.updateActiveItemInListing(index);
         this.updatePageIndicator(pageName);
-        this.contentAddition.formImageContent(this.pages[index].id);
+        
+        if (this.pageLoadCallback !== null) {
+            this.pageLoadCallback.call(null, this.pages[index].id, pageName);
+        }
     }
 }

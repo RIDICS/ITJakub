@@ -25,6 +25,7 @@
     "PageName": "Stránka: {0}",
     "Pages": "Stránky",
     "NoPages": "Projekt neobsahuje stránky.",
+    "PageDoesNotContainTerms": "Stránka neobsahuje termíny.",
     "PageContent": "Obsah stránky",
     "PagePreview": "Náhled stránky",
     "UnsavedChanges": "Provedené změny nejsou uloženy.",

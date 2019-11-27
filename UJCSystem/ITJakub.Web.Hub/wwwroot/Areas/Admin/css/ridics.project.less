@@ -1267,7 +1267,9 @@ table {
     }
 }
 
-#project-resource-images, #project-resource-preview {
+#project-resource-images, 
+#project-resource-preview,
+#project-resource-terms {
     .text-editor-page-slider {
         background-color: @editor-sliderbar-color;
         border: none !important; /*to override default browser border styling*/
@@ -1702,45 +1704,7 @@ table {
 
 .project-snapshot-new {
     margin: 1em;
-
-    .panel {
-        border: none;
-        box-shadow: none;
-
-        .panel-heading {
-            border-radius: 0;
-            border: none;
-            background-color: @menu-background-color;
-            color: white;
-            font-weight: bold;
-
-            .collapse-icon {
-                float: right;
-            }
-
-            a {
-                color: white;
-
-                &:focus {
-                    text-decoration: none;
-                }
-
-                &[aria-expanded=true] .fa-chevron-down {
-                    display: none;
-                }
-
-                &[aria-expanded=false] .fa-chevron-up {
-                    display: none;
-                }
-            }
-        }
-
-        .panel-collapse {
-            border: @box-border;
-        }
-    }
-
-
+    
     .publish-resource-panel {
         border: none;
 
@@ -1834,6 +1798,131 @@ table {
             position: absolute;
             top: 45%;
             text-align: center;
+        }
+    }
+}
+
+.collapsible-panel {
+    border: none;
+    box-shadow: none;
+
+    .panel-heading {
+        border-radius: 0;
+        border: none;
+        background-color: @menu-background-color;
+        color: white;
+        font-weight: bold;
+
+        .collapse-icon {
+            float: right;
+        }
+
+        a {
+            color: white;
+
+            &:focus {
+                text-decoration: none;
+            }
+
+            &[aria-expanded=true] .fa-chevron-down {
+                display: none;
+            }
+
+            &[aria-expanded=false] .fa-chevron-up {
+                display: none;
+            }
+        }
+    }
+
+    .panel-collapse {
+        border: @box-border;
+    }
+}
+
+#project-resource-terms {
+    .equal-row {
+        margin: 0;
+        display: flex;
+
+        .panel {
+            width: 100%;
+            height: 100%;
+
+            .page-listing,
+            .body-content {
+                height: 55vh;
+            }
+        }
+    }
+
+    @media screen and (max-width: 1399px) {
+        .manage-terms-button {
+            white-space: normal;
+        }
+    }
+}
+
+#addTermsDialog {    
+    #termsList {
+        height: 60vh;
+        overflow-y: scroll;
+        
+        .panel-collapse {
+            .ridics-checkbox {
+                margin-left: 0.3em;
+                
+                &:first-of-type {
+                    margin-top: 0.3em;
+                }
+            }
+        }
+    }
+
+    #selectedTerms {
+        min-height: 170px;
+    }
+
+    hr {
+        margin: 0 0 10px 0;
+    }
+
+    .selected-term {
+        padding: 0.3em;
+        border: 1px solid #ddd;
+        border-top: none;
+        
+        &:first-of-type {
+            border-top: 1px solid #ddd;    
+        }
+        
+        span {
+            float: right;
+            margin-right: 0.2em;  
+            cursor: pointer;
+        }
+    }
+
+    .reset-search-button {
+        font-size: 1em;
+        position: absolute;
+        right: 1.8em;
+        top: 50%;
+        transform: translatey(-50%);
+        cursor: pointer;
+        color: #cdcdcd;
+
+        &:hover {
+            color: black;
+        }
+    }
+    
+    .alert-holder {
+        text-align: left;
+        margin: 0;
+        padding: 0;
+        
+        .alert {
+            margin: 0;
         }
     }
 }
