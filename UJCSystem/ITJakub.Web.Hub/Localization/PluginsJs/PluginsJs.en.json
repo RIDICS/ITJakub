@@ -36,7 +36,6 @@
 
     "LoadingContentError": "translate[Chyba při načítání obsahu]",
     "Pictures": "translate[Obrázky]",
-    "Text": "translate[Text]",
     "PageLoadingError": "translate[Chyba při načítání stránky '{0}']",
     "PageLoadingErrorWithSearchResults": "translate[Chyba při načítání stránky '{0}' s výsledky vyhledávání]",
     "PreparingPrint": "translate[Probíhá příprava díla pro tisk]",
@@ -52,6 +51,9 @@
 
     "Advanced": "translate[Pokročilé]",
     "Search...": "translate[Hledat...]",
+    "SearchInTitles...": "translate[Hledat v názvech děl...]",
+    "SearchInFulltext...": "translate[Hledat ve fulltextu...]",
+    "SearchInDictionaries...": "translate[Hledat ve slovnících...]",
     "Finish": "translate[Dokončit]",
     "Cancel": "translate[Zrušit]",
     "+And": "translate[+ A zároveň]",
@@ -63,6 +65,7 @@
     "Editor": "translate[Editor]",
     "Dating": "translate[Období vzniku]",
     "Term": "translate[Téma]",
+    "Text": "translate[Text]",
     "Fulltext": "translate[Fulltext]",
     "TokenDistance": "translate[X tokenů od sebe]",
     "InSentence": "translate[Ve větě]",

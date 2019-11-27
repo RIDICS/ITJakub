@@ -12,7 +12,8 @@
                 autosearch: false
             },
             search: {
-                processSearchJsonCallback: this.editionAdvancedSearch.bind(this)
+                processSearchJsonCallback: this.editionAdvancedSearch.bind(this),
+                placeholder: localization.translate("SearchInFulltext...", "PluginsJs").value
             }
         }, super.getDefaultConfiguration());
     }

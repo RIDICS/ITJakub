@@ -270,6 +270,10 @@ class Search {
         });
     }
 
+    setPlaceholder(text: string) {
+        this.searchInputTextbox.placeholder = text;
+    }
+
     closeAdvancedSearchEditorWithImport(jsonData: string) {
         this.writeTextToTextField(jsonData);
         this.closeAdvancedSearchEditor();
