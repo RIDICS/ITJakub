@@ -17,6 +17,10 @@ namespace ITJakub.Web.Hub.AutoMapperProfiles
             CreateMap<SearchResultDetailContract, SearchResultDetailExtendedContract>()
                 .ForMember(dest => dest.ProjectTypeString, opt => opt.MapFrom(src => projectTypeLocalizer.TranslateProjectType(src.ProjectType)))
                 .ForMember(dest => dest.CreateTimeString, opt => opt.MapFrom(src => src.CreateTime.ToLocalTime().ToString(localizationService.GetRequestCulture())));
+
+            CreateMap<AudioBookSearchResultContract, AudioBookSearchResultExtendedContract>()
+                .ForMember(dest => dest.ProjectTypeString, opt => opt.MapFrom(src => projectTypeLocalizer.TranslateProjectType(src.ProjectType)))
+                .ForMember(dest => dest.CreateTimeString, opt => opt.MapFrom(src => src.CreateTime.ToLocalTime().ToString(localizationService.GetRequestCulture())));
         }
     }
 }
