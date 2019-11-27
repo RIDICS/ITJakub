@@ -170,10 +170,10 @@
             });
         });
 
-        $(".work-metadata-cancel-button").click(() => {
+        $(".work-metadata-cancel-button").on("click", () => {
             this.disableEdit();
-            const metadataTabSelector = "#project-work-metadata";
-            var tabPanelEl = $(metadataTabSelector);
+            const metadataTabSelector = "#project-work-metadata-tab";
+            const tabPanelEl = $(metadataTabSelector);
             tabPanelEl.empty();
             this.workModule.loadTabPanel(metadataTabSelector);
             this.publisherTypeahead.destroy();
