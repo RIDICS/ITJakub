@@ -5,14 +5,25 @@
 
 class ProjectModule {
     private readonly projectId: number;
+    private readonly client: ProjectClient;
+    private readonly errorHandler: ErrorHandler;
     private currentModule: ProjectModuleBase;
+    private renameProjectDialog: BootstrapDialogWrapper;
 
     constructor() {
         this.currentModule = null;
+        this.client = new ProjectClient();
+        this.errorHandler = new ErrorHandler();
         this.projectId = Number($("#project-id").text());
+
+        this.renameProjectDialog = new BootstrapDialogWrapper({
+            element: $("#renameProjectDialog"),
+            autoClearInputs: false,
+            submitCallback: this.renameProject.bind(this)
+        });
     }
 
-    public init() {
+    public init() {        
         const $splitterButton = $("#splitter-button");
         $splitterButton.on("click", () => {
             const $leftMenu = $("#left-menu");
@@ -36,6 +47,10 @@ class ProjectModule {
 
         const activeLink = $("#project-navigation a.active");
         this.showModule(activeLink.attr("id"));
+
+        $(".rename-project-button").on("click", () => {
+            this.renameProjectDialog.show();
+        });
     }
 
     public showModule(identificator: string) {
@@ -57,6 +72,26 @@ class ProjectModule {
         if (this.currentModule !== null) {
             this.currentModule.init();
         }
+    }
+
+    private renameProject() {
+        const newProjectName = $("#renameProjectInput").val() as string;
+
+        if (newProjectName.length === 0)
+        {
+            this.renameProjectDialog.showError(localization.translate("EmptyProjectNameError", "Admin").value);
+            return;
+        }
+
+        const projectTitle = $(".project-title");
+        this.client.renameProject(this.projectId, newProjectName).done(() => {
+            projectTitle.text(newProjectName);
+            this.renameProjectDialog.hide();
+        }).fail(error => {
+            this.renameProjectDialog.showError(
+                this.errorHandler.getErrorMessage(error, localization.translate("ErrorDuringSave", "Admin").value)
+            );
+        });
     }
 }
 

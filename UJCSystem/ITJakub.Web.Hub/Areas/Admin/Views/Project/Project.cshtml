@@ -1,5 +1,6 @@
 ﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectItemViewModel
 @using ITJakub.Web.Hub.Areas.Admin.Models.Type
+@using ITJakub.Web.Hub.Core
 @using ITJakub.Web.Hub.Helpers
 @using Scalesoft.Localization.AspNetCore
 
@@ -45,9 +46,14 @@
 <div class="content-container">
     <div class="row project-layout">
        
-        <div class="col-xs-12">
-                   <div class="project-title">@Model.Name<br/><span class="text-type">@TextTypeLocalizer.TranslateTextTypeFull(Model.TextType)</span></div>
-               </div>
+        <div class="col-xs-10 col-sm-11">
+            <div class="project-title">@Model.Name<br/><span class="text-type">@TextTypeLocalizer.TranslateTextTypeFull(Model.TextType)</span></div>
+        </div>
+        <div class="col-xs-2 col-sm-1 text-right">
+            <button class="rename-project-button btn btn-default" title="@Localizer.Translate("Rename", "Admin")">
+                <i class="fa fa-pencil"></i>
+            </button>
+        </div>
         <div class="left-menu" id="left-menu">
             <div class="list-group list-group-root" id="project-navigation">
                 <span class="list-group-item parent-item">@Localizer.Translate("Project", "Admin")</span>
@@ -82,7 +88,33 @@
             </button>
         </div>
 
-            <div class="content" id="project-layout-content">
+        <div class="content" id="project-layout-content">
+        </div>
+        
+        <div class="modal fade" role="dialog" id="renameProjectDialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">@Localizer.Translate("RenameProject", "Admin")</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="renameProjectInput" class="col-md-3 col-lg-4 control-label">@Localizer.Translate("NewProjectName", "Admin")</label>
+                                <div class="col-md-8 col-lg-7">
+                                    <input class="form-control" id="renameProjectInput" type="text" maxlength="@Projects.MaxNameLength" value="@Model.Name">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("ErrorDuringSave", "Admin")</div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close2", "Admin")</button>
+                        <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Rename", "Admin")</button>
+                    </div>
+                </div>
             </div>
+        </div>
     </div>
 </div>
