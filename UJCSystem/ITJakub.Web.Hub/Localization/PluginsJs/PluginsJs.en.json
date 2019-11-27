@@ -110,6 +110,7 @@
     "StartsWith": "translate[Začíná na]",
     "Contains": "translate[Obsahuje]",
     "EndsWith": "translate[Končí na]",
+    "ExactMatch": "translate[Přesně se shoduje]",
     "Distance:": "translate[Vzdálenost: ]",
     "TitleSort": "translate[Název]",
     "DatingSort": "translate[Datace]",

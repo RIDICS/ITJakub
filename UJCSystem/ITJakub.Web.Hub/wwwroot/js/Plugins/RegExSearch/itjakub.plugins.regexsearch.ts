@@ -2006,12 +2006,9 @@ class RegExWordInput {
         conditionTypeDivEl.append(conditionSelectEl);
 
         conditionSelectEl.append(HtmlItemsFactory.createOption(localization.translate("StartsWith", "PluginsJs").value, WordInputTypeEnum.StartsWith.toString()));
-        //conditionSelectEl.appendChild(this.createOption("Nezačíná na", this.conditionType.NotStartsWith));
         conditionSelectEl.append(HtmlItemsFactory.createOption(localization.translate("Contains", "PluginsJs").value, WordInputTypeEnum.Contains.toString()));
-        //conditionSelectEl.append(this.createOption("Neobsahuje", this.conditionType.NotContains));
         conditionSelectEl.append(HtmlItemsFactory.createOption(localization.translate("EndsWith", "PluginsJs").value, WordInputTypeEnum.EndsWith.toString()));
-        //conditionSelectEl.append(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
-        conditionSelectEl.append(HtmlItemsFactory.createOption("Přesně shoduje", WordInputTypeEnum.ExactMatch.toString())); // TODO add localization
+        conditionSelectEl.append(HtmlItemsFactory.createOption(localization.translate("ExactMatch", "PluginsJs").value, WordInputTypeEnum.ExactMatch.toString()));
 
         conditionSelectEl.change((eventData) => {
             var oldConditonType = this.conditionInputType;

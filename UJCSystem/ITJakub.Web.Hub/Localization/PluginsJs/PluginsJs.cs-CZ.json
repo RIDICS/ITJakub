@@ -110,6 +110,7 @@
     "StartsWith": "Začíná na",
     "Contains": "Obsahuje",
     "EndsWith": "Končí na",
+    "ExactMatch": "Přesně se shoduje",
     "Distance:": "Vzdálenost: ",
     "TitleSort": "Název",
     "DatingSort": "Datace",
