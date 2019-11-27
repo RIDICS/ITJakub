@@ -1,4 +1,5 @@
-﻿@using ITJakub.Web.Hub.Core.Managers
+﻿@using ITJakub.Web.Hub.Constants
+@using ITJakub.Web.Hub.Core.Managers
 @using ITJakub.Web.Hub.Helpers
 @using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
@@ -21,16 +22,19 @@
 
 <div class="dropdown-select-div">
     <div id="dropdownSelectDiv"></div>
-    <div id="otherDropdownSelectDiv">
-        <span class="search-areas-label">@Localizer.Translate("SearchedAreas", "BibliographyModule"):</span>
-        <select class="selectpicker" multiple data-show-content="false">
-            @foreach (var projectType in ProjectTypeLocalizer.GetProjectTypeList())
-            {
-                var isDefault = projectType == PortalTypeManager.GetDefaultProjectType();
-                <option value="@projectType" data-content="@ProjectTypeLocalizer.TranslatePortal(projectType)" disabled="@isDefault" selected="@isDefault">@ProjectTypeLocalizer.TranslatePortalShort(projectType)</option>
-            }
-        </select>
-    </div>
+    @if (ViewData.TryGetBooleanValue(BibliographyConstants.IsSearchAreaSelectionEnabled))
+    {
+        <div id="otherDropdownSelectDiv">
+            <span class="search-areas-label">@Localizer.Translate("SearchedAreas", "BibliographyModule"):</span>
+            <select class="selectpicker" multiple data-show-content="false">
+                @foreach (var projectType in ProjectTypeLocalizer.GetProjectTypeList())
+                {
+                    var isDefault = projectType == PortalTypeManager.GetDefaultProjectType();
+                    <option value="@projectType" data-content="@ProjectTypeLocalizer.TranslatePortal(projectType)" disabled="@isDefault" selected="@isDefault">@ProjectTypeLocalizer.TranslatePortalShort(projectType)</option>
+                }
+            </select>
+        </div>
+    }
 </div>
 
 <div id="listResults" style="clear: both;">
