@@ -336,6 +336,10 @@ class Search {
             var query = this.getFilteredQuery(searchboxValue, this.enabledOptions); //filter disabled options
             this.writeTextToTextField(query);
             this.processSearchJsonCallback(query);
+
+            if (query.length !== searchboxValue.length && query !== JSON.stringify(JSON.parse(searchboxValue))) { // JSON serialization is required to have the same string (e.g. without whitespaces)
+                bootbox.alert(localization.translate("UnsupportedCriteriaRemoved", "PluginsJs").value);
+            }
         } else {
             this.lastQueryWasJson = false;
             this.processSearchTextCallback(searchboxValue);

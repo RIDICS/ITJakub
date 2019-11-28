@@ -8,6 +8,7 @@
     "SearchError": "Chyba při vyhledávání.",
     "LoadingBookListError": "Chyba při načítání seznamu děl.",
     "SearchCriteriaError": "Zadáno neplatné nebo nepodporované vyhledávací kritérium.",
+    "UnsupportedCriteriaRemoved": "Vyhledávací dotaz obsahoval nepodporované kritérium. Toto kritérium bylo vyřazeno a vyhledávání proběhlo bez něho.",
     "Unknown": "Neznámý",
 
     "FilterByName": "Filtrovat podle názvu..",
