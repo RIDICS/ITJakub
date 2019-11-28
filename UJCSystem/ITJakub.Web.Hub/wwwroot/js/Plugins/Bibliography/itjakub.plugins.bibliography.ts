@@ -188,14 +188,15 @@ class BibliographyModule {
     }
 
     public showSearchError() {
-        var errorDiv = BibliographyFactory.makeError(localization.translate("SearchError", "PluginsJs").value);
-        $(this.booksContainer)
-            .empty()
-            .append(errorDiv);
+        this.showError(localization.translate("SearchError", "PluginsJs").value);
     }
 
     public showPageLoadError() {
-        var errorDiv = BibliographyFactory.makeError(localization.translate("LoadingBookListError", "PluginsJs").value);
+        this.showError(localization.translate("LoadingBookListError", "PluginsJs").value);
+    }
+
+    public showError(text: string) {
+        var errorDiv = BibliographyFactory.makeError(text);
         $(this.booksContainer)
             .empty()
             .append(errorDiv);

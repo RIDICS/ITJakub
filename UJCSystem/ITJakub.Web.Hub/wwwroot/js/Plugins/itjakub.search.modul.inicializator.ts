@@ -27,6 +27,12 @@
         bibliographyModule.showLoading();
         bibliographyModule.destroyPagination();
 
+        // the same condition in ModulInicializator class
+        if (json === "[]") {
+            bibliographyModule.showError(localization.translate("SearchCriteriaError", "PluginsJs").value);
+            return;
+        }
+
         $.ajax({
             type: "GET",
             traditional: true,

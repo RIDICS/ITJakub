@@ -7,6 +7,7 @@
     "NoResultsToShow": "translate[Žádné výsledky k zobrazení]",
     "SearchError": "translate[Chyba při vyhledávání.]",
     "LoadingBookListError": "translate[Chyba při načítání seznamu děl.]",
+    "SearchCriteriaError": "translate[Zadáno neplatné nebo nepodporované vyhledávací kritérium.]",
     "Unknown": "translate[Neznámý]",
 
     "FilterByName": "translate[Filtrovat podle názvu..]",
