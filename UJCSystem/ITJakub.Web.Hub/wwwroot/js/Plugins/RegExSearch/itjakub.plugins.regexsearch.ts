@@ -472,6 +472,11 @@ class RegExAdvancedSearchEditor {
         $(this.innerContainer).empty();
         this.regExConditions = new Array<RegExConditionListItem>();
 
+        if (jsonDataArray.length == 0) {
+            this.addNewCondition();
+            return;
+        }
+
         for (var i = 0; i < jsonDataArray.length; i++) {
             var conditionData = jsonDataArray[i];
             if (this.enabledOptionsArray && $.inArray(conditionData.searchType, this.enabledOptionsArray) >= 0) {
