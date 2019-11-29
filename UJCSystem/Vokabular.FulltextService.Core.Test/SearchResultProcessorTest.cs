@@ -26,6 +26,17 @@ namespace Vokabular.FulltextService.Core.Test
         }
 
         [TestMethod]
+        public void TestCountOfHighlightOccurencesWithAdditionalChar()
+        {
+            const string tag = "!";
+            const string highlightedText = "Lorem ipsum dolor sit amet, consectetuer adipiscing !elit!. Etiam sapien !elit!, consequat eget, tristique non Venenatis";
+
+            var count = m_searchResultProcessor.GetNumberOfHighlitOccurencesPublic(highlightedText, tag);
+
+            Assert.AreEqual(2, count);
+        }
+
+        [TestMethod]
         public void TestHighlightedTextSimple()
         {
             const string tag = "$";
@@ -47,9 +58,9 @@ namespace Vokabular.FulltextService.Core.Test
 
             Assert.AreEqual(4, result.Count);
 
-            Assert.AreEqual("<6> ero. Sadipscing <6>  ¼ipsum¼ at ¼ipsum <6> ¼ feugait et ", result[2].PageResultContext.ContextStructure.Before);
+            Assert.AreEqual("<6> ero. Sadipscing <6>  ipsum at ipsum <6>  feugait et ", result[2].PageResultContext.ContextStructure.Before);
             Assert.AreEqual("ips <6> um", result[2].PageResultContext.ContextStructure.Match);
-            Assert.AreEqual(" ¼ipsum¼ et est <6>  est sed sit al", result[2].PageResultContext.ContextStructure.After);
+            Assert.AreEqual(" ipsum et est <6>  est sed sit al", result[2].PageResultContext.ContextStructure.After);
         }
 
         [TestMethod]

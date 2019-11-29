@@ -64,7 +64,8 @@ namespace Vokabular.FulltextService.Core.Helpers
 
         protected int GetNumberOfHighlitOccurences(string highlightedText, string highlightTag)
         {
-            return highlightedText.Split(new[] { highlightTag }, StringSplitOptions.None).Length / 2;
+            var segmentCount = highlightedText.Split(new[] {highlightTag}, StringSplitOptions.None).Length;
+            return (segmentCount - 1) / 2;
         }
         
         public TextResourceContract ProcessSearchPageByCriteria(ISearchResponse<TextResourceContract> response)
@@ -187,6 +188,9 @@ namespace Vokabular.FulltextService.Core.Helpers
                     };
 
                     result.Add(corpusSearchResult);
+                }
+                else
+                {
                     break;
                 }
                 
@@ -381,6 +385,9 @@ namespace Vokabular.FulltextService.Core.Helpers
                     };
 
                     result.Add(corpusSearchResult);
+                }
+                else
+                {
                     break;
                 }
                 
