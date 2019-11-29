@@ -62,7 +62,7 @@ namespace Vokabular.FulltextService.Core.Helpers
             return new FulltextSearchCorpusResultContract { Count = counter };
         }
 
-        private int GetNumberOfHighlitOccurences(string highlightedText, string highlightTag)
+        protected int GetNumberOfHighlitOccurences(string highlightedText, string highlightTag)
         {
             return highlightedText.Split(new[] { highlightTag }, StringSplitOptions.None).Length / 2;
         }
