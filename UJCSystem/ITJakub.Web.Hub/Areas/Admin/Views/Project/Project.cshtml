@@ -46,14 +46,17 @@
 <div class="content-container">
     <div class="row project-layout">
        
-        <div class="col-xs-10 col-sm-11">
-            <div class="project-title">@Model.Name<br/><span class="text-type">@TextTypeLocalizer.TranslateTextTypeFull(Model.TextType)</span></div>
+        <div class="col-xs-12">
+            <div class="project-title">
+                @Model.Name
+                <button class="rename-project-button btn btn-default" title="@Localizer.Translate("Rename", "Admin")">
+                    <i class="fa fa-pencil"></i>
+                </button>
+                <br/>
+                <span class="text-type">@TextTypeLocalizer.TranslateTextTypeFull(Model.TextType)</span>
+            </div>
         </div>
-        <div class="col-xs-2 col-sm-1 text-right">
-            <button class="rename-project-button btn btn-default" title="@Localizer.Translate("Rename", "Admin")">
-                <i class="fa fa-pencil"></i>
-            </button>
-        </div>
+        
         <div class="left-menu" id="left-menu">
             <div class="list-group list-group-root" id="project-navigation">
                 <span class="list-group-item parent-item">@Localizer.Translate("Project", "Admin")</span>
