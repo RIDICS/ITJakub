@@ -72,7 +72,7 @@
                     <label class="col-sm-3 col-md-4 col-lg-3 control-label">@Localizer.Translate("LiteraryKind", "Admin")</label>
                     <div class="col-sm-9 col-md-8 col-lg-9">
                         <div id="work-categorization-literary-kind">
-                            @if (Model.AllLiteraryKindList.Count > 0)
+                            @if (Model.SelectedLiteraryKindIds.Count > 0)
                             {
                                 @foreach (var kindSelected in Model.SelectedLiteraryKindIds)
                                 {
@@ -95,8 +95,8 @@
                             }
                             else
                             {
-                                <div class="col-xs-12">
-                                    <div class="not-filled-label">@Localizer.Translate("NotFilled")</div>
+                                <div class="col-xs-12 not-filled-label">
+                                    @Localizer.Translate("NotFilled")
                                 </div>
                             }
                         </div>

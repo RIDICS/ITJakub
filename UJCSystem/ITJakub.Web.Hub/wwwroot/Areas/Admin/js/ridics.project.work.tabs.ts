@@ -993,6 +993,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
 
         $(".work-categorization-edit-button").on("click",() => {
             this.enabledEdit();
+            $("#work-categorization-container .not-filled-label").remove();
             categoryTreeElement.children("input").prop("disabled", false);
             categoryTreeLabels.removeClass("disabled");
         });
