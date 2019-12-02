@@ -91,13 +91,12 @@
 }
 
 .project-layout {
-    display: table-row;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .project-layout,
 .snapshot-layout {
-    display: flex;
-    flex-wrap: wrap;
     
     .back-button {
         margin-top: -1rem;
@@ -134,8 +133,7 @@
         min-width: 60%;
         flex-grow: 10;
         flex-basis: 0;
-        margin: 0em 1em 1em 0em;
-        padding-left: 1em;
+        margin-bottom: 1em;
     }
 
     .tab-content {
@@ -583,6 +581,8 @@ table {
 }
 
 #work-categorization-container {
+    padding: 0 1em;
+    
     .add-button {
         button {
             margin-left: 15px;
@@ -624,6 +624,13 @@ table {
         }
     }
 }
+
+#new-snapshot-container,
+#cooperation-container,
+#project-history-records-container {
+    padding: 0 1em;
+}
+
 
 #project-work-categorization-tab,
 #project-work-metadata-tab {
