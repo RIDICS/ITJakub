@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Models;
@@ -30,7 +31,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public virtual ActionResult Feed(string feedType, string feedCount = "10")
+        public virtual ActionResult Feed(string feedType, int feedCount = PageSizes.NewsFeed)
         {
             FeedType ft;
             if (!Enum.TryParse(feedType, true, out ft))
@@ -38,8 +39,7 @@ namespace ITJakub.Web.Hub.Controllers
                 throw new ArgumentException("Unknown feed type");
             }
 
-            var count = Convert.ToInt32(feedCount);
-            if (count <= 0)
+            if (feedCount <= 0)
             {
                 throw new ArgumentException("Invalid feed count");
             }
@@ -49,7 +49,7 @@ namespace ITJakub.Web.Hub.Controllers
 
             var client = GetNewsClient();
             {
-                var feeds = client.GetNewsSyndicationItems(0, count, NewsTypeEnumContract.Web);
+                var feeds = client.GetNewsSyndicationItems(0, feedCount, NewsTypeEnumContract.Web);
                 foreach (var feed in feeds.List)
                 {
                     var syndicationItem = new SyndicationItem
