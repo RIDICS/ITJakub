@@ -949,10 +949,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
     }
 
     private reloadTab() {
-        const metadataTabSelector = "#project-work-categorization";
-        const tabPanelEl = $(metadataTabSelector);
-        tabPanelEl.empty();
-        this.workModule.loadTabPanel(metadataTabSelector);
+        this.workModule.loadTabPanel("project-work-categorization");
     }
 
     initTab(): void {
