@@ -108,7 +108,7 @@
         flex-grow: 1;
         flex-shrink: 0;
         flex-basis: 6em;
-        margin: 1em;
+        margin: 0 1em;
     }
     
     .parent-item {
@@ -134,7 +134,7 @@
         min-width: 60%;
         flex-grow: 10;
         flex-basis: 0;
-        margin: 1em 1em 1em 0em;
+        margin: 0em 1em 1em 0em;
         padding-left: 1em;
     }
 
@@ -1291,7 +1291,7 @@ table {
         margin: 0;
         
         > div {
-            margin: 1em 0 1em 0;
+            margin-bottom: 1em;
         }
 
         .page-navigation-arrow {
@@ -1353,6 +1353,22 @@ table {
     }
     .bottom-buttons {
         text-align: right;
+    }
+}
+
+#snapshot-section {
+    h3 {
+        margin-top: 0;
+    }
+}
+
+.content {
+    .user-section, 
+    .role-section, 
+    .permission-section, 
+    .project-section, 
+    .project-permission-section {
+        margin-top: 0;
     }
 }
 
