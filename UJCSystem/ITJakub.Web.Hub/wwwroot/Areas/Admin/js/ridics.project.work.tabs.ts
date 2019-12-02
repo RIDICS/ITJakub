@@ -1076,7 +1076,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
 
     private onProjectListLoaded() {
         $("#add-project-to-group-dialog .project-row").on("click", (event) => {
-            $(event.currentTarget as Node as Element).addClass("selected").siblings().removeClass("selected");
+            $(event.currentTarget as Node as Element).addClass("active").siblings().removeClass("active");
         });
     }
 
@@ -1090,7 +1090,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
     }
 
     private assignProjectToGroup() {
-        const selectedProjectRow = $("#add-project-to-group-dialog .project-row.selected");
+        const selectedProjectRow = $("#add-project-to-group-dialog .project-row.active");
         if (selectedProjectRow.length < 1) {
             this.addProjectToGroupDialog.showError(localization.translate("ProjectIsNotSelected", "PermissionJs").value);
             return;
