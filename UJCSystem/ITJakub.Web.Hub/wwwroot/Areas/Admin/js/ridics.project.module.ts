@@ -154,7 +154,7 @@ class ProjectTextPreviewModule extends ProjectModuleBase {
     }
 
     initModule() {
-        const main = new TextEditorMain();
+        const main = new TextEditorMain(this);
         main.init(this.projectId);
     }
 }

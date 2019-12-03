@@ -1,4 +1,5 @@
 ﻿@import "../../../css/ITJakub.Colors.less";
+@import "../../../css/ITJakub.Fonts.less";
 @import "../../../css/ridics.checkbox.less";
 @import "@text-editor-variables.less";
 @import "@page-list-editor-vabiables.less";
@@ -1282,6 +1283,12 @@ table {
                                 cursor: not-allowed;
                             }
                         }
+
+                        .itj-page {
+                            font-family: @serif-font-family-reader;
+                            text-align: justify;
+                            font-size: 115%;
+                        }
                     }
                 }
             }
@@ -1348,6 +1355,7 @@ table {
         }
 
         .page-indicator {
+            text-align: center;
             font-size: 1.2em;
             color: @page-indicator-text-color;
             font-weight: bold;

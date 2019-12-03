@@ -47,14 +47,20 @@
     private processAreaSwitch () {
         this.editorExistsInTab = false;
 
-        $(".page-toolbar .edit-page").click((event) => {
+        $(".page-toolbar .edit-page").on("click", (event) => {
             const pageRow = $(event.currentTarget).parents(".page-row");
             pageRow.addClass("init-editor");
             pageRow.data(this.editModeSelector, true);
             this.changeOrInitEditor(pageRow);
         });
 
-        $(".page-toolbar .create-text").click((event) => {
+        $(".page-toolbar .refresh-text").on("click", (event) => {
+            const pageRow = $(event.currentTarget).parents(".page-row");
+            pageRow.data(this.editModeSelector, false);
+            this.togglePageRows(pageRow);
+        });
+        
+        $(".page-toolbar .create-text").on("click", (event) => {
             const pageRow = $(event.currentTarget).parents(".page-row");
             this.createText(pageRow);
         });
@@ -260,7 +266,7 @@
         loading.show();
         this.apiClient.createTextOnPage(pageId).done(() => {
             this.pageStructure.loadPage(pageRow).done(() => {
-                $(".edit-page", pageRow).click(); //Open editor
+                $(".edit-page", pageRow).trigger("click"); //Open editor
             });
         }).fail((error) => {
             const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();

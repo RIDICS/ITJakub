@@ -37,7 +37,7 @@
         return $.get(`${this.serverPath}Admin/Project/PageList?projectId=${projectId}`);
     }
     
-    createPage(projectId: number, name: string, position: number): JQueryXHR {
+    createPage(projectId: number, name: string, position: number): JQuery.jqXHR<number> {
         return $.post(`${this.serverPath}Admin/ContentEditor/CreatePage`,
             {
                 projectId: projectId,
