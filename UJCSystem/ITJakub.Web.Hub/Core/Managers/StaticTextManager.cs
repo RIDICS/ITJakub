@@ -26,7 +26,7 @@ namespace ITJakub.Web.Hub.Core.Managers
 
         public EditStaticTextViewModel GetText(string name, string scope)
         {
-            scope = m_dictionaryScopeResolver.GetDictionaryScope(scope);
+            //scope = m_dictionaryScopeResolver.GetDictionaryScope(scope);
             var staticText = m_dynamicTextService.GetDynamicText(name, scope);
             var currentCultureLabel = m_localizationService.GetRequestCulture().NativeName;
 
@@ -76,7 +76,7 @@ namespace ITJakub.Web.Hub.Core.Managers
         public ModificationUpdateViewModel SaveText(string name, string scope, string text, string culture, StaticTextFormatType format,
             string username)
         {
-            scope = m_dictionaryScopeResolver.GetDictionaryScope(scope);
+            //scope = m_dictionaryScopeResolver.GetDictionaryScope(scope);
             var dynamicText = new DynamicText
             {
                 Culture = culture,
