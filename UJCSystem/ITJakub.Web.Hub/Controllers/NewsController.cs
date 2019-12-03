@@ -49,7 +49,7 @@ namespace ITJakub.Web.Hub.Controllers
 
             var client = GetNewsClient();
             {
-                var feeds = client.GetNewsSyndicationItems(0, feedCount, NewsTypeEnumContract.Web);
+                var feeds = client.GetNewsSyndicationItems(0, feedCount, NewsTypeEnumContract.Web, PortalTypeValue);
                 foreach (var feed in feeds.List)
                 {
                     var syndicationItem = new SyndicationItem
@@ -85,7 +85,7 @@ namespace ITJakub.Web.Hub.Controllers
         public virtual ActionResult GetSyndicationItems(int start, int count)
         {
             var client = GetNewsClient();
-            var feeds = client.GetNewsSyndicationItems(start, count, NewsTypeEnumContract.Web);
+            var feeds = client.GetNewsSyndicationItems(start, count, NewsTypeEnumContract.Web, PortalTypeValue);
             
             var result = new PagedResultList<NewsSyndicationItemExtendedContract>
             {
@@ -124,6 +124,7 @@ namespace ITJakub.Web.Hub.Controllers
                 ItemType = (NewsTypeEnumContract) model.ItemType,
                 Text = model.Content,
                 Url = model.Url,
+                PortalType = PortalTypeValue,
             };
             client.CreateNewsSyndicationItem(data);
 

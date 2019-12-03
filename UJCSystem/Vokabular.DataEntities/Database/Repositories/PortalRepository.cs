@@ -17,10 +17,11 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
-        public virtual ListWithTotalCountResult<NewsSyndicationItem> GetNewsSyndicationItems(int start, int count, SyndicationItemType? type)
+        public virtual ListWithTotalCountResult<NewsSyndicationItem> GetNewsSyndicationItems(int start, int count, SyndicationItemType? type, PortalTypeEnum portalType)
         {
             var query = GetSession().QueryOver<NewsSyndicationItem>()
                 .Fetch(SelectMode.Fetch, x => x.User)
+                .Where(x => x.PortalType == portalType)
                 .OrderBy(x => x.CreateTime).Desc;
 
             if (type != null)
