@@ -54,7 +54,7 @@ namespace ITJakub.Web.Hub.Core.Managers
             viewModel.FormIdentification = formIdentification;
         }
 
-        public void CreateFeedback(FeedbackViewModel model, FeedbackCategoryEnumContract category, bool isAuthenticated)
+        public void CreateFeedback(FeedbackViewModel model, FeedbackCategoryEnumContract category, PortalTypeContract portalType, bool isAuthenticated)
         {
             var client = m_communicationProvider.GetMainServiceFeedbackClient();
 
@@ -63,7 +63,8 @@ namespace ITJakub.Web.Hub.Core.Managers
                 client.CreateFeedback(new CreateFeedbackContract
                 {
                     FeedbackCategory = category,
-                    Text = model.Text
+                    Text = model.Text,
+                    PortalType = portalType,
                 });
             }
             else
@@ -72,6 +73,7 @@ namespace ITJakub.Web.Hub.Core.Managers
                 {
                     FeedbackCategory = category,
                     Text = model.Text,
+                    PortalType = portalType,
                     AuthorEmail = model.Email,
                     AuthorName = model.Name,
                 });

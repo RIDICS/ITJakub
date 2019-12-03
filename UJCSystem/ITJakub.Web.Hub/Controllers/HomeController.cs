@@ -68,7 +68,7 @@ namespace ITJakub.Web.Hub.Controllers
                 return View(model);
             }
 
-            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.None, IsUserLoggedIn());
+            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.None, PortalTypeValue, IsUserLoggedIn());
             return View("Feedback/FeedbackSuccess");
         }
 

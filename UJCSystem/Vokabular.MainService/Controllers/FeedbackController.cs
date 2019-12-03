@@ -90,12 +90,13 @@ namespace Vokabular.MainService.Controllers
             [FromQuery] int? count,
             [FromQuery] FeedbackSortEnumContract? sort,
             [FromQuery] SortDirectionEnumContract? sortDirection,
-            [FromQuery] IList<FeedbackCategoryEnumContract> filterCategories)
+            [FromQuery] IList<FeedbackCategoryEnumContract> filterCategories,
+            [FromQuery] PortalTypeContract portalType)
         {
             var sortValue = sort ?? FeedbackSortEnumContract.Date;
             var sortDirectionValue = sortDirection ?? SortDirectionEnumContract.Desc;
 
-            var result = m_feedbackManager.GetFeedbackList(start, count, sortValue, sortDirectionValue, filterCategories);
+            var result = m_feedbackManager.GetFeedbackList(start, count, sortValue, sortDirectionValue, filterCategories, portalType);
 
             SetTotalCountHeader(result.TotalCount);
 
