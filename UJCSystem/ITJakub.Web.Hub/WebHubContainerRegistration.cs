@@ -20,6 +20,7 @@ namespace ITJakub.Web.Hub
             services.AddScoped<ControllerDataProvider>();
             services.AddScoped<CommunicationProvider>();
             services.AddScoped<CommunicationConfigurationProvider>();
+            services.AddScoped<DictionaryScopeResolver>();
             services.AddScoped<StaticTextManager>();
             services.AddScoped<FeedbacksManager>();
             services.AddScoped<PortalTypeManager>();
