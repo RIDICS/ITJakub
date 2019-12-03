@@ -6,12 +6,17 @@
     private util: EditorsApiClient;
     private errorHandler: ErrorHandler;
     private alertHolder: JQuery;
+    private originalNote: string;
 
     constructor(projectId: number) {
         this.projectId = projectId;
         this.errorHandler = new ErrorHandler();
     }
 
+    isChangeMade(): boolean {
+        return this.simpleMde.value() != this.originalNote;
+    }
+    
     init() {
         this.util = new EditorsApiClient();
         this.simpleMdeIcons = new SimpleMdeTools();
@@ -35,7 +40,7 @@
             noteEditorLoader.addClass("hide");
         });
 
-        $("#saveNote").click(() => {
+        $("#saveNote").on("click", () => {
             this.saveNote(this.simpleMde.value());
         });
     }
@@ -44,6 +49,8 @@
         if (note == null) {
             note = "";
         }
+        
+        this.originalNote = note;        
         const textAreaEl = $(".note-editor-textarea");
         $(".note-editor .bottom-buttons").removeClass("hide");
         textAreaEl.removeClass("hide");
@@ -90,8 +97,9 @@
         this.alertHolder.empty();
         this.util.saveEditionNote(request).done((editionNoteVersionId) => {
             this.editionNoteVersionId = editionNoteVersionId;
-            const error = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("EditionNoteSaveSuccess", "RidicsProject").value);
-            this.alertHolder.empty().append(error.buildElement()).delay(3000).fadeOut(2000);
+            this.originalNote = noteValue;
+            const successAlert = new AlertComponentBuilder(AlertType.Success).addContent(localization.translate("EditionNoteSaveSuccess", "RidicsProject").value);
+            this.alertHolder.empty().append(successAlert.buildElement()).delay(3000).fadeOut(2000);
         }).fail((error) => {
             const alert = new AlertComponentBuilder(AlertType.Error)
                 .addContent(this.errorHandler.getErrorMessage(error, localization.translate("EditionNoteSaveFailed", "RidicsProject").value));

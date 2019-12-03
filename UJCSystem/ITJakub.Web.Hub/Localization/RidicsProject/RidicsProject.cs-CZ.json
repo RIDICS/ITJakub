@@ -80,6 +80,8 @@
     "Close": "Zavřít",
     "CloseWithoutSaving": "Zavřít bez uložení",
     "Cancel": "Zrušit",
+    "Continue" : "Pokračovat",
+    "SwitchTabWithoutSaving" : "Opravdu chcete přepnout na jinou záložku? Neuložená data budou ztracena.",
     "DiscardChanges": "Zrušit změny",
     "SaveAndClose": "Uložit a zavřít",
     "Save": "Uložit",

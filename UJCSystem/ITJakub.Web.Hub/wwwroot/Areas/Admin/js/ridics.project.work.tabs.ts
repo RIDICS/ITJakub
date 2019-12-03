@@ -751,6 +751,7 @@
 
 class ProjectWorkPageListTab extends ProjectModuleTabBase {
     private readonly projectId: number;
+    private editor: PageListEditorMain;
 
     constructor(projectId: number) {
         super();
@@ -758,22 +759,31 @@ class ProjectWorkPageListTab extends ProjectModuleTabBase {
     }
 
     initTab() {
-        const main = new PageListEditorMain();
-        main.init(this.projectId);
+        this.editor = new PageListEditorMain();
+        this.editor.init(this.projectId);
+    }
+
+    isEditModeEnabled() {
+        return this.editor.isChangeMade();
     }
 }
 
 class ProjectWorkChapterEditorTab extends ProjectModuleTabBase {
     private readonly projectId: number;
-
+    private editor: ChapterEditorMain;
+    
     constructor(projectId: number) {
         super();
         this.projectId = projectId;
     }
 
     initTab() {
-        const main = new ChapterEditorMain();
-        main.init(this.projectId);
+        this.editor = new ChapterEditorMain();
+        this.editor.init(this.projectId);
+    }
+
+    isEditModeEnabled() {
+        return this.editor.isChangeMade();
     }
 }
 
@@ -1210,6 +1220,10 @@ class ProjectWorkPublicationsTab extends ProjectModuleTabBase {
         var snapshotList = new SnapshotList(this.projectId);
         snapshotList.init();
     }
+
+    isEditModeEnabled() {
+        return false;
+    }
 }
 
 class ProjectWorkCooperationTab extends ProjectModuleTabBase {
@@ -1224,10 +1238,15 @@ class ProjectWorkCooperationTab extends ProjectModuleTabBase {
         const cooperationManager = new CooperationManager(this.projectId);
         cooperationManager.init();
     }
+
+    isEditModeEnabled() {
+        return false;
+    }
 }
 
 class ProjectWorkNoteTab extends ProjectModuleTabBase {
     private readonly projectId: number;
+    private editor: EditionNote;
 
     constructor(projectId: number) {
         super();
@@ -1235,8 +1254,12 @@ class ProjectWorkNoteTab extends ProjectModuleTabBase {
     }
 
     initTab() {
-        const main = new EditionNote(this.projectId);
-        main.init();
+        this.editor = new EditionNote(this.projectId);
+        this.editor.init();
+    }
+
+    isEditModeEnabled() {
+        return this.editor.isChangeMade();
     }
 }
 
@@ -1282,6 +1305,10 @@ class ProjectWorkForumTab extends ProjectModuleTabBase {
         }).always(() => {
             $loadingGlyph.hide();
         });
+    }
+
+    isEditModeEnabled() {
+        return false;
     }
 }
 
