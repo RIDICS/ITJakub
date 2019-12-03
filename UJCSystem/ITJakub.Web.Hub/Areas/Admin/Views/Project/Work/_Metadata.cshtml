@@ -3,7 +3,7 @@
 @model ITJakub.Web.Hub.Areas.Admin.Models.ProjectWorkMetadataViewModel
 
 @inject ILocalizationService Localizer
-<div class="row resource-tab-row-fix">
+<div id="project-work-metadata-tab" class="row resource-tab-row-fix">
     @await Html.PartialAsync("Work/SubView/_EditMetadataButtons", Model)
 
     <div id="work-metadata-container">

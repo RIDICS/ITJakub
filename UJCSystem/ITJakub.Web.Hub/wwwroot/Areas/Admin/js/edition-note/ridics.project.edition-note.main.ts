@@ -15,7 +15,7 @@
     init() {
         this.util = new EditorsApiClient();
         this.simpleMdeIcons = new SimpleMdeTools();
-        const noteTab = $("#project-work-note");
+        const noteTab = $("#project-layout-content");
         this.alertHolder = noteTab.find(".alert-holder");
         const noteEditorLoader = noteTab.find(".loader");    
 
