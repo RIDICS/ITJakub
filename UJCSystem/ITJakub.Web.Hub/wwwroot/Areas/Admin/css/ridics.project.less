@@ -584,8 +584,12 @@ table {
     padding: 0 1em;
     
     .add-button {
-        button {
-            margin-left: 15px;
+        margin-left: 15px;
+    }
+
+    .categorization-panel {
+        .control-label {
+            padding-right: 0;
         }
     }
 
@@ -604,7 +608,7 @@ table {
         }
     }
 
-    #work-categorization-invalid-keyword-fail {
+    .work-categorization-invalid-keyword-fail {
         display: none;
     }
 }
@@ -623,6 +627,34 @@ table {
 
         tr.selected {
             background-color: @selected-row-color;
+        }
+    }
+
+    #projectForGroupListContainer {
+        min-height: 300px;
+    }
+
+    .clearfix {
+        .col {
+            padding-right: 0;
+        }
+    }
+
+    .button-float-right {
+        margin-right: 15px;
+    }
+
+    .not-filled-label {
+        margin-top: 7px;
+    }
+
+    .alert {
+        text-align: left;
+    }
+
+    #project-group-projects {
+        .btn {
+            margin-top: 1em;
         }
     }
 }

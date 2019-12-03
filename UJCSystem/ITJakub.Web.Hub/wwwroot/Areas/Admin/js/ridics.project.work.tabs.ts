@@ -804,8 +804,8 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
     getConfiguration(): IProjectMetadataTabConfiguration {
         return {
             $panel: $("#work-categorization-container"),
-            $viewButtonPanel: $("#work-categorization-view-button-panel"),
-            $editorButtonPanel: $("#work-categorization-editor-button-panel")
+            $viewButtonPanel: $(".work-categorization-view-button-panel"),
+            $editorButtonPanel: $(".work-categorization-editor-button-panel")
         };
     }
 
@@ -876,7 +876,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
         } else {
             elm += `<div class="lit-kind-item clearfix">`;
         }
-        elm += `<div class="col-xs-9">`;
+        elm += `<div class="col col-xs-9 col-sm-10 col-md-8 col-lg-9">`;
         elm += `<select class="item-select-box form-control">`;
         items.each((index, elem) => {
             const genreEl = $(elem);
@@ -973,7 +973,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
         categoryTreeElement.find("input").prop("disabled", true);
         const categoryTreeLabels = categoryTreeElement.find(".list-group-item span[data-role=\"display\"]");
         categoryTreeLabels.addClass("disabled");
-        categoryTreeLabels.click((event) => {
+        categoryTreeLabels.on("click", (event) => {
             if (!$(event.currentTarget).hasClass("disabled")) {
                 const node = $(event.currentTarget).parent("div").parent(".list-group-item");
                 if (node.find("input").prop("checked")) {
@@ -983,20 +983,23 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
                 }
             }
         });
+        
+        this.categoryTree.expandAll();
 
         $(".project-form-bottom-buttons .btn, #project-group-projects .btn").show();
 
-        $("#work-categorization-edit-button").click(() => {
+        $(".work-categorization-edit-button").on("click",() => {
             this.enabledEdit();
+            $("#work-categorization-container .not-filled-label").remove();
             categoryTreeElement.children("input").prop("disabled", false);
             categoryTreeLabels.removeClass("disabled");
         });
 
-        $("#work-categorization-cancel-button").click(() => {
+        $(".work-categorization-cancel-button").on("click", () => {
             this.reloadTab();
         });
 
-        $("#add-literary-kind-button").click(() => {
+        $("#add-literary-kind-button").on("click", () => {
             const kindSelectsEl = $("#work-categorization-literary-kind");
             if (this.existingLitKinds == null) {
                 this.parseExistingKinds();
@@ -1006,7 +1009,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
             kindSelectsEl.append(selectBox);
         });
 
-        $("#add-literary-genre-button").click(() => {
+        $("#add-literary-genre-button").on("click", () => {
             const genreSelectsEl = $("#work-categorization-literary-genre");
             if (this.existingGenres == null) {
                 this.parseExistingGenres();
@@ -1016,11 +1019,11 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
             genreSelectsEl.append(selectBox);
         });
 
-        $("#add-project-to-group-button").click(() => {
+        $("#add-project-to-group-button").on("click", () => {
             this.addProjectToGroupDialog.show();
         });
 
-        $("#remove-project-from-group-button").click(() => {
+        $("#remove-project-from-group-button").on("click", () => {
             bootbox.dialog({
                 title: localization.translate("Warning", "PermissionJs").value,
                 message: localization.translate("UnassignProjectFromGroupWarning", "PermissionJs").value,
@@ -1049,13 +1052,13 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
         projectList.loadFirstPage();
         projectList.init();
 
-        const $saveButton = $("#work-categorization-save-button");
-        $saveButton.click(() => {
+        const $saveButton = $(".work-categorization-save-button");
+        $saveButton.on("click", () => {
             this.saveCategorization();
         });
         $(".saving-icon", $saveButton).hide();
 
-        $("#work-categorization-save-error, #work-categorization-save-success").hide();
+        $(".work-categorization-save-error, .work-categorization-save-success").hide();
     }
 
     private addRemoveGenreEvent() {
@@ -1120,7 +1123,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
             selectedGenreIds.push(parseInt($(elem as Element).val() as string));
         });
 
-        const keywordsInputEl = $(".keywords-container").children(".tokenfield").children(".keywords-textarea");
+        const keywordsInputEl = $(".keywords-container").find(".tokenfield").children(".keywords-textarea");
         const keywordsArray = $.map((keywordsInputEl.val() as string).split(","), $.trim);
         const uniqueKeywordArray = this.returnUniqueElsArray(keywordsArray);
         const keywordNonIdList: string[] = [];
@@ -1170,10 +1173,10 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
             literaryGenreIdList: contract.literaryGenreIdList,
             literaryKindIdList: contract.literaryKindIdList
         };
-        var $loadingGlyph = $("#work-categorization-save-button .saving-icon");
-        var $buttons = $("#work-categorization-editor-button-panel button");
-        var $successAlert = $("#work-categorization-save-success");
-        var $errorAlert = $("#work-categorization-save-error");
+        var $loadingGlyph = $(".work-categorization-save-button .saving-icon");
+        var $buttons = $(".work-categorization-editor-button-panel button");
+        var $successAlert = $(".work-categorization-save-success");
+        var $errorAlert = $(".work-categorization-save-error");
         $loadingGlyph.show();
         $buttons.prop("disabled", true);
         $successAlert.finish().hide();
