@@ -15,9 +15,15 @@ namespace ITJakub.Web.Hub.Core
 
         public string GetDictionaryScope(string dictionaryScope)
         {
-            return m_portalOption.PortalType == PortalType.CommunityPortal && !dictionaryScope.Contains(CommunityTextsPrefix) 
-                ? $"{CommunityTextsPrefix}-{dictionaryScope}" 
-                : dictionaryScope;
+            switch (m_portalOption.PortalType)
+            {
+                case PortalType.ResearchPortal:
+                    return dictionaryScope;
+                case PortalType.CommunityPortal:
+                    return $"{CommunityTextsPrefix}-{dictionaryScope}";
+                default:
+                    return dictionaryScope;
+            }
         }
     }
 }
