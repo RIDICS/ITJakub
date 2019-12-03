@@ -21,23 +21,9 @@ namespace ITJakub.Web.Hub.Models
         [Display(Name = "Url:")]        
         public string Url { get; set; }    
         
-        [EnumDataType(typeof(NewsTypeContractViewEnum))]
-        [Required]
-        [Display(Name="Type")]
-        public NewsTypeContractViewEnum ItemType { get; set; }
+        //[EnumDataType(typeof(NewsTypeContractViewEnum))]
+        //[Required]
+        //[Display(Name="Type")]
+        //public NewsTypeContractViewEnum ItemType { get; set; }
     }
-
-    public enum NewsTypeContractViewEnum
-    {
-        //[Display(Name = "WebAndMobileApp")] // TODO determine why attribute usage cause exception in CSHTML
-        Combined = 0,
-        
-        //[Display(Name = "OnlyWeb")]
-        Web = 1,
-        
-        //[Display(Name = "OnlyMobileApp")]
-        MobileApps = 2,
-    }
-
-
 }

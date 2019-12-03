@@ -17,10 +17,11 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
-        public virtual ListWithTotalCountResult<NewsSyndicationItem> GetNewsSyndicationItems(int start, int count, SyndicationItemType? type)
+        public virtual ListWithTotalCountResult<NewsSyndicationItem> GetNewsSyndicationItems(int start, int count, SyndicationItemType? type, PortalTypeEnum portalType)
         {
             var query = GetSession().QueryOver<NewsSyndicationItem>()
                 .Fetch(SelectMode.Fetch, x => x.User)
+                .Where(x => x.PortalType == portalType)
                 .OrderBy(x => x.CreateTime).Desc;
 
             if (type != null)
@@ -42,10 +43,12 @@ namespace Vokabular.DataEntities.Database.Repositories
             };
         }
 
-        public ListWithTotalCountResult<Feedback> GetFeedbackList(int start, int count, FeedbackSortEnum sort, SortDirectionEnumContract sortDirection, IList<FeedbackCategoryEnum> filterCategories)
+        public ListWithTotalCountResult<Feedback> GetFeedbackList(int start, int count, FeedbackSortEnum sort, SortDirectionEnumContract sortDirection, 
+            IList<FeedbackCategoryEnum> filterCategories, PortalTypeEnum portalType)
         {
             var query = GetSession().QueryOver<Feedback>()
-                .Fetch(SelectMode.Fetch, x => x.AuthorUser);
+                .Fetch(SelectMode.Fetch, x => x.AuthorUser)
+                .Where(x => x.PortalType == portalType);
 
             IQueryOverOrderBuilder<Feedback, Feedback> queryOrder;
 

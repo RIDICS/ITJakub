@@ -31,6 +31,8 @@ namespace Vokabular.MainService.DataContracts.Contracts.Feedback
         public string Text { get; set; }
 
         public FeedbackCategoryEnumContract FeedbackCategory { get; set; }
+        
+        public PortalTypeContract PortalType { get; set; }
     }
 
     public class CreateAnonymousFeedbackContract : CreateFeedbackContract

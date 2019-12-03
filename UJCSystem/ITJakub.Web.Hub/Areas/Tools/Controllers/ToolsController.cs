@@ -56,7 +56,7 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
                 return View(model);
             }
 
-            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Tools, IsUserLoggedIn());
+            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Tools, PortalTypeValue, IsUserLoggedIn());
             return View("Feedback/FeedbackSuccess");
         }
 

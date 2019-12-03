@@ -89,7 +89,8 @@ namespace Vokabular.MainService.DataContracts.Clients
             int count,
             FeedbackSortEnumContract sort,
             SortDirectionEnumContract sortDirection,
-            IList<FeedbackCategoryEnumContract> filterCategories)
+            IList<FeedbackCategoryEnumContract> filterCategories,
+            PortalTypeContract portalType)
         {
             try
             {
@@ -99,6 +100,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("sort", sort)
                     .AddParameter("sortDirection", sortDirection)
                     .AddParameterList("filterCategories", filterCategories)
+                    .AddParameter("portalType", portalType)
                     .ToResult();
                 var result = m_client.GetPagedList<FeedbackContract>(url);
                 return result;

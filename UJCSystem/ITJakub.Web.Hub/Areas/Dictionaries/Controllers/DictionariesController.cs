@@ -139,7 +139,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
             if (model.BookId == null || model.HeadwordVersionId == null)
             {
-                m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Dictionaries, IsUserLoggedIn());
+                m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Dictionaries, PortalTypeValue, IsUserLoggedIn());
             }
             else
             {

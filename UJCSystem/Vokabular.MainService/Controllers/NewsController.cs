@@ -23,9 +23,9 @@ namespace Vokabular.MainService.Controllers
 
         [HttpGet("")]
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
-        public List<NewsSyndicationItemContract> GetNewsSyndicationItems([FromQuery] int? start, [FromQuery] int? count, [FromQuery] NewsTypeEnumContract? itemType)
+        public List<NewsSyndicationItemContract> GetNewsSyndicationItems([FromQuery] int? start, [FromQuery] int? count, [FromQuery] NewsTypeEnumContract? itemType, [FromQuery] PortalTypeContract portalType)
         {
-            var result = m_newsManager.GetNewsSyndicationItems(start, count, itemType);
+            var result = m_newsManager.GetNewsSyndicationItems(start, count, itemType, portalType);
 
             SetTotalCountHeader(result.TotalCount);
 

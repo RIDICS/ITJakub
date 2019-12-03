@@ -60,6 +60,7 @@ namespace Vokabular.MainService.Core.Works.Portal
             feedback.Text = m_data.Text;
             feedback.CreateTime = now;
             feedback.FeedbackCategory = m_mapper.Map<FeedbackCategoryEnum>(m_data.FeedbackCategory);
+            feedback.PortalType = m_mapper.Map<PortalTypeEnum>(m_data.PortalType);
 
             if (m_userId != null)
             {
