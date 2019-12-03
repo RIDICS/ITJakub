@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -17,15 +16,15 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Resource.Project.Id));
 
             CreateMap<MetadataResource, SearchResultContract>()
-                .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.Resource.Project.Id)) // TODO try convert property from BookId to ProjectId (including TypeScript)
-                .ForMember(dest => dest.BookXmlId, opt => opt.MapFrom(src => src.Resource.Project.ExternalId))
+                .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.Resource.Project.Id))
+                .ForMember(dest => dest.ProjectType, opt => opt.MapFrom(src => src.Resource.Project.ProjectType))
+                .ForMember(dest => dest.TextType, opt => opt.MapFrom(src => src.Resource.Project.TextType))
                 .ForMember(dest => dest.BookType, opt => opt.MapFrom(src => src.Resource.Project.LatestPublishedSnapshot.DefaultBookType.Type))
                 .ForMember(dest => dest.AuthorsLabel, opt => opt.MapFrom(src => src.AuthorsLabel))
                 //.ForMember(dest => dest.Authors, opt => opt.MapFrom(src => src.Resource.Project.ExternalId)) // Missing fetch
                 .ForMember(dest => dest.BiblText, opt => opt.MapFrom(src => src.BiblText))
                 .ForMember(dest => dest.Copyright, opt => opt.MapFrom(src => src.Copyright))
-                .ForMember(dest => dest.CreateTime, opt => opt.MapFrom(src => src.CreateTime))
-                .ForMember(dest => dest.CreateTimeString, opt => opt.MapFrom(src => src.CreateTime.ToString(CultureInfo.GetCultureInfo("cs")))) // Czech is the main language
+                .ForMember(dest => dest.CreateTime, opt => opt.MapFrom(src => src.Resource.Project.LatestPublishedSnapshot.PublishTime))
                 .ForMember(dest => dest.ManuscriptCountry, opt => opt.MapFrom(src => src.ManuscriptCountry))
                 .ForMember(dest => dest.ManuscriptTitle, opt => opt.MapFrom(src => src.ManuscriptTitle))
                 .ForMember(dest => dest.ManuscriptExtent, opt => opt.MapFrom(src => src.ManuscriptExtent))

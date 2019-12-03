@@ -26,6 +26,8 @@
     "Drawer": "translate[Zásuvka]",
     "NoResults": "translate[Vyhledávání neodpovídá žádný výsledek]",
     "NoCardFileSelected": "translate[Není vybrána žádná kartotéka]",
+    "Error": "translate[Chyba]",
+    "PermissionsError": "translate[Nedostatečná práva pro přístup ke kartotékám]",
     "ServerCommunicationError": "translate[Došlo k chybě v komunikaci se serverem]"
   }
 }

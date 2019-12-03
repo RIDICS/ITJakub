@@ -11,6 +11,7 @@
                 SearchTypeEnum.Editor,
                 SearchTypeEnum.Dating
             ],
+            enabledSearchInSecondPortal: true,
             url: {
                 advanced: getBaseUrl() + "OldGrammar/OldGrammar/AdvancedSearchPaged",
                 text: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchPaged",

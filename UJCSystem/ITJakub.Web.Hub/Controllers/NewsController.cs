@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core;
+using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Config;
 using ITJakub.Web.Hub.Models.FeedResults;
@@ -11,6 +13,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.SyndicationFeed;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.RestClient.Results;
 using Vokabular.Shared.Const;
 
 namespace ITJakub.Web.Hub.Controllers
@@ -28,7 +31,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public virtual ActionResult Feed(string feedType, string feedCount = "10")
+        public virtual ActionResult Feed(string feedType, int feedCount = PageSizes.NewsFeed)
         {
             FeedType ft;
             if (!Enum.TryParse(feedType, true, out ft))
@@ -36,8 +39,7 @@ namespace ITJakub.Web.Hub.Controllers
                 throw new ArgumentException("Unknown feed type");
             }
 
-            var count = Convert.ToInt32(feedCount);
-            if (count <= 0)
+            if (feedCount <= 0)
             {
                 throw new ArgumentException("Invalid feed count");
             }
@@ -47,7 +49,7 @@ namespace ITJakub.Web.Hub.Controllers
 
             var client = GetNewsClient();
             {
-                var feeds = client.GetNewsSyndicationItems(0, count, NewsTypeEnumContract.Web);
+                var feeds = client.GetNewsSyndicationItems(0, feedCount, NewsTypeEnumContract.Web);
                 foreach (var feed in feeds.List)
                 {
                     var syndicationItem = new SyndicationItem
@@ -84,7 +86,14 @@ namespace ITJakub.Web.Hub.Controllers
         {
             var client = GetNewsClient();
             var feeds = client.GetNewsSyndicationItems(start, count, NewsTypeEnumContract.Web);
-            return Json(feeds);
+            
+            var result = new PagedResultList<NewsSyndicationItemExtendedContract>
+            {
+                TotalCount = feeds.TotalCount,
+                List = Mapper.Map<List<NewsSyndicationItemExtendedContract>>(feeds.List),
+            };
+
+            return Json(result);
         }
 
         public ActionResult Add()

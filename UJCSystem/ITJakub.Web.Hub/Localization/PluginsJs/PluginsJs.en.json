@@ -7,6 +7,8 @@
     "NoResultsToShow": "translate[Žádné výsledky k zobrazení]",
     "SearchError": "translate[Chyba při vyhledávání.]",
     "LoadingBookListError": "translate[Chyba při načítání seznamu děl.]",
+    "SearchCriteriaError": "translate[Zadáno neplatné nebo nepodporované vyhledávací kritérium.]",
+    "UnsupportedCriteriaRemoved": "translate[Vyhledávací dotaz obsahoval nepodporované kritérium. Toto kritérium bylo vyřazeno a vyhledávání proběhlo bez něho.]",
     "Unknown": "translate[Neznámý]",
 
     "FilterByName": "translate[Filtrovat podle názvu..]",
@@ -36,7 +38,6 @@
 
     "LoadingContentError": "translate[Chyba při načítání obsahu]",
     "Pictures": "translate[Obrázky]",
-    "Text": "translate[Text]",
     "PageLoadingError": "translate[Chyba při načítání stránky '{0}']",
     "PageLoadingErrorWithSearchResults": "translate[Chyba při načítání stránky '{0}' s výsledky vyhledávání]",
     "PreparingPrint": "translate[Probíhá příprava díla pro tisk]",
@@ -52,6 +53,9 @@
 
     "Advanced": "translate[Pokročilé]",
     "Search...": "translate[Hledat...]",
+    "SearchInTitles...": "translate[Hledat v názvech děl...]",
+    "SearchInFulltext...": "translate[Hledat ve fulltextu...]",
+    "SearchInDictionaries...": "translate[Hledat ve slovnících...]",
     "Finish": "translate[Dokončit]",
     "Cancel": "translate[Zrušit]",
     "+And": "translate[+ A zároveň]",
@@ -63,6 +67,7 @@
     "Editor": "translate[Editor]",
     "Dating": "translate[Období vzniku]",
     "Term": "translate[Téma]",
+    "Text": "translate[Text]",
     "Fulltext": "translate[Fulltext]",
     "TokenDistance": "translate[X tokenů od sebe]",
     "InSentence": "translate[Ve větě]",
@@ -107,6 +112,7 @@
     "StartsWith": "translate[Začíná na]",
     "Contains": "translate[Obsahuje]",
     "EndsWith": "translate[Končí na]",
+    "ExactMatch": "translate[Přesně se shoduje]",
     "Distance:": "translate[Vzdálenost: ]",
     "TitleSort": "translate[Název]",
     "DatingSort": "translate[Datace]",

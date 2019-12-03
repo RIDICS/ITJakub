@@ -1,6 +1,6 @@
 ﻿class KeyTableEditorBase {
     protected currentPage: number;
-    protected numberOfItemsPerPage = 14;
+    protected numberOfItemsPerPage = Number($("#key-table-config").data("page-size"));
     protected createEntryButtonEl = $(".create-key-table-entry-description");
     protected changeEntryButtonEl = $(".rename-key-table-entry-description");
     protected deleteEntryButtonEl = $(".delete-key-table-entry-description");

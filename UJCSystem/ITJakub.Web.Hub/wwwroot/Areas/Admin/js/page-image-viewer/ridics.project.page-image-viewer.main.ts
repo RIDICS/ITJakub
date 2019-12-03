@@ -1,7 +1,7 @@
 ﻿class ImageViewerMain {
     private readonly client: EditorsApiClient;
     private readonly errorHandler: ErrorHandler;
-    private navigation: ImageViewerPageNavigation;
+    private navigation: PageNavigation;
     private upload: ImageViewerUpload;
     private projectId: number;
 
@@ -16,11 +16,14 @@
         
         const gui = new EditorsGui();
         const contentAddition = new ImageViewerContentAddition(this.client);
+
+        this.navigation = new PageNavigation(gui, (pageId: number) => {
+            contentAddition.formImageContent(pageId);    
+        });
         
-        this.navigation = new ImageViewerPageNavigation(contentAddition, gui);
         this.navigation.init();
-        
-        this.upload = new ImageViewerUpload(contentAddition);        
+
+        this.upload = new ImageViewerUpload(contentAddition);
         this.upload.init();
     }
 
@@ -30,6 +33,13 @@
         compositionPagesAjax.done((data) => {
             $(".pages .page-listing").html(data);
             this.navigation.reinit();
+            const uploadImageBtn = $(".upload-new-image-button");
+            if (this.navigation.hasPages()) {
+                uploadImageBtn.removeAttr("disabled")
+            } else {
+                uploadImageBtn.attr("disabled", "true")
+            }
+            
         });
         compositionPagesAjax.fail(() => {
             const error = new AlertComponentBuilder(AlertType.Error)

@@ -154,7 +154,7 @@ class BohemianTextbankSearch {
             this.corpusBasicSearchCount.bind(this),
             favoritesQueriesConfig);
         this.search.limitFullTextSearchToOne();
-        this.search.makeSearch(this.enabledOptions);
+        this.search.makeSearch(this.enabledOptions, false);
 
         const callbackDelegate = new DropDownSelectCallbackDelegate();
         callbackDelegate.selectedChangedCallback = (state: State) => {

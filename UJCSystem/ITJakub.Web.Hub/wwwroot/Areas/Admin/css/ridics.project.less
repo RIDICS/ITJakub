@@ -91,23 +91,27 @@
 }
 
 .project-layout {
-    display: table-row;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .project-layout,
 .snapshot-layout {
+    
     .back-button {
         margin-top: -1rem;
         margin-bottom: 0.7rem;
     }
-    
-    .left-menu, .vertical-splitter, .vertical-splitter-control, .content {
-        display: table-cell;
-    }
 
     .left-menu {
-        width: 200px;
-        padding-right: 10px;
+        flex-grow: 1;
+        flex-shrink: 0;
+        flex-basis: 6em;
+        margin: 0 1em;
+    }
+    
+    .parent-item {
+        background-color: #f5f5f5;
     }
 
     .vertical-splitter-control {
@@ -117,6 +121,7 @@
             padding: 10px 2px;
             margin-right: 3px;
             transform: scaleY(2);
+            margin-top: 30vh;
         }
     }
 
@@ -125,7 +130,10 @@
     }
 
     .content {
-        width: 100%;
+        min-width: 60%;
+        flex-grow: 10;
+        flex-basis: 0;
+        margin-bottom: 1em;
     }
 
     .tab-content {
@@ -155,12 +163,17 @@
     }
 }
 
-.project-title {
+.project-title-header {
     font-weight: bold;
     font-size: 120%;
-    width: 200px;
     margin-bottom: 20px;
 
+    .rename-project-button {
+        padding: 2px 6px;
+        font-size: 12px;
+        margin-left: 0.5em;
+    }
+    
     .text-type {
         color: gray;
         font-size: 80%;
@@ -567,7 +580,9 @@ table {
     }
 }
 
-#project-work-categorization {
+#work-categorization-container {
+    padding: 0 1em;
+    
     .add-button {
         button {
             margin-left: 15px;
@@ -592,7 +607,9 @@ table {
     #work-categorization-invalid-keyword-fail {
         display: none;
     }
+}
 
+#work-categorization-container, #add-project-to-group-dialog {
     .page-listing {
         height: auto;
         min-height: 200px;
@@ -610,8 +627,15 @@ table {
     }
 }
 
-#project-work-categorization,
-#project-work-metadata {
+#new-snapshot-container,
+#cooperation-container,
+#project-history-records-container {
+    padding: 0 1em;
+}
+
+
+#project-work-categorization-tab,
+#project-work-metadata-tab {
     .person-surname {
         margin: 0 3px;
     }
@@ -1238,7 +1262,9 @@ table {
     }
 }
 
-#project-resource-images, #project-resource-preview {
+#project-resource-images, 
+#project-resource-preview,
+#project-resource-terms {
     .text-editor-page-slider {
         background-color: @editor-sliderbar-color;
         border: none !important; /*to override default browser border styling*/
@@ -1280,7 +1306,7 @@ table {
         margin: 0;
         
         > div {
-            margin: 1em 0 1em 0;
+            margin-bottom: 1em;
         }
 
         .page-navigation-arrow {
@@ -1342,6 +1368,22 @@ table {
     }
     .bottom-buttons {
         text-align: right;
+    }
+}
+
+#snapshot-section {
+    h3 {
+        margin-top: 0;
+    }
+}
+
+.content {
+    .user-section, 
+    .role-section, 
+    .permission-section, 
+    .project-section, 
+    .project-permission-section {
+        margin-top: 0;
     }
 }
 
@@ -1621,7 +1663,7 @@ table {
 }
 
 .body-content {
-    height: 458px;
+    height: 504px;
     overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
@@ -1673,45 +1715,7 @@ table {
 
 .project-snapshot-new {
     margin: 1em;
-
-    .panel {
-        border: none;
-        box-shadow: none;
-
-        .panel-heading {
-            border-radius: 0;
-            border: none;
-            background-color: @menu-background-color;
-            color: white;
-            font-weight: bold;
-
-            .collapse-icon {
-                float: right;
-            }
-
-            a {
-                color: white;
-
-                &:focus {
-                    text-decoration: none;
-                }
-
-                &[aria-expanded=true] .fa-chevron-down {
-                    display: none;
-                }
-
-                &[aria-expanded=false] .fa-chevron-up {
-                    display: none;
-                }
-            }
-        }
-
-        .panel-collapse {
-            border: @box-border;
-        }
-    }
-
-
+    
     .publish-resource-panel {
         border: none;
 
@@ -1805,6 +1809,131 @@ table {
             position: absolute;
             top: 45%;
             text-align: center;
+        }
+    }
+}
+
+.collapsible-panel {
+    border: none;
+    box-shadow: none;
+
+    .panel-heading {
+        border-radius: 0;
+        border: none;
+        background-color: @menu-background-color;
+        color: white;
+        font-weight: bold;
+
+        .collapse-icon {
+            float: right;
+        }
+
+        a {
+            color: white;
+
+            &:focus {
+                text-decoration: none;
+            }
+
+            &[aria-expanded=true] .fa-chevron-down {
+                display: none;
+            }
+
+            &[aria-expanded=false] .fa-chevron-up {
+                display: none;
+            }
+        }
+    }
+
+    .panel-collapse {
+        border: @box-border;
+    }
+}
+
+#project-resource-terms {
+    .equal-row {
+        margin: 0;
+        display: flex;
+
+        .panel {
+            width: 100%;
+            height: 100%;
+
+            .page-listing,
+            .body-content {
+                height: 55vh;
+            }
+        }
+    }
+
+    @media screen and (max-width: 1399px) {
+        .manage-terms-button {
+            white-space: normal;
+        }
+    }
+}
+
+#addTermsDialog {    
+    #termsList {
+        height: 60vh;
+        overflow-y: scroll;
+        
+        .panel-collapse {
+            .ridics-checkbox {
+                margin-left: 0.3em;
+                
+                &:first-of-type {
+                    margin-top: 0.3em;
+                }
+            }
+        }
+    }
+
+    #selectedTerms {
+        min-height: 170px;
+    }
+
+    hr {
+        margin: 0 0 10px 0;
+    }
+
+    .selected-term {
+        padding: 0.3em;
+        border: 1px solid #ddd;
+        border-top: none;
+        
+        &:first-of-type {
+            border-top: 1px solid #ddd;    
+        }
+        
+        span {
+            float: right;
+            margin-right: 0.2em;  
+            cursor: pointer;
+        }
+    }
+
+    .reset-search-button {
+        font-size: 1em;
+        position: absolute;
+        right: 1.8em;
+        top: 50%;
+        transform: translatey(-50%);
+        cursor: pointer;
+        color: #cdcdcd;
+
+        &:hover {
+            color: black;
+        }
+    }
+    
+    .alert-holder {
+        text-align: left;
+        margin: 0;
+        padding: 0;
+        
+        .alert {
+            margin: 0;
         }
     }
 }

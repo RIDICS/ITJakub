@@ -82,16 +82,32 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return View(viewModel);
         }
 
-        public IActionResult ProjectModule(ProjectModuleType moduleType)
+        public IActionResult ProjectModule(ProjectModuleType moduleType, long projectId)
         {
+            var client = GetProjectClient();
+            
             switch (moduleType)
             {
-                case ProjectModuleType.Work:
-                    return PartialView("_ProjectWork");
                 case ProjectModuleType.Resource:
                     return PartialView("_ProjectResource");
+                case ProjectModuleType.Preview:
+                    return PartialView("Resource/_Preview");
+                case ProjectModuleType.TermEditor:
+                    var pages = client.GetAllPageList(projectId);
+            
+                    var termClient = GetTermClient();
+                    var termCategories = termClient.GetTermCategoriesWithTerms();
+            
+                    return PartialView("Resource/_Terms",  new TermEditorViewModel
+                    {
+                        TermCategories = termCategories,
+                        Pages = pages,
+                    });
+                case ProjectModuleType.ImageEditor: 
+                    var pagesWithImageInfo = client.GetAllPagesWithImageInfoList(projectId);
+                    return PartialView("Resource/_Images", pagesWithImageInfo);
                 default:
-                    return PartialView("_ProjectWork");
+                    return PartialView("_ProjectResource");
             }
         }
 
@@ -181,23 +197,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult GetImageViewer(long projectId)
-        {
-            var client = GetProjectClient();
-            var pages = client.GetAllPagesWithImageInfoList(projectId);
-            return PartialView("Resource/_Images", pages);
-        }
-        
         public IActionResult ImagesPageList(long projectId)
         {
             var client = GetProjectClient();
             var pages = client.GetAllPagesWithImageInfoList(projectId);
-            return PartialView("Work/SubView/_PageWithImagesTable", pages);
-        }
-
-        public IActionResult GetTextPreview()
-        {
-            return PartialView("Resource/_Preview");
+            return PartialView("Resource/SubView/_PageWithImagesTable", pages);
         }
 
         public IActionResult PageList(long projectId)

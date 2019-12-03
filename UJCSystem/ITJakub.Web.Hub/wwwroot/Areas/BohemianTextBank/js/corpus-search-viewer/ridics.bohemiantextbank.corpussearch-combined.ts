@@ -183,7 +183,7 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
             this.corpusBasicSearchBookHits.bind(this),
             favoritesQueriesConfig);
         this.search.limitFullTextSearchToOne();
-        this.search.makeSearch(this.enabledOptions);
+        this.search.makeSearch(this.enabledOptions, false);
 
         $(".results-refresh-button").on("click", () => {
             const query = this.search.getLastQuery();

@@ -1,0 +1,139 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Areas.Admin.Models.TermEditorViewModel
+@inject ILocalizationService Localization
+
+<div id="project-resource-terms">
+    @await Html.PartialAsync("Resource/SubView/_PageNavigation")
+
+    <div class="row equal-row">
+        <div class="pages col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="panel panel-default pages">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="panel-title">
+                                @Localization.Translate("SelectPage", "Admin")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="list-container selectable page-listing">
+                        @await Html.PartialAsync("Resource/SubView/_PageTable", Model.Pages, ViewData)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-terms col-xs-12 col-sm-6 col-md-4 col-lg-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="panel-title text-left">
+                                    @Localization.Translate("TermsOnPage", "Admin")
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 panel-buttons text-right">
+                                <button type="button" class="btn btn-default manage-terms-button">@Localization.Translate("EditTerms", "Admin")</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body page-terms">
+                    <div class="alert-holder"></div>
+                    <div class="body-content"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-text col-xs-12 col-sm-12 col-md-4 col-lg-5">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <div class="panel-title text-left">
+                                    @Localization.Translate("PageContent", "RidicsProject")
+                                </div>
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <i class="hide fa fa-file-text-o" title="@Localization.Translate("PageContainsText", "RidicsProject")"></i>
+                                <i class="hide fa fa-image" title="@Localization.Translate("PageContainsImage", "RidicsProject")"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body page-text">
+                    <div class="alert-holder"></div>
+                    <div class="body-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" role="dialog" id="addTermsDialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title info-dialog-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-7 col-md-8">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    @Localization.Translate("TermList", "Admin")
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-5">
+                                            <select id="termCategoryFilter" class="form-control">
+                                                <option value="" selected="selected">@Localization.Translate("AllCategories", "Admin")</option>
+                                                @foreach (var category in Model.TermCategories)
+                                                {
+                                                    <option value="@category.Id">@category.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-xs-7">
+                                            <input id="searchTerm" type="text" class="form-control" placeholder="@Localization.Translate("Search...", "Admin")"/>
+                                            <i class="fa fa-close reset-search-button"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr/>
+                                <div id="termsList">
+                                    @await Html.PartialAsync("Resource/SubView/_TermCategories", Model.TermCategories, ViewData)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-5 col-md-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    @Localization.Translate("SelectedTerms", "Admin")
+                                </div>
+                                <div class="panel-body">
+                                    <div id="selectedTerms">
+                                        @*Generated content*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="alert-holder col-xs-9"></div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        @Localization.Translate("Close2", "Admin")
+                    </button>
+                    <button type="button" class="btn btn-default save-terms">
+                        @Localization.Translate("Save", "Admin")
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,5 @@
 ﻿@using ITJakub.Web.Hub.Areas.Admin.Models.Type
+@using ITJakub.Web.Hub.Constants
 @using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
 @using Vokabular.MainService.DataContracts.Contracts.Type
@@ -15,6 +16,9 @@
     <script asp-append-version="true" src="~/Areas/Admin/js/editors-common-base/ridics.project.editors.bundle.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor.bundle.js"></script>
 }
+
+<div id="key-table-config" class="hidden" data-page-size="@PageSizes.KeyTable"></div>
+
 <div class="content-container keytable-container">
     <h2>@Localizer.Translate("KeyTableTitle", "KeyTable", LocTranslationSource.File)</h2>
     <div class="row display-flex">

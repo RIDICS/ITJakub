@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Types;
 using ITJakub.Web.Hub.Options;
+using Scalesoft.Localization.AspNetCore;
 using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
@@ -22,10 +23,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     [Area("Admin")]
     public class ContentEditorController : BaseController
     {
+        private readonly ILocalizationService m_localizationService;
         private readonly TextManager m_textManager;
 
-        public ContentEditorController(ControllerDataProvider controllerDataProvider, TextManager textManager) : base(controllerDataProvider)
+        public ContentEditorController(ILocalizationService localizationService, ControllerDataProvider controllerDataProvider, TextManager textManager) : base(controllerDataProvider)
         {
+            m_localizationService = localizationService;
             m_textManager = textManager;
         }
 
@@ -59,12 +62,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return Json(parts);
         }
 
-        private static CommentStructureResponse CreateComment(int order, GetTextCommentContract textComment, bool nested, long textId)
+        private CommentStructureResponse CreateComment(int order, GetTextCommentContract textComment, bool nested, long textId)
         {
             var comment = new CommentStructureResponse
             {
                 Order = order,
                 Time = ((DateTimeOffset) textComment.CreateTime).ToUnixTimeMilliseconds(),
+                TimeString = textComment.CreateTime.ToLocalTime().ToString(m_localizationService.GetRequestCulture()),
                 Text = textComment.Text,
                 Picture = null, // Picture is not supported
                 Id = textComment.Id,
@@ -83,7 +87,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var client = GetProjectClient();
             var request = new CreatePageContract
             {
-                Name = name, 
+                Name = name,
                 Position = position,
             };
             var result = client.CreatePage(projectId, request);
@@ -189,16 +193,36 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 model.Text = client.GetPageText(pageId, TextFormatEnumContract.Html);
             }
-            catch (HttpErrorCodeException e) 
+            catch (HttpErrorCodeException e)
             {
-                if(e.StatusCode != HttpStatusCode.NotFound)
+                if (e.StatusCode != HttpStatusCode.NotFound)
                     throw;
             }
 
             model.HasImage = client.HasPageImage(pageId);
             model.PageId = pageId;
-            
+
             return PartialView("../Project/Work/SubView/_PageListDetail", model);
+        }
+
+        [HttpGet]
+        public IActionResult GetPageTermList(long pageId)
+        {
+            var client = GetProjectClient();
+            var result = client.GetPageTermList(pageId);
+            return PartialView("../Project/Resource/SubView/_TermTable", result);
+        }
+
+        [HttpPost]
+        public IActionResult SetTerms(long pageId, IList<int> termIds)
+        {
+            var client = GetProjectClient();
+            var data = new IntegerIdListContract
+            {
+                IdList = termIds,
+            };
+            client.SetTerms(pageId, data);
+            return AjaxOkResponse();
         }
 
         [HttpPost]
@@ -232,7 +256,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             client.GenerateChapters(projectId);
             return AjaxOkResponse();
         }
-        
+
         [RequestFormLimits(ValueLengthLimit = 32768, KeyLengthLimit = 32768, ValueCountLimit = 32768 * 32768)]
         [HttpPost]
         public IActionResult UpdateChapterList([FromBody] UpdateChapterListRequest request)
@@ -315,7 +339,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 Id = result.ResourceId,
                 VersionId = result.ResourceVersionId,
                 VersionNumber = result.VersionNumber,
-                ImageUrl = Url.Action("GetPageImage", "ContentEditor", new { Area = "Admin", pageId = request.PageId }),
+                ImageUrl = Url.Action("GetPageImage", "ContentEditor", new {Area = "Admin", pageId = request.PageId}),
             });
         }
 

@@ -35,8 +35,7 @@
     private loadPage(pageNumber: number, initial?: boolean) {
         const listEl = $(".selectable-list-div");
         const startIndex = (pageNumber - 1) * this.numberOfItemsPerPage;
-        const endIndex = pageNumber * this.numberOfItemsPerPage;
-        const pagedResponsiblePersonListAjax = this.util.getResponsiblePersonList(startIndex, endIndex);
+        const pagedResponsiblePersonListAjax = this.util.getResponsiblePersonList(startIndex, this.numberOfItemsPerPage);
         pagedResponsiblePersonListAjax.done((data: IPagedResult<IResponsiblePerson>) => {
             listEl.empty();
             if (initial) {
