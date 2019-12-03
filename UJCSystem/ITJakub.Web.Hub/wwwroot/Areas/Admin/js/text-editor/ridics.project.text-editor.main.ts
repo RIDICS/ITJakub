@@ -1,4 +1,5 @@
 ﻿class TextEditorMain {
+    private readonly workModule: ProjectModuleBase;
     private readonly client: EditorsApiClient;
     private readonly errorHandler: ErrorHandler;
     private projectId: number;
@@ -6,7 +7,8 @@
     private maxPosition: number = 0;
     private resourcePreview: JQuery<HTMLElement>;
 
-    constructor() {
+    constructor(workModule: ProjectModuleBase) {
+        this.workModule = workModule;
         this.client = new EditorsApiClient();
         this.errorHandler = new ErrorHandler();
         this.resourcePreview = $("#project-resource-preview");
@@ -140,12 +142,19 @@
             const newPageName = String(dialog.find("input[name=\"page-name\"]").val());
             if (newPageName !== "") {
                 this.client.createPage(this.projectId, newPageName, this.maxPosition + 1).done(() => {
-                    location.reload(); //TODO add reloading tab - after merging with branch editor-ux
+                    dialog.modal("hide").on("hidden.bs.modal", () => {
+                        dialog.off("hidden.bs.modal");
+                        this.reloadTab();
+                    });                   
                 }).fail((error) => {
                     const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error));
                     alertHolder.empty().append(alert.buildElement());
                 });
             }
         });
+    }
+
+    private reloadTab() {
+        this.workModule.init();
     }
 }
