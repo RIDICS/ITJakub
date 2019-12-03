@@ -170,10 +170,10 @@
             });
         });
 
-        $(".work-metadata-cancel-button").click(() => {
+        $(".work-metadata-cancel-button").on("click", () => {
             this.disableEdit();
-            const metadataTabSelector = "#project-work-metadata";
-            var tabPanelEl = $(metadataTabSelector);
+            const metadataTabSelector = "#project-work-metadata-tab";
+            const tabPanelEl = $(metadataTabSelector);
             tabPanelEl.empty();
             this.workModule.loadTabPanel(metadataTabSelector);
             this.publisherTypeahead.destroy();
@@ -949,10 +949,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
     }
 
     private reloadTab() {
-        const metadataTabSelector = "#project-work-categorization";
-        const tabPanelEl = $(metadataTabSelector);
-        tabPanelEl.empty();
-        this.workModule.loadTabPanel(metadataTabSelector);
+        this.workModule.loadTabPanel("project-work-categorization");
     }
 
     initTab(): void {
@@ -1285,6 +1282,7 @@ class ProjectWorkForumTab extends ProjectModuleTabBase {
         $successAlert.finish().hide();
         $errorAlert.hide();
         this.projectClient.createForum(this.projectId).done((data) => {
+            $("#missing-forum-warning").hide();
             $successAlert.show().delay(1500);
             $("#forum-name").text(data.name);
             $("#forum-url").html("<a href=\""+data.url+"\" >"+data.url+"</a>");

@@ -26,6 +26,8 @@
     "Drawer": "Zásuvka",
     "NoResults": "Vyhledávání neodpovídá žádný výsledek",
     "NoCardFileSelected": "Není vybrána žádná kartotéka",
+    "Error": "Chyba",
+    "PermissionsError": "Nedostatečná práva pro přístup ke kartotékám",
     "ServerCommunicationError": "Došlo k chybě v komunikaci se serverem"
   }
 }

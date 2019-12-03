@@ -22,17 +22,17 @@
     <div class="search-with-saved-word-area">
         <div class="search-area short-search-area transparent-content-container dicitonaries-search">
             <div id="dictionarySearchDiv">
-                <form role="form" class="form-horizontal">
-                    <div class="form-group searchbar">
-                        <div class="searchbar-buttons">
-                            <button id="searchButton" type="button" class="btn btn-default searchbar-button">
-                                @Localizer.Translate("Search", "Dictionaries")
-                            </button>
-                        </div>
+                <form role="form">
+                    <div class="searchbar">
                         <div class="searchbar-inputs input_container">
                             <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="@Localizer.Translate("Search...", "PluginsJs")" style="max-width: 100%;" />
                             <button type="button" class="btn regexsearch-input-button" id="keyboard-button">
                                 <div class="custom-glyphicon-keyboard" style="height: 100%;"></div>
+                            </button>
+                        </div>
+                        <div class="searchbar-buttons">
+                            <button id="searchButton" type="button" class="btn btn-default searchbar-button">
+                                @Localizer.Translate("Search", "Dictionaries")
                             </button>
                         </div>
                     </div>

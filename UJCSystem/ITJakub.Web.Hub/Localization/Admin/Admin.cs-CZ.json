@@ -14,10 +14,11 @@
     "CreateLiteraryKind": "Chyba při vytváření nového literárního druhu",
     "CreateLiteraryGenre": "Chyba při vytváření nového literárního žánru",
     "CreateResourcesError": "Chyba při načítání zdrojů k publikaci",
-
+    
     "ProjectHeader": "Projekt - ",
     "ProjectTitle": "Název díla",
     "Project": "Dílo",
+    "InfoAboutWork": "Informace o díle",
     "ImageScan": "Obrazové skeny",
     "Texts": "Texty",
     "Audio": "Audio",

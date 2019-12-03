@@ -26,6 +26,13 @@
     "BookFromResearchPortal": "translate[Dílo z Vokabuláře webového]",
     "BookFromCommunityPortal": "translate[Dílo z komunitního portálu]",
     "BibliographicRecord": "translate[Bibliografický záznam]",
+    "ResearchPortal": "translate[Vokabulář webový]",
+    "CommunityPortal": "translate[Komunitní portál]",
+    "BibliographicRecords": "translate[Bibliografické záznamy]",
+    "ResearchPortalShort": "translate[Vokabulář]",
+    "CommunityPortalShort": "translate[Komunitní]",
+    "BibliographicRecordsShort": "translate[Bibliografie]",
+    "SearchedAreas": "translate[Prohledávané oblasti]",
     "SearchInResearchPortal": "translate[Vyhledat ve Vokabuláři webovém]",
     "SearchInCommunityPortal": "translate[Vyhledat v komunitním portálu]",
     "NotFilled": "&lt;translate[Nezadáno]&gt;"

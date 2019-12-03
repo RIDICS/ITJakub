@@ -1,6 +1,6 @@
 ﻿class News {
     private paginator: Pagination;
-    private newsOnPage = 5;
+    private newsOnPage = Number($("#news-container").data("page-size"));
     private newsContainer: HTMLElement;
     private loaderElement = lv.create(null, "lv-dots md lv-mid lvt-3 lvb-3");
     private errorHandler: ErrorHandler;

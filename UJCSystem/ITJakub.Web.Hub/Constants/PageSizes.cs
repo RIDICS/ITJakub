@@ -10,6 +10,11 @@
         public const int SnapshotList = 10;
         public const int CooperationList = 10;
 
+        public const int NewsFeed = 10;
+        public const int News = 5;
+        public const int Feedback = 10;
+        public const int KeyTable = 14;
+
         public const int MinCorpusSearch = 1;
         public const int MaxCorpusSearch = 100;
         public const int DefaultContextLength = 100;

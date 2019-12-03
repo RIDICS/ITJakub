@@ -7,6 +7,8 @@
     "NoResultsToShow": "Žádné výsledky k zobrazení",
     "SearchError": "Chyba při vyhledávání.",
     "LoadingBookListError": "Chyba při načítání seznamu děl.",
+    "SearchCriteriaError": "Zadáno neplatné nebo nepodporované vyhledávací kritérium.",
+    "UnsupportedCriteriaRemoved": "Vyhledávací dotaz obsahoval nepodporované kritérium. Toto kritérium bylo vyřazeno a vyhledávání proběhlo bez něho.",
     "Unknown": "Neznámý",
 
     "FilterByName": "Filtrovat podle názvu..",
@@ -51,6 +53,9 @@
 
     "Advanced": "Pokročilé",
     "Search...": "Hledat...",
+    "SearchInTitles...": "Hledat v názvech děl...",
+    "SearchInFulltext...": "Hledat ve fulltextu...",
+    "SearchInDictionaries...": "Hledat ve slovnících...",
     "Finish": "Dokončit",
     "Cancel": "Zrušit",
     "+And": "+ A zároveň",
@@ -107,6 +112,7 @@
     "StartsWith": "Začíná na",
     "Contains": "Obsahuje",
     "EndsWith": "Končí na",
+    "ExactMatch": "Přesně se shoduje",
     "Distance:": "Vzdálenost: ",
     "TitleSort": "Název",
     "DatingSort": "Datace",

@@ -158,8 +158,8 @@
     }
 
     private parseTerms(): ITermContract[] {
-        const terms = [];
-        for(let term of $(".content-terms .term-row").toArray())
+        const terms: Array<ITermContract> = [];
+        for (let term of $(".content-terms .term-row").toArray())
         {
             terms.push({
                 id: $(term).data("term-id"),
