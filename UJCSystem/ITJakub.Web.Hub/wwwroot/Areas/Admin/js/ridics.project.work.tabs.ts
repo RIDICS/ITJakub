@@ -1226,17 +1226,6 @@ class ProjectWorkCooperationTab extends ProjectModuleTabBase {
     }
 }
 
-class ProjectWorkHistoryTab extends ProjectModuleTabBase {
-    private projectId: number;
-
-    constructor(projectId: number) {
-        super();
-        this.projectId = projectId;
-    }
-
-    initTab() {}
-}
-
 class ProjectWorkNoteTab extends ProjectModuleTabBase {
     private readonly projectId: number;
 
