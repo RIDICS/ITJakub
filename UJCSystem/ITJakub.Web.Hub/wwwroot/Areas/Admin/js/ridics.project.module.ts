@@ -319,8 +319,9 @@ interface IProjectMetadataTabConfiguration {
 }
 
 abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
+    protected editModeEnabled: boolean;
+
     public abstract getConfiguration(): IProjectMetadataTabConfiguration;
-    public editModeEnabled: boolean;    
     
     initTab() {
         this.disableEdit();
