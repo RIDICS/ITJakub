@@ -9,6 +9,7 @@ class ProjectModule {
     private readonly errorHandler: ErrorHandler;
     private currentModule: ProjectModuleBase;
     private renameProjectDialog: BootstrapDialogWrapper;
+    private projectNavigationLinks: JQuery;
 
     constructor() {
         this.currentModule = null;
@@ -24,6 +25,8 @@ class ProjectModule {
     }
 
     public init() {        
+        this.projectNavigationLinks = $("#project-navigation a");
+
         const $splitterButton = $("#splitter-button");
         $splitterButton.on("click", () => {
             const $leftMenu = $("#left-menu");
@@ -36,13 +39,35 @@ class ProjectModule {
             }
         });
 
-        const $projectNavigationLinks = $("#project-navigation a");
-        $projectNavigationLinks.on("click", (e) => {
+
+        this.projectNavigationLinks.on("click", (e) => {
             e.preventDefault();
-            $projectNavigationLinks.removeClass("active");
             const navigationLink = $(e.currentTarget);
-            navigationLink.addClass("active");
-            this.showModule(navigationLink.attr("id"));
+            
+            if (this.currentModule.isEditModeEnabled()) {
+                bootbox.dialog({
+                    title: localization.translate("Warning", "RidicsProject").value,
+                    message: localization.translate("SwitchTabWithoutSaving", "RidicsProject").value,
+                    buttons: {
+                        cancel: {
+                            label: localization.translate("Cancel", "RidicsProject").value,
+                            className: "btn-default",
+                            callback: () => {
+                                return;
+                            }
+                        },
+                        confirm: {
+                            label: localization.translate("Continue", "RidicsProject").value,
+                            className: "btn-default",
+                            callback: () => {
+                                this.switchToLink(navigationLink);
+                            }
+                        }
+                    }
+                });
+            } else {
+                this.switchToLink(navigationLink);
+            }
         });
 
         const activeLink = $("#project-navigation a.active");
@@ -51,6 +76,12 @@ class ProjectModule {
         $(".rename-project-button").on("click", () => {
             this.renameProjectDialog.show();
         });
+    }
+
+    private switchToLink(link: JQuery) {
+        this.projectNavigationLinks.removeClass("active");
+        link.addClass("active");
+        this.showModule(link.attr("id"));
     }
 
     public showModule(identificator: string) {
@@ -77,8 +108,7 @@ class ProjectModule {
     private renameProject() {
         const newProjectName = $("#renameProjectInput").val() as string;
 
-        if (newProjectName.length === 0)
-        {
+        if (newProjectName.length === 0) {
             this.renameProjectDialog.showError(localization.translate("EmptyProjectNameError", "Admin").value);
             return;
         }
@@ -104,6 +134,8 @@ abstract class ProjectModuleBase {
 
     public abstract getModuleType(): ProjectModuleType;
 
+    public abstract isEditModeEnabled(): boolean;
+
     public abstract initModule(): void;
 
     public init() {
@@ -128,7 +160,8 @@ abstract class ProjectModuleBase {
 }
 
 class ProjectImageViewerModule extends ProjectModuleBase {
-
+    private editor: ImageViewerMain;
+    
     constructor(projectId: number) {
         super(projectId);
     }
@@ -138,13 +171,18 @@ class ProjectImageViewerModule extends ProjectModuleBase {
     }
 
     initModule(): void {
-        const imageViewer = new ImageViewerMain();
-        imageViewer.init(this.projectId);
+        this.editor = new ImageViewerMain();
+        this.editor.init(this.projectId);
+    }
+
+    isEditModeEnabled(): boolean {
+        return false;
     }
 }
 
 class ProjectTextPreviewModule extends ProjectModuleBase {
-
+    private editor: TextEditorMain;
+    
     constructor(projectId: number) {
         super(projectId);
     }
@@ -154,13 +192,18 @@ class ProjectTextPreviewModule extends ProjectModuleBase {
     }
 
     initModule() {
-        const main = new TextEditorMain(this);
-        main.init(this.projectId);
+        this.editor = new TextEditorMain(this);
+        this.editor.init(this.projectId);
+    }
+
+    isEditModeEnabled(): boolean {
+        return this.editor.isEditModeEnabled();
     }
 }
 
 class ProjectTermEditorModule extends ProjectModuleBase {
-
+    private editor: TermEditorMain;
+    
     constructor(projectId: number) {
         super(projectId)
     }
@@ -170,8 +213,12 @@ class ProjectTermEditorModule extends ProjectModuleBase {
     }
 
     initModule(): void {
-        const termEditorMain = new TermEditorMain();
-        termEditorMain.init(this.projectId);
+        this.editor = new TermEditorMain();
+        this.editor.init(this.projectId);
+    }
+
+    isEditModeEnabled(): boolean {
+        return false;
     }
 }
 
@@ -240,14 +287,13 @@ class ProjectWorkModule extends ProjectModuleBase {
                         if (this.moduleTab != null) {
                             this.moduleTab.initTab();
                         }
-                    }
-                    else {
+                    } else {
                         const errorDiv = new AlertComponentBuilder(AlertType.Error)
                             .addContent(localization.translate("BookmarkError", "RidicsProject").value)
                             .buildElement();
                         $contentContainer.empty().append(errorDiv);
                         this.moduleTab = null;
-                    }                    
+                    }
                 });
     }
 
@@ -255,10 +301,15 @@ class ProjectWorkModule extends ProjectModuleBase {
         this.moduleIdentificator = moduleIdentificator;
         this.init();
     }
+
+    isEditModeEnabled(): boolean {
+        return this.moduleTab.isEditModeEnabled();
+    }
 }
 
 abstract class ProjectModuleTabBase {
     public abstract initTab();
+    public abstract isEditModeEnabled(): boolean;
 }
 
 interface IProjectMetadataTabConfiguration {
@@ -269,12 +320,18 @@ interface IProjectMetadataTabConfiguration {
 
 abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
     public abstract getConfiguration(): IProjectMetadataTabConfiguration;
-
+    public editModeEnabled: boolean;    
+    
     initTab() {
         this.disableEdit();
     }
 
+    isEditModeEnabled() {
+        return this.editModeEnabled;
+    }
+
     protected enabledEdit() {
+        this.editModeEnabled = true;
         ($(".keywords-textarea") as any).tokenfield("enable");
         var config = this.getConfiguration();
         const copyrightTextarea = $("#work-metadata-copyright");
@@ -289,6 +346,7 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
     }
 
     protected disableEdit() {
+        this.editModeEnabled = false;
         ($(".keywords-textarea") as any).tokenfield("disable");
         var config = this.getConfiguration();
         const copyrightTextarea = $("#work-metadata-copyright");

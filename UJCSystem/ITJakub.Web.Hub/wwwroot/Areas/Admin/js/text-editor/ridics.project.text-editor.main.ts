@@ -2,6 +2,7 @@
     private readonly workModule: ProjectModuleBase;
     private readonly client: EditorsApiClient;
     private readonly errorHandler: ErrorHandler;
+    private pageTextEditor: Editor;
     private projectId: number;
     private numberOfPages: number = 0;
     private maxPosition: number = 0;
@@ -20,6 +21,10 @@
     isShowPageNumbers(): boolean {
         return this.resourcePreview.find(".display-page-checkbox").is(":checked");
     }
+    
+    isEditModeEnabled(): boolean {
+        return this.pageTextEditor.isEditModeEnabled();
+    }
 
     init(projectId: number) {
         this.projectId = projectId;
@@ -30,8 +35,8 @@
                 const connections = new Connections();
                 const commentArea = new CommentArea(this.client);
                 const commentInput = new CommentInput(commentArea, this.client);
-                const pageTextEditor = new Editor(commentInput, this.client, commentArea);
-                const pageStructure = new PageStructure(commentArea, this.client, pageTextEditor);
+                this.pageTextEditor = new Editor(commentInput, this.client, commentArea);
+                const pageStructure = new PageStructure(commentArea, this.client, this.pageTextEditor);
                 const lazyLoad = new PageLazyLoading(pageStructure);
                 const pageNavigation = new TextEditorPageNavigation(this);
                 connections.init();
@@ -93,14 +98,14 @@
                                 ${commentAreaDiv}
                             </div>`);
                 }
-                pageTextEditor.init(pageStructure);
+                this.pageTextEditor.init(pageStructure);
                 lazyLoad.init();
                 pageNavigation.init(data);
                 pageNavigation.togglePageNumbers(this.isShowPageNumbers());
                 this.attachEventShowPageCheckbox(pageNavigation);
                 commentInput.init();
                 commentArea.init();
-                commentArea.initCommentsDeleting(pageTextEditor);
+                commentArea.initCommentsDeleting(this.pageTextEditor);
 
             } else {
                 const error = new AlertComponentBuilder(AlertType.Error)
