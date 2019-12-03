@@ -21,7 +21,7 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual FeedbackCategoryEnum FeedbackCategory { get; set; }
 
-        public virtual PortalTypeEnum PortalTypeEnum { get; set; }
+        public virtual PortalTypeEnum PortalType { get; set; }
 
         public virtual bool Equals(Feedback other)
         {

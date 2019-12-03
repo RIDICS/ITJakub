@@ -11,10 +11,10 @@ namespace Vokabular.Database.Migrations.Migrations.VokabularDB
         public override void Up()
         {
             Alter.Table("Feedback")
-                .AddColumn("ProjectType").AsInt16().NotNullable().SetExistingRowsTo(0);
+                .AddColumn("PortalType").AsInt16().NotNullable().SetExistingRowsTo(0);
             
             Alter.Table("NewsSyndicationItem")
-                .AddColumn("ProjectType").AsInt16().NotNullable().SetExistingRowsTo(0);
+                .AddColumn("PortalType").AsInt16().NotNullable().SetExistingRowsTo(0);
         }
     }
 }

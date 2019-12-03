@@ -19,7 +19,7 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual SyndicationItemType ItemType { get; set; }
         
-        public virtual PortalTypeEnum PortalTypeEnum { get; set; }
+        public virtual PortalTypeEnum PortalType { get; set; }
 
         public virtual bool Equals(NewsSyndicationItem other)
         {
