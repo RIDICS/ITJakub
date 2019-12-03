@@ -61,7 +61,7 @@
                                                 <div class="row">
                                                     <div class="col-xs-4">
                                                       <div class="page-toolbar-buttons">
-                                                        <button type="button" class="btn btn-default refresh-text" title="${localization.translate("RefreshTextPage", "RidicsProject").value}>
+                                                        <button type="button" class="btn btn-default refresh-text" title="${localization.translate("RefreshTextPage", "RidicsProject").value}">
                                                             <i class="fa fa-refresh"></i>
                                                         </button>
                                                         <button type="button" class="btn btn-default create-text hidden" title="${localization.translate("CreateTextPage", "RidicsProject").value}">
