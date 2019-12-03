@@ -59,6 +59,9 @@
                                                 <div class="row">
                                                     <div class="col-xs-4">
                                                       <div class="page-toolbar-buttons">
+                                                        <button type="button" class="btn btn-default refresh-text">
+                                                            <i class="fa fa-refresh"></i>
+                                                        </button>
                                                         <button type="button" class="btn btn-default create-text hidden" title="${localization.translate("CreateTextPage", "RidicsProject").value}">
                                                             <i class="fa fa-plus-circle"></i>
                                                             ${localization.translate("CreateText", "RidicsProject").value}
@@ -136,8 +139,8 @@
             
             const newPageName = String(dialog.find("input[name=\"page-name\"]").val());
             if (newPageName !== "") {
-                this.client.createPage(this.projectId, newPageName, this.maxPosition + 1).done(() => {                    
-                    location.reload();
+                this.client.createPage(this.projectId, newPageName, this.maxPosition + 1).done(() => {
+                    location.reload(); //TODO add reloading tab - after merging with branch editor-ux
                 }).fail((error) => {
                     const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error));
                     alertHolder.empty().append(alert.buildElement());
