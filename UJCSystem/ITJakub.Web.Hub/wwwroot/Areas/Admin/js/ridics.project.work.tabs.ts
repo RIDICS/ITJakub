@@ -1279,6 +1279,7 @@ class ProjectWorkForumTab extends ProjectModuleTabBase {
         $successAlert.finish().hide();
         $errorAlert.hide();
         this.projectClient.createForum(this.projectId).done((data) => {
+            $("#missing-forum-warning").hide();
             $successAlert.show().delay(1500);
             $("#forum-name").text(data.name);
             $("#forum-url").html("<a href=\""+data.url+"\" >"+data.url+"</a>");
