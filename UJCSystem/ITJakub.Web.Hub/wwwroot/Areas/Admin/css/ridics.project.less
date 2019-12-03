@@ -91,23 +91,27 @@
 }
 
 .project-layout {
-    display: table-row;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .project-layout,
 .snapshot-layout {
+    
     .back-button {
         margin-top: -1rem;
         margin-bottom: 0.7rem;
     }
-    
-    .left-menu, .vertical-splitter, .vertical-splitter-control, .content {
-        display: table-cell;
-    }
 
     .left-menu {
-        width: 200px;
-        padding-right: 10px;
+        flex-grow: 1;
+        flex-shrink: 0;
+        flex-basis: 6em;
+        margin: 0 1em;
+    }
+    
+    .parent-item {
+        background-color: #f5f5f5;
     }
 
     .vertical-splitter-control {
@@ -117,6 +121,7 @@
             padding: 10px 2px;
             margin-right: 3px;
             transform: scaleY(2);
+            margin-top: 30vh;
         }
     }
 
@@ -125,7 +130,10 @@
     }
 
     .content {
-        width: 100%;
+        min-width: 60%;
+        flex-grow: 10;
+        flex-basis: 0;
+        margin-bottom: 1em;
     }
 
     .tab-content {
@@ -155,12 +163,17 @@
     }
 }
 
-.project-title {
+.project-title-header {
     font-weight: bold;
     font-size: 120%;
-    width: 200px;
     margin-bottom: 20px;
 
+    .rename-project-button {
+        padding: 2px 6px;
+        font-size: 12px;
+        margin-left: 0.5em;
+    }
+    
     .text-type {
         color: gray;
         font-size: 80%;
@@ -567,7 +580,9 @@ table {
     }
 }
 
-#project-work-categorization {
+#work-categorization-container {
+    padding: 0 1em;
+    
     .add-button {
         button {
             margin-left: 15px;
@@ -592,7 +607,9 @@ table {
     #work-categorization-invalid-keyword-fail {
         display: none;
     }
+}
 
+#work-categorization-container, #add-project-to-group-dialog {
     .page-listing {
         height: auto;
         min-height: 200px;
@@ -610,8 +627,15 @@ table {
     }
 }
 
-#project-work-categorization,
-#project-work-metadata {
+#new-snapshot-container,
+#cooperation-container,
+#project-history-records-container {
+    padding: 0 1em;
+}
+
+
+#project-work-categorization-tab,
+#project-work-metadata-tab {
     .person-surname {
         margin: 0 3px;
     }
@@ -1288,7 +1312,7 @@ table {
         margin: 0;
         
         > div {
-            margin: 1em 0 1em 0;
+            margin-bottom: 1em;
         }
 
         .page-navigation-arrow {
@@ -1351,6 +1375,22 @@ table {
     }
     .bottom-buttons {
         text-align: right;
+    }
+}
+
+#snapshot-section {
+    h3 {
+        margin-top: 0;
+    }
+}
+
+.content {
+    .user-section, 
+    .role-section, 
+    .permission-section, 
+    .project-section, 
+    .project-permission-section {
+        margin-top: 0;
     }
 }
 
@@ -1630,7 +1670,7 @@ table {
 }
 
 .body-content {
-    height: 458px;
+    height: 504px;
     overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
