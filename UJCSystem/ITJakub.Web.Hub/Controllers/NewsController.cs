@@ -121,7 +121,7 @@ namespace ITJakub.Web.Hub.Controllers
             var data = new CreateNewsSyndicationItemContract
             {
                 Title = model.Title,
-                ItemType = (NewsTypeEnumContract) model.ItemType,
+                ItemType = NewsTypeEnumContract.Combined,
                 Text = model.Content,
                 Url = model.Url,
                 PortalType = PortalTypeValue,
