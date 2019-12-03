@@ -31,14 +31,14 @@
                         <div id="work-categorization-literary-genre">
                             @if (Model.SelectedLiteraryGenreIds.Count > 0)
                             {
-                                @foreach (var kindSelected in Model.SelectedLiteraryGenreIds)
+                                @foreach (var genreSelected in Model.SelectedLiteraryGenreIds)
                                 {
-                                    <div class="lit-kind-item clearfix">
+                                    <div class="genre-item clearfix">
                                         <div class="col col-xs-9 col-sm-10 col-md-8 col-lg-9">
                                             <select class="item-select-box form-control">
-                                                @foreach (var kind in Model.AllLiteraryKindList)
+                                                @foreach (var genre in Model.AllLiteraryGenreList)
                                                 {
-                                                    <option value="@kind.Id" selected="@(kind.Id == kindSelected)">@kind.Name</option>
+                                                    <option value="@genre.Id" selected="@(genre.Id == genreSelected)">@genre.Name</option>
                                                 }
                                             </select>
                                         </div>

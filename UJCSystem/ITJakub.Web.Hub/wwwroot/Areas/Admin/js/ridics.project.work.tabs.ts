@@ -876,7 +876,7 @@ class ProjectWorkCategorizationTab extends ProjectMetadataTabBase {
         } else {
             elm += `<div class="lit-kind-item clearfix">`;
         }
-        elm += `<div class="col-xs-9">`;
+        elm += `<div class="col col-xs-9 col-sm-10 col-md-8 col-lg-9">`;
         elm += `<select class="item-select-box form-control">`;
         items.each((index, elem) => {
             const genreEl = $(elem);
