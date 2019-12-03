@@ -213,8 +213,6 @@ class ProjectWorkModule extends ProjectModuleBase {
                 return new ProjectWorkPublicationsTab(this.projectId);
             case ProjectModuleTabType.WorkCooperation:
                 return new ProjectWorkCooperationTab(this.projectId);
-            case ProjectModuleTabType.WorkHistory:
-                return new ProjectWorkHistoryTab(this.projectId);
             case ProjectModuleTabType.WorkNote:
                 return new ProjectWorkNoteTab(this.projectId);
             case ProjectModuleTabType.Forum:

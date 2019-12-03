@@ -179,8 +179,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         Pages = Mapper.Map<List<PageViewModel>>(pageList)
                     };
                     return PartialView("Work/_ChapterEditor", chapterEditorViewModel);
-                case ProjectModuleTabType.WorkHistory:
-                    return PartialView("Work/_History");
                 case ProjectModuleTabType.WorkNote:
                     return PartialView("Work/_Note");
                 case ProjectModuleTabType.Forum:
