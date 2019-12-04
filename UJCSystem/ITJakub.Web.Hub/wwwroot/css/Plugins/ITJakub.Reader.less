@@ -338,13 +338,14 @@ html,body {
     height: auto;
 }
 
+@fullscreenZIndex: 1035;
 .fullscreen {
     position: fixed;
     margin-top: 0;
     padding-top: 0;
     top: 0;
     left: 0;
-    z-index: 1035;
+    z-index: @fullscreenZIndex;
     background-color: @background-color;
     width : 100%;
     height:100vh;
@@ -357,6 +358,16 @@ html,body {
     }
 }
 
+// Rewrite golden layout styles to allow dragged item visibility in fullscreen
+body {
+    .lm_dragProxy {
+        z-index: @fullscreenZIndex+30;
+    }
+
+    .lm_dropTargetIndicator {
+        z-index: @fullscreenZIndex+25;
+    }
+}
 .reader .fullscreen-close-button {
     display: none;
 }
