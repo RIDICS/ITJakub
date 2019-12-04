@@ -1,4 +1,5 @@
 ﻿class DictionaryViewer {
+    private readonly errorHandler: ErrorHandler;
     private headwordDescriptionContainer: string;
     private paginationContainer: string;
     private headwordListContainer: string;
@@ -21,6 +22,7 @@
     private localization: Localization;
 
     constructor(headwordListContainer: string, paginationContainer: string, headwordDescriptionContainer: string, lazyLoad: boolean) {
+        this.errorHandler = new ErrorHandler();
         this.headwordDescriptionContainer = headwordDescriptionContainer;
         this.paginationContainer = paginationContainer;
         this.headwordListContainer = headwordListContainer;
@@ -574,6 +576,13 @@
             //hack: not exist event CSSready
             setTimeout(()=> { printWindow.print(); }, 2000);
         });
+    }
+
+    public showErrors(jqXhrError: JQueryXHR) {
+        const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(jqXhrError));
+        $(this.headwordListContainer).empty().append(alert.buildElement());
+        $(this.paginationContainer).empty();
+        $(this.headwordDescriptionContainer).empty().append(alert.buildElement());
     }
 }
 

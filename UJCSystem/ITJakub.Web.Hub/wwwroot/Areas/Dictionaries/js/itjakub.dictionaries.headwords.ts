@@ -99,7 +99,6 @@
 };
 
 class DictionaryViewerListWrapper {
-    private readonly errorHandler: ErrorHandler;
     private favoriteHeadwords: DictionaryFavoriteHeadwords;
     private pageSize: number;
     private currentPageNumber: number;
@@ -111,7 +110,6 @@ class DictionaryViewerListWrapper {
         this.pageSize = pageSize;
         this.dictionaryViewer = dictionaryViewer;
         //this.dictionaryViewer.setFavoriteCallback(this.addNewFavoriteHeadword.bind(this), this.removeFavoriteHeadword.bind(this));
-        this.errorHandler = new ErrorHandler();
         
         window.matchMedia("print").addListener(mql => {
             if (mql.matches) {
@@ -153,7 +151,7 @@ class DictionaryViewerListWrapper {
                 this.dictionaryViewer.goToPage(resultPageNumber);
             },
             error: (jqXHR) => {
-                this.showErrors(jqXHR);
+                this.dictionaryViewer.showErrors(jqXHR);
             }
         });
     }
@@ -208,7 +206,7 @@ class DictionaryViewerListWrapper {
                 this.dictionaryViewer.createViewer(resultCount, this.loadHeadwords.bind(this), this.pageSize, null, null);
             },
             error: (jqXHR) => {
-                this.showErrors(jqXHR);
+                this.dictionaryViewer.showErrors(jqXHR);
             }
         });
     }
@@ -232,7 +230,7 @@ class DictionaryViewerListWrapper {
                 this.dictionaryViewer.showHeadwords(response);
             },
             error: (jqXHR) => {
-                this.showErrors(jqXHR);
+                this.dictionaryViewer.showErrors(jqXHR);
             }
         });
     }
@@ -241,12 +239,5 @@ class DictionaryViewerListWrapper {
         updateQueryStringParameter("categories", JSON.stringify(this.selectedCategoryIds));
         updateQueryStringParameter("books", JSON.stringify(this.selectedBookIds));
         updateQueryStringParameter("page", this.currentPageNumber);
-    }
-    
-    private showErrors(jqXHR: JQueryXHR) {
-        const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(jqXHR));
-        $("#headwordDescription").empty().append(alert.buildElement());
-        $("#headwordList").empty().append(alert.buildElement());
-        $("#pagination").empty();
     }
 }
