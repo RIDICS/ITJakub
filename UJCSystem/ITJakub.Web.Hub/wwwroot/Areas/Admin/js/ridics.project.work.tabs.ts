@@ -158,7 +158,7 @@
                 }
             });
 
-        $(".work-metadata-edit-button").click(() => {
+        $(".work-metadata-edit-button").on("click", () => {
             this.enabledEdit();
             this.publisherTypeahead.create((selectedExists, selectConfirmed) => {
                 if (selectedExists) {
@@ -172,22 +172,19 @@
 
         $(".work-metadata-cancel-button").on("click", () => {
             this.disableEdit();
-            const metadataTabSelector = "#project-work-metadata-tab";
-            const tabPanelEl = $(metadataTabSelector);
-            tabPanelEl.empty();
-            this.workModule.loadTabPanel(metadataTabSelector);
             this.publisherTypeahead.destroy();
+            this.workModule.loadTabPanel("project-work-metadata");
         });
 
-        $("#add-author-button").click(() => {
+        $("#add-author-button").on("click", () => {
             this.addAuthorDialog.show();
         });
 
-        $(".edit-date-range").click(() => {
+        $(".edit-date-range").on("click", () => {
             this.selectRangeDialog.show();
         });
 
-        $("#add-editor-button").click(() => {
+        $("#add-editor-button").on("click", () => {
             $addResponsibleTypeButton.prop("disabled", false);
             $("#add-editor-type").val(null);
             this.addEditorDialog.show();
@@ -440,7 +437,7 @@
                 tableBodyEl.empty();
             });
 
-        $addResponsibleTypeButton.click(() => {
+        $addResponsibleTypeButton.on("click", () => {
             $addResponsibleTypeButton.prop("disabled", true);
             $("#responsibility-type-input-elements").hide();
         });
@@ -448,7 +445,7 @@
         this.addRemovePersonEvent($("#work-metadata-authors .remove-button, #work-metadata-editors .remove-button"));
         
         var $saveButton = $(".work-metadata-save-button");
-        $saveButton.click(() => {
+        $saveButton.on("click", () => {
             this.saveMetadata();
         });
         $(".saving-icon", $saveButton).hide();
@@ -646,7 +643,7 @@
     }
 
     private addRemovePersonEvent($removeButton: JQuery) {
-        $removeButton.click((event) => {
+        $removeButton.on("click", (event) => {
             const $item = $(event.currentTarget).closest(".author-item, .editor-item");
             
             const remainingCount = $item.siblings(".author-item, .editor-item").length;
@@ -1275,7 +1272,7 @@ class ProjectWorkForumTab extends ProjectModuleTabBase {
 
     initTab() {
         var $saveButton = $("#forum-repair-button");
-        $saveButton.click(() => {
+        $saveButton.on("click", () => {
             this.repairForum();
         });
         $(".saving-icon", $saveButton).hide();
