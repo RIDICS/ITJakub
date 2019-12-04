@@ -912,8 +912,8 @@ class ReaderLayout {
         this.moveToPageNumber(pageNumber, true);
         });
 
-        this.readerLayout.eventHub.on("scrollPage", (pageWithMinOffset) => {
-            this.moveToPage($(pageWithMinOffset).data("page-xmlId"), false);
+        this.readerLayout.eventHub.on("scrollPage", (pageWithMinOffsetId) => {
+            this.moveToPage(pageWithMinOffsetId, false);
         });
     }
 }
