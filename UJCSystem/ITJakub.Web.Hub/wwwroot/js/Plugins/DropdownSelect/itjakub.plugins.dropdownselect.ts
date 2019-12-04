@@ -285,7 +285,7 @@ class DropDownSelect {
         $(loadDiv).addClass("lv-circles sm lv-mid");
         $(dropDownItemsDiv).append(loadDiv);
         var self = this;
-
+        
         $.ajax({
             type: "GET",
             traditional: true,
@@ -307,6 +307,14 @@ class DropDownSelect {
                 this.dataLoaded(rootCategoryId);
 
                 this.downloadFavoriteData(dropDownItemsDiv);
+            },
+            error: jqXHR => {
+                $(dropDownItemsDiv).children("div.lv-circles").remove();
+                $(dropDownItemsDiv).siblings(".dropdown-select-header").children("div.lv-circles").remove();
+                const selectHeader = $(dropDownItemsDiv).parent().children(".dropdown-select-header");
+                $(selectHeader).children(".dropdown-select-text").append(localization.translate("LoadingContentError", "PluginsJs").value);
+                this.dataLoaded(null);
+                this.downloadFavoriteData(dropDownItemsDiv);  
             }
         });
     }
