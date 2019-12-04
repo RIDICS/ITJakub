@@ -533,15 +533,15 @@
                 var title = target.parents(".book-details").find(".title");
                 title.toggleClass("full");
 
-                var details = target.parents(".book-details").find(".hidden-content");
-                if (!details.hasClass("visible")) {
+                var details = target.parents(".book-details").find(".collapsible-div");
+                if (!details.is(":visible")) {
                     $(target).removeClass("glyphicon-info-sign");
                     $(target).addClass("glyphicon-chevron-up");
-                    details.addClass("visible");
+                    details.collapse("show");
                 } else {
                     $(target).removeClass("glyphicon-chevron-up");
                     $(target).addClass("glyphicon-info-sign");
-                    details.removeClass("visible");
+                    details.collapse("hide");
                 }
             });
             bookInfoDiv.appendChild(detailsButton);  
@@ -573,9 +573,12 @@
         
 
         var hiddenDiv = document.createElement("div");
-        $(hiddenDiv).addClass("hidden-content");
-        hiddenDiv.appendChild(editionNoteDiv);
-        hiddenDiv.appendChild(this.getBookDetail());
+        $(hiddenDiv).addClass("collapse collapsible-div");
+        var bookFullInfoDiv = document.createElement("div");
+        $(bookFullInfoDiv).addClass("book-full-info-container");
+        bookFullInfoDiv.appendChild(editionNoteDiv);
+        bookFullInfoDiv.appendChild(this.getBookDetail());
+        hiddenDiv.appendChild(bookFullInfoDiv);
 
         bookInfoDiv.appendChild(hiddenDiv);
         return bookInfoDiv;
