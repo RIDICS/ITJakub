@@ -7,6 +7,7 @@ function initBiblSearch() {
 }
 
 class BibliographiesSearch {
+    private readonly errorHandler: ErrorHandler;
     private bookCountPerPage: number;
     private search: Search;
     private typeaheadSearchBox: SearchBox;
@@ -27,8 +28,8 @@ class BibliographiesSearch {
 
     constructor(bookCountPerPage: number) {
         this.bookCountPerPage = bookCountPerPage;
-
         this.localization = localization;
+        this.errorHandler = new ErrorHandler();
     }
 
     create() {
@@ -184,6 +185,9 @@ class BibliographiesSearch {
                 updateQueryStringParameter(this.urlSearchKey, text);
                 updateQueryStringParameter(this.urlSortAscKey, this.bibliographyModule.isSortedAsc());
                 updateQueryStringParameter(this.urlSortCriteriaKey, this.bibliographyModule.getSortCriteria());
+            },
+            error: jqXHR => {
+                this.bibliographyModule.showError(this.errorHandler.getErrorMessage(jqXHR));
             }
         });
     }
