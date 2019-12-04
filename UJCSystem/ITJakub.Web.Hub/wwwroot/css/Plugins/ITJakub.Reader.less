@@ -358,14 +358,20 @@ html,body {
     }
 }
 
-// Rewrite golden layout styles to allow dragged item visibility in fullscreen
+
 body {
+    // Rewrite golden layout styles to allow dragged item visibility in fullscreen
     .lm_dragProxy {
         z-index: @fullscreenZIndex+30;
     }
 
     .lm_dropTargetIndicator {
         z-index: @fullscreenZIndex+25;
+    }
+
+    // Removed z-index from golden layout header as it caused problems with header dropdown visibility
+    .lm_header {
+        z-index: unset;
     }
 }
 .reader .fullscreen-close-button {
