@@ -10,7 +10,7 @@
     "auth-edit-self-personal-data": "Upravovat vlastní osobní údaje",
     "auth-find-user-by-registration-code": "Vyhledat uživatele podle registračního kódu",
     "auth-get-non-verified-user-by-verification-code": "Vyhledat neověřené uživatele podle registračního kódu",
-    "auth-list-users": "Zobrazit všechny uživatele",
+    "auth-list-users": "Zobrazit seznam uživatelů",
     "auth-manage-non-verified-users-data": "Spravovat neověřené uživatele",
     "auth-manage-user-permissions": "Spravovat práva",
     "auth-manage-user-roles": "Spravovat uživatelské skupiny",

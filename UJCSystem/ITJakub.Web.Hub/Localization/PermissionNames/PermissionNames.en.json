@@ -10,7 +10,7 @@
     "auth-edit-self-personal-data": "Edit own personal data",
     "auth-find-user-by-registration-code": "Find user by registration code",
     "auth-get-non-verified-user-by-verification-code": "Find non-verified user by verification code",
-    "auth-list-users": "List all users",
+    "auth-list-users": "Show user list",
     "auth-manage-non-verified-users-data": "Manage non-verified users",
     "auth-manage-user-permissions": "Manage user permissions",
     "auth-manage-user-roles": "Manage user groups",
