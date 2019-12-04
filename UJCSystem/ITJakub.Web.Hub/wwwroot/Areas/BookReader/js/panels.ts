@@ -698,6 +698,13 @@ class TextPanel extends ContentViewPanel {
 
             var pageId = $(pageWithMinOffset).data("page-xmlId");
             this.parentReader.readerLayout.eventHub.emit("scrollPage", pageId);
+            this.parentReader.readerLayout.eventHub.on("toggleComments", (isChecked: boolean, className: string) => {
+                if (isChecked) {
+                    $(this.innerContent).addClass(className);
+                } else {
+                    $(this.innerContent).removeClass(className);
+                }
+            });
         });
 
         var textAreaDiv: HTMLDivElement = window.document.createElement("div");

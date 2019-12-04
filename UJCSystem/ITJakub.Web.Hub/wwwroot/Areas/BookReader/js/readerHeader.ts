@@ -286,11 +286,7 @@
         $(showPageNameCheckbox).change((eventData) => {
             var readerText: JQuery = $("#" + this.parentReader.textPanelId).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node);
-            if (currentTarget.checked) {
-                readerText.addClass("reader-text-show-page-names");
-            } else {
-                readerText.removeClass("reader-text-show-page-names");
-            }
+            this.parentReader.readerLayout.eventHub.emit("toggleComments", currentTarget.checked, "reader-text-show-page-names");
         });
 
         var pageNameSlider = document.createElement("label");
@@ -313,11 +309,7 @@
         $(showPageOnNewLineCheckbox).change((eventData) => {
             var readerText = $("#" + this.parentReader.textPanelId).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node);
-            if (currentTarget.checked) {
-                $(readerText).addClass("reader-text-page-new-line");
-            } else {
-                $(readerText).removeClass("reader-text-page-new-line");
-            }
+            this.parentReader.readerLayout.eventHub.emit("toggleComments", currentTarget.checked, "reader-text-page-new-line");
         });
 
         var pageOnNewLineSlider = document.createElement("label");
@@ -340,11 +332,8 @@
         $(showCommentCheckbox).change((eventData) => {
             var readerText = $("#" + this.parentReader.textPanelId).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node);
-            if (currentTarget.checked) {
-                $(readerText).addClass("show-notes");
-            } else {
-                $(readerText).removeClass("show-notes");
-            }
+            this.parentReader.readerLayout.eventHub.emit("toggleComments", currentTarget.checked, "show-notes");
+            
         });
 
         var commentSlider = document.createElement("label");
