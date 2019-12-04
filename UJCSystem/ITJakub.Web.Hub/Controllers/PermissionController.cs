@@ -259,6 +259,8 @@ namespace ITJakub.Web.Hub.Controllers
                 Start = 0
             };
 
+            ViewData.Add(RoleViewConstants.RegisteredRoleName, RoleNames.RegisteredUser);
+
             return View(model);
         }
 
