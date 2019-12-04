@@ -63,29 +63,28 @@ class BibliographiesSearch {
     private initializeFromUrlParams() {
 
         if (this.notInitialized) {
-
             this.notInitialized = false;
 
-            var page = getQueryStringParameterByName(this.urlPageKey);
+            this.bibliographyModule.runAsyncOnLoad(() => {
+                var page = getQueryStringParameterByName(this.urlPageKey);
 
-            if (page) {
-                this.initPage = parseInt(page);
-            }
+                if (page) {
+                    this.initPage = parseInt(page);
+                }
 
-            var sortedAsc = getQueryStringParameterByName(this.urlSortAscKey);
-            var sortCriteria = getQueryStringParameterByName(this.urlSortCriteriaKey);
+                var sortedAsc = getQueryStringParameterByName(this.urlSortAscKey);
+                var sortCriteria = getQueryStringParameterByName(this.urlSortCriteriaKey);
 
-            if (sortedAsc && sortCriteria) {
-                this.bibliographyModule.setSortedAsc(sortedAsc === "true");
-                this.bibliographyModule.setSortCriteria(<SortEnum>(<any>(sortCriteria)));
-            }
+                if (sortedAsc && sortCriteria) {
+                    this.bibliographyModule.setSortedAsc(sortedAsc === "true");
+                    this.bibliographyModule.setSortCriteria(<SortEnum>(<any>(sortCriteria)));
+                }
 
-            var searched = getQueryStringParameterByName(this.urlSearchKey);
-            this.search.writeTextToTextField(searched);
+                var searched = getQueryStringParameterByName(this.urlSearchKey);
+                this.search.writeTextToTextField(searched);
 
-            this.search.processSearch();
-            
-
+                this.search.processSearch();
+            });
         } 
     }
 
