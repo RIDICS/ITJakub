@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.RestClient.Errors;
+using Vokabular.Shared.Const;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -19,12 +21,14 @@ namespace Vokabular.MainService.Controllers
             m_catalogValueManager = catalogValueManager;
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpPost("")]
         public int CreateTerm([FromBody] TermContract term)
         {
             return m_termManager.CreateTerm(term);
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpPut("{termId}")]
         public IActionResult UpdateTerm(int termId, [FromBody] TermContract data)
         {
@@ -39,6 +43,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpDelete("{termId}")]
         public IActionResult DeleteTerm(int termId)
         {
@@ -71,12 +76,14 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpPost("category")]
         public int CreateTermCategory([FromBody] TermCategoryContract termCategory)
         {
             return m_catalogValueManager.CreateTermCategory(termCategory);
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpPut("category/{termCategoryId}")]
         public IActionResult UpdateTermCategory(int termCategoryId, [FromBody] TermCategoryContract data)
         {
@@ -91,6 +98,7 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
+        [Authorize(VokabularPermissionNames.ManageCodeList)]
         [HttpDelete("category/{termCategoryId}")]
         public IActionResult DeleteTermCategory(int termCategoryId)
         {
