@@ -39,6 +39,15 @@ namespace Vokabular.MainService.DataContracts.Clients
 
                 throw exception;
             }
+
+            if (responseStatusCode == HttpStatusCode.Forbidden)
+            {
+                var exception = new MainServiceException(MainServiceErrorCode.Forbidden, "Insufficient permissions", responseStatusCode);
+
+                m_localization.LocalizeApiException(exception);
+
+                throw exception;
+            }
         }
     }
 }
