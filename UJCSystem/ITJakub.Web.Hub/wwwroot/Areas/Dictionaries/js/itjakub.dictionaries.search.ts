@@ -330,7 +330,6 @@ class DictionaryViewerTextWrapper {
             dataType: "json",
             contentType: "application/json",
             success: (resultCount: number) => {
-                console.error("test2");
                 this.showBasicTabsAndCount("#search-headword-count", resultCount);
                 this.headwordViewer.createViewer(resultCount, this.loadHeadwords.bind(this), this.pageSize, text);
             },
@@ -406,7 +405,6 @@ class DictionaryViewerTextWrapper {
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
-                console.error("loadFulltextHead");
                 this.fulltextViewer.showHeadwords(response);
             },
             error: (response) => {
