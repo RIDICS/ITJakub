@@ -50,6 +50,8 @@
             this.pagination.make(this.recordCount, this.pageSize, this.defaultPageNumber);
         else
             this.pagination.make(this.recordCount, this.pageSize);
+
+        $(".disable-on-search-error").prop("disabled", false);
     }
 
     public setDefaultPageNumber(pageNumber: number) {
@@ -583,6 +585,7 @@
         $(this.headwordListContainer).empty().append(alert.buildElement());
         $(this.paginationContainer).empty();
         $(this.headwordDescriptionContainer).empty().append(alert.buildElement());
+        $(".disable-on-search-error").prop("disabled", true);
     }
 }
 

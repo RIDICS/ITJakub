@@ -85,10 +85,7 @@
                 dictionaryViewer.goToPage(resultPageNumber);
             },
             error: (jqXHR) => {
-                const alert = new AlertComponentBuilder(AlertType.Error).addContent(errorHandler.getErrorMessage(jqXHR));
-                $(headwordDescriptionSelector).empty().append(alert.buildElement());
-                $(headwordListSelector).empty().append(alert.buildElement());
-                $(paginationSelector).empty();
+                dictionaryViewer.showErrors(jqXHR);
             }            
         });
     });
