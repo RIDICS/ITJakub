@@ -20,7 +20,8 @@ class FavoriteManagement {
     private currentTypeFilter: number;
     private currentNameFilter: string;
 
-	private localizationScope = "FavoriteJs";
+    private localizationScope = "FavoriteJs";
+    private loader = lv.create(null, "lv-dots md lv-mid");
 
     constructor(favoriteManager: FavoriteManager) {
         this.favoriteManager = favoriteManager;
@@ -28,7 +29,7 @@ class FavoriteManagement {
         this.activeLabelId = null;
 
         this.paginationOptions = {
-            container: document.getElementById("#pagination") as HTMLDivElement,
+            container: document.getElementById("pagination") as HTMLDivElement,
             pageClickCallback: this.loadFavoriteItemsPage.bind(this)
         }
         this.pagination = new Pagination(this.paginationOptions);
@@ -197,21 +198,15 @@ class FavoriteManagement {
     }
 
     private showLoader() {
-        var loaderDiv = document.createElement("div");
-        var loaderClass = "lv-dots md lv-mid";
-        $(loaderDiv).addClass(loaderClass);
-
         $("#favorite-item-container")
             .empty()
-            .append(loaderDiv);
+            .append(this.loader.getElement());
     }
 
     private loadFavoriteItems() {
         this.currentSortOrder = parseInt($("#sort-select").val() as string);
         this.currentTypeFilter = parseInt($("#type-filter-select").val() as string);
         this.currentNameFilter = $("#name-filter").val() as string;
-        
-        this.showLoader();
 
         this.paginationOptions.callPageClickCallbackOnInit = false;
         this.pagination.make(0, FavoriteManagement.pageSize);
