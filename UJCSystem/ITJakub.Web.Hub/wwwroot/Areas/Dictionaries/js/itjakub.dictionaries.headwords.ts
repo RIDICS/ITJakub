@@ -10,8 +10,12 @@
         selectedBookIds = JSON.parse(bookIdList);
     } catch (e) { }
     
+    const headwordListSelector = "#headwordList";
+    const paginationSelector = "#pagination";
+    const headwordDescriptionSelector = "#headwordDescription";
     var pageSize = 50;
-    var dictionaryViewer = new DictionaryViewer("#headwordList", "#pagination", "#headwordDescription", true);
+    
+    var dictionaryViewer = new DictionaryViewer(headwordListSelector, paginationSelector, headwordDescriptionSelector, true);
     var dictionaryViewerWrapper = new DictionaryViewerListWrapper(dictionaryViewer, pageSize);
 
     var searchBox = new SearchBox("#searchbox", "Dictionaries/Dictionaries");
@@ -47,20 +51,21 @@
     dictionarySelector.makeAndRestore(selectedCategoryIds, selectedBookIds);
 
 
-    $("#cancelFilter").click(() => {
+    $("#cancelFilter").on("click",() => {
         dictionaryViewer.cancelFilter();
         $("#cancelFilter").addClass("hidden");
     });
 
-    $("#printDescription").click(() => {
+    $("#printDescription").on("click",() => {
         dictionaryViewer.print();
     });
 
-    $("#printList").click(() => {
+    $("#printList").on("click",() => {
         dictionaryViewer.printList();
     });
 
-    $("#searchButton").click(() => {
+    const errorHandler = new ErrorHandler();
+    $("#searchButton").on("click", () => {
         var query = $("#searchbox").val() as string;
         var selectedIds = dictionarySelector.getSelectedIds();
         $.ajax({
@@ -78,7 +83,10 @@
             success: (response) => {
                 var resultPageNumber = response;
                 dictionaryViewer.goToPage(resultPageNumber);
-            }
+            },
+            error: (jqXHR) => {
+                dictionaryViewer.showErrors(jqXHR);
+            }            
         });
     });
 
@@ -99,7 +107,7 @@ class DictionaryViewerListWrapper {
         this.pageSize = pageSize;
         this.dictionaryViewer = dictionaryViewer;
         //this.dictionaryViewer.setFavoriteCallback(this.addNewFavoriteHeadword.bind(this), this.removeFavoriteHeadword.bind(this));
-
+        
         window.matchMedia("print").addListener(mql => {
             if (mql.matches) {
                 this.dictionaryViewer.loadAllHeadwords();
@@ -138,6 +146,9 @@ class DictionaryViewerListWrapper {
             success: (response) => {
                 var resultPageNumber = response;
                 this.dictionaryViewer.goToPage(resultPageNumber);
+            },
+            error: (jqXHR) => {
+                this.dictionaryViewer.showErrors(jqXHR);
             }
         });
     }
@@ -190,6 +201,9 @@ class DictionaryViewerListWrapper {
                 }
 
                 this.dictionaryViewer.createViewer(resultCount, this.loadHeadwords.bind(this), this.pageSize, null, null);
+            },
+            error: (jqXHR) => {
+                this.dictionaryViewer.showErrors(jqXHR);
             }
         });
     }
@@ -211,6 +225,9 @@ class DictionaryViewerListWrapper {
             contentType: "application/json",
             success: (response) => {
                 this.dictionaryViewer.showHeadwords(response);
+            },
+            error: (jqXHR) => {
+                this.dictionaryViewer.showErrors(jqXHR);
             }
         });
     }
