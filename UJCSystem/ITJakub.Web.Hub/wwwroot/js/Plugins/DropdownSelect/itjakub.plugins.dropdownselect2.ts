@@ -150,7 +150,7 @@
     protected downloadData(dropDownItemsDiv: HTMLDivElement) {
         this.books = {};
 
-        var loadDiv = lv.create(null, "lv-circles lv-mid sm lvb-1");
+        var loadDiv = lv.create(null, "lv-circles lv-mid sm lvb-1 lvt-1");
         $(dropDownItemsDiv).append(loadDiv.getElement());
 
         $.ajax({

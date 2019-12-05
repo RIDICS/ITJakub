@@ -95,7 +95,6 @@ class DropDownSelect {
     protected favoriteManager: FavoriteManager;
     protected favoriteDialog: NewFavoriteDialog;
     private headerLoader = lv.create(null, "lv-circles tiniest dropdown-loader-color dropdown-align-loader");
-    private bodyLoader = lv.create(null, "lv-circles sm lv-mid lvt-1 lvb-1");
 
     constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
         this.dropDownSelectContainer = dropDownSelectContainer;
@@ -237,8 +236,6 @@ class DropDownSelect {
         $(dropDownBodyDiv).addClass("dropdown-select-body");
 
         this.dropDownBodyDiv = dropDownBodyDiv;
-
-        this.dropDownBodyDiv.append(this.bodyLoader.getElement());
 
         var filterDiv = document.createElement("div");
         $(filterDiv).addClass("dropdown-filter");
@@ -407,7 +404,6 @@ class DropDownSelect {
                 this.makeLeafItem(dropDownItemsDiv, childBook);
             }
         }
-        this.bodyLoader.hide();
         this.headerLoader.hide();
         }
 
