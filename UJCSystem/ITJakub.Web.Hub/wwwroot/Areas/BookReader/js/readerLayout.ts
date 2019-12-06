@@ -94,7 +94,6 @@ class ReaderLayout {
             this.pagesById[bookPageItem.pageId] = bookPageItem;
         }
 
-        
 
         var layoutConfig = new LayoutConfiguration().getLayoutConfig();
         for (var index = 0; index < layoutConfig.length; index++) {
@@ -137,9 +136,9 @@ class ReaderLayout {
                     container.getElement().append(this.createSearchPanel());
                     break;
                 default:
-                    break;
+                    return;
             }
-       
+
         });
         readerLayout.registerComponent('viewTab', (container, state) => {
             switch (state.label) {
@@ -153,17 +152,40 @@ class ReaderLayout {
                     container.getElement().append(this.createTextPanel());
                     break;
                 default:
-                    break;
+                    return;
             }
+
+            container.on("tab", () => {
+
+
+            });
         });
         readerLayout.init();
-        readerLayout.on("stateChanged", () => {
-            this.moveToPageNumber(this.actualPageIndex, true);
-        });
+        
+
+        this.attachReaderLayoutEvents(readerLayout);
+        
         $(window as any).resize(() => {
             readerLayout.updateSize();
         });
         return readerLayout;
+    }
+    
+    private attachReaderLayoutEvents(readerLayout: GoldenLayout) {
+        readerLayout.on("stateChanged", () => {
+            this.moveToPageNumber(this.actualPageIndex, true);
+        });
+
+        // Prevent dragging tab if there is only one in layout
+        readerLayout.on('tabCreated', (tab) => {
+            var dragListener = tab._dragListener;
+            tab._dragListener._eElement.on("mousedown touchstart", () => {
+                var tabs = $(".lm_tab");
+                if (tabs.length <= 1) {
+                    dragListener.onMouseUp();
+                }
+            });
+        });
     }
 
     createDesktopToolPanel(panelId: string, panelTitle: string) {
@@ -213,7 +235,7 @@ class ReaderLayout {
     }
 
     createMobileToolPanel(panelId: string, panelTitle: string) {
-        var type; 
+        var type;
         if (panelId === this.termsPanelId) type = PanelType.Column;
         else type = PanelType.Component;
         var configurationObject: LayoutConfiguration = new LayoutConfiguration();
@@ -221,7 +243,7 @@ class ReaderLayout {
         if (this.readerLayout.root.contentItems.length > 0) {
             this.readerLayout.root.contentItems[0].remove();
         }
-        
+
         this.readerLayout.root.addChild(itemConfig);
         if (panelId === this.termsPanelId) {
             this.createTermsPanel(configurationObject);
@@ -233,7 +255,7 @@ class ReaderLayout {
 
         var itemConfig = configurationObject.viewPanelConfig(PanelType.Component, panelId, panelTitle);
         if (this.readerLayout.root.contentItems.length > 0) {
-            this.readerLayout.root.contentItems[0].remove();    
+            this.readerLayout.root.contentItems[0].remove();
         }
         this.readerLayout.root.addChild(itemConfig);
     }
@@ -252,7 +274,9 @@ class ReaderLayout {
         var pages = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace(['index', 'pageText']),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            local: (): ISearchResult[] => { return pagesTexts; }
+            local: (): ISearchResult[] => {
+                return pagesTexts;
+            }
         });
 
         $(input).typeahead(
@@ -266,7 +290,7 @@ class ReaderLayout {
                 source: pages,
                 display: data => data.pageText,
                 templates: {
-                     suggestion: data => '<div><span style = "text-align: left;display: inline-block;width: 50%;">Str: ' + data.pageText + '</span> <span style="width: 50%;float: right;text-align: right;display: inline-block;"> Pořadí: ' + data.index + '</span></div>'
+                    suggestion: data => '<div><span style = "text-align: left;display: inline-block;width: 50%;">Str: ' + data.pageText + '</span> <span style="width: 50%;float: right;text-align: right;display: inline-block;"> Pořadí: ' + data.index + '</span></div>'
                 }
             });
     }
@@ -524,7 +548,8 @@ class ReaderLayout {
             $(bookmarkPosition.bookmarkSpan).data("title", title);
         }
 
-        this.favoriteManager.updateFavoriteItem(bookmarkId, title, () => { });
+        this.favoriteManager.updateFavoriteItem(bookmarkId, title, () => {
+        });
     }
 
     public persistRemoveBookmark(pageIndex: number, bookmarkId: number) {
@@ -552,7 +577,7 @@ class ReaderLayout {
             postRemoveAction();
         });
     }
-    
+
     moveToPage(pageId: number, scrollTo: boolean) {
         var pageIndex: number = -1;
         for (var i = 0; i < this.pages.length; i++) {
@@ -683,9 +708,9 @@ class ReaderLayout {
         if (this.deviceType === Device.Mobile) {
             this.createMobileToolPanel(this.searchPanelId, "Výsledky vyhledávání");
         } else {
-            this.createDesktopToolPanel(this.searchPanelId, "Výsledky vyhledávání");    
+            this.createDesktopToolPanel(this.searchPanelId, "Výsledky vyhledávání");
         }
-        
+
         var searchButton = $(document as any).find(".search-button");
         searchButton.prop("disabled", false);
         return this.searchPanel;
@@ -779,7 +804,7 @@ class ReaderLayout {
 
     protected createSearchPanel(): HTMLDivElement {
         if (this.searchPanel == null) {
-            var resultPanel: SearchResultPanel =  new SearchResultPanel(this.searchPanelId, this, this.sc);
+            var resultPanel: SearchResultPanel = new SearchResultPanel(this.searchPanelId, this, this.sc);
             this.searchPanel = resultPanel;
             this.toolPanels.push(resultPanel);
         }
@@ -815,7 +840,7 @@ class ReaderLayout {
         if (this.textPanel == null) {
             var textPanel: TextPanel = new TextPanel(this.textPanelId, this, this.sc);
             this.textPanel = textPanel;
-            this.contentViewPanels.push(textPanel);    
+            this.contentViewPanels.push(textPanel);
         }
         return this.textPanel.getPanelHtml();
     }
@@ -824,7 +849,7 @@ class ReaderLayout {
         if (this.imagePanel == null) {
             var imagePanel: ImagePanel = new ImagePanel(this.imagePanelId, this, this.sc);
             this.imagePanel = imagePanel;
-            this.contentViewPanels.push(imagePanel);    
+            this.contentViewPanels.push(imagePanel);
         }
         return this.imagePanel.getPanelHtml();
     }
@@ -839,13 +864,13 @@ class ReaderLayout {
     }
 
     protected hasBookImageCache: { [key: string]: { [key: string]: boolean; }; } = {};
+
     hasBookPage(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
         if (this.hasBookPageCache[bookId] !== undefined && this.hasBookPageCache[bookId][bookVersionId + "_loading"]) {
             this.hasBookPageCallOnSuccess[bookId][bookVersionId].push(() => {
                 this.hasBookPage(bookId, bookVersionId, onTrue, onFalse);
             });
-        }
-        else if (this.hasBookPageCache[bookId] === undefined || this.hasBookPageCache[bookId][bookVersionId] === undefined) {
+        } else if (this.hasBookPageCache[bookId] === undefined || this.hasBookPageCache[bookId][bookVersionId] === undefined) {
             if (this.hasBookPageCache[bookId] === undefined) {
                 this.hasBookPageCache[bookId] = {};
                 this.hasBookPageCache[bookId][bookVersionId + "_loading"] = true;
@@ -886,9 +911,9 @@ class ReaderLayout {
 
     private addResponsiveBehavior(bookHeader: BookHeader) {
         var configArray = new LayoutConfiguration().getLayoutConfig();
-        for (var index = 0; index<configArray.length; index++) {
+        for (var index = 0; index < configArray.length; index++) {
             if (configArray[index].minWidth <= window.innerWidth && configArray[index].maxWidth >= window.innerWidth && this.deviceType !== configArray[index].deviceType) {
-                    this.createSearchPanel();
+                this.createSearchPanel();
                 this.deviceType = configArray[index].deviceType;
                 this.readerLayout.destroy();
                 this.readerLayout = this.initLayout(configArray[index].goldenLayoutConfig);
@@ -897,19 +922,20 @@ class ReaderLayout {
                 return;
             }
         }
-       
+
     }
+
     private addListeners() {
         this.readerLayout.eventHub.on("navigationClicked", (pageNumber: number) => {
             this.moveToPage(pageNumber, true);
         });
 
         this.readerLayout.on("windowOpened", () => {
-            this.readerLayout.eventHub.emit("moveToPageNumber", this.getActualPage().position-1);
+            this.readerLayout.eventHub.emit("moveToPageNumber", this.getActualPage().position - 1);
         });
 
         this.readerLayout.eventHub.on("moveToPageNumber", (pageNumber: number) => {
-        this.moveToPageNumber(pageNumber, true);
+            this.moveToPageNumber(pageNumber, true);
         });
 
         this.readerLayout.eventHub.on("scrollPage", (pageWithMinOffsetId) => {
