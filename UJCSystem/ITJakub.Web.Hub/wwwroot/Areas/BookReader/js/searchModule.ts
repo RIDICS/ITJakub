@@ -24,7 +24,7 @@
         enabledOptions.push(SearchTypeEnum.Sentence);
         enabledOptions.push(SearchTypeEnum.Heading);
 
-        this.search.makeSearch(enabledOptions);
+        this.search.makeSearch(enabledOptions, false);
 
         var decodedText: string;
         if (typeof searchedText !== "undefined" && searchedText !== null) {
