@@ -687,7 +687,10 @@ class TextPanel extends ContentViewPanel {
         var textContainerDiv: HTMLDivElement = window.document.createElement("div");
         $(textContainerDiv).addClass("reader-text-container");
 
-        $(textContainerDiv).scroll((event) => {
+        document.addEventListener("scroll", (event) => {
+            if (!$(event.target).hasClass("reader-text-container")) {
+                return
+            }
             this.parentReader.clickedMoveToPage = false;
 
             var pages = $(event.target as Node as HTMLElement).find(".page");
@@ -701,7 +704,7 @@ class TextPanel extends ContentViewPanel {
                 }
             });
 
-            var pageId = $(pageWithMinOffset).data("page-xmlId");
+            var pageId: number = parseInt($(pageWithMinOffset).attr("data-page-xmlId"));
             this.parentReader.readerLayout.eventHub.emit("scrollPage", pageId);
             this.parentReader.readerLayout.eventHub.on("toggleComments", (isChecked: boolean, className: string) => {
                 if (isChecked) {
@@ -710,7 +713,7 @@ class TextPanel extends ContentViewPanel {
                     $(this.innerContent).removeClass(className);
                 }
             });
-        });
+        }, true);
 
         var textAreaDiv: HTMLDivElement = window.document.createElement("div");
         $(textAreaDiv).addClass("reader-text");
@@ -722,7 +725,7 @@ class TextPanel extends ContentViewPanel {
             $(pageTextDiv).addClass("page");
             $(pageTextDiv).addClass("unloaded");
             $(pageTextDiv).data("page-name", page.text);
-            $(pageTextDiv).data("page-xmlId", page.pageId);
+            $(pageTextDiv).attr("data-page-xmlId", page.pageId);
             pageTextDiv.id = page.pageId.toString(); // each page has own id
 
             var pageNameDiv: HTMLDivElement = window.document.createElement("div");
