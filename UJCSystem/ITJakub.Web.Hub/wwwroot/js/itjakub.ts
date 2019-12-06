@@ -38,11 +38,14 @@ $(document as Node as Element).ready(() => {
 
     $("#main-plugins-menu > ul > li > a").on("touchstart",
         (event) => {
-            event.preventDefault();
             var $liElement = $(event.currentTarget as Node as Element).closest(".has-sub");
-            $liElement.siblings().removeClass("hover");
-            navbarItems.removeClass("hover");
-            $liElement.toggleClass("hover");
+            if($liElement.length)
+            {
+                event.preventDefault();
+                $liElement.siblings().removeClass("hover");
+                navbarItems.removeClass("hover");
+                $liElement.toggleClass("hover");
+            }
         });
     navbarItems.on("touchstart",
         (event) => {
