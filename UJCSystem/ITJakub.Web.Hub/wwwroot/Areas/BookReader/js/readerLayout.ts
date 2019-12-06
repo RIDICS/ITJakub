@@ -399,7 +399,7 @@ class ReaderLayout {
         $bookmarkSpan.addClass("glyphicon glyphicon-bookmark bookmark");
         $bookmarkSpan.data("page-index", pageIndex);
         $bookmarkSpan.data("page-name", pageName);
-        $bookmarkSpan.data("page-xmlId", pageId);
+        $bookmarkSpan.attr("data-page-xmlId", pageId);
         $bookmarkSpan.data("title", title);
 
         $bookmarkSpan.click(() => {
