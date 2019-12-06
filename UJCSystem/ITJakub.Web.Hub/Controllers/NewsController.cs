@@ -98,7 +98,12 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult Add()
         {
-            return View("AddNews");
+            var model = new NewsSyndicationItemViewModel
+            {
+                AddForCommunityPortal = PortalTypeValue == PortalTypeContract.Community,
+                AddForResearchPortal = PortalTypeValue == PortalTypeContract.Research,
+            };
+            return View("AddNews", model);
         }
 
         [HttpGet]
@@ -117,18 +122,41 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Add(NewsSyndicationItemViewModel model)
         {
-            var client = GetNewsClient();
-            var data = new CreateNewsSyndicationItemContract
+            if (ModelState.IsValid)
+            {
+                if (model.AddForCommunityPortal || model.AddForResearchPortal)
+                {
+                    var client = GetNewsClient();
+
+                    if (model.AddForCommunityPortal)
+                    {
+                        client.CreateNewsSyndicationItem(CreateSyndicationItem(model, PortalTypeContract.Community));
+                    }
+
+                    if (model.AddForResearchPortal)
+                    {
+                        client.CreateNewsSyndicationItem(CreateSyndicationItem(model, PortalTypeContract.Research));
+                    }
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ModelState.AddModelError(string.Empty, Localizer.Translate("CreateNewsForOnePortalError", "News"));
+            }
+
+            return View("AddNews", model);
+        }
+
+        private CreateNewsSyndicationItemContract CreateSyndicationItem(NewsSyndicationItemViewModel model, PortalTypeContract portalType)
+        {
+            return new CreateNewsSyndicationItemContract
             {
                 Title = model.Title,
                 ItemType = NewsTypeEnumContract.Combined,
                 Text = model.Content,
                 Url = model.Url,
-                PortalType = PortalTypeValue,
+                PortalType = portalType,
             };
-            client.CreateNewsSyndicationItem(data);
-
-            return RedirectToAction("Index", "Home");
         }
     }
 

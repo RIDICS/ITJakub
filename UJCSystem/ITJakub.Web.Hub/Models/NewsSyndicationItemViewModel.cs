@@ -21,6 +21,10 @@ namespace ITJakub.Web.Hub.Models
         [Display(Name = "Url:")]        
         public string Url { get; set; }    
         
+        public bool AddForCommunityPortal { get; set; }
+        
+        public bool AddForResearchPortal { get; set; }
+        
         //[EnumDataType(typeof(NewsTypeContractViewEnum))]
         //[Required]
         //[Display(Name="Type")]
