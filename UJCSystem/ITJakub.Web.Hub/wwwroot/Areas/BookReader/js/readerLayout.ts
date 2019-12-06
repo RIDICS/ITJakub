@@ -599,10 +599,6 @@ class ReaderLayout {
             pageIndex = this.pages.length - 1;
         }
 
-        if (!scrollTo) {
-            this.clickedMoveToPage = true;
-        }
-
         this.actualPageIndex = pageIndex;
         this.actualizeSlider(pageIndex);
         this.actualizePagination(pageIndex);
@@ -651,9 +647,7 @@ class ReaderLayout {
         });
         $(displayedPages).css("display", "inline-block");
         $(actualPage).addClass("page-active");
-        if (actualPage.data("page-index") !== prevActualPage) { //WORKAROUND notify view panels in different windows
-            actualPage.children().first().click();
-        }
+
     }
 
     actualizeSlider(pageIndex: number) {
@@ -924,6 +918,7 @@ class ReaderLayout {
 
     private addListeners() {
         this.readerLayout.eventHub.on("navigationClicked", (pageNumber: number) => {
+            this.clickedMoveToPage = true;
             this.moveToPage(pageNumber, true);
         });
 
@@ -932,6 +927,7 @@ class ReaderLayout {
         });
 
         this.readerLayout.eventHub.on("moveToPageNumber", (pageNumber: number) => {
+            this.clickedMoveToPage = true;
             this.moveToPageNumber(pageNumber, true);
         });
 
