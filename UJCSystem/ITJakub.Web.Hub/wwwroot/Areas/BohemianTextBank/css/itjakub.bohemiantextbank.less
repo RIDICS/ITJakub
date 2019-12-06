@@ -14,9 +14,6 @@
 
 .corpus-search-div{
     clear:both;
-    margin-left: 10px;
-    margin-right: 10px;
-    width: @corpus-search-width;
     background-color: @background-color;
     display: block;
     padding-top: 15px;
@@ -34,7 +31,6 @@
 .corpus-search-result-detail-div{
     background-color: white;
     height: @search-result-detail-area-height;
-    width: @search-results-area-width;
     border-top: 3px solid @background-color;
 }
 
@@ -154,6 +150,10 @@
 .corpus-search-setting-div-results-count{
     margin-top: 70px;
     margin-bottom: 10px;
+    
+    div {
+        display: inline-block;
+    }
 }
 
 #totalResultCountDiv {

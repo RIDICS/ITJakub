@@ -1,5 +1,7 @@
 ﻿@import "../../../css/ITJakub.Colors.less";
+@import "../../../css/ITJakub.Constants.less";
 @import "../../Admin/css/@editors-common-variables.less";
+
 @table-line-height: 3em;
 @table-even-colour: #eee;
 @table-odd-colour: white;
@@ -17,12 +19,14 @@
 }
 
 .search-result-section {
-
+    padding: 0;
+    
     .corpus-result-and-settings-row {
         height: 32em;
 
         .corpus-search-results-div {
             height: inherit;
+            border: 1px solid #ddd;
 
             .search-results-row {
                 height: 100%;
@@ -61,6 +65,7 @@
 
                             .abbrev-col {
                                 padding-right: 5px;
+                                padding-left: 5px;
                             }
 
                             .context-before {
@@ -81,6 +86,10 @@
                                 width: 45%;
                             }
                         }
+                    }
+
+                    .alert {
+                        margin: 15px;
                     }
                 }
             }
