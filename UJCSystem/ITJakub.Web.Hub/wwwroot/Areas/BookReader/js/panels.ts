@@ -10,7 +10,6 @@
         this.parentReader = readerLayout;
 
         this.innerContent = this.makeBody(this, window);
-        this.attachDragPrevent();
     }
 
     protected makeBody(rootReference: Panel, window: Window): HTMLElement {
@@ -31,17 +30,6 @@
 
     protected addPanelClass(sidePanelDiv: HTMLDivElement) {
         throw new Error("Not implemented");
-    }
-    
-    private attachDragPrevent() {
-        var tabsSelector = ".lm_tab";
-        $(document.documentElement).on("mousedown", tabsSelector, (event)=>{
-            var tabs = $(tabsSelector);
-            if(tabs.length <= 1) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-            }
-        });
     }
 }
 

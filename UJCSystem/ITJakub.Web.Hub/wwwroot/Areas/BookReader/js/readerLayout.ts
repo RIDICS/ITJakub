@@ -154,11 +154,6 @@ class ReaderLayout {
                 default:
                     return;
             }
-
-            container.on("tab", () => {
-
-
-            });
         });
         readerLayout.init();
         
