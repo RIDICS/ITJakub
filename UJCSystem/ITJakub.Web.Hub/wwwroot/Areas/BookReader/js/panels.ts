@@ -52,7 +52,7 @@ class ContentPanel extends ToolPanel {
         $(this.innerContent).empty();
         $(this.innerContent).addClass("loader");
         var bookContent: JQueryXHR = this.sc.getBookContent(this.parentReader.bookId);
-        bookContent.done((response: {content: IChapterHieararchyContract[]}) => {
+        bookContent.done((response: { content: IChapterHieararchyContract[] }) => {
             var ulElement = document.createElement("ul");
             $(ulElement).addClass("content-item-root-list");
             for (var i = 0; i < response.content.length; i++) {
@@ -74,9 +74,12 @@ class ContentPanel extends ToolPanel {
     }
 
     private parseJsonItemToContentItem(chapterItem: IChapterHieararchyContract): ContentItem {
-        var pageItem = this.parentReader.pagesById[chapterItem.beginningPageId];
+        var pageItem = chapterItem.beginningPageId != null
+            ? this.parentReader.pagesById[chapterItem.beginningPageId]
+            : null;
+        var pageItemText = pageItem != null ? pageItem.text : "";
         return new ContentItem(chapterItem.name, chapterItem.beginningPageId,
-            pageItem.text, chapterItem.subChapters);
+            pageItemText, chapterItem.subChapters);
     }
 
     private makeContentItemChilds(contentItem: ContentItem): HTMLUListElement {
@@ -109,7 +112,7 @@ class ContentPanel extends ToolPanel {
                     $($(".view-control button")[1] as Node as HTMLElement).click();
                 }
                 this.parentReader.readerLayout.eventHub.emit("navigationClicked", contentItem.referredPageId);
-            });   
+            });
         });
 
         var textSpanElement = document.createElement("span");
@@ -118,8 +121,9 @@ class ContentPanel extends ToolPanel {
 
         var pageNameSpanElement = document.createElement("span");
         $(pageNameSpanElement).addClass("content-item-page-name");
-        pageNameSpanElement.innerHTML = "[" + contentItem.referredPageName + "]";
-
+        if (contentItem.referredPageName !== "") {
+            pageNameSpanElement.innerHTML = "[" + contentItem.referredPageName + "]";
+        }
         $(hrefElement).append(pageNameSpanElement);
         $(hrefElement).append(textSpanElement);
 
@@ -170,7 +174,7 @@ class SearchResultPanel extends ToolPanel {
             callPageClickCallbackOnInit: true
         };
         this.paginator = new Pagination(this.paginatorOptions);
-       
+
 
         innerContent.appendChild(this.searchPagingDiv);
         innerContent.appendChild(searchResultItemsDiv);
@@ -291,8 +295,7 @@ class BookmarksPanel extends ToolPanel {
             bookmarksContainer = document.createElement("div");
             bookmarksContainer.classList.add("reader-bookmarks-container");
             innerContent.appendChild(bookmarksContainer);
-        }
-        else {
+        } else {
             $bookmarksContainer.empty();
             bookmarksContainer = <HTMLDivElement>($bookmarksContainer.get(0) as Node);
         }
@@ -340,7 +343,7 @@ class BookmarksPanel extends ToolPanel {
         if (this.paginator != null) {
             this.actualBookmarkPage = this.paginator.getCurrentPage();
         }
-        
+
         this.paginator = new Pagination({
             container: paginationContainer,
             pageClickCallback: (pageNumber: number) => this.showBookmarkPage(pagesContainer, pageNumber),
@@ -370,7 +373,7 @@ class BookmarksPanel extends ToolPanel {
 
             rootReference.parentReader.persistRemoveBookmark(pageIndex, bookmark.id);
         });
-        
+
         const bookmarkIco = document.createElement("span");
         bookmarkIco.classList.add("glyphicon", "glyphicon-bookmark", "bookmark-ico");
         if (bookmark.favoriteLabel) {
@@ -415,7 +418,7 @@ class BookmarksPanel extends ToolPanel {
 
             titleInput.focus();
         });
-       
+
         const updateHook = () => {
             this.setBookmarkTitle(title, rootReference, bookmark.id, pageIndex, titleInput.value);
 
@@ -560,6 +563,7 @@ class TermsResultPanel extends TermsPanel {
     private termsOrderedList: HTMLOListElement;
 
     private termsResultItemsLoadDiv: HTMLDivElement;
+
     makeBody(rootReference: Panel, window: Window): HTMLElement {
         var termsResultDiv = window.document.createElement("div");
         $(termsResultDiv).addClass("reader-terms-result-div");
@@ -601,8 +605,8 @@ class TermsResultPanel extends TermsPanel {
         $(this.termsResultItemsLoadDiv).show();
         $(this.termsResultItemsDiv).hide();
         var terms: JQueryXHR = this.sc.getTerms(this.parentReader.bookId, page.pageId);
-        terms.done((response: {terms: Array<ITermContract>}) => {
-                
+        terms.done((response: { terms: Array<ITermContract> }) => {
+
             $(this.termsOrderedList).empty();
             $(this.termsOrderedList).removeClass("no-items");
             $(this.termsResultItemsLoadDiv).hide();
@@ -617,7 +621,7 @@ class TermsResultPanel extends TermsPanel {
                 $(this.termsOrderedList).addClass("no-items");
                 $(this.termsOrderedList).append("Na této stránce se nenachází žádné téma");
             }
-            
+
         });
         terms.fail(() => {
             if (page.pageId === this.parentReader.getActualPage().pageId) {
@@ -657,6 +661,7 @@ class TermsResultPanel extends TermsPanel {
         return termItemListElement;
     }
 }
+
 //end of tool panels
 
 abstract class ContentViewPanel extends Panel {
@@ -760,15 +765,12 @@ class TextPanel extends ContentViewPanel {
         if (!pageLoading) {
             if (pageSearchUnloaded) {
                 this.downloadSearchPageById(this.query, this.queryIsJson, page, onSuccess, onFailed);
-            }
-            else if (!pageLoaded) {
+            } else if (!pageLoaded) {
                 this.downloadPageById(page, onSuccess, onFailed);
-            }
-            else if (onSuccess !== null) {
+            } else if (onSuccess !== null) {
                 onSuccess();
             }
-        }
-        else if (onSuccess !== null) {
+        } else if (onSuccess !== null) {
             onSuccess();
         }
 
@@ -792,7 +794,7 @@ class TextPanel extends ContentViewPanel {
         var pageContainer = document.getElementById(page.pageId.toString());
         $(pageContainer).addClass("loading");
         var bookPage: JQueryXHR = this.sc.getBookPage(this.parentReader.versionId, page.pageId);
-        bookPage.done((response: { pageText: string}) => {
+        bookPage.done((response: { pageText: string }) => {
             $(pageContainer).empty();
             $(pageContainer).append(response.pageText);
             $(pageContainer).removeClass("loading");
@@ -821,7 +823,7 @@ class TextPanel extends ContentViewPanel {
         var pageContainer = document.getElementById(page.pageId.toString());
         $(pageContainer).addClass("loading");
         var bookPage: JQueryXHR = this.sc.getBookPageSearch(this.parentReader.versionId, page.pageId, queryIsJson, query);
-        bookPage.done((response: {pageText: string}) => {
+        bookPage.done((response: { pageText: string }) => {
             $(pageContainer).empty();
             $(pageContainer).append(response.pageText);
             $(pageContainer).removeClass("loading");
@@ -873,7 +875,9 @@ class ImagePanel extends ContentViewPanel {
         var imageLink: HTMLAnchorElement = document.createElement("a");
         imageLink.classList.add("no-click-href");
         imageLink.href = image.src;
-        imageLink.onclick = (event: MouseEvent) => { return event.ctrlKey; };
+        imageLink.onclick = (event: MouseEvent) => {
+            return event.ctrlKey;
+        };
 
         imageLink.appendChild(image);
         this.innerContent.appendChild(imageLink);
@@ -885,7 +889,7 @@ class ImagePanel extends ContentViewPanel {
             var $innerContent = $(this.innerContent);
 
             if (zoomOnClick) {
-                $innerContent.zoom({ on: "click" });
+                $innerContent.zoom({on: "click"});
             } else {
                 image.setAttribute("data-image-src", image.src);
                 wheelzoom(image);
@@ -917,6 +921,7 @@ class ImagePanel extends ContentViewPanel {
 class AudioPanel extends ContentViewPanel {
     private trackId: number;
     private numberOfTracks: number;
+
     protected makeBody(rootReference: Panel, window: Window): HTMLElement {
         var audioContainerDiv: HTMLDivElement = document.createElement("div");
         $(audioContainerDiv).addClass("reader-audio-container");
@@ -928,15 +933,15 @@ class AudioPanel extends ContentViewPanel {
         var trackSelect = document.createElement("select");
         trackSelect.id = "track-select";
         var book: JQueryXHR = this.sc.getAudioBook(this.parentReader.bookId);
-        book.done((response: {audioBook: IAudioBookSearchResultContract}) => {
+        book.done((response: { audioBook: IAudioBookSearchResultContract }) => {
             this.numberOfTracks = response.audioBook.Tracks.length;
             for (var track of response.audioBook.Tracks) {
                 var trackOption = document.createElement("option");
-                $(trackOption).prop("value", track.Position-1);
+                $(trackOption).prop("value", track.Position - 1);
                 trackOption.innerHTML = track.Name;
                 $(trackSelect).append(trackOption);
             }
-            for (var recording of response.audioBook.FullBookRecordings) {    
+            for (var recording of response.audioBook.FullBookRecordings) {
                 var download = document.createElement("a");
                 $(download).addClass("audio-download-href");
                 download.href = this.sc.getTrackDownloadUrl(recording.Id, recording.AudioType);
@@ -1008,14 +1013,14 @@ class AudioPanel extends ContentViewPanel {
 
     private reloadTrack() {
         var getTrack: JQueryXHR = this.sc.getTrack(this.parentReader.bookId, this.trackId);
-        getTrack.done((response: {track: ITrackWithRecordingContract}) => {
+        getTrack.done((response: { track: ITrackWithRecordingContract }) => {
             $(".track-name").html(response.track.Name);
             $("#track-select").val(this.trackId);
             $(".audio-text").html(response.track.Text);
             var audioPlayer = $("audio"); // TODO why audio object is wrapped in JQuery twice?
             $(audioPlayer).empty();
             $(".track").html("Stáhnout kapitolu:");
-            for (var recording  of response.track.Recordings) {
+            for (var recording of response.track.Recordings) {
                 var source = document.createElement("source");
                 source.src = this.sc.getTrackDownloadUrl(recording.Id, recording.AudioType);
                 source.type = recording.MimeType;
