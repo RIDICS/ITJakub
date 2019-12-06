@@ -1,11 +1,10 @@
 ﻿@using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
-@using Vokabular.MainService.DataContracts.Contracts.Permission
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.ProjectDetailContract>
 @inject ILocalizationService Localizer
 
 @{
-    ViewBag.Title = Localizer.Translate("GroupPermissionManagementTitle", "Permission", LocTranslationSource.File);
+    ViewBag.Title = Localizer.Translate("ProjectPermissionManagementTitle", "Permission", LocTranslationSource.File);
 }
 
 @section styles{
