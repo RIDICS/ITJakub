@@ -133,7 +133,7 @@
         $(toolButtons).addClass("buttons left");
 
         var addBookmarksButton = button.createAddBookmarkButton("bookmark",
-            localization.translate("add-bookmark", "BookReader").value,
+            localization.translate("addBoookmark", "BookReader").value,
             this.parentReader.bookmarksPanelId
         );
         toolButtons.appendChild(addBookmarksButton);

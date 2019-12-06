@@ -617,7 +617,7 @@ class TermsResultPanel extends TermsPanel {
 
             if (response.terms.length === 0 && this.termsOrderedList.innerHTML === "") {
                 $(this.termsOrderedList).addClass("no-items");
-                $(this.termsOrderedList).append(localization.translate("NoTopicsOnPage","BookReader").value);
+                $(this.termsOrderedList).append(localization.translate("NoTopicOnPage","BookReader").value);
             }
 
         });
