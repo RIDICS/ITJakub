@@ -502,25 +502,13 @@
         $(bookInfoDiv).addClass("book-details");
         
         var editionNoteDiv = this.getEditionNote(true);
-        var fullscreenButton = buttonObject.createButton("fullscreen", "fullscreen");
-        $(fullscreenButton).click(() => {
-            var $fullscreenButtonFirstChild = $(fullscreenButton.firstChild as Node as HTMLElement);
-            if ($fullscreenButtonFirstChild.hasClass("glyphicon-fullscreen")) {
-                $("#ReaderDiv").addClass("fullscreen");
-                $fullscreenButtonFirstChild.removeClass("glyphicon-fullscreen");
-                $fullscreenButtonFirstChild.addClass("glyphicon-remove");
-            } else {
-                $("#ReaderDiv").removeClass("fullscreen");
-                $fullscreenButtonFirstChild.removeClass("glyphicon-remove");
-                $fullscreenButtonFirstChild.addClass("glyphicon-fullscreen");
-            }
-            this.parentReader.readerLayout.updateSize();
-
-
-        });
-        bookInfoDiv.appendChild(fullscreenButton);
+        
         var title = document.createElement("span");
         $(title).addClass("title");
+        
+        var bookHeaderButtons = document.createElement("div");
+        $(bookHeaderButtons).addClass("book-details-buttons");
+                
         bookInfoDiv.appendChild(title);
         if (deviceType === Device.Desktop) {
             title.innerHTML = bookTitle;
@@ -544,7 +532,7 @@
                     details.collapse("hide");
                 }
             });
-            bookInfoDiv.appendChild(detailsButton);  
+            bookHeaderButtons.appendChild(detailsButton);  
 
         }
 
@@ -570,7 +558,24 @@
             
         }
 
-        
+        var fullscreenButton = buttonObject.createButton("fullscreen", "fullscreen");
+        $(fullscreenButton).click(() => {
+            var $fullscreenButtonFirstChild = $(fullscreenButton.firstChild as Node as HTMLElement);
+            if ($fullscreenButtonFirstChild.hasClass("glyphicon-fullscreen")) {
+                $("#ReaderDiv").addClass("fullscreen");
+                $("body").addClass("fullscreen-body");
+                $fullscreenButtonFirstChild.removeClass("glyphicon-fullscreen");
+                $fullscreenButtonFirstChild.addClass("glyphicon-remove");
+            } else {
+                $("#ReaderDiv").removeClass("fullscreen");
+                $("body").removeClass("fullscreen-body");
+                $fullscreenButtonFirstChild.removeClass("glyphicon-remove");
+                $fullscreenButtonFirstChild.addClass("glyphicon-fullscreen");
+            }
+            this.parentReader.readerLayout.updateSize();
+        });
+        bookHeaderButtons.appendChild(fullscreenButton);
+        bookInfoDiv.appendChild(bookHeaderButtons);
 
         var hiddenDiv = document.createElement("div");
         $(hiddenDiv).addClass("collapse collapsible-div");

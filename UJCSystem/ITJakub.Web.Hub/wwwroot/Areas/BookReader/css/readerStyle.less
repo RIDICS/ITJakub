@@ -107,13 +107,21 @@
 }
 
 .book-details {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  
+  .collapsible-div {
+    width: 100%;
+    padding: 0 1em;
+  }
+  
   .book-full-info-container {
     display: flex;
     padding-bottom: 1.5em;
   }
 
   button {
-    float: right;
     border: none;
     background: none;
     width: auto;
@@ -121,7 +129,7 @@
     padding: 0;
     margin: 1.5rem 2rem 0 0;
     font-size: 25px;
-    display: block !important;
+    display: inline-block;
 
     &:hover {
       color: @linkColorHover;
