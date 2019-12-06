@@ -23,10 +23,10 @@
                 minItemWidth: 265
             },
             labels: {
-                close: 'Zavřít',
-                maximise: 'Maximalizovat',
-                minimise: 'Minimalizovat',
-                popout: 'Otevřít v novém okně'
+                close: localization.translate("close", "BookReader").value,
+                maximise: localization.translate("maximise", "BookReader").value,
+                minimise: localization.translate("minimise", "BookReader").value,
+                popout: localization.translate("popout", "BookReader").value
             },
             content: [{
                 type: "row",
@@ -56,10 +56,10 @@
                 minItemWidth: 200
             },
             labels: {
-                close: 'Zavřít',
-                maximise: 'Maximalizovat',
-                minimise: 'Minimalizovat',
-                popout: 'Otevřít v novém okně'
+                close: localization.translate("close", "BookReader").value,
+                maximise: localization.translate("maximise", "BookReader").value,
+                minimise: localization.translate("minimise", "BookReader").value,
+                popout: localization.translate("popout", "BookReader").value
             },
             content: [
                 

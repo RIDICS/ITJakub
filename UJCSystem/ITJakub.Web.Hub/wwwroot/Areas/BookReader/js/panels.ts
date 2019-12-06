@@ -64,12 +64,10 @@ class ContentPanel extends ToolPanel {
             $(this.innerContent).empty();
             $(this.innerContent).append(ulElement);
 
-            this.innerContent = this.innerContent;
-
         });
         bookContent.fail(() => {
             $(this.innerContent).empty();
-            $(this.innerContent).append("Chyba při načítání obsahu");
+            $(this.innerContent).append(localization.translate("LoadingContentError", "BookReader").value);
         });
     }
 
@@ -301,7 +299,7 @@ class BookmarksPanel extends ToolPanel {
         }
 
         var bookmarksHead = document.createElement("h2");
-        bookmarksHead.innerHTML = "Všechny záložky";
+        bookmarksHead.innerHTML = localization.translate("AllBookmarks", "BookReader").value;
         bookmarksHead.classList.add("reader-bookmarks-head");
         bookmarksContainer.appendChild(bookmarksHead);
 
@@ -446,7 +444,7 @@ class BookmarksPanel extends ToolPanel {
         rootReference.parentReader.setBookmarkTitle(bookmarkId, pageIndex, title);
 
         if (!title) {
-            title = "&lt;bez názvu&gt;";
+            title = localization.translate("NoName","BookReader").value;
         }
 
         titleItem.innerHTML = title;
@@ -505,7 +503,7 @@ class TermsSearchPanel extends TermsPanel {
 
     clearResults() {
         $(this.searchResultOrderedList).empty();
-        $(this.searchResultOrderedList).append("Pro zobrazení výskytů použijte vyhledávání.");
+        $(this.searchResultOrderedList).append(localization.translate("UseSearch", "BookReader").value);
         $(this.searchResultOrderedList).addClass("no-items");
     }
 
@@ -522,7 +520,7 @@ class TermsSearchPanel extends TermsPanel {
 
         if (searchResults.length === 0) {
             $(this.searchResultOrderedList).addClass("no-items");
-            $(this.searchResultOrderedList).append("Žádné výskyty na stránce.");
+            $(this.searchResultOrderedList).append(localization.translate("NoOccurancesOnPage","BookReader").value);
         }
     }
 
@@ -619,7 +617,7 @@ class TermsResultPanel extends TermsPanel {
 
             if (response.terms.length === 0 && this.termsOrderedList.innerHTML === "") {
                 $(this.termsOrderedList).addClass("no-items");
-                $(this.termsOrderedList).append("Na této stránce se nenachází žádné téma");
+                $(this.termsOrderedList).append(localization.translate("NoTopicsOnPage","BookReader").value);
             }
 
         });
@@ -628,7 +626,7 @@ class TermsResultPanel extends TermsPanel {
                 $(this.termsResultItemsLoadDiv).hide();
                 $(this.termsResultItemsDiv).show();
                 $(this.termsOrderedList).addClass("no-items");
-                $(this.termsOrderedList).append("Chyba při načítání témat na stránce '" + page.text + "'");
+                $(this.termsOrderedList).append(localization.translateFormat("LoadingTopicsError", new Array<string>(page.text), "BookReader").value);
             }
         });
     }
@@ -814,7 +812,7 @@ class TextPanel extends ContentViewPanel {
         bookPage.fail(() => {
             $(pageContainer).empty();
             $(pageContainer).removeClass("loading");
-            $(pageContainer).append("Chyba při načítání stránky '" + page.text + "'");
+            $(pageContainer).append(localization.translateFormat("PageLoadingError", new Array<string>(page.text), "BookReader").value);
 
             if (onFailed != null) {
                 onFailed();
@@ -846,7 +844,7 @@ class TextPanel extends ContentViewPanel {
         bookPage.fail(() => {
             $(pageContainer).empty();
             $(pageContainer).removeClass("loading");
-            $(pageContainer).append("Chyba při načítání stránky '" + page.text + "' s výsledky vyhledávání");
+            $(pageContainer).append(localization.translateFormat("PageLoadingErrorWithSearchResults", new Array<string>(page.text), "BookReader").value);
 
             if (onFailed != null) {
                 onFailed();
@@ -958,7 +956,7 @@ class AudioPanel extends ContentViewPanel {
         });
         book.fail(() => {
             $(".reader-audio-container").empty();
-            $(".reader-audio-container").append("Nepodařilo se načíst audio knihu, opakujte prosím pokus později");
+            $(".reader-audio-container").append(localization.translate("FailedToLoadAudioBook","BookReader").value);
             $(".reader-audio-container").removeClass("loading");
         });
 
@@ -1004,7 +1002,7 @@ class AudioPanel extends ContentViewPanel {
         $(audioDownloadDiv).addClass("audio-download");
         var downloadBookDiv = document.createElement("div");
         $(downloadBookDiv).addClass("full-book");
-        $(downloadBookDiv).append("Stáhnout audioknihu:");
+        $(downloadBookDiv).append(localization.translate("downloadAudiobook", "BookReader").value);
         audioDownloadDiv.appendChild(downloadBookDiv);
         var downloadTrackDiv = document.createElement("div");
         $(downloadTrackDiv).addClass("track");
@@ -1022,7 +1020,7 @@ class AudioPanel extends ContentViewPanel {
             $(".audio-text").html(response.track.Text);
             var audioPlayer = $("audio"); // TODO why audio object is wrapped in JQuery twice?
             $(audioPlayer).empty();
-            $(".track").html("Stáhnout kapitolu:");
+            $(".track").html(`${localization.translate("DownloadChapter","BookReader").value}:`);
             for (var recording of response.track.Recordings) {
                 var source = document.createElement("source");
                 source.src = this.sc.getTrackDownloadUrl(recording.Id, recording.AudioType);
@@ -1039,7 +1037,7 @@ class AudioPanel extends ContentViewPanel {
         });
         getTrack.fail(() => {
             $(".reader-audio-container").empty();
-            $(".reader-audio-container").append("Nepodařilo se načíst stopu, opakujte prosím pokus později");
+            $(".reader-audio-container").append(localization.translate("FailedToLoadTrack","BookReader").value);
         });
     }
 }

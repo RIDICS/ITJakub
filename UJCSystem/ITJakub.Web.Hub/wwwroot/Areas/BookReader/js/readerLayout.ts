@@ -2,6 +2,8 @@
 //import GoldenLayout = require("golden-layout");
 //declare var GoldenLayout;
 
+var localization: Localization;
+
 class ReaderLayout {
     private favoriteManager: FavoriteManager;
     protected newFavoriteDialog: NewFavoriteDialog;
@@ -45,16 +47,6 @@ class ReaderLayout {
     termsPanelId: string = "terms";
     termsResultId: string = "termsResult";
     termsSearchId: string = "termsSearch";
-
-    textPanelLabel: string = "Text";
-    audioPanelLabel: string = "Zvuková stopa";
-    imagePanelLabel: string = "Obraz";
-    contentPanelLabel: string = "Obsah";
-    bookmarksPanelLabel: string = "Záložky";
-    searchPanelLabel: string = "Výsledky vyhledávání";
-    termsPanelLabel: string = "Lingvistické pojmy";
-    termsResultLabel: string = "Pojmy na stránce";
-    termsSearchLabel: string = "Výskyty na stránce";
 
     showPanelList: Array<ReaderPanelEnum>;
 
@@ -210,7 +202,7 @@ class ReaderLayout {
         var configurationObject: LayoutConfiguration = new LayoutConfiguration();
         if (this.readerLayout.root.getItemsById(panelId).length === 0) {
             if (this.readerLayout.root.getItemsById('views').length === 0) {
-                var viewColumnConfig = configurationObject.viewPanelConfig(PanelType.Column, "views", "Zdroje knihy");
+                var viewColumnConfig = configurationObject.viewPanelConfig(PanelType.Column, "views", localization.translate("BookSources", "BookReader").value);
                 this.readerLayout.root.contentItems[0].addChild(viewColumnConfig);
             }
             var itemConfig = configurationObject.viewPanelConfig(PanelType.Component, panelId, panelTitle);
@@ -371,7 +363,7 @@ class ReaderLayout {
 
         this.favoriteManager.createPageBookmark(Number(this.bookId), page.pageId, data.itemName, labelIds, (ids, error) => {
             if (error) {
-                this.newFavoriteDialog.showError("Chyba při vytváření záložky");
+                this.newFavoriteDialog.showError(localization.translate("CreatingBookmarkError", "BookReader").value);
                 return;
             }
 
@@ -429,7 +421,7 @@ class ReaderLayout {
         var tooltipTitle = function () {
             var bookmarkTitle = $(this).data("title");
             return favoriteLabel
-                ? bookmarkTitle + " (Štítek: " + favoriteLabel.name + ")"
+                ? localization.translateFormat("Label", new Array<string>(bookmarkTitle, favoriteLabel.name), "BookReader").value
                 : bookmarkTitle;
         };
 
@@ -448,11 +440,11 @@ class ReaderLayout {
 
         var tooltipTitle: string;
         if (labelCount > 4 || labelCount < 1) {
-            tooltipTitle = labelCount + " záložek";
+            tooltipTitle = `${labelCount} ${localization.translate("BookmarksGt4", "BookReader").value}`;
         } else if (labelCount > 1) {
-            tooltipTitle = labelCount + " záložky";
+            tooltipTitle = `${labelCount} ${localization.translate("BookmarksLt4", "BookReader").value}`;
         } else {
-            tooltipTitle = "1 záložka";
+            tooltipTitle = `${labelCount} ${localization.translate("Bookmark", "BookReader").value}`;
         }
 
         var bookmarkSpan = this.createBookmarkSpan(pageIndex, pageName, pageId, "", tooltipTitle, favoriteLabel);
@@ -653,7 +645,8 @@ class ReaderLayout {
     actualizeSlider(pageIndex: number) {
         var slider = $(this.readerHeaderDiv).find(".slider");
         $(slider).slider().slider("value", pageIndex);
-        $(slider).find(".ui-slider-handle").find(".tooltip-inner").html("Strana: " + this.pages[pageIndex].text);
+        $(slider).find(".ui-slider-handle").find(".tooltip-inner")
+            .html(`${localization.translate("page", "BookReader").value}: ${this.pages[pageIndex].text}`);
     }
 
     notifyPanelsMovePage(pageIndex: number, scrollTo: boolean) {
@@ -697,9 +690,9 @@ class ReaderLayout {
 
     private getSearchPanel(): SearchResultPanel {
         if (this.deviceType === Device.Mobile) {
-            this.createMobileToolPanel(this.searchPanelId, "Výsledky vyhledávání");
+            this.createMobileToolPanel(this.searchPanelId, localization.translate(this.searchPanelId, "BookReader").value);
         } else {
-            this.createDesktopToolPanel(this.searchPanelId, "Výsledky vyhledávání");
+            this.createDesktopToolPanel(this.searchPanelId, localization.translate(this.termsResultId, "BookReader").value);
         }
 
         var searchButton = $(document as any).find(".search-button");
@@ -710,9 +703,9 @@ class ReaderLayout {
     private getTermsResultPanel(): TermsResultPanel {
         if (this.termsResultPanel === null) {
             if (this.deviceType === Device.Mobile) {
-                this.createMobileToolPanel(this.termsResultId, this.termsResultLabel);
+                this.createMobileToolPanel(this.termsResultId, localization.translate(this.termsResultId, "BookReader").value);
             } else {
-                this.createDesktopToolPanel(this.termsResultId, this.termsResultLabel);
+                this.createDesktopToolPanel(this.termsResultId, localization.translate(this.termsResultId, "BookReader").value);
             }
         }
 
@@ -722,9 +715,9 @@ class ReaderLayout {
     private getTermsSearchPanel(): TermsSearchPanel {
         if (this.termsSearchPanel === null) {
             if (this.deviceType === Device.Mobile) {
-                this.createMobileToolPanel(this.termsSearchId, this.termsSearchLabel);
+                this.createMobileToolPanel(this.termsSearchId, localization.translate(this.termsSearchId, "BookReader").value);
             } else {
-                this.createDesktopToolPanel(this.termsSearchId, this.termsSearchLabel);
+                this.createDesktopToolPanel(this.termsSearchId, localization.translate(this.termsSearchId, "BookReader").value);
             }
         }
 
@@ -803,9 +796,9 @@ class ReaderLayout {
     }
 
     protected createTermsPanel(configObject: LayoutConfiguration) {
-        var itemConfig = configObject.toolPanelConfig(PanelType.Component, this.termsSearchId, "Výskyty na stránce");
+        var itemConfig = configObject.toolPanelConfig(PanelType.Component, this.termsSearchId, localization.translate(this.termsSearchId, "BookReader").value);
         this.readerLayout.root.getItemsById(this.termsPanelId)[0].addChild(itemConfig);
-        itemConfig = configObject.toolPanelConfig(PanelType.Component, this.termsResultId, "Témata na stránce");
+        itemConfig = configObject.toolPanelConfig(PanelType.Component, this.termsResultId, localization.translate(this.termsSearchId, "BookReader").value);
         this.readerLayout.root.getItemsById(this.termsPanelId)[0].addChild(itemConfig);
     }
 

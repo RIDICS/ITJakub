@@ -31,7 +31,7 @@
         $(editionNoteDiv).addClass("edition-note-wrapper");
         if (addHeader) {
             var editionNoteHeader = document.createElement("h3");
-            $(editionNoteHeader).append("Ediční poznámka");
+            $(editionNoteHeader).append(localization.translate("editionNote", "BookReader").value);
             $(editionNoteDiv).append(editionNoteHeader);
         }
         
@@ -40,7 +40,7 @@
             var editionNoteText = document.createElement("div");
             $(editionNoteText).addClass("edition-note-text");
             if (response.editionNote === "") {
-                $(editionNoteText).append("Toto dílo nemá ediční poznámku");
+                $(editionNoteText).append(localization.translate("noEditionNote", "BookReader").value);
             } else {
                 $(editionNoteText).append(response.editionNote);
             }
@@ -48,7 +48,7 @@
             $(editionNoteDiv).removeClass("loading");
         });
         editionNote.fail(() => {
-            $(editionNoteDiv).append("Ediční poznámku se nepodařilo načíst");
+            $(editionNoteDiv).append(localization.translate("failedToLoadNote", "BookReader").value);
             $(editionNoteDiv).removeClass("loading");
         });
 
@@ -59,7 +59,7 @@
         var bookDetailDiv = document.createElement("div");
         $(bookDetailDiv).addClass("book-detail-wrapper");
         var bookDetailHeader = document.createElement("h3");
-        $(bookDetailHeader).append("Informace o díle");
+        $(bookDetailHeader).append(localization.translate("informations", "BookReader").value);
         bookDetailDiv.appendChild(bookDetailHeader);
 
         var bookDetail: JQueryXHR = this.sc.getBookDetail(this.bookId);
@@ -75,17 +75,17 @@
                 }
             }
 
-            detailTable.makeTableRow("Editor", editors);
-            detailTable.makeTableRow("Předloha", detailData.LiteraryOriginal);
-            detailTable.makeTableRow("Zkratka památky", detailData.RelicAbbreviation);
-            detailTable.makeTableRow("Zkratka pramene", detailData.SourceAbbreviation);
-            detailTable.makeTableRow("Literární druh", detailData.LiteraryKinds);
-            detailTable.makeTableRow("Literární žánr", detailData.LiteraryGenre);
-            detailTable.makeTableRow("Poslední úprava edice	", detailData.CreateTimeString);
+            detailTable.makeTableRow(localization.translate("editor", "BookReader").value, editors);
+            detailTable.makeTableRow(localization.translate("original", "BookReader").value, detailData.LiteraryOriginal);
+            detailTable.makeTableRow(localization.translate("relicAbbr", "BookReader").value, detailData.RelicAbbreviation);
+            detailTable.makeTableRow(localization.translate("sourceAbbr", "BookReader").value, detailData.SourceAbbreviation);
+            detailTable.makeTableRow(localization.translate("literaryType", "BookReader").value, detailData.LiteraryKinds);
+            detailTable.makeTableRow(localization.translate("literaryGenre", "BookReader").value, detailData.LiteraryGenre);
+            detailTable.makeTableRow(localization.translate("EditionLastModification", "BookReader").value, detailData.CreateTimeString);
 
             $(detailTable.build()).find(".bib-table-cell").each((index, element) => {
                 if (element.innerHTML === "" || element.innerHTML === "undefined") {
-                    element.innerHTML = "&lt;Nezadáno&gt;";
+                    element.innerHTML = `&lt;${localization.translate("nullValue", "BookReader").value}&gt;`;
                 }
             });
 
@@ -94,7 +94,7 @@
             
         });
         bookDetail.fail(() => {
-            $(bookDetailDiv).append("Nepodařilo se načíst detaily o díle");
+            $(bookDetailDiv).append(localization.translate("FailedToLoadInfo", "BookReader").value);
         });
 
         return bookDetailDiv;
@@ -120,7 +120,7 @@
             }
         });
         bookDetail.fail(() => {
-            target.prepend("&lt;Nenačtení autoři&gt;");
+            target.prepend(`&lt;${localization.translate("failedToLoadAuthors", "BookReader").value}&gt;`);
         });
     }
 
@@ -133,7 +133,7 @@
         $(toolButtons).addClass("buttons left");
 
         var addBookmarksButton = button.createAddBookmarkButton("bookmark",
-            "Přidat záložku",
+            localization.translate("add-bookmark", "BookReader").value,
             this.parentReader.bookmarksPanelId
         );
         toolButtons.appendChild(addBookmarksButton);
@@ -141,22 +141,22 @@
 
         var bookmarksButton =
             button.createToolButton("bookmark",
-                this.parentReader.bookmarksPanelLabel,
+                localization.translate(this.parentReader.bookmarksPanelId, "BookReader").value,
                 this.parentReader.bookmarksPanelId);
         toolButtons.appendChild(bookmarksButton);
 
         var contentButton = button.createToolButton("book",
-            this.parentReader.contentPanelLabel,
+            localization.translate(this.parentReader.contentPanelId, "BookReader").value,
             this.parentReader.contentPanelId);
         toolButtons.appendChild(contentButton);
 
         var searchResultButton = button.createToolButton("search",
-            this.parentReader.searchPanelLabel,
+            localization.translate(this.parentReader.searchPanelId, "BookReader").value,
             this.parentReader.searchPanelId);
         toolButtons.appendChild(searchResultButton);
 
         var termsButton = button.createToolButton("list-alt",
-            this.parentReader.termsPanelLabel,
+            localization.translate(this.parentReader.termsPanelId, "BookReader").value,
             this.parentReader.termsPanelId);
         toolButtons.appendChild(termsButton);
         toolButtonsDiv.appendChild(toolButtons);
@@ -200,7 +200,7 @@
         hasBookPage.done((response: { hasBookPage: boolean }) => {
             if (response.hasBookPage) {
                 var textButton = buttonObject.createViewButton("font",
-                    this.parentReader.textPanelLabel,
+                    localization.translate(this.parentReader.textPanelId, "BookReader").value,
                     this.parentReader.textPanelId);
                 hasBookText = true;
                 if (!$(".lm_popin").is("div")) {
@@ -220,7 +220,7 @@
             hasBookImageAjax.done((response: { hasBookImage: boolean }) => {
                 if (response.hasBookImage) {
                     var imageButton = buttonObject.createViewButton("picture",
-                        this.parentReader.imagePanelLabel,
+                        localization.translate(this.parentReader.imagePanelId, "BookReader").value,
                         this.parentReader.imagePanelId);
                     hasBookImage = true;
                     if (!hasBookText && !$(".lm_popin").is("div")) {
@@ -237,7 +237,7 @@
             audioBook.done((response: { audioBook: IAudioBookSearchResultContract }) => {
                 if (response.audioBook.Tracks.length > 0) {
                     var audioButton = buttonObject.createViewButton("music",
-                        this.parentReader.audioPanelLabel,
+                        localization.translate(this.parentReader.audioPanelId, "BookReader").value,
                         this.parentReader.audioPanelId);
 
                     if (!hasBookText && !hasBookImage && !$(".lm_popin").is("div")) {
@@ -257,7 +257,7 @@
                 .click(() => {
                     $("#modalHeader")
                         .empty()
-                        .append("Ediční poznámka");
+                        .append(localization.translate("editionNote", "BookReader").value);
 
                     $("#modalBody")
                         .empty()
@@ -265,7 +265,7 @@
                 });
             var editionNoteLabel = document.createElement("span");
             $(editionNoteLabel).addClass("button-text");
-            $(editionNoteLabel).append("Ediční poznámka");
+            $(editionNoteLabel).append(localization.translate("editionNote", "BookReader").value);
             $(editionNoteButton).append(editionNoteLabel);
             viewButtons.appendChild(editionNoteButton);
         }
@@ -293,7 +293,7 @@
         $(pageNameSlider).addClass("switch");
 
         var showPageNameLabel: HTMLLabelElement = window.document.createElement("label");
-        showPageNameLabel.innerHTML = "Číslování stránek";
+        showPageNameLabel.innerHTML = localization.translate("pageNames", "BookReader").value;
         showPageCheckboxDiv.appendChild(showPageNameCheckbox);
         showPageCheckboxDiv.appendChild(pageNameSlider);
         showPageCheckboxDiv.appendChild(showPageNameLabel);
@@ -316,7 +316,7 @@
         $(pageOnNewLineSlider).addClass("switch");
 
         var showPageOnNewLineLabel: HTMLLabelElement = window.document.createElement("label");
-        showPageOnNewLineLabel.innerHTML = "Zalamovat stránky";
+        showPageOnNewLineLabel.innerHTML = localization.translate("wrapPages", "BookReader").value;
         showPageOnNewLineDiv.appendChild(showPageOnNewLineCheckbox);
         showPageOnNewLineDiv.appendChild(pageOnNewLineSlider);
         showPageOnNewLineDiv.appendChild(showPageOnNewLineLabel);
@@ -340,7 +340,7 @@
         $(commentSlider).addClass("switch");
 
         var showCommentLabel: HTMLLabelElement = window.document.createElement("label");
-        showCommentLabel.innerHTML = "Poznámky";
+        showCommentLabel.innerHTML = localization.translate("notes", "BookReader").value;
         showCommentCheckboxDiv.appendChild(showCommentCheckbox);
         showCommentCheckboxDiv.appendChild(commentSlider);
         showCommentCheckboxDiv.appendChild(showCommentLabel);
@@ -389,7 +389,7 @@
         var pageInputText = document.createElement("input");
         pageInputText.setAttribute("type", "text");
         pageInputText.setAttribute("id", "pageInputText");
-        pageInputText.setAttribute("placeholder", "Přejít na stranu...");
+        pageInputText.setAttribute("placeholder", localization.translate("GoToPage", "BookReader").value);
         pageInputText.classList.add("page-input-text");
         pageInputDiv.appendChild(pageInputText);
 
@@ -476,7 +476,7 @@
         var innerTooltip: HTMLDivElement = document.createElement("div");
         $(innerTooltip).addClass("tooltip-inner");
         if (this.parentReader.pages[0] !== undefined) {
-            $(innerTooltip).html("Strana: " + this.parentReader.pages[0].text);
+            $(innerTooltip).html(`${localization.translate("page", "BookReader").value}: ${this.parentReader.pages[0].text}`);
         }
         else {
             console.error("missing page " + 0);

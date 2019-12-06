@@ -1,0 +1,77 @@
+﻿{
+  "culture": "cs-CZ",
+  "scope": "BookReader",
+  "dictionary": {
+    //Tab names
+    "text": "Text",
+    "audio": "Zvuková stopa",
+    "image": "Obraz",
+    "content": "Obsah",
+    "bookmarks": "Záložky",
+    "search": "Výsledky vyhledávání",
+    "terms": "Lingvistické pojmy",
+    "termsResult": "Pojmy na stránce",
+    "termsSearch": "Výskyty na stránce",
+    
+    
+    //Button names
+    "addBoookmark": "Přidat záložku",
+    "pageNames": "Číslování stránek",
+    "wrapPages": "Zalamovat stránky",
+    "notes": "Poznámky",
+    
+    "editionNote": "Ediční poznámka",
+    "noEditionNote": "Toto dílo nemá ediční poznámku",
+    "failedToLoadNote": "Ediční poznámku se nepodařilo načíst",
+    
+    "informations": "Informace o díle",
+    "editor": "Editor",
+    "original": "Předloha",
+    "relicAbbr": "Zkratka památky",
+    "sourceAbbr": "Zkratka pramene",
+    "literaryType": "Literární druh",
+    "literaryGenre": "Literární žánr",
+    "EditionLastModification": "Poslední úprava edice",
+    "FailedToLoadInfo": "Nepodařilo se načíst detaily o díle",
+    
+    "failedToLoadAuthors": "Nenačtení autoři",
+    
+    "page": "Strana",
+    "GoToPage": "Přejít na stranu...",
+    
+    "nullValue": "Nezadáno",
+
+    "BookmarksGt4": " záložek",
+    "BookmarksLt4": " záložky",
+    "Bookmark": " záložka",
+    "CreatingBookmarkError": "Chyba při vytváření záložky",
+
+    "BookSources": "Zdroje knihy",
+    "Label": "{0} (Štítek: {1})",
+
+    "close": "Zavřít",
+    "maximise": "Maximalizovat",
+    "minimise": "Minimalizovat",
+    "popout": "Otevřít v novém okně",
+    
+    "searchResultFailed": "Nepodařilo se načíst výsledky vyhledávání, opakujte prosím vyhledávání později",
+    "PageLoadingError": "Chyba při načítání stránky '{0}'",
+    "PageLoadingErrorWithSearchResults": "Chyba při načítání stránky '{0}' s výsledky vyhledávání",
+    "FailedToLoadAudioBook": "Nepodařilo se načíst audio knihu, opakujte prosím pokus později",
+    "FailedToLoadTrack": "Nepodařilo se načíst stopu, opakujte prosím pokus později",
+
+    "DownloadChapter": "Stáhnout kapitolu",
+    "DownloadAudiobook": "Stáhnout audioknihu:",
+
+    "NoOccurencesOnPage": "Žádné výskyty na stránce.",
+    "NoTopicOnPage": "Na této stránce se nenachází žádné téma",
+    "LoadingTopicsError": "Chyba při načítání témat na stránce '{0}'",
+    "UseSearch": "Pro zobrazení výskytů použijte vyhledávání.",
+
+    "NoName": "<bez názvu>",
+
+    "AllBookmarks": "Všechny záložky",
+    
+    "LoadingContentError": "Chyba při načítání obsahu"
+  }
+}
