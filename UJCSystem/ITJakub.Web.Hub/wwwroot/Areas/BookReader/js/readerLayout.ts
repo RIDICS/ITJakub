@@ -156,16 +156,16 @@ class ReaderLayout {
             }
         });
         readerLayout.init();
-        
+
 
         this.attachReaderLayoutEvents(readerLayout);
-        
+
         $(window as any).resize(() => {
             readerLayout.updateSize();
         });
         return readerLayout;
     }
-    
+
     private attachReaderLayoutEvents(readerLayout: GoldenLayout) {
         readerLayout.on("stateChanged", () => {
             this.moveToPageNumber(this.actualPageIndex, true);
@@ -174,12 +174,14 @@ class ReaderLayout {
         // Prevent dragging tab if there is only one in layout
         readerLayout.on('tabCreated', (tab) => {
             var dragListener = tab._dragListener;
-            tab._dragListener._eElement.on("mousedown touchstart", () => {
-                var tabs = $(".lm_tab");
-                if (tabs.length <= 1) {
-                    dragListener.onMouseUp();
-                }
-            });
+            if (dragListener) {
+                tab._dragListener._eElement.on("mousedown touchstart", () => {
+                    var tabs = $(".lm_tab");
+                    if (tabs.length <= 1) {
+                        dragListener.onMouseUp();
+                    }
+                });
+            }
         });
     }
 
