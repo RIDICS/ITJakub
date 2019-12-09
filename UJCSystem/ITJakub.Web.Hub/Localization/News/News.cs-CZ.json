@@ -15,7 +15,7 @@
     "ErrorNoCalendar": "Není dostupný žádný kalendář.",
     "AddForCommunityPortal": "Přidat pro Komunitní portál",
     "AddForResearchPortal": "Přidat pro Vokabulář webový",
-    "CreateNewsForOnePortalError": "Pro vztvoření novinky musíte vybrat alespoň jeden portál."
+    "CreateNewsForOnePortalError": "Pro vytvoření novinky musíte vybrat alespoň jeden portál."
   },
   "constants": {
     "GoogleCalendarLanguage": "cs"
