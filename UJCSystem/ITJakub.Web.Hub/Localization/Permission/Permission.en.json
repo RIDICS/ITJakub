@@ -67,6 +67,7 @@
     "GroupEditTitle": "Edit group",
     "Changed": "Changed",
 
+    "ProjectPermissionManagementTitle": "Administration - permissions on work",
     "ProjectPermissionManagementHeadline": "Permissions on work",
     "Projects": "Works",
     "AddProjectPermissionToGroup": "Add permission to a group on work",
