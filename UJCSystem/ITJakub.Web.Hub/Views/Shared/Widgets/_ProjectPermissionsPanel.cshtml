@@ -16,7 +16,9 @@
             <div class="alert-holder"></div>
             @if (ViewData.TryGetBooleanValue(PermissionViewConstants.ShowLinkToGroupManagement))
             {
-                <a asp-controller="Permission" asp-action="RolePermission" class="btn-link btn btn-default">@Localizer.Translate("GroupPermissionManagementHeadline", "Permission")</a>
+                <div class="header-link-container">
+                    <a asp-controller="Permission" asp-action="RolePermission"><i class="fa fa-external-link"></i> @Localizer.Translate("GroupPermissionManagementHeadline", "Permission")</a>
+                </div>
             }
 
             <div class="sub-content"></div>
