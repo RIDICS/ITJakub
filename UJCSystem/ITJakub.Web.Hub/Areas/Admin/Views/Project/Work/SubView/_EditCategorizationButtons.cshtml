@@ -1,0 +1,26 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@inject ILocalizationService Localizer
+
+<div class="row">
+    <div class="col-xs-12">
+    <div class="project-form-bottom-buttons col-md-12">
+        <div class="work-categorization-view-button-panel text-right">
+            <button class="btn btn-default work-categorization-edit-button">
+                @Localizer.Translate("Edit", "Admin")
+            </button>
+        </div>
+        <div class="work-categorization-editor-button-panel text-right">
+            <div class="alert alert-success work-categorization-save-success">@Localizer.Translate("DataSaveSuccess", "Admin")</div>
+            <div class="alert alert-danger work-categorization-save-error">@Localizer.Translate("DataSaveError", "Admin")</div>
+            <div class="alert alert-danger work-categorization-invalid-keyword-fail">@Localizer.Translate("KeywordsSaveError", "Admin")</div>
+
+            <button class="btn btn-default work-categorization-cancel-button">
+                @Localizer.Translate("Cancel", "Admin")
+            </button>
+            <button class="btn btn-default work-categorization-save-button">
+                <span class="saving-icon loading-small-button"></span> @Localizer.Translate("Save", "Admin")
+            </button>
+        </div>
+    </div>
+    </div>
+</div>

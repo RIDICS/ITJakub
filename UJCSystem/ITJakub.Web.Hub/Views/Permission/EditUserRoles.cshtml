@@ -1,4 +1,5 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Constants
+@using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
 @model ITJakub.Web.Hub.Models.User.UserDetailViewModel
 @inject ILocalizationService Localizer
@@ -18,6 +19,10 @@
 
 <h2>@Localizer.Translate("EditUsersGroupsTitle", "Permission", LocTranslationSource.File)</h2>
 
+@if (ViewData.TryGetValue(RoleViewConstants.RegisteredRoleName, out var registeredRoleName))
+{
+    <span id="registeredRoleName" data-name="@registeredRoleName" class="hidden"></span>
+}
 
 <div class="row">
     <div class="col-sm-6 col-md-4">

@@ -69,7 +69,7 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
                 return View(model);
             }
 
-            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Bibliographies, IsUserLoggedIn());
+            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Bibliographies, PortalTypeValue,IsUserLoggedIn());
             return View("Feedback/FeedbackSuccess");
         }
 

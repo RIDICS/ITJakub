@@ -65,7 +65,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 return View(model);
             }
 
-            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.AudioBooks, IsUserLoggedIn());
+            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.AudioBooks, PortalTypeValue,IsUserLoggedIn());
             return View("Feedback/FeedbackSuccess");
         }
 

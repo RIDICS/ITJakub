@@ -38,7 +38,7 @@
             wheelzoom($(".page-image").children("img"), {zoom: zoom});
 
             let setMinWidth = true;
-            $('.page-image').on('wheel', (e) =>
+            $('.page-image img').on('wheel', (e) =>
             {
                 const image = $('.page-image img');
                 if(setMinWidth)

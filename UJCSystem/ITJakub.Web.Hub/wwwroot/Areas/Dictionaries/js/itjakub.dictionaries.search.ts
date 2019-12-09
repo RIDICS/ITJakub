@@ -252,6 +252,9 @@ class DictionaryViewerJsonWrapper {
                 $("#search-advanced-count").text(resultCount);
                 this.tabs.showAdvanced();
                 this.dictionaryViewer.createViewer(resultCount, this.loadHeadwords.bind(this), this.pageSize, filteredJsonForShowing, true);
+            },
+            error: (response) => {
+                this.dictionaryViewer.showErrors(response);
             }
         });
     }
@@ -272,6 +275,9 @@ class DictionaryViewerJsonWrapper {
             contentType: "application/json",
             success: (response) => {
                 this.dictionaryViewer.showHeadwords(response);
+            },
+            error: (response) => {
+                this.dictionaryViewer.showErrors(response);
             }
         });
     }
@@ -284,6 +290,7 @@ class DictionaryViewerJsonWrapper {
 }
 
 class DictionaryViewerTextWrapper {
+    private errorHandler: ErrorHandler;
     private categoryDropDown: DropDownSelect2;
     private tabs: DictionarySearchTabs;
     private pageSize: number;
@@ -293,6 +300,7 @@ class DictionaryViewerTextWrapper {
     private selectedIds: DropDownSelected;
 
     constructor(headwordViewer: DictionaryViewer, fulltextViewer: DictionaryViewer, pageSize: number, tabs: DictionarySearchTabs, categoryDropDown: DropDownSelect2) {
+        this.errorHandler = new ErrorHandler();
         this.categoryDropDown = categoryDropDown;
         this.tabs = tabs;
         this.pageSize = pageSize;
@@ -325,8 +333,9 @@ class DictionaryViewerTextWrapper {
                 this.showBasicTabsAndCount("#search-headword-count", resultCount);
                 this.headwordViewer.createViewer(resultCount, this.loadHeadwords.bind(this), this.pageSize, text);
             },
-            error: () => {
+            error: (response) => {
                 this.showBasicTabsAndCount("#search-headword-count", "!");
+                this.headwordViewer.showErrors(response);
             }
         });
 
@@ -345,8 +354,9 @@ class DictionaryViewerTextWrapper {
                 this.showBasicTabsAndCount("#search-fulltext-count", resultCount);
                 this.fulltextViewer.createViewer(resultCount, this.loadFulltextHeadwords.bind(this), this.pageSize, text);
             },
-            error: () => {
+            error: (response) => {
                 this.showBasicTabsAndCount("#search-fulltext-count", "!");
+                this.fulltextViewer.showErrors(response);
             }
         });
     }
@@ -373,6 +383,9 @@ class DictionaryViewerTextWrapper {
             contentType: "application/json",
             success: (response) => {
                 this.headwordViewer.showHeadwords(response);
+            },
+            error: (response) => {
+                this.headwordViewer.showErrors(response);
             }
         });
     }
@@ -393,6 +406,9 @@ class DictionaryViewerTextWrapper {
             contentType: "application/json",
             success: (response) => {
                 this.fulltextViewer.showHeadwords(response);
+            },
+            error: (response) => {
+                this.fulltextViewer.showErrors(response);
             }
         });
     }

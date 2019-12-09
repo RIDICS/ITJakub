@@ -92,55 +92,8 @@ class BohemianTextBankCombined extends BohemianTextBankBase{
                 }
             }
         });
-
-        $("#wordCheckbox").change(() => {
-            var checkbox = $("#wordCheckbox");
-            var mainDiv = $("#corpus-search-div");
-
-            if (checkbox.is(":checked")) {
-                mainDiv.addClass("show-word");
-            } else {
-                mainDiv.removeClass("show-word");
-            }
-        });
-
-        $("#commentCheckbox").change(() => {
-            var checkbox = $("#commentCheckbox");
-            var mainDiv = $("#corpus-search-div");
-
-            if (checkbox.is(":checked")) {
-                mainDiv.addClass("show-notes");
-            } else {
-                mainDiv.removeClass("show-notes");
-            }
-        });
-
-
-        $("#languageCheckbox").change(() => {
-            var checkbox = $("#languageCheckbox");
-            var mainDiv = $("#corpus-search-div");
-
-            if (checkbox.is(":checked")) {
-                mainDiv.addClass("show-language");
-            } else {
-                mainDiv.removeClass("show-language");
-            }
-        });
-
-
-        $("#structureCheckbox").change(() => {
-            var checkbox = $("#structureCheckbox");
-            var mainDiv = $("#corpus-search-div");
-
-            if (checkbox.is(":checked")) {
-                mainDiv.addClass("show-structure");
-            } else {
-                mainDiv.removeClass("show-structure");
-            }
-        });
-
-
-        $("#paragraphCheckbox").change(() => {
+        
+        $("#paragraphCheckbox").on("change", () => {
             var checkbox = $("#paragraphCheckbox");
             var mainDiv = $("#corpus-search-div");
 

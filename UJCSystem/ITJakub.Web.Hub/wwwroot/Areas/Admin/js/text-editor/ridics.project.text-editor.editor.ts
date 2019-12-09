@@ -13,7 +13,6 @@
     private readonly errorHandler: ErrorHandler;
     private pageStructure: PageStructure;
     private isPreviewRendering = true;
-    private editorExistsInTab = false;
 
     constructor(commentInput: CommentInput, apiClient: EditorsApiClient, commentArea: CommentArea) {
         this.commentInput = commentInput;
@@ -37,6 +36,11 @@
     getSimpleMdeEditor() {
         return this.simplemde;
     }
+    
+    isEditModeEnabled() : boolean {
+        const editorEl = $(".CodeMirror");
+        return (editorEl.length !== 0);
+    }
 
     init(pageStructure: PageStructure) {
         this.pageStructure = pageStructure;
@@ -45,16 +49,20 @@
     }
 
     private processAreaSwitch () {
-        this.editorExistsInTab = false;
-
-        $(".page-toolbar .edit-page").click((event) => {
+        $(".page-toolbar .edit-page").on("click", (event) => {
             const pageRow = $(event.currentTarget).parents(".page-row");
             pageRow.addClass("init-editor");
             pageRow.data(this.editModeSelector, true);
             this.changeOrInitEditor(pageRow);
         });
 
-        $(".page-toolbar .create-text").click((event) => {
+        $(".page-toolbar .refresh-text").on("click", (event) => {
+            const pageRow = $(event.currentTarget).parents(".page-row");
+            pageRow.data(this.editModeSelector, false);
+            this.togglePageRows(pageRow);
+        });
+        
+        $(".page-toolbar .create-text").on("click", (event) => {
             const pageRow = $(event.currentTarget).parents(".page-row");
             this.createText(pageRow);
         });
@@ -135,15 +143,14 @@
                 pageDiffers = true;
             }
             const editorEl = $(".CodeMirror");
-            this.editorExistsInTab = (editorEl.length !== 0);
-            if (!this.editorExistsInTab) {
+            if (!this.isEditModeEnabled()) {
                 if (typeof this.simplemde !== "undefined" && this.simplemde !== null) {
                     this.simplemde.toTextArea();
                     this.simplemde = null;
                 }
                 this.togglePageRows(selectedPageRow);
             }
-            if (this.editorExistsInTab && pageDiffers) {
+            if (this.isEditModeEnabled() && pageDiffers) {
                 const previousPageEl = $(`*[data-text-id="${this.currentTextId}"]`);
                 const contentBeforeClose = this.simplemde.value();
                 if (contentBeforeClose !== this.originalContent) {
@@ -260,7 +267,7 @@
         loading.show();
         this.apiClient.createTextOnPage(pageId).done(() => {
             this.pageStructure.loadPage(pageRow).done(() => {
-                $(".edit-page", pageRow).click(); //Open editor
+                $(".edit-page", pageRow).trigger("click"); //Open editor
             });
         }).fail((error) => {
             const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
