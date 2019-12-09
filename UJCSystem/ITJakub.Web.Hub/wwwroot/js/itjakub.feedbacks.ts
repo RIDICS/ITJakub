@@ -41,7 +41,8 @@ $(document.documentElement).ready(() => {
     var paginator: Pagination;
     var feedbacksOnPage = Number($("#feedbacks").data("page-size"));
     var notFilledMessage = localization.translateFormat("NotFilled", new Array<string>("&lt;", "&gt;"), "ItJakubJs").value;
-
+    var loader = lv.create(null, "lv-circles sm lv-mid lvt-3 lvb-3");
+    var removeLoader = lv.create(null, "lv-circles tiniest feedback-loader");
 
     paginator = new Pagination({
         container: document.getElementById("feedbacks-paginator") as HTMLDivElement,
@@ -49,8 +50,8 @@ $(document.documentElement).ready(() => {
         callPageClickCallbackOnInit: true
     });
 
-
     function deleteFeedback(feedbackId: string) {
+        $("#" + feedbackId).children(".feedback-header").children(".feedback-delete-button-div").prepend(removeLoader.getElement());
         $.ajax({
             type: "POST",
             traditional: true,
@@ -73,7 +74,6 @@ $(document.documentElement).ready(() => {
             dataType: "json",
             contentType: "application/json",
             success: (results: IFeedback[]) => {
-                $(".lv-circles").hide();
                 var feedbacksContainer = document.getElementById("feedbacks");
                 $(feedbacksContainer).empty();
 
@@ -223,6 +223,8 @@ $(document.documentElement).ready(() => {
     }
 
     function paginatorClickedCallback(pageNumber: number) {
+        $("#feedbacks").empty();
+        $("#feedbacks").append(loader.getElement());
         var start = (pageNumber - 1) * feedbacksOnPage;
         showFeedbacks(start, feedbacksOnPage);
     }
