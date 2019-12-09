@@ -922,6 +922,7 @@ class ImagePanel extends ContentViewPanel {
 class AudioPanel extends ContentViewPanel {
     private trackId: number;
     private numberOfTracks: number;
+    private currentTrack: HTMLAudioElement;
 
     protected makeBody(rootReference: Panel, window: Window): HTMLElement {
         var audioContainerDiv: HTMLDivElement = document.createElement("div");
@@ -990,6 +991,9 @@ class AudioPanel extends ContentViewPanel {
     }
 
     private reloadTrack() {
+        if (this.currentTrack) {
+            this.currentTrack.pause();
+        }
         var getTrack: JQueryXHR = this.sc.getTrack(this.parentReader.bookId, this.trackId);
         getTrack.done((response: { track: ITrackWithRecordingContract }) => {
             $(".track-name").html(response.track.Name);
@@ -1013,13 +1017,13 @@ class AudioPanel extends ContentViewPanel {
     }
 
     private buildAudioPlayer(track: ITrackWithRecordingContract) {
-        var audio = new Audio();
+        this.currentTrack = new Audio();
 
         for (var recording of track.Recordings) {
             var source = document.createElement("source");
             source.src = this.sc.getTrackDownloadUrl(recording.Id, recording.AudioType);
             source.type = recording.MimeType;
-            audio.appendChild(source);
+            this.currentTrack.appendChild(source);
         }
 
         var audioContainer = $(".audio-player-container");
@@ -1032,7 +1036,6 @@ class AudioPanel extends ContentViewPanel {
             if (this.trackId > 0) {
                 this.trackId--;
                 this.reloadTrack();
-                audio.pause();
             }
         });
         audioControl.appendChild(buttonBack);
@@ -1040,16 +1043,16 @@ class AudioPanel extends ContentViewPanel {
         var buttonPlay = document.createElement("button");
         $(buttonPlay).addClass("glyphicon btn glyphicon-play");
         buttonPlay.addEventListener("click", () => {
-            if (audio.paused) {
+            if (this.currentTrack.paused) {
                 $(buttonPlay)
                     .removeClass("glyphicon-play")
                     .addClass("glyphicon-pause");
-                audio.play();
+                this.currentTrack.play();
             } else {
                 $(buttonPlay)
                     .removeClass("glyphicon-pause")
                     .addClass("glyphicon-play");
-                audio.pause();
+                this.currentTrack.pause();
             }
         });
         audioControl.appendChild(buttonPlay);
@@ -1061,7 +1064,6 @@ class AudioPanel extends ContentViewPanel {
             if (this.trackId < this.numberOfTracks - 1) {
                 this.trackId++;
                 this.reloadTrack();
-                audio.pause();
             }
         });
         audioControl.appendChild(buttonForward);
@@ -1071,14 +1073,14 @@ class AudioPanel extends ContentViewPanel {
 
         var timer = document.createElement("div");
         var currentTimeContainer = document.createElement("span");
-        $(audio).on("timeupdate", () => {
-            currentTimeContainer.innerText = this.getFormattedTime(audio.currentTime, audio.duration);
+        $(this.currentTrack).on("timeupdate", () => {
+            currentTimeContainer.innerText = this.getFormattedTime(this.currentTrack.currentTime, this.currentTrack.duration);
         });
 
         timer.append(currentTimeContainer);
-        $(audio).on("loadedmetadata", () => {
-            currentTimeContainer.innerText = this.getFormattedTime(audio.currentTime, audio.duration);
-            timer.append(` / ${this.getFormattedTime(audio.duration, audio.duration)}`);
+        $(this.currentTrack).on("loadedmetadata", () => {
+            currentTimeContainer.innerText = this.getFormattedTime(this.currentTrack.currentTime, this.currentTrack.duration);
+            timer.append(` / ${this.getFormattedTime(this.currentTrack.duration, this.currentTrack.duration)}`);
         });
         audioContainer.append(timer);
 
@@ -1088,8 +1090,8 @@ class AudioPanel extends ContentViewPanel {
         var currentProgressEl = document.createElement("div");
         $(currentProgressEl)
             .addClass("current-progress");
-        $(audio).on("timeupdate loadedmetadata", () => {
-            $(currentProgressEl).css("width", this.calculatePercentageProgress(audio));
+        $(this.currentTrack).on("timeupdate loadedmetadata", () => {
+            $(currentProgressEl).css("width", this.calculatePercentageProgress(this.currentTrack));
         });
 
         progressBar.append(currentProgressEl);
