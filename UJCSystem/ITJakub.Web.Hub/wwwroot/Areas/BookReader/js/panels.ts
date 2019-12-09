@@ -444,7 +444,7 @@ class BookmarksPanel extends ToolPanel {
         rootReference.parentReader.setBookmarkTitle(bookmarkId, pageIndex, title);
 
         if (!title) {
-            title = localization.translate("NoName","BookReader").value;
+            title = localization.translate("NoName", "BookReader").value;
         }
 
         titleItem.innerHTML = title;
@@ -520,7 +520,7 @@ class TermsSearchPanel extends TermsPanel {
 
         if (searchResults.length === 0) {
             $(this.searchResultOrderedList).addClass("no-items");
-            $(this.searchResultOrderedList).append(localization.translate("NoOccurancesOnPage","BookReader").value);
+            $(this.searchResultOrderedList).append(localization.translate("NoOccurancesOnPage", "BookReader").value);
         }
     }
 
@@ -617,7 +617,7 @@ class TermsResultPanel extends TermsPanel {
 
             if (response.terms.length === 0 && this.termsOrderedList.innerHTML === "") {
                 $(this.termsOrderedList).addClass("no-items");
-                $(this.termsOrderedList).append(localization.translate("NoTopicOnPage","BookReader").value);
+                $(this.termsOrderedList).append(localization.translate("NoTopicOnPage", "BookReader").value);
             }
 
         });
@@ -956,7 +956,7 @@ class AudioPanel extends ContentViewPanel {
         });
         book.fail(() => {
             $(".reader-audio-container").empty();
-            $(".reader-audio-container").append(localization.translate("FailedToLoadAudioBook","BookReader").value);
+            $(".reader-audio-container").append(localization.translate("FailedToLoadAudioBook", "BookReader").value);
             $(".reader-audio-container").removeClass("loading");
         });
 
@@ -971,32 +971,9 @@ class AudioPanel extends ContentViewPanel {
         $(audioTextDiv).addClass("audio-text");
         audioContainerDiv.appendChild(audioTextDiv);
 
-        var audioControl = document.createElement("div");
-        $(audioControl).addClass("buttons control-buttons");
-        var buttonBack = document.createElement("button");
-        $(buttonBack).addClass("glyphicon glyphicon-step-backward");
-        buttonBack.addEventListener("click", () => {
-            if (this.trackId > 0) {
-                this.trackId--;
-                this.reloadTrack();
-            }
-        });
-        audioControl.appendChild(buttonBack);
-        var buttonForward = document.createElement("button");
-        $(buttonForward).addClass("glyphicon glyphicon-step-forward");
-        buttonForward.addEventListener("click", () => {
-            if (this.trackId < this.numberOfTracks - 1) {
-                this.trackId++;
-                this.reloadTrack();
-            }
-        });
-        audioControl.appendChild(buttonForward);
-        audioContainerDiv.appendChild(audioControl);
-
-        var audioPlayer = document.createElement("audio");
-        $(audioPlayer).prop("controls", "controls");
-        $(audioPlayer).prop("preload", "none");
-        audioContainerDiv.appendChild(audioPlayer);
+        var audioPlayerContainer = document.createElement("div");
+        $(audioPlayerContainer).addClass("audio-player-container");
+        audioContainerDiv.appendChild(audioPlayerContainer);
 
         var audioDownloadDiv = document.createElement("div");
         $(audioDownloadDiv).addClass("audio-download");
@@ -1018,26 +995,142 @@ class AudioPanel extends ContentViewPanel {
             $(".track-name").html(response.track.Name);
             $("#track-select").val(this.trackId);
             $(".audio-text").html(response.track.Text);
-            var audioPlayer = $("audio"); // TODO why audio object is wrapped in JQuery twice?
-            $(audioPlayer).empty();
-            $(".track").html(`${localization.translate("DownloadChapter","BookReader").value}:`);
+            $(".track").html(`${localization.translate("DownloadChapter", "BookReader").value}:`);
             for (var recording of response.track.Recordings) {
-                var source = document.createElement("source");
-                source.src = this.sc.getTrackDownloadUrl(recording.Id, recording.AudioType);
-                source.type = recording.MimeType;
-                $(audioPlayer).append(source);
-
                 var download = document.createElement("a");
                 $(download).addClass("audio-download-href");
                 download.href = this.sc.getTrackDownloadUrl(recording.Id, recording.AudioType);
                 $(download).html(recording.AudioType);
                 $(".track").append(download);
             }
-            $(audioPlayer).append("Váš prohlížeč nepodporuje html audio");
+            this.buildAudioPlayer(response.track);
+
         });
         getTrack.fail(() => {
             $(".reader-audio-container").empty();
-            $(".reader-audio-container").append(localization.translate("FailedToLoadTrack","BookReader").value);
+            $(".reader-audio-container").append(localization.translate("FailedToLoadTrack", "BookReader").value);
         });
+    }
+
+    private buildAudioPlayer(track: ITrackWithRecordingContract) {
+        var audio = new Audio();
+
+        for (var recording of track.Recordings) {
+            var source = document.createElement("source");
+            source.src = this.sc.getTrackDownloadUrl(recording.Id, recording.AudioType);
+            source.type = recording.MimeType;
+            audio.appendChild(source);
+        }
+
+        var audioContainer = $(".audio-player-container");
+
+        var audioControl = document.createElement("div");
+        $(audioControl).addClass("buttons btn-group control-buttons");
+        var buttonBack = document.createElement("button");
+        $(buttonBack).addClass("glyphicon btn btn-sm glyphicon-step-backward");
+        buttonBack.addEventListener("click", () => {
+            if (this.trackId > 0) {
+                this.trackId--;
+                this.reloadTrack();
+                audio.pause();
+            }
+        });
+        audioControl.appendChild(buttonBack);
+
+        var buttonPlay = document.createElement("button");
+        $(buttonPlay).addClass("glyphicon btn btn-sm glyphicon-play");
+        buttonPlay.addEventListener("click", () => {
+            if (audio.paused) {
+                $(buttonPlay)
+                    .removeClass("glyphicon-play")
+                    .addClass("glyphicon-pause");
+                audio.play();
+            } else {
+                $(buttonPlay)
+                    .removeClass("glyphicon-pause")
+                    .addClass("glyphicon-play");
+                audio.pause();
+            }
+        });
+        audioControl.appendChild(buttonPlay);
+
+
+        var buttonForward = document.createElement("button");
+        $(buttonForward).addClass("glyphicon btn btn-sm glyphicon-step-forward");
+        buttonForward.addEventListener("click", () => {
+            if (this.trackId < this.numberOfTracks - 1) {
+                this.trackId++;
+                this.reloadTrack();
+                audio.pause();
+            }
+        });
+        audioControl.appendChild(buttonForward);
+        audioContainer.html(audioControl);
+
+        var audioProgress = document.createElement("div");
+
+        var timer = document.createElement("div");
+        var currentTimeContainer = document.createElement("span");
+        $(audio).on("timeupdate", () => {
+            currentTimeContainer.innerText = this.getFormattedTime(audio.currentTime, audio.duration);
+        });
+
+        timer.append(currentTimeContainer);
+        $(audio).on("loadedmetadata", () => {
+            currentTimeContainer.innerText = this.getFormattedTime(audio.currentTime, audio.duration);
+            timer.append(` / ${this.getFormattedTime(audio.duration, audio.duration)}`);
+        });
+        audioContainer.append(timer);
+
+        var progressBar = document.createElement("div");
+        $(progressBar).addClass("full-progressbar");
+
+        var currentProgressEl = document.createElement("div");
+        $(currentProgressEl)
+            .addClass("current-progress");
+        $(audio).on("timeupdate loadedmetadata", () => {
+            $(currentProgressEl).css("width", this.calculatePercentageProgress(audio));
+        });
+
+        progressBar.append(currentProgressEl);
+        audioContainer.append(progressBar);
+
+    }
+
+    private getFormattedTime(timeInSeconds: number, audioLength: number): string {
+
+        var hours = Math.floor(timeInSeconds / 3600);
+        timeInSeconds -= hours * 3600;
+        var hoursString: string;
+        if (Math.floor(audioLength / 3600) !== 0) {
+            if (hours < 10) {
+                hoursString = `0${hours}`;
+            } else {
+                hoursString = `${hours}`;
+            }
+        }
+        var minutes = Math.floor(timeInSeconds / 60);
+        timeInSeconds -= minutes * 60;
+        var minutesString: string;
+        if (Math.floor(audioLength / 60) !== 0) {
+            if (minutes < 10) {
+                minutesString = `0${minutes}`;
+            } else {
+                minutesString = `${minutes}`;
+            }
+        }
+
+        var secondsString: string;
+        if (timeInSeconds < 10) {
+            secondsString = `0${Math.floor(timeInSeconds)}`;
+        } else {
+            secondsString = `${Math.floor(timeInSeconds)}`;
+        }
+
+        return `${(hoursString !== undefined ? `${hoursString}:` : "")}${(minutesString !== undefined ? `${minutesString}:` : "")}${secondsString}`
+    }
+
+    private calculatePercentageProgress(audio: HTMLAudioElement): string {
+        return `${audio.currentTime / audio.duration * 100}%`;
     }
 }

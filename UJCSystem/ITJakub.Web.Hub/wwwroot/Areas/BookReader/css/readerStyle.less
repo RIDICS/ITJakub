@@ -426,27 +426,41 @@ button {
     max-width: 100%;
   }
 
-  .control-buttons {
-    background-color: #fafafa;
-    display: inline-block;
-    float: left;
-
-    @media screen and (max-width: 500px) {
-      display: block;
-      text-align: center;
-      float: none;
+  @audioPlayerBackgroundColor: #eeeeee; 
+  .audio-player-container {
+    background-color: @audioPlayerBackgroundColor;
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+        
+    .control-buttons {
+      padding-right: 1em; 
+      button {
+        background-color:@audioPlayerBackgroundColor;
+        
+        &:hover, &:focus {
+          background-color: darken(@audioPlayerBackgroundColor, 5%);
+        }
+      }
     }
-
-    button {
-      background: none;
-      border: none;
-      outline: 0;
-      padding: 0;
-      text-align: center;
-      height: 32px;
-      margin: 0 5px;
+    
+    .full-progressbar {
+      height: 0.4em;
+      min-width: 10em;
+      margin: 0 1em;
+      background-color: darken(@audioPlayerBackgroundColor, 20%);
+      position: relative;
+      
+      .current-progress {
+        background-color: darken(@audioPlayerBackgroundColor, 50%);
+        position: absolute;
+        top: 0;
+        left:0;
+        bottom: 0;
+      }
     }
   }
+  
 
   .audio-text {
     min-height: 1em;
