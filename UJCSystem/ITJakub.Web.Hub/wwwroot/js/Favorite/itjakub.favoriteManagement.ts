@@ -198,6 +198,10 @@ class FavoriteManagement {
     }
 
     private showLoader() {
+        if ($("#favorite-item-container").has(this.loader.getElement()).length > 0) {
+            return;
+        }
+        
         $("#favorite-item-container")
             .empty()
             .append(this.loader.getElement());
@@ -207,6 +211,8 @@ class FavoriteManagement {
         this.currentSortOrder = parseInt($("#sort-select").val() as string);
         this.currentTypeFilter = parseInt($("#type-filter-select").val() as string);
         this.currentNameFilter = $("#name-filter").val() as string;
+
+        this.showLoader();
 
         this.paginationOptions.callPageClickCallbackOnInit = false;
         this.pagination.make(0, FavoriteManagement.pageSize);
