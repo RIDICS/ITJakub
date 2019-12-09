@@ -1,4 +1,6 @@
-﻿#ReaderBodyDiv {
+﻿@import "../../../css/ITJakub.Colors.less";
+
+#ReaderBodyDiv {
   min-height: 550px;
   @media screen and (max-width: @mobile-max-width) {
     margin: 0 15px;
@@ -10,10 +12,7 @@
 @color2: #777777;
 @color3: #ffffff;
 @color4: #888888;
-@linkColor: #8E5523;
-@linkColorHover: #633107;
 @lineColor: #e5e5e5;
-@navBackground: #388E3C;
 @mobile-max-width: 800px;
 
 .lm_tabs {
@@ -85,10 +84,10 @@
   }
 
   a {
-    color: @linkColor;
+    color: @button-background-color;
 
     &:hover, &:focus {
-      color: @linkColorHover;
+      color: @button-hover-background-color;
     }
   }
 }
@@ -125,14 +124,14 @@
     border: none;
     background: none;
     width: auto;
-    color: @linkColor;
+    color: @button-background-color;
     padding: 0;
     margin: 1.5rem 2rem 0 0;
     font-size: 25px;
     display: inline-block;
 
     &:hover {
-      color: @linkColorHover;
+      color: @button-hover-background-color;
     }
 
     @media screen and (max-width: @mobile-max-width) {
@@ -190,11 +189,11 @@ button {
 
     &:checked {
       ~ .switch {
-        background: @linkColor;
+        background: @button-background-color;
 
         &:before {
           left: 16px;
-          background: @linkColorHover;
+          background: @button-hover-background-color;
         }
       }
     }
@@ -280,7 +279,7 @@ button {
 .tool-panel {
   @media screen and (max-width: @mobile-max-width) {
     .left {
-      background: @navBackground;
+      background: @menu-background-color;
       margin: 0 !important;
       padding: 1em 5px;
       width: 116.5px;
@@ -297,7 +296,7 @@ button {
       display: block;
       margin: 10px 0 0 !important;
       width: auto !important;
-      background: @navBackground !important;
+      background: @menu-background-color !important;
       position: relative;
 
       &.display-panel-button {
@@ -452,7 +451,7 @@ button {
       position: relative;
       
       .current-progress {
-        background-color: #8E5523;
+        background-color: @button-hover-background-color;
         position: absolute;
         top: 0;
         left:0;
@@ -472,7 +471,7 @@ button {
 
     a.audio-download-href {
       border-radius: 5px;
-      background: #8E5523;
+      background: @button-background-color;
       padding: 5px;
       color: white;
       text-decoration: none;
@@ -483,7 +482,7 @@ button {
       display: inline-block;
 
       &:hover {
-        background-color: #633107;
+        background-color: @button-hover-background-color;
         opacity: 1;
         cursor: pointer;
       }
