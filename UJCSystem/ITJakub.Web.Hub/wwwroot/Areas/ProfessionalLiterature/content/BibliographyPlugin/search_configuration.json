@@ -104,6 +104,10 @@
               "pattern": "{$literaryGenre}"
             },
             {
+              "label": "TextType",
+              "pattern": "{TextTypeString}"
+            },
+            {
               "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
             },

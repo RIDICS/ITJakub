@@ -21,23 +21,13 @@ namespace ITJakub.Web.Hub.Models
         [Display(Name = "Url:")]        
         public string Url { get; set; }    
         
-        [EnumDataType(typeof(NewsTypeContractViewEnum))]
-        [Required]
-        [Display(Name="Type")]
-        public NewsTypeContractViewEnum ItemType { get; set; }
-    }
-
-    public enum NewsTypeContractViewEnum
-    {
-        //[Display(Name = "WebAndMobileApp")] // TODO determine why attribute usage cause exception in CSHTML
-        Combined = 0,
+        public bool AddForCommunityPortal { get; set; }
         
-        //[Display(Name = "OnlyWeb")]
-        Web = 1,
+        public bool AddForResearchPortal { get; set; }
         
-        //[Display(Name = "OnlyMobileApp")]
-        MobileApps = 2,
+        //[EnumDataType(typeof(NewsTypeContractViewEnum))]
+        //[Required]
+        //[Display(Name="Type")]
+        //public NewsTypeContractViewEnum ItemType { get; set; }
     }
-
-
 }

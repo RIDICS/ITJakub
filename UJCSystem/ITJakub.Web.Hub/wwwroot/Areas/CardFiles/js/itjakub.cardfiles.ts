@@ -177,13 +177,13 @@ function createListing() {
         error: (response) => {
             cardFileLoader.remove();
             bootbox.alert({
-                title: "Error",
-                message: "Not enough permissions to access card files",
-                buttons:{
+                title: localization.translate("Error", "CardFiles").value,
+                message: localization.translate("PermissionsError", "CardFiles").value,
+                buttons: {
                     ok: {
                         className: "btn-default"
-            }
-            }
+                    }
+                }
             });
         }
     });
@@ -224,8 +224,8 @@ function createListing() {
             error: (response) => {
                 bucketLoader.remove();
                 bootbox.alert({
-                    title: "Error",
-                    message: "Not enough permissions to access card files",
+                    title: localization.translate("Error", "CardFiles").value,
+                    message: localization.translate("PermissionsError", "CardFiles").value,
                     buttons: {
                         ok: {
                             className: "btn-default"

@@ -2,7 +2,9 @@
 {
     public enum ProjectModuleType
     {
-        Work = 0,
-        Resource = 1,
+        Resource = 0,
+        Preview = 1,
+        TermEditor = 2,
+        ImageEditor = 3,
     }
 }

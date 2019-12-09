@@ -1,4 +1,5 @@
 ﻿@using ITJakub.Web.Hub.Areas.Admin.Models.Type
+@using ITJakub.Web.Hub.Constants
 @using Vokabular.MainService.DataContracts.Contracts.Type
 @{
     ViewBag.Title = "Administrace číselníků";
@@ -10,6 +11,9 @@
     <script asp-append-version="true" src="~/Areas/Admin/js/editors-common-base/ridics.project.editors.bundle.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor.bundle.js"></script>
 }
+
+<div id="key-table-config" class="hidden" data-page-size="@PageSizes.KeyTable"></div>
+
 <div class="content-container keytable-container">
     <div class="row display-flex">
         <div class="col-xs-12 col-md-2 left-menu left-menu" id="left-menu">

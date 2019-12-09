@@ -152,7 +152,7 @@
 
         var loadDiv = lv.create(null, "lv-circles lv-mid sm lvb-1 lvt-1");
         $(dropDownItemsDiv).append(loadDiv.getElement());
-
+        
         $.ajax({
             type: "GET",
             traditional: true,
@@ -169,6 +169,15 @@
                 this.isLoaded = true;
                 this.dataLoaded(this.rootCategory.id);
 
+                this.downloadFavoriteData(dropDownItemsDiv);
+            },
+            error: () => {
+                $(dropDownItemsDiv).children("div.lv-circles").remove();
+                $(dropDownItemsDiv).siblings(".dropdown-select-header").children("div.lv-circles").remove();
+                const selectHeader = $(dropDownItemsDiv).parent().children(".dropdown-select-header");
+                $(selectHeader).children(".dropdown-select-text").append(localization.translate("LoadingContentError", "PluginsJs").value);
+                this.isLoaded = true;
+                this.dataLoaded(null);
                 this.downloadFavoriteData(dropDownItemsDiv);
             }
         });

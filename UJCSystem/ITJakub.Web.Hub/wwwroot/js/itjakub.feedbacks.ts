@@ -39,7 +39,7 @@ $(document.documentElement).ready(() => {
     var sortOrderAsc = false;
     var categories = new Array<number>();
     var paginator: Pagination;
-    var feedbacksOnPage = 5;
+    var feedbacksOnPage = Number($("#feedbacks").data("page-size"));
     var notFilledMessage = localization.translateFormat("NotFilled", new Array<string>("&lt;", "&gt;"), "ItJakubJs").value;
     var loader = lv.create(null, "lv-circles sm lv-mid lvt-3 lvb-3");
     var removeLoader = lv.create(null, "lv-circles tiniest feedback-loader");

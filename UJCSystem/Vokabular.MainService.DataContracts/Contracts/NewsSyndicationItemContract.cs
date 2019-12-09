@@ -29,5 +29,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public string Url { get; set; }
 
         public NewsTypeEnumContract ItemType { get; set; }
+        
+        public PortalTypeContract PortalType { get; set; }
     }
 }

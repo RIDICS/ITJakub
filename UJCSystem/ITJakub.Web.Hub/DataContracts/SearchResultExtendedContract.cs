@@ -6,6 +6,8 @@ namespace ITJakub.Web.Hub.DataContracts
     {
         public string ProjectTypeString { get; set; }
 
+        public string TextTypeString { get; set; }
+
         public string CreateTimeString { get; set; }
     }
 
@@ -13,12 +15,16 @@ namespace ITJakub.Web.Hub.DataContracts
     {
         public string ProjectTypeString { get; set; }
 
+        public string TextTypeString { get; set; }
+
         public string CreateTimeString { get; set; }
     }
 
     public class AudioBookSearchResultExtendedContract : AudioBookSearchResultContract
     {
         public string ProjectTypeString { get; set; }
+
+        public string TextTypeString { get; set; }
 
         public string CreateTimeString { get; set; }
     }

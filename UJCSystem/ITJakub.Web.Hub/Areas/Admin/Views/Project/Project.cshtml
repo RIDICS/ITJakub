@@ -1,4 +1,6 @@
 ﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectItemViewModel
+@using ITJakub.Web.Hub.Areas.Admin.Models.Type
+@using ITJakub.Web.Hub.Core
 @using ITJakub.Web.Hub.Helpers
 @using Scalesoft.Localization.AspNetCore
 
@@ -41,15 +43,36 @@
 
 <div class="content-container">
     <div class="row project-layout">
+       
+        <div class="col-xs-12">
+            <div class="project-title-header">
+                <span class="project-title">@Model.Name</span>
+                <button class="rename-project-button btn btn-default" title="@Localizer.Translate("Rename", "Admin")">
+                    <i class="fa fa-pencil"></i>
+                </button>
+                <br/>
+                <span class="text-type">@TextTypeLocalizer.TranslateTextTypeFull(Model.TextType)</span>
+            </div>
+        </div>
+        
         <div class="left-menu" id="left-menu">
-            <div class="project-title">@Model.Name<br/><span class="text-type">@TextTypeLocalizer.TranslateTextTypeFull(Model.TextType)</span></div>
             <div class="list-group list-group-root" id="project-navigation">
-                <a href="#" class="list-group-item active" id="project-navigation-root">@Localizer.Translate("Project", "Admin")</a>
+                <span class="list-group-item parent-item">@Localizer.Translate("Project", "Admin")</span>
                 <div class="list-group">
-                    <a href="#" class="list-group-item" id="project-navigation-image">@Localizer.Translate("ImageScan", "Admin")</a>
+                    <a href="#" class="list-group-item" id="project-work-page-list" data-panel-type="@Html.Raw((int) ProjectModuleTabType.WorkPageList)">@Localizer.Translate("PageList", "Admin")</a>
+                    <a href="#" class="list-group-item" id="project-work-chapter-editor" data-panel-type="@Html.Raw((int) ProjectModuleTabType.WorkChapters)">@Localizer.Translate("Chapters", "Admin")</a>
                     <a href="#" class="list-group-item" id="project-navigation-text">@Localizer.Translate("Texts", "Admin")</a>
-                    <a href="#" class="list-group-item" id="project-navigation-audio">@Localizer.Translate("Audio", "Admin")</a>
+                    <a href="#" class="list-group-item" id="project-navigation-image">@Localizer.Translate("ImageScan", "Admin")</a>
                     <a href="#" class="list-group-item" id="project-navigation-terms">@Localizer.Translate("Terms", "Admin")</a>
+                    <a href="#" class="list-group-item" id="project-work-note" data-panel-type="@Html.Raw((int) ProjectModuleTabType.WorkNote)">@Localizer.Translate("EditionNote", "Admin")</a>
+                </div>
+                <span class="list-group-item parent-item">@Localizer.Translate("InfoAboutWork", "Admin")</span>
+                <div class="list-group">
+                    <a href="#" class="list-group-item active" id="project-work-publications" data-panel-type="@Html.Raw((int) ProjectModuleTabType.WorkPublications)">@Localizer.Translate("Publication", "Admin")</a>
+                    <a href="#" class="list-group-item" id="project-work-cooperation" data-panel-type="@Html.Raw((int) ProjectModuleTabType.WorkCooperation)">@Localizer.Translate("Cooperation", "Admin")</a>
+                    <a href="#" class="list-group-item" id="project-work-metadata" data-panel-type="@Html.Raw((int) ProjectModuleTabType.WorkMetadata)">@Localizer.Translate("Metadata", "Admin")</a>
+                    <a href="#" class="list-group-item" id="project-work-categorization" data-panel-type="@Html.Raw((int) ProjectModuleTabType.WorkCategorization)">@Localizer.Translate("Categorization", "Admin")</a>
+                    <a href="#" class="list-group-item" id="project-forum" data-panel-type="@Html.Raw((int) ProjectModuleTabType.Forum)">@Localizer.Translate("Forum", "Admin")</a>
                 </div>
             </div>
 
@@ -66,6 +89,32 @@
         </div>
 
         <div class="content" id="project-layout-content">
+        </div>
+        
+        <div class="modal fade" role="dialog" id="renameProjectDialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">@Localizer.Translate("RenameProject", "Admin")</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="renameProjectInput" class="col-md-3 col-lg-4 control-label">@Localizer.Translate("NewProjectName", "Admin")</label>
+                                <div class="col-md-8 col-lg-7">
+                                    <input class="form-control" id="renameProjectInput" type="text" maxlength="@Projects.MaxNameLength" value="@Model.Name">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="dialog-error alert alert-danger true-inline-alert">@Localizer.Translate("ErrorDuringSave", "Admin")</div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close2", "Admin")</button>
+                        <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>@Localizer.Translate("Rename", "Admin")</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

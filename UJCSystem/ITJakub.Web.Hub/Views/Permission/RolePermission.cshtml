@@ -130,6 +130,9 @@
                     </div>
                 </div>
                 <div class="panel-body">
+                    <div class="header-link-container">
+                        <a asp-controller="Permission" asp-action="ProjectPermission"><i class="fa fa-external-link"></i> @Localizer.Translate("ProjectPermissionManagementHeadline", "Permission")</a>
+                    </div>
                     <div id="permissionListContainer" class="list-container"></div>
                     <div id="permissionPagination" class="text-center"></div>
                 </div>

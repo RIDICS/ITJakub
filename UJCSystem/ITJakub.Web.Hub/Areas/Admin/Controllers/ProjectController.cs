@@ -82,16 +82,32 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return View(viewModel);
         }
 
-        public IActionResult ProjectModule(ProjectModuleType moduleType)
+        public IActionResult ProjectModule(ProjectModuleType moduleType, long projectId)
         {
+            var client = GetProjectClient();
+            
             switch (moduleType)
             {
-                case ProjectModuleType.Work:
-                    return PartialView("_ProjectWork");
                 case ProjectModuleType.Resource:
                     return PartialView("_ProjectResource");
+                case ProjectModuleType.Preview:
+                    return PartialView("Resource/_Preview");
+                case ProjectModuleType.TermEditor:
+                    var pages = client.GetAllPageList(projectId);
+            
+                    var termClient = GetTermClient();
+                    var termCategories = termClient.GetTermCategoriesWithTerms();
+            
+                    return PartialView("Resource/_Terms",  new TermEditorViewModel
+                    {
+                        TermCategories = termCategories,
+                        Pages = pages,
+                    });
+                case ProjectModuleType.ImageEditor: 
+                    var pagesWithImageInfo = client.GetAllPagesWithImageInfoList(projectId);
+                    return PartialView("Resource/_Images", pagesWithImageInfo);
                 default:
-                    return PartialView("_ProjectWork");
+                    return PartialView("_ProjectResource");
             }
         }
 
@@ -163,8 +179,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         Pages = Mapper.Map<List<PageViewModel>>(pageList)
                     };
                     return PartialView("Work/_ChapterEditor", chapterEditorViewModel);
-                case ProjectModuleTabType.WorkHistory:
-                    return PartialView("Work/_History");
                 case ProjectModuleTabType.WorkNote:
                     return PartialView("Work/_Note");
                 case ProjectModuleTabType.Forum:
@@ -181,38 +195,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult GetImageViewer(long projectId)
-        {
-            var client = GetProjectClient();
-            var pages = client.GetAllPagesWithImageInfoList(projectId);
-            return PartialView("Resource/_Images", pages);
-        }
-        
         public IActionResult ImagesPageList(long projectId)
         {
             var client = GetProjectClient();
             var pages = client.GetAllPagesWithImageInfoList(projectId);
             return PartialView("Resource/SubView/_PageWithImagesTable", pages);
-        }
-
-        public IActionResult GetTextPreview()
-        {
-            return PartialView("Resource/_Preview");
-        }
-
-        public IActionResult GetTermsEditor(long projectId)
-        {
-            var client = GetProjectClient();
-            var pages = client.GetAllPageList(projectId);
-            
-            var termClient = GetTermClient();
-            var termCategories = termClient.GetTermCategoriesWithTerms();
-            
-            return PartialView("Resource/_Terms",  new TermEditorViewModel
-            {
-                TermCategories = termCategories,
-                Pages = pages,
-            });
         }
 
         public IActionResult PageList(long projectId)

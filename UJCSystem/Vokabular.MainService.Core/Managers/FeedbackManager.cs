@@ -54,16 +54,18 @@ namespace Vokabular.MainService.Core.Managers
             return resultId;
         }
 
-        public PagedResultList<FeedbackContract> GetFeedbackList(int? start, int? count, FeedbackSortEnumContract sort, SortDirectionEnumContract sortDirection, IList<FeedbackCategoryEnumContract> filterCategories)
+        public PagedResultList<FeedbackContract> GetFeedbackList(int? start, int? count, FeedbackSortEnumContract sort, 
+            SortDirectionEnumContract sortDirection, IList<FeedbackCategoryEnumContract> filterCategories, PortalTypeContract portalTypeContract)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
             var sortValue = m_mapper.Map<FeedbackSortEnum>(sort);
             var filterCategoryValues = m_mapper.Map<List<FeedbackCategoryEnum>>(filterCategories);
+            var portalType = m_mapper.Map<PortalTypeEnum>(portalTypeContract);
 
             var result = m_portalRepository.InvokeUnitOfWork(repository =>
             {
-                var dbFeedbacks = repository.GetFeedbackList(startValue, countValue, sortValue, sortDirection, filterCategoryValues);
+                var dbFeedbacks = repository.GetFeedbackList(startValue, countValue, sortValue, sortDirection, filterCategoryValues, portalType);
 
                 var headwordFeedbackIds = dbFeedbacks.List.Where(x => x.FeedbackType == FeedbackType.Headword)
                     .Select(x => x.Id);

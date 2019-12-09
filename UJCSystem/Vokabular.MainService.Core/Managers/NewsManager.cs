@@ -26,14 +26,15 @@ namespace Vokabular.MainService.Core.Managers
             m_mapper = mapper;
         }
 
-        public PagedResultList<NewsSyndicationItemContract> GetNewsSyndicationItems(int? start, int? count, NewsTypeEnumContract? itemType)
+        public PagedResultList<NewsSyndicationItemContract> GetNewsSyndicationItems(int? start, int? count, NewsTypeEnumContract? itemType, PortalTypeContract portalTypeContract)
         {
             var startValue = PagingHelper.GetStart(start);
             var countValue = PagingHelper.GetCount(count);
             var syndicationItemType = m_mapper.Map<SyndicationItemType?>(itemType);
+            var portalType = m_mapper.Map<PortalTypeEnum>(portalTypeContract);
 
             var result = m_portalRepository.InvokeUnitOfWork(x =>
-                x.GetNewsSyndicationItems(startValue, countValue, syndicationItemType));
+                x.GetNewsSyndicationItems(startValue, countValue, syndicationItemType, portalType));
 
             return new PagedResultList<NewsSyndicationItemContract>
             {

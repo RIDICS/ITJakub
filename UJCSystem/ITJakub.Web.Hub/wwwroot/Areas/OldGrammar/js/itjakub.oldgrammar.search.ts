@@ -13,7 +13,7 @@
                     SearchTypeEnum.Dating,
                     SearchTypeEnum.Term
                 ],
-                enabledSearchInSecondPortal: false,
+                enabledSearchInSecondPortal: true,
                 url: {
                     advanced: getBaseUrl() + "OldGrammar/OldGrammar/AdvancedSearchPaged",
                     text: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchFulltextPaged",

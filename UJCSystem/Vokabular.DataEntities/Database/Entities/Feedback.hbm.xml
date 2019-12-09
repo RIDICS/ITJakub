@@ -23,6 +23,8 @@
 
     <property name="FeedbackCategory" />
     
+    <property name="PortalType" />
+    
     <many-to-one name="AuthorUser" class="User" lazy="proxy" />
 
     <subclass

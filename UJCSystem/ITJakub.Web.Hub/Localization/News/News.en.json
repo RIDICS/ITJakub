@@ -12,7 +12,10 @@
     "DiacriticsAllowed": "You can use diacritics",
     "Submit": "Submit",
     "Events": "Events",
-    "ErrorNoCalendar": "No available calendar."
+    "ErrorNoCalendar": "No available calendar.",
+    "AddForCommunityPortal": "Add for Komunitní portál",
+    "AddForResearchPortal": "Add for Vokabulář webový",
+    "CreateNewsForOnePortalError": "You must select at least one portal for creating news."
   },
   "constants": {
     "GoogleCalendarLanguage": "en_GB"

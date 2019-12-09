@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Models;
@@ -30,7 +31,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public virtual ActionResult Feed(string feedType, string feedCount = "10")
+        public virtual ActionResult Feed(string feedType, int feedCount = PageSizes.NewsFeed)
         {
             FeedType ft;
             if (!Enum.TryParse(feedType, true, out ft))
@@ -38,8 +39,7 @@ namespace ITJakub.Web.Hub.Controllers
                 throw new ArgumentException("Unknown feed type");
             }
 
-            var count = Convert.ToInt32(feedCount);
-            if (count <= 0)
+            if (feedCount <= 0)
             {
                 throw new ArgumentException("Invalid feed count");
             }
@@ -49,7 +49,7 @@ namespace ITJakub.Web.Hub.Controllers
 
             var client = GetNewsClient();
             {
-                var feeds = client.GetNewsSyndicationItems(0, count, NewsTypeEnumContract.Web);
+                var feeds = client.GetNewsSyndicationItems(0, feedCount, NewsTypeEnumContract.Web, PortalTypeValue);
                 foreach (var feed in feeds.List)
                 {
                     var syndicationItem = new SyndicationItem
@@ -85,7 +85,7 @@ namespace ITJakub.Web.Hub.Controllers
         public virtual ActionResult GetSyndicationItems(int start, int count)
         {
             var client = GetNewsClient();
-            var feeds = client.GetNewsSyndicationItems(start, count, NewsTypeEnumContract.Web);
+            var feeds = client.GetNewsSyndicationItems(start, count, NewsTypeEnumContract.Web, PortalTypeValue);
             
             var result = new PagedResultList<NewsSyndicationItemExtendedContract>
             {
@@ -98,7 +98,12 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult Add()
         {
-            return View("AddNews");
+            var model = new NewsSyndicationItemViewModel
+            {
+                AddForCommunityPortal = PortalTypeValue == PortalTypeContract.Community,
+                AddForResearchPortal = PortalTypeValue == PortalTypeContract.Research,
+            };
+            return View("AddNews", model);
         }
 
         [HttpGet]
@@ -117,17 +122,41 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Add(NewsSyndicationItemViewModel model)
         {
-            var client = GetNewsClient();
-            var data = new CreateNewsSyndicationItemContract
+            if (ModelState.IsValid)
+            {
+                if (model.AddForCommunityPortal || model.AddForResearchPortal)
+                {
+                    var client = GetNewsClient();
+
+                    if (model.AddForCommunityPortal)
+                    {
+                        client.CreateNewsSyndicationItem(CreateSyndicationItem(model, PortalTypeContract.Community));
+                    }
+
+                    if (model.AddForResearchPortal)
+                    {
+                        client.CreateNewsSyndicationItem(CreateSyndicationItem(model, PortalTypeContract.Research));
+                    }
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ModelState.AddModelError(string.Empty, Localizer.Translate("CreateNewsForOnePortalError", "News"));
+            }
+
+            return View("AddNews", model);
+        }
+
+        private CreateNewsSyndicationItemContract CreateSyndicationItem(NewsSyndicationItemViewModel model, PortalTypeContract portalType)
+        {
+            return new CreateNewsSyndicationItemContract
             {
                 Title = model.Title,
-                ItemType = (NewsTypeEnumContract) model.ItemType,
+                ItemType = NewsTypeEnumContract.Combined,
                 Text = model.Content,
                 Url = model.Url,
+                PortalType = portalType,
             };
-            client.CreateNewsSyndicationItem(data);
-
-            return RedirectToAction("Index", "Home");
         }
     }
 
