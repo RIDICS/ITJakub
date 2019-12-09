@@ -22,8 +22,10 @@ namespace ITJakub.Web.Hub
             services.AddScoped<CommunicationConfigurationProvider>();
             services.AddScoped<StaticTextManager>();
             services.AddScoped<FeedbacksManager>();
+            services.AddScoped<PortalTypeManager>();
             services.AddScoped<RefreshUserManager>();
             services.AddScoped<PermissionLocalizer>();
+            services.AddScoped<ProjectTypeLocalizer>();
             services.AddScoped<ResourceTypeLocalizer>();
             services.AddScoped<TextTypeLocalizer>();
 
@@ -35,10 +37,13 @@ namespace ITJakub.Web.Hub
             services.AddSingleton<Profile, DatingCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, DatingListCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, FavoriteProfile>();
+            services.AddSingleton<Profile, FeedbackProfile>();
             services.AddSingleton<Profile, ForumProfile>();
+            services.AddSingleton<Profile, NewsSyndicationItemProfile>();
             services.AddSingleton<Profile, PermissionProfile>();
             services.AddSingleton<Profile, PortalTypeProfile>();
             services.AddSingleton<Profile, RoleProfile>();
+            services.AddSingleton<Profile, SearchResultProfile>();
             services.AddSingleton<Profile, TokenDistanceCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, TokenDistanceListCriteriaDescriptionProfile>();
             services.AddSingleton<Profile, UserDetailProfile>();

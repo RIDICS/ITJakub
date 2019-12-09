@@ -23,6 +23,18 @@
     "DownloadChapter": "Stáhnout kapitolu",
     "LinkToOriginal": "Odkaz na originál",
 
+    "BookFromResearchPortal": "Dílo z Vokabuláře webového",
+    "BookFromCommunityPortal": "Dílo z komunitního portálu",
+    "BibliographicRecord": "Bibliografický záznam",
+    "ResearchPortal": "Vokabulář webový",
+    "CommunityPortal": "Komunitní portál",
+    "BibliographicRecords": "Bibliografické záznamy",
+    "ResearchPortalShort": "Vokabulář",
+    "CommunityPortalShort": "Komunitní",
+    "BibliographicRecordsShort": "Bibliografie",
+    "SearchedAreas": "Prohledávané oblasti",
+    "SearchInResearchPortal": "Vyhledat ve Vokabuláři webovém",
+    "SearchInCommunityPortal": "Vyhledat v komunitním portálu",
     "NotFilled": "&lt;Nezadáno&gt;"
   }
 }

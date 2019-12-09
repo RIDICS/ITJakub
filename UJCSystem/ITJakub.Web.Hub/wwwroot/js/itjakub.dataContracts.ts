@@ -7,6 +7,7 @@ interface IFeedback {
     id: number;
     text: string;
     createTime: string;
+    createTimeString: string;
     authorUser: IUserDetail;
     authorName: string;
     authorEmail: string;
@@ -60,6 +61,7 @@ interface INewsSyndicationItemContract {
     text: string;
     url: string;
     createTime: string;
+    createTimeString: string;
     createdByUser: IUser;
 }
 
@@ -464,6 +466,7 @@ interface ICommentSctucture extends ICommentStructureBase {
     surname: string;
     order: number;
     time: number;
+    timeString: string;
 }
 
 interface IDeleteRootCommentResponse {

@@ -157,7 +157,7 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
     enabledOptions.push(SearchTypeEnum.Sentence);
     enabledOptions.push(SearchTypeEnum.Heading);
 
-    search.makeSearch(enabledOptions);
+    search.makeSearch(enabledOptions, false);
 
     if (typeof searchedText !== "undefined" && searchedText !== null) {
         var decodedText = decodeURIComponent(searchedText);

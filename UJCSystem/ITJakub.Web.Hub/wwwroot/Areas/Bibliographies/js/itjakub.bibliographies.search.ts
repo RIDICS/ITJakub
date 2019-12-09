@@ -11,6 +11,7 @@ class BibliographiesSearch {
     private search: Search;
     private typeaheadSearchBox: SearchBox;
     private bibliographyModule: BibliographyModule;
+    private searchAreaSelector: SearchAreaSelectorWrapper;
 
     private localization: Localization;
 
@@ -42,7 +43,8 @@ class BibliographiesSearch {
             queryType: QueryTypeEnum.Search
         };
         this.search = new Search(<any>$("#listSearchDiv")[0], (json: string) => { this.advancedSearch(json) }, (text: string) => { this.basicSearch(text) }, favoriteQueriesConfig);
-        this.search.makeSearch(enabledOptions);
+        this.search.makeSearch(enabledOptions, false);
+        this.search.setPlaceholder(localization.translate("SearchInTitles...", "PluginsJs").value);
         this.search.setOverrideQueryCallback(newQuery => this.typeaheadSearchBox.value(newQuery));
 
         this.typeaheadSearchBox = new SearchBox(".searchbar-input", "Bibliographies/Bibliographies");
@@ -52,6 +54,8 @@ class BibliographiesSearch {
         this.typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
 
         this.bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", () => { this.sortOrderChanged() });
+
+        this.searchAreaSelector = new SearchAreaSelectorWrapper($("#dropdown-search-area-selector"), () => { this.search.processSearch() });
         
         this.initializeFromUrlParams();
     }
@@ -93,6 +97,7 @@ class BibliographiesSearch {
         var count = this.bibliographyModule.getBooksCountOnPage();
         var sortAsc = this.bibliographyModule.isSortedAsc();
         var sortingEnum = this.bibliographyModule.getSortCriteria();
+        var searchAreas = this.searchAreaSelector.getValues();
 
         if (!this.firstLoad) {
             this.bibliographyModule.clearBooks();
@@ -104,7 +109,7 @@ class BibliographiesSearch {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Bibliographies/Bibliographies/AdvancedSearchPaged",
-            data: { json: json, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc } as JQuery.PlainObject,
+            data: { json: json, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, searchArea: searchAreas } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: response => {
@@ -125,6 +130,7 @@ class BibliographiesSearch {
         var count = this.bibliographyModule.getBooksCountOnPage();
         var sortAsc = this.bibliographyModule.isSortedAsc();
         var sortingEnum = this.bibliographyModule.getSortCriteria();
+        var searchAreas = this.searchAreaSelector.getValues();
 
         if (!this.firstLoad) {
             this.bibliographyModule.clearBooks();
@@ -136,7 +142,7 @@ class BibliographiesSearch {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Bibliographies/Bibliographies/TextSearchPaged",
-            data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc } as JQuery.PlainObject,
+            data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, searchArea: searchAreas } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: response => {
@@ -162,6 +168,8 @@ class BibliographiesSearch {
         this.hideTypeahead();
         //if (typeof text === "undefined" || text === null || text === "") return;
 
+        var searchAreas = this.searchAreaSelector.getValues();
+
         this.bibliographyModule.clearBooks();
         this.bibliographyModule.showLoading();
 
@@ -169,7 +177,7 @@ class BibliographiesSearch {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Bibliographies/Bibliographies/TextSearchCount",
-            data: { text: text } as JQuery.PlainObject,
+            data: { text: text, searchArea: searchAreas } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: response => {
@@ -185,6 +193,8 @@ class BibliographiesSearch {
         this.hideTypeahead();
         if (typeof json === "undefined" || json === null || json === "") return;
 
+        var searchAreas = this.searchAreaSelector.getValues();
+
         this.bibliographyModule.clearBooks();
         this.bibliographyModule.showLoading();
 
@@ -192,7 +202,7 @@ class BibliographiesSearch {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Bibliographies/Bibliographies/AdvancedSearchResultsCount",
-            data: { json: json } as JQuery.PlainObject,
+            data: { json: json, searchArea: searchAreas } as JQuery.PlainObject,
             dataType: "json",
             contentType: "application/json",
             success: response => {

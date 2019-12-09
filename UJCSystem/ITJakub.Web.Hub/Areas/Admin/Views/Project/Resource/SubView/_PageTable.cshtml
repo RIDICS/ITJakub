@@ -1,0 +1,29 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model IList<Vokabular.MainService.DataContracts.Contracts.PageContract>
+@inject ILocalizationService Localizer
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <tbody>
+            @if (Model.Count == 0)
+            {
+                <div id="noPagesAlert" class="alert alert-info">@Localizer.Translate("NoPages", "RidicsProject")</div>
+            }
+            else
+            {
+                for (var i = 0; i < Model.Count; i++)
+                {
+                    var pageItem = Model[i];
+                    <tr class="page-row" data-page-id="@pageItem.Id" data-name="@pageItem.Name" data-position="@pageItem.Position" data-version-id="@pageItem.VersionId" data-index="@i">
+                        <td>
+                            <span class="name">
+                                @Localizer.Translate("Page", "RidicsProject"): @pageItem.Name
+                            </span>
+                            <div class="alert alert-danger"></div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

@@ -36,6 +36,7 @@ class Search {
 
     private searchButton: HTMLButtonElement;
     private advancedButton: HTMLButtonElement;
+    private searchInSecondPortalButton: HTMLButtonElement;
     private searchInputTextbox: HTMLInputElement;
     private searchbarAdvancedEditorContainer: HTMLDivElement;
     private favoritesContainer: HTMLDivElement;
@@ -74,7 +75,7 @@ class Search {
         this.fulltextIsLimited = true;
     }
 
-    makeSearch(enabledOptions: Array<SearchTypeEnum>) {
+    makeSearch(enabledOptions: Array<SearchTypeEnum>, enabledSearchInSecondPortal: boolean) {
         this.enabledOptions = enabledOptions;
 
         var searchAreaDiv = document.createElement("div");
@@ -82,18 +83,15 @@ class Search {
 
         var form: HTMLFormElement = document.createElement("form");
         form.setAttribute("role", "form");
-        
-        form.classList.add("form-horizontal");
         searchAreaDiv.appendChild(form);
 
         var formGroupDiv = document.createElement("div");
-        formGroupDiv.classList.add("form-group");
         formGroupDiv.classList.add("searchbar");
         form.appendChild(formGroupDiv);
 
         var searchbarButtonsDiv = document.createElement("div");
         searchbarButtonsDiv.classList.add("searchbar-buttons");
-        formGroupDiv.appendChild(searchbarButtonsDiv);
+        // append buttons after appending input
         
         var searchButton = document.createElement("button");
         searchButton.type = "button";
@@ -137,6 +135,7 @@ class Search {
                     $searchInputTextbox.closest(".input_container").find(".keyboard-icon-img").addClass("disabled");
                     $searchInputTextbox.closest(".input_container").find(".regexsearch-input-button").prop("disabled", true);
                     $(this.searchButton).prop("disabled", true);
+                    $(this.searchInSecondPortalButton).prop("disabled", true);
 
                     if (!this.favoriteQueryComponent.isHidden()) {
                         this.favoriteQueryComponent.hide();
@@ -144,12 +143,36 @@ class Search {
                 }
             });
 
-        } 
+        }
+
+        if (enabledSearchInSecondPortal) {
+            var secondPortalButton = document.createElement("button");
+            secondPortalButton.type = "button";
+            var text = $("#bibliography-configuration").data("second-portal-search-label") as string;
+            $(secondPortalButton).html("<i class='fa fa-external-link'></i> " + text);
+            secondPortalButton.classList.add("btn");
+            secondPortalButton.classList.add("btn-default");
+            secondPortalButton.classList.add("searchbar-button");
+            secondPortalButton.classList.add("separated");
+            searchbarButtonsDiv.appendChild(secondPortalButton);
+
+            this.searchInSecondPortalButton = secondPortalButton;
+
+            $(secondPortalButton).click(() => {
+                var targetUrl = $("#bibliography-configuration").data("second-portal-search-url") as string;
+                var searchboxValue = $(this.searchInputTextbox).val() as string;
+                var parameter = encodeURIComponent(searchboxValue);
+                var redirectUrl = `${targetUrl}?search=${parameter}`;
+                window.open(redirectUrl, "_blank");
+            });
+        }
 
         var searchbarInputDiv = document.createElement("div");
         searchbarInputDiv.classList.add("regex-searchbar-inputs");
         searchbarInputDiv.classList.add("input_container");
         formGroupDiv.appendChild(searchbarInputDiv);
+
+        formGroupDiv.appendChild(searchbarButtonsDiv);
         
         var searchbarInput: HTMLInputElement = document.createElement("input");
         searchbarInput.type = "text";
@@ -247,6 +270,10 @@ class Search {
         });
     }
 
+    setPlaceholder(text: string) {
+        this.searchInputTextbox.placeholder = text;
+    }
+
     closeAdvancedSearchEditorWithImport(jsonData: string) {
         this.writeTextToTextField(jsonData);
         this.closeAdvancedSearchEditor();
@@ -260,6 +287,7 @@ class Search {
         $searchInputTextbox.closest(".input_container").find(".regexsearch-input-button").prop("disabled", false);
         $(this.searchButton).prop("disabled", false);
         $(this.advancedButton).css("visibility", "visible");
+        $(this.searchInSecondPortalButton).prop("disabled", false);
         $searchInputTextbox.focus();
     }
 
@@ -308,6 +336,10 @@ class Search {
             var query = this.getFilteredQuery(searchboxValue, this.enabledOptions); //filter disabled options
             this.writeTextToTextField(query);
             this.processSearchJsonCallback(query);
+
+            if (query.length !== searchboxValue.length && query !== JSON.stringify(JSON.parse(searchboxValue))) { // JSON serialization is required to have the same string (e.g. without whitespaces)
+                bootbox.alert(localization.translate("UnsupportedCriteriaRemoved", "PluginsJs").value);
+            }
         } else {
             this.lastQueryWasJson = false;
             this.processSearchTextCallback(searchboxValue);
@@ -337,6 +369,33 @@ class Search {
 
     isLastQueryText(): boolean {
         return !this.lastQueryWasJson;
+    }
+}
+
+class SearchAreaSelectorWrapper {
+    private element: JQuery;
+
+    constructor(element: JQuery, onChanged: () => void) {
+        this.element = element;
+
+        element.on("changed.bs.select", () => {
+            if (onChanged != null) {
+                onChanged();
+            }
+        });
+    }
+
+    getValues() {
+        const val = this.element.val() as string | string[];
+        return val;
+    }
+
+    getSerializedValues() {
+        const val = this.getValues();
+        const result = $.param({
+            searchArea: val
+        });
+        return result;
     }
 }
 
@@ -412,6 +471,11 @@ class RegExAdvancedSearchEditor {
         var jsonDataArray = JSON.parse(json);
         $(this.innerContainer).empty();
         this.regExConditions = new Array<RegExConditionListItem>();
+
+        if (jsonDataArray.length == 0) {
+            this.addNewCondition();
+            return;
+        }
 
         for (var i = 0; i < jsonDataArray.length; i++) {
             var conditionData = jsonDataArray[i];
@@ -1957,12 +2021,9 @@ class RegExWordInput {
         conditionTypeDivEl.append(conditionSelectEl);
 
         conditionSelectEl.append(HtmlItemsFactory.createOption(localization.translate("StartsWith", "PluginsJs").value, WordInputTypeEnum.StartsWith.toString()));
-        //conditionSelectEl.appendChild(this.createOption("Nezačíná na", this.conditionType.NotStartsWith));
         conditionSelectEl.append(HtmlItemsFactory.createOption(localization.translate("Contains", "PluginsJs").value, WordInputTypeEnum.Contains.toString()));
-        //conditionSelectEl.append(this.createOption("Neobsahuje", this.conditionType.NotContains));
         conditionSelectEl.append(HtmlItemsFactory.createOption(localization.translate("EndsWith", "PluginsJs").value, WordInputTypeEnum.EndsWith.toString()));
-        //conditionSelectEl.append(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
-        conditionSelectEl.append(HtmlItemsFactory.createOption("Přesně shoduje", WordInputTypeEnum.ExactMatch.toString())); // TODO add localization
+        conditionSelectEl.append(HtmlItemsFactory.createOption(localization.translate("ExactMatch", "PluginsJs").value, WordInputTypeEnum.ExactMatch.toString()));
 
         conditionSelectEl.change((eventData) => {
             var oldConditonType = this.conditionInputType;

@@ -12,7 +12,8 @@
                 autosearch: false
             },
             search: {
-                processSearchJsonCallback: this.editionAdvancedSearch.bind(this)
+                processSearchJsonCallback: this.editionAdvancedSearch.bind(this),
+                placeholder: localization.translate("SearchInFulltext...", "PluginsJs").value
             }
         }, super.getDefaultConfiguration());
     }
@@ -25,6 +26,12 @@
         bibliographyModule.clearBooks();
         bibliographyModule.showLoading();
         bibliographyModule.destroyPagination();
+
+        // the same condition in ModulInicializator class
+        if (json === "[]") {
+            bibliographyModule.showError(localization.translate("SearchCriteriaError", "PluginsJs").value);
+            return;
+        }
 
         $.ajax({
             type: "GET",

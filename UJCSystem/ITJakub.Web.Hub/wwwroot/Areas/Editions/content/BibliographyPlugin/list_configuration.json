@@ -71,8 +71,11 @@
         }
       }
     },
+    "middle-right-panel": {
+      "body": "<img src='{$baseUrl}images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
+    },
     "bottom-panel": {
-      "body": "{$printSearchResultsCondition}{$editionTable}<a href='/EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
+      "body": "{$printSearchResultsCondition}{$editionTable}<a href='{$baseUrl}EditionNote/EditionNote?bookId={BookId}'>{@EditionNote}</a> <br> {@Copyright}: {Copyright}",
       "variables": {
         "$editionTable": {
           "type": "table",
@@ -165,7 +168,7 @@
           "type": "basic",
           "pattern": "<a href='{ForumUrl}'>{@Link}</a>",
           "printIfNullValue": false
-        } 
+        }
 
       }
     },

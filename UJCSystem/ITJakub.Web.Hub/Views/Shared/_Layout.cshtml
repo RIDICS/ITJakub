@@ -27,6 +27,7 @@
     <link asp-append-version="true" href="~/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker-plus.min.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/lib/s-pagination/dist/pagination.css" rel="stylesheet" />
+    <link asp-append-version="true" href="~/lib/bootstrap-select/dist/css/bootstrap-select.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/css/ITJakubStyle.css" rel="stylesheet" />
     <link asp-append-version="true" href="~/css/lib.loading-visualization.css" rel="stylesheet" />
     @RenderSection("styles", false)
@@ -80,7 +81,9 @@
                                                                                                     {@Html.Raw("EditLemmatization")
                                                                                                     } "></div>
     <div id="bibliography-configuration-default-url" data-url="@FileVersionProvider.AddFileVersionToPath(Context.Request.PathBase, Url.Content("~/content/BibliographyConfiguration/configuration.json"))"></div>
-    <div id="bibliography-configuration" data-page-size="@PageSizes.BibliographyModule"></div>
+    <div id="bibliography-configuration" data-page-size="@PageSizes.BibliographyModule"
+         data-second-portal-search-label="@Localizer.Translate(PortalConfig.Value.PortalType == PortalType.CommunityPortal ? "SearchInResearchPortal" : "SearchInCommunityPortal", "BibliographyModule")"
+         data-second-portal-search-url="@UrlHelpers.ConvertCurrentUrlToSecondPortal(Context.Request, PortalConfig.Value)"></div>
     <div class="page-body-content">
 
         <script asp-append-version="true" src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -100,10 +103,12 @@
         <script asp-append-version="true" src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker.js"></script>
         <script asp-append-version="true" src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker-plus.js"></script>
         <script asp-append-version="true" src="~/lib/s-pagination/dist/pagination.js"></script>
+        <script asp-append-version="true" src="~/lib/bootstrap-select/dist/js/bootstrap-select.js"></script>
         <script asp-append-version="true" src="~/lib/bootbox/bootbox.js"></script>
         <script asp-append-version="true" src="~/lib/dropzone/dist/dropzone.js"></script>
         <script asp-append-version="true" src="~/lib/he/he.js"></script>
         <script asp-append-version="true" src="~/lib/urijs/src/URI.min.js"></script>
+        <script asp-append-version="true" src="~/lib/loading-visualization/dist/main.js"></script>
         @*<script asp-append-version="true" src="~/lib/modernizr/modernizr.js"></script>*@
 
         <script asp-append-version="true" src="~/js/Plugins/Keyboard/itjakub.keyboard.bundle.js"></script>
@@ -111,14 +116,6 @@
         <script asp-append-version="true" src="~/js/itjakub.bundle.js"></script>
         <script asp-append-version="true" src="~/js/Plugins/itjakub.plugins.bundle.js"></script>
         <script asp-append-version="true" src="~/js/Favorite/itjakub.favorite.bundle.js"></script>
-        <script asp-append-version="true" src="~/lib/loading-visualization/dist/main.js"></script>
-        <script>
-            $(document).ready(function() {
-                var loader = new lv();
-                loader.initLoaderAll();
-                loader.startObserving();
-            });
-        </script>
 
         @RenderSection("scripts", false)
 

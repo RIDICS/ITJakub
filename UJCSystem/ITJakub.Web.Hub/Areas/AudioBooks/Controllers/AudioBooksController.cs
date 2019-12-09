@@ -3,6 +3,7 @@ using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Managers;
+using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
@@ -108,7 +109,8 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 
             var client = GetBookClient();
             var results = client.SearchAudioBook(request, GetDefaultProjectType());
-            return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
+            var resultContracts = Mapper.Map<List<AudioBookSearchResultExtendedContract>>(results);
+            return Json(new {books = resultContracts}, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
@@ -135,7 +137,8 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             };
             var client = GetBookClient();
             var results = client.SearchAudioBook(request, GetDefaultProjectType());
-            return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
+            var resultContracts = Mapper.Map<List<AudioBookSearchResultExtendedContract>>(results);
+            return Json(new {books = resultContracts}, GetJsonSerializerSettingsForBiblModule());
         }
 
         public FileResult DownloadAudio(long audioId)

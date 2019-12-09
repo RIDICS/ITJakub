@@ -251,6 +251,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.AppAuthentication
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.ImportTestData.App", "Vokabular.ImportTestData.App\Vokabular.ImportTestData.App.csproj", "{B1BF19CE-7DC6-420B-ADC2-3D0630B3BECD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vokabular.FulltextService.Core.Test", "Vokabular.FulltextService.Core.Test\Vokabular.FulltextService.Core.Test.csproj", "{631A390D-DDE6-444D-AB61-EDCD83AA083F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1945,6 +1947,26 @@ Global
 		{B1BF19CE-7DC6-420B-ADC2-3D0630B3BECD}.Release|x64.Build.0 = Release|Any CPU
 		{B1BF19CE-7DC6-420B-ADC2-3D0630B3BECD}.Release|x86.ActiveCfg = Release|Any CPU
 		{B1BF19CE-7DC6-420B-ADC2-3D0630B3BECD}.Release|x86.Build.0 = Release|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Debug|ARM.Build.0 = Debug|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Debug|x64.Build.0 = Debug|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Debug|x86.Build.0 = Debug|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Release|ARM.ActiveCfg = Release|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Release|ARM.Build.0 = Release|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Release|x64.ActiveCfg = Release|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Release|x64.Build.0 = Release|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Release|x86.ActiveCfg = Release|Any CPU
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2035,6 +2057,7 @@ Global
 		{C953C591-E7CE-44A7-8641-F105004DAF32} = {BD0AAA0F-2FF3-40D6-B391-E3366A454844}
 		{A4AEE19E-B148-484D-AA40-B50A0D269003} = {53A1BA5E-DF69-4655-AB7B-3BBF58B426FD}
 		{B1BF19CE-7DC6-420B-ADC2-3D0630B3BECD} = {53A1BA5E-DF69-4655-AB7B-3BBF58B426FD}
+		{631A390D-DDE6-444D-AB61-EDCD83AA083F} = {03208FD7-4079-4AE7-8BC9-643C06A89967}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {214F8215-5125-4376-A074-1F7A35690484}

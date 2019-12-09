@@ -1,4 +1,5 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Constants
+@using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
 
 @inject ILocalizationService Localizer
@@ -22,7 +23,7 @@
 
     <div class="lv-circles md lv-mid lvt-2 lvb-2"></div>
 
-    <div id="feedbacks" class="feedbacks-area">
+    <div id="feedbacks" class="feedbacks-area" data-page-size="@PageSizes.Feedback">
     </div>
 
     <div id="feedbacks-paginator" class="feedbacks-paginator">

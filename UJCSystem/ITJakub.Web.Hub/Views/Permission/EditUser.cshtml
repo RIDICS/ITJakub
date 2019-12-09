@@ -48,7 +48,7 @@
                                 @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @readonly = true })
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" title="@Localizer.Translate("UserCodeHelp", "Permission")">
                             @Html.LabelFor(m => m.UserCode, new { @class = "col-md-3 control-label" })
                             <div class="col-md-8">
                                 @Html.TextBoxFor(m => m.UserCode, new { @class = "form-control", @readonly = true })

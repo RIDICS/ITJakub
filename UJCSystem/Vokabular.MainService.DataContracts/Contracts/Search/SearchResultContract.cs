@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.DataContracts.Contracts.Search
 {
     public class SearchResultContract
     {
-        public long BookId { get; set; }
+        public string BookId { get; set; }
 
-        public string BookXmlId { get; set; }
+        public ProjectTypeContract ProjectType { get; set; }
 
-        public string VersionXmlId { get; set; }
+        public TextTypeEnumContract TextType { get; set; }
 
         public BookTypeEnumContract BookType { get; set; }
 
         public string Title { get; set; }
 
         public string SubTitle { get; set; }
-
-        //public string Acronym { get; set; }
 
         public string BiblText { get; set; }
 
@@ -38,17 +37,11 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
 
         public string AuthorsLabel { get; set; }
         
-        //public PublisherContract Publisher { get; set; }
-
         public string Copyright { get; set; }
 
         public int PageCount { get; set; }
 
         public DateTime CreateTime { get; set; }
-
-        public string CreateTimeString { get; set; }
-
-        //public List<ManuscriptContract> Manuscripts { get; set; }
 
         public string ManuscriptIdno { get; set; }
 

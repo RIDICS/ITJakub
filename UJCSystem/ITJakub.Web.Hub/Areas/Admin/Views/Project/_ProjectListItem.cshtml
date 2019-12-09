@@ -29,10 +29,10 @@
         </div>
         <div class="col-md-4">
             @{
-                var lastEditDate = viewModel.LastEditDate?.ToString() ?? $"({Localizer.Translate("NotFilled")})";
+                var lastEditDate = viewModel.LastEditDate?.ToLocalTime().ToString(Localizer.GetRequestCulture()) ?? $"({Localizer.Translate("NotFilled")})";
             }
             @Localizer.Translate("LastEdited", "Admin"): @lastEditDate @Localizer.Translate("ByUser", "Admin") @viewModel.LastEditUser<br />
-            @Localizer.Translate("Created", "Admin"): @viewModel.CreateDate @Localizer.Translate("ByUser", "Admin") @viewModel.CreateUser
+            @Localizer.Translate("Created", "Admin"): @viewModel.CreateDate.ToLocalTime().ToString(Localizer.GetRequestCulture()) @Localizer.Translate("ByUser", "Admin") @viewModel.CreateUser
         </div>
         <div class="col-md-2 project-item-buttons">
             <a href="#" class="delete-button @(permissions.AdminProject ? string.Empty : "disabled")">

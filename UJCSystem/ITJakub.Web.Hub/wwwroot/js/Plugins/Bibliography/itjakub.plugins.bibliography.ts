@@ -116,7 +116,7 @@ class BibliographyModule {
             bookData.$favoritesContainer = $(".favorites", bookData.element);
             bookData.$favoriteButton = $(".favorite-button", bookData.element);
             if (bookData.$favoritesContainer.length > 0 || bookData.$favoriteButton.length > 0) {
-                bookIds.push(bookData.bookId);
+                bookIds.push(Number(bookData.bookId));
             }
         });
         if (bookIds.length === 0) return;
@@ -188,14 +188,15 @@ class BibliographyModule {
     }
 
     public showSearchError() {
-        var errorDiv = BibliographyFactory.makeError(localization.translate("SearchError", "PluginsJs").value);
-        $(this.booksContainer)
-            .empty()
-            .append(errorDiv);
+        this.showError(localization.translate("SearchError", "PluginsJs").value);
     }
 
     public showPageLoadError() {
-        var errorDiv = BibliographyFactory.makeError(localization.translate("LoadingBookListError", "PluginsJs").value);
+        this.showError(localization.translate("LoadingBookListError", "PluginsJs").value);
+    }
+
+    public showError(text: string) {
+        var errorDiv = BibliographyFactory.makeError(text);
         $(this.booksContainer)
             .empty()
             .append(errorDiv);
@@ -213,10 +214,8 @@ class BibliographyModule {
         var liElement: HTMLLIElement = document.createElement('li');
         $(liElement).addClass('list-item');
         $(liElement).attr("data-id", bibItem.BookId);
-        $(liElement).attr("data-bookid", bibItem.BookXmlId);
         $(liElement).attr("data-booktype", bibItem.BookType);
         $(liElement).attr("data-name", bibItem.Title);
-        $(liElement).attr("data-century", bibItem.Century);
 
         var visibleContent: HTMLDivElement = document.createElement('div');
         $(visibleContent).addClass('visible-content');
@@ -231,6 +230,9 @@ class BibliographyModule {
 
             var middlePanel = bibFactory.makeMiddlePanel(bibItem);
             if (middlePanel != null) visibleWrapper.appendChild(middlePanel);
+
+            var midRightPanel = bibFactory.makeMidRightPanel(bibItem);
+            if (midRightPanel != null) visibleWrapper.appendChild(midRightPanel);
 
             var rightPanel = bibFactory.makeRightPanel(bibItem);
             if (rightPanel != null) visibleWrapper.appendChild(rightPanel);
@@ -369,7 +371,7 @@ function getAudioLengthString(value: string): string {
 }
 
 interface IBookRenderData {
-    bookId: number;
+    bookId: string;
     bookType: BookTypeEnum;
     bookName: string;
     element: HTMLLIElement;
@@ -378,26 +380,14 @@ interface IBookRenderData {
 }
 
 interface IBookInfo {
-    BookId: number;
-    BookXmlId: string;
+    BookId: string;
+    ProjectType: ProjectType;
+    TextType: ProjectTextType;
     BookType: BookTypeEnum;
     Title: string;
-    Editor: string;
-    Pattern: string;
-    SourceAbbreviation: string;
     RelicAbbreviation: string;
-    LiteraryType: string;
-    LiteraryGenre: string;
-    LastEditation: string;
-    EditationNote: string; //anchor href?
-    Copyright: string;
-    //Pages: IPage[];
-    Archive: IArchive;
-    Century: number;
-    Sign: string;
-    Authors: IAuthor[];
-    Description: string;
-    Year: number;
+    SourceAbbreviation: string;
+    // there are other properties but they are not required in TypeScript because they are used in configuration JSON file
 }
 
 enum BookTypeEnum {
@@ -411,16 +401,22 @@ enum BookTypeEnum {
     AudioBook = "AudioBook"
 }
 
+enum ProjectType {
+    Research = "Research",
+    Community = "Community",
+    Bibliography = "Bibliography",
+}
+
+enum ProjectTextType {
+    NoneOrOriginal = "NoneOrOriginal",
+    Transliterated = "Transliterated",
+    Transcribed = "Transcribed",
+}
+
 //interface IPage {
 //    Start: number;
 //    End: number;
 //}
-
-interface IArchive {
-    Name: string;
-    City: string;
-    State: string;
-}
 
 interface IAuthor {
     FirstName: string;

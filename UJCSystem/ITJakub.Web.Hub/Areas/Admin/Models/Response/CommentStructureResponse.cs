@@ -11,5 +11,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models.Response
         public string Surname { get; set; }
         public int Order { get; set; }
         public long Time { get; set; }
+        public string TimeString { get; set; }
     }
 }

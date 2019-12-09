@@ -22,6 +22,7 @@
     "Texts": "translate[Texty]",
     "Audio": "translate[Audio]",
     "Video": "translate[Video]",
+    "Terms": "Terms",
     "AddResource": "translate[Přidat zdroj]",
     "DeleteResource": "translate[Smazat zdroj]",
     "RenameResource": "translate[Přejmenovat zdroj]",
@@ -272,6 +273,16 @@
     "WorksLoadFailed": "An unexpected error occurred while loading works.",
     "SelectAuthor": "Please select one author from list.",
     "SelectResponsiblePerson": "Please select one responsible person from list.",
-    "SelectResponsibleType": "Please select responsible type."
+    "SelectResponsibleType": "Please select responsible type.",
+
+    "SelectPage": "Select page",
+    "TermsOnPage": "Terms on the page",
+    "TermList": "Term list",
+    "EditTerms": "Edit terms",
+    "EditTermsTitle": "Terms editing - page {0}",
+    "RemoveTerm": "Remove term",
+    "SelectedTerms": "Selected terms",
+    "AllCategories": "All categories",
+    "Search..." : "Search..." 
   }
 }

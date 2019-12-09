@@ -36,8 +36,7 @@
     private loadPage(pageNumber: number, initial?: boolean) {
         const listEl = $(".selectable-list-div");
         const startIndex = (pageNumber - 1) * this.numberOfItemsPerPage;
-        const endIndex = pageNumber * this.numberOfItemsPerPage;
-        const pagedAuthorListAjax = this.util.getOriginalAuthorList(startIndex, endIndex);
+        const pagedAuthorListAjax = this.util.getOriginalAuthorList(startIndex, this.numberOfItemsPerPage);
         pagedAuthorListAjax.done((data: IPagedResult<IOriginalAuthor>) => {
             listEl.empty();
             if (initial) {

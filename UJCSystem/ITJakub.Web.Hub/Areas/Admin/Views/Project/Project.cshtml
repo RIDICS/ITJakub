@@ -14,7 +14,6 @@
     <link asp-append-version="true" rel="stylesheet" href="~/css/ridics.permissions.css" />
     <link asp-append-version="true" rel="stylesheet" href="~/css/ridics.checkbox.css" />
     <link asp-append-version="true" rel="stylesheet" href="~/css/ridics.list.css" />
-    <link asp-append-version="true" rel="stylesheet" href="~/lib/bootstrap-select/dist/css/bootstrap-select.css" />
     <link asp-append-version="true" rel="stylesheet" href="~/lib/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css" />
     <link asp-append-version="true" rel="stylesheet" href="~/lib/gijgo/dist/modular/css/checkbox.min.css" />
     <link asp-append-version="true" rel="stylesheet" href="~/lib/gijgo/dist/modular/css/core.min.css" />
@@ -24,13 +23,13 @@
     <script asp-append-version="true" src="~/Areas/Admin/js/ridics.project.bundle.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/chapter-editor/ridics.project.chapter-editor.bundle.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/editors-common-base/ridics.project.editors.bundle.js"></script>
+    <script asp-append-version="true" src="~/Areas/Admin/js/term-editor/ridics.project.term-editor.bundle.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/text-editor/ridics.project.text-editor.bundle.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/page-image-viewer/ridics.project.page-image-viewer.bundle.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/page-list-editor/ridics.project.page-list-editor.bundle.js"></script>
     <script asp-append-version="true" src="~/js/itjakub.simplemde.tools.js"></script>
     <script asp-append-version="true" src="~/js/ridics.text-api-client.js"></script>
     <script asp-append-version="true" src="~/Areas/Admin/js/edition-note/ridics.project.edition-note.main.js"></script>
-    <script asp-append-version="true" src="~/lib/bootstrap-select/dist/js/bootstrap-select.js"></script>
     <script asp-append-version="true" src="~/lib/bootstrap-tokenfield/dist/bootstrap-tokenfield.js"></script>
     <script asp-append-version="true" src="~/lib/gijgo/dist/modular/js/core.min.js"></script>
     <script asp-append-version="true" src="~/lib/gijgo/dist/modular/js/checkbox.min.js"></script>
@@ -50,6 +49,7 @@
                     <a href="#" class="list-group-item" id="project-navigation-image">@Localizer.Translate("ImageScan", "Admin")</a>
                     <a href="#" class="list-group-item" id="project-navigation-text">@Localizer.Translate("Texts", "Admin")</a>
                     <a href="#" class="list-group-item" id="project-navigation-audio">@Localizer.Translate("Audio", "Admin")</a>
+                    <a href="#" class="list-group-item" id="project-navigation-terms">@Localizer.Translate("Terms", "Admin")</a>
                 </div>
             </div>
 

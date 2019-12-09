@@ -155,7 +155,8 @@
             this.configuration.search.processSearchTextCallback,
             this.configuration.search.favoriteQueries
         );
-        search.makeSearch(this.configuration.search.enabledOptions);
+        search.makeSearch(this.configuration.search.enabledOptions, this.configuration.search.enabledSearchInSecondPortal);
+        search.setPlaceholder(this.configuration.search.placeholder);
 
         return search;
     }
@@ -277,6 +278,12 @@
         bibliographyModule.clearBooks();
         bibliographyModule.showLoading();
         bibliographyModule.destroyPagination();
+
+        // the same condition in SearchModulInicializator class
+        if (json === "[]") {
+            bibliographyModule.showError(localization.translate("SearchCriteriaError", "PluginsJs").value);
+            return;
+        }
 
         $.ajax({
             type: "GET",
@@ -444,6 +451,8 @@ interface IModulInicializatorConfigurationSearch {
     processSearchTextCallback?: (text: string) => void;
 
     enabledOptions: Array<SearchTypeEnum>;
+    enabledSearchInSecondPortal: boolean;
+    placeholder?: string;
 
     url: IModulInicializatorConfigurationSearchUrl;
     favoriteQueries: IModulInicializatorConfigurationSearchFavorites;

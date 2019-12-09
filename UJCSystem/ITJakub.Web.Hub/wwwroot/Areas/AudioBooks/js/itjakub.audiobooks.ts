@@ -10,6 +10,7 @@
                 SearchTypeEnum.Editor,
                 SearchTypeEnum.Dating
             ],
+            enabledSearchInSecondPortal: false,
             url: {
                 advanced: getBaseUrl() + "AudioBooks/AudioBooks/AdvancedSearchPaged",
                 text: getBaseUrl() + "AudioBooks/AudioBooks/TextSearchPaged",
