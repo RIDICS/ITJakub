@@ -1,4 +1,5 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Constants
+@using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
 @using Vokabular.MainService.DataContracts.Contracts.Permission
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.ProjectDetailContract>
@@ -91,7 +92,10 @@
         </div>
     </div>
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 project-permission-section" id="project-permission-section">
-        @await Html.PartialAsync("Widgets/_ProjectPermissionsPanel")
+        @{
+            ViewData.Add(PermissionViewConstants.ShowLinkToGroupManagement, true);
+        }
+        @await Html.PartialAsync("Widgets/_ProjectPermissionsPanel", ViewData)
     </div>
 </div>
 
