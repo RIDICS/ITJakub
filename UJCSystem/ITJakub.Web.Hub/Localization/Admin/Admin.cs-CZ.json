@@ -2,7 +2,7 @@
   "culture": "cs-CZ",
   "scope": "Admin",
   "dictionary": {
-    "ListError": "Chyba při načítání strany se seznamem projektů",
+    "ListError": "Chyba při načítání strany se seznamem děl",
     "ModuleError": "Chyba při načítání modulu",
     "BookmarkError": "Chyba při načítání záložky.",
     "ResourceError": "Chyba při načítání zdrojů",
@@ -15,7 +15,7 @@
     "CreateLiteraryGenre": "Chyba při vytváření nového literárního žánru",
     "CreateResourcesError": "Chyba při načítání zdrojů k publikaci",
     
-    "ProjectHeader": "Projekt - ",
+    "ProjectHeader": "Dílo - ",
     "ProjectTitle": "Název díla",
     "Project": "Dílo",
     "InfoAboutWork": "Informace o díle",
@@ -73,7 +73,7 @@
     "ChapterName": "Název kapitoly",
     "NewChapter": "Nová kapitola",
     "StartsOnPage": "Začíná na stránce",
-    "NoChapters": "Projekt neobsahuje kapitoly.",
+    "NoChapters": "Dílo neobsahuje kapitoly.",
 
     "CommonInformation": "Obecné informace",
     "ProjectName": "Název díla",
@@ -211,7 +211,7 @@
     "CardFile": "Kartotéky",
     "AudioBook": "Audioknihy",
     "All": "Vše",
-    "ProjectNotContains": "Projekt neobsahuje {0}",
+    "ProjectNotContains": "Dílo neobsahuje {0}",
 
     "DefaultModule": "Výchozí modul",
     "VisibilityInModules": "Viditelnost v modulech",
@@ -253,8 +253,8 @@
     "CreateForumInModules": "Vytvoření fóra v modulech",
     "NoSelectedModuleForForum": "Musí být vybrán alespoň jeden modul pro vytvoření fóra.",
     "EmptyProjectNameError": "Název díla nemůže být prázdný.",
-    "NoProjectsSearch": "Je nám líto, ale nepodařilo se najít žádné projekty odpovídající dotazu ",
-    "NoProjectsFound": "Je nám líto, ale nebyly nalezeny žádné projekty",
+    "NoProjectsSearch": "Je nám líto, ale nepodařilo se najít žádná díla odpovídající dotazu ",
+    "NoProjectsFound": "Je nám líto, ale nebyla nalezena žádná díla",
     "NoProjects": "Nebyla nalezena žádná díla",
     "RenameSource": "Přejmenovat zdroj",
     "SearchQuery": "Zobrazují se výsledky pro",
