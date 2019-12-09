@@ -990,7 +990,7 @@ class AudioPanel extends ContentViewPanel {
         return audioContainerDiv;
     }
 
-    private reloadTrack() {
+    private reloadTrack(autoplay: boolean = false) {
         if (this.currentTrack) {
             this.currentTrack.pause();
         }
@@ -1007,7 +1007,7 @@ class AudioPanel extends ContentViewPanel {
                 $(download).html(recording.AudioType);
                 $(".track").append(download);
             }
-            this.buildAudioPlayer(response.track);
+            this.buildAudioPlayer(response.track, autoplay);
 
         });
         getTrack.fail(() => {
@@ -1016,9 +1016,15 @@ class AudioPanel extends ContentViewPanel {
         });
     }
 
-    private buildAudioPlayer(track: ITrackWithRecordingContract) {
+    private buildAudioPlayer(track: ITrackWithRecordingContract, autoplay: boolean) {
         this.currentTrack = new Audio();
-
+        if(autoplay) {
+            $(this.currentTrack).on("canplay", () => {
+                this.currentTrack.play();
+            })
+                
+        }
+        
         for (var recording of track.Recordings) {
             var source = document.createElement("source");
             source.src = this.sc.getTrackDownloadUrl(recording.Id, recording.AudioType);
@@ -1035,13 +1041,13 @@ class AudioPanel extends ContentViewPanel {
         buttonBack.addEventListener("click", () => {
             if (this.trackId > 0) {
                 this.trackId--;
-                this.reloadTrack();
+                this.reloadTrack(true);
             }
         });
         audioControl.appendChild(buttonBack);
 
         var buttonPlay = document.createElement("button");
-        $(buttonPlay).addClass("glyphicon btn glyphicon-play");
+        $(buttonPlay).addClass(`glyphicon btn ${autoplay ? "glyphicon-pause" : "glyphicon-play"}`);
         buttonPlay.addEventListener("click", () => {
             if (this.currentTrack.paused) {
                 $(buttonPlay)
@@ -1063,7 +1069,7 @@ class AudioPanel extends ContentViewPanel {
         buttonForward.addEventListener("click", () => {
             if (this.trackId < this.numberOfTracks - 1) {
                 this.trackId++;
-                this.reloadTrack();
+                this.reloadTrack(true);
             }
         });
         audioControl.appendChild(buttonForward);
