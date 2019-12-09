@@ -1027,7 +1027,7 @@ class AudioPanel extends ContentViewPanel {
         var audioControl = document.createElement("div");
         $(audioControl).addClass("buttons btn-group control-buttons");
         var buttonBack = document.createElement("button");
-        $(buttonBack).addClass("glyphicon btn btn-sm glyphicon-step-backward");
+        $(buttonBack).addClass("glyphicon btn glyphicon-step-backward");
         buttonBack.addEventListener("click", () => {
             if (this.trackId > 0) {
                 this.trackId--;
@@ -1038,7 +1038,7 @@ class AudioPanel extends ContentViewPanel {
         audioControl.appendChild(buttonBack);
 
         var buttonPlay = document.createElement("button");
-        $(buttonPlay).addClass("glyphicon btn btn-sm glyphicon-play");
+        $(buttonPlay).addClass("glyphicon btn glyphicon-play");
         buttonPlay.addEventListener("click", () => {
             if (audio.paused) {
                 $(buttonPlay)
@@ -1056,7 +1056,7 @@ class AudioPanel extends ContentViewPanel {
 
 
         var buttonForward = document.createElement("button");
-        $(buttonForward).addClass("glyphicon btn btn-sm glyphicon-step-forward");
+        $(buttonForward).addClass("glyphicon btn glyphicon-step-forward");
         buttonForward.addEventListener("click", () => {
             if (this.trackId < this.numberOfTracks - 1) {
                 this.trackId++;
