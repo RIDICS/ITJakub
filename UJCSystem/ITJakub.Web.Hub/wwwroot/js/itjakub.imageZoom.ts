@@ -126,8 +126,8 @@
         var imageElWidth = $(this.image).width();
         if (this.bgPositionX > 0) {
             this.bgPositionX = 0;
-        } else if (this.bgPositionX < this.originalWidth - imageElWidth) {
-            this.bgPositionX = this.originalWidth - imageElWidth;
+        } else if (this.bgPositionX < imageElWidth - this.imageWidth) {
+            this.bgPositionX = imageElWidth - this.imageWidth;
         }
 
         if (this.bgPositionY > 0) {
