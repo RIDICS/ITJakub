@@ -6,13 +6,15 @@ class ChapterEditorMain {
     private editDialog: BootstrapDialogWrapper;
     private chaptersToSave: IUpdateChapter[];
     private bookPages: Array<BookPage>;
+    private pageDetail: JQuery;
+    private chapterEdited: boolean;
     private position = 0;
-    private pageDetail = $("#chaptersPageDetail")
     
     constructor() {
         this.errorHandler = new ErrorHandler();
         this.util = new EditorsApiClient();
         this.moveEditor = new ChapterMoveEditor();
+        this.pageDetail = $("#chaptersPageDetail");
         this.readerPagination = new ReaderPagination(this.pageDetail[0]);
     }
 
@@ -93,6 +95,7 @@ class ChapterEditorMain {
             listing.empty().append(`<div class="loader"></div>`);
             this.util.saveChapterList(projectId, this.chaptersToSave).done(() => {
                 $("#chaptersUnsavedChanges").addClass("hide");
+                this.chapterEdited = false;
                 this.util.getChapterListView(projectId).done((data) => {
                     listing.html(data);
                     this.initChapterRowClicks($(".table > .sub-chapters"));
@@ -158,6 +161,10 @@ class ChapterEditorMain {
             liveSearch: true,
             maxOptions: 1
         });
+    }
+
+    public isChangeMade(): boolean {
+        return this.chapterEdited;
     }
 
     private getChaptersToSave(subChaptersElements: JQuery<HTMLElement>, parentId: number = null): void {
@@ -367,6 +374,7 @@ class ChapterEditorMain {
     }
 
     private showUnsavedChangesAlert() {
+        this.chapterEdited = true;
         $("#chaptersUnsavedChanges").removeClass("hide");
     }
 

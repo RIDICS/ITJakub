@@ -106,7 +106,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
                 return View(model);
             }
 
-            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.CardFiles, IsUserLoggedIn());
+            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.CardFiles, PortalTypeValue,IsUserLoggedIn());
             return View("Feedback/FeedbackSuccess");
         }
 

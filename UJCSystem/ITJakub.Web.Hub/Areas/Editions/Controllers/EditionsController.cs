@@ -99,7 +99,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 return View(model);
             }
 
-            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Editions, IsUserLoggedIn());
+            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Editions, PortalTypeValue,IsUserLoggedIn());
             return View("Feedback/FeedbackSuccess");
         }
 

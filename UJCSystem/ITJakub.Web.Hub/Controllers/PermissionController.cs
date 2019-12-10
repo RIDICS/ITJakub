@@ -20,16 +20,11 @@ namespace ITJakub.Web.Hub.Controllers
     [Authorize]
     public class PermissionController : BaseController
     {
-        private const int UserListPageSize = 10;
-        private const int RoleListPageSize = 10;
-        private const int PermissionListPageSize = 10;
-        private const int BookListPageSize = 10;
-
         public PermissionController(ControllerDataProvider controllerDataProvider) : base(controllerDataProvider)
         {
         }
 
-        public IActionResult UserPermission(string search, int start, int count = UserListPageSize, ViewType viewType = ViewType.Full)
+        public IActionResult UserPermission(string search, int start, int count = PageSizes.Users, ViewType viewType = ViewType.Full)
         {
             var client = GetUserClient();
 
@@ -50,7 +45,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public IActionResult RolePermission(string search, int start, int count = RoleListPageSize, ViewType viewType = ViewType.Full)
+        public IActionResult RolePermission(string search, int start, int count = PageSizes.Roles, ViewType viewType = ViewType.Full)
         {
             var client = GetRoleClient();
 
@@ -87,7 +82,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult ProjectPermission(string search, int start, int count = BookListPageSize, ViewType viewType = ViewType.Full)
+        public ActionResult ProjectPermission(string search, int start, int count = PageSizes.ProjectsInSublist, ViewType viewType = ViewType.Full)
         {
             search = search ?? string.Empty;
 
@@ -113,7 +108,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public IActionResult RolePermissionList(int roleId, string search, int start, int count = PermissionListPageSize)
+        public IActionResult RolePermissionList(int roleId, string search, int start, int count = PageSizes.Permissions)
         {
             search = search ?? string.Empty;
 
@@ -141,7 +136,7 @@ namespace ITJakub.Web.Hub.Controllers
             return PartialView("Widget/_PermissionListWidget", model);
         }
 
-        public IActionResult UsersByRole(int roleId, string search, int start, int count = UserListPageSize)
+        public IActionResult UsersByRole(int roleId, string search, int start, int count = PageSizes.UsersInSublist)
         {
             var client = GetRoleClient();
             search = search ?? string.Empty;
@@ -150,7 +145,7 @@ namespace ITJakub.Web.Hub.Controllers
             return PartialView("Widget/_UserListWidget", model);
         }
 
-        public ActionResult RolesByProject(int projectId, string search, int start, int count = RoleListPageSize)
+        public ActionResult RolesByProject(int projectId, string search, int start, int count = PageSizes.Roles)
         {
             var client = GetProjectClient();
             search = search ?? string.Empty;
@@ -260,9 +255,11 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 TotalCount = resultRoles.Count,
                 List = resultRoles,
-                PageSize = RoleListPageSize,
+                PageSize = resultRoles.Count, // no paging
                 Start = 0
             };
+
+            ViewData.Add(RoleViewConstants.RegisteredRoleName, RoleNames.RegisteredUser);
 
             return View(model);
         }

@@ -33,6 +33,7 @@ namespace Vokabular.MainService.Core.Works.Portal
             var now = DateTime.UtcNow;
             var user = m_portalRepository.Load<User>(m_userId);
             var itemType = m_mapper.Map<SyndicationItemType>(m_data.ItemType);
+            var portalType = m_mapper.Map<PortalTypeEnum>(m_data.PortalType);
 
             var syndicationItem = new NewsSyndicationItem
             {
@@ -41,6 +42,7 @@ namespace Vokabular.MainService.Core.Works.Portal
                 Url = m_data.Url,
                 Text = m_data.Text,
                 ItemType = itemType,
+                PortalType = portalType,
                 User = user,
             };
 

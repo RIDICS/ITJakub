@@ -18,6 +18,8 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual DateTime CreateTime { get; set; }
 
         public virtual SyndicationItemType ItemType { get; set; }
+        
+        public virtual PortalTypeEnum PortalType { get; set; }
 
         public virtual bool Equals(NewsSyndicationItem other)
         {

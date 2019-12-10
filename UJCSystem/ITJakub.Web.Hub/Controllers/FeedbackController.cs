@@ -26,7 +26,7 @@ namespace ITJakub.Web.Hub.Controllers
         public ActionResult GetFeedbacksCount(IList<FeedbackCategoryEnumContract> categories)
         {
             var client = GetFeedbackClient();
-            var feedbacks = client.GetFeedbackList(0, 0, FeedbackSortEnumContract.Date, SortDirectionEnumContract.Desc, categories);
+            var feedbacks = client.GetFeedbackList(0, 0, FeedbackSortEnumContract.Date, SortDirectionEnumContract.Desc, categories, PortalTypeValue);
             return Json(feedbacks.TotalCount);
         }
 
@@ -36,7 +36,7 @@ namespace ITJakub.Web.Hub.Controllers
             var sortValue = (FeedbackSortEnumContract) sortCriteria;
             var sortDirection = sortAsc ? SortDirectionEnumContract.Asc : SortDirectionEnumContract.Desc;
             var client = GetFeedbackClient();
-            var feedbacks = client.GetFeedbackList(start, count, sortValue, sortDirection, categories);
+            var feedbacks = client.GetFeedbackList(start, count, sortValue, sortDirection, categories, PortalTypeValue);
             var result = Mapper.Map<List<FeedbackExtendedContract>>(feedbacks.List);
             return Json(result);
         }

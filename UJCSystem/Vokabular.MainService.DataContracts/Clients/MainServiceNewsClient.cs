@@ -19,7 +19,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             m_client = client;
         }
 
-        public PagedResultList<NewsSyndicationItemContract> GetNewsSyndicationItems(int start, int count, NewsTypeEnumContract? itemType)
+        public PagedResultList<NewsSyndicationItemContract> GetNewsSyndicationItems(int start, int count, NewsTypeEnumContract? itemType, PortalTypeContract portalType)
         {
             try
             {
@@ -27,6 +27,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                     .AddParameter("start", start)
                     .AddParameter("count", count)
                     .AddParameter("itemType", itemType)
+                    .AddParameter("portalType", portalType)
                     .ToResult();
                 var result = m_client.GetPagedList<NewsSyndicationItemContract>(url);
                 return result;

@@ -6,6 +6,7 @@
     private readonly fsPageName = "FS";
     private readonly fcPageName = "FC";
     private projectId: number;
+    public pageListEdited: boolean;
     
     constructor() {
         this.gui = new EditorsGui();
@@ -60,6 +61,10 @@
         $("#project-pages-generate-to, #project-pages-generate-from").on("input", () => {
             this.setAlerts();
         });
+    }
+    
+    public isChangeMade(): boolean {
+        return this.pageListEdited;
     }
 
     init(projectId: number) {
@@ -163,7 +168,8 @@
             const alertHolder = $(".save-alert-holder");
             alertHolder.append(alert);
             alertHolder.delay(3000).fadeOut(2000);
-
+            this.pageListEdited = false;
+            
             this.util.getPageListView(this.projectId).done((data) => {
                 listing.html(data);
                 this.initPageRowClicks();
@@ -536,6 +542,7 @@
     }
 
     private showUnsavedChangesAlert() {
+        this.pageListEdited = true;
         $("#unsavedChanges").removeClass("hide");
     }
 

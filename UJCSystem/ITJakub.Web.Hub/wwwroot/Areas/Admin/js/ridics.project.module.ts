@@ -4,249 +4,242 @@
 });
 
 class ProjectModule {
+    private readonly projectId: number;
+    private readonly client: ProjectClient;
+    private readonly errorHandler: ErrorHandler;
     private currentModule: ProjectModuleBase;
-    private projectId: number;
+    private renameProjectDialog: BootstrapDialogWrapper;
+    private projectNavigationLinks: JQuery;
 
     constructor() {
         this.currentModule = null;
+        this.client = new ProjectClient();
+        this.errorHandler = new ErrorHandler();
         this.projectId = Number($("#project-id").text());
+
+        this.renameProjectDialog = new BootstrapDialogWrapper({
+            element: $("#renameProjectDialog"),
+            autoClearInputs: false,
+            submitCallback: this.renameProject.bind(this)
+        });
     }
 
-    public init() {
-        var self = this;
-        var $splitterButton = $("#splitter-button");
-        $splitterButton.click(() => {
-            var $leftMenu = $("#left-menu");
+    public init() {        
+        this.projectNavigationLinks = $("#project-navigation a");
+
+        const $splitterButton = $("#splitter-button");
+        $splitterButton.on("click", () => {
+            const $leftMenu = $("#left-menu");
             if ($leftMenu.is(":visible")) {
-                $leftMenu.hide("slide", { direction: "left" });
+                $leftMenu.hide("slide", {direction: "left"});
                 $splitterButton.html("<span class=\"glyphicon glyphicon-menu-right\"></span>");
             } else {
-                $leftMenu.show("slide", { direction: "left" });
+                $leftMenu.show("slide", {direction: "left"});
                 $splitterButton.html("<span class=\"glyphicon glyphicon-menu-left\"></span>");
             }
         });
 
-        var $projectNavigationLinks = $("#project-navigation a");
-        $projectNavigationLinks.click(function(e) {
+
+        this.projectNavigationLinks.on("click", (e) => {
             e.preventDefault();
-            $projectNavigationLinks.removeClass("active");
-            $(this).addClass("active");
-            self.showModule($(e.currentTarget as Node as Element).attr("id"));
+            const navigationLink = $(e.currentTarget);
+            
+            if (this.currentModule.isEditModeEnabled()) {
+                bootbox.dialog({
+                    title: localization.translate("Warning", "RidicsProject").value,
+                    message: localization.translate("SwitchTabWithoutSaving", "RidicsProject").value,
+                    buttons: {
+                        cancel: {
+                            label: localization.translate("Cancel", "RidicsProject").value,
+                            className: "btn-default",
+                            callback: () => {
+                                return;
+                            }
+                        },
+                        confirm: {
+                            label: localization.translate("Continue", "RidicsProject").value,
+                            className: "btn-default",
+                            callback: () => {
+                                this.switchToLink(navigationLink);
+                            }
+                        }
+                    }
+                });
+            } else {
+                this.switchToLink(navigationLink);
+            }
         });
-        
-        this.showModule(null);
+
+        const activeLink = $("#project-navigation a.active");
+        this.showModule(activeLink.attr("id"));
+
+        $(".rename-project-button").on("click", () => {
+            this.renameProjectDialog.show();
+        });
+    }
+
+    private switchToLink(link: JQuery) {
+        this.projectNavigationLinks.removeClass("active");
+        link.addClass("active");
+        this.showModule(link.attr("id"));
     }
 
     public showModule(identificator: string) {
         $("#resource-panel").hide();
         switch (identificator) {
-        case "project-navigation-root":
-            this.currentModule = new ProjectWorkModule(this.projectId);
-            break;
-        case "project-navigation-image": //TODO
-            this.currentModule = null;
-            const imageViewer = new ProjectImageViewerModule(this.projectId);
-            imageViewer.init();
-            break;
-        case "project-navigation-text": //TODO
-            this.currentModule = null;
-            const textPreview = new ProjectTextPreviewModule(this.projectId);
-            textPreview.init();
-            break;
-        case "project-navigation-audio":
-            this.currentModule = null;
-            break;
-        case "project-navigation-terms":
-            this.currentModule = null;
-            const termEditor = new ProjectTermEditorModule(this.projectId);
-            termEditor.init();
-            break;
-        default:
-            this.currentModule = new ProjectWorkModule(this.projectId);
+            case "project-navigation-image":
+                this.currentModule = new ProjectImageViewerModule(this.projectId);
+                break;
+            case "project-navigation-text":
+                this.currentModule = new ProjectTextPreviewModule(this.projectId);
+                break;
+            case "project-navigation-terms":
+                this.currentModule = new ProjectTermEditorModule(this.projectId);
+                break;
+            default:
+                this.currentModule = new ProjectWorkModule(this.projectId, identificator);
         }
+
         if (this.currentModule !== null) {
             this.currentModule.init();
         }
     }
+
+    private renameProject() {
+        const newProjectName = $("#renameProjectInput").val() as string;
+
+        if (newProjectName.length === 0) {
+            this.renameProjectDialog.showError(localization.translate("EmptyProjectNameError", "Admin").value);
+            return;
+        }
+
+        const projectTitle = $(".project-title");
+        this.client.renameProject(this.projectId, newProjectName).done(() => {
+            projectTitle.text(newProjectName);
+            this.renameProjectDialog.hide();
+        }).fail(error => {
+            this.renameProjectDialog.showError(
+                this.errorHandler.getErrorMessage(error, localization.translate("ErrorDuringSave", "Admin").value)
+            );
+        });
+    }
 }
 
 abstract class ProjectModuleBase {
-    protected moduleTab: ProjectModuleTabBase;
+    protected readonly projectId: number;
+
+    protected constructor(projectId: number) {
+        this.projectId = projectId;
+    }
 
     public abstract getModuleType(): ProjectModuleType;
 
-    public abstract getTabsId(): string;
+    public abstract isEditModeEnabled(): boolean;
 
     public abstract initModule(): void;
 
-    public abstract getTabPanelType(panelSelector: string): ProjectModuleTabType;
-
-    public abstract getLoadTabPanelContentUrl(panelType: ProjectModuleTabType): string;
-
-    public abstract makeProjectModuleTab(panelType: ProjectModuleTabType): ProjectModuleTabBase;
-
-    protected initTabs() {
-        var self = this;
-        $(`#${this.getTabsId()} a`).click(function(e) {
-            e.preventDefault();
-            $(this).tab('show');
-            var tabPanelSelector = $(this).attr("href");
-            self.loadTabPanel(tabPanelSelector);
-        });
-    }
-
     public init() {
-        var $contentContainer = $("#project-layout-content");
-        var url = getBaseUrl() + "Admin/Project/ProjectModule?moduleType=" + Number(this.getModuleType());
+        const $contentContainer = $("#project-layout-content");
+        const url = `${getBaseUrl()}Admin/Project/ProjectModule?moduleType=${Number(this.getModuleType())}&projectId=${this.projectId}`;
 
         $contentContainer
-            .empty()
-            .addClass("loading")
+            .html("<div class=\"loader\"></div>")
             .load(url,
                 null,
                 (responseText, textStatus, xmlHttpRequest) => {
-                    $contentContainer.removeClass("loading");
                     if (xmlHttpRequest.status === HttpStatusCode.Success) {
-                        this.initTabs();
                         this.initModule();
                     } else {
                         var alert = new AlertComponentBuilder(AlertType.Error)
                             .addContent(localization.translate("ModuleError", "RidicsProject").value)
                             .buildElement();
-                        $contentContainer.append(alert);
-                    }
-                });
-    }
-
-    loadTabPanel(tabPanelSelector: string) {
-        var tabPanelType = this.getTabPanelType(tabPanelSelector);
-        var $tabPanel = $(tabPanelSelector);
-        var url = this.getLoadTabPanelContentUrl(tabPanelType);
-        $tabPanel
-            .html("<div class=\"loader\"></div>")
-            .load(url,
-                null,
-                (responseText, textStatus, xmlHttpRequest) => {
-                    if (xmlHttpRequest.status !== HttpStatusCode.Success) {
-                        var errorDiv = new AlertComponentBuilder(AlertType.Error)
-                            .addContent(localization.translate("BookmarkError", "RidicsProject").value)
-                            .buildElement();
-                        $tabPanel.empty().append(errorDiv);
-                        this.moduleTab = null;
-                        return;
-                    }
-
-                    this.moduleTab = this.makeProjectModuleTab(tabPanelType);
-                    if (this.moduleTab != null) {
-                        this.moduleTab.initTab();
+                        $contentContainer.empty().append(alert);
                     }
                 });
     }
 }
 
-class ProjectImageViewerModule {
-    private readonly projectId: number;
-
+class ProjectImageViewerModule extends ProjectModuleBase {
+    private editor: ImageViewerMain;
+    
     constructor(projectId: number) {
-        this.projectId = projectId;
+        super(projectId);
     }
 
-    init() {
-        const url = getBaseUrl() + `Admin/Project/GetImageViewer?projectId=${this.projectId}`;
-        const loadingSpinner = $(`<div class="loading"></div>`);
-        const projectLayoutEl = $("#project-layout-content");
-        projectLayoutEl.empty();
-        projectLayoutEl.append(loadingSpinner);
-        projectLayoutEl.load(url,
-            (response, status, xhr) => {
-                if (status === "error") {
-                    const error = new AlertComponentBuilder(AlertType.Error).addContent("Image viewer loading error");
-                    $("#project-layout-content").empty().append(error.buildElement());
-                } else {
-                    loadingSpinner.hide();
-                    $("#project-resource-images").off();
-                    const imageViewer = new ImageViewerMain();
-                    imageViewer.init(this.projectId);
-                }
-            });
+    getModuleType(): ProjectModuleType {
+        return ProjectModuleType.ImageEditor;
+    }
+
+    initModule(): void {
+        this.editor = new ImageViewerMain();
+        this.editor.init(this.projectId);
+    }
+
+    isEditModeEnabled(): boolean {
+        return false;
     }
 }
 
-class ProjectTextPreviewModule {
-    private readonly projectId: number;
-
+class ProjectTextPreviewModule extends ProjectModuleBase {
+    private editor: TextEditorMain;
+    
     constructor(projectId: number) {
-        this.projectId = projectId;
+        super(projectId);
     }
 
-    init() {
-        const url = getBaseUrl() + "Admin/Project/GetTextPreview";
-        const projectLayoutEl = $("#project-layout-content");
-        const loadingSpinner = $(`<div class="loading"></div>`);
-        projectLayoutEl.empty();
-        projectLayoutEl.append(loadingSpinner);
-        projectLayoutEl.load(url,
-            (response, status, xhr) => {
-                if (status === "error") {
-                    const error = new AlertComponentBuilder(AlertType.Error).addContent("Text preview loading error");
-                    $("#project-layout-content").empty().append(error.buildElement());
-                } else {
-                    loadingSpinner.hide();
-                    $("#project-resource-preview").off();
-                    const main = new TextEditorMain();
-                    main.init(this.projectId);
-                }
-            });
+    getModuleType(): ProjectModuleType {
+        return ProjectModuleType.Preview;
+    }
+
+    initModule() {
+        this.editor = new TextEditorMain(this);
+        this.editor.init(this.projectId);
+    }
+
+    isEditModeEnabled(): boolean {
+        return this.editor.isEditModeEnabled();
     }
 }
 
-class ProjectTermEditorModule {
-    private readonly projectId: number;
-
+class ProjectTermEditorModule extends ProjectModuleBase {
+    private editor: TermEditorMain;
+    
     constructor(projectId: number) {
-        this.projectId = projectId;
+        super(projectId)
     }
 
-    init() {
-        const url = getBaseUrl() + `Admin/Project/GetTermsEditor?projectId=${this.projectId}`;
-        const loadingSpinner = $(`<div class="loading"></div>`);
-        const projectLayoutEl = $("#project-layout-content");
-        projectLayoutEl.empty();
-        projectLayoutEl.append(loadingSpinner);
-        projectLayoutEl.load(url,
-            (response, status, xhr) => {
-                if (status === "error") {
-                    const error = new AlertComponentBuilder(AlertType.Error).addContent("Term editor loading error");
-                    $("#project-layout-content").empty().append(error.buildElement());
-                } else {
-                    loadingSpinner.hide();
-                    $("#project-resource-terms").off();
-                    const termEditorMain = new TermEditorMain();
-                    termEditorMain.init(this.projectId);
-                }
-            });
+    getModuleType(): ProjectModuleType {
+        return ProjectModuleType.TermEditor;
+    }
+
+    initModule(): void {
+        this.editor = new TermEditorMain();
+        this.editor.init(this.projectId);
+    }
+
+    isEditModeEnabled(): boolean {
+        return false;
     }
 }
 
 class ProjectWorkModule extends ProjectModuleBase {
-    private projectId: number;
+    private moduleIdentificator: string;
+    private moduleTab: ProjectModuleTabBase;
 
-    constructor(projectId: number) {
-        super();
-        this.projectId = projectId;
+    constructor(projectId: number, moduleIdentificator: string) {
+        super(projectId);
+        this.moduleIdentificator = moduleIdentificator;
     }
 
-    getModuleType(): ProjectModuleType { return ProjectModuleType.Work; }
-
-    getTabsId(): string { return "project-work-tabs" }
+    getModuleType(): ProjectModuleType {
+        return null
+    }
 
     initModule(): void {
-        $("#resource-panel").hide();
-        $("#project-work-tabs .active a").trigger("click");
     }
 
     getTabPanelType(panelSelector: string): ProjectModuleTabType {
-        return <ProjectModuleTabType>$(panelSelector).data("panel-type");
+        return <ProjectModuleTabType>$(`#${panelSelector}`).data("panel-type");
     }
 
     getLoadTabPanelContentUrl(tabPanelType: ProjectModuleTabType): string {
@@ -259,32 +252,64 @@ class ProjectWorkModule extends ProjectModuleBase {
 
     makeProjectModuleTab(tabPanelType: ProjectModuleTabType): ProjectModuleTabBase {
         switch (tabPanelType) {
-        case ProjectModuleTabType.WorkMetadata:
-            return new ProjectWorkMetadataTab(this.projectId, this);
-        case ProjectModuleTabType.WorkPageList:
-            return new ProjectWorkPageListTab(this.projectId);
-        case ProjectModuleTabType.WorkPublications:
-            return new ProjectWorkPublicationsTab(this.projectId);
-        case ProjectModuleTabType.WorkCooperation:
-            return new ProjectWorkCooperationTab(this.projectId);
-        case ProjectModuleTabType.WorkHistory:
-            return new ProjectWorkHistoryTab(this.projectId);
-        case ProjectModuleTabType.WorkNote:
-            return new ProjectWorkNoteTab(this.projectId);
-        case ProjectModuleTabType.Forum:
-            return new ProjectWorkForumTab(this.projectId);
-        case ProjectModuleTabType.WorkCategorization:
+            case ProjectModuleTabType.WorkMetadata:
+                return new ProjectWorkMetadataTab(this.projectId, this);
+            case ProjectModuleTabType.WorkPageList:
+                return new ProjectWorkPageListTab(this.projectId);
+            case ProjectModuleTabType.WorkPublications:
+                return new ProjectWorkPublicationsTab(this.projectId);
+            case ProjectModuleTabType.WorkCooperation:
+                return new ProjectWorkCooperationTab(this.projectId);
+            case ProjectModuleTabType.WorkNote:
+                return new ProjectWorkNoteTab(this.projectId);
+            case ProjectModuleTabType.Forum:
+                return new ProjectWorkForumTab(this.projectId);
+            case ProjectModuleTabType.WorkCategorization:
                 return new ProjectWorkCategorizationTab(this.projectId, this);
-        case ProjectModuleTabType.WorkChapters:
-            return new ProjectWorkChapterEditorTab(this.projectId);
-        default:
-            return null;
+            case ProjectModuleTabType.WorkChapters:
+                return new ProjectWorkChapterEditorTab(this.projectId);
+            default:
+                return null;
         }
+    }
+
+    init() {
+        const tabPanelType = this.getTabPanelType(this.moduleIdentificator);
+        const $contentContainer = $("#project-layout-content");
+        const url = this.getLoadTabPanelContentUrl(tabPanelType);
+        $contentContainer
+            .html("<div class=\"loader\"></div>")
+            .load(url,
+                null,
+                (responseText, textStatus, xmlHttpRequest) => {
+                    if (xmlHttpRequest.status == HttpStatusCode.Success) {
+                        this.moduleTab = this.makeProjectModuleTab(tabPanelType);
+                        if (this.moduleTab != null) {
+                            this.moduleTab.initTab();
+                        }
+                    } else {
+                        const errorDiv = new AlertComponentBuilder(AlertType.Error)
+                            .addContent(localization.translate("BookmarkError", "RidicsProject").value)
+                            .buildElement();
+                        $contentContainer.empty().append(errorDiv);
+                        this.moduleTab = null;
+                    }
+                });
+    }
+
+    loadTabPanel(moduleIdentificator: string) {
+        this.moduleIdentificator = moduleIdentificator;
+        this.init();
+    }
+
+    isEditModeEnabled(): boolean {
+        return this.moduleTab.isEditModeEnabled();
     }
 }
 
 abstract class ProjectModuleTabBase {
     public abstract initTab();
+    public abstract isEditModeEnabled(): boolean;
 }
 
 interface IProjectMetadataTabConfiguration {
@@ -294,14 +319,21 @@ interface IProjectMetadataTabConfiguration {
 }
 
 abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
-    public abstract getConfiguration(): IProjectMetadataTabConfiguration;
+    protected editModeEnabled: boolean;
 
+    public abstract getConfiguration(): IProjectMetadataTabConfiguration;
+    
     initTab() {
         this.disableEdit();
     }
 
+    isEditModeEnabled() {
+        return this.editModeEnabled;
+    }
+
     protected enabledEdit() {
-        ($(".keywords-textarea")as any).tokenfield("enable");
+        this.editModeEnabled = true;
+        ($(".keywords-textarea") as any).tokenfield("enable");
         var config = this.getConfiguration();
         const copyrightTextarea = $("#work-metadata-copyright");
         var $inputs = $("input", config.$panel);
@@ -315,7 +347,8 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
     }
 
     protected disableEdit() {
-        ($(".keywords-textarea")as any).tokenfield("disable");
+        this.editModeEnabled = false;
+        ($(".keywords-textarea") as any).tokenfield("disable");
         var config = this.getConfiguration();
         const copyrightTextarea = $("#work-metadata-copyright");
         var $inputs = $("input", config.$panel);
@@ -330,8 +363,10 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
 }
 
 enum ProjectModuleType {
-    Work = 0,
-    Resource = 1,
+    Resource = 0,
+    Preview = 1,
+    TermEditor = 2,
+    ImageEditor = 3,
 }
 
 enum ProjectModuleTabType {
@@ -346,9 +381,4 @@ enum ProjectModuleTabType {
     ResourceDiscussion = 102,
     ResourceMetadata = 103,
     Forum = 200,
-}
-
-interface IProjectResource {
-    id: number;
-    name: string;
 }

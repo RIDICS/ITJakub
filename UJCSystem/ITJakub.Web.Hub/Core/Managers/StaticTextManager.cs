@@ -13,16 +13,20 @@ namespace ITJakub.Web.Hub.Core.Managers
         private readonly IDynamicTextService m_dynamicTextService;
         private readonly ILocalizationService m_localizationService;
         private readonly IMarkdownToHtmlConverter m_markdownToHtmlConverter;
+        private readonly DictionaryScopeResolver m_dictionaryScopeResolver;
 
-        public StaticTextManager(IDynamicTextService dynamicTextService, ILocalizationService localizationService, IMarkdownToHtmlConverter markdownToHtmlConverter)
+        public StaticTextManager(IDynamicTextService dynamicTextService, ILocalizationService localizationService,
+            IMarkdownToHtmlConverter markdownToHtmlConverter, DictionaryScopeResolver dictionaryScopeResolver)
         {
             m_dynamicTextService = dynamicTextService;
             m_localizationService = localizationService;
             m_markdownToHtmlConverter = markdownToHtmlConverter;
+            m_dictionaryScopeResolver = dictionaryScopeResolver;
         }
-        
+
         public EditStaticTextViewModel GetText(string name, string scope)
         {
+            //scope = m_dictionaryScopeResolver.GetDictionaryScope(scope);
             var staticText = m_dynamicTextService.GetDynamicText(name, scope);
             var currentCultureLabel = m_localizationService.GetRequestCulture().NativeName;
 
@@ -48,16 +52,17 @@ namespace ITJakub.Web.Hub.Core.Managers
                 Text = staticText.Text,
                 CultureNameLabel = currentCultureLabel,
             };
-            
+
             return staticTextViewModel;
         }
 
         public StaticTextViewModel GetRenderedHtmlText(string name, string scope)
         {
+            scope = m_dictionaryScopeResolver.GetDictionaryScope(scope);
             var text = m_localizationService.Translate(name, scope, LocTranslationSource.Database);
 
             var htmlText = m_markdownToHtmlConverter.ConvertToHtml(text);
-            
+
             var viewModel = new StaticTextViewModel
             {
                 Name = name,
@@ -68,13 +73,15 @@ namespace ITJakub.Web.Hub.Core.Managers
             return viewModel;
         }
 
-        public ModificationUpdateViewModel SaveText(string name, string scope, string text, string culture, StaticTextFormatType format, string username)
+        public ModificationUpdateViewModel SaveText(string name, string scope, string text, string culture, StaticTextFormatType format,
+            string username)
         {
+            //scope = m_dictionaryScopeResolver.GetDictionaryScope(scope);
             var dynamicText = new DynamicText
             {
                 Culture = culture,
                 DictionaryScope = scope,
-                Format = (short)format,
+                Format = (short) format,
                 ModificationUser = username,
                 Name = name,
                 Text = text

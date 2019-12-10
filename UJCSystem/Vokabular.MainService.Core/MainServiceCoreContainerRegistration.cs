@@ -91,6 +91,7 @@ namespace Vokabular.MainService.Core
             services.AddSingleton<Profile, NewsProfile>();
             services.AddSingleton<Profile, OriginalAuthorProfile>();
             services.AddSingleton<Profile, PageProfile>();
+            services.AddSingleton<Profile, PortalTypeProfile>();
             services.AddSingleton<Profile, ProjectProfile>();
             services.AddSingleton<Profile, ProjectGroupProfile>();
             services.AddSingleton<Profile, ProjectPermissionProfile>();

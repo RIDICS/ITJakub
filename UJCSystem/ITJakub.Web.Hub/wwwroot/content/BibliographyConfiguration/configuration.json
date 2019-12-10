@@ -107,6 +107,10 @@
               "pattern": "{$literaryGenre}"
             },
             {
+              "label": "TextType",
+              "pattern": "{TextTypeString}"
+            },
+            {
               "label": "EditionLastModification",
               "pattern": "{CreateTimeString}"
             },
@@ -330,6 +334,10 @@
             {
               "label": "LiteraryGenre",
               "pattern": "{$literaryGenre}"
+            },
+            {
+              "label": "TextType",
+              "pattern": "{TextTypeString}"
             },
             {
               "label": "EditionLastModification",
@@ -857,6 +865,10 @@
             {
               "label": "LiteraryGenre",
               "pattern": "{$literaryGenre}"
+            },
+            {
+              "label": "TextType",
+              "pattern": "{TextTypeString}"
             },
             {
               "label": "EditionLastModification",
