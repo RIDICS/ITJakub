@@ -9,8 +9,9 @@
     private bgPositionX: number = 0;
     private bgPositionY: number = 0;
     private previousDragEvent: MouseEvent;
+    private config: IImageZoomConfig;
 
-    constructor(image: HTMLImageElement, imageContainer: JQuery) {
+    constructor(image: HTMLImageElement, imageContainer: JQuery, config?: IImageZoomConfig) {
         this.image = image;
         this.container = imageContainer;
         this.imageHeight = image.offsetHeight;
@@ -18,8 +19,18 @@
         this.originalHeight = image.offsetHeight;
         this.originalWidth = image.offsetWidth;
 
+        if (config) {
+            this.config = config;
+        } else {
+            this.config = {
+                maxScale: 2.5,
+                scaleStep: 0.1,
+                maxImageWidth: 1150
+            };
+        }
+
         this.imageToBackground();
-        
+
         this.initializeZoom();
         this.initializeDrag();
     }
@@ -32,12 +43,12 @@
         canvas.width = this.imageWidth;
         canvas.height = this.imageHeight;
         this.image.src = canvas.toDataURL();
-        
+
         this.image.style.backgroundSize = `${this.originalWidth}px ${this.originalHeight}px`;
     }
-    
+
     private initializeZoom() {
-        
+
         this.image.width = this.originalWidth;
         this.image.height = this.originalHeight;
         var onWheel = this.onWheel.bind(this);
@@ -51,23 +62,29 @@
         var originalHeight = this.imageHeight;
         if (event.deltaY < 0) {
 
-            this.imageWidth += this.imageWidth * 0.1;
-            this.imageHeight += this.imageHeight * 0.1;
-            if (this.imageWidth < this.container.width()) {
-
+            var newWidth = this.imageWidth + this.imageWidth * this.config.scaleStep;
+            var newHeight = this.imageHeight + this.imageHeight * this.config.scaleStep;
+            if (newWidth < this.container.width() && newWidth < this.config.maxImageWidth) {
+                this.imageHeight = newHeight;
+                this.imageWidth = newWidth;
                 $(this.image)
                     .css("width", this.imageWidth)
                     .css("background-position", "0px 0px");
                 this.bgPositionY = 0;
                 this.bgPositionX = 0;
             } else {
-                this.scale += this.scale * 0.1;
+                if (this.scale > this.config.maxScale) {
+                    return;
+                }
+                this.imageHeight = newHeight;
+                this.imageWidth = newWidth;
+                this.scale += this.scale * this.config.scaleStep;
                 this.updateBgPositionRelative(originalWidth, originalHeight, event.pageX, event.pageY);
             }
 
         } else {
-            this.imageWidth -= this.imageWidth * 0.1;
-            this.imageHeight -= this.imageHeight * 0.1;
+            this.imageWidth -= this.imageWidth * this.config.scaleStep;
+            this.imageHeight -= this.imageHeight * this.config.scaleStep;
             this.imageWidth = Math.max(this.imageWidth, this.originalWidth);
             this.imageHeight = Math.max(this.imageHeight, this.originalHeight);
 
@@ -78,7 +95,7 @@
                 this.bgPositionY = 0;
                 this.bgPositionX = 0;
             } else {
-                this.scale -= this.scale * 0.1;
+                this.scale -= this.scale * this.config.scaleStep;
                 this.scale = Math.max(this.scale, 1);
                 this.updateBgPositionRelative(originalWidth, originalHeight, event.pageX, event.pageY);
             }
@@ -150,4 +167,10 @@
         this.previousDragEvent = event;
         this.updateBgPosition();
     }
+}
+
+interface IImageZoomConfig {
+    maxScale: number;
+    maxImageWidth: number;
+    scaleStep: number;
 }
