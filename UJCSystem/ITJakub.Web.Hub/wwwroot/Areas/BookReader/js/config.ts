@@ -33,11 +33,7 @@
                 isClosable: false,
                 content: [{
                     type: "column",
-                    id: "views",
-                    content: [{
-                        type: "row",
-                        id: "viewsRow",
-                    }]
+                    id: "views"
                 }]
             }]
         }
