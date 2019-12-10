@@ -6,6 +6,8 @@
     private imageWidth: number;
     private imageHeight: number;
     private scale: number = 1;
+    private bgPositionX: number = 0;
+    private bgPositionY: number = 0;
 
     constructor(image: HTMLImageElement, imageContainer: JQuery) {
         this.image = image;
@@ -32,25 +34,61 @@
 
     private onWheel(event: WheelEvent) {
         event.preventDefault();
-
+        var originalWidth = this.imageWidth;
+        var originalHeight = this.imageHeight;
         if (event.deltaY < 0) {
-            if (this.imageWidth * 1.1 < this.container.width()) {
-                this.imageWidth += this.imageWidth * 0.1;
-                this.imageHeight += this.imageHeight * 0.1;
+            
+            this.imageWidth += this.imageWidth * 0.1;
+            this.imageHeight += this.imageHeight * 0.1;
+            if (this.imageWidth < this.container.width()) {
+
                 $(this.image)
-                    .css("background-size", `${this.imageWidth}px ${this.imageHeight}px`)
                     .css("width", this.imageWidth)
+                    .css("background-position", "0px 0px");
+                this.bgPositionY = 0;
+                this.bgPositionX = 0;
+            } else {
+                this.scale += this.scale * 0.1;
+                this.updateBgPosition(originalWidth, originalHeight, event.pageX, event.pageY);
             }
+
         } else {
+            this.imageWidth -= this.imageWidth * 0.1;
+            this.imageHeight -= this.imageHeight * 0.1;
+            this.imageWidth = Math.max(this.imageWidth, this.originalWidth);
+            this.imageHeight = Math.max(this.imageHeight, this.originalHeight);
+            
             if (this.scale == 1) {
-                this.imageWidth -= this.imageWidth * 0.1;
-                this.imageHeight -= this.imageHeight * 0.1;
-                this.imageWidth = Math.max(this.imageWidth, this.originalWidth);
-                this.imageHeight = Math.max(this.imageHeight, this.originalHeight);
                 $(this.image)
-                    .css("background-size", `${Math.max(this.imageWidth)}px ${this.imageHeight}px`)
                     .css("width", this.imageWidth)
+                    .css("background-position", "0px 0px");
+                this.bgPositionY = 0;
+                this.bgPositionX = 0;
+            } else {
+                this.scale -= this.scale * 0.1;
+                this.scale = Math.max(this.scale, 1);
+                this.updateBgPosition(originalWidth, originalHeight, event.pageX, event.pageY);
             }
         }
+        
+        $(this.image).css("background-size", `${this.imageWidth}px ${this.imageHeight}px`)
+
+    }
+    
+    private updateBgPosition(originalWidth: number, originalHeight: number, pageX: number, pageY: number) {
+        var imgOffset = $(this.image).offset();
+        var cursorPositionX = (pageX - imgOffset.left);
+        var cursorPositionY = (pageY - imgOffset.top);
+
+        var cursorRelativeToBgX = cursorPositionX - this.bgPositionX;
+        var cursorRelativeToBgY = cursorPositionY - this.bgPositionY;
+
+        var cursorRatioX = cursorRelativeToBgX / originalWidth;
+        var cursorRatioY = cursorRelativeToBgY / originalHeight;
+
+        this.bgPositionX = cursorPositionX - (this.imageWidth * cursorRatioX);
+        this.bgPositionY = cursorPositionY - (this.imageHeight * cursorRatioY);
+
+        $(this.image).css("background-position", `${this.bgPositionX}px ${this.bgPositionY}px`);
     }
 }
