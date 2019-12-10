@@ -47,6 +47,9 @@
                 var convertedResults = convertSearchResults(response["results"]);
                 readerPlugin.searchPanelRemoveLoading();
                 readerPlugin.showSearchInPanel(convertedResults);
+            },
+            error: (jqXHR) => {
+                this.showAjaxError(jqXHR);
             }
         });
     }
@@ -69,6 +72,9 @@
                 var convertedResults = convertSearchResults(response["results"]);
                 readerPlugin.searchPanelRemoveLoading();
                 readerPlugin.showSearchInPanel(convertedResults);
+            },
+            error: (jqXHR) => {
+                this.showAjaxError(jqXHR);
             }
         });
     }

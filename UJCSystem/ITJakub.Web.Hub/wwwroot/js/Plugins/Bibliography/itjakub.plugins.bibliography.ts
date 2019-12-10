@@ -4,7 +4,8 @@
 /// <reference path="../Sort/itjakub.plugins.sort.ts" />
 
 class BibliographyModule {
-
+    
+    private readonly errorHandler: ErrorHandler;
     private resultsContainer;
     private booksContainer: HTMLDivElement;
     private sortBarContainer: string;
@@ -27,6 +28,7 @@ class BibliographyModule {
     private onConfigurationLoad: Array<() => any>=[];
 
     constructor(resultsContainer: string, sortBarContainer: string, sortChangeCallback: () => void, forcedBookType?: BookTypeEnum, customConfigurationPath?: string, protected modulInicializator?: ModulInicializator) {
+        this.errorHandler = new ErrorHandler();
         this.resultsContainer = $(resultsContainer);
         this.sortChangeCallback = sortChangeCallback;
 
@@ -67,8 +69,8 @@ class BibliographyModule {
                     this.onConfigurationLoad[i]();
                 }
             },
-            error: () => {
-                this.showPageLoadError();
+            error: (jqXHR) => {
+                this.showAjaxError(jqXHR);
             }
         });
     }
@@ -198,6 +200,13 @@ class BibliographyModule {
         this.showError(localization.translate("LoadingBookListError", "PluginsJs").value);
     }
 
+    public showAjaxError(jqXHR: JQueryXHR) {
+        var errorDiv = BibliographyFactory.makeError(this.errorHandler.getErrorMessage(jqXHR));
+        $(this.booksContainer)
+            .empty()
+            .append(errorDiv);
+    }
+    
     public showError(text: string) {
         var errorDiv = BibliographyFactory.makeError(text);
         $(this.booksContainer)

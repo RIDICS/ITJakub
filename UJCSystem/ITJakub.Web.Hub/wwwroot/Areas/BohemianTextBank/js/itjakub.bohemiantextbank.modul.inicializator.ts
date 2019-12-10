@@ -37,9 +37,9 @@
                 updateQueryStringParameter(this.configuration.base.url.sortAscKey, this.bibliographyModule.isSortedAsc());
                 updateQueryStringParameter(this.configuration.base.url.sortCriteriaKey, this.bibliographyModule.getSortCriteria());
             },
-            error: () => {
-                this.bibliographyModule.showPageLoadError();
+            error: (jqXHR) => {
                 this.bibliographyModule.clearLoading();
+                this.bibliographyModule.showAjaxError(jqXHR);
             }
         });
     }
@@ -73,9 +73,9 @@
                 updateQueryStringParameter(this.configuration.base.url.sortAscKey, this.bibliographyModule.isSortedAsc());
                 updateQueryStringParameter(this.configuration.base.url.sortCriteriaKey, this.bibliographyModule.getSortCriteria());
             },
-            error: () => {
-                this.bibliographyModule.showPageLoadError();
+            error: (jqXHR) => {
                 this.bibliographyModule.clearLoading();
+                this.bibliographyModule.showAjaxError(jqXHR);
             }
         });
     }
