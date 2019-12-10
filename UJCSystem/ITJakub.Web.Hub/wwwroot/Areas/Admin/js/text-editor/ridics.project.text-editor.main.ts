@@ -61,7 +61,7 @@
                         commentAreaClass = "comment-area-collapsed-odd";
                     }
                     const compositionAreaDiv =
-                        `<div class="col-xs-7 composition-area"><div class="loading composition-area-loading"></div><div class="page"><div class="viewer"><span class="rendered-text"></span></div></div></div>`;
+                        `<div class="col-xs-7 composition-area"><div class="page"><div class="viewer"><span class="rendered-text"></span></div></div></div>`;
                     const commentAreaDiv = `<div class="col-xs-5 comment-area ${
                         commentAreaClass}"></div>`;
                     
