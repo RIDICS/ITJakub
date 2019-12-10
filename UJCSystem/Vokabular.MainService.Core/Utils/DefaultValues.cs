@@ -14,7 +14,7 @@ namespace Vokabular.MainService.Core.Utils
         public const int ProjectCount = 10;
         public const int MaxProjectCount = 100;
 
-        public const string RoleForNewPermissions = "Admin";
+        public static readonly string[] RolesForNewPermissions = {"Admin", "PortalAdmin"};
         public static readonly IReadOnlyList<Tuple<string, string>> RequiredPermissionsWithDescription = new List<Tuple<string, string>>
         {
             // All non-default permission can be specified here to automatic creating them on Auth service
