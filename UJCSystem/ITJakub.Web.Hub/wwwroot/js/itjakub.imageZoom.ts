@@ -8,6 +8,7 @@
     private scale: number = 1;
     private bgPositionX: number = 0;
     private bgPositionY: number = 0;
+    private previousDragEvent: MouseEvent;
 
     constructor(image: HTMLImageElement, imageContainer: JQuery) {
         this.image = image;
@@ -18,6 +19,7 @@
         this.originalWidth = image.offsetWidth;
 
         this.initializeZoom();
+        this.initializeDrag();
     }
 
     private initializeZoom() {
@@ -27,9 +29,9 @@
         this.image.style.backgroundSize = `${this.originalWidth}px ${this.originalHeight}px`;
         this.image.width = this.originalWidth;
         this.image.height = this.originalHeight;
-
-        this.image.removeEventListener("wheel", this.onWheel);
-        this.image.addEventListener("wheel", this.onWheel.bind(this));
+        var onWheel = this.onWheel.bind(this);
+        this.image.removeEventListener("wheel", onWheel);
+        this.image.addEventListener("wheel", onWheel);
     }
 
     private onWheel(event: WheelEvent) {
@@ -89,6 +91,34 @@
         this.bgPositionX = cursorPositionX - (this.imageWidth * cursorRatioX);
         this.bgPositionY = cursorPositionY - (this.imageHeight * cursorRatioY);
 
+        $(this.image).css("background-position", `${this.bgPositionX}px ${this.bgPositionY}px`);
+    }
+    
+    private initializeDrag() {
+        var $image = $(this.image);
+        $image.off("mousedown");
+        $image.off("mouseup mouseleave");
+        $image.on("mousedown", this.onMouseDown.bind(this));
+        $image.on("mouseup mouseleave", this.onMouseUp.bind(this));
+    }
+
+    private onMouseDown(event: MouseEvent) {
+        event.preventDefault();
+        this.previousDragEvent = event;
+        $(this.image).on("mousemove", this.onDrag.bind(this));
+    }
+
+    private onMouseUp(event: MouseEvent) {
+        event.preventDefault();
+        this.previousDragEvent = event;
+        $(this.image).off("mousemove");
+    }
+    
+    private onDrag(event: MouseEvent) {
+        event.preventDefault();
+        this.bgPositionX += (event.pageX - this.previousDragEvent.pageX);
+        this.bgPositionY += (event.pageY - this.previousDragEvent.pageY);
+        this.previousDragEvent = event;
         $(this.image).css("background-position", `${this.bgPositionX}px ${this.bgPositionY}px`);
     }
 }
