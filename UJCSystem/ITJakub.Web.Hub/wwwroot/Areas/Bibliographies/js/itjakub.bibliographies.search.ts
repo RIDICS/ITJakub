@@ -118,6 +118,10 @@ class BibliographiesSearch {
                 updateQueryStringParameter(this.urlPageKey, pageNumber);
                 updateQueryStringParameter(this.urlSortAscKey, this.bibliographyModule.isSortedAsc());
                 updateQueryStringParameter(this.urlSortCriteriaKey, this.bibliographyModule.getSortCriteria());
+            },
+            error: (jqXHR) => {
+                this.bibliographyModule.clearLoading();
+                this.bibliographyModule.showError(this.errorHandler.getErrorMessage(jqXHR));
             }
         });
     }
@@ -151,6 +155,10 @@ class BibliographiesSearch {
                 updateQueryStringParameter(this.urlPageKey, pageNumber);
                 updateQueryStringParameter(this.urlSortAscKey, this.bibliographyModule.isSortedAsc());
                 updateQueryStringParameter(this.urlSortCriteriaKey, this.bibliographyModule.getSortCriteria());
+            },
+            error: jqXHR => {
+                this.bibliographyModule.clearLoading();
+                this.bibliographyModule.showError(this.errorHandler.getErrorMessage(jqXHR));
             }
         });
     }
@@ -187,6 +195,7 @@ class BibliographiesSearch {
                 updateQueryStringParameter(this.urlSortCriteriaKey, this.bibliographyModule.getSortCriteria());
             },
             error: jqXHR => {
+                this.bibliographyModule.clearLoading();
                 this.bibliographyModule.showError(this.errorHandler.getErrorMessage(jqXHR));
             }
         });
@@ -213,6 +222,10 @@ class BibliographiesSearch {
                 updateQueryStringParameter(this.urlSearchKey, json);
                 updateQueryStringParameter(this.urlSortAscKey, this.bibliographyModule.isSortedAsc());
                 updateQueryStringParameter(this.urlSortCriteriaKey, this.bibliographyModule.getSortCriteria());
+            },
+            error: (jqXHR) => {
+                this.bibliographyModule.clearLoading();
+                this.bibliographyModule.showError(this.errorHandler.getErrorMessage(jqXHR));
             }
         });
     }
