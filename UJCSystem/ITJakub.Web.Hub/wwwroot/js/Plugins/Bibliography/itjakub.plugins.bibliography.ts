@@ -201,10 +201,7 @@ class BibliographyModule {
     }
 
     public showAjaxError(jqXHR: JQueryXHR) {
-        var errorDiv = BibliographyFactory.makeError(this.errorHandler.getErrorMessage(jqXHR));
-        $(this.booksContainer)
-            .empty()
-            .append(errorDiv);
+        this.showError(this.errorHandler.getErrorMessage(jqXHR));
     }
     
     public showError(text: string) {
