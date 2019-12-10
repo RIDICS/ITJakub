@@ -280,6 +280,12 @@
     saveText(textId: number, contents: string, mode: SaveTextModeType): JQuery.jqXHR<ISaveTextResponse> {
         const pageEl = $(`*[data-text-id="${textId}"]`);
         const compositionArea = pageEl.children(".composition-area");
+        const loader = lv.create(null, "lv-circles sm lv-mid composition-area-loading");
+        $(compositionArea).append(loader.getElement());
+        
+        const alertHolder = pageEl.find(this.alertHolderSelector);
+        alertHolder.empty();
+        
         const id = compositionArea.data("id");
         const versionId = compositionArea.data("version-id");
         const request: ICreateTextVersion = {
@@ -292,6 +298,13 @@
                 this.originalContent = contents;
                 compositionArea.data("version-id", response.resourceVersionId);
             }
+        });
+        ajax.fail((jqXHR) => {
+            const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(jqXHR));
+            alertHolder.append(alert.buildElement());
+        });
+        ajax.always(() => {
+           compositionArea.find(".composition-area-loading").remove(); 
         });
         return ajax;
     }
