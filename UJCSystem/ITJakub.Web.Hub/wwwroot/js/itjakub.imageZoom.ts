@@ -88,7 +88,7 @@
             this.imageWidth = Math.max(this.imageWidth, this.originalWidth);
             this.imageHeight = Math.max(this.imageHeight, this.originalHeight);
 
-            if (this.scale == 1) {
+            if (this.scale > 1) {
                 $(this.image)
                     .css("width", this.imageWidth)
                     .css("background-position", "0px 0px");
