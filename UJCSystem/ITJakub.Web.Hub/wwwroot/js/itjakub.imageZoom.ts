@@ -18,15 +18,26 @@
         this.originalHeight = image.offsetHeight;
         this.originalWidth = image.offsetWidth;
 
+        this.imageToBackground();
+        
         this.initializeZoom();
         this.initializeDrag();
     }
 
-    private initializeZoom() {
+    private imageToBackground() {
         this.image.style.backgroundImage = 'url("' + this.image.src + '")';
         this.image.style.backgroundRepeat = 'no-repeat';
-        this.image.src = "";
+
+        var canvas = document.createElement("canvas");
+        canvas.width = this.imageWidth;
+        canvas.height = this.imageHeight;
+        this.image.src = canvas.toDataURL();
+        
         this.image.style.backgroundSize = `${this.originalWidth}px ${this.originalHeight}px`;
+    }
+    
+    private initializeZoom() {
+        
         this.image.width = this.originalWidth;
         this.image.height = this.originalHeight;
         var onWheel = this.onWheel.bind(this);
