@@ -440,7 +440,8 @@ gulp.task("bundle:ridics_new_reader", function() {
         paths.webroot + "Areas/BookReader/js/panels.js",
         paths.webroot + "Areas/BookReader/js/searchModule.js",
         paths.webroot + "Areas/BookReader/js/readerHeader.js",
-        paths.webroot + "Areas/BookReader/js/serverCommunication.js"
+        paths.webroot + "Areas/BookReader/js/serverCommunication.js",
+        paths.webroot + "js/itjakub.imageZoom.js"
       
     ])
     .pipe(sourcemaps.init({ loadMaps: true }))

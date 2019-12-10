@@ -893,7 +893,8 @@ class ImagePanel extends ContentViewPanel {
                 $innerContent.zoom({on: "click"});
             } else {
                 image.setAttribute("data-image-src", image.src);
-                wheelzoom(image);
+                new ImageZoom(image, $(this.innerContent));
+                //wheelzoom(image);
 
                 var lastWidth = $innerContent.width();
                 var lastHeight = $innerContent.height();
@@ -905,7 +906,8 @@ class ImagePanel extends ContentViewPanel {
                         image.src = image.getAttribute("data-image-src");
 
                         console.log(image);
-                        wheelzoom(image);
+                        new ImageZoom(image, $(this.innerContent));
+
 
                         lastWidth = newWidth;
                         lastHeight = newHeight;
