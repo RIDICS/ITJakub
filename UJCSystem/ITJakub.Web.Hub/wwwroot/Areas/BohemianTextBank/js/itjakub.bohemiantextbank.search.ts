@@ -205,6 +205,7 @@ class BohemianTextbankSearch {
                 this.booksSelector.restoreFromSerializedState(selected);
             }
 
+            this.search.processSearch();
         } else if (!this.notInitialized) {
             this.search.processSearch();
         } else {
