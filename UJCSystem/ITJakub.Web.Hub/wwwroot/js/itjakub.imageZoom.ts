@@ -39,7 +39,7 @@
         var originalWidth = this.imageWidth;
         var originalHeight = this.imageHeight;
         if (event.deltaY < 0) {
-            
+
             this.imageWidth += this.imageWidth * 0.1;
             this.imageHeight += this.imageHeight * 0.1;
             if (this.imageWidth < this.container.width()) {
@@ -51,7 +51,7 @@
                 this.bgPositionX = 0;
             } else {
                 this.scale += this.scale * 0.1;
-                this.updateBgPosition(originalWidth, originalHeight, event.pageX, event.pageY);
+                this.updateBgPositionRelative(originalWidth, originalHeight, event.pageX, event.pageY);
             }
 
         } else {
@@ -59,7 +59,7 @@
             this.imageHeight -= this.imageHeight * 0.1;
             this.imageWidth = Math.max(this.imageWidth, this.originalWidth);
             this.imageHeight = Math.max(this.imageHeight, this.originalHeight);
-            
+
             if (this.scale == 1) {
                 $(this.image)
                     .css("width", this.imageWidth)
@@ -69,15 +69,15 @@
             } else {
                 this.scale -= this.scale * 0.1;
                 this.scale = Math.max(this.scale, 1);
-                this.updateBgPosition(originalWidth, originalHeight, event.pageX, event.pageY);
+                this.updateBgPositionRelative(originalWidth, originalHeight, event.pageX, event.pageY);
             }
         }
-        
+
         $(this.image).css("background-size", `${this.imageWidth}px ${this.imageHeight}px`)
 
     }
-    
-    private updateBgPosition(originalWidth: number, originalHeight: number, pageX: number, pageY: number) {
+
+    private updateBgPositionRelative(originalWidth: number, originalHeight: number, pageX: number, pageY: number) {
         var imgOffset = $(this.image).offset();
         var cursorPositionX = (pageX - imgOffset.left);
         var cursorPositionY = (pageY - imgOffset.top);
@@ -91,9 +91,27 @@
         this.bgPositionX = cursorPositionX - (this.imageWidth * cursorRatioX);
         this.bgPositionY = cursorPositionY - (this.imageHeight * cursorRatioY);
 
-        $(this.image).css("background-position", `${this.bgPositionX}px ${this.bgPositionY}px`);
+        this.updateBgPosition()
     }
-    
+
+    private updateBgPosition() {
+        var imageElWidth = $(this.image).width();
+        if (this.bgPositionX > 0) {
+            this.bgPositionX = 0;
+        } else if (this.bgPositionX < this.originalWidth - imageElWidth) {
+            this.bgPositionX = this.originalWidth - imageElWidth;
+        }
+
+        if (this.bgPositionY > 0) {
+            this.bgPositionY = 0;
+        } else if (this.bgPositionY < this.originalHeight - this.imageHeight) {
+            this.bgPositionY = this.originalHeight - this.imageHeight;
+        }
+
+        $(this.image).css("background-position", `${this.bgPositionX}px ${this.bgPositionY}px`);
+
+    }
+
     private initializeDrag() {
         var $image = $(this.image);
         $image.off("mousedown");
@@ -113,12 +131,12 @@
         this.previousDragEvent = event;
         $(this.image).off("mousemove");
     }
-    
+
     private onDrag(event: MouseEvent) {
         event.preventDefault();
         this.bgPositionX += (event.pageX - this.previousDragEvent.pageX);
         this.bgPositionY += (event.pageY - this.previousDragEvent.pageY);
         this.previousDragEvent = event;
-        $(this.image).css("background-position", `${this.bgPositionX}px ${this.bgPositionY}px`);
+        this.updateBgPosition();
     }
 }
