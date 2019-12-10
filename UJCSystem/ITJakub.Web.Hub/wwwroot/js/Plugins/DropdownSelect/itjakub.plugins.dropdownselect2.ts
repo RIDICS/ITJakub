@@ -150,9 +150,8 @@
     protected downloadData(dropDownItemsDiv: HTMLDivElement) {
         this.books = {};
 
-        var loadDiv = document.createElement("div");
-        $(loadDiv).addClass("lv-circles lv-mid sm lvb-1");
-        $(dropDownItemsDiv).append(loadDiv);
+        var loadDiv = lv.create(null, "lv-circles lv-mid sm lvb-1 lvt-1");
+        $(dropDownItemsDiv).append(loadDiv.getElement());
         
         $.ajax({
             type: "GET",
@@ -162,7 +161,7 @@
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
-                $(dropDownItemsDiv).children("div.lv-circles").remove();
+                loadDiv.remove();
                 this.processDownloadedData(response);
                 this.makeTreeStructure(this.categories, this.books, dropDownItemsDiv);
                 this.rootCategory.checkBox = ($(dropDownItemsDiv).parent().children(".dropdown-select-header").children("span.dropdown-select-checkbox").children("input").get(0) as Node as HTMLInputElement);

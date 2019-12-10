@@ -1,4 +1,6 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Constants
+@using ITJakub.Web.Hub.Helpers
+@using Scalesoft.Localization.AspNetCore
 @inject ILocalizationService Localizer
 
 <div class="section hide">
@@ -12,6 +14,13 @@
         </div>
         <div class="panel-body">
             <div class="alert-holder"></div>
+            @if (ViewData.TryGetBooleanValue(PermissionViewConstants.ShowLinkToGroupManagement))
+            {
+                <div class="header-link-container">
+                    <a asp-controller="Permission" asp-action="RolePermission"><i class="fa fa-external-link"></i> @Localizer.Translate("GroupPermissionManagementHeadline", "Permission")</a>
+                </div>
+            }
+
             <div class="sub-content"></div>
             <button id="saveProjectPermissions" type="button" class="btn btn-default">@Localizer.Translate("Save", "Permission")</button>
         </div>
