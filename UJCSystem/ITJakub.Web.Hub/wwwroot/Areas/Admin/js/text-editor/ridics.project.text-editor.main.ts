@@ -23,6 +23,9 @@
     }
     
     isEditModeEnabled(): boolean {
+        if(typeof this.pageTextEditor == "undefined")
+            return false;
+        
         return this.pageTextEditor.isEditModeEnabled();
     }
 
