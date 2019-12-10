@@ -905,7 +905,6 @@ class ImagePanel extends ContentViewPanel {
                     if (lastWidth !== newWidth || lastHeight !== newHeight) {
                         image.src = image.getAttribute("data-image-src");
 
-                        console.log(image);
                         new ImageZoom(image, $(this.innerContent));
 
 
