@@ -260,6 +260,12 @@ class BohemianTextbankSearch {
         const abbrevTableBody = $("#resultsAbbrevTableBody");
         tableBody.empty();
         abbrevTableBody.empty();
+        if(results.length == 0) {
+            const alert = new AlertComponentBuilder(AlertType.Info).addContent(localization.translate("NoResults", "BohemianTextBank").value);
+            tableBody.append(alert.buildElement());
+            return;
+        }
+        
         for (var i = 0; i < results.length; i++) {
             var result = results[i];
             var pageContext = result.pageResultContext;
