@@ -260,9 +260,9 @@ class BohemianTextbankSearch {
         const abbrevTableBody = $("#resultsAbbrevTableBody");
         tableBody.empty();
         abbrevTableBody.empty();
-        if(results.length == 0) {
-            const alert = new AlertComponentBuilder(AlertType.Info).addContent(localization.translate("NoResults", "BohemianTextBank").value);
-            tableBody.append(alert.buildElement());
+        if (results.length === 0) {
+            const noResultsInfo = $(`<div class="no-results-info">${localization.translate("NoResults", "BohemianTextBank").value}</div>`);
+            tableBody.append(noResultsInfo);
             return;
         }
         
