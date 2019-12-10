@@ -56,9 +56,6 @@
 
                 readerPlugin.termsPanelRemoveLoading();
                 readerPlugin.showSearchInTermsPanel(convertSearchResults(response["results"]));
-            },
-            error: (jqXHR) => {
-                this.showAjaxError(jqXHR);
             }
         });
     }
@@ -82,9 +79,6 @@
 
                 readerPlugin.termsPanelRemoveLoading();
                 readerPlugin.showSearchInTermsPanel(convertSearchResults(response["results"]));
-            },
-            error: (jqXHR) => {
-                this.showAjaxError(jqXHR);
             }
         });
     }
