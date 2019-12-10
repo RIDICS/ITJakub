@@ -44,13 +44,15 @@
             });
             return ajax; // return Promise about loaded page, not about related comments
         } else {
-            const ajax = this.appendRenderedText(pageEl);
-            const ajax2 = this.commentArea.asyncConstructCommentArea(commentArea);
-            $.when(ajax, ajax2).done(() => {
-                this.commentArea.updateCommentAreaHeight(pageEl);
-                this.commentArea.collapseIfCommentAreaIsTall(commentArea, true, true);
+            const loadPageAjax = this.appendRenderedText(pageEl);
+            loadPageAjax.done(() => {
+                const loadCommentsAjax = this.commentArea.asyncConstructCommentArea(commentArea);
+                loadCommentsAjax.done(() => {
+                    this.commentArea.updateCommentAreaHeight(pageEl);
+                    this.commentArea.collapseIfCommentAreaIsTall(commentArea, true, true);
+                }); 
             });
-            return ajax; // return Promise about loaded page, not about related comments
+            return loadPageAjax;
         }
     }
 
