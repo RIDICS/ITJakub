@@ -300,6 +300,7 @@
             },
             error: () => {
                 bibliographyModule.showSearchError();
+                bibliographyModule.clearLoading();
             }
         });
     }

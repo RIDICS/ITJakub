@@ -66,6 +66,9 @@ class BibliographyModule {
                 for (let i = 0; i < this.onConfigurationLoad.length; i++) {
                     this.onConfigurationLoad[i]();
                 }
+            },
+            error: () => {
+                this.showPageLoadError();
             }
         });
     }
