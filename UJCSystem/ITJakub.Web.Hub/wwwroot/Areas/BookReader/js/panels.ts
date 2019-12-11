@@ -115,12 +115,12 @@ class ContentPanel extends ToolPanel {
 
         var textSpanElement = document.createElement("span");
         $(textSpanElement).addClass("content-item-text");
-        textSpanElement.innerHTML = contentItem.text;
+        $(textSpanElement).text(contentItem.text);
 
         var pageNameSpanElement = document.createElement("span");
         $(pageNameSpanElement).addClass("content-item-page-name");
         if (contentItem.referredPageName !== "") {
-            pageNameSpanElement.innerHTML = "[" + contentItem.referredPageName + "]";
+            $(pageNameSpanElement).text("[" + contentItem.referredPageName + "]");
         }
         $(hrefElement).append(pageNameSpanElement);
         $(hrefElement).append(textSpanElement);
@@ -224,19 +224,19 @@ class SearchResultPanel extends ToolPanel {
 
         var pageNameSpan = document.createElement("span");
         $(pageNameSpan).addClass("reader-search-result-name");
-        pageNameSpan.innerHTML = result.pageName;
+        $(pageNameSpan).text(result.pageName);
 
         var resultBeforeSpan = document.createElement("span");
         $(resultBeforeSpan).addClass("reader-search-result-before");
-        resultBeforeSpan.innerHTML = result.before;
+        $(resultBeforeSpan).text(result.before);
 
         var resultMatchSpan = document.createElement("span");
         $(resultMatchSpan).addClass("reader-search-result-match");
-        resultMatchSpan.innerHTML = result.match;
+        $(resultMatchSpan).text(result.match);
 
         var resultAfterSpan = document.createElement("span");
         $(resultAfterSpan).addClass("reader-search-result-after");
-        resultAfterSpan.innerHTML = result.after;
+        $(resultAfterSpan).text(result.after);
 
         resultItemDiv.appendChild(pageNameSpan);
         resultItemDiv.appendChild(resultBeforeSpan);
@@ -383,7 +383,7 @@ class BookmarksPanel extends ToolPanel {
         const pageInfo = rootReference.parentReader.getPageByIndex(pageIndex);
         const page = document.createElement("a");
         page.href = "#";
-        page.innerHTML = pageInfo.text;
+        $(page).text(pageInfo.text);
         page.classList.add("reader-bookmarks-content-item-page");
 
         const actionHook = () => {
@@ -447,7 +447,7 @@ class BookmarksPanel extends ToolPanel {
             title = localization.translate("NoName", "BookReader").value;
         }
 
-        titleItem.innerHTML = title;
+        $(titleItem).text(title);
     }
 
 }
@@ -545,7 +545,7 @@ class TermsSearchPanel extends TermsPanel {
         });
 
         var textSpanElement = document.createElement("span");
-        textSpanElement.innerHTML = `[${page.pageName}]`;
+        $(textSpanElement).text(`[${page.pageName}]`);
 
         $(hrefElement).append(textSpanElement);
 
@@ -650,7 +650,7 @@ class TermsResultPanel extends TermsPanel {
         });
 
         var textSpanElement = document.createElement("span");
-        textSpanElement.innerHTML = `[${text}]`;
+        $(textSpanElement).text(`[${text}]`);
 
         $(hrefElement).append(textSpanElement);
 
@@ -942,7 +942,7 @@ class AudioPanel extends ContentViewPanel {
             for (var track of response.audioBook.Tracks) {
                 var trackOption = document.createElement("option");
                 $(trackOption).prop("value", track.Position - 1);
-                trackOption.innerHTML = track.Name;
+                $(trackOption).text(track.Name);
                 $(trackSelect).append(trackOption);
             }
             for (var recording of response.audioBook.FullBookRecordings) {

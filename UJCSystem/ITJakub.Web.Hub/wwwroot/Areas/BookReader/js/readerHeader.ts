@@ -534,7 +534,7 @@
                 
         bookInfoDiv.appendChild(title);
         if (deviceType === Device.Desktop) {
-            title.innerHTML = bookTitle;
+            $(title).text(bookTitle);
             this.getAuthors($(title));
             
             var detailsButton = buttonObject.createButton("more", "info-sign");
