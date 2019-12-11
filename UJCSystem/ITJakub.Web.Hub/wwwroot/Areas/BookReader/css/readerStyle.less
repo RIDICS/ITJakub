@@ -431,6 +431,7 @@ button {
     display: inline-flex;
     flex-wrap: nowrap;
     align-items: center;
+    
         
     .control-buttons {
       padding-right: 1em; 
@@ -456,6 +457,17 @@ button {
         top: 0;
         left:0;
         bottom: 0;
+      }
+    }
+
+    @media screen and (max-width: @mobile-max-width) {
+      padding: 0 1em;
+      width: 100%;
+      flex-wrap: wrap-reverse;
+      
+      .full-progressbar {
+        width: calc(100% + 2em);
+        margin: 0 -1em;
       }
     }
   }
