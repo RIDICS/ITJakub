@@ -609,7 +609,7 @@ class ReaderLayout {
         if (this.deviceType === Device.Mobile) {
             this.createMobileToolPanel(this.searchPanelId, localization.translate(this.searchPanelId, "BookReader").value);
         } else {
-            this.createDesktopToolPanel(this.searchPanelId, localization.translate(this.termsResultId, "BookReader").value);
+            this.createDesktopToolPanel(this.searchPanelId, localization.translate(this.searchPanelId, "BookReader").value);
         }
 
         var searchButton = $(document as any).find(".search-button");
