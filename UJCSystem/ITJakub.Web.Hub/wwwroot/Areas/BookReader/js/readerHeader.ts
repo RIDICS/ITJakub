@@ -4,6 +4,8 @@
     private versionId: string;
     private sc: ServerCommunication;
     private bookTitle: string;
+    private audioOnly: boolean = true;
+    private toolButtons: JQuery<HTMLButtonElement> = $();
 
     constructor(parentReader: ReaderLayout, sc: ServerCommunication, headerDiv: HTMLDivElement, bookTitle: string) {
         super(headerDiv);
@@ -139,7 +141,8 @@
         });
     }
 
-    private makeToolButtons(deviceType: Device): HTMLDivElement {
+    private makeToolButtons(deviceType: Device, disabledButtons: boolean = false): HTMLDivElement {
+
         var toolButtonsDiv = document.createElement("div");
         $(toolButtonsDiv).addClass("tool-panel");
 
@@ -152,28 +155,33 @@
             this.parentReader.bookmarksPanelId
         );
         toolButtons.appendChild(addBookmarksButton);
-
-
+        this.toolButtons = this.toolButtons.add(addBookmarksButton)
+        
         var bookmarksButton =
             button.createToolButton("bookmark",
                 localization.translate(this.parentReader.bookmarksPanelId, "BookReader").value,
                 this.parentReader.bookmarksPanelId);
         toolButtons.appendChild(bookmarksButton);
-
+        this.toolButtons = this.toolButtons.add(bookmarksButton);
+        
         var contentButton = button.createToolButton("book",
             localization.translate(this.parentReader.contentPanelId, "BookReader").value,
             this.parentReader.contentPanelId);
         toolButtons.appendChild(contentButton);
+        this.toolButtons = this.toolButtons.add(contentButton);
 
         var searchResultButton = button.createToolButton("search",
             localization.translate(this.parentReader.searchPanelId, "BookReader").value,
             this.parentReader.searchPanelId);
         toolButtons.appendChild(searchResultButton);
+        this.toolButtons = this.toolButtons.add(searchResultButton);
 
         var termsButton = button.createToolButton("list-alt",
             localization.translate(this.parentReader.termsPanelId, "BookReader").value,
             this.parentReader.termsPanelId);
         toolButtons.appendChild(termsButton);
+        this.toolButtons = this.toolButtons.add(termsButton);
+        
         toolButtonsDiv.appendChild(toolButtons);
         if (deviceType === Device.Mobile) {
             $(toolButtonsDiv).addClass("buttons");
@@ -198,6 +206,7 @@
             
             toolButtonsDiv.appendChild(showPanelButton);
         }
+        
         return toolButtonsDiv;
 
     }
@@ -226,6 +235,7 @@
 
                 var checkboxDiv = this.createCheckboxDiv();
                 viewControl.appendChild(checkboxDiv);
+                this.audioOnly = false;
             }
         });
         var hasBookImageAjax: JQueryXHR;
@@ -243,6 +253,7 @@
                         $(".page-navigation-container-helper").removeClass("hidden");
                     }
                     viewButtons.appendChild(imageButton);
+                    this.audioOnly = false;
                 }
             });    
         });
@@ -260,6 +271,12 @@
                         $(".page-navigation-container-helper").removeClass("hidden");
                     }
                     viewButtons.appendChild(audioButton);
+
+                    if(this.audioOnly) {
+                        this.toolButtons.each((index, element: HTMLButtonElement) => {
+                            (element as HTMLButtonElement).disabled = true;
+                        })
+                    }
                 }
             });    
         });
