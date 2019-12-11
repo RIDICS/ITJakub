@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ridics.Core.Structures.Shared;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
@@ -16,11 +17,13 @@ namespace Vokabular.MainService.Controllers
     {
         private readonly RoleManager m_roleManager;
         private readonly PermissionManager m_permissionManager;
+        private readonly AuthorizationManager m_authorizationManager;
 
-        public UserGroupController(RoleManager roleManager, PermissionManager permissionManager)
+        public UserGroupController(RoleManager roleManager, PermissionManager permissionManager, AuthorizationManager authorizationManager)
         {
             m_roleManager = roleManager;
             m_permissionManager = permissionManager;
+            m_authorizationManager = authorizationManager;
         }
 
         [Authorize(PermissionNames.ListUsers)]
@@ -46,6 +49,8 @@ namespace Vokabular.MainService.Controllers
         [HttpGet("{groupId}/book/{bookId}/permission")]
         public PermissionDataContract GetPermissionsForGroupAndBook(int groupId, long bookId)
         {
+            m_authorizationManager.AuthorizeBookOrPermission(bookId, PermissionFlag.ReadProject, PermissionNames.AssignPermissionsToRoles);
+
             var result = m_permissionManager.GetPermissionsForGroupAndBook(groupId, bookId);
             return result;
         }
@@ -54,7 +59,8 @@ namespace Vokabular.MainService.Controllers
         [HttpPost("{groupId}/book/{bookId}/permission")]
         public void AddBookToGroup(int groupId, long bookId, [FromBody] PermissionDataContract data)
         {
-            // TODO check user permission for book
+            m_authorizationManager.AuthorizeBookOrPermission(bookId, PermissionFlag.AdminProject, PermissionNames.AssignPermissionsToRoles);
+
             m_permissionManager.AddBookToGroup(groupId, bookId, data);
         }
 
@@ -62,6 +68,8 @@ namespace Vokabular.MainService.Controllers
         [HttpPut("{groupId}/book/{bookId}/permission")]
         public void UpdateOrAddBookToGroup(int groupId, long bookId, [FromBody] PermissionDataContract data)
         {
+            m_authorizationManager.AuthorizeBookOrPermission(bookId, PermissionFlag.AdminProject, PermissionNames.AssignPermissionsToRoles);
+
             m_permissionManager.UpdateOrAddBooksToGroup(groupId, new List<long> { bookId }, data);
         }
 
@@ -69,6 +77,8 @@ namespace Vokabular.MainService.Controllers
         [HttpDelete("{groupId}/book/{bookId}/permission")]
         public void RemoveBooksFromGroup(int groupId, long bookId)
         {
+            m_authorizationManager.AuthorizeBookOrPermission(bookId, PermissionFlag.AdminProject, PermissionNames.AssignPermissionsToRoles);
+
             m_permissionManager.RemoveBooksFromGroup(groupId, new List<long> { bookId });
         }
     }
