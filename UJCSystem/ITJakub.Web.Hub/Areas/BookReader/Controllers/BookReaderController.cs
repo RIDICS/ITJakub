@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AutoMapper;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
@@ -23,20 +22,7 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
         }
 
         protected override BookTypeEnumContract AreaBookType => BookTypeEnumContract.Edition;
-
-        public ActionResult GetListConfiguration()
-        {
-            var fullPath = "~/Areas/Editions/content/BibliographyPlugin/list_configuration.json";
-            return File(fullPath, "application/json", fullPath);
-        }
-
-        public ActionResult GetSearchConfiguration()
-        {
-            var fullPath = "~/Areas/Editions/content/BibliographyPlugin/search_configuration.json";
-            return File(fullPath, "application/json", fullPath);
-        }
-
-
+        
         #region Views and Feedback
                 
         public ActionResult Listing(long? bookId, string searchText, string pageId)
@@ -90,13 +76,6 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
         }
         
         #endregion
-
-        // TODO this method is probably not used - check it and remove it:
-        //public ActionResult GetEditionsWithCategories()
-        //{
-        //    var result = GetBooksAndCategories();
-        //    return Json(result);
-        //}
 
         #region Search in book
 
