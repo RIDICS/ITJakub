@@ -133,7 +133,7 @@
                 subContent.html(result);
                 saveButton.removeClass("hide");
             }).fail((error) => {
-                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement;
+                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
                 subContent.empty();
                 alertHolder.empty().append(alert);
             });
