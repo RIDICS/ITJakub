@@ -20,12 +20,12 @@
         this.savePermissionButtonSelector = "#saveProjectPermissions";
     }
 
-    public init(clearPermissions = false) {
+    public init(clearPermissions = false, saveStateToUrl = true) {
         if (this.projectId != null) {
             this.roleList = new ListWithPagination(`Admin/Project/CooperationList?projectId=${this.projectId}`,
                 "role",
                 ViewType.Widget,
-                true,
+                saveStateToUrl,
                 false,
                 this.initRoleClicks,
                 this);
