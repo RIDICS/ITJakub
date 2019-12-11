@@ -16,6 +16,7 @@ class ChapterEditorMain {
         this.moveEditor = new ChapterMoveEditor();
         this.pageDetail = $("#chaptersPageDetail");
         this.readerPagination = new ReaderPagination(this.pageDetail[0]);
+        this.chapterEdited = false;
     }
 
     init(projectId: number) {
