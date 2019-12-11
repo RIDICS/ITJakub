@@ -1026,9 +1026,9 @@ class AudioPanel extends ContentViewPanel {
             })
 
         }
-
+        this.currentTrackDuration = this.parseStringTimeToSeconds(track.Recordings[0].Duration);
         for (var recording of track.Recordings) {
-            this.currentTrackDuration = this.parseStringTimeToSeconds(recording.Duration);
+            
             var source = document.createElement("source");
             source.src = this.sc.getTrackDownloadUrl(recording.Id, recording.AudioType);
             source.type = recording.MimeType;
