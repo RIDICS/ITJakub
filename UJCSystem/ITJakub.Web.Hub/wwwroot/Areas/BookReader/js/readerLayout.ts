@@ -194,6 +194,11 @@ class ReaderLayout {
             if (panelId === this.termsPanelId) {
                 this.createTermsPanel(configurationObject);
             }
+        } else {
+            var contentItem = this.readerLayout.root.getItemsById(panelId)[0] as GoldenLayout.ContentItem;
+            if (contentItem.parent.isStack) {
+                contentItem.parent.setActiveContentItem(contentItem);
+            } 
         }
     }
 
