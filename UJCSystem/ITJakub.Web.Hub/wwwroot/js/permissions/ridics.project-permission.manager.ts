@@ -188,6 +188,7 @@
             });
 
             addProjectPermissionToRoleBtn.on("click", () => {
+                const savingIcon = addProjectPermissionToRoleBtn.find(".saving-icon");
                 roleError.empty();
                 if (typeof this.currentRoleSelectedItem == "undefined" || this.currentRoleSelectedItem == null) {
                     const errorAlert = new AlertComponentBuilder(AlertType.Error)
@@ -195,6 +196,7 @@
                     roleError.empty().append(errorAlert.buildElement());
                     return;
                 } else {
+                    savingIcon.removeClass("hide");
                     const requestContract = this.getRequestContract(this.currentRoleSelectedItem.id, addProjectPermissionModal);
                     this.client.addProjectToRole(requestContract).done(() => {
                         this.roleList.reloadPage();
@@ -205,6 +207,8 @@
                             .addContent(this.errorHandler.getErrorMessage(error,
                                 localization.translate("AddProjectToRoleError", "PermissionJs").value));
                         roleError.empty().append(errorAlert.buildElement());
+                    }).always(() => {
+                        savingIcon.addClass("hide");
                     });
                 }
             });

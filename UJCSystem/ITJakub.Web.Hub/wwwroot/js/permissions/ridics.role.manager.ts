@@ -369,7 +369,7 @@ class RoleManager {
             const initModalBtn = $("#addRoleButton");
             const addToRoleModal = $("#addToRoleDialog");
             const roleError = $("#add-user-to-role-error");
-
+            
             initModalBtn.on("click",() => {
                 if (!initModalBtn.hasClass("disabled")) {
                     const role = $(".role-row.active");
@@ -385,8 +385,8 @@ class RoleManager {
                 addToRoleModal.find("#mainSearchInput").val("");
                 addToRoleModal.find("#selectedUser").text(localization.translate("UserIsNotSelected", "Permission").value);
             });
-
-            addUserToRoleBtn.on("click", () => {
+            
+            addUserToRoleBtn.on("click",() => {
                 roleError.empty();
                 const roleId = $(".role-row.active").data("role-id");
                 if (typeof this.currentUserSelectedItem == "undefined" || this.currentUserSelectedItem == null) {
@@ -396,6 +396,8 @@ class RoleManager {
                     return;
                 }
                 else {
+                    const savingIcon = addUserToRoleBtn.find(".saving-icon");
+                    savingIcon.removeClass("hide");
                     const userId = this.currentUserSelectedItem.id;
                     this.client.addUserToRole(userId, roleId).done(() => {
                         this.userList.reloadPage();
@@ -404,6 +406,8 @@ class RoleManager {
                         const errorAlert = new AlertComponentBuilder(AlertType.Error)
                             .addContent(this.errorHandler.getErrorMessage(error));
                         roleError.empty().append(errorAlert.buildElement());
+                    }).always(() => {
+                        savingIcon.addClass("hide");
                     });
                 }
             });
