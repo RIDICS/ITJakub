@@ -720,7 +720,7 @@ class ReaderLayout {
     protected createTermsPanel(configObject: LayoutConfiguration) {
         var itemConfig = configObject.toolPanelConfig(PanelType.Component, this.termsSearchId, localization.translate(this.termsSearchId, "BookReader").value);
         this.readerLayout.root.getItemsById(this.termsPanelId)[0].addChild(itemConfig);
-        itemConfig = configObject.toolPanelConfig(PanelType.Component, this.termsResultId, localization.translate(this.termsSearchId, "BookReader").value);
+        itemConfig = configObject.toolPanelConfig(PanelType.Component, this.termsResultId, localization.translate(this.termsResultId, "BookReader").value);
         this.readerLayout.root.getItemsById(this.termsPanelId)[0].addChild(itemConfig);
     }
 
