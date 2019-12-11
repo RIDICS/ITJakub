@@ -1087,7 +1087,7 @@ class AudioPanel extends ContentViewPanel {
         });
 
         timer.append(currentTimeContainer);
-        $(this.currentTrack).on("canplay", () => {
+        $(this.currentTrack).on("loadedmetadata", () => {
             currentTimeContainer.innerText = this.getFormattedTime(this.currentTrack.currentTime, this.currentTrackDuration);
             timer.append(` / ${this.getFormattedTime(this.currentTrackDuration, this.currentTrackDuration)}`);
         });
@@ -1103,6 +1103,12 @@ class AudioPanel extends ContentViewPanel {
             $(currentProgressEl).css("width", this.calculatePercentageProgress(this.currentTrack));
         });
 
+        $(this.currentTrack).on("ended", () => {
+            $(buttonPlay)
+                .removeClass("glyphicon-pause")
+                .addClass("glyphicon-play");
+        });
+        
         progressBar.append(currentProgressEl);
         audioContainer.append(progressBar);
 
