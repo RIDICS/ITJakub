@@ -11,7 +11,6 @@
                 {
                     @await Html.PartialAsync("Work/SubView/_ChapterRow", new ChapterEditorRowViewModel{
                         Chapter = chapter,
-                        Pages = Model.Pages,
                         LevelOfHierarchy = 0
                     }, ViewData)
                 }
@@ -23,3 +22,10 @@
         </div>
     </div>
 </div>
+
+<select id="pageList" class="hide">
+    @foreach (var pageItem in Model.Pages)
+    {
+        <option value="@pageItem.Id" >@pageItem.Name</option>
+    }
+</select>
