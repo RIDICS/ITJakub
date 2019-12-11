@@ -44,13 +44,15 @@
             });
             return ajax; // return Promise about loaded page, not about related comments
         } else {
-            const ajax = this.appendRenderedText(pageEl);
-            const ajax2 = this.commentArea.asyncConstructCommentArea(commentArea);
-            $.when(ajax, ajax2).done(() => {
-                this.commentArea.updateCommentAreaHeight(pageEl);
-                this.commentArea.collapseIfCommentAreaIsTall(commentArea, true, true);
+            const loadPageAjax = this.appendRenderedText(pageEl);
+            loadPageAjax.done(() => {
+                const loadCommentsAjax = this.commentArea.asyncConstructCommentArea(commentArea);
+                loadCommentsAjax.done(() => {
+                    this.commentArea.updateCommentAreaHeight(pageEl);
+                    this.commentArea.collapseIfCommentAreaIsTall(commentArea, true, true);
+                }); 
             });
-            return ajax; // return Promise about loaded page, not about related comments
+            return loadPageAjax;
         }
     }
 
@@ -70,6 +72,9 @@
         const pageId = pageEl.data("page-id") as number;
         const renderedText = this.apiClient.loadRenderedText(pageId);
         const compositionAreaDiv = pageEl.find(".rendered-text");
+        const compositionAreaEl = pageEl.find(".composition-area");
+        const loader = lv.create(null, "lv-circles sm lv-mid composition-area-loading");
+        compositionAreaDiv.append(loader.getElement());
         renderedText.done((data: ITextWithContent) => {
             if (data == null) {
                 var infoAlert = new AlertComponentBuilder(AlertType.Info)
@@ -114,6 +119,11 @@
 
     private appendPlainText(pageEl: JQuery): JQuery.jqXHR<ITextWithContent> {
         const pageId = pageEl.data("page-id") as number;
+
+        const compositionAreaEl = pageEl.children(".composition-area");
+        const loader = lv.create(null, "lv-circles sm lv-mid composition-area-loading");
+        compositionAreaEl.append(loader.getElement());
+        
         const plainText = this.apiClient.loadPlainText(pageId);
         const textAreaEl = $(pageEl.find(".plain-text"));
         plainText.done((data: ITextWithContent) => {
@@ -137,7 +147,7 @@
             textAreaEl.val(localization.translate("ContentLoadFailed", "RidicsProject").value);
         });
         plainText.always(() => {
-            pageEl.find(".loading").hide();
+            pageEl.find(".composition-area-loading").remove();
         });
         return plainText;
     }

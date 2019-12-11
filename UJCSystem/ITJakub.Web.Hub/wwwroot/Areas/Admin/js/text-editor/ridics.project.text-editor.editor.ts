@@ -262,10 +262,12 @@
     
     private createText(pageRow: JQuery<HTMLElement>) {
         const pageId = pageRow.data("page-id");
-        const loading = pageRow.find("composition-area-loading");
+        const loader = lv.create(null, "lv-circles sm lv-mid composition-area-loading");
+        $(pageRow.find(".composition-area")).append(loader.getElement());
+                
         pageRow.find(".rendered-text").find(".alert").remove();
-        loading.show();
         this.apiClient.createTextOnPage(pageId).done(() => {
+            $(pageRow.find(".composition-area .composition-area-loading")).remove();
             this.pageStructure.loadPage(pageRow).done(() => {
                 $(".edit-page", pageRow).trigger("click"); //Open editor
             });
@@ -278,6 +280,12 @@
     saveText(textId: number, contents: string, mode: SaveTextModeType): JQuery.jqXHR<ISaveTextResponse> {
         const pageEl = $(`*[data-text-id="${textId}"]`);
         const compositionArea = pageEl.children(".composition-area");
+        const loader = lv.create(null, "lv-circles sm lv-mid composition-area-loading");
+        $(compositionArea).append(loader.getElement());
+        
+        const alertHolder = pageEl.find(this.alertHolderSelector);
+        alertHolder.empty();
+        
         const id = compositionArea.data("id");
         const versionId = compositionArea.data("version-id");
         const request: ICreateTextVersion = {
@@ -290,6 +298,13 @@
                 this.originalContent = contents;
                 compositionArea.data("version-id", response.resourceVersionId);
             }
+        });
+        ajax.fail((jqXHR) => {
+            const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(jqXHR));
+            alertHolder.append(alert.buildElement());
+        });
+        ajax.always(() => {
+           compositionArea.find(".composition-area-loading").remove(); 
         });
         return ajax;
     }
@@ -439,7 +454,8 @@
         this.simpleMdeTools.toolPreview.action = (editor: SimpleMDE) => {
             this.simpleMdeOptions.previewRender = (plainText: string, preview: HTMLElement) => {
                 this.previewRemoteRender(plainText, preview);
-                return "<div class=\"loading\"></div>";
+                const loader = lv.create(null, "lv-circles sm lv-mid composition-area-loading");
+                return loader.getElement().outerHTML;
             };
             SimpleMDE.togglePreview(editor);
         };
@@ -472,8 +488,6 @@
             const pageEl = $(child as Node as HTMLElement);
             const compositionAreaEl = pageEl.children(".composition-area");
             this.commentArea.updateCommentAreaHeight(pageEl);
-            const placeholderSpinner = pageEl.find(".loading");
-            placeholderSpinner.show();
             const toolbarButtons = pageEl.find(".page-toolbar-buttons");
             if (pageEl.data(this.editModeSelector)) { // changing div to textarea here
                 toolbarButtons.addClass("hide");
