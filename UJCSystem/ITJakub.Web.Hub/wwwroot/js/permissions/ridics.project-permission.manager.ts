@@ -20,12 +20,12 @@
         this.savePermissionButtonSelector = "#saveProjectPermissions";
     }
 
-    public init(clearPermissions = false) {
+    public init(clearPermissions = false, saveStateToUrl = true) {
         if (this.projectId != null) {
             this.roleList = new ListWithPagination(`Admin/Project/CooperationList?projectId=${this.projectId}`,
                 "role",
                 ViewType.Widget,
-                true,
+                saveStateToUrl,
                 false,
                 this.initRoleClicks,
                 this);
@@ -133,7 +133,7 @@
                 subContent.html(result);
                 saveButton.removeClass("hide");
             }).fail((error) => {
-                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement;
+                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
                 subContent.empty();
                 alertHolder.empty().append(alert);
             });

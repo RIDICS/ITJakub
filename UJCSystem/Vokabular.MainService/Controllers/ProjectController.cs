@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Ridics.Core.Structures.Shared;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -20,10 +22,11 @@ namespace Vokabular.MainService.Controllers
         private readonly ForumSiteManager m_forumSiteManager;
         private readonly PermissionManager m_permissionManager;
         private readonly ProjectGroupManager m_projectGroupManager;
+        private readonly AuthorizationManager m_authorizationManager;
 
         public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager,
             ProjectInfoManager projectInfoManager, ForumSiteManager forumSiteManager, PermissionManager permissionManager,
-            ProjectGroupManager projectGroupManager)
+            ProjectGroupManager projectGroupManager, AuthorizationManager authorizationManager)
         {
             m_projectManager = projectManager;
             m_projectMetadataManager = projectMetadataManager;
@@ -31,6 +34,7 @@ namespace Vokabular.MainService.Controllers
             m_forumSiteManager = forumSiteManager;
             m_permissionManager = permissionManager;
             m_projectGroupManager = projectGroupManager;
+            m_authorizationManager = authorizationManager;
         }
         
         [HttpGet]
@@ -236,6 +240,8 @@ namespace Vokabular.MainService.Controllers
         [HttpPost("{projectId}/single-user-group")]
         public IActionResult AddProjectToUserGroupByCode(long projectId, [FromBody] AssignPermissionToSingleUserGroupContract data)
         {
+            m_authorizationManager.AuthorizeBookOrPermission(projectId, PermissionFlag.AdminProject, PermissionNames.AssignPermissionsToRoles);
+
             m_permissionManager.AddBookToSingleUserGroup(projectId, data.Code, data.Permissions);
             return Ok();
         }

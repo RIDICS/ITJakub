@@ -58,6 +58,7 @@
     "group-already-assigned-to-project": "The group already has assigned some permission for this work",
     "user-already-assigned-to-project": "The user already has assigned some permission for this work",
     "snapshot-must-contain-metadata": "The work must contain metadata otherwise it can't be published.",
+    "forbidden": "Insufficient permissions for the operation",
 
     //Auth service codes
     "generic-error": "Operation failed",
@@ -118,7 +119,7 @@
     "unauthorized-code-401":
       "There was a problem communicating with a third party service. Third party service returned status: 401 Unauthorized",
     "forbidden-code-403":
-      "There was a problem communicating with a third party service. Third party service returned status: 403 Forbidden",
+      "Insufficient permissions for the operation",
     "not-found-code-404":
       "There was a problem communicating with a third party service. Third party service returned status: 404 Not found",
     "internal-server-error-code-500":

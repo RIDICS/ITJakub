@@ -58,6 +58,7 @@
     "group-already-assigned-to-project": "Skupina už má přiřazené nějaké právo k tomuto dílu",
     "user-already-assigned-to-project": "Uživatel už má přiřazené nějaké právo k tomuto dílu",
     "snapshot-must-contain-metadata": "Dílo musí obsahovat metadata, jinak nemůže být publikováno.",
+    "forbidden": "Nedostatečná práva pro tuto operaci",
     
     //Auth service codes
     "generic-error": "Operace se nezdařila",
@@ -118,7 +119,7 @@
     "unauthorized-code-401":
       "Chyba při komunikaci s externí službou. Služba vrátila stav: 401 Unauthorized",
     "forbidden-code-403":
-      "Chyba při komunikaci s externí službou. Služba vrátila stav: 403 Forbidden",
+      "Nedostatečná práva pro tuto operaci",
     "not-found-code-404":
       "Chyba při komunikaci s externí službou. Služba vrátila stav: 404 Not found",
     "internal-server-error-code-500":

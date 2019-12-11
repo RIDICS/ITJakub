@@ -58,14 +58,14 @@ namespace Vokabular.MainService.Controllers
             return result.List;
         }
         
-        [Authorize(PermissionNames.AssignPermissionsToRoles)]
+        [Authorize(PermissionNames.ManageUserRoles)]
         [HttpDelete("{groupId}/user/{userId}")]
         public void RemoveUserFromRole(int userId, int groupId)
         {
             m_roleManager.RemoveUserFromRole(userId, groupId);
         }
 
-        [Authorize(PermissionNames.AssignPermissionsToRoles)]
+        [Authorize(PermissionNames.ManageUserRoles)]
         [HttpPost("{groupId}/user/{userId}")]
         public void AddUserToRole(int userId, int groupId)
         {
@@ -86,7 +86,7 @@ namespace Vokabular.MainService.Controllers
             m_permissionManager.RemoveSpecialPermissionsFromRole(groupId, specialPermissionsIds.IdList);
         }
 
-        [Authorize(PermissionNames.ManageUserRoles)]
+        //[Authorize(PermissionNames.ManageUserRoles)]
         [HttpGet("autocomplete")]
         public List<RoleContract> GetAutocomplete([FromQuery] string query, [FromQuery] int? count)
         {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -7,6 +8,7 @@ using Vokabular.MainService.DataContracts.Contracts.Type;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api")]
+    [Obsolete("Resource groups are not used at all")]
     public class ResourceGroupController : BaseController
     {
         private readonly NamedResourceGroupManager m_namedResourceGroupManager;

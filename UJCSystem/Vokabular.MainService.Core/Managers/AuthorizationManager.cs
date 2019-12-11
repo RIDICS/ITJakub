@@ -144,6 +144,17 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
+        public void AuthorizeBookOrPermission(long projectId, PermissionFlag permission, string permissionName)
+        {
+            var userPermissions = m_authenticationManager.GetCurrentUserPermissions(false);
+            if (userPermissions.Any(x => x.Value == permissionName))
+            {
+                return;
+            }
+
+            AuthorizeBook(projectId, permission);
+        }
+
         public void AuthorizeSnapshot(long snapshotId)
         {
             var user = m_authenticationManager.GetCurrentUser();
