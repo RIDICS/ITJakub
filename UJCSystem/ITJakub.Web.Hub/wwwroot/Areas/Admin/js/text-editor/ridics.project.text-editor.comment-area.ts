@@ -333,7 +333,7 @@
             return deferredResult.promise();
         }
 
-        const loader = lv.create(null, "lv-circles sm lv-mid lvt-5");
+        const loader = lv.create(null, "lv-circles sm lv-mid lvt-3");
         $(commentAreaEl).html(loader.getElement());
 
         pageRowEl.removeClass("comment-never-loaded");
