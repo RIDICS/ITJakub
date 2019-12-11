@@ -924,6 +924,7 @@ class AudioPanel extends ContentViewPanel {
     private trackId: number;
     private numberOfTracks: number;
     private currentTrack: HTMLAudioElement;
+    private currentTrackDuration: number;
 
     protected makeBody(rootReference: Panel, window: Window): HTMLElement {
         var audioContainerDiv: HTMLDivElement = document.createElement("div");
@@ -1019,14 +1020,15 @@ class AudioPanel extends ContentViewPanel {
 
     private buildAudioPlayer(track: ITrackWithRecordingContract, autoplay: boolean) {
         this.currentTrack = new Audio();
-        if(autoplay) {
+        if (autoplay) {
             $(this.currentTrack).on("canplay", () => {
                 this.currentTrack.play();
             })
-                
+
         }
-        
+
         for (var recording of track.Recordings) {
+            this.currentTrackDuration = this.parseStringTimeToSeconds(recording.Duration);
             var source = document.createElement("source");
             source.src = this.sc.getTrackDownloadUrl(recording.Id, recording.AudioType);
             source.type = recording.MimeType;
@@ -1081,13 +1083,13 @@ class AudioPanel extends ContentViewPanel {
         var timer = document.createElement("div");
         var currentTimeContainer = document.createElement("span");
         $(this.currentTrack).on("timeupdate", () => {
-            currentTimeContainer.innerText = this.getFormattedTime(this.currentTrack.currentTime, this.currentTrack.duration);
+            currentTimeContainer.innerText = this.getFormattedTime(this.currentTrack.currentTime, this.currentTrackDuration);
         });
 
         timer.append(currentTimeContainer);
-        $(this.currentTrack).on("loadedmetadata", () => {
-            currentTimeContainer.innerText = this.getFormattedTime(this.currentTrack.currentTime, this.currentTrack.duration);
-            timer.append(` / ${this.getFormattedTime(this.currentTrack.duration, this.currentTrack.duration)}`);
+        $(this.currentTrack).on("canplay", () => {
+            currentTimeContainer.innerText = this.getFormattedTime(this.currentTrack.currentTime, this.currentTrackDuration);
+            timer.append(` / ${this.getFormattedTime(this.currentTrackDuration, this.currentTrackDuration)}`);
         });
         audioContainer.append(timer);
 
@@ -1104,6 +1106,15 @@ class AudioPanel extends ContentViewPanel {
         progressBar.append(currentProgressEl);
         audioContainer.append(progressBar);
 
+    }
+
+    private parseStringTimeToSeconds(time: string): number {
+        var splittedTime = time.split(":");
+        var seconds = 0;
+        for (var i = splittedTime.length - 1; i >= 0; i--) {
+            seconds += parseInt(splittedTime[i]) * Math.pow(60, (splittedTime.length - 1) - i);
+        }
+        return seconds;
     }
 
     private getFormattedTime(timeInSeconds: number, audioLength: number): string {
