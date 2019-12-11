@@ -205,6 +205,7 @@ class BohemianTextbankSearch {
                 this.booksSelector.restoreFromSerializedState(selected);
             }
 
+            this.search.processSearch();
         } else if (!this.notInitialized) {
             this.search.processSearch();
         } else {
@@ -259,6 +260,12 @@ class BohemianTextbankSearch {
         const abbrevTableBody = $("#resultsAbbrevTableBody");
         tableBody.empty();
         abbrevTableBody.empty();
+        if (results.length === 0) {
+            const noResultsInfo = $(`<div class="no-results-info">${localization.translate("NoResults", "BohemianTextBank").value}</div>`);
+            tableBody.append(noResultsInfo);
+            return;
+        }
+        
         for (var i = 0; i < results.length; i++) {
             var result = results[i];
             var pageContext = result.pageResultContext;
