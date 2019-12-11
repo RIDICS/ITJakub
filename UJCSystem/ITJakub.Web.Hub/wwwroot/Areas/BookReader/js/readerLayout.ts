@@ -641,7 +641,7 @@ class ReaderLayout {
         return this.termsSearchPanel;
     }
 
-    showSearchResultInPages(searchQuery: string, isQueryJson: boolean, pages: Array<IPage>) {
+    private showSearchResultInPages(searchQuery: string, isQueryJson: boolean, pages: Array<IPage>) {
         this.textPanel.setSearchedQuery(searchQuery, isQueryJson);
         $(".search-unloaded").removeClass(".search-unloaded");
         var previousSearchPages = $(".search-loaded");
@@ -844,6 +844,10 @@ class ReaderLayout {
         this.readerLayout.eventHub.on("scrollPage", (pageWithMinOffsetId) => {
             this.bookHeader.moveToPage(pageWithMinOffsetId, false);
         });
+        
+        this.readerLayout.eventHub.on("showTextSearchMatch", (searchQuery: string, isQueryJson: boolean, pages: Array<IPage>) => {
+            this.showSearchResultInPages(searchQuery, isQueryJson, pages);
+        })
     }
 }
 

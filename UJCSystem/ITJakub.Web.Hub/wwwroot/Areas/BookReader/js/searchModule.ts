@@ -56,7 +56,7 @@
 
         var textSearchMatchHit: JQueryXHR = this.sc.textSearchMatchHit(this.bookId, this.versionId, text);
         textSearchMatchHit.done((response: { pages: Array<IPage> }) => {
-            this.readerPlugin.showSearchResultInPages(text, false, response.pages);
+            this.readerPlugin.readerLayout.eventHub.emit("showTextSearchMatch", text, false, response.pages);
         });
     }
 
@@ -71,7 +71,7 @@
 
         var advancedSearchMatchHit: JQueryXHR = this.sc.advancedSearchMatchHit(this.bookId, this.versionId, json);
         advancedSearchMatchHit.done((response: { pages: Array<IPage> }) => {
-            this.readerPlugin.showSearchResultInPages(json, true, response.pages);
+            this.readerPlugin.readerLayout.eventHub.emit("showTextSearchMatch", json, true, response.pages);
         });
 
     }
