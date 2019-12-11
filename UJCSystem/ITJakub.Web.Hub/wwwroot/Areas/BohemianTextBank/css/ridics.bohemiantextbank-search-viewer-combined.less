@@ -1,6 +1,8 @@
 ﻿@import "../../../css/ITJakub.Colors.less";
+@import "../../../css/ITJakub.Constants.less";
 @import "../../Admin/css/@editors-common-variables.less";
-@table-line-height: 3em;
+
+@table-line-height: 2em;
 @table-even-colour: #eee;
 @table-odd-colour: white;
 @table-row-clicked-color: #C0C0C0;
@@ -17,18 +19,21 @@
 }
 
 .search-result-section {
-
+    padding: 0;
+    
     .corpus-result-and-settings-row {
         height: 32em;
 
         .corpus-search-results-div {
             height: inherit;
+            background-color: white;
 
             .search-results-row {
                 height: 100%;
 
                 .result-text-col {
                     height: 100%;
+                    overflow-y: scroll;
 
                     .text-results-table {
                         width: 100%;
@@ -61,6 +66,7 @@
 
                             .abbrev-col {
                                 padding-right: 5px;
+                                padding-left: 5px;
                             }
 
                             .context-before {
@@ -81,6 +87,10 @@
                                 width: 45%;
                             }
                         }
+                    }
+
+                    .alert {
+                        margin: 15px;
                     }
                 }
             }
@@ -149,6 +159,10 @@
             .corpus-search-settings-checkboxes {
                 margin-bottom: 20px;
                 margin-top: 10px;
+                
+                .checkbox label input[type="checkbox"] {
+                    margin: 1px 0 0 -18px;
+                }
             }
 
             .corpus-search-setting-div-results-count {
@@ -161,8 +175,27 @@
             }
 
             .corpus-search-setting-div-pagination {
-                padding-left: 8%;
-                padding-right: 8%;
+
+                .indefinite-pagination-button-group-elements {
+                    .indefinite-pagination-load-all {
+
+                    }
+
+                    .btn {
+                        padding: 3px 6px;
+                        white-space: normal;
+                    }
+                }
+                
+                @media (min-width: @large-screen)
+                {
+                    .indefinite-pagination-button-group-elements {
+                        .btn {
+                            padding: 6px 12px;
+                            white-space: nowrap;
+                        }
+                    }
+                }
 
                 .ui-slider-handle {
                     width: 1.5em;

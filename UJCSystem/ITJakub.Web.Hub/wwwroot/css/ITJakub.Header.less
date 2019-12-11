@@ -292,10 +292,12 @@ ul.navbar-language li:hover a {
         a {
             vertical-align: middle;
 
-            span {
-                text-align: center;
-                vertical-align: middle;
-                display: table-cell;
+            @media screen and (min-width: @extra-large-screen + 1px) {
+                span {
+                    text-align: center;
+                    vertical-align: middle;
+                    display: table-cell;
+                }
             }
         }
     }

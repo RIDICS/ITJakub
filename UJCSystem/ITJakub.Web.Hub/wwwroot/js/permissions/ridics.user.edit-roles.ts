@@ -10,6 +10,7 @@ class UserRolesEditor {
     private readonly roleList: ListWithPagination;
     private readonly client: PermissionApiClient;
     private readonly errorHandler: ErrorHandler;
+    private readonly registeredRoleName: string;
     private roleSearchCurrentSelectedItem: IRole;
 
     constructor(mainContainer: string) {
@@ -30,6 +31,7 @@ class UserRolesEditor {
         this.initRemoveUserFromRoleButton();
         this.client = new PermissionApiClient();
         this.errorHandler = new ErrorHandler();
+        this.registeredRoleName = $("#registeredRoleName").data("name");
     }
 
     make() {
@@ -46,11 +48,11 @@ class UserRolesEditor {
             }
         });
 
-        $("#addGroupButton").click(() => {
+        $("#addGroupButton").on("click",() => {
             $("#addToGroupDialog").modal();
         });
 
-        $("#add-user-to-group").click(() => {
+        $("#add-user-to-group").on("click", () => {
             if ($("#tab2-select-existing").hasClass("active")) {
                 const alertHolder = $("#add-user-to-role-error");
                 alertHolder.empty();
@@ -90,18 +92,45 @@ class UserRolesEditor {
     }
 
     private initRemoveUserFromRoleButton() {
-        $(".remove-role").click((event) => {
+        $(".remove-role").on("click", (event) => {
             const roleRow = $(event.currentTarget as Node as HTMLElement).parents(".role-row");
-            const roleId = roleRow.data("role-id");
-            const alert = roleRow.find(".alert");
-            alert.hide();
+            const roleName = roleRow.find(".name").text().trim();
 
-            this.client.removeUserFromRole(this.userId, roleId).done(() => {
-                this.roleList.reloadPage();
-            }).fail((error) => {
-                alert.text(this.errorHandler.getErrorMessage(error, localization.translate("RemoveUserFromRoleError", "PermissionJs").value));
-                alert.show();
-            });
+            if (roleName === this.registeredRoleName) {
+                bootbox.dialog({
+                    title: localization.translate("Warning", "PermissionJs").value,
+                    message: localization.translateFormat("RemoveUserFromRegisteredRole", [roleName], "PermissionJs").value,
+                    buttons: {
+                        cancel: {
+                            label: localization.translate("Cancel", "PermissionJs").value,
+                            className: "btn-default",
+                            callback: () => {}
+                        },
+                        confirm: {
+                            label: localization.translate("Remove","PermissionJs").value,
+                            className: "btn-default",
+                            callback: () => {
+                                this.removeUserFromRole(roleRow);
+                            }
+                        }
+                    }
+                });
+            } else {
+                this.removeUserFromRole(roleRow);
+            }
+        });
+    }
+    
+    private removeUserFromRole(roleRowElement: JQuery<HTMLElement>) {
+        const roleId = roleRowElement.data("role-id");
+        const alert = roleRowElement.find(".alert");
+        alert.hide();
+        
+        this.client.removeUserFromRole(this.userId, roleId).done(() => {
+            this.roleList.reloadPage();
+        }).fail((error) => {
+            alert.text(this.errorHandler.getErrorMessage(error, localization.translate("RemoveUserFromRoleError", "PermissionJs").value));
+            alert.show();
         });
     }
 }

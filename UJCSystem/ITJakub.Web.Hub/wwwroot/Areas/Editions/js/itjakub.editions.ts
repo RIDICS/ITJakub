@@ -52,7 +52,6 @@
     }
 
     function editionBasicSearchPaged(text: string, pageNumber: number) {
-
         if (typeof text === "undefined" || text === null || text === "") return;
 
         var start = (pageNumber - 1) * readerPlugin.getSearchResultsCountOnPage();

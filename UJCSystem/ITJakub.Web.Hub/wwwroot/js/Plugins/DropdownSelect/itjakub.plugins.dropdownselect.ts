@@ -24,6 +24,7 @@
 
     dataLoadedCallback: (rootCategoryId) => void;
 
+
     constructor() {
         this.makeDefaults();
     }
@@ -93,6 +94,7 @@ class DropDownSelect {
     protected dropDownBodyDiv: HTMLDivElement;
     protected favoriteManager: FavoriteManager;
     protected favoriteDialog: NewFavoriteDialog;
+    private headerLoader = lv.create(null, "lv-circles tiniest dropdown-loader-color dropdown-align-loader");
 
     constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
         this.dropDownSelectContainer = dropDownSelectContainer;
@@ -192,15 +194,6 @@ class DropDownSelect {
 
         dropDownHeadDiv.appendChild(textSpan);
 
-        var loadSpan = document.createElement("div");
-        $(loadSpan).addClass("lv-circles lv-right");
-        $(loadSpan).css("height", "20px");
-        $(loadSpan).css("width", "20px");
-        $(loadSpan).css("display", "inline-block");
-        $(loadSpan).css("margin-left", "50%");
-
-        dropDownHeadDiv.appendChild(loadSpan);
-
         var moreSpan = document.createElement("span");
         $(moreSpan).addClass("dropdown-select-more");
 
@@ -220,6 +213,8 @@ class DropDownSelect {
         moreSpan.appendChild(iconSpan);
 
         dropDownHeadDiv.appendChild(moreSpan);
+
+        dropDownHeadDiv.append(this.headerLoader.getElement());
 
         dropDownDiv.appendChild(dropDownHeadDiv);
     }
@@ -281,11 +276,8 @@ class DropDownSelect {
     }
 
     protected downloadData(dropDownItemsDiv: HTMLDivElement) {
-        var loadDiv = document.createElement("div");
-        $(loadDiv).addClass("lv-circles sm lv-mid");
-        $(dropDownItemsDiv).append(loadDiv);
         var self = this;
-
+        
         $.ajax({
             type: "GET",
             traditional: true,
@@ -298,8 +290,6 @@ class DropDownSelect {
                 var categories = this.getCategories(response);
                 var items = this.getLeafItems(response);
 
-                $(dropDownItemsDiv).children("div.lv-circles").remove();
-
                 this.makeTreeStructure(categories, items, dropDownItemsDiv);
 
                 var rootCategory = this.getRootCategory(categories);
@@ -307,6 +297,14 @@ class DropDownSelect {
                 this.dataLoaded(rootCategoryId);
 
                 this.downloadFavoriteData(dropDownItemsDiv);
+            },
+            error: jqXHR => {
+                $(dropDownItemsDiv).children("div.lv-circles").remove();
+                $(dropDownItemsDiv).siblings(".dropdown-select-header").children("div.lv-circles").remove();
+                const selectHeader = $(dropDownItemsDiv).parent().children(".dropdown-select-header");
+                $(selectHeader).children(".dropdown-select-text").append(localization.translate("LoadingContentError", "PluginsJs").value);
+                this.dataLoaded(null);
+                this.downloadFavoriteData(dropDownItemsDiv);  
             }
         });
     }
@@ -364,7 +362,6 @@ class DropDownSelect {
 
         var selectHeader = $(dropDownItemsDiv).parent().children(".dropdown-select-header");
         $(selectHeader).children(".dropdown-select-text").append(this.getCategoryName(rootCategory));
-        $(selectHeader).children(".lv-circles").hide();
 
         $(selectHeader).data("id", this.getCategoryId(rootCategory));
         $(selectHeader).data("name", this.getCategoryName(rootCategory));
@@ -415,12 +412,13 @@ class DropDownSelect {
                 this.makeLeafItem(dropDownItemsDiv, childBook);
             }
         }
-    }
+        this.headerLoader.hide();
+        }
 
     protected dataLoaded(rootCategoryId) {
         if (this.callbackDelegate.dataLoadedCallback)
             this.callbackDelegate.dataLoadedCallback(rootCategoryId);
-    }
+        }
 
     protected onCreateCategoryCheckBox(categoryId: any, checkBox: HTMLInputElement) { }
 

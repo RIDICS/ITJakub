@@ -169,7 +169,7 @@ namespace Vokabular.MainService.Core.Managers
 
             var request = new EnsurePermissionsContract
             {
-                NewAssignToRoleName = DefaultValues.RoleForNewPermissions,
+                NewAssignToRoleNames = DefaultValues.RolesForNewPermissions,
                 Permissions = DefaultValues.RequiredPermissionsWithDescription.Select(x => new PermissionContractBase
                 {
                     Name = x.Item1,

@@ -77,7 +77,6 @@
             picture = content[i].picture;
             id = content[i].id;
             orderOfNestedComment = content[i].order;
-            var unixTimeMilliseconds = content[i].time;
             var localizedCreateTime = content[i].timeString;
             var commentBodyStart = `<div class="media-body" data-comment-id=${id}>`;
             let commentImage;
@@ -334,10 +333,14 @@
             return deferredResult.promise();
         }
 
+        const loader = lv.create(null, "lv-circles sm lv-mid lvt-3");
+        $(commentAreaEl).html(loader.getElement());
+
         pageRowEl.removeClass("comment-never-loaded");
         const ajax = this.adminApiClient.loadCommentFile(textId);
         ajax.done(
             (fileContent: ICommentSctucture[]) => {
+                commentAreaEl.empty();
                 if (fileContent.length) {
                     if (fileContent !== null && typeof fileContent !== "undefined") {
                         this.parseLoadedCommentFiles(fileContent, commentAreaEl);
@@ -352,7 +355,7 @@
         ajax.fail(() => {
             const alert = new AlertComponentBuilder(AlertType.Error)
                 .addContent(localization.translateFormat("LoadCommentsFailed", [pageName], "RidicsProject").value).buildElement();
-            commentAreaEl.append(alert);
+            commentAreaEl.html(alert);
             deferredResult.reject();
         });
         return deferredResult.promise();

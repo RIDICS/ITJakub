@@ -36,6 +36,10 @@
                 updateQueryStringParameter(this.configuration.base.url.selectionKey, this.dropDownSelect.getSerializedState());
                 updateQueryStringParameter(this.configuration.base.url.sortAscKey, this.bibliographyModule.isSortedAsc());
                 updateQueryStringParameter(this.configuration.base.url.sortCriteriaKey, this.bibliographyModule.getSortCriteria());
+            },
+            error: (jqXHR) => {
+                this.bibliographyModule.clearLoading();
+                this.bibliographyModule.showAjaxError(jqXHR);
             }
         });
     }
@@ -68,6 +72,10 @@
                 updateQueryStringParameter(this.configuration.base.url.pageKey, pageNumber);
                 updateQueryStringParameter(this.configuration.base.url.sortAscKey, this.bibliographyModule.isSortedAsc());
                 updateQueryStringParameter(this.configuration.base.url.sortCriteriaKey, this.bibliographyModule.getSortCriteria());
+            },
+            error: (jqXHR) => {
+                this.bibliographyModule.clearLoading();
+                this.bibliographyModule.showAjaxError(jqXHR);
             }
         });
     }

@@ -10,7 +10,10 @@
     formImageContent(pageId: number) {
         const pageImageEl = $(".page-image");
         pageImageEl.data("page-id", pageId);
-
+        
+        const loader = lv.create(null, "lv-circles sm lv-mid lvt-5");
+        $(pageImageEl).html(loader.getElement());
+        
         this.apiClient.getImageResourceByPageId(pageId).done(result => {
             pageImageEl.data("image-id", result.id)
                 .data("version-id", result.versionId);
@@ -38,7 +41,7 @@
             wheelzoom($(".page-image").children("img"), {zoom: zoom});
 
             let setMinWidth = true;
-            $('.page-image').on('wheel', (e) =>
+            $('.page-image img').on('wheel', (e) =>
             {
                 const image = $('.page-image img');
                 if(setMinWidth)

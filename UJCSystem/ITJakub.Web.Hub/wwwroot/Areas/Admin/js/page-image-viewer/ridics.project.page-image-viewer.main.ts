@@ -28,6 +28,10 @@
     }
 
     private loadPages() {
+        const pageListing = $(".pages .page-listing");
+        const loader = lv.create(null, "lv-circles sm lv-mid lvt-5");
+        $(pageListing).html(loader.getElement());
+        
         const compositionPagesAjax = this.client.getImagesPageListView(this.projectId);
         const projectImagesElement = $("#project-resource-images");
         compositionPagesAjax.done((data) => {
@@ -42,6 +46,7 @@
             
         });
         compositionPagesAjax.fail(() => {
+            pageListing.empty();
             const error = new AlertComponentBuilder(AlertType.Error)
                 .addContent(localization.translate("ProjectLoadFailed", "RidicsProject").value);
             projectImagesElement.empty().append(error.buildElement());
