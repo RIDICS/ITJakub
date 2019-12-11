@@ -568,55 +568,6 @@ class ReaderLayout {
         });
     }
     
-    actualizePagination(pageIndex: number) {
-        var prevActualPage = $(".page-active").data("page-index");
-        var pager = $(this.readerHeaderDiv).find("ul.pagination");
-        pager.find("li.page-navigation").css("visibility", "visible");
-        pager.find("li.more-pages").css("visibility", "visible");
-        if (pageIndex === 0) {
-            pager.find("li.page-navigation-left").css("visibility", "hidden");
-            pager.find("li.more-pages-left").css("visibility", "hidden");
-        } else if (pageIndex === this.bookHeader.pages.length - 1) {
-            pager.find("li.page-navigation-right").css("visibility", "hidden");
-            pager.find("li.more-pages-right").css("visibility", "hidden");
-        }
-
-        var pages = $(pager).find(".page");
-        $(pages).css("display", "none");
-        $(pages).removeClass("page-active");
-        var actualPage = $(pages).filter(function () {
-            return $(this).data("page-index") === pageIndex;
-        });
-
-        var displayPagesOnEachSide = (this.pagerDisplayPages - 1) / 2;
-        var displayOnRight = displayPagesOnEachSide;
-        var displayOnLeft = displayPagesOnEachSide;
-        var pagesOnLeft = pageIndex;
-        var pagesOnRight = this.bookHeader.pages.length - (pageIndex + 1);
-        if (pagesOnLeft <= displayOnLeft) {
-            displayOnRight += displayOnLeft - pagesOnLeft;
-            pager.find("li.more-pages-left").css("visibility", "hidden");
-        } else if (pagesOnRight <= displayOnRight) {
-            displayOnLeft += displayOnRight - pagesOnRight;
-            pager.find("li.more-pages-right").css("visibility", "hidden");
-        }
-
-        var displayedPages = $(pages).filter(function () {
-            var itemPageIndex = $(this).data("page-index");
-            return (itemPageIndex >= pageIndex - displayOnLeft && itemPageIndex <= pageIndex + displayOnRight);
-        });
-        $(displayedPages).css("display", "inline-block");
-        $(actualPage).addClass("page-active");
-
-    }
-
-    actualizeSlider(pageIndex: number) {
-        var slider = $(this.readerHeaderDiv).find(".slider");
-        $(slider).slider().slider("value", pageIndex);
-        $(slider).find(".ui-slider-handle").find(".tooltip-inner")
-            .html(`${localization.translate("page", "BookReader").value}: ${this.bookHeader.pages[pageIndex].text}`);
-    }
-
     notifyPanelsMovePage(pageIndex: number, scrollTo: boolean) {
         var k: 0;
         for (k = 0; k < this.toolPanels.length; k++) {

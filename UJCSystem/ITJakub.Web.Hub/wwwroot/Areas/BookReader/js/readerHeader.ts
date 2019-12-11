@@ -14,12 +14,20 @@
         this.bookTitle = bookTitle;
         this.init((pageId, pageIndex, scrollTo) => {
             this.parentReader.actualPageIndex = pageIndex;
-            this.parentReader.actualizeSlider(pageIndex);
+            this.actualizeSlider(pageIndex);
             this.parentReader.notifyPanelsMovePage(pageIndex, scrollTo);
             this.parentReader.pageChangedCallback(pageId);
         });
 
     }
+
+    private actualizeSlider(pageIndex: number) {
+        var slider = $(this.readerContainer).find(".slider");
+        $(slider).slider().slider("value", pageIndex);
+        $(slider).find(".ui-slider-handle").find(".tooltip-inner")
+            .html(`${localization.translate("page", "BookReader").value}: ${this.pages[pageIndex].text}`);
+    }
+
 
     public getInnerHtml(deviceType: Device): HTMLDivElement {
         var innerHtml: HTMLDivElement = null;
@@ -602,134 +610,6 @@
 
         bookInfoDiv.appendChild(hiddenDiv);
         return bookInfoDiv;
-    }
-
-    private makePageNavigation(): HTMLDivElement {
-        var paginationUl: HTMLUListElement = document.createElement("ul");
-        paginationUl.classList.add("pagination", "pagination-sm");
-
-        var toLeft = document.createElement("ul");
-        toLeft.classList.add("page-navigation-container", "page-navigation-container-left");
-
-        var liElement: HTMLLIElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-left");
-        var anchor: HTMLAnchorElement = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = "|<";
-        $(anchor).click((event) => {
-            event.stopPropagation();
-            this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", 0);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toLeft.appendChild(liElement);
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-left");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = "<<";
-        $(anchor).click((event) => {
-            event.stopPropagation();
-            this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", this.parentReader.actualPageIndex - 5);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toLeft.appendChild(liElement);
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-left");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = "<";
-        $(anchor).click((event) => {
-            event.stopPropagation();
-            this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", this.parentReader.actualPageIndex - 1);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toLeft.appendChild(liElement);
-
-        var toRight = document.createElement("ul");
-        toRight.classList.add("page-navigation-container", "page-navigation-container-right");
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-right");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = ">";
-        $(anchor).click((event) => {
-            event.stopPropagation();
-            this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", this.parentReader.actualPageIndex + 1);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toRight.appendChild(liElement);
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-right");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = ">>";
-        $(anchor).click((event) => {
-            event.stopPropagation();
-            this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", this.parentReader.actualPageIndex + 5);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toRight.appendChild(liElement);
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("page-navigation page-navigation-right");
-        anchor = document.createElement("a");
-        anchor.href = "#";
-        anchor.innerHTML = ">|";
-        $(anchor).click((event) => {
-            event.stopPropagation();
-            this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", this.parentReader.actualPageIndex - 1);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        toRight.appendChild(liElement);
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("more-pages more-pages-left");
-        liElement.innerHTML = "...";
-        paginationUl.appendChild(liElement);
-
-        $.each(this.pages, (index, page) => {
-            liElement = document.createElement("li");
-            $(liElement).addClass("page");
-            $(liElement).data("page-index", index);
-            anchor = document.createElement("a");
-            anchor.href = "#";
-            anchor.innerHTML = page.text;
-            $(anchor).click((event) => {
-                event.stopPropagation();
-                this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.pageId);
-                return false;
-            });
-            liElement.appendChild(anchor);
-            paginationUl.appendChild(liElement);
-        });
-
-        liElement = document.createElement("li");
-        $(liElement).addClass("more-pages more-pages-right");
-        liElement.innerHTML = "...";
-        paginationUl.appendChild(liElement);
-
-        var listingContainer: HTMLDivElement = document.createElement("div");
-        listingContainer.classList.add("page-navigation-container-helper");
-        listingContainer.classList.add("hidden");
-        if (this.parentReader.deviceType === Device.Mobile) {
-            $(listingContainer).prepend("Str: ");
-            listingContainer.appendChild(paginationUl);
-        } else {
-            listingContainer.appendChild(toLeft);
-            listingContainer.appendChild(paginationUl);
-            listingContainer.appendChild(toRight);
-        }
-        return listingContainer;
     }
 }
 
