@@ -1,4 +1,4 @@
-﻿class BookHeader {
+﻿class BookHeader extends ReaderPagination{
     private parentReader: ReaderLayout;
     private bookId: string;
     private versionId: string;
@@ -6,11 +6,18 @@
     private bookTitle: string;
 
     constructor(parentReader: ReaderLayout, sc: ServerCommunication, headerDiv: HTMLDivElement, bookTitle: string) {
+        super(headerDiv);
         this.parentReader = parentReader;
         this.sc = sc;
         this.bookId = parentReader.getBookId();
         this.versionId = parentReader.getVersionId();
         this.bookTitle = bookTitle;
+        this.init((pageId, pageIndex, scrollTo) => {
+            this.parentReader.actualPageIndex = pageIndex;
+            this.parentReader.actualizeSlider(pageIndex);
+            this.parentReader.notifyPanelsMovePage(pageIndex, scrollTo);
+            this.parentReader.pageChangedCallback(pageId);
+        });
 
     }
 
@@ -361,7 +368,11 @@
         controlsDiv.appendChild(this.makeSlider());
         controlsDiv.appendChild(this.makeViewButtons(Device.Desktop));
         controlsDiv.appendChild(this.makeToolButtons(Device.Desktop));
-        controlsDiv.appendChild(this.makePageNavigation());
+        controlsDiv.appendChild(this.createPagination(true, pageIndex => {
+            this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", pageIndex);
+        }, pageIndex => {
+            this.parentReader.readerLayout.eventHub.emit("navigationClicked", pageIndex);
+        }));
         headerDiv.appendChild(controlsDiv);
 
         return headerDiv;
@@ -403,15 +414,15 @@
         $(pageInputButton).click(() => {
             var pageName = $("#pageInputText").val();
             var pageIndex: number = -1;
-            for (var i = 0; i < this.parentReader.pages.length; i++) {
-                if (this.parentReader.pages[i].text === pageName) {
+            for (var i = 0; i < this.pages.length; i++) {
+                if (this.pages[i].text === pageName) {
                     pageIndex = i;
                     break;
                 }
             }
 
-            if (this.parentReader.pages[pageIndex] !== undefined) {
-                var page: BookPage = this.parentReader.pages[pageIndex];
+            if (this.pages[pageIndex] !== undefined) {
+                var page: BookPage = this.pages[pageIndex];
                 this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.pageId);
             }
             else {
@@ -443,7 +454,7 @@
         $(slider).addClass("slider");
         $(slider).slider({
             min: 0,
-            max: this.parentReader.pages.length - 1,
+            max: this.pages.length - 1,
             value: 0,
             start: (event) => {
                 $(event.target as Node as HTMLElement).find(".ui-slider-handle").find(".slider-tip").show();
@@ -454,8 +465,8 @@
             slide: (event, ui) => {
                 $(event.target as Node as HTMLElement).find(".ui-slider-handle").find(".slider-tip").stop(true, true);
                 $(event.target as Node as HTMLElement).find(".ui-slider-handle").find(".slider-tip").show();
-                if (this.parentReader.pages[ui.value] !== undefined) {
-                    $(event.target as Node as HTMLElement).find(".ui-slider-handle").find(".tooltip-inner").html("Strana: " + this.parentReader.pages[ui.value].text);
+                if (this.pages[ui.value] !== undefined) {
+                    $(event.target as Node as HTMLElement).find(".ui-slider-handle").find(".tooltip-inner").html("Strana: " + this.pages[ui.value].text);
                 } else {
                     console.error("missing page " + ui.value);
                 }
@@ -475,8 +486,8 @@
 
         var innerTooltip: HTMLDivElement = document.createElement("div");
         $(innerTooltip).addClass("tooltip-inner");
-        if (this.parentReader.pages[0] !== undefined) {
-            $(innerTooltip).html(`${localization.translate("page", "BookReader").value}: ${this.parentReader.pages[0].text}`);
+        if (this.pages[0] !== undefined) {
+            $(innerTooltip).html(`${localization.translate("page", "BookReader").value}: ${this.pages[0].text}`);
         }
         else {
             console.error("missing page " + 0);
@@ -682,7 +693,7 @@
         liElement.innerHTML = "...";
         paginationUl.appendChild(liElement);
 
-        $.each(this.parentReader.pages, (index, page) => {
+        $.each(this.pages, (index, page) => {
             liElement = document.createElement("li");
             $(liElement).addClass("page");
             $(liElement).data("page-index", index);

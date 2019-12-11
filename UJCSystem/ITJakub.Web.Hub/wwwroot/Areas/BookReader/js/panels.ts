@@ -581,7 +581,7 @@ class TermsResultPanel extends TermsPanel {
 
         this.termsResultItemsDiv.appendChild(this.termsOrderedList);
 
-        var actualPage = this.parentReader.pages[this.parentReader.actualPageIndex];
+        var actualPage = this.parentReader.bookHeader.pages[this.parentReader.actualPageIndex];
         this.loadTermsOnPage(actualPage);
         if (typeof this.termClickedCallback === "undefined") {
             this.termClickedCallback = (termId: number, text: string) => {
@@ -716,8 +716,8 @@ class TextPanel extends ContentViewPanel {
         var textAreaDiv: HTMLDivElement = window.document.createElement("div");
         $(textAreaDiv).addClass("reader-text");
 
-        for (var i = 0; i < rootReference.parentReader.pages.length; i++) {
-            let page: BookPage = rootReference.parentReader.pages[i];
+        for (var i = 0; i < rootReference.parentReader.bookHeader.pages.length; i++) {
+            let page: BookPage = rootReference.parentReader.bookHeader.pages[i];
 
             var pageTextDiv: HTMLDivElement = window.document.createElement("div");
             $(pageTextDiv).addClass("page");
@@ -749,12 +749,12 @@ class TextPanel extends ContentViewPanel {
         //fetch page only if exist
         this.parentReader.hasBookPage(this.parentReader.bookId, this.parentReader.versionId, () => {
             for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
-                this.displayPage(this.parentReader.pages[pageIndex - j], false);
+                this.displayPage(this.parentReader.bookHeader.pages[pageIndex - j], false);
             }
-            for (var i = 1; pageIndex + i < this.parentReader.pages.length && i <= this.preloadPagesAfter; i++) {
-                this.displayPage(this.parentReader.pages[pageIndex + i], false);
+            for (var i = 1; pageIndex + i < this.parentReader.bookHeader.pages.length && i <= this.preloadPagesAfter; i++) {
+                this.displayPage(this.parentReader.bookHeader.pages[pageIndex + i], false);
             }
-            this.displayPage(this.parentReader.pages[pageIndex], scrollTo);
+            this.displayPage(this.parentReader.bookHeader.pages[pageIndex], scrollTo);
         });
     }
 
@@ -802,7 +802,7 @@ class TextPanel extends ContentViewPanel {
             $(pageContainer).removeClass("unloaded");
 
             if (this.parentReader.clickedMoveToPage) {
-                this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex, true);
+                this.parentReader.bookHeader.moveToPageNumber(this.parentReader.actualPageIndex, true);
             }
 
             if (onSuccess != null) {
@@ -833,7 +833,7 @@ class TextPanel extends ContentViewPanel {
             $(pageContainer).addClass("search-loaded");
 
             if (this.parentReader.clickedMoveToPage) {
-                this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex, true);
+                this.parentReader.bookHeader.moveToPageNumber(this.parentReader.actualPageIndex, true);
             }
 
             if (onSuccess != null) {
@@ -866,7 +866,7 @@ class ImagePanel extends ContentViewPanel {
     }
 
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {
-        var pageInfo = this.parentReader.pages[pageIndex];
+        var pageInfo = this.parentReader.bookHeader.pages[pageIndex];
         $(this.innerContent).empty();
 
         var image: HTMLImageElement = document.createElement("img");

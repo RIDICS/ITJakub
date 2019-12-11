@@ -11,7 +11,6 @@ class ReaderLayout {
     readerHeaderDiv: HTMLDivElement;
     sliderOnPage: number;
     actualPageIndex: number;
-    pages: Array<BookPage>;
     pagesById: IDictionary<BookPage>;
     bookmarks: Array<IBookmarkPosition>;
     pagerDisplayPages: number;
@@ -22,7 +21,8 @@ class ReaderLayout {
     loadedBookContent: boolean;
     sc: ServerCommunication;
     deviceType: Device;
-
+    bookHeader: BookHeader;
+    
     clickedMoveToPage: boolean;
 
     private bookmarksPanel: BookmarksPanel;
@@ -68,11 +68,13 @@ class ReaderLayout {
     }
 
     public makeReader(bookId: string, versionId: string, bookTitle: string, pageList: IPage[]) {
+
         this.bookId = bookId;
         this.versionId = versionId;
         this.actualPageIndex = 0;
         this.sliderOnPage = 0;
-        this.pages = new Array<BookPage>();
+        this.bookHeader = new BookHeader(this, this.sc, this.readerHeaderDiv, bookTitle);
+        this.bookHeader.pages = new Array<BookPage>();
         this.pagesById = {};
         this.bookmarks = new Array<IBookmarkPosition>(pageList.length);
         this.toolPanels = new Array<ToolPanel>();
@@ -82,7 +84,7 @@ class ReaderLayout {
             var page = pageList[i];
             var bookPageItem = new BookPage(page.id, page.name, page.position);
 
-            this.pages.push(bookPageItem);
+            this.bookHeader.pages.push(bookPageItem);
             this.pagesById[bookPageItem.pageId] = bookPageItem;
         }
 
@@ -96,15 +98,14 @@ class ReaderLayout {
             }
         }
         this.addListeners();
-        var bookHeader = new BookHeader(this, this.sc, this.readerHeaderDiv, bookTitle);
-        this.readerHeaderDiv.appendChild(bookHeader.getInnerHtml(this.deviceType));
+        this.readerHeaderDiv.appendChild(this.bookHeader.getInnerHtml(this.deviceType));
 
         this.loadBookmarks();
         this.newFavoriteDialog.make();
         this.newFavoriteDialog.setSaveCallback(this.createBookmarks.bind(this));
 
         $(window as any).resize(() => {
-            this.addResponsiveBehavior(bookHeader);
+            this.addResponsiveBehavior(this.bookHeader);
         });
     }
 
@@ -160,7 +161,7 @@ class ReaderLayout {
 
     private attachReaderLayoutEvents(readerLayout: GoldenLayout) {
         readerLayout.on("stateChanged", () => {
-            this.moveToPageNumber(this.actualPageIndex, true);
+            this.bookHeader.moveToPageNumber(this.actualPageIndex, true);
         });
 
         // Prevent dragging tab if there is only one in layout
@@ -256,7 +257,7 @@ class ReaderLayout {
     public activateTypeahead(input: HTMLInputElement) {
 
         var pagesTexts = new Array<ISearchResult>();
-        $.each(this.pages, (index, page: BookPage) => {
+        $.each(this.bookHeader.pages, (index, page: BookPage) => {
             pagesTexts.push({index: index, pageText: page.text});
         });
 
@@ -308,7 +309,7 @@ class ReaderLayout {
         }
 
         var pageIndex: number = this.actualPageIndex;
-        var page: BookPage = this.pages[pageIndex];
+        var page: BookPage = this.bookHeader.pages[pageIndex];
         var bookmarkPosition: IBookmarkPosition = this.bookmarks[pageIndex];
 
         if (!bookmarkPosition) {
@@ -384,7 +385,7 @@ class ReaderLayout {
     }
 
     private createBookmarkSpan(pageIndex: number, pageName: string, pageId: number, title: string, tooltipTitle: string | (() => string), favoriteLabel: IFavoriteLabel) {
-        var positionStep = 100 / (this.pages.length - 1);
+        var positionStep = 100 / (this.bookHeader.pages.length - 1);
         var bookmarkSpan = document.createElement("span");
         var $bookmarkSpan = $(bookmarkSpan);
 
@@ -395,7 +396,7 @@ class ReaderLayout {
         $bookmarkSpan.data("title", title);
 
         $bookmarkSpan.click(() => {
-            this.moveToPage(pageId, true);
+            this.bookHeader.moveToPage(pageId, true);
         });
 
         if (favoriteLabel) {
@@ -474,8 +475,8 @@ class ReaderLayout {
     }
 
     private loadBookmark(actualBookmark: IBookPageBookmark) {
-        for (var pageIndex = 0; pageIndex < this.pages.length; pageIndex++) {
-            var actualPage = this.pages[pageIndex];
+        for (var pageIndex = 0; pageIndex < this.bookHeader.pages.length; pageIndex++) {
+            var actualPage = this.bookHeader.pages[pageIndex];
             if (actualBookmark.pageId === actualPage.pageId) {
                 var bookmarkPosition = this.bookmarks[pageIndex];
                 if (!bookmarkPosition) {
@@ -497,7 +498,7 @@ class ReaderLayout {
 
     recreateAndShowBookmarkSpan(bookmarkPosition: IBookmarkPosition) {
         var pageIndex = bookmarkPosition.pageIndex;
-        var actualPage = this.pages[pageIndex];
+        var actualPage = this.bookHeader.pages[pageIndex];
 
         $(bookmarkPosition.bookmarkSpan).remove();
 
@@ -536,7 +537,7 @@ class ReaderLayout {
         if (bookmarkPosition.bookmarks.length === 1) {
             $(bookmarkPosition.bookmarkSpan).data("title", title);
         }
-
+        
         this.favoriteManager.updateFavoriteItem(bookmarkId, title, () => {
         });
     }
@@ -566,40 +567,7 @@ class ReaderLayout {
             postRemoveAction();
         });
     }
-
-    moveToPage(pageId: number, scrollTo: boolean) {
-        var pageIndex: number = -1;
-        for (var i = 0; i < this.pages.length; i++) {
-            if (this.pages[i].pageId === pageId) {
-                pageIndex = i;
-                break;
-            }
-        }
-        if (pageIndex >= 0 && pageIndex < this.pages.length) {
-            this.moveToPageNumber(pageIndex, scrollTo);
-
-        } else {
-            console.log("Page with id '" + pageId + "' does not exist");
-            //TODO tell user page not exist  
-        }
-    }
-
-    moveToPageNumber(pageIndex: number, scrollTo: boolean) {
-        if (pageIndex < 0) {
-            pageIndex = 0;
-        } else if (pageIndex >= this.pages.length) {
-            pageIndex = this.pages.length - 1;
-        }
-
-        this.actualPageIndex = pageIndex;
-        this.actualizeSlider(pageIndex);
-        this.actualizePagination(pageIndex);
-        this.notifyPanelsMovePage(pageIndex, scrollTo);
-
-        var pageId = this.pages[pageIndex].pageId;
-        this.pageChangedCallback(pageId);
-    }
-
+    
     actualizePagination(pageIndex: number) {
         var prevActualPage = $(".page-active").data("page-index");
         var pager = $(this.readerHeaderDiv).find("ul.pagination");
@@ -608,7 +576,7 @@ class ReaderLayout {
         if (pageIndex === 0) {
             pager.find("li.page-navigation-left").css("visibility", "hidden");
             pager.find("li.more-pages-left").css("visibility", "hidden");
-        } else if (pageIndex === this.pages.length - 1) {
+        } else if (pageIndex === this.bookHeader.pages.length - 1) {
             pager.find("li.page-navigation-right").css("visibility", "hidden");
             pager.find("li.more-pages-right").css("visibility", "hidden");
         }
@@ -624,7 +592,7 @@ class ReaderLayout {
         var displayOnRight = displayPagesOnEachSide;
         var displayOnLeft = displayPagesOnEachSide;
         var pagesOnLeft = pageIndex;
-        var pagesOnRight = this.pages.length - (pageIndex + 1);
+        var pagesOnRight = this.bookHeader.pages.length - (pageIndex + 1);
         if (pagesOnLeft <= displayOnLeft) {
             displayOnRight += displayOnLeft - pagesOnLeft;
             pager.find("li.more-pages-left").css("visibility", "hidden");
@@ -646,7 +614,7 @@ class ReaderLayout {
         var slider = $(this.readerHeaderDiv).find(".slider");
         $(slider).slider().slider("value", pageIndex);
         $(slider).find(".ui-slider-handle").find(".tooltip-inner")
-            .html(`${localization.translate("page", "BookReader").value}: ${this.pages[pageIndex].text}`);
+            .html(`${localization.translate("page", "BookReader").value}: ${this.bookHeader.pages[pageIndex].text}`);
     }
 
     notifyPanelsMovePage(pageIndex: number, scrollTo: boolean) {
@@ -661,11 +629,11 @@ class ReaderLayout {
     }
 
     getActualPage(): BookPage {
-        return this.pages[this.actualPageIndex];
+        return this.bookHeader.pages[this.actualPageIndex];
     }
 
     getPageByIndex(pageIndex: number): BookPage {
-        return this.pages[pageIndex];
+        return this.bookHeader.pages[pageIndex];
     }
 
     getBookId(): string {
@@ -735,7 +703,7 @@ class ReaderLayout {
             var pageDiv = document.getElementById(page.id.toString());
             $(pageDiv).addClass("search-unloaded");
         }
-        this.moveToPageNumber(this.actualPageIndex, true);
+        this.bookHeader.moveToPageNumber(this.actualPageIndex, true);
     }
 
     searchPanelShowLoading() {
@@ -912,7 +880,7 @@ class ReaderLayout {
     private addListeners() {
         this.readerLayout.eventHub.on("navigationClicked", (pageNumber: number) => {
             this.clickedMoveToPage = true;
-            this.moveToPage(pageNumber, true);
+            this.bookHeader.moveToPage(pageNumber, true);
         });
 
         this.readerLayout.on("windowOpened", () => {
@@ -921,11 +889,11 @@ class ReaderLayout {
 
         this.readerLayout.eventHub.on("moveToPageNumber", (pageNumber: number) => {
             this.clickedMoveToPage = true;
-            this.moveToPageNumber(pageNumber, true);
+            this.bookHeader.moveToPageNumber(pageNumber, true);
         });
 
         this.readerLayout.eventHub.on("scrollPage", (pageWithMinOffsetId) => {
-            this.moveToPage(pageWithMinOffsetId, false);
+            this.bookHeader.moveToPage(pageWithMinOffsetId, false);
         });
     }
 }

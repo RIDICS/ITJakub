@@ -37,7 +37,7 @@
             decodedText = decodeURIComponent(initPageId);
             decodedText = replaceSpecialChars(decodedText);
             var pageId = Number(decodedText);
-            this.readerPlugin.moveToPage(pageId, true);
+            this.readerPlugin.bookHeader.moveToPage(pageId, true);
         }
 
         //label item in main menu
