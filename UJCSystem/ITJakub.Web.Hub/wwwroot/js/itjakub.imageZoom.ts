@@ -49,8 +49,9 @@
 
     private initializeZoom() {
 
-        this.image.width = this.originalWidth;
-        this.image.height = this.originalHeight;
+        $(this.image)
+            .css("min-width", this.originalWidth)
+            .css("min-height", this.originalHeight);
         var onWheel = this.onWheel.bind(this);
         this.image.removeEventListener("wheel", onWheel);
         this.image.addEventListener("wheel", onWheel);

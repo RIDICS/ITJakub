@@ -13,9 +13,9 @@
         this.versionId = parentReader.getVersionId();
         this.bookTitle = bookTitle;
         this.init((pageId, pageIndex, scrollTo) => {
+            this.parentReader.notifyPanelsMovePage(pageIndex, scrollTo);
             this.parentReader.actualPageIndex = pageIndex;
             this.actualizeSlider(pageIndex);
-            this.parentReader.notifyPanelsMovePage(pageIndex, scrollTo);
             this.parentReader.pageChangedCallback(pageId);
         });
 

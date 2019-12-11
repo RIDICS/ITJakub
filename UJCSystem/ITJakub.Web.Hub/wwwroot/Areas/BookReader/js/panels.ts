@@ -866,9 +866,12 @@ class ImagePanel extends ContentViewPanel {
     }
 
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {
+        if(pageIndex === this.parentReader.actualPageIndex && !$(this.innerContent).is(":empty")) {
+            return;
+        }
         var pageInfo = this.parentReader.bookHeader.pages[pageIndex];
         $(this.innerContent).empty();
-
+        
         var image: HTMLImageElement = document.createElement("img");
         image.classList.add("reader-image");
         image.src = getBaseUrl() + "Reader/GetBookImage?snapshotId=" + this.parentReader.versionId + "&pageId=" + pageInfo.pageId;
