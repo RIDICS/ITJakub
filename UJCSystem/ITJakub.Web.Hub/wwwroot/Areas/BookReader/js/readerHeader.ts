@@ -74,7 +74,7 @@
         var bookDetailDiv = document.createElement("div");
         $(bookDetailDiv).addClass("book-detail-wrapper");
         var bookDetailHeader = document.createElement("h3");
-        $(bookDetailHeader).append(localization.translate("informations", "BookReader").value);
+        $(bookDetailHeader).append(localization.translate("information", "BookReader").value);
         bookDetailDiv.appendChild(bookDetailHeader);
 
         var bookDetail: JQueryXHR = this.sc.getBookDetail(this.bookId);

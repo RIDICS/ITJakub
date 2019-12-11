@@ -24,7 +24,7 @@
     "noEditionNote": "Toto dílo nemá ediční poznámku",
     "failedToLoadNote": "Ediční poznámku se nepodařilo načíst",
     
-    "informations": "Informace o díle",
+    "information": "Informace o díle",
     "editor": "Editor",
     "original": "Předloha",
     "relicAbbr": "Zkratka památky",
@@ -63,7 +63,7 @@
     "DownloadChapter": "Stáhnout kapitolu",
     "DownloadAudiobook": "Stáhnout audioknihu:",
 
-    "NoOccurencesOnPage": "Žádné výskyty na stránce.",
+    "NoOccurrencesOnPage": "Žádné výskyty na stránce.",
     "NoTopicOnPage": "Na této stránce se nenachází žádné téma",
     "LoadingTopicsError": "Chyba při načítání témat na stránce '{0}'",
     "UseSearch": "Pro zobrazení výskytů použijte vyhledávání.",

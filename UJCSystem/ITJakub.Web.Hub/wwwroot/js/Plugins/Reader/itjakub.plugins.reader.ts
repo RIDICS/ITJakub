@@ -2377,7 +2377,7 @@ class TermsPanelOld extends LeftSidePanel {
 
         if (searchResults.length === 0) {
             $(this.searchResultOrderedList).addClass("no-items");
-            $(this.searchResultOrderedList).append(localization.translate("NoOccurencesOnPage", "PluginsJs").value);
+            $(this.searchResultOrderedList).append(localization.translate("NoOccurrencesOnPage", "PluginsJs").value);
         }
     }
 

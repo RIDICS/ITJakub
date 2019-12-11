@@ -2,8 +2,6 @@
 //import GoldenLayout = require("golden-layout");
 //declare var GoldenLayout;
 
-var localization: Localization;
-
 class ReaderLayout {
     private favoriteManager: FavoriteManager;
     protected newFavoriteDialog: NewFavoriteDialog;

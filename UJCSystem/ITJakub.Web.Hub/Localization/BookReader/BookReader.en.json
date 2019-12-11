@@ -4,7 +4,7 @@
   "dictionary": {
     //Tab names
     "text": "Text",
-    "audio": "Audio tracks",
+    "audio": "Audio track",
     "image": "Image",
     "content": "Book contents",
     "bookmarks": "Bookmarks",
@@ -24,7 +24,7 @@
     "noEditionNote": "This book has no edition note",
     "failedToLoadNote": "Failed to load edition note",
 
-    "informations": "Book informations",
+    "information": "Book information",
     "editor": "Editor",
     "original": "Original book",
     "relicAbbr": "Relic abbreviation",
@@ -32,7 +32,7 @@
     "literaryType": "translate[Literární druh]",
     "literaryGenre": "Literary genre",
     "EditionLastModification": "Last book edition",
-    "FailedToLoadInfo": "Failed to load book informations",
+    "FailedToLoadInfo": "Failed to load book information",
 
     "failedToLoadAuthors": "Failed to load authors",
 
@@ -63,7 +63,7 @@
     "DownloadChapter": "Download chapter",
     "DownloadAudiobook": "Download audiobook:",
 
-    "NoOccurencesOnPage": "No occurences on curren page",
+    "NoOccurrencesOnPage": "No occurrences on current page",
     "NoTopicOnPage": "No topic on current page",
     "LoadingTopicsError": "Failed to load terms on page '{0}'",
     "UseSearch": "For display search results please first use search.",
