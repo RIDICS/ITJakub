@@ -385,7 +385,11 @@
         var controlsDiv = document.createElement("div");
         $(controlsDiv).addClass("reader-controls content-container");
         controlsDiv.appendChild(this.makeViewButtons(Device.Mobile));
-        controlsDiv.appendChild(this.makePageNavigation());
+        controlsDiv.appendChild(this.createPagination(true, pageIndex => {
+            this.parentReader.readerLayout.eventHub.emit("moveToPageNumber", pageIndex);
+        }, pageIndex => {
+            this.parentReader.readerLayout.eventHub.emit("navigationClicked", pageIndex);
+        }));
         controlsDiv.appendChild(this.makePageInput());
         controlsDiv.appendChild(this.makeToolButtons(Device.Mobile));
         headerDiv.appendChild(controlsDiv);

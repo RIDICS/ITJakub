@@ -530,6 +530,12 @@ button {
     }
   }
 
+  @media screen and (max-width: @mobile-max-width) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
   &:after {
     content: '';
     display: block;
