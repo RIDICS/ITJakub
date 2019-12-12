@@ -12,9 +12,9 @@
     init() {
         this.showLoading();
         $("#project-layout-content").find("*").off();
-        this.createEntryButtonEl.text(localization.translate("CreateResponsiblePerson", "KeyTable").value);
-        this.changeEntryButtonEl.text(localization.translate("RenameResponsiblePerson", "KeyTable").value);
-        this.deleteEntryButtonEl.text(localization.translate("DeleteResponsiblePerson", "KeyTable").value);
+        this.createEntryButtonEl.text(localization.translate("Create", "KeyTable").value);
+        this.changeEntryButtonEl.text(localization.translate("Change", "KeyTable").value);
+        this.deleteEntryButtonEl.text(localization.translate("Delete", "KeyTable").value);
         this.titleEl.text(localization.translate("ResponsiblePersonHeadline", "KeyTable").value);
         this.unbindEventsDialog();
         const initialPage = 1;
@@ -44,7 +44,7 @@
             listEl.append(this.generateListStructure(data.list));
             this.makeSelectable(listEl);
         }).fail(() => {
-            const error = new AlertComponentBuilder(AlertType.Error).addContent("Failed to load editor");
+            const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("EditorLoadError", "KeyTable").value);
             $("#project-layout-content").empty().append(error.buildElement());
         });
     }
@@ -72,9 +72,9 @@
         $(".crud-buttons-div").on("click",
             ".create-key-table-entry",
             () => {
-                this.gui.showAuthorInputDialog("Create new responsible person",
-                    "Responsible person's name:",
-                    "Responsible person's surname:");
+                this.gui.showAuthorInputDialog(localization.translate("RespPerInputHeadline", "KeyTable").value,
+                    localization.translate("RespPerNameInput", "KeyTable").value,
+                    localization.translate("RespPerSurnameInput", "KeyTable").value);
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const nameTextareaEl = $(".primary-input-author-textarea");
@@ -85,12 +85,12 @@
                         newResponsiblePersonAjax.done(() => {
                             nameTextareaEl.val("");
                             surnameTextareaEl.val("");
-                            this.gui.showInfoDialog("Success", "New responsible person has been created");
+                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("RespPerCreateSuccess", "KeyTable").value);
                             $(".info-dialog-ok-button").off();
                             this.updateContentAfterChange();
                         });
                         newResponsiblePersonAjax.fail(() => {
-                            this.gui.showInfoDialog("Error", "New responsible person has not been created");
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("RespPerCreateError", "KeyTable").value);
                             $(".info-dialog-ok-button").off();
                         });
                     });
@@ -109,9 +109,9 @@
                     const originalSurname = selectedPageEl.children(".person-surname").text();
                     nameTextareaEl.val(originalName);
                     surnameTextareaEl.val(originalSurname);
-                    this.gui.showAuthorInputDialog("Rename responsible person",
-                        "Responsible person's name:",
-                        "Responsible person's surname:");
+                    this.gui.showAuthorInputDialog(localization.translate("RespPerInputHeadline", "KeyTable").value,
+                        localization.translate("RespPerNameInput", "KeyTable").value,
+                        localization.translate("RespPerSurnameInput", "KeyTable").value);
                     $(".info-dialog-ok-button").on("click",
                         () => {
                             const nameString = nameTextareaEl.val() as string;
@@ -123,17 +123,17 @@
                             renameAjax.done(() => {
                                 nameTextareaEl.val("");
                                 surnameTextareaEl.val("");
-                                this.gui.showInfoDialog("Success", "Responsible person has been renamed");
+                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("RespPerRenameSuccess", "KeyTable").value);
                                 $(".info-dialog-ok-button").off();
                                 this.updateContentAfterChange();
                             });
                             renameAjax.fail(() => {
-                                this.gui.showInfoDialog("Error", "Responsible person has not been renamed");
+                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("RespPerRenameError", "KeyTable").value);
                                 $(".info-dialog-ok-button").off();
                             });
                         });
                 } else {
-                    this.gui.showInfoDialog("Warning", "Please choose a responsible person");
+                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("RespPerInfoMessage", "KeyTable").value);
                 }
             });
     }
@@ -144,24 +144,23 @@
             () => {
                 const selectedPageEl = $(".list-group").find(".page-list-item-selected");
                 if (selectedPageEl.length) {
-                    this.gui.showConfirmationDialog("Confirm",
-                        "Are you sure you want to delete this responsible person?");
+                    this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("RespPerConfirmMessage", "KeyTable").value);
                     $(".confirmation-ok-button").on("click",
                         () => {
                             const id = selectedPageEl.data("key-id") as number;
                             const deleteAjax = this.util.deleteResponsiblePerson(id);
                             deleteAjax.done(() => {
                                 $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Success", "Responsible person deletion was successful");
+                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("RespPerDeleteSuccess", "KeyTable").value);
                                 this.updateContentAfterChange();
                             });
                             deleteAjax.fail(() => {
                                 $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Error", "Responsible person deletion was not successful");
+                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("RespPerDeleteError", "KeyTable").value);
                             });
                         });
                 } else {
-                    this.gui.showInfoDialog("Warning", "Please choose a responsible person");
+                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("RespPerInfoMessage", "KeyTable").value);
                 }
             });
     }

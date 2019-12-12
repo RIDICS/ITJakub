@@ -11,9 +11,9 @@
     init() {
         this.showLoading();
         $("#project-layout-content").find("*").off();
-        this.createEntryButtonEl.text(localization.translate("CreateOriginalAuthor", "KeyTable").value);
-        this.changeEntryButtonEl.text(localization.translate("RenameOriginalAuthor", "KeyTable").value);
-        this.deleteEntryButtonEl.text(localization.translate("DeleteOriginalAuthor", "KeyTable").value);
+        this.createEntryButtonEl.text(localization.translate("Create", "KeyTable").value);
+        this.changeEntryButtonEl.text(localization.translate("Change", "KeyTable").value);
+        this.deleteEntryButtonEl.text(localization.translate("Delete", "KeyTable").value);
         this.titleEl.text(localization.translate("OriginalAuthorHeadline", "KeyTable").value);
         this.unbindEventsDialog();
         {
@@ -45,7 +45,7 @@
             listEl.append(this.generateListStructure(data.list));
             this.makeSelectable(listEl);
         }).fail(() => {
-            const error = new AlertComponentBuilder(AlertType.Error).addContent("Failed to load editor");
+            const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("EditorLoadError", "KeyTable").value);
             $("#project-layout-content").empty().append(error.buildElement());
         });
     }
@@ -73,9 +73,9 @@
         $(".crud-buttons-div").on("click",
             ".create-key-table-entry",
             () => {
-                this.gui.showAuthorInputDialog("Create new author",
-                    "Please input new author's name:",
-                    "Please input new author's surname:");
+                this.gui.showAuthorInputDialog(localization.translate("OrigAuthInputHeadline", "KeyTable").value,
+                    localization.translate("OrigAuthNameInput", "KeyTable").value,
+                    localization.translate("OrigAuthSurnameInput", "KeyTable").value);
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const nameTextareaEl = $(".primary-input-author-textarea");
@@ -86,12 +86,12 @@
                         newAuthorAjax.done(() => {
                             nameTextareaEl.val("");
                             surnameTextareaEl.val("");
-                            this.gui.showInfoDialog("Success", "New author has been created");
+                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("OrigAuthCreateSuccess", "KeyTable").value);
                             $(".info-dialog-ok-button").off();
                             this.updateContentAfterChange();
                         });
                         newAuthorAjax.fail(() => {
-                            this.gui.showInfoDialog("Error", "New author has not been created");
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("OrigAuthCreateError", "KeyTable").value);
                             $(".info-dialog-ok-button").off();
                         });
                     });
@@ -104,9 +104,9 @@
             () => {
                 const selectedPageEl = $(".list-group").children(".page-list-item-selected");
                 if (selectedPageEl.length) {
-                    this.gui.showAuthorInputDialog("Rename author's name",
-                        "Please input new author's name:",
-                        "Please input new author's surname:");
+                    this.gui.showAuthorInputDialog(localization.translate("OrigAuthInputHeadline", "KeyTable").value,
+                        localization.translate("OrigAuthNameInput", "KeyTable").value,
+                        localization.translate("OrigAuthSurnameInput", "KeyTable").value);
                     const nameTextareaEl = $(".primary-input-author-textarea");
                     const surnameTextareaEl = $(".secondary-input-author-textarea");
                     const originalName = selectedPageEl.children(".person-name").text();
@@ -122,17 +122,17 @@
                             renameAjax.done(() => {
                                 nameTextareaEl.val("");
                                 surnameTextareaEl.val("");
-                                this.gui.showInfoDialog("Success", "Author has been renamed");
+                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("OrigAuthRenameSuccess", "KeyTable").value);
                                 $(".info-dialog-ok-button").off();
                                 this.updateContentAfterChange();
                             });
                             renameAjax.fail(() => {
-                                this.gui.showInfoDialog("Error", "Author has not been renamed");
+                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("OrigAuthRenameError", "KeyTable").value);
                                 $(".info-dialog-ok-button").off();
                             });
                         });
                 } else {
-                    this.gui.showInfoDialog("Warning", "Please choose an author");
+                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("OrigAuthInfoMessage", "KeyTable").value);
                 }
             });
     }
@@ -143,23 +143,23 @@
             () => {
                 const selectedPageEl = $(".list-group").find(".page-list-item-selected");
                 if (selectedPageEl.length) {
-                    this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this author?");
+                    this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("OrigAuthConfirmMessage", "KeyTable").value);
                     $(".confirmation-ok-button").on("click",
                         () => {
                             const id = selectedPageEl.data("key-id") as number;
                             const deleteAjax = this.util.deleteOriginalAuthor(id);
                             deleteAjax.done(() => {
                                 $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Success", "Author deletion was successful");
+                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("OrigAuthDeleteSuccess", "KeyTable").value);
                                 this.updateContentAfterChange();
                             });
                             deleteAjax.fail(() => {
                                 $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Error", "Author deletion was not successful");
+                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("OrigAuthDeleteError", "KeyTable").value);
                             });
                         });
                 } else {
-                    this.gui.showInfoDialog("Warning", "Please choose an author");
+                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("OrigAuthInfoMessage", "KeyTable").value);
                 }
             });
     }

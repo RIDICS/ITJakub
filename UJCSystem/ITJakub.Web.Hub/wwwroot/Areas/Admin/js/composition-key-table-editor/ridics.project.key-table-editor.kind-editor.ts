@@ -12,9 +12,9 @@
     init() {
         this.showLoading();
         $("#project-layout-content").find("*").off();
-        this.createEntryButtonEl.text(localization.translate("CreateKind", "KeyTable").value);
-        this.changeEntryButtonEl.text(localization.translate("RenameKind", "KeyTable").value);
-        this.deleteEntryButtonEl.text(localization.translate("DeleteKind", "KeyTable").value);
+        this.createEntryButtonEl.text(localization.translate("Create", "KeyTable").value);
+        this.changeEntryButtonEl.text(localization.translate("Change", "KeyTable").value);
+        this.deleteEntryButtonEl.text(localization.translate("Delete", "KeyTable").value);
         this.titleEl.text(localization.translate("KindHeadline", "KeyTable").value);
         this.unbindEventsDialog();
         this.util.getLitararyKindList().done((data: ILiteraryKindContract[]) => {
@@ -28,7 +28,7 @@
             this.literaryKindDelete();
             this.literaryKindCreation();
         }).fail(() => {
-            const error = new AlertComponentBuilder(AlertType.Error).addContent("Failed to load editor");
+            const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("EditorLoadError", "KeyTable").value);
             $("#project-layout-content").empty().append(error.buildElement());
         });
     }
@@ -56,7 +56,7 @@
             const itemsOnPage = this.numberOfItemsPerPage;
             this.initPagination(data.length, itemsOnPage, this.loadPage.bind(this));
         }).fail(() => {
-            this.gui.showInfoDialog("Warning", "Connection to server lost.\nAutomatic page reload is not possible.");
+            this.gui.showInfoDialog(localization.translate("ConnectionErrorHeadline", "KeyTable").value, localization.translate("ConnectionErrorMessage", "KeyTable").value);
         });
     }
 
@@ -64,7 +64,7 @@
         $(".crud-buttons-div").on("click",
             ".create-key-table-entry",
             () => {
-                this.gui.showSingleInputDialog("Name input", "Please input new literary kind name:");
+                this.gui.showSingleInputDialog(localization.translate("KindInputHeadline", "KeyTable").value, localization.translate("KindNameInput", "KeyTable").value);
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const textareaEl = $(".input-dialog-textarea");
@@ -72,12 +72,12 @@
                         const newLiteraryKindAjax = this.util.createNewLiteraryKind(nameString);
                         newLiteraryKindAjax.done(() => {
                             textareaEl.val("");
-                            this.gui.showInfoDialog("Success", "New literary kind has been created");
+                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("KindCreateSuccess", "KeyTable").value);
                             $(".info-dialog-ok-button").off();
                             this.updateContentAfterChange();
                         });
                         newLiteraryKindAjax.fail(() => {
-                            this.gui.showInfoDialog("Error", "New literary kind has not been created");
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("KindCreateError", "KeyTable").value);
                             $(".info-dialog-ok-button").off();
                         });
                     });
@@ -90,7 +90,7 @@
             () => {
                 const selectedPageEl = $(".list-group").children(".page-list-item-selected");
                 if (selectedPageEl.length) {
-                    this.gui.showSingleInputDialog("Name input", "Please input literary kind after rename:");
+                    this.gui.showSingleInputDialog(localization.translate("KindInputHeadline", "KeyTable").value, localization.translate("KindNameInput", "KeyTable").value);
                     const textareaEl = $(".input-dialog-textarea");
                     const originalText = selectedPageEl.text();
                     textareaEl.val(originalText);
@@ -101,17 +101,17 @@
                             const renameAjax = this.util.renameLiteraryKind(literaryOriginalId, literaryKindName);
                             renameAjax.done(() => {
                                 textareaEl.val("");
-                                this.gui.showInfoDialog("Success", "Literary kind has been renamed");
+                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("KindRenameSuccess", "KeyTable").value);
                                 $(".info-dialog-ok-button").off();
                                 this.updateContentAfterChange();
                             });
                             renameAjax.fail(() => {
-                                this.gui.showInfoDialog("Error", "Literary kind has not been renamed");
+                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("KindRenameError", "KeyTable").value);
                                 $(".info-dialog-ok-button").off();
                             });
                         });
                 } else {
-                    this.gui.showInfoDialog("Warning", "Please choose a literary kind");
+                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("KindInfoMessage", "KeyTable").value);
                 }
             });
     }
@@ -122,24 +122,23 @@
             () => {
                 const selectedPageEl = $(".list-group").find(".page-list-item-selected");
                 if (selectedPageEl.length) {
-                    this.gui.showConfirmationDialog("Confirmation",
-                        "Are you sure you want to delete this literary kind?");
+                    this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("KindConfirmMessage", "KeyTable").value);
                     $(".confirmation-ok-button").on("click",
                         () => {
                             const literaryKindId = selectedPageEl.data("key-id") as number;
                             const deleteAjax = this.util.deleteLiteraryKind(literaryKindId);
                             deleteAjax.done(() => {
                                 $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Success", "Kind deletion was successful");
+                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, "Kind deletion was successful");
                                 this.updateContentAfterChange();
                             });
                             deleteAjax.fail(() => {
                                 $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Error", "Kind deletion was not successful");
+                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, "Kind deletion was not successful");
                             });
                         });
                 } else {
-                    this.gui.showInfoDialog("Warning", "Please choose a literary kind");
+                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("KindInfoMessage", "KeyTable").value);
                 }
             });
     }

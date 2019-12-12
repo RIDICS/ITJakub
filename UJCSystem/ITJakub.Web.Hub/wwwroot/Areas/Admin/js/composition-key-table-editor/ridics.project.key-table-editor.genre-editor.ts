@@ -12,9 +12,9 @@
     init() {
         this.showLoading();
         $("#project-layout-content").find("*").off();
-        this.createEntryButtonEl.text(localization.translate("CreateGenre", "KeyTable").value);
-        this.changeEntryButtonEl.text(localization.translate("RenameGenre", "KeyTable").value);
-        this.deleteEntryButtonEl.text(localization.translate("DeleteGenre", "KeyTable").value);
+        this.createEntryButtonEl.text(localization.translate("Create", "KeyTable").value);
+        this.changeEntryButtonEl.text(localization.translate("Change", "KeyTable").value);
+        this.deleteEntryButtonEl.text(localization.translate("Delete", "KeyTable").value);
         this.titleEl.text(localization.translate("GenreHeadline", "KeyTable").value);
         this.unbindEventsDialog();
         this.util.getLiteraryGenreList().done((data: IGenreResponseContract[]) => {
@@ -28,7 +28,7 @@
             this.genreDelete();
             this.genreCreation();
         }).fail(() => {
-            const error = new AlertComponentBuilder(AlertType.Error).addContent("Failed to load editor");
+            const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("EditorLoadError", "KeyTable").value);
             $("#project-layout-content").empty().append(error.buildElement());
         });
     }
@@ -41,7 +41,7 @@
             const itemsOnPage = this.numberOfItemsPerPage;
             this.initPagination(data.length, itemsOnPage, this.loadPage.bind(this));
         }).fail(() => {
-            this.gui.showInfoDialog("Warning", "Connection to server lost.\nAutomatic page reload is not possible.");
+            this.gui.showInfoDialog(localization.translate("ConnectionErrorHeadline", "KeyTable").value, localization.translate("ConnectionErrorMessage", "KeyTable").value);
         });
     }
 
@@ -64,7 +64,7 @@
         $(".crud-buttons-div").on("click",
             ".create-key-table-entry",
             () => {
-                this.gui.showSingleInputDialog("Name input", "Please input new genre name:");
+                this.gui.showSingleInputDialog(localization.translate("GenreInputHeadline", "KeyTable").value, localization.translate("GenreNameInput", "KeyTable").value);
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const textareaEl = $(".input-dialog-textarea");
@@ -72,12 +72,12 @@
                         const newGenreAjax = this.util.createNewGenre(genreString);
                         newGenreAjax.done(() => {
                             textareaEl.val("");
-                            this.gui.showInfoDialog("Success", "New genre has been created");
+                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("GenreCreateSuccess", "KeyTable").value);
                             $(".info-dialog-ok-button").off();
                             this.updateContentAfterChange();
                         });
                         newGenreAjax.fail(() => {
-                            this.gui.showInfoDialog("Error", "New genre has not been created");
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("GenreCreateError", "KeyTable").value);
                             $(".info-dialog-ok-button").off();
                         });
                     });
@@ -90,7 +90,7 @@
             () => {
                 const selectedPageEl = $(".list-group").children(".page-list-item-selected");
                 if (selectedPageEl.length) {
-                    this.gui.showSingleInputDialog("Name input", "Please input genre name after rename:");
+                    this.gui.showSingleInputDialog(localization.translate("GenreInputHeadline", "KeyTable").value, localization.translate("GenreNameInput", "KeyTable").value);
                     const textareaEl = $(".input-dialog-textarea");
                     const originalText = selectedPageEl.text();
                     textareaEl.val(originalText);
@@ -101,17 +101,17 @@
                             const renameAjax = this.util.renameGenre(genreId, genreName);
                             renameAjax.done(() => {
                                 textareaEl.val("");
-                                this.gui.showInfoDialog("Success", "Genre has been renamed");
+                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("GenreRenameSuccess", "KeyTable").value);
                                 $(".info-dialog-ok-button").off();
                                 this.updateContentAfterChange();
                             });
                             renameAjax.fail(() => {
-                                this.gui.showInfoDialog("Error", "Genre has not been renamed");
+                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("GenreRenameError", "KeyTable").value);
                                 $(".info-dialog-ok-button").off();
                             });
                     });
                 } else {
-                    this.gui.showInfoDialog("Warning", "Please choose a genre");
+                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("GenreInfoMessage", "KeyTable").value);
                 }
             });
     }
@@ -122,23 +122,23 @@
             () => {
                 const selectedPageEl = $(".list-group").find(".page-list-item-selected");
                 if (selectedPageEl.length) {
-                    this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this genre?");
+                    this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("GenreConfirmMessage", "KeyTable").value);
                     $(".confirmation-ok-button").on("click",
                         () => {
                                 const id = selectedPageEl.data("key-id") as number;
                                 const deleteAjax = this.util.deleteGenre(id);
                                 deleteAjax.done(() => {
                                     $(".confirmation-ok-button").off();
-                                    this.gui.showInfoDialog("Success", "Genre deletion was successful");
+                                    this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("GenreRemoveSuccess", "KeyTable").value);
                                     this.updateContentAfterChange();
                                 });
                                 deleteAjax.fail(() => {
                                     $(".confirmation-ok-button").off();
-                                    this.gui.showInfoDialog("Error", "Genre deletion was not successful");
+                                    this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("GenreRemoveError", "KeyTable").value);
                                 });
                         });
                 } else {
-                    this.gui.showInfoDialog("Warning", "Please choose a genre");
+                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("GenreInfoMessage", "KeyTable").value);
                 }
             });
     }

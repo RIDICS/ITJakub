@@ -12,9 +12,9 @@
     init() {
         this.showLoading();
         $("#project-layout-content").find("*").off();
-        this.createEntryButtonEl.text(localization.translate("CreateKeyword", "KeyTable").value);
-        this.changeEntryButtonEl.text(localization.translate("RenameKeyword", "KeyTable").value);
-        this.deleteEntryButtonEl.text(localization.translate("DeleteKeyword", "KeyTable").value);
+        this.createEntryButtonEl.text(localization.translate("Create", "KeyTable").value);
+        this.changeEntryButtonEl.text(localization.translate("Change", "KeyTable").value);
+        this.deleteEntryButtonEl.text(localization.translate("Delete", "KeyTable").value);
         this.titleEl.text(localization.translate("KeywordHeadline", "KeyTable").value);
         this.unbindEventsDialog();
             const initialPage = 1;
@@ -39,7 +39,7 @@
             listEl.append(generatedListStructure);
             this.makeSelectable(listEl);
         }).fail(() => {
-            const error = new AlertComponentBuilder(AlertType.Error).addContent("Failed to load editor");
+            const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("EditorLoadError", "KeyTable").value);
             $("#project-layout-content").empty().append(error.buildElement());
         });
     }
@@ -60,7 +60,7 @@
         $(".crud-buttons-div").on("click",
             ".create-key-table-entry",
             () => {
-                this.gui.showSingleInputDialog("Name input", "Please input new keyword:");
+                this.gui.showSingleInputDialog(localization.translate("KeywordInputHeadline", "KeyTable").value, localization.translate("KeywordNameInput", "KeyTable").value);
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const textareaEl = $(".input-dialog-textarea");
@@ -68,12 +68,12 @@
                         const newKeywordAjax = this.util.createNewKeyword(keywordString);
                         newKeywordAjax.done(() => {
                             textareaEl.val("");
-                            this.gui.showInfoDialog("Success", "New keyword has been created");
+                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("KeywordCreateSuccess", "KeyTable").value);
                             $(".info-dialog-ok-button").off();
                             this.updateContentAfterChange();
                         });
                         newKeywordAjax.fail(() => {
-                            this.gui.showInfoDialog("Error", "New keyword has not been created");
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("KeywordCreateError", "KeyTable").value);
                             $(".info-dialog-ok-button").off();
                         });
                     });
@@ -86,7 +86,7 @@
             () => {
                 const selectedPageEl = $(".list-group").children(".page-list-item-selected");
                 if (selectedPageEl.length) {
-                    this.gui.showSingleInputDialog("Name input", "Please input new keyword name:");
+                    this.gui.showSingleInputDialog(localization.translate("KeywordInputHeadline", "KeyTable").value, localization.translate("KeywordNameInput", "KeyTable").value);
                     const textareaEl = $(".input-dialog-textarea");
                     const originalText = selectedPageEl.text();
                     textareaEl.val(originalText);
@@ -97,12 +97,12 @@
                             const renameAjax = this.util.renameKeyword(keywordId, keywordName);
                             renameAjax.done(() => {
                                 textareaEl.val("");
-                                this.gui.showInfoDialog("Success", "Keyword has been renamed");
+                                this.gui.showInfoDialog(localization.translate("Success", "KeyTable").value, localization.translate("KeywordRenameSuccess", "KeyTable").value);
                                 $(".info-dialog-ok-button").off();
                                 this.updateContentAfterChange();
                             });
                             renameAjax.fail(() => {
-                                this.gui.showInfoDialog("Error", "Keyword has not been renamed");
+                                this.gui.showInfoDialog(localization.translate("Error", "KeyTable").value, localization.translate("KeywordRenameError", "KeyTable").value);
                                 $(".info-dialog-ok-button").off();
                             });
                     });
@@ -118,23 +118,23 @@
             () => {
                 const selectedPageEl = $(".list-group").find(".page-list-item-selected");
                 if (selectedPageEl.length) {
-                this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this keyword?");
+                    this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("KeywordConfirmMessage", "KeyTable").value);
                 $(".confirmation-ok-button").on("click",
                     () => {
                             const id = selectedPageEl.data("key-id") as number;
                             const deleteAjax = this.util.deleteKeyword(id);
                             deleteAjax.done(() => {
                                 $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Success", "Keyword deletion was successful");
+                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("KeywordDeleteSuccess", "KeyTable").value);
                                 this.updateContentAfterChange();
                             });
                             deleteAjax.fail(() => {
                                 $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Error", "Keyword deletion was not successful");
+                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("KeywordDeleteError", "KeyTable").value);
                             });
                     });
                 } else {
-                    this.gui.showInfoDialog("Warning", "Please choose a keyword");
+                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("KeywordInfoMessage", "KeyTable").value);
                 }
             });
     }

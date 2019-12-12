@@ -23,7 +23,6 @@
     <h2>@Localizer.Translate("KeyTableTitle", "KeyTable", LocTranslationSource.File)</h2>
     <div class="row display-flex">
         <div class="col-xs-12 col-md-2 left-menu left-menu" id="left-menu">
-            <div class="project-title">Název díla</div>
             <div class="list-group list-group-root" id="project-navigation">
                 <a href="#" class="list-group-item key-table-editor-selection active" data-editor-type="@{@((int) KeyTableEditorType.Category)}">@Localizer.Translate("Category", "KeyTable", LocTranslationSource.File)</a>
                 <a href="#" class="list-group-item key-table-editor-selection" data-editor-type="@{@((int) KeyTableEditorType.Genre)}">@Localizer.Translate("Genre", "KeyTable", LocTranslationSource.File)</a>
@@ -77,13 +76,17 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <p class="primary-input-dialog-message"></p>
-                                    <textarea class="textarea-no-resize primary-input-dialog-textarea" rows="1" cols="30"></textarea>
+                                    <div class="input-group">
+                                        <p class="primary-input-dialog-message"></p>
+                                        <textarea class="form-control textarea-no-resize primary-input-dialog-textarea adjust-select-height" rows="1" cols="30"></textarea>
+                                    </div>
                                 </div>
                                 <div class="col-xs-6">
-                                    <p class="secondary-input-dialog-message"></p>
-                                    <select class="id-method-selection">
-                                    </select>
+                                    <div class="form-group">
+                                        <p class="secondary-input-dialog-message"></p>
+                                        <select class="id-method-selection form-control custom-select">
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -104,18 +107,22 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <p class="primary-input-dialog-message"></p>
-                                    <textarea class="textarea-no-resize responsible-type-text-input-dialog-textarea" rows="1" cols="30"></textarea>
+                                    <div class="form-group">
+                                        <p class="primary-input-dialog-message"></p>
+                                        <textarea class="textarea-no-resize form-control responsible-type-text-input-dialog-textarea" rows="1" cols="30"></textarea>
+                                    </div>
                                 </div>
                                 <div class="col-xs-6">
+                                    <div class="form-group">
                                     <p class="secondary-input-dialog-message"></p>
-                                    <select class="responsible-type-selection">
-                                        @{
-                                            <option value="@((int) ResponsibleTypeEnumContract.Unknown)">@Localizer.Translate("Unknown", "KeyTable", LocTranslationSource.File)</option>
-                                            <option value="@((int) ResponsibleTypeEnumContract.Editor)">@Localizer.Translate("Editor", "KeyTable", LocTranslationSource.File)</option>
-                                            <option value="@((int) ResponsibleTypeEnumContract.Kolace)">@Localizer.Translate("Collation", "KeyTable", LocTranslationSource.File)</option>
-                                        }
-                                    </select>
+                                        <select class="form-control responsible-type-selection">
+                                            @{
+                                                <option value="@((int) ResponsibleTypeEnumContract.Unknown)">@Localizer.Translate("Unknown", "KeyTable", LocTranslationSource.File)</option>
+                                                <option value="@((int) ResponsibleTypeEnumContract.Editor)">@Localizer.Translate("Editor", "KeyTable", LocTranslationSource.File)</option>
+                                                <option value="@((int) ResponsibleTypeEnumContract.Kolace)">@Localizer.Translate("Collation", "KeyTable", LocTranslationSource.File)</option>
+                                            }
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -134,8 +141,10 @@
                             <h4 class="modal-title input-dialog-title"></h4>
                         </div>
                         <div class="modal-body">
-                            <p class="input-dialog-message"></p>
-                            <textarea class="textarea-no-resize input-dialog-textarea" rows="1" cols="30"></textarea>
+                            <div class="form-group">
+                                <p class="input-dialog-message"></p>
+                                <textarea class="form-control textarea-no-resize input-dialog-textarea" rows="1" cols="30"></textarea>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "KeyTable", LocTranslationSource.File)</button>
@@ -189,12 +198,16 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <p class="primary-input-dialog-message"></p>
-                                    <textarea class="textarea-no-resize primary-input-author-textarea" rows="1" cols="30"></textarea>
+                                    <div class="form-group">
+                                        <p class="primary-input-dialog-message"></p>
+                                        <textarea class="form-control textarea-no-resize primary-input-author-textarea" rows="1" cols="30"></textarea>
+                                    </div>
                                 </div>
                                 <div class="col-xs-6">
-                                    <p class="secondary-input-dialog-message"></p>
-                                    <textarea class="textarea-no-resize secondary-input-author-textarea" rows="1" cols="30"></textarea>
+                                    <div class="form-group">
+                                        <p class="secondary-input-dialog-message"></p>
+                                        <textarea class="form-control textarea-no-resize secondary-input-author-textarea" rows="1" cols="30"></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -13,9 +13,9 @@
     init() {
         this.showLoading();
         $("#project-layout-content").find("*").off();
-        this.createEntryButtonEl.text(localization.translate("CreateCategory", "KeyTable").value);
-        this.changeEntryButtonEl.text(localization.translate("ChangeCategory", "KeyTable").value);
-        this.deleteEntryButtonEl.text(localization.translate("DeleteCategory", "KeyTable").value);
+        this.createEntryButtonEl.text(localization.translate("Create", "KeyTable").value);
+        this.changeEntryButtonEl.text(localization.translate("Change", "KeyTable").value);
+        this.deleteEntryButtonEl.text(localization.translate("Delete", "KeyTable").value);
         this.titleEl.text(localization.translate("CategoryHeadline", "KeyTable").value);
         this.unbindEventsDialog();
         this.util.getCategoryList().done((data: ICategoryContract[]) => {
@@ -31,7 +31,7 @@
             this.categoryRename();
             this.categoryDelete();
         }).fail(() => {
-            const error = new AlertComponentBuilder(AlertType.Error).addContent("Failed to load editor");
+            const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("EditorLoadError", "KeyTable").value);
             $("#project-layout-content").empty().append(error.buildElement());
         });
     }
@@ -46,7 +46,7 @@
             const itemsOnPage = this.numberOfItemsPerPage;
             this.initPagination(numberOfParentCategories, itemsOnPage, this.loadPage.bind(this));
         }).fail(() => {
-            this.gui.showInfoDialog("Warning", "Connection to server lost.\nAutomatic page reload is not possible.");
+            this.gui.showInfoDialog(localization.translate("ConnectionErrorHeadline", "KeyTable").value, localization.translate("ConnectionErrorMessage", "KeyTable").value);
         });
     }
 
@@ -120,7 +120,7 @@
             const childrenCategories = mainCategoryEl.children(".child-category");
             if (childrenCategories.length) {
                 childrenCategories.hide();
-                mainCategoryEl.append(`<span class="collapse-category-button" title="Toggle collapsed category"><i class="fa fa-arrows-v fa-pull-right" aria-hidden="true"></i></span>`);
+                mainCategoryEl.append(`<span class="collapse-category-button" title="${localization.translate("CollapseButtonTitle", "KeyTable").value}"><i class="fa fa-arrows-v fa-pull-right" aria-hidden="true"></i></span>`);
                 this.trackCollapseCategoryButton(childrenCategories);
             }
         });
@@ -136,14 +136,14 @@
         $(".crud-buttons-div").on("click",
             ".create-key-table-entry",
             () => {
-                this.gui.showCategoryInputDialog("Name input", "Please input new category description:", "Please choose parent category:");
+                this.gui.showCategoryInputDialog(localization.translate("CategoryInputHeadline", "KeyTable").value, localization.translate("CategoryNameInput", "KeyTable").value, localization.translate("ParentNameInput", "KeyTable").value);
                 const dialogEl = $(".category-change-input-modal-dialog");
                 const okButtonEl = dialogEl.find(".info-dialog-ok-button");
                 const descriptionTextareaEl = dialogEl.find(".primary-input-dialog-textarea");
                 const parentCategoryIdSelectEl = dialogEl.find(".id-method-selection");
                 parentCategoryIdSelectEl.empty();
                 const newCategoryOption =
-                    `<option value="null" data-parent-category-id="null">(No parent category)</option>`;
+                    `<option value="null" data-parent-category-id="null">` + localization.translate("NoParentCategory", "KeyTable").value + `</option>`;
                 parentCategoryIdSelectEl.append(newCategoryOption);
                 parentCategoryIdSelectEl.append(this.generateComboboxFromList(this.categoryItemListArray));
                 const selectedPageEl = $(".list-group").find(".page-list-item-selected");
@@ -157,18 +157,18 @@
                     () => {
                         const categoryString = descriptionTextareaEl.val() as string;
                         if (!categoryString) {
-                            this.gui.showInfoDialog("Warning", "You haven't entered anything.");
+                            this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("CategoryWarningMessage", "KeyTable").value);
                         } else {
                             const parentCategoryIdNumber = parentCategoryIdSelectEl.val() as number;
                             const newCategoryAjax = this.util.createNewCategory(categoryString, parentCategoryIdNumber);
                             newCategoryAjax.done(() => {
                                 descriptionTextareaEl.val("");
-                                this.gui.showInfoDialog("Success", "New category has been created");
+                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("CategoryCreateSuccess").value);
                                 okButtonEl.off();
                                 this.updateContentAfterChange();
                             });
                             newCategoryAjax.fail(() => {
-                                this.gui.showInfoDialog("Error", "New category has not been created");
+                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("CategoryCreateError", "KeyTable").value);
                                 okButtonEl.off();
                             });
                         }
@@ -182,13 +182,13 @@
             () => {
                 const selectedPageEl = $(".list-group").find(".page-list-item-selected");
                 if (selectedPageEl.length) {
-                    this.gui.showCategoryInputDialog("Category input", "Please input new category description:", "Please choose new parent category:");
+                    this.gui.showCategoryInputDialog(localization.translate("CategoryInputHeadline", "KeyTable").value, localization.translate("CategoryNameInput", "KeyTable").value, localization.translate("ParentNameInput", "KeyTable").value);
                     const dialogEl = $(".category-change-input-modal-dialog");
                     const textareaEl = dialogEl.find(".primary-input-dialog-textarea");
                     const parentCategoryIdSelectEl = dialogEl.find(".id-method-selection");
                     parentCategoryIdSelectEl.empty();
                     const newCategoryOption =
-                        `<option value="null" data-parent-category-id="null">(No parent category)</option>`;
+                        `<option value="null" data-parent-category-id="null">` + localization.translate("NoParentCategory", "KeyTable").value + `</option>`;
                     parentCategoryIdSelectEl.append(newCategoryOption);
                     parentCategoryIdSelectEl.append(this.generateComboboxFromList(this.categoryItemListArray));
                     const originalText = selectedPageEl.clone().children().remove().end().text();
@@ -202,23 +202,23 @@
                             const categoryString = textareaEl.val() as string;
                             const newParentCategory = parentCategoryIdSelectEl.val() as number;
                             if (!categoryString) {
-                                this.gui.showInfoDialog("Warning", "You haven't entered anything.");
+                                this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("CategoryWarningMessage", "KeyTable").value);
                             } else {
                                 const renameAjax = this.util.renameCategory(id, categoryString, newParentCategory);
                                     renameAjax.done(() => {
                                         textareaEl.val("");
-                                        this.gui.showInfoDialog("Success", "Category has been renamed");
+                                        this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("CategoryRenameSuccess", "KeyTable").value);
                                         okButtonEl.off();
                                         this.updateContentAfterChange();
                                     });
                                     renameAjax.fail(() => {
-                                        this.gui.showInfoDialog("Error", "Category has not been renamed");
+                                        this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("CategoryRenameError", "KeyTable").value);
                                         okButtonEl.off();
                                     });
                             }
                         });
                 } else {
-                    this.gui.showInfoDialog("Info", "Please choose a category");
+                    this.gui.showInfoDialog(localization.translate("ModalInfo", "KeyTable").value, localization.translate("CategoryInfoMessage", "KeyTable").value);
                 }
             });
     }
@@ -229,23 +229,23 @@
             () => {
                 const selectedPageEl = $(".list-group").find(".page-list-item-selected");
                 if (selectedPageEl.length) {
-                    this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this category?");
+                    this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("CategoryConfirmMessage", "KeyTable").value);
                     $(".confirmation-ok-button").on("click",
                         () => {
                                 const id = selectedPageEl.data("category-id") as number;
                                 const deleteAjax = this.util.deleteCategory(id);
                                 deleteAjax.done(() => {
                                     $(".confirmation-ok-button").off();
-                                    this.gui.showInfoDialog("Success", "Category deletion was successful");
+                                    this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("CategoryDeleteSuccess", "KeyTable").value);
                                     this.updateContentAfterChange();
                                 });
                                 deleteAjax.fail(() => {
                                     $(".confirmation-ok-button").off();
-                                    this.gui.showInfoDialog("Error", "Category deletion was not successful");
+                                    this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("CategoryDeleteSuccess", "KeyTable").value);
                                 });
                         });
                 } else {
-                    this.gui.showInfoDialog("Info", "Please choose a category");
+                    this.gui.showInfoDialog(localization.translate("ModalInfo", "KeyTable").value, localization.translate("CategoryInfoMessage", "KeyTable").value);
                 }
             });
     }

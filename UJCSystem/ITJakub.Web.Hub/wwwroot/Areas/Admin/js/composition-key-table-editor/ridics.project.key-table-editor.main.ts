@@ -73,7 +73,7 @@ class KeyTableEditorMain {
             originalAuthorEditor.init();
             break;
         default:
-            const error = new AlertComponentBuilder(AlertType.Error).addContent("Invalid editor type");
+            const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("InvalidEditorError", "KeyTable").value);
             $("#project-layout-content").empty().append(error.buildElement());
         }
     }

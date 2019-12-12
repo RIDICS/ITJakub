@@ -12,9 +12,9 @@
     init() {
         this.showLoading();
         $("#project-layout-content").find("*").off();
-        this.createEntryButtonEl.text(localization.translate("CreateResponsiblePersonType", "KeyTable").value);
-        this.changeEntryButtonEl.text(localization.translate("ChangeResponsiblePersonType", "KeyTable").value);
-        this.deleteEntryButtonEl.text(localization.translate("DeleteResponsiblePersonType", "KeyTable").value);
+        this.createEntryButtonEl.text(localization.translate("Create", "KeyTable").value);
+        this.changeEntryButtonEl.text(localization.translate("Change", "KeyTable").value);
+        this.deleteEntryButtonEl.text(localization.translate("Delete", "KeyTable").value);
         this.titleEl.text(localization.translate("ResponsiblePersonTypeHeadline", "KeyTable").value);
         this.unbindEventsDialog();
         this.util.getResponsiblePersonTypeList().done((data: IResponsibleType[]) => {
@@ -28,7 +28,7 @@
             this.responsibleTypeDelete();
             this.responsibleTypeCreation();
         }).fail(() => {
-            const error = new AlertComponentBuilder(AlertType.Error).addContent("Failed to load editor");
+            const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("EditorLoadError", "KeyTable").value);
             $("#project-layout-content").empty().append(error.buildElement());
         });
     };
@@ -41,7 +41,7 @@
             const itemsOnPage = this.numberOfItemsPerPage;
             this.initPagination(data.length, itemsOnPage, this.loadPage.bind(this));
         }).fail(() => {
-            this.gui.showInfoDialog("Warning", "Connection to server lost.\nAutomatic page reload is not possible.");
+            this.gui.showInfoDialog(localization.translate("ConnectionErrorHeadline", "KeyTable").value, localization.translate("ConnectionErrorMessage", "KeyTable").value);
         });
     }
 
@@ -75,15 +75,15 @@
         $(".crud-buttons-div").on("click",
             ".create-key-table-entry",
             () => {
-                this.gui.showResponsibleTypeInputDialog("Responsible type input",
-                    "Please input description:",
-                    "Please input responsibility type");
+                this.gui.showResponsibleTypeInputDialog(localization.translate("RespPerTypeTypeInputHeadline", "KeyTable").value,
+                    localization.translate("RespPerTypeTypeNameInput", "KeyTable").value,
+                    localization.translate("RespPerTypeTypeInput", "KeyTable").value);
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const textareaEl = $(".responsible-type-text-input-dialog-textarea");
                         const typeDescriptionString = textareaEl.val() as string;
                         if (!typeDescriptionString) {
-                            this.gui.showInfoDialog("Warning", "You haven't entered anything.");
+                            this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("RespPerTypeWarningMessage", "KeyTable").value);
                         } else {
                             const responsibilityTypeSelectEl = $(".responsible-type-selection");
                             const responsibilityTypeSelect = responsibilityTypeSelectEl.val() as ResponsibleTypeEnum;
@@ -92,12 +92,12 @@
                                     typeDescriptionString);
                             newResponsibleTypeAjax.done(() => {
                                 textareaEl.val("");
-                                this.gui.showInfoDialog("Success", "New responsibility type has been created");
+                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("RespPerTypeCreateSuccess", "KeyTable").value);
                                 $(".info-dialog-ok-button").off();
                                 this.updateContentAfterChange();
                             });
                             newResponsibleTypeAjax.fail(() => {
-                                this.gui.showInfoDialog("Error", "New responsibility type has not been created");
+                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("RespPerTypeCreateError", "KeyTable").value);
                                 $(".info-dialog-ok-button").off();
                             });
                         }
@@ -111,9 +111,9 @@
             () => {
                 const selectedPageEl = $(".list-group").children(".page-list-item-selected");
                 if (selectedPageEl.length) {
-                    this.gui.showResponsibleTypeInputDialog("Responsible type input",
-                        "Please input new description:",
-                        "Please input new responsibility type");
+                    this.gui.showResponsibleTypeInputDialog(localization.translate("RespPerTypeTypeInputHeadline", "KeyTable").value,
+                        localization.translate("RespPerTypeTypeNameInput", "KeyTable").value,
+                        localization.translate("RespPerTypeTypeInput", "KeyTable").value);
                     const textareaEl = $(".responsible-type-text-input-dialog-textarea");
                     const originalText = selectedPageEl.text();
                     textareaEl.val(originalText);
@@ -125,7 +125,7 @@
                             const typeDescriptionString = textareaEl.val() as string;
                             const responsibilityTypeSelect = responsibilityTypeSelectEl.val() as ResponsibleTypeEnum;
                             if (!typeDescriptionString) {
-                                this.gui.showInfoDialog("Warning", "You haven't entered anything.");
+                                this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("RespPerTypeWarningMessage", "KeyTable").value);
                             } else {
                                     const responsibleTypeId = selectedPageEl.data("key-id") as number;
                                     const renameAjax = this.util.renameResponsiblePersonType(responsibleTypeId,
@@ -133,18 +133,18 @@
                                         typeDescriptionString);
                                     renameAjax.done(() => {
                                         textareaEl.val("");
-                                        this.gui.showInfoDialog("Success", "Responsibility type has been changed");
+                                        this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("RespPerTypeRenameSuccess", "KeyTable").value);
                                         $(".info-dialog-ok-button").off();
                                         this.updateContentAfterChange();
                                     });
                                     renameAjax.fail(() => {
-                                        this.gui.showInfoDialog("Error", "Responsibility type has not been changed");
+                                        this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("RespPerTypeRenameError", "KeyTable").value);
                                         $(".info-dialog-ok-button").off();
                                     });
                             }
                         });
                 } else {
-                    this.gui.showInfoDialog("Warning", "Please choose a responsibility type");
+                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("RespPerTypeInfoMessage", "KeyTable").value);
                 }
             });
     }
@@ -155,24 +155,23 @@
             () => {
                 const selectedPageEl = $(".list-group").find(".page-list-item-selected");
                 if (selectedPageEl.length) {
-                    this.gui.showConfirmationDialog("Confirm",
-                        "Are you sure you want to delete this responsibility type?");
+                    this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("RespPerTypeConfirmMessage", "KeyTable").value);
                     $(".confirmation-ok-button").on("click",
                         () => {
                             const id = selectedPageEl.data("key-id") as number;
                             const deleteAjax = this.util.deleteResponsiblePersonType(id);
                             deleteAjax.done(() => {
                                 $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Success", "Responsibility type deletion was successful");
+                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("RespPerTypeDeleteSuccess", "KeyTable").value);
                                 this.updateContentAfterChange();
                             });
                             deleteAjax.fail(() => {
                                 $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Error", "Responsibility type deletion was not successful");
+                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("RespPerTypeDeleteError", "KeyTable").value);
                             });
                         });
                 } else {
-                    this.gui.showInfoDialog("Warning", "Please choose a responsibility type");
+                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("RespPerTypeInfoMessage", "KeyTable").value);
                 }
             });
     }
