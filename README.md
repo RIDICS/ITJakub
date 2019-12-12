@@ -4,19 +4,22 @@
 
 Required software:
 * Microsoft Windows
-* Microsoft Visual Studio 2017
+* Microsoft Visual Studio 2017 / 2019
   * ASP.NET and web development
   * .NET desktop development (for BatchImport client app)
   * .NET Core cross-platform development
-  * (Git - for restoring NPM/Yarn dependencies)
-  * (Node.js - for restoring NPM/Yarn)
 * Microsoft SQL Server
 * Java
 * eXist-db 2.1
 * .NET Core 2.2 SDK
-* Altova XML 2013 Community Edition (installer is in repository)
-* Internet Information Services (installed from Windows features dialog)
+* Altova XML 2013 Community Edition (installer is in repository - Resources folder)
+* Enable following Windows features (from Turn Windows features on or off dialog)
+  * Internet Information Services
+  * Internet Information Services Hostable Web Core
+  * .NET Framework 4.x Advanced Services > WCF Services > HTTP activation
 * Yarn package manager
+* Git - for restoring NPM/Yarn dependencies
+* (Node.js - used by Authentication service for restoring NPM/Yarn)
 * Elasticsearch 5.5.2
 
 Recommended software:
@@ -36,12 +39,11 @@ Environment configuration
 * Other databases which should be created automatically from Forum and Authentication setup are following:
   * VokabularForumDB - database for Forum
   * VokabularAuthDB - database for Authentication service
-* Prepare Elasticsearch:
-  * Install Experimental highlighter plugin using following command: "./bin/elasticsearch-plugin install org.wikimedia.search.highlighter:experimental-highlighter-elasticsearch-plugin:5.5.2.2" in Elasticsearch installation directory.
-* Run script `InitFulltextDatabases.ps1` to check if fulltext databases are correctly installed and initialize them. The script will do following steps:
+* Configure JAVA_HOME environment variable to Java folder
+* Run script `Database\InitFulltextDatabases.ps1` to check if fulltext databases are correctly installed and initialize them. The script will do following steps:
   * Check if eXist-db is correctly installed and running
   * Check if Elasticsearch is correctly installed and running
-  * Check if Elasticsearch has installed required plugin
+  * Check if Elasticsearch has installed required plugin or install it (Experimental highlighter)
   * Upload required resources to eXist-db (xqueries)
   * Create indices in Elasticsearch
 * Restore Yarn dependencies (for development) using `YarnInstall.ps1` script.
@@ -61,6 +63,7 @@ Fulltext databases manual initialization (instead of running `InitFulltextDataba
 	3. copy content of "Database/ExistDB" folder except "config" folder to app collection named "jacob"
 	4. copy content of "Database/ExistDB/config" folder to collection "/system/config/db/apps/jacob"
 * Prepare Elasticsearch:
+  * Install Experimental highlighter plugin using following command: "./bin/elasticsearch-plugin install org.wikimedia.search.highlighter:experimental-highlighter-elasticsearch-plugin:5.5.2.2" in Elasticsearch installation directory.
   * Create indices using Elasticsearch-Update.ps1 script or manually using REST calls to Elasticsearch with configuration stored in "Database/Elasticsearch" folder (every file represents configuration for one index, index name is the same as file name).
   * Elasticsearch-Update.ps1 script has following parameters:
     1. -url URL of database (default is "http://localhost:9200")
@@ -87,7 +90,6 @@ Services to deploy:
 * ITJakub.Web.Hub - web portal (ASP.NET Core) with two modes available (Research and Community)
 * Vokabular.MainService - main service for direct client communication (ASP.NET Core)
 * Vokabular.FulltextService - service for searching in fulltext database of Community portal (in Elasticsearch) (ASP.NET Core)
-* ~~ITJakub.ITJakubService~~ - original main service (will be completetly replaced by Vokabular.MainService) (WCF service)
 * ITJakub.FileProcessing.Service - service for importing books from DOCX format (WCF service)
 * ITJakub.SearchService - service for searching in fulltext database of Research portal (in eXist-db) (WCF service)
 * ITJakub.Lemmatization.Service - service for lemmatization (WCF service)
@@ -118,8 +120,6 @@ Server environment configuration
 * Configure Application Pools in IIS
   1. Create new Application Pool (e.g. .NET Core) with ".NET CLR version" set to "No Managed Code"
   2. Configure ASP.NET Core services to use .NET Core Application Pool (every ASP.NET Core service run as separate process with Kestrel server)
-* Prepare Elasticsearch:
-  * Install Experimental highlighter plugin using following command: "./bin/elasticsearch-plugin install org.wikimedia.search.highlighter:experimental-highlighter-elasticsearch-plugin:5.5.2.2" in Elasticsearch installation directory.
 * Copy Database folder from itjakub folder to the server and run script `InitFulltextDatabases.ps1` to check if fulltext databases are correctly installed and initialize them.
 
 ## Configuration for different environments
@@ -212,7 +212,6 @@ Description: This user has PortalAdmin role which is used for managing portal We
 Currently secured services are:
 * ITJakub.Web.Hub - web portal using Authentication service
 * Vokabular.MainService - main service, secured by access token from Authentication service
-* ~~ITJakub.ITJakubService - original main service, secured by communication token~~
 
 **Other services are not intended for direct client communication, so they should be accessible only for MainService or Web.Hub.**
 The default configuration assumes deployment of these services to IIS Site which is configured only for access from http://localhost:85 address.
@@ -222,13 +221,6 @@ The default configuration assumes deployment of these services to IIS Site which
 
 **Install Elasticsearch plugin failed with error: The syntax of the command is incorrect.**  
 Java is not installed or Java folder is missing in PATH variable.
-
-
-~~**Publish failed with: Error MSB3073: The command "npm install" exited with code 9009.**~~
-~~NPM is not added to system path.~~
-
-~~**Publish failed with: Error MSB3073: The command "gulp clean" exited with code 9009.**~~
-~~Gulp is not installed as global package.~~
 
 **IIS error 500.19 - The requested page cannot be accessed because the related configuration data for the page is invalid.**  
 Check if ".NET Core Windows Server Hosting" is installed.
