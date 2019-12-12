@@ -82,8 +82,17 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return View(viewModel);
         }
 
+        private void SetProjectPermissions(long projectId)
+        {
+            var client = GetProjectClient();
+            var permissions = client.GetCurrentUserProjectPermissions(projectId);
+            ViewData[ProjectConstants.CurrentUserPermissions] = permissions;
+        }
+
         public IActionResult ProjectModule(ProjectModuleType moduleType, long projectId)
         {
+            SetProjectPermissions(projectId);
+
             var client = GetProjectClient();
             
             switch (moduleType)
@@ -117,6 +126,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 return BadRequest();
             }
+
+            SetProjectPermissions(projectId.Value);
 
             var projectClient = GetProjectClient();
             var codeListClient = GetCodeListClient();
@@ -197,6 +208,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult ImagesPageList(long projectId)
         {
+            SetProjectPermissions(projectId);
+
             var client = GetProjectClient();
             var pages = client.GetAllPagesWithImageInfoList(projectId);
             return PartialView("Resource/SubView/_PageWithImagesTable", pages);
@@ -204,6 +217,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult PageList(long projectId)
         {
+            SetProjectPermissions(projectId);
+
             var client = GetProjectClient();
             var pages = client.GetAllPageList(projectId);
             return PartialView("Work/Subview/_PageTable", pages);
@@ -211,6 +226,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult ChapterList(long projectId)
         {
+            SetProjectPermissions(projectId);
+
             var projectClient = GetProjectClient();
             var chapterList = projectClient.GetChapterList(projectId);
             var pageList = projectClient.GetAllPageList(projectId);
@@ -225,6 +242,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         
         public IActionResult SnapshotList(long projectId, string search, int start, int count = PageSizes.SnapshotList)
         {
+            SetProjectPermissions(projectId);
+
             var client = GetProjectClient();
 
             search = search ?? string.Empty;
@@ -236,6 +255,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         
         public IActionResult CooperationList(long projectId, string search, int start, int count = PageSizes.CooperationList)
         {
+            SetProjectPermissions(projectId);
+
             var client = GetProjectClient();
 
             search = search ?? string.Empty;
