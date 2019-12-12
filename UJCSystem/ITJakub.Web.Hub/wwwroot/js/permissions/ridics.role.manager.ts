@@ -285,13 +285,16 @@ class RoleManager {
         const editRoleFormSelector = "#editRoleForm";
         const editRoleForm = $(editRoleFormSelector);
         const alertHolder = editRoleForm.find(".alert-holder");
-        editRoleForm.on("submit", (event) => {
+        const saveButton = editRoleForm.find(".save-button");
+        saveButton.on("click", (event) => {
             event.preventDefault();
             event.stopPropagation();
             alertHolder.empty();
 
             if (editRoleForm.valid()) {
                 const editRoleSection = $("#editRoleSection");
+                const saveIcon = saveButton.find(".saving-icon");
+                saveIcon.removeClass("hide");
                 this.client.editRole(editRoleForm.serialize())
                     .done((response) => {
                         editRoleSection.html(response);
@@ -304,6 +307,8 @@ class RoleManager {
                         const alert = new AlertComponentBuilder(AlertType.Error)
                             .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
                         alertHolder.empty().append(alert);
+                    }).always(() => {
+                        saveIcon.addClass("hide");
                     });
             }
         });
@@ -364,8 +369,8 @@ class RoleManager {
             const initModalBtn = $("#addRoleButton");
             const addToRoleModal = $("#addToRoleDialog");
             const roleError = $("#add-user-to-role-error");
-
-            initModalBtn.click(() => {
+            
+            initModalBtn.on("click",() => {
                 if (!initModalBtn.hasClass("disabled")) {
                     const role = $(".role-row.active");
                     $("#specificRoleName").text(role.find(".name").text());
@@ -380,8 +385,8 @@ class RoleManager {
                 addToRoleModal.find("#mainSearchInput").val("");
                 addToRoleModal.find("#selectedUser").text(localization.translate("UserIsNotSelected", "Permission").value);
             });
-
-            addUserToRoleBtn.click(() => {
+            
+            addUserToRoleBtn.on("click",() => {
                 roleError.empty();
                 const roleId = $(".role-row.active").data("role-id");
                 if (typeof this.currentUserSelectedItem == "undefined" || this.currentUserSelectedItem == null) {
@@ -391,6 +396,8 @@ class RoleManager {
                     return;
                 }
                 else {
+                    const savingIcon = addUserToRoleBtn.find(".saving-icon");
+                    savingIcon.removeClass("hide");
                     const userId = this.currentUserSelectedItem.id;
                     this.client.addUserToRole(userId, roleId).done(() => {
                         this.userList.reloadPage();
@@ -399,6 +406,8 @@ class RoleManager {
                         const errorAlert = new AlertComponentBuilder(AlertType.Error)
                             .addContent(this.errorHandler.getErrorMessage(error));
                         roleError.empty().append(errorAlert.buildElement());
+                    }).always(() => {
+                        savingIcon.addClass("hide");
                     });
                 }
             });
@@ -412,7 +421,7 @@ class RoleManager {
     private initCreateRoleModal() {
         const createRoleModal = $("#createRoleDialog");
         
-        $("#createRoleButton").click(() => {
+        $("#createRoleButton").on("click", () => {
             createRoleModal.modal();
         });
 
@@ -425,13 +434,16 @@ class RoleManager {
     private initCreateRoleForm() {
         const createRoleForm = $("#createRoleForm");
         const alertHolder = createRoleForm.find(".alert-holder");
-        createRoleForm.on("submit", (event) => {
+        const saveButton = createRoleForm.find(".save-button");
+        saveButton.on("click", (event) => {
             event.preventDefault();
             event.stopPropagation();
             alertHolder.empty();
 
             if (createRoleForm.valid()) {
                 const createRoleSection = $("#createRoleSection");
+                const savingIcon = saveButton.find(".saving-icon");
+                savingIcon.removeClass("hide");
                 this.client.createRole(createRoleForm.serialize())
                     .done((response) => {
                         createRoleSection.html(response);
@@ -444,6 +456,8 @@ class RoleManager {
                         const alert = new AlertComponentBuilder(AlertType.Error)
                             .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
                         alertHolder.empty().append(alert);
+                    }).always(() => {
+                        savingIcon.addClass("hide");
                     });
             }
         });
