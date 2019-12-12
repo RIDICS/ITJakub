@@ -294,7 +294,7 @@ class RoleManager {
             if (editRoleForm.valid()) {
                 const editRoleSection = $("#editRoleSection");
                 const saveIcon = saveButton.find(".saving-icon");
-                saveIcon.show();
+                saveIcon.removeClass("hide");
                 this.client.editRole(editRoleForm.serialize())
                     .done((response) => {
                         editRoleSection.html(response);
@@ -308,8 +308,8 @@ class RoleManager {
                             .addContent(this.errorHandler.getErrorMessage(error)).buildElement();
                         alertHolder.empty().append(alert);
                     }).always(() => {
-                    saveIcon.hide();
-                });
+                        saveIcon.addClass("hide");
+                    });
             }
         });
     }
