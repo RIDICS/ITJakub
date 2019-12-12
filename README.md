@@ -50,13 +50,15 @@ Environment configuration
 * Run `SelectPortalTheme.{SELECTED_PORTAL}.ps1` to choose portal style otherwise build fails because of missing styles. Run this script any time you want to change a theme.
 
 Fulltext databases manual initialization (instead of running `InitFulltextDatabases.ps1` script)
-* Prepare eXist-db collection (it's possible either to use script `ExistDB-Recreate.cmd` or copy ExistDB folder content manually).
-  * Automatic script use predefined default values or values specified as parameters in following order:
-    1. eXist URL (default is xmldb:exist://localhost:8080/exist/xmlrpc)
-    2. scripts path on disk (default is C:\Pool\itjakub\Database\ExistDB)
-    3. collection name (default is jacob)
-    4. username
-    5. password
+* Prepare eXist-db collection (it's possible either to use script `ExistDB-Update.ps1` or copy ExistDB folder content manually).
+  * Automatic script use predefined default values or values specified as parameters:
+    1. -url eXist URL (default is xmldb:exist://localhost:8080/exist/xmlrpc)
+    2. -path Scripts path on disk (default is C:\Pool\itjakub\Database\ExistDB)
+    3. -collectionName Collection name (default is jacob)
+    4. -username Username
+    5. -password Password
+	6. -recreateMode Determine if DB should be deleted and then created new (default is $false)
+	7. -installationPath Path where eXist-db is installed (default will try some predefined paths)
   * Manual file copying
     1. open eXist-db Java Admin Client
 	2. create collection with name "apps/jacob"
