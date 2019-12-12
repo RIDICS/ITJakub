@@ -265,5 +265,12 @@ namespace Vokabular.MainService.Controllers
             m_projectGroupManager.RemoveProjectFromGroup(projectId);
             return Ok();
         }
+
+        [HttpGet("{projectId}/current-user-permission")]
+        public ActionResult<PermissionDataContract> GetCurrentUserProjectPermissions(long projectId)
+        {
+            var result = m_authorizationManager.GetCurrentUserProjectPermissions(projectId);
+            return result;
+        }
     }
 }

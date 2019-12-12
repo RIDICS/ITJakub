@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using AutoMapper;
 using log4net;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
+using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
@@ -21,11 +22,13 @@ namespace Vokabular.MainService.Core.Managers
 
         private readonly AuthenticationManager m_authenticationManager;
         private readonly PermissionRepository m_permissionRepository;
+        private readonly IMapper m_mapper;
 
-        public AuthorizationManager(AuthenticationManager authenticationManager, PermissionRepository permissionRepository)
+        public AuthorizationManager(AuthenticationManager authenticationManager, PermissionRepository permissionRepository, IMapper mapper)
         {
             m_authenticationManager = authenticationManager;
             m_permissionRepository = permissionRepository;
+            m_mapper = mapper;
         }
 
         public int GetCurrentUserId()
@@ -239,6 +242,28 @@ namespace Vokabular.MainService.Core.Managers
                     );
                 }
             }
+        }
+        
+        public PermissionDataContract GetCurrentUserProjectPermissions(long projectId)
+        {
+            var result = new PermissionDataContract();
+            var user = m_authenticationManager.GetCurrentUser(true);
+            if (user == null)
+            {
+                return result;
+            }
+
+            var permissions = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionsByUserAndBook(user.Id, projectId));
+            var permissionContracts = m_mapper.Map<IEnumerable<PermissionDataContract>>(permissions);
+            foreach (var permission in permissionContracts)
+            {
+                result.ShowPublished |= permission.ShowPublished;
+                result.ReadProject |= permission.ReadProject;
+                result.EditProject |= permission.EditProject;
+                result.AdminProject |= permission.AdminProject;
+            }
+
+            return result;
         }
     }
 }

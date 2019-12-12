@@ -188,6 +188,24 @@ namespace Vokabular.DataEntities.Database.Repositories
             return permissions;
         }
 
+        public virtual IList<Permission> FindPermissionsByUserAndBook(int userId, long bookId)
+        {
+            Project projectAlias = null;
+            Permission permissionAlias = null;
+            UserGroup groupAlias = null;
+            User userAlias = null;
+
+            var permissions = GetSession().QueryOver(() => permissionAlias)
+                .JoinAlias(() => permissionAlias.Project, () => projectAlias)
+                .JoinAlias(() => permissionAlias.UserGroup, () => groupAlias)
+                .JoinAlias(() => groupAlias.Users, () => userAlias)
+                .Where(() => userAlias.Id == userId && projectAlias.IsRemoved == false)
+                .And(() => projectAlias.Id == bookId)
+                .List<Permission>();
+
+            return permissions;
+        }
+
         public virtual void CreatePermissionIfNotExist(Permission permission)
         {
             var tmpPermission = FindPermissionByBookAndGroup(permission.Project.Id, permission.UserGroup.Id);

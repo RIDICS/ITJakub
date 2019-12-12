@@ -1056,6 +1056,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public PermissionDataContract GetCurrentUserProjectPermissions(long projectId)
+        {
+            try
+            {
+                var result = m_client.Get<PermissionDataContract>($"project/{projectId}/current-user-permission");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         #endregion
 
     }
