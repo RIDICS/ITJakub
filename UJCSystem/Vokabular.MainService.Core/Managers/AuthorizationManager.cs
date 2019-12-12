@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -119,9 +120,29 @@ namespace Vokabular.MainService.Core.Managers
                     x.GetFilteredBookIdListByUserPermissions(user.Id, new List<long> {projectId}, permission));
                 if (filtered == null || filtered.Count == 0)
                 {
+                    string errorCode;
+                    switch (permission)
+                    {
+                        case PermissionFlag.ShowPublished:
+                            errorCode = MainServiceErrorCode.UserBookReadForbidden;
+                            break;
+                        case PermissionFlag.ReadProject:
+                            errorCode = MainServiceErrorCode.UserBookReadProjectForbidden;
+                            break;
+                        case PermissionFlag.EditProject:
+                            errorCode = MainServiceErrorCode.UserBookEditProjectForbidden;
+                            break;
+                        case PermissionFlag.AdminProject:
+                            errorCode = MainServiceErrorCode.UserBookAdminProjectForbidden;
+                            break;
+                        default:
+                            errorCode = MainServiceErrorCode.UserBookAccessForbidden;
+                            break;
+                    }
+
                     throw new MainServiceException(
-                        MainServiceErrorCode.UserBookAccessForbidden,
-                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with id '{projectId}'",
+                        errorCode,
+                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission {permission} on book with id '{projectId}'",
                         HttpStatusCode.Forbidden
                     );
                 }
@@ -137,7 +158,7 @@ namespace Vokabular.MainService.Core.Managers
                 {
                     throw new MainServiceException(
                         MainServiceErrorCode.UnregisteredUserBookAccessForbidden,
-                        $"Unregistered user does not have permission on book with id '{projectId}'",
+                        $"Unregistered user does not have permission {permission} on book with id '{projectId}'",
                         HttpStatusCode.Forbidden
                     );
                 }
@@ -164,7 +185,7 @@ namespace Vokabular.MainService.Core.Managers
                 if (permissions == null || !permissions.Any(x => x.Flags.HasFlag(PermissionFlag.ShowPublished)))
                 {
                     throw new MainServiceException(
-                        MainServiceErrorCode.UserBookAccessForbidden,
+                        MainServiceErrorCode.UserBookReadForbidden,
                         $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with Snapshot ID '{snapshotId}'",
                         HttpStatusCode.Forbidden
                     );
