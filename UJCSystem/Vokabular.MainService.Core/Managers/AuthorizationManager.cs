@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using AutoMapper;
 using log4net;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
 using Vokabular.MainService.DataContracts.Contracts.Permission;
@@ -22,13 +22,13 @@ namespace Vokabular.MainService.Core.Managers
 
         private readonly AuthenticationManager m_authenticationManager;
         private readonly PermissionRepository m_permissionRepository;
-        private readonly IMapper m_mapper;
+        private readonly ProjectPermissionConverter m_projectPermissionConverter;
 
-        public AuthorizationManager(AuthenticationManager authenticationManager, PermissionRepository permissionRepository, IMapper mapper)
+        public AuthorizationManager(AuthenticationManager authenticationManager, PermissionRepository permissionRepository, ProjectPermissionConverter projectPermissionConverter)
         {
             m_authenticationManager = authenticationManager;
             m_permissionRepository = permissionRepository;
-            m_mapper = mapper;
+            m_projectPermissionConverter = projectPermissionConverter;
         }
 
         public int GetCurrentUserId()
@@ -246,23 +246,15 @@ namespace Vokabular.MainService.Core.Managers
         
         public PermissionDataContract GetCurrentUserProjectPermissions(long projectId)
         {
-            var result = new PermissionDataContract();
             var user = m_authenticationManager.GetCurrentUser(true);
             if (user == null)
             {
-                return result;
+                return new PermissionDataContract();
             }
 
             var permissions = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionsByUserAndBook(user.Id, projectId));
-            var permissionContracts = m_mapper.Map<IEnumerable<PermissionDataContract>>(permissions);
-            foreach (var permission in permissionContracts)
-            {
-                result.ShowPublished |= permission.ShowPublished;
-                result.ReadProject |= permission.ReadProject;
-                result.EditProject |= permission.EditProject;
-                result.AdminProject |= permission.AdminProject;
-            }
-
+            var result = m_projectPermissionConverter.GetAggregatedPermissions(permissions);
+            
             return result;
         }
     }

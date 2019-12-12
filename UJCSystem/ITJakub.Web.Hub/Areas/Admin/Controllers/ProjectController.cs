@@ -77,7 +77,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult Project(long id)
         {
             var client = GetProjectClient();
-            var result = client.GetProject(id);
+            var result = client.GetProject(id, fetchPermissions: true);
             var viewModel = Mapper.Map<ProjectItemViewModel>(result);
             return View(viewModel);
         }

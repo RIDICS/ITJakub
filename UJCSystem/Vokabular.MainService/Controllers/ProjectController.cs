@@ -65,13 +65,20 @@ namespace Vokabular.MainService.Controllers
 
         [HttpGet("{projectId}")]
         [ProducesResponseType(typeof(ProjectDetailContract), StatusCodes.Status200OK)]
-        public IActionResult GetProject(long projectId, [FromQuery] bool? fetchPageCount, [FromQuery] bool? fetchAuthors, [FromQuery] bool? fetchResponsiblePersons)
+        public IActionResult GetProject(long projectId,
+            [FromQuery] bool? fetchPageCount,
+            [FromQuery] bool? fetchAuthors,
+            [FromQuery] bool? fetchResponsiblePersons,
+            //[FromQuery] bool? fetchLatestChangedResource,
+            [FromQuery] bool? fetchPermissions)
         {
             var isFetchPageCount = fetchPageCount ?? false;
             var isFetchAuthors = fetchAuthors ?? false;
             var isFetchResponsiblePersons = fetchResponsiblePersons ?? false;
+            //var isFetchLatestChangedResource = fetchLatestChangedResource ?? false;
+            var isFetchPermissions = fetchPermissions ?? false;
 
-            var projectData = m_projectManager.GetProject(projectId, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons);
+            var projectData = m_projectManager.GetProject(projectId, isFetchPageCount, isFetchAuthors, isFetchResponsiblePersons, isFetchPermissions);
             if (projectData == null)
                 return NotFound();
 

@@ -54,11 +54,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public ProjectDetailContract GetProject(long projectId, bool fetchPageCount = false)
+        public ProjectDetailContract GetProject(long projectId, bool fetchPageCount = false, bool fetchPermissions = false)
         {
             try
             {
-                var project = m_client.Get<ProjectDetailContract>($"project/{projectId}?fetchPageCount={fetchPageCount}");
+                var project = m_client.Get<ProjectDetailContract>($"project/{projectId}?fetchPageCount={fetchPageCount}&fetchPermissions={fetchPermissions}");
                 return project;
             }
             catch (HttpRequestException e)
