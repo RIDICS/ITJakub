@@ -57,5 +57,6 @@
         public const string UserAlreadyAssignedToProject = "user-already-assigned-to-project";
         public const string SnapshotMustContainMetadata = "snapshot-must-contain-metadata";
         public const string Forbidden = "forbidden";
+        public const string UserAlreadyAssignedToRole = "user-already-assigned-to-role";
     }
 }

@@ -59,6 +59,7 @@
     "user-already-assigned-to-project": "Uživatel už má přiřazené nějaké právo k tomuto dílu",
     "snapshot-must-contain-metadata": "Dílo musí obsahovat metadata, jinak nemůže být publikováno.",
     "forbidden": "Nedostatečná práva pro tuto operaci",
+    "user-already-assigned-to-role": "Uživatel '{0}' se již nachází ve skupině '{1}'.",
     
     //Auth service codes
     "generic-error": "Operace se nezdařila",
