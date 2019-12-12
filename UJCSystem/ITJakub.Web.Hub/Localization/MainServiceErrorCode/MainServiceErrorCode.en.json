@@ -13,12 +13,16 @@
     "cannot-move-category-to-subcategory": "Can't move category into it's own subcategories",
     "unallowed-authorization-criteria":
       "Search criteria contains unallowed Authorization criteria. Authorization criteria is generated automatically.",
-    "unregistered-user-cardfile-access-forbidden": "Unregistered user does not have permission to read  this cardfile",
+    "unregistered-user-cardfile-access-forbidden": "Unregistered user does not have permission to read this card file",
     "unregistered-user-book-access-forbidden": "Unregistered user does not have permission on this book",
     "unregistered-user-resource-access-forbidden":
       "Unregistered user does not have permission on the book with this resource",
-    "user-cardfile-access-forbidden": "You do not have permission to read this cardfile",
+    "user-cardfile-access-forbidden": "You do not have permission to read this card file",
     "user-book-access-forbidden": "You do not have permission on this book",
+    "user-book-read-forbidden": "You do not have permission to read this book",
+    "user-book-read-project-forbidden": "You do not have permission to read this work in progress",
+    "user-book-write-project-forbidden": "You do not have permission to edit this work",
+    "user-book-admin-project-forbidden": "You do not have permission to admin this work",
     "user-resource-access-forbidden": "You do not have permission on the book with this resource",
     "project-id-or-resource-id": "Exactly one parameter (ProjectId or ResourceId) has to be specified",
     "create-anonymous-feedback": "If a user is not signed in, it is required to create anonymous feedback",

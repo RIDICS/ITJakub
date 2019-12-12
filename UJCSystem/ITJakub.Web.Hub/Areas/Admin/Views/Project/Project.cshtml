@@ -40,6 +40,7 @@
 }
 
 <div id="project-id" class="hidden">@Model.Id</div>
+<div id="project-permissions" class="hidden" data-show-published="@Model.Permissions.ShowPublished" data-read="@Model.Permissions.ReadProject" data-edit="@Model.Permissions.EditProject" data-admin="@Model.Permissions.AdminProject"></div>
 
 <div class="content-container">
     <div class="row project-layout">

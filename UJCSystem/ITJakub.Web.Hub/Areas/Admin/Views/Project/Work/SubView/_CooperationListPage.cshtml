@@ -1,4 +1,5 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Helpers
+@using Scalesoft.Localization.AspNetCore
 @using Vokabular.MainService.DataContracts.Contracts.Type
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.UserGroupContract>
 @inject ILocalizationService Localizer
@@ -15,9 +16,9 @@
             <div class="alert alert-danger"></div>
         </td>
         <td class="buttons">
-            <a class="remove-role btn btn-sm btn-default">
+            <button type="button" class="remove-role btn btn-sm btn-default" disabled="@(!ViewData.HasPermissionFor().AdminProject)">
                 <i class="fa fa-trash"></i>
-            </a>
+            </button>
         </td>
     </tr>
 }
