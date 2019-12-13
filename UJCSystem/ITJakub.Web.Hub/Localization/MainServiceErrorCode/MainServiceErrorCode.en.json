@@ -24,6 +24,8 @@
     "user-book-edit-project-forbidden": "You do not have permission to edit this work",
     "user-book-admin-project-forbidden": "You do not have permission to admin this work",
     "user-resource-access-forbidden": "You do not have permission on the book with this resource",
+    "user-resource-read-forbidden": "You do not have permission to show this resource",
+    "user-resource-edit-forbidden": "You do not have permission to edit this resource",
     "project-id-or-resource-id": "Exactly one parameter (ProjectId or ResourceId) has to be specified",
     "create-anonymous-feedback": "If a user is not signed in, it is required to create anonymous feedback",
     "user-has-missing-external-id": "User with ID {0} has missing ExternalID",

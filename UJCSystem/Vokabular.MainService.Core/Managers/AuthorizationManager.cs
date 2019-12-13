@@ -131,6 +131,21 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
+        private string GetResourceUnauthorizedErrorCodeForPermission(PermissionFlag permission)
+        {
+            switch (permission)
+            {
+                case PermissionFlag.ShowPublished:
+                    return MainServiceErrorCode.UserResourceAccessForbidden;
+                case PermissionFlag.ReadProject:
+                    return MainServiceErrorCode.UserResourceReadForbidden;
+                case PermissionFlag.EditProject:
+                    return MainServiceErrorCode.UserResourceEditForbidden;
+                default:
+                    return MainServiceErrorCode.UserResourceAccessForbidden;
+            }
+        }
+
         public void AuthorizeBook(long projectId, PermissionFlag permission)
         {
             var user = m_authenticationManager.GetCurrentUser();
@@ -221,8 +236,10 @@ namespace Vokabular.MainService.Core.Managers
 
                 if (filtered == null)
                 {
+                    var errorCode = GetResourceUnauthorizedErrorCodeForPermission(permission);
+
                     throw new MainServiceException(
-                        MainServiceErrorCode.UserResourceAccessForbidden,
+                        errorCode,
                         $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission {permission} on book with resource with id '{resourceId}'",
                         HttpStatusCode.Forbidden
                     );

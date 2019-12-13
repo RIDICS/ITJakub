@@ -21,6 +21,8 @@
         public const string UserBookEditProjectForbidden = "user-book-edit-project-forbidden";
         public const string UserBookAdminProjectForbidden = "user-book-admin-project-forbidden";
         public const string UserResourceAccessForbidden = "user-resource-access-forbidden";
+        public const string UserResourceReadForbidden = "user-resource-read-forbidden";
+        public const string UserResourceEditForbidden = "user-resource-edit-forbidden";
         public const string ProjectIdOrResourceId = "project-id-or-resource-id";
         public const string CreateAnonymousFeedback = "create-anonymous-feedback";
         public const string UserHasMissingExternalId = "user-has-missing-external-id";

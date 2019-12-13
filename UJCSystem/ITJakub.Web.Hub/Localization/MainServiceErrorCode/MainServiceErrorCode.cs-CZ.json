@@ -24,6 +24,8 @@
     "user-book-edit-project-forbidden": "Nemáte právo k úpravě tohoto díla",
     "user-book-admin-project-forbidden": "Nemáte právo ke spravování tohoto díla",
     "user-resource-access-forbidden": "Nemáte přístup ke knize s tímto zdrojem",
+    "user-resource-read-forbidden": "Nemáte právo k zobrazení tohoto zdroje",
+    "user-resource-edit-forbidden": "Nemáte právo k úpravě tohoto zdroje",
     "project-id-or-resource-id": "Musí být specifikován právě jeden parametr (ProjectId or ResourceId)",
     "create-anonymous-feedback": "Pokud není uživatel přihlášen je nutné vytvořit anonymní připomínku",
     "user-has-missing-external-id": "Uživateli s ID {0} schází externí ID",
