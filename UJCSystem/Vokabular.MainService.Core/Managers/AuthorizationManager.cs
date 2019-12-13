@@ -179,17 +179,17 @@ namespace Vokabular.MainService.Core.Managers
             AuthorizeBook(projectId, permission);
         }
 
-        public void AuthorizeSnapshot(long snapshotId)
+        public void AuthorizeSnapshot(long snapshotId, PermissionFlag permission = PermissionFlag.ShowPublished)
         {
             var user = m_authenticationManager.GetCurrentUser();
             if (user != null)
             {
                 var permissions = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionsForSnapshotByUserId(snapshotId, user.Id));
-                if (permissions == null || !permissions.Any(x => x.Flags.HasFlag(PermissionFlag.ShowPublished)))
+                if (permissions == null || !permissions.Any(x => x.Flags.HasFlag(permission)))
                 {
                     throw new MainServiceException(
                         MainServiceErrorCode.UserBookReadForbidden,
-                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with Snapshot ID '{snapshotId}'",
+                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission {permission} on book with Snapshot ID '{snapshotId}'",
                         HttpStatusCode.Forbidden
                     );
                 }
@@ -198,13 +198,13 @@ namespace Vokabular.MainService.Core.Managers
             {
                 var role = m_authenticationManager.GetUnregisteredRole();
                 var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(role.Id, role.Name));
-                var permission = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionForSnapshotByGroupId(snapshotId, group.Id));
+                var dbPermission = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionForSnapshotByGroupId(snapshotId, group.Id));
 
-                if (permission == null || !permission.Flags.HasFlag(PermissionFlag.ShowPublished))
+                if (dbPermission == null || !dbPermission.Flags.HasFlag(permission))
                 {
                     throw new MainServiceException(
                         MainServiceErrorCode.UnregisteredUserBookAccessForbidden,
-                        $"Unregistered user does not have permission on book with Snapshot ID '{snapshotId}'",
+                        $"Unregistered user does not have permission {permission} on book with Snapshot ID '{snapshotId}'",
                         HttpStatusCode.Forbidden
                     );
                 }
@@ -222,7 +222,7 @@ namespace Vokabular.MainService.Core.Managers
                 {
                     throw new MainServiceException(
                         MainServiceErrorCode.UserResourceAccessForbidden,
-                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with resource with id '{resourceId}'",
+                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission {permission} on book with resource with id '{resourceId}'",
                         HttpStatusCode.Forbidden
                     );
                 }
@@ -237,7 +237,7 @@ namespace Vokabular.MainService.Core.Managers
                 {
                     throw new MainServiceException(
                         MainServiceErrorCode.UnregisteredUserResourceAccessForbidden,
-                        $"Unregistered user does not have permission on book with resource with id '{resourceId}'",
+                        $"Unregistered user does not have permission {permission} on book with resource with id '{resourceId}'",
                         HttpStatusCode.Forbidden
                     );
                 }
