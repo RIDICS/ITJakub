@@ -114,8 +114,9 @@ class ReaderLayout {
                 case this.bookmarksPanelId:
                     container.getElement().append(this.createBookmarksPanel());
                     break;
-                case this.termsResultId:
-                    container.getElement().append(this.createTermsResultPanel());
+                case this.termsPanelId:
+                    var containerEl = container.getElement();
+                    containerEl.append(this.createTermsPanel(containerEl));
                     break;
                 case this.termsSearchId:
                     container.getElement().append(this.createTermsSearchPanel());
@@ -184,16 +185,11 @@ class ReaderLayout {
                 var toolStackConfig = configurationObject.toolPanelConfig(PanelType.Stack, "tools", "");
                 this.readerLayout.root.contentItems[0].addChild(toolStackConfig, 0);
             }
-            var type: PanelType;
-            if (panelId === this.termsPanelId) type = PanelType.Column;
-            else type = PanelType.Component;
+            var type: PanelType = PanelType.Component;
             var itemConfig = configurationObject.toolPanelConfig(type, panelId, panelTitle);
             this.readerLayout.root.getItemsById('tools')[0].addChild(itemConfig);
             this.readerLayout.root.getItemsById('tools')[0].config.width = 15;
             this.readerLayout.updateSize();
-            if (panelId === this.termsPanelId) {
-                this.createTermsPanel(configurationObject);
-            }
         } else {
             var contentItem = this.readerLayout.root.getItemsById(panelId)[0] as GoldenLayout.ContentItem;
             if (contentItem.parent.isStack) {
@@ -238,9 +234,6 @@ class ReaderLayout {
         }
 
         this.readerLayout.root.addChild(itemConfig);
-        if (panelId === this.termsPanelId) {
-            this.createTermsPanel(configurationObject);
-        }
     }
 
     createMobileViewPanel(panelId: string, panelTitle: string) {
@@ -716,11 +709,17 @@ class ReaderLayout {
         return this.searchPanel.getPanelHtml();
     }
 
-    protected createTermsPanel(configObject: LayoutConfiguration) {
-        var itemConfig = configObject.toolPanelConfig(PanelType.Component, this.termsSearchId, localization.translate(this.termsSearchId, "BookReader").value);
-        this.readerLayout.root.getItemsById(this.termsPanelId)[0].addChild(itemConfig);
-        itemConfig = configObject.toolPanelConfig(PanelType.Component, this.termsResultId, localization.translate(this.termsResultId, "BookReader").value);
-        this.readerLayout.root.getItemsById(this.termsPanelId)[0].addChild(itemConfig);
+    protected createTermsPanel(containerEl: HTMLDivElement): HTMLDivElement {
+        // var itemConfig = configObject.toolPanelConfig(PanelType.Component, this.termsSearchId, localization.translate(this.termsSearchId, "BookReader").value);
+        // this.readerLayout.root.getItemsById(this.termsPanelId)[0].addChild(itemConfig);
+        // itemConfig = configObject.toolPanelConfig(PanelType.Component, this.termsResultId, localization.translate(this.termsResultId, "BookReader").value);
+        // this.readerLayout.root.getItemsById(this.termsPanelId)[0].addChild(itemConfig);
+
+        containerEl.append(this.createTermsSearchPanel());
+        containerEl.append(this.createTermsResultPanel());
+        $(containerEl).addClass("terms-panel");
+        
+        return containerEl;
     }
 
     protected createTermsResultPanel(): HTMLDivElement {

@@ -454,7 +454,7 @@ class BookmarksPanel extends ToolPanel {
 
 abstract class TermsPanel extends ToolPanel {
     protected termClickedCallback: (termId: number, text: string) => void;
-
+    
     setTermClickedCallback(callback: (termId: number, text: string) => void) {
         this.termClickedCallback = callback;
     }
@@ -470,7 +470,9 @@ class TermsSearchPanel extends TermsPanel {
 
     makeBody(rootReference: Panel, window: Window): HTMLElement {
         var searchResultDiv = window.document.createElement("div");
-        $(searchResultDiv).addClass("reader-search-result-div");
+        $(searchResultDiv)
+            .addClass("reader-search-result-div")
+            .append(`<h3>${localization.translate(this.identificator, "BookReader").value} </h3>`);
 
         var searchResultItemsLoadDiv = window.document.createElement("div");
         $(searchResultItemsLoadDiv).addClass("reader-terms-search-result-items-div-load loader");
@@ -565,7 +567,9 @@ class TermsResultPanel extends TermsPanel {
 
     makeBody(rootReference: Panel, window: Window): HTMLElement {
         var termsResultDiv = window.document.createElement("div");
-        $(termsResultDiv).addClass("reader-terms-result-div");
+        $(termsResultDiv)
+            .addClass("reader-terms-result-div")
+            .append(`<h3>${localization.translate(this.identificator, "BookReader").value} </h3>`);
 
         var termsResultItemsLoadDiv = window.document.createElement("div");
         $(termsResultItemsLoadDiv).addClass("reader-terms-result-items-div-load loader");
@@ -589,7 +593,7 @@ class TermsResultPanel extends TermsPanel {
                 window.location.href = getBaseUrl() + "OldGrammar/OldGrammar/Search?search=" + text;
             };
         }
-        return termsResultItemsDiv;
+        return termsResultDiv;
     }
 
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {

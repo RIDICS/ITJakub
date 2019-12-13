@@ -57,6 +57,31 @@
   }
 }
 
+.terms-panel {
+  display: flex;
+  flex-direction: column;
+  
+  .reader-tool-panel {
+    padding: 10px 0;
+    height: 100%;
+    
+    > * {
+      padding: 0 10px;
+    }
+  }
+  
+  #termsResult {
+    border-top: 2px solid @separation-line-color;
+  }
+  
+  h3 {
+    font-size: 17px;
+    font-weight: bold;
+    margin: 1rem auto;
+  }
+
+}
+
 .reader-tool-panel {
   float: left;
   background-color: white;
@@ -109,12 +134,12 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  
+
   .collapsible-div {
     width: 100%;
     padding: 0 1em;
   }
-  
+
   .book-full-info-container {
     display: flex;
     padding-bottom: 1.5em;
@@ -425,37 +450,39 @@ button {
     max-width: 100%;
   }
 
-  @audioPlayerBackgroundColor: #eeeeee; 
+  @audioPlayerBackgroundColor: #eeeeee;
+
   .audio-player-container {
     background-color: @audioPlayerBackgroundColor;
     display: inline-flex;
     flex-wrap: nowrap;
     align-items: center;
-    
-        
+
+
     .control-buttons {
-      padding-right: 1em; 
+      padding-right: 1em;
+
       button {
-        background-color:@audioPlayerBackgroundColor;
-        
+        background-color: @audioPlayerBackgroundColor;
+
         &:hover, &:focus {
           background-color: darken(@audioPlayerBackgroundColor, 5%);
         }
       }
     }
-    
+
     .full-progressbar {
       height: 0.4em;
       min-width: 10em;
       margin: 0 1em;
       background-color: darken(@audioPlayerBackgroundColor, 20%);
       position: relative;
-      
+
       .current-progress {
         background-color: @button-hover-background-color;
         position: absolute;
         top: 0;
-        left:0;
+        left: 0;
         bottom: 0;
       }
     }
@@ -472,7 +499,7 @@ button {
       }
     }
   }
-  
+
 
   .audio-text {
     min-height: 1em;
@@ -512,7 +539,7 @@ button {
   min-width: 310px;
   text-align: right;
   margin-top: 0.7rem;
-  
+
   .buttons {
     float: none;
     text-align: right;
@@ -549,7 +576,7 @@ button {
     flex-direction: column;
     align-items: center;
   }
-  
+
   &:after {
     content: '';
     display: block;
