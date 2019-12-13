@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Managers.Fulltext;
@@ -18,19 +17,19 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly SnapshotRepository m_snapshotRepository;
-        private readonly AuthorizationManager m_authorizationManager;
+        private readonly AuthenticationManager m_authenticationManager;
         private readonly UserDetailManager m_userDetailManager;
         private readonly IMapper m_mapper;
         private readonly ResourceRepository m_resourceRepository;
         private readonly FulltextStorageProvider m_fulltextStorageProvider;
 
         public SnapshotManager(ProjectRepository projectRepository, SnapshotRepository snapshotRepository,
-            AuthorizationManager authorizationManager, UserDetailManager userDetailManager, IMapper mapper,
+            AuthenticationManager authenticationManager, UserDetailManager userDetailManager, IMapper mapper,
             ResourceRepository resourceRepository, FulltextStorageProvider fulltextStorageProvider)
         {
             m_projectRepository = projectRepository;
             m_snapshotRepository = snapshotRepository;
-            m_authorizationManager = authorizationManager;
+            m_authenticationManager = authenticationManager;
             m_userDetailManager = userDetailManager;
             m_mapper = mapper;
             m_resourceRepository = resourceRepository;
@@ -39,8 +38,6 @@ namespace Vokabular.MainService.Core.Managers
 
         public SnapshotContract GetLatestPublishedSnapshot(long projectId)
         {
-            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ShowPublished);
-
             var latestSnapshot = m_snapshotRepository.InvokeUnitOfWork(x => x.GetLatestPublishedSnapshot(projectId));
             var snapshotContract = m_mapper.Map<SnapshotContract>(latestSnapshot);
             return snapshotContract;
@@ -55,7 +52,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public long CreateSnapshot(CreateSnapshotContract data)
         {
-            var userId = m_authorizationManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUserId();
             var bookTypes = m_mapper.Map<IList<BookTypeEnum>>(data.BookTypes);
             var defaultBookTypes = m_mapper.Map<BookTypeEnum>(data.DefaultBookType);
 

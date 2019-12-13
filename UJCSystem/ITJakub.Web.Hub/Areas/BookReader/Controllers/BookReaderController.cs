@@ -20,15 +20,15 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
                 return BadRequest();
             }
 
-            var client = GetProjectClient();
-            var snapshotInfo = client.GetLatestPublishedSnapshot(bookId.Value);
+            var client = GetBookClient();
+            var bookDetail = client.GetBookDetail(bookId.Value);
 
-            if (snapshotInfo == null)
+            if (bookDetail == null)
             {
                 return NotFound();
             }
 
-            switch (snapshotInfo.DefaultBookType)
+            switch (bookDetail.BookType)
             {
                 case BookTypeEnumContract.Edition:
                 case BookTypeEnumContract.ProfessionalLiterature:
