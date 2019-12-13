@@ -20,7 +20,7 @@
     "user-cardfile-access-forbidden": "You do not have permission to read this card file",
     "user-book-access-forbidden": "You do not have permission on this book",
     "user-book-read-forbidden": "You do not have permission to read this book",
-    "user-book-read-project-forbidden": "You do not have permission to read this work in progress",
+    "user-book-read-project-forbidden": "You do not have permission to show this work",
     "user-book-edit-project-forbidden": "You do not have permission to edit this work",
     "user-book-admin-project-forbidden": "You do not have permission to admin this work",
     "user-resource-access-forbidden": "You do not have permission on the book with this resource",
