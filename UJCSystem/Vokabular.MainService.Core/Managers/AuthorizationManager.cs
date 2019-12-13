@@ -114,6 +114,23 @@ namespace Vokabular.MainService.Core.Managers
             projectIds = filtered;
         }
 
+        private string GetUnauthorizedErrorCodeForPermission(PermissionFlag permission)
+        {
+            switch (permission)
+            {
+                case PermissionFlag.ShowPublished:
+                    return MainServiceErrorCode.UserBookReadForbidden;
+                case PermissionFlag.ReadProject:
+                    return MainServiceErrorCode.UserBookReadProjectForbidden;
+                case PermissionFlag.EditProject:
+                    return MainServiceErrorCode.UserBookEditProjectForbidden;
+                case PermissionFlag.AdminProject:
+                    return MainServiceErrorCode.UserBookAdminProjectForbidden;
+                default:
+                    return MainServiceErrorCode.UserBookAccessForbidden;
+            }
+        }
+
         public void AuthorizeBook(long projectId, PermissionFlag permission)
         {
             var user = m_authenticationManager.GetCurrentUser();
@@ -123,25 +140,7 @@ namespace Vokabular.MainService.Core.Managers
                     x.GetFilteredBookIdListByUserPermissions(user.Id, new List<long> {projectId}, permission));
                 if (filtered == null || filtered.Count == 0)
                 {
-                    string errorCode;
-                    switch (permission)
-                    {
-                        case PermissionFlag.ShowPublished:
-                            errorCode = MainServiceErrorCode.UserBookReadForbidden;
-                            break;
-                        case PermissionFlag.ReadProject:
-                            errorCode = MainServiceErrorCode.UserBookReadProjectForbidden;
-                            break;
-                        case PermissionFlag.EditProject:
-                            errorCode = MainServiceErrorCode.UserBookEditProjectForbidden;
-                            break;
-                        case PermissionFlag.AdminProject:
-                            errorCode = MainServiceErrorCode.UserBookAdminProjectForbidden;
-                            break;
-                        default:
-                            errorCode = MainServiceErrorCode.UserBookAccessForbidden;
-                            break;
-                    }
+                    var errorCode = GetUnauthorizedErrorCodeForPermission(permission);
 
                     throw new MainServiceException(
                         errorCode,
@@ -187,8 +186,10 @@ namespace Vokabular.MainService.Core.Managers
                 var permissions = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionsForSnapshotByUserId(snapshotId, user.Id));
                 if (permissions == null || !permissions.Any(x => x.Flags.HasFlag(permission)))
                 {
+                    var errorCode = GetUnauthorizedErrorCodeForPermission(permission);
+
                     throw new MainServiceException(
-                        MainServiceErrorCode.UserBookReadForbidden,
+                        errorCode,
                         $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission {permission} on book with Snapshot ID '{snapshotId}'",
                         HttpStatusCode.Forbidden
                     );
