@@ -310,5 +310,16 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(() => snapshotAlias.Id == snapshotId && userGroupAlias.Id == userGroupId && projectAlias.IsRemoved == false)
                 .SingleOrDefault();
         }
+
+
+        public virtual IList<Permission> FindPermissionsForResourceVersionByUserId(long resourceVersionId, int userId)
+        {
+
+        }
+
+        public virtual Permission FindPermissionForResourceVersionByGroupId(long resourceVersionId, int userGroupId)
+        {
+
+        }
     }
 }

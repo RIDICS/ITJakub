@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -260,6 +261,47 @@ namespace Vokabular.MainService.Core.Managers
                     );
                 }
             }
+        }
+
+        public void AuthorizeResourceVersion(long resourceVersionId, PermissionFlag permission)
+        {
+            var user = m_authenticationManager.GetCurrentUser();
+            if (user != null)
+            {
+                var dbPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionsForResourceVersionByUserId(resourceVersionId, user.Id));
+
+                if (dbPermissions == null || !dbPermissions.Any(x => x.Flags.HasFlag(permission)))
+                {
+                    var errorCode = GetResourceUnauthorizedErrorCodeForPermission(permission);
+
+                    throw new MainServiceException(
+                        errorCode,
+                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission {permission} on book with resource with versionId '{resourceVersionId}'",
+                        HttpStatusCode.Forbidden
+                    );
+                }
+            }
+            else
+            {
+                var role = m_authenticationManager.GetUnregisteredRole();
+                var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(role.Id, role.Name));
+                var dbPermission = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionForResourceVersionByGroupId(resourceVersionId, group.Id));
+
+                if (dbPermission == null || !dbPermission.Flags.HasFlag(permission))
+                {
+                    throw new MainServiceException(
+                        MainServiceErrorCode.UnregisteredUserResourceAccessForbidden,
+                        $"Unregistered user does not have permission {permission} on book with resource with versionId '{resourceVersionId}'",
+                        HttpStatusCode.Forbidden
+                    );
+                }
+            }
+        }
+
+        public void AuthorizeTextComment(long commentId, PermissionFlag permission)
+        {
+            // TODO check also author of the comment
+            throw new NotImplementedException();
         }
         
         public PermissionDataContract GetCurrentUserProjectPermissions(long projectId)
