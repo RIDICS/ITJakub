@@ -17,5 +17,7 @@ namespace ITJakub.Web.Hub.Options
         public PortalHeadingOption SecondPortal { get; set; }
 
         public Dictionary<string, bool> AllowedSearchOptions { get; set; }
+        
+        public Dictionary<string, bool> ReaderConfig { get; set; }
     }
 }

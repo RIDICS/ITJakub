@@ -1,4 +1,4 @@
-﻿class BookHeader extends ReaderPagination{
+﻿class BookHeader extends ReaderPagination {
     private parentReader: ReaderLayout;
     private bookId: string;
     private versionId: string;
@@ -35,7 +35,7 @@
         var innerHtml: HTMLDivElement = null;
         if (deviceType === Device.Mobile) {
             innerHtml = this.createMobileHeaderDiv(this.bookTitle);
-        } 
+        }
         if (deviceType === Device.Desktop) {
             innerHtml = this.createDesktopHeaderDiv(this.bookTitle);
         }
@@ -51,7 +51,7 @@
             $(editionNoteHeader).append(localization.translate("editionNote", "BookReader").value);
             $(editionNoteDiv).append(editionNoteHeader);
         }
-        
+
         var editionNote: JQueryXHR = this.sc.getEditionNote(this.bookId);
         editionNote.done((response: { editionNote: string }) => {
             var editionNoteText = document.createElement("div");
@@ -107,8 +107,8 @@
             });
 
             $(bookDetailDiv).append(detailTable.build());
-            
-            
+
+
         });
         bookDetail.fail(() => {
             $(bookDetailDiv).append(localization.translate("FailedToLoadInfo", "BookReader").value);
@@ -124,7 +124,7 @@
             var detailData = response["detail"];
             if (detailData.Authors.length !== 0) {
 
-                
+
                 for (var i = 0; i < detailData.Authors.length; i++) {
                     var author = detailData.Authors[i];
                     authors += author.FirstName + " " + author.LastName;
@@ -156,14 +156,14 @@
         );
         toolButtons.appendChild(addBookmarksButton);
         this.toolButtons = this.toolButtons.add(addBookmarksButton)
-        
+
         var bookmarksButton =
             button.createToolButton("bookmark",
                 localization.translate(this.parentReader.bookmarksPanelId, "BookReader").value,
                 this.parentReader.bookmarksPanelId);
         toolButtons.appendChild(bookmarksButton);
         this.toolButtons = this.toolButtons.add(bookmarksButton);
-        
+
         var contentButton = button.createToolButton("book",
             localization.translate(this.parentReader.contentPanelId, "BookReader").value,
             this.parentReader.contentPanelId);
@@ -181,7 +181,7 @@
             this.parentReader.termsPanelId);
         toolButtons.appendChild(termsButton);
         this.toolButtons = this.toolButtons.add(termsButton);
-        
+
         toolButtonsDiv.appendChild(toolButtons);
         if (deviceType === Device.Mobile) {
             $(toolButtonsDiv).addClass("buttons");
@@ -203,10 +203,10 @@
                     } as JQuery.PlainObject);
                 }
             });
-            
+
             toolButtonsDiv.appendChild(showPanelButton);
         }
-        
+
         return toolButtonsDiv;
 
     }
@@ -255,7 +255,7 @@
                     viewButtons.appendChild(imageButton);
                     this.audioOnly = false;
                 }
-            });    
+            });
         });
 
         $.when(hasBookPage, hasBookImageAjax).then(() => {
@@ -272,13 +272,13 @@
                     }
                     viewButtons.appendChild(audioButton);
 
-                    if(this.audioOnly) {
+                    if (this.audioOnly) {
                         this.toolButtons.each((index, element: HTMLButtonElement) => {
                             (element as HTMLButtonElement).disabled = true;
                         })
                     }
                 }
-            });    
+            });
         });
 
         if (deviceType === Device.Mobile) {
@@ -301,13 +301,15 @@
             $(editionNoteButton).append(editionNoteLabel);
             viewButtons.appendChild(editionNoteButton);
         }
-        
+
 
         viewControl.appendChild(viewButtons);
         return viewControl;
     }
 
     private createCheckboxDiv(): HTMLDivElement {
+        var readerOptions = JSON.parse(he.decode($("#readerOptions").data("options"))) as Array<IKeyValue<string, boolean>>;
+
         var checkboxesDiv = window.document.createElement("div");
         $(checkboxesDiv).addClass("reader-settings-checkboxes-area");
 
@@ -356,31 +358,31 @@
         showPageOnNewLineLabel.setAttribute("for", showPageOnNewLineCheckbox.id);
         pageOnNewLineSlider.setAttribute("for", showPageOnNewLineCheckbox.id);
         checkboxesDiv.appendChild(showPageOnNewLineDiv);
+        if (readerOptions[0].value) {
+            var showCommentCheckboxDiv: HTMLDivElement = window.document.createElement("div");
+            var showCommentCheckbox: HTMLInputElement = window.document.createElement("input");
+            showCommentCheckbox.type = "checkbox";
 
-        var showCommentCheckboxDiv: HTMLDivElement = window.document.createElement("div");
-        var showCommentCheckbox: HTMLInputElement = window.document.createElement("input");
-        showCommentCheckbox.type = "checkbox";
+            $(showCommentCheckbox).change((eventData) => {
+                var readerText = $("#" + this.parentReader.textPanelId).find(".reader-text");
+                var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node);
+                this.parentReader.readerLayout.eventHub.emit("toggleComments", currentTarget.checked, "show-notes");
 
-        $(showCommentCheckbox).change((eventData) => {
-            var readerText = $("#" + this.parentReader.textPanelId).find(".reader-text");
-            var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node);
-            this.parentReader.readerLayout.eventHub.emit("toggleComments", currentTarget.checked, "show-notes");
-            
-        });
+            });
 
-        var commentSlider = document.createElement("label");
-        $(commentSlider).addClass("switch");
+            var commentSlider = document.createElement("label");
+            $(commentSlider).addClass("switch");
 
-        var showCommentLabel: HTMLLabelElement = window.document.createElement("label");
-        showCommentLabel.innerHTML = localization.translate("notes", "BookReader").value;
-        showCommentCheckboxDiv.appendChild(showCommentCheckbox);
-        showCommentCheckboxDiv.appendChild(commentSlider);
-        showCommentCheckboxDiv.appendChild(showCommentLabel);
-        showCommentCheckbox.id = "checkbox-show-comment";
-        showCommentLabel.setAttribute("for", showCommentCheckbox.id);
-        commentSlider.setAttribute("for", showCommentCheckbox.id);
-        checkboxesDiv.appendChild(showCommentCheckboxDiv);
-
+            var showCommentLabel: HTMLLabelElement = window.document.createElement("label");
+            showCommentLabel.innerHTML = localization.translate("notes", "BookReader").value;
+            showCommentCheckboxDiv.appendChild(showCommentCheckbox);
+            showCommentCheckboxDiv.appendChild(commentSlider);
+            showCommentCheckboxDiv.appendChild(showCommentLabel);
+            showCommentCheckbox.id = "checkbox-show-comment";
+            showCommentLabel.setAttribute("for", showCommentCheckbox.id);
+            commentSlider.setAttribute("for", showCommentCheckbox.id);
+            checkboxesDiv.appendChild(showCommentCheckboxDiv);
+        }
         return checkboxesDiv;
     }
 
@@ -419,7 +421,7 @@
         controlsDiv.appendChild(this.makeToolButtons(Device.Mobile));
         headerDiv.appendChild(controlsDiv);
 
-        return headerDiv;    
+        return headerDiv;
     }
 
     private makePageInput(): HTMLDivElement {
@@ -453,8 +455,7 @@
             if (this.pages[pageIndex] !== undefined) {
                 var page: BookPage = this.pages[pageIndex];
                 this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.pageId);
-            }
-            else {
+            } else {
                 console.error("missing page " + pageIndex);
             }
         });
@@ -517,8 +518,7 @@
         $(innerTooltip).addClass("tooltip-inner");
         if (this.pages[0] !== undefined) {
             $(innerTooltip).html(`${localization.translate("page", "BookReader").value}: ${this.pages[0].text}`);
-        }
-        else {
+        } else {
             console.error("missing page " + 0);
         }
         sliderTooltip.appendChild(innerTooltip);
@@ -540,20 +540,20 @@
         var buttonObject = new ButtonFactory(this.parentReader, deviceType);
         var bookInfoDiv: HTMLDivElement = document.createElement("div");
         $(bookInfoDiv).addClass("book-details");
-        
+
         var editionNoteDiv = this.getEditionNote(true);
-        
+
         var title = document.createElement("span");
         $(title).addClass("title");
-        
+
         var bookHeaderButtons = document.createElement("div");
         $(bookHeaderButtons).addClass("book-details-buttons");
-                
+
         bookInfoDiv.appendChild(title);
         if (deviceType === Device.Desktop) {
             $(title).text(bookTitle);
             this.getAuthors($(title));
-            
+
             var detailsButton = buttonObject.createButton("more", "info-sign");
             $(detailsButton).click((event) => {
                 var target: JQuery = $(event.target as Node as HTMLInputElement);
@@ -572,7 +572,7 @@
                     details.collapse("hide");
                 }
             });
-            bookHeaderButtons.appendChild(detailsButton);  
+            bookHeaderButtons.appendChild(detailsButton);
 
         }
 
@@ -595,7 +595,7 @@
             title.appendChild(bookDetailButton);
             $(title).append(bookTitle);
 
-            
+
         }
 
         var fullscreenButton = buttonObject.createButton("fullscreen", "fullscreen");
@@ -676,15 +676,15 @@ class ButtonFactory {
         $(spanText).addClass("button-text");
         $(spanText).append(label);
         $(button).append(spanText);
-        
+
         $(button).click(() => {
             if (buttonId === this.readerLayout.searchPanelId) {
                 $(".searchbar-button").first().click(); //WORKAROUND recreating of search result panel
             } else {
-            if (this.deviceType === Device.Desktop) {
-                this.readerLayout.createDesktopToolPanel(buttonId, spanText.innerHTML);
-            } else {
-                this.readerLayout.createMobileToolPanel(buttonId, spanText.innerHTML);
+                if (this.deviceType === Device.Desktop) {
+                    this.readerLayout.createDesktopToolPanel(buttonId, spanText.innerHTML);
+                } else {
+                    this.readerLayout.createMobileToolPanel(buttonId, spanText.innerHTML);
                 }
             }
         });
