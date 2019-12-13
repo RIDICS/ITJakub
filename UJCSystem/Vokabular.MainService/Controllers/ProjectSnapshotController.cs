@@ -25,7 +25,7 @@ namespace Vokabular.MainService.Controllers
         [ProducesResponseTypeHeader(StatusCodes.Status200OK, CustomHttpHeaders.TotalCount, ResponseDataType.Integer, "Total count")]
         public IList<SnapshotAggregatedInfoContract> GetSnapshotList(long projectId, [FromQuery] int? start, [FromQuery] int? count, [FromQuery] string filterByComment)
         {
-            // TODO authorize here
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ReadProject);
 
             var result = m_snapshotManager.GetPublishedSnapshotWithAggregatedInfo(projectId, start, count, filterByComment);
 
