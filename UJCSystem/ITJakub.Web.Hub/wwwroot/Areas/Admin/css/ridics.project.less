@@ -122,12 +122,13 @@
             padding: 10px 2px;
             margin-right: 3px;
             transform: scaleY(2);
-            margin-top: 30vh;
+            margin-top: 250px;
         }
     }
 
     .vertical-splitter {
         border: 1px solid #ccc;
+        min-height: 500px;
     }
 
     .content {
@@ -1254,13 +1255,18 @@ table {
                         .respond-to-comment-textarea {
                             margin-top: 5px;
                         }
+
+                        .alert {
+                            margin-top: 1em;
+                        }
                     }
 
                     .composition-area {
                         &-loading {
                             position: absolute;
-                            top: 25%;
-                            left: 40%;
+                            top: 30%;
+                            left: 45%;
+                            z-index: 2;
                         }
 
                         .editor {
@@ -1288,6 +1294,10 @@ table {
                             font-family: @serif-font-family-reader;
                             text-align: justify;
                             font-size: 115%;
+                        }
+                        
+                        .alert {
+                            margin-top: 1em;
                         }
                     }
                 }

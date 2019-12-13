@@ -54,11 +54,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public ProjectDetailContract GetProject(long projectId, bool fetchPageCount = false)
+        public ProjectDetailContract GetProject(long projectId, bool fetchPageCount = false, bool fetchPermissions = false)
         {
             try
             {
-                var project = m_client.Get<ProjectDetailContract>($"project/{projectId}?fetchPageCount={fetchPageCount}");
+                var project = m_client.Get<ProjectDetailContract>($"project/{projectId}?fetchPageCount={fetchPageCount}&fetchPermissions={fetchPermissions}");
                 return project;
             }
             catch (HttpRequestException e)
@@ -1046,6 +1046,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 m_client.Delete($"project/{projectId}/group");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public PermissionDataContract GetCurrentUserProjectPermissions(long projectId)
+        {
+            try
+            {
+                var result = m_client.Get<PermissionDataContract>($"project/{projectId}/current-user-permission");
+                return result;
             }
             catch (HttpRequestException e)
             {

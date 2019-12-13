@@ -28,12 +28,13 @@ namespace Vokabular.MainService.Core.Managers
         private readonly ForumSiteManager m_forumSiteManager;
         private readonly CommunicationProvider m_communicationProvider;
         private readonly DefaultUserProvider m_defaultUserProvider;
+        private readonly ProjectPermissionConverter m_projectPermissionConverter;
         private readonly IMapper m_mapper;
 
         public ProjectManager(ProjectRepository projectRepository, MetadataRepository metadataRepository,
             PermissionRepository permissionRepository, AuthenticationManager authenticationManager,
             UserDetailManager userDetailManager, ForumSiteManager forumSiteManager, CommunicationProvider communicationProvider,
-            DefaultUserProvider defaultUserProvider, IMapper mapper)
+            DefaultUserProvider defaultUserProvider, ProjectPermissionConverter projectPermissionConverter, IMapper mapper)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
@@ -43,6 +44,7 @@ namespace Vokabular.MainService.Core.Managers
             m_forumSiteManager = forumSiteManager;
             m_communicationProvider = communicationProvider;
             m_defaultUserProvider = defaultUserProvider;
+            m_projectPermissionConverter = projectPermissionConverter;
             m_mapper = mapper;
         }
 
@@ -118,16 +120,8 @@ namespace Vokabular.MainService.Core.Managers
 
                 if (fetchPermissions)
                 {
-                    var joinedFlags = PermissionFlag.None;
-                    if (userPermissionDict.TryGetValue(projectContract.Id, out var permissions))
-                    {
-                        foreach (var permission in permissions)
-                        {
-                            joinedFlags |= permission.Flags;
-                        }
-                    }
-
-                    projectContract.CurrentUserPermissions = m_mapper.Map<PermissionDataContract>(joinedFlags);
+                    userPermissionDict.TryGetValue(projectContract.Id, out var permissions);
+                    projectContract.CurrentUserPermissions = m_projectPermissionConverter.GetAggregatedPermissions(permissions);
                 }
             }
 
@@ -138,8 +132,11 @@ namespace Vokabular.MainService.Core.Managers
             };
         }
 
-        public ProjectDetailContract GetProject(long projectId, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons)
+        public ProjectDetailContract GetProject(long projectId, bool fetchPageCount, bool fetchAuthors, bool fetchResponsiblePersons,
+            bool fetchPermissions)
         {
+            var userId = m_authenticationManager.GetCurrentUserId();
+
             var work = new GetProjectWork(m_projectRepository, m_metadataRepository, projectId, fetchPageCount, fetchAuthors,
                 fetchResponsiblePersons, false);
             var project = work.Execute();
@@ -161,6 +158,12 @@ namespace Vokabular.MainService.Core.Managers
             if (fetchResponsiblePersons && metadataResource != null)
                 result.ResponsiblePersons =
                     m_mapper.Map<List<ProjectResponsiblePersonContract>>(metadataResource.Resource.Project.ResponsiblePersons);
+
+            if (fetchPermissions)
+            {
+                var permissions = m_projectRepository.InvokeUnitOfWork(x => x.FindPermissionsForProjectsByUserId(new[] {projectId}, userId));
+                result.CurrentUserPermissions = m_projectPermissionConverter.GetAggregatedPermissions(permissions);
+            }
 
             return result;
         }

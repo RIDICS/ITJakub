@@ -1,5 +1,7 @@
 ﻿@using ITJakub.Web.Hub.Helpers
+@using Ridics.Core.Structures.Shared
 @using Scalesoft.Localization.AspNetCore
+@using Vokabular.Shared.AspNetCore.Extensions
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Models.PermissionViewModel>
 @inject ILocalizationService Localizer
 @inject PermissionLocalizer PermissionLocalizer
@@ -8,7 +10,7 @@
 {
 <tr class="permission-row" data-permission-id="@permission.Id">
     <td>
-        <input type="checkbox" asp-for="@permission.IsSelected" />
+        <input type="checkbox" asp-for="@permission.IsSelected" disabled="@(User.HasPermission(PermissionNames.AssignPermissionsToRoles) == false)" />
     </td>
     <td>
         <div class="name">

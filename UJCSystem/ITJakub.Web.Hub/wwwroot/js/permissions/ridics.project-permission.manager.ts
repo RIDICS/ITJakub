@@ -20,12 +20,12 @@
         this.savePermissionButtonSelector = "#saveProjectPermissions";
     }
 
-    public init(clearPermissions = false) {
+    public init(clearPermissions = false, saveStateToUrl = true) {
         if (this.projectId != null) {
             this.roleList = new ListWithPagination(`Admin/Project/CooperationList?projectId=${this.projectId}`,
                 "role",
                 ViewType.Widget,
-                true,
+                saveStateToUrl,
                 false,
                 this.initRoleClicks,
                 this);
@@ -133,7 +133,7 @@
                 subContent.html(result);
                 saveButton.removeClass("hide");
             }).fail((error) => {
-                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement;
+                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
                 subContent.empty();
                 alertHolder.empty().append(alert);
             });
@@ -188,6 +188,7 @@
             });
 
             addProjectPermissionToRoleBtn.on("click", () => {
+                const savingIcon = addProjectPermissionToRoleBtn.find(".saving-icon");
                 roleError.empty();
                 if (typeof this.currentRoleSelectedItem == "undefined" || this.currentRoleSelectedItem == null) {
                     const errorAlert = new AlertComponentBuilder(AlertType.Error)
@@ -195,6 +196,7 @@
                     roleError.empty().append(errorAlert.buildElement());
                     return;
                 } else {
+                    savingIcon.removeClass("hide");
                     const requestContract = this.getRequestContract(this.currentRoleSelectedItem.id, addProjectPermissionModal);
                     this.client.addProjectToRole(requestContract).done(() => {
                         this.roleList.reloadPage();
@@ -205,6 +207,8 @@
                             .addContent(this.errorHandler.getErrorMessage(error,
                                 localization.translate("AddProjectToRoleError", "PermissionJs").value));
                         roleError.empty().append(errorAlert.buildElement());
+                    }).always(() => {
+                        savingIcon.addClass("hide");
                     });
                 }
             });

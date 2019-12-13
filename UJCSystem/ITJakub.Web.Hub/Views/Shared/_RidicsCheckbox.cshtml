@@ -2,7 +2,7 @@
 
 <div class="ridics-checkbox">
     <label>
-        <input type="checkbox" name="@Model.Name" @(Model != null && Model.IsChecked ? "checked=\"checked\"" : "")/>
+        <input type="checkbox" name="@Model.Name" checked="@Model.IsChecked" disabled="@Model.IsDisabled" />
         <span class="cr cr-black">
             <i class="cr-icon glyphicon glyphicon-ok"></i>
         </span>

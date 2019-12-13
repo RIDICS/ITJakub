@@ -12,7 +12,7 @@
     }
     
     public init() {
-        this.projectPermissionManager.init(true);
+        this.projectPermissionManager.init(true, false);
         this.initAddProjectToUserDialog();
     }
 

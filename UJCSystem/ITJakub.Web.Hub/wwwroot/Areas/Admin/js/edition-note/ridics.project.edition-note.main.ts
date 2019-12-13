@@ -11,9 +11,14 @@
     constructor(projectId: number) {
         this.projectId = projectId;
         this.errorHandler = new ErrorHandler();
+        this.simpleMde = null;
     }
 
     isChangeMade(): boolean {
+        if (this.simpleMde == null) {
+            return false;
+        }
+
         return this.simpleMde.value() != this.originalNote;
     }
     

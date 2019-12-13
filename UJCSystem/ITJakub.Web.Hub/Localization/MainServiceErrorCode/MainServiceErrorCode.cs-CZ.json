@@ -14,11 +14,15 @@
     "unallowed-authorization-criteria":
       "Vyhledácí kritérium obsahuje nepovolené autorizační kritérium. Autorizační kritérium je generováno automaticky.",
     "unregistered-user-cardfile-access": "Neregistrovaní uživatelé nemají přístup ke čtení této kartotéky",
-    "unregistered-user-book-access-forbidden": "Neregistrovaní uživatelé nemají přístup ke čtétní této knihy",
+    "unregistered-user-book-access-forbidden": "Neregistrovaní uživatelé nemají přístup ke čtení této knihy",
     "unregistered-user-resource-access-forbidden":
       "Neregistrovaní uživatelé nemají přístup ke knize s tímto zdrojem",
     "user-cardfile-access-forbidden": "Nemáte přístup ke čtení kartotéky",
-    "user-book-access-forbidden": "Nemáte přístup ke čtení této knihy",
+    "user-book-access-forbidden": "Nemáte přístup k této knize",
+    "user-book-read-forbidden": "Nemáte přístup ke čtení této knihy",
+    "user-book-read-project-forbidden": "Nemáte přístup ke čtení tohoto rozpracovaného díla",
+    "user-book-write-project-forbidden": "Nemáte přístup k úpravě tohoto díla",
+    "user-book-admin-project-forbidden": "Nemáte přístup ke správě tohoto díla",
     "user-resource-access-forbidden": "Nemáte přístup ke knize s tímto zdrojem",
     "project-id-or-resource-id": "Musí být specifikován právě jeden parametr (ProjectId or ResourceId)",
     "create-anonymous-feedback": "Pokud není uživatel přihlášen je nutné vytvořit anonymní připomínku",
@@ -58,6 +62,8 @@
     "group-already-assigned-to-project": "Skupina už má přiřazené nějaké právo k tomuto dílu",
     "user-already-assigned-to-project": "Uživatel už má přiřazené nějaké právo k tomuto dílu",
     "snapshot-must-contain-metadata": "Dílo musí obsahovat metadata, jinak nemůže být publikováno.",
+    "forbidden": "Nedostatečná práva pro tuto operaci",
+    "user-already-assigned-to-role": "Uživatel '{0}' se již nachází ve skupině '{1}'.",
     
     //Auth service codes
     "generic-error": "Operace se nezdařila",
@@ -118,7 +124,7 @@
     "unauthorized-code-401":
       "Chyba při komunikaci s externí službou. Služba vrátila stav: 401 Unauthorized",
     "forbidden-code-403":
-      "Chyba při komunikaci s externí službou. Služba vrátila stav: 403 Forbidden",
+      "Nedostatečná práva pro tuto operaci",
     "not-found-code-404":
       "Chyba při komunikaci s externí službou. Služba vrátila stav: 404 Not found",
     "internal-server-error-code-500":

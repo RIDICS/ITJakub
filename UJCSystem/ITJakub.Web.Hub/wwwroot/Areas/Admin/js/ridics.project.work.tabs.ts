@@ -760,7 +760,7 @@ class ProjectWorkPageListTab extends ProjectModuleTabBase {
         this.editor.init(this.projectId);
     }
 
-    isEditModeEnabled() {
+    isEditModeOpened() {
         return this.editor.isChangeMade();
     }
 }
@@ -779,7 +779,7 @@ class ProjectWorkChapterEditorTab extends ProjectModuleTabBase {
         this.editor.init(this.projectId);
     }
 
-    isEditModeEnabled() {
+    isEditModeOpened() {
         return this.editor.isChangeMade();
     }
 }
@@ -1218,7 +1218,7 @@ class ProjectWorkPublicationsTab extends ProjectModuleTabBase {
         snapshotList.init();
     }
 
-    isEditModeEnabled() {
+    isEditModeOpened() {
         return false;
     }
 }
@@ -1236,7 +1236,7 @@ class ProjectWorkCooperationTab extends ProjectModuleTabBase {
         cooperationManager.init();
     }
 
-    isEditModeEnabled() {
+    isEditModeOpened() {
         return false;
     }
 }
@@ -1255,7 +1255,7 @@ class ProjectWorkNoteTab extends ProjectModuleTabBase {
         this.editor.init();
     }
 
-    isEditModeEnabled() {
+    isEditModeOpened() {
         return this.editor.isChangeMade();
     }
 }
@@ -1304,7 +1304,7 @@ class ProjectWorkForumTab extends ProjectModuleTabBase {
         });
     }
 
-    isEditModeEnabled() {
+    isEditModeOpened() {
         return false;
     }
 }

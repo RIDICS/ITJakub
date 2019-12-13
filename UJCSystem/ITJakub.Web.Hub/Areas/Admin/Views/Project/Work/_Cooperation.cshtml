@@ -1,4 +1,6 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Constants
+@using ITJakub.Web.Hub.Helpers
+@using Scalesoft.Localization.AspNetCore
 @using Scalesoft.Localization.Core.Util
 @using Vokabular.MainService.DataContracts.Contracts.Permission
 @inject ILocalizationService Localizer
@@ -17,12 +19,12 @@
                             <div class="col-xs-12 col col-sm-12 col-md-9 col-lg-8">
                                 <form asp-action="CooperationList" asp-controller="Project" method="get" class="role-search-form search-form form-inline">
                                     <div class="form-group">
-                                        <div id="addPermissionButton" class="btn btn-default" title="@Localizer.Translate("AddProjectPermissionToGroup", "Permission")">
+                                        <button type="button" id="addPermissionButton" class="btn btn-default" disabled="@(!ViewData.HasPermissionFor().AdminProject)" title="@Localizer.Translate("AddProjectPermissionToGroup", "Permission")">
                                             <i class="fa fa-plus"></i>
-                                        </div>
-                                        <div id="addPermissionToUserButton" class="btn btn-default" title="@Localizer.Translate("AddProjectPermissionToUser", "Permission")">
+                                        </button>
+                                        <button type="button" id="addPermissionToUserButton" class="btn btn-default" disabled="@(!ViewData.HasPermissionFor().AdminProject)" title="@Localizer.Translate("AddProjectPermissionToUser", "Permission")">
                                             <i class="fa fa-user-plus"></i>
-                                        </div>
+                                        </button>
                                         <div class="search-input">
                                             <input class="form-control search-value" name="search" placeholder=" " value="@Model.SearchQuery"/>
                                             <i class="fa fa-close reset-search-button"></i>
@@ -47,6 +49,7 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-5 project-permission-section" id="project-permission-section">
+            @{ ViewData[PermissionViewConstants.SaveProjectPermissionsEnabled] = ViewData.HasPermissionFor().AdminProject; }
             @await Html.PartialAsync("Widgets/_ProjectPermissionsPanel")
         </div>
 

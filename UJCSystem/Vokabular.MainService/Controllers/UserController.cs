@@ -35,7 +35,6 @@ namespace Vokabular.MainService.Controllers
             m_userDetailManager = userDetailManager;
         }
 
-        [AllowAnonymous]
         [HttpPost("")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         public IActionResult CreateNewUser([FromBody] CreateUserContract data)
@@ -51,7 +50,6 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [AllowAnonymous]
         [HttpPost("current/local-data")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         public IActionResult CreateUserIfNotExist([FromBody] CreateUserIfNotExistContract data)

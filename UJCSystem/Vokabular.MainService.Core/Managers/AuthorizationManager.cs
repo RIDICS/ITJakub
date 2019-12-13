@@ -5,8 +5,10 @@ using System.Reflection;
 using log4net;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts.CardFile;
+using Vokabular.MainService.DataContracts.Contracts.Permission;
 using Vokabular.Shared.Const;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
@@ -20,11 +22,13 @@ namespace Vokabular.MainService.Core.Managers
 
         private readonly AuthenticationManager m_authenticationManager;
         private readonly PermissionRepository m_permissionRepository;
+        private readonly ProjectPermissionConverter m_projectPermissionConverter;
 
-        public AuthorizationManager(AuthenticationManager authenticationManager, PermissionRepository permissionRepository)
+        public AuthorizationManager(AuthenticationManager authenticationManager, PermissionRepository permissionRepository, ProjectPermissionConverter projectPermissionConverter)
         {
             m_authenticationManager = authenticationManager;
             m_permissionRepository = permissionRepository;
+            m_projectPermissionConverter = projectPermissionConverter;
         }
 
         public int GetCurrentUserId()
@@ -119,9 +123,29 @@ namespace Vokabular.MainService.Core.Managers
                     x.GetFilteredBookIdListByUserPermissions(user.Id, new List<long> {projectId}, permission));
                 if (filtered == null || filtered.Count == 0)
                 {
+                    string errorCode;
+                    switch (permission)
+                    {
+                        case PermissionFlag.ShowPublished:
+                            errorCode = MainServiceErrorCode.UserBookReadForbidden;
+                            break;
+                        case PermissionFlag.ReadProject:
+                            errorCode = MainServiceErrorCode.UserBookReadProjectForbidden;
+                            break;
+                        case PermissionFlag.EditProject:
+                            errorCode = MainServiceErrorCode.UserBookEditProjectForbidden;
+                            break;
+                        case PermissionFlag.AdminProject:
+                            errorCode = MainServiceErrorCode.UserBookAdminProjectForbidden;
+                            break;
+                        default:
+                            errorCode = MainServiceErrorCode.UserBookAccessForbidden;
+                            break;
+                    }
+
                     throw new MainServiceException(
-                        MainServiceErrorCode.UserBookAccessForbidden,
-                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with id '{projectId}'",
+                        errorCode,
+                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission {permission} on book with id '{projectId}'",
                         HttpStatusCode.Forbidden
                     );
                 }
@@ -137,11 +161,22 @@ namespace Vokabular.MainService.Core.Managers
                 {
                     throw new MainServiceException(
                         MainServiceErrorCode.UnregisteredUserBookAccessForbidden,
-                        $"Unregistered user does not have permission on book with id '{projectId}'",
+                        $"Unregistered user does not have permission {permission} on book with id '{projectId}'",
                         HttpStatusCode.Forbidden
                     );
                 }
             }
+        }
+
+        public void AuthorizeBookOrPermission(long projectId, PermissionFlag permission, string permissionName)
+        {
+            var userPermissions = m_authenticationManager.GetCurrentUserPermissions(false);
+            if (userPermissions.Any(x => x.Value == permissionName))
+            {
+                return;
+            }
+
+            AuthorizeBook(projectId, permission);
         }
 
         public void AuthorizeSnapshot(long snapshotId)
@@ -153,7 +188,7 @@ namespace Vokabular.MainService.Core.Managers
                 if (permissions == null || !permissions.Any(x => x.Flags.HasFlag(PermissionFlag.ShowPublished)))
                 {
                     throw new MainServiceException(
-                        MainServiceErrorCode.UserBookAccessForbidden,
+                        MainServiceErrorCode.UserBookReadForbidden,
                         $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with Snapshot ID '{snapshotId}'",
                         HttpStatusCode.Forbidden
                     );
@@ -207,6 +242,20 @@ namespace Vokabular.MainService.Core.Managers
                     );
                 }
             }
+        }
+        
+        public PermissionDataContract GetCurrentUserProjectPermissions(long projectId)
+        {
+            var user = m_authenticationManager.GetCurrentUser(true);
+            if (user == null)
+            {
+                return new PermissionDataContract();
+            }
+
+            var permissions = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionsByUserAndBook(user.Id, projectId));
+            var result = m_projectPermissionConverter.GetAggregatedPermissions(permissions);
+            
+            return result;
         }
     }
 }

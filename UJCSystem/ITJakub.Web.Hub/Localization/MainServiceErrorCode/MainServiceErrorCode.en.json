@@ -13,12 +13,16 @@
     "cannot-move-category-to-subcategory": "Can't move category into it's own subcategories",
     "unallowed-authorization-criteria":
       "Search criteria contains unallowed Authorization criteria. Authorization criteria is generated automatically.",
-    "unregistered-user-cardfile-access-forbidden": "Unregistered user does not have permission to read  this cardfile",
+    "unregistered-user-cardfile-access-forbidden": "Unregistered user does not have permission to read this card file",
     "unregistered-user-book-access-forbidden": "Unregistered user does not have permission on this book",
     "unregistered-user-resource-access-forbidden":
       "Unregistered user does not have permission on the book with this resource",
-    "user-cardfile-access-forbidden": "You do not have permission to read this cardfile",
+    "user-cardfile-access-forbidden": "You do not have permission to read this card file",
     "user-book-access-forbidden": "You do not have permission on this book",
+    "user-book-read-forbidden": "You do not have permission to read this book",
+    "user-book-read-project-forbidden": "You do not have permission to read this work in progress",
+    "user-book-write-project-forbidden": "You do not have permission to edit this work",
+    "user-book-admin-project-forbidden": "You do not have permission to admin this work",
     "user-resource-access-forbidden": "You do not have permission on the book with this resource",
     "project-id-or-resource-id": "Exactly one parameter (ProjectId or ResourceId) has to be specified",
     "create-anonymous-feedback": "If a user is not signed in, it is required to create anonymous feedback",
@@ -58,6 +62,8 @@
     "group-already-assigned-to-project": "The group already has assigned some permission for this work",
     "user-already-assigned-to-project": "The user already has assigned some permission for this work",
     "snapshot-must-contain-metadata": "The work must contain metadata otherwise it can't be published.",
+    "forbidden": "Insufficient permissions for the operation",
+    "user-already-assigned-to-role": "The user '{0}' is already assigned to a group '{1}'.",
 
     //Auth service codes
     "generic-error": "Operation failed",
@@ -118,7 +124,7 @@
     "unauthorized-code-401":
       "There was a problem communicating with a third party service. Third party service returned status: 401 Unauthorized",
     "forbidden-code-403":
-      "There was a problem communicating with a third party service. Third party service returned status: 403 Forbidden",
+      "Insufficient permissions for the operation",
     "not-found-code-404":
       "There was a problem communicating with a third party service. Third party service returned status: 404 Not found",
     "internal-server-error-code-500":
