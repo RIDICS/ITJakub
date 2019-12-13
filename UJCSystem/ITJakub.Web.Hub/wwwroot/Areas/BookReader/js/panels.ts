@@ -1,9 +1,10 @@
-﻿abstract class Panel {
+﻿const MAX_INTEGER = 2147483647;
+
+abstract class Panel {
     identificator: string;
     innerContent: HTMLElement;
     sc: ServerCommunication;
     parentReader: ReaderLayout;
-
     constructor(identificator: string, readerLayout: ReaderLayout, sc: ServerCommunication) {
         this.identificator = identificator;
         this.sc = sc;
@@ -160,7 +161,7 @@ class SearchResultPanel extends ToolPanel {
         $(pagingDiv).addClass("reader-search-result-paging pagination-extra-small");
         this.searchPagingDiv = pagingDiv;
         if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
-            this.resultsOnPage = Number.POSITIVE_INFINITY;
+            this.resultsOnPage = MAX_INTEGER;
         } else {
             this.resultsOnPage = 8;
         }
