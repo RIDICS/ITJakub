@@ -21,7 +21,7 @@
     "user-book-access-forbidden": "Nemáte přístup k této knize",
     "user-book-read-forbidden": "Nemáte přístup ke čtení této knihy",
     "user-book-read-project-forbidden": "Nemáte přístup ke čtení tohoto rozpracovaného díla",
-    "user-book-write-project-forbidden": "Nemáte přístup k úpravě tohoto díla",
+    "user-book-edit-project-forbidden": "Nemáte přístup k úpravě tohoto díla",
     "user-book-admin-project-forbidden": "Nemáte přístup ke správě tohoto díla",
     "user-resource-access-forbidden": "Nemáte přístup ke knize s tímto zdrojem",
     "project-id-or-resource-id": "Musí být specifikován právě jeden parametr (ProjectId or ResourceId)",
