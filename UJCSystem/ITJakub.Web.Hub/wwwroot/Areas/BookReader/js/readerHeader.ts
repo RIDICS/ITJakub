@@ -155,7 +155,7 @@
             this.parentReader.bookmarksPanelId
         );
         toolButtons.appendChild(addBookmarksButton);
-        this.toolButtons = this.toolButtons.add(addBookmarksButton)
+        this.toolButtons = this.toolButtons.add(addBookmarksButton);
 
         var bookmarksButton =
             button.createToolButton("bookmark",
