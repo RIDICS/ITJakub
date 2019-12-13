@@ -45,7 +45,6 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
-        //[Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpGet("{groupId}/book/{bookId}/permission")]
         public PermissionDataContract GetPermissionsForGroupAndBook(int groupId, long bookId)
         {
@@ -55,7 +54,6 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
-        //[Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpPost("{groupId}/book/{bookId}/permission")]
         public void AddBookToGroup(int groupId, long bookId, [FromBody] PermissionDataContract data)
         {
@@ -64,7 +62,6 @@ namespace Vokabular.MainService.Controllers
             m_permissionManager.AddBookToGroup(groupId, bookId, data);
         }
 
-        //[Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpPut("{groupId}/book/{bookId}/permission")]
         public void UpdateOrAddBookToGroup(int groupId, long bookId, [FromBody] PermissionDataContract data)
         {
@@ -73,7 +70,6 @@ namespace Vokabular.MainService.Controllers
             m_permissionManager.UpdateOrAddBooksToGroup(groupId, new List<long> { bookId }, data);
         }
 
-        //[Authorize(PermissionNames.AssignPermissionsToRoles)]
         [HttpDelete("{groupId}/book/{bookId}/permission")]
         public void RemoveBooksFromGroup(int groupId, long bookId)
         {
