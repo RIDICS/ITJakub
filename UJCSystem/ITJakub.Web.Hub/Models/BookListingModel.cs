@@ -12,6 +12,8 @@ namespace ITJakub.Web.Hub.Models
         public IList<PageContract> BookPages { get; set; }
         public IList<TrackWithRecordingContract> AudioTracks { get; set; }
         public string SearchText { get; set; }
+        
+        public string SearchType { get; set; }
         public string InitPageId { get; set; }
         public bool CanPrintEdition { get; set; }
         public JsonSerializerSettings JsonSerializerSettingsForBiblModule { get; set; }

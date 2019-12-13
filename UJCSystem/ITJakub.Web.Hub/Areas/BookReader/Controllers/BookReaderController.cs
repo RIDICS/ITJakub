@@ -25,7 +25,7 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
         
         #region Views and Feedback
                 
-        public ActionResult Listing(long? bookId, string searchText, string pageId)
+        public ActionResult Listing(long? bookId, string searchText, string pageId, string searchType = "Fulltext")
         {
             if (bookId == null)
             {
@@ -69,6 +69,7 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
                     BookTitle = book.Title,
                     BookPages = pages,
                     SearchText = searchText,
+                    SearchType = searchType,
                     InitPageId = pageId, 
                     CanPrintEdition = User.HasPermission(VokabularPermissionNames.EditionPrintText),
                     JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()

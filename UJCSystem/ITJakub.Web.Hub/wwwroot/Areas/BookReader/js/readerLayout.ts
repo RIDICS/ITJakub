@@ -20,7 +20,7 @@ class ReaderLayout {
     sc: ServerCommunication;
     deviceType: Device;
     bookHeader: BookHeader;
-    
+
     clickedMoveToPage: boolean;
 
     private bookmarksPanel: BookmarksPanel;
@@ -198,7 +198,7 @@ class ReaderLayout {
             var contentItem = this.readerLayout.root.getItemsById(panelId)[0] as GoldenLayout.ContentItem;
             if (contentItem.parent.isStack) {
                 contentItem.parent.setActiveContentItem(contentItem);
-            } 
+            }
         }
     }
 
@@ -540,7 +540,7 @@ class ReaderLayout {
         if (bookmarkPosition.bookmarks.length === 1) {
             $(bookmarkPosition.bookmarkSpan).data("title", title);
         }
-        
+
         this.favoriteManager.updateFavoriteItem(bookmarkId, title, () => {
         });
     }
@@ -570,7 +570,7 @@ class ReaderLayout {
             postRemoveAction();
         });
     }
-    
+
     notifyPanelsMovePage(pageIndex: number, scrollTo: boolean) {
         var k: 0;
         for (k = 0; k < this.toolPanels.length; k++) {
@@ -623,24 +623,20 @@ class ReaderLayout {
     }
 
     private getTermsResultPanel(): TermsResultPanel {
-        if (this.termsResultPanel === null) {
-            if (this.deviceType === Device.Mobile) {
-                this.createMobileToolPanel(this.termsResultId, localization.translate(this.termsResultId, "BookReader").value);
-            } else {
-                this.createDesktopToolPanel(this.termsResultId, localization.translate(this.termsResultId, "BookReader").value);
-            }
+        if (this.deviceType === Device.Mobile) {
+            this.createMobileToolPanel(this.termsPanelId, localization.translate(this.termsPanelId, "BookReader").value);
+        } else {
+            this.createDesktopToolPanel(this.termsPanelId, localization.translate(this.termsPanelId, "BookReader").value);
         }
 
         return this.termsResultPanel;
     }
 
     private getTermsSearchPanel(): TermsSearchPanel {
-        if (this.termsSearchPanel === null) {
-            if (this.deviceType === Device.Mobile) {
-                this.createMobileToolPanel(this.termsSearchId, localization.translate(this.termsSearchId, "BookReader").value);
-            } else {
-                this.createDesktopToolPanel(this.termsSearchId, localization.translate(this.termsSearchId, "BookReader").value);
-            }
+        if (this.deviceType === Device.Mobile) {
+            this.createMobileToolPanel(this.termsPanelId, localization.translate(this.termsPanelId, "BookReader").value);
+        } else {
+            this.createDesktopToolPanel(this.termsPanelId, localization.translate(this.termsPanelId, "BookReader").value);
         }
 
         return this.termsSearchPanel;
@@ -679,7 +675,6 @@ class ReaderLayout {
 
     termsPanelShowLoading() {
         this.getTermsSearchPanel().showLoading();
-
     }
 
     termsPanelRemoveLoading() {
@@ -688,6 +683,10 @@ class ReaderLayout {
 
     termsPanelClearResults() {
         this.getTermsSearchPanel().clearResults();
+    }
+
+    showSearchInTermsPanel(searchResults: Array<PageDescription>) {
+        this.getTermsSearchPanel().showResults(searchResults);
     }
 
     protected createBookmarksPanel(): HTMLDivElement {
@@ -849,7 +848,7 @@ class ReaderLayout {
         this.readerLayout.eventHub.on("scrollPage", (pageWithMinOffsetId) => {
             this.bookHeader.moveToPage(pageWithMinOffsetId, false);
         });
-        
+
         this.readerLayout.eventHub.on("showTextSearchMatch", (searchQuery: string, isQueryJson: boolean, pages: Array<IPage>) => {
             this.showSearchResultInPages(searchQuery, isQueryJson, pages);
         })

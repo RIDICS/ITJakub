@@ -486,7 +486,8 @@ class TermsSearchPanel extends TermsPanel {
         this.searchResultOrderedList = window.document.createElement("ol");
 
         this.searchResultItemsDiv.appendChild(this.searchResultOrderedList);
-
+        
+        this.clearResults();
         return searchResultDiv;
     }
 
@@ -533,19 +534,19 @@ class TermsSearchPanel extends TermsPanel {
             if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
                 $($(".view-control button")[1] as Node as HTMLElement).click();
             }
-            this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.pageId);
+            this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.id);
         });
         this.parentReader.readerLayout.on("itemCreated", () => {
             $(hrefElement).click(() => {
                 if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
                     $($(".view-control button")[1] as Node as HTMLElement).click();
                 }
-                this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.pageId);
+                this.parentReader.readerLayout.eventHub.emit("navigationClicked", page.id);
             });
         });
 
         var textSpanElement = document.createElement("span");
-        $(textSpanElement).text(`[${page.pageName}]`);
+        $(textSpanElement).text(`[${page.name}]`);
 
         $(hrefElement).append(textSpanElement);
 

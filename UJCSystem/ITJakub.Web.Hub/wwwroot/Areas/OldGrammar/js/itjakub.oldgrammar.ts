@@ -29,8 +29,8 @@
         for (var i = 0; i < responseResults.length; i++) {
             var result = responseResults[i];
             var searchResult = new PageDescription();
-            searchResult.pageId = result.id;
-            searchResult.pageName = result.name;
+            searchResult.id = result.id;
+            searchResult.name = result.name;
             searchResults.push(searchResult);
         }
 
@@ -125,9 +125,9 @@ function listGrammarBookReadClicked(target) {
     return context => {
         var bookId = $(target).parents("li.list-item").attr("data-id");
         if (context.search.isLastQueryJson()) { //only text seach criteria we should propagate
-            onClickHref(context.event, getBaseUrl() + "BookReader/BookReader/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
+            onClickHref(context.event, getBaseUrl() + "BookReader/BookReader/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery() + "&searchType=Terms");
         } else {
-            onClickHref(context.event, getBaseUrl() + "BookReader/BookReader/Listing?bookId=" + bookId);
+            onClickHref(context.event, getBaseUrl() + "BookReader/BookReader/Listing?bookId=" + bookId + "&searchType=Terms");
         }
     }
 }
@@ -135,6 +135,6 @@ function listGrammarBookReadClicked(target) {
 function searchGrammarBookReadClicked(target) {
     return context => {
         var bookId = $(target).parents("li.list-item").attr("data-id");
-        onClickHref(context.event, getBaseUrl() + "BookReader/BookReader/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
+        onClickHref(context.event, getBaseUrl() + "BookReader/BookReader/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery() + "&searchType=Terms");
     }
 }

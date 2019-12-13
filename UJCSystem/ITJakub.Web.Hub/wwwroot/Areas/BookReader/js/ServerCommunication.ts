@@ -108,11 +108,33 @@
         });
     }
 
+    textSearchOldGrammar(bookId: string, versionId: string, text: string): JQueryXHR {
+        return $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchInBook",
+            data: { text: text, projectId: bookId, snapshotId: versionId } as JQuery.PlainObject,
+            dataType: 'json',
+            contentType: 'application/json'
+        });
+    }
+    
     advancedSearchBookCount(bookId: string, versionId: string, json: string): JQueryXHR {
         return $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BookReader/BookReader/AdvancedSearchInBookCount",
+            data: { json: json, projectId: bookId, snapshotId: versionId } as JQuery.PlainObject,
+            dataType: 'json',
+            contentType: 'application/json'
+        });
+    }
+
+    advancedSearchOldGrammar(bookId: string, versionId: string, json: string): JQueryXHR {
+        return $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "OldGrammar/OldGrammar/AdvancedSearchInBook",
             data: { json: json, projectId: bookId, snapshotId: versionId } as JQuery.PlainObject,
             dataType: 'json',
             contentType: 'application/json'

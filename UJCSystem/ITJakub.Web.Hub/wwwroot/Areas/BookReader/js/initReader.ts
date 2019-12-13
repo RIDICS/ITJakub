@@ -2,6 +2,7 @@
     versionId: string,
     bookTitle: string,
     pageList: any,
+    searchedType: string,
     searchedText?: string,
     initPageId?: string) {
 
@@ -22,6 +23,6 @@
     );
     readerPlugin.makeReader(bookId, versionId, bookTitle, pageList);
 
-    var searchModule = new SearchModule(<any>$("#SearchDiv")[0], sc, readerPlugin, bookId, versionId);
+    var searchModule = new SearchModule(<any>$("#SearchDiv")[0], sc, readerPlugin, bookId, versionId, searchedType);
     searchModule.initSearchModule(initPageId, searchedText);
 }

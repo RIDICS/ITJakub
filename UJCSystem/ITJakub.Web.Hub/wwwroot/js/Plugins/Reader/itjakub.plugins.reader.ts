@@ -2391,11 +2391,11 @@ class TermsPanelOld extends LeftSidePanel {
         var hrefElement = document.createElement("a");
         hrefElement.href = "#";
         $(hrefElement).click(() => {
-            this.parentReader.moveToPage(page.pageId, true);
+            this.parentReader.moveToPage(page.id, true);
         });
 
         var textSpanElement = document.createElement("span");
-        textSpanElement.innerHTML = `[${page.pageName}]`;
+        textSpanElement.innerHTML = `[${page.name}]`;
         
         $(hrefElement).append(textSpanElement);
 
@@ -2542,8 +2542,8 @@ class SearchHitResult {
 }
 
 class PageDescription {
-    pageId: number;
-    pageName: string;
+    id: number;
+    name: string;
 }
 
 interface IBookmarkPosition {

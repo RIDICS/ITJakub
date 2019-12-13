@@ -4,8 +4,9 @@
     readerPlugin: ReaderLayout;
     bookId: string;
     versionId: string;
+    searchType: string;
 
-    constructor(searchContainer: HTMLDivElement, sc: ServerCommunication, readerPlugin: ReaderLayout, bookId: string, versionId: string) {
+    constructor(searchContainer: HTMLDivElement, sc: ServerCommunication, readerPlugin: ReaderLayout, bookId: string, versionId: string, searchType: string) {
         this.sc = sc;
         this.readerPlugin = readerPlugin;
         this.bookId = bookId;
@@ -14,6 +15,7 @@
             bookType: BookTypeEnum.Edition,
             queryType: QueryTypeEnum.Reader
         };
+        this.searchType = searchType;
         this.search = new Search(searchContainer, this.advancedSearch.bind(this), this.basicSearch.bind(this), favoriteQueriesConfig);
     }
 
@@ -48,31 +50,50 @@
 
     private basicSearch(text: string) {
         if (typeof text === "undefined" || text === null || text === "") return;
-        var textSearch: JQueryXHR = this.sc.textSearchBookCount(this.bookId, this.versionId, text);
-        textSearch.done((response: { count: number }) => {
-            updateQueryStringParameter("searchText", text);
-            this.readerPlugin.setResultsPaging(response.count, this.paginatorPageClickCallback.bind(this));
-        });
+        if (this.searchType == SearchType.Fulltext) {
+            var textSearch: JQueryXHR = this.sc.textSearchBookCount(this.bookId, this.versionId, text);
+            textSearch.done((response: { count: number }) => {
+                updateQueryStringParameter("searchText", text);
+                this.readerPlugin.setResultsPaging(response.count, this.paginatorPageClickCallback.bind(this));
+            });
 
-        var textSearchMatchHit: JQueryXHR = this.sc.textSearchMatchHit(this.bookId, this.versionId, text);
-        textSearchMatchHit.done((response: { pages: Array<IPage> }) => {
-            this.readerPlugin.readerLayout.eventHub.emit("showTextSearchMatch", text, false, response.pages);
-        });
+            var textSearchMatchHit: JQueryXHR = this.sc.textSearchMatchHit(this.bookId, this.versionId, text);
+            textSearchMatchHit.done((response: { pages: Array<IPage> }) => {
+                this.readerPlugin.readerLayout.eventHub.emit("showTextSearchMatch", text, false, response.pages);
+            });
+        } else if (this.searchType == SearchType.Terms) {
+            var termsSearch: JQueryXHR = this.sc.textSearchOldGrammar(this.bookId, this.versionId, text);
+            termsSearch.done((response: {results: PageDescription[]}) => {
+                updateQueryStringParameter("searchText", text);
+                this.readerPlugin.showSearchInTermsPanel(response.results);
+            });
+        }
+
+
     }
 
     private advancedSearch(json: string) {
         if (typeof json === "undefined" || json === null || json === "") return;
-        var advancedSearch: JQueryXHR =
-            this.sc.advancedSearchBookCount(this.bookId, this.versionId, json);
-        advancedSearch.done((response: { count: number }) => {
-            updateQueryStringParameter("searchText", json);
-            this.readerPlugin.setResultsPaging(response.count, this.paginatorPageClickCallback.bind(this));
-        });
+        if (this.searchType == SearchType.Fulltext) {
+            var advancedSearch: JQueryXHR =
+                this.sc.advancedSearchBookCount(this.bookId, this.versionId, json);
+            advancedSearch.done((response: { count: number }) => {
+                updateQueryStringParameter("searchText", json);
+                this.readerPlugin.setResultsPaging(response.count, this.paginatorPageClickCallback.bind(this));
+            });
 
-        var advancedSearchMatchHit: JQueryXHR = this.sc.advancedSearchMatchHit(this.bookId, this.versionId, json);
-        advancedSearchMatchHit.done((response: { pages: Array<IPage> }) => {
-            this.readerPlugin.readerLayout.eventHub.emit("showTextSearchMatch", json, true, response.pages);
-        });
+            var advancedSearchMatchHit: JQueryXHR = this.sc.advancedSearchMatchHit(this.bookId, this.versionId, json);
+            advancedSearchMatchHit.done((response: { pages: Array<IPage> }) => {
+                this.readerPlugin.readerLayout.eventHub.emit("showTextSearchMatch", json, true, response.pages);
+            });
+        } else if (this.searchType == SearchType.Terms) {
+            var termsSearch: JQueryXHR = this.sc.advancedSearchOldGrammar(this.bookId, this.versionId, json);
+            termsSearch.done((response: {results: PageDescription[]}) => {
+                updateQueryStringParameter("searchText", json);
+                this.readerPlugin.showSearchInTermsPanel(response.results);
+            });
+        }
+
 
     }
 
@@ -147,4 +168,9 @@
         return searchResults;
     }
 
+}
+
+enum SearchType {
+    Fulltext = "Fulltext",
+    Terms = "Terms"
 }
