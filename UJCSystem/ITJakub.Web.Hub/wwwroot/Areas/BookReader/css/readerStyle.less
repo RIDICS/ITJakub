@@ -45,6 +45,18 @@
   font-weight: bold;
 }
 
+.lm_header {
+  .lm_tabdropdown_list {
+    .lm_tab {
+      height: auto;
+      
+      &:last-of-type {
+        border-bottom: 1px solid @color2;;
+      }
+    }
+  }
+}
+
 .reader-view-panel {
   width: auto;
   background-color: white;
@@ -60,20 +72,20 @@
 .terms-panel {
   display: flex;
   flex-direction: column;
-  
+
   .reader-tool-panel {
     padding: 10px 0;
     height: 100%;
-    
+
     > * {
       padding: 0 10px;
     }
   }
-  
+
   #termsResult {
     border-top: 2px solid @separation-line-color;
   }
-  
+
   h3 {
     font-size: 17px;
     font-weight: bold;
