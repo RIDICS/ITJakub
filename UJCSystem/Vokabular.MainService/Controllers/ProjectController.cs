@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ridics.Core.Structures.Shared;
@@ -50,6 +51,8 @@ namespace Vokabular.MainService.Controllers
             [FromQuery] bool? fetchLatestChangedResource,
             [FromQuery] bool? fetchPermissions)
         {
+            // Authorization is directly in SQL query
+
             var isFetchPageCount = fetchPageCount ?? false;
             var isFetchAuthors = fetchAuthors ?? false;
             var isFetchResponsiblePersons = fetchResponsiblePersons ?? false;
@@ -72,6 +75,8 @@ namespace Vokabular.MainService.Controllers
             //[FromQuery] bool? fetchLatestChangedResource,
             [FromQuery] bool? fetchPermissions)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ReadProject);
+
             var isFetchPageCount = fetchPageCount ?? false;
             var isFetchAuthors = fetchAuthors ?? false;
             var isFetchResponsiblePersons = fetchResponsiblePersons ?? false;
@@ -86,20 +91,27 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public long CreateProject([FromBody] CreateProjectContract project)
         {
+            // Authorization by book/resource/resource-version is not required
+
             return m_projectManager.CreateProject(project);
         }
 
         [HttpPut("{projectId}")]
         public void UpdateProject(long projectId, [FromBody] ItemNameContract data)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.EditProject);
+
             m_projectManager.UpdateProject(projectId, data);
         }
 
         [HttpDelete("{projectId}")]
         public void RemoveProject(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.AdminProject);
+
             m_projectManager.RemoveProject(projectId);
         }
 
@@ -108,6 +120,8 @@ namespace Vokabular.MainService.Controllers
         public IActionResult GetProjectMetadata(long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
             [FromQuery] bool includeKind, [FromQuery] bool includeGenre, [FromQuery] bool includeOriginal, [FromQuery] bool includeKeyword, [FromQuery] bool includeCategory)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ReadProject);
+
             var parameters = new GetProjectMetadataParameter
             {
                 IncludeKind = includeKind,
@@ -129,90 +143,120 @@ namespace Vokabular.MainService.Controllers
         [HttpPost("{projectId}/metadata")]
         public long CreateNewProjectMetadataVersion(long projectId, [FromBody] ProjectMetadataContract metadata)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.EditProject);
+
             return m_projectMetadataManager.CreateNewProjectMetadataVersion(projectId, metadata);
         }
 
         [HttpPut("{projectId}/literary-kind")]
         public void SetLiteraryKinds(long projectId, [FromBody] IntegerIdListContract kindIdList)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.EditProject);
+
             m_projectInfoManager.SetLiteraryKinds(projectId, kindIdList);
         }
 
         [HttpPut("{projectId}/literary-genre")]
         public void SetLiteraryGenres(long projectId, [FromBody] IntegerIdListContract genreIdList)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.EditProject);
+
             m_projectInfoManager.SetLiteraryGenres(projectId, genreIdList);
         }
 
         [HttpPut("{projectId}/literary-original")]
         public void SetLiteraryOriginal(long projectId, [FromBody] IntegerIdListContract litOriginalIdList)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.EditProject);
+
             m_projectInfoManager.SetLiteraryOriginals(projectId, litOriginalIdList);
         }
 
         [HttpPut("{projectId}/keyword")]
         public void SetKeywords(long projectId, [FromBody] IntegerIdListContract keywordIdList)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.EditProject);
+
             m_projectInfoManager.SetKeywords(projectId, keywordIdList);
         }
 
         [HttpPut("{projectId}/category")]
         public void SetCategories(long projectId, [FromBody] IntegerIdListContract categoryIdList)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.EditProject);
+
             m_projectInfoManager.SetCategories(projectId, categoryIdList);
         }
 
         [HttpPut("{projectId}/author")]
         public void SetAuthors(long projectId, [FromBody] IntegerIdListContract authorIdList)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.EditProject);
+
             m_projectInfoManager.SetAuthors(projectId, authorIdList);
         }
 
         [HttpPut("{projectId}/responsible-person")]
         public void SetResponsiblePersons(long projectId, [FromBody] List<ProjectResponsiblePersonIdContract> projectResposibleIdList)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.EditProject);
+
             m_projectInfoManager.SetResponsiblePersons(projectId, projectResposibleIdList);
         }
 
         [HttpGet("{projectId}/literary-kind")]
         public List<LiteraryKindContract> GetLiteraryKinds(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ReadProject);
+
             return m_projectInfoManager.GetLiteraryKinds(projectId);
         }
 
         [HttpGet("{projectId}/literary-genre")]
         public List<LiteraryGenreContract> GetLiteraryGenres(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ReadProject);
+
             return m_projectInfoManager.GetLiteraryGenres(projectId);
         }
 
         [HttpGet("{projectId}/literary-original")]
         public List<LiteraryOriginalContract> GetLiteraryOriginal(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ReadProject);
+
             return m_projectInfoManager.GetLiteraryOriginals(projectId);
         }
 
         [HttpGet("{projectId}/keyword")]
         public List<KeywordContract> GetKeywords(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ReadProject);
+
             return m_projectInfoManager.GetKeywords(projectId);
         }
 
         [HttpGet("{projectId}/category")]
         public List<CategoryContract> GetCategories(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ReadProject);
+
             return m_projectInfoManager.GetCategories(projectId);
         }
 
         [HttpGet("{projectId}/author")]
         public List<OriginalAuthorContract> GetAuthors(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ReadProject);
+
             return m_projectInfoManager.GetAuthors(projectId);
         }
 
         [HttpGet("{projectId}/responsible-person")]
         public List<ProjectResponsiblePersonContract> GetProjectResponsiblePersons(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ReadProject);
+
             return m_projectInfoManager.GetProjectResponsiblePersons(projectId);
         }
 
