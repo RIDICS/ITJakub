@@ -42,10 +42,10 @@
             this.readerPlugin.bookHeader.moveToPage(pageId, true);
         }
 
-        //label item in main menu
-        $('#main-plugins-menu').find('li').removeClass('active');
-        var mainMenuLi = $('#editions-menu');
-        $(mainMenuLi).addClass('active');
+        // don't label item in main menu
+        //$('#main-plugins-menu').find('li').removeClass('active');
+        //var mainMenuLi = $('#editions-menu');
+        //$(mainMenuLi).addClass('active');
     }
 
     private basicSearch(text: string) {
