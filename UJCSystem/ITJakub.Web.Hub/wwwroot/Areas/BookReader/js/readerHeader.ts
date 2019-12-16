@@ -308,7 +308,7 @@
     }
 
     private createCheckboxDiv(): HTMLDivElement {
-        var readerOptions = JSON.parse(he.decode($("#readerOptions").data("options"))) as Array<IKeyValue<ReaderOptions, boolean>>;
+        var readerOptions = JSON.parse(he.decode($("#readerOptions").data("options"))) as IReaderOptions;
 
         var checkboxesDiv = window.document.createElement("div");
         $(checkboxesDiv).addClass("reader-settings-checkboxes-area");
@@ -358,7 +358,7 @@
         showPageOnNewLineLabel.setAttribute("for", showPageOnNewLineCheckbox.id);
         pageOnNewLineSlider.setAttribute("for", showPageOnNewLineCheckbox.id);
         checkboxesDiv.appendChild(showPageOnNewLineDiv);
-        if (readerOptions.filter(value => value.key == ReaderOptions.DisplayNotes)[0].value) {
+        if (readerOptions.displayNotes) {
             var showCommentCheckboxDiv: HTMLDivElement = window.document.createElement("div");
             var showCommentCheckbox: HTMLInputElement = window.document.createElement("input");
             showCommentCheckbox.type = "checkbox";
@@ -745,6 +745,6 @@ enum Device {
     Desktop
 }
 
-enum ReaderOptions {
-    DisplayNotes = "DisplayNotes"
+interface IReaderOptions {
+    displayNotes: boolean;
 }

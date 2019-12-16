@@ -18,6 +18,6 @@ namespace ITJakub.Web.Hub.Options
 
         public Dictionary<string, bool> AllowedSearchOptions { get; set; }
         
-        public Dictionary<string, bool> ReaderConfig { get; set; }
+        public PortalReaderOption ReaderConfig { get; set; }
     }
 }
