@@ -61,6 +61,26 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
             var client = GetBookClient();
             var book = client.GetBookInfo(bookId.Value);
             var pages = client.GetBookPageList(bookId.Value);
+
+            switch (snapshotInfo.DefaultBookType)
+            {    
+                case BookTypeEnumContract.Edition: 
+                    ViewBag.Title = Localizer.Translate("EditionsListing", "Editions");
+                    break;
+                case BookTypeEnumContract.Grammar:
+                    ViewBag.Title = Localizer.Translate("OldGrammarListing", "OldGrammar");
+                    break;
+                case BookTypeEnumContract.AudioBook:
+                    ViewBag.Title = Localizer.Translate("AudioBookListing", "AudioBooks");
+                    break;
+                case BookTypeEnumContract.ProfessionalLiterature:
+                    ViewBag.Title = Localizer.Translate("ProfessionalLiteratureListing", "ProfessionalLiterature");
+                    break;
+                case BookTypeEnumContract.TextBank:
+                    ViewBag.Title = Localizer.Translate("BohemianTextBankListing", "BohemianTextBank");
+                    break;
+            }
+
             return
                 View(new BookListingModel
                 {
