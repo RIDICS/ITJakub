@@ -150,7 +150,7 @@
     "RemoveProjectFromGroup": "translate[Odebrat toto dílo ze skupiny]",
     "ProjectsInGroup": "translate[Díla ve skupině]",
     "SelectProjectForCreatingGroup": "translate[Vyberte dílo, se kterým stávající dílo vytvoří skupinu]",
-    "SelectProjectForCreatingGroupNote": "translate[Poznámka: Zobrazena jsou jenom díla, ke kterým máte oprávnění.]",
+    "SelectProjectForCreatingGroupNote": "translate[Poznámka: Zobrazena jsou jenom díla, ke kterým máte oprávnění (číst dílo).]",
 
     "EditPageList": "translate[Upravit seznam stránek]",
     "AddPage": "Add page",

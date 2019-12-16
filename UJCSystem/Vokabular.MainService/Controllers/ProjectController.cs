@@ -221,6 +221,8 @@ namespace Vokabular.MainService.Controllers
         public List<UserGroupContract> GetUserGroupsByProject(long projectId, [FromQuery] int? start, [FromQuery] int? count,
             [FromQuery] string filterByName)
         {
+            m_authorizationManager.AuthorizeBookOrPermission(projectId, PermissionFlag.ReadProject, PermissionNames.AssignPermissionsToRoles);
+
             var result = m_projectManager.GetUserGroupsByProject(projectId, start, count, filterByName);
 
             SetTotalCountHeader(result.TotalCount);
@@ -232,6 +234,8 @@ namespace Vokabular.MainService.Controllers
         [ProducesResponseType(typeof(ForumContract), StatusCodes.Status200OK)]
         public IActionResult GetForum(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ReadProject);
+
             var forum = m_forumSiteManager.GetForum(projectId);
             return Ok(forum);
         }
@@ -239,6 +243,8 @@ namespace Vokabular.MainService.Controllers
         [HttpPost("{projectId}/forum")]
         public ActionResult<int> CreateForum(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.EditProject);
+
             var forumId = m_forumSiteManager.CreateOrUpdateForums(projectId);
 
             return forumId != null ? (ActionResult<int>) Ok(forumId.Value) : BadRequest("Forum is disabled");
@@ -256,12 +262,17 @@ namespace Vokabular.MainService.Controllers
         [HttpGet("{projectId}/group")]
         public ActionResult<ProjectGroupContract> GetProjectGroups(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.ReadProject);
+
             return m_projectGroupManager.GetProjectGroups(projectId);
         }
 
         [HttpPut("{targetProjectId}/group")]
         public IActionResult AddProjectToGroup(long targetProjectId, [FromQuery] long selectedProjectId)
         {
+            m_authorizationManager.AuthorizeBook(selectedProjectId, PermissionFlag.EditProject);
+            m_authorizationManager.AuthorizeBook(targetProjectId, PermissionFlag.ReadProject);
+
             m_projectGroupManager.AddProjectToGroup(targetProjectId, selectedProjectId);
             return Ok();
         }
@@ -269,6 +280,8 @@ namespace Vokabular.MainService.Controllers
         [HttpDelete("{projectId}/group")]
         public IActionResult RemoveProjectFromGroup(long projectId)
         {
+            m_authorizationManager.AuthorizeBook(projectId, PermissionFlag.EditProject);
+
             m_projectGroupManager.RemoveProjectFromGroup(projectId);
             return Ok();
         }
