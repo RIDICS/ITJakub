@@ -32,15 +32,15 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
                 return BadRequest();
             }
 
-            var projectClient = GetProjectClient();
-            var snapshotInfo = projectClient.GetLatestPublishedSnapshot(bookId.Value);
+            var client = GetBookClient();
+            var bookDetail = client.GetBookDetail(bookId.Value);
 
-            if (snapshotInfo == null)
+            if (bookDetail == null)
             {
                 return NotFound();
             }
 
-            switch (snapshotInfo.DefaultBookType)
+            switch (bookDetail.BookType)
             {
                 case BookTypeEnumContract.Dictionary:
                     return RedirectToAction("Listing", "Dictionaries", new
@@ -58,11 +58,9 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
                     return BadRequest();
             }
 
-            var client = GetBookClient();
-            var book = client.GetBookInfo(bookId.Value);
             var pages = client.GetBookPageList(bookId.Value);
 
-            switch (snapshotInfo.DefaultBookType)
+            switch (bookDetail.BookType)
             {    
                 case BookTypeEnumContract.Edition: 
                     ViewBag.Title = Localizer.Translate("EditionsListing", "Editions");
@@ -84,9 +82,9 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
             return
                 View(new BookListingModel
                 {
-                    BookId = book.Id,
+                    BookId = int.Parse(bookDetail.BookId),
                     SnapshotId = null, 
-                    BookTitle = book.Title,
+                    BookTitle = bookDetail.Title,
                     BookPages = pages,
                     SearchText = searchText,
                     SearchType = searchType,
