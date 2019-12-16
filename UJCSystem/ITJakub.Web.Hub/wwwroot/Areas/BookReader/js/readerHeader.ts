@@ -572,6 +572,7 @@
                     details.collapse("hide");
                 }
             });
+            
             bookHeaderButtons.appendChild(detailsButton);
 
         }
@@ -624,6 +625,10 @@
         bookFullInfoDiv.appendChild(editionNoteDiv);
         bookFullInfoDiv.appendChild(this.getBookDetail());
         hiddenDiv.appendChild(bookFullInfoDiv);
+
+        $(hiddenDiv).on("hidden.bs.collapse shown.bs.collapse", ()=>{
+            this.parentReader.readerLayout.updateSize();
+        });
 
         bookInfoDiv.appendChild(hiddenDiv);
         return bookInfoDiv;
