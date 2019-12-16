@@ -224,9 +224,7 @@ class ReaderLayout {
     }
 
     createMobileToolPanel(panelId: string, panelTitle: string) {
-        var type;
-        if (panelId === this.termsPanelId) type = PanelType.Column;
-        else type = PanelType.Component;
+        var type = PanelType.Component;
         var configurationObject: LayoutConfiguration = new LayoutConfiguration();
         var itemConfig = configurationObject.toolPanelConfig(type, panelId, panelTitle);
         if (this.readerLayout.root.contentItems.length > 0) {
