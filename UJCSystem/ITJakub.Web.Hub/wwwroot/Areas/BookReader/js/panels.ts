@@ -1,6 +1,4 @@
-﻿const MAX_INTEGER = 2147483647;
-
-abstract class Panel {
+﻿abstract class Panel {
     identificator: string;
     innerContent: HTMLElement;
     sc: ServerCommunication;
