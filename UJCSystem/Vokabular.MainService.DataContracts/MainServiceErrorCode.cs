@@ -64,5 +64,6 @@
         public const string SnapshotMustContainMetadata = "snapshot-must-contain-metadata";
         public const string Forbidden = "forbidden";
         public const string UserAlreadyAssignedToRole = "user-already-assigned-to-role";
+        public const string InvalidCommentAuthorForbidden = "invalid-comment-author-forbidden";
     }
 }

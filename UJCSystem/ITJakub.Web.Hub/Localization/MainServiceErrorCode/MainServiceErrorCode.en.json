@@ -66,6 +66,7 @@
     "snapshot-must-contain-metadata": "The work must contain metadata otherwise it can't be published.",
     "forbidden": "Insufficient permissions for the operation",
     "user-already-assigned-to-role": "The user '{0}' is already assigned to a group '{1}'.",
+    "invalid-comment-author-forbidden": "Only the author is allowed to change his comments",
 
     //Auth service codes
     "generic-error": "Operation failed",

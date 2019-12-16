@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
 using log4net;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Utils;
@@ -300,8 +300,23 @@ namespace Vokabular.MainService.Core.Managers
 
         public void AuthorizeTextComment(long commentId, PermissionFlag permission)
         {
-            // TODO check also author of the comment
-            throw new NotImplementedException();
+            var textComment = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<TextComment>(commentId));
+
+            AuthorizeResource(textComment.ResourceText.Id, permission);
+
+            // Authorize comment author
+            if (permission == PermissionFlag.EditProject)
+            {
+                var currentUserId = GetCurrentUserId();
+                if (textComment.CreatedByUser.Id != currentUserId)
+                {
+                    throw new MainServiceException(
+                        MainServiceErrorCode.InvalidCommentAuthorForbidden,
+                        $"User with id '{currentUserId}' is not author of text comment with id '{commentId}'",
+                        HttpStatusCode.Forbidden
+                    );
+                }
+            }
         }
         
         public PermissionDataContract GetCurrentUserProjectPermissions(long projectId)
