@@ -213,7 +213,7 @@ class RoleManager {
     }
 
     private initRemoveUserFromRoleButton() {
-        $(".remove-user-from-role").click((event) => {
+        $(".remove-user-from-role").on("click", (event) => {
             const roleName = $(".role-row.active").find(".name").text();
 
             if (roleName === this.registeredRoleName) {
@@ -242,15 +242,23 @@ class RoleManager {
     }
 
     private removeUserFromRole(event: JQuery.TriggeredEvent) {
-        const userRow = $(event.currentTarget as Node as HTMLElement).parents(".user-row");
+        const removeButton = $(event.currentTarget as Node as HTMLElement);
+        const savingIcon = removeButton.find(".saving-icon");
+        const removeButtonIcon = removeButton.find("fa.i");
+        removeButtonIcon.addClass("hide");
+        savingIcon.removeClass("hide");
+        
+        const userRow = removeButton.parents(".user-row");
         const userId = userRow.data("user-id");
         const alert = userRow.find(".alert");
         alert.hide();
 
-        var roleId = $(".role-row.active").data("role-id");
+        const roleId = $(".role-row.active").data("role-id");
         this.client.removeUserFromRole(userId, roleId).done(() => {
             this.userList.reloadPage();
         }).fail((error) => {
+            savingIcon.addClass("hide");
+            removeButtonIcon.removeClass("hide");
             alert.text(this.errorHandler.getErrorMessage(error, localization.translate("RemoveUserFromRoleError", "PermissionJs").value));
             alert.show();
         });
@@ -258,7 +266,7 @@ class RoleManager {
 
     private initEditRoleButtons() {
         const editRoleDialog = $("#editRoleDialog");
-        $(".edit-role").click((event) => {
+        $(".edit-role").on("click", (event) => {
             event.stopPropagation();
             const roleRow = $(event.currentTarget as Node as HTMLElement).parents(".role-row");
             const roleId = roleRow.data("role-id");
@@ -316,7 +324,7 @@ class RoleManager {
 
 
     private initRemoveRoleButtons() {
-        $(".remove-role").click((event) => {
+        $(".remove-role").on("click",(event) => {
             event.stopPropagation();
             const roleRow = $(event.currentTarget as Node as HTMLElement).parents(".role-row");
             const roleName = roleRow.find(".name").text();
