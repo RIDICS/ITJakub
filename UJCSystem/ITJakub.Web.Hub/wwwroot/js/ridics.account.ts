@@ -17,7 +17,7 @@ class AccountManager {
     private readonly twoFactorSection: JQuery;
     private readonly userCodeSection: JQuery;
     //Email confirm
-    private readonly oldEmailValue: string;
+    private actualEmailValue: string;
     private newEmailValue: string;
 
     private readonly emailContactType = "Email";
@@ -44,7 +44,7 @@ class AccountManager {
         this.twoFactorSection = $("#updateTwoFactorVerification");
         this.userCodeSection = $("#userCode");
 
-        this.oldEmailValue = String($("#oldEmailValue").val());
+        this.actualEmailValue = String($("#oldEmailValue").val());
 
         this.confirmContactDescriptionAlert = $("#confirmContactDescription");
 
@@ -76,7 +76,7 @@ class AccountManager {
 
             this.client.resendConfirmCode(this.emailContactType).done(() => {
                 const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization
-                    .translateFormat("ConfirmCodeSend", [this.newEmailValue], "Account").value).buildElement();
+                    .translateFormat("ConfirmCodeSend", [this.actualEmailValue], "Account").value).buildElement();
                 alertHolder.empty().append(alert);
             }).fail((response) => {
                 const alert = new AlertComponentBuilder(AlertType.Error)
@@ -224,6 +224,7 @@ class AccountManager {
             const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization
                 .translateFormat("SuccessContactUpdate", [this.newEmailValue], "Account").value).buildElement();
             alertHolder.empty().append(alert);
+            this.actualEmailValue = this.newEmailValue;
         }).fail((response) => {
             const alert = new AlertComponentBuilder(AlertType.Error)
                 .addContent(this.errorHandler.getErrorMessage(response)).buildElement();
