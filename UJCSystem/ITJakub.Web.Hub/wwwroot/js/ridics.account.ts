@@ -17,7 +17,7 @@ class AccountManager {
     private readonly twoFactorSection: JQuery;
     private readonly userCodeSection: JQuery;
     //Email confirm
-    private readonly oldEmailValue: string;
+    private actualEmailValue: string;
     private newEmailValue: string;
 
     private readonly emailContactType = "Email";
@@ -44,7 +44,7 @@ class AccountManager {
         this.twoFactorSection = $("#updateTwoFactorVerification");
         this.userCodeSection = $("#userCode");
 
-        this.oldEmailValue = String($("#oldEmailValue").val());
+        this.actualEmailValue = String($("#oldEmailValue").val());
 
         this.confirmContactDescriptionAlert = $("#confirmContactDescription");
 
@@ -59,24 +59,24 @@ class AccountManager {
     }
 
     init() {
-        $("#updateEmailSubmit").click((event) => {
+        $("#updateEmailSubmit").on("click",(event) => {
             event.preventDefault();
             this.sendUpdateContactRequest();
         });
 
-        this.confirmEmailSubmit.click((event) => {
+        this.confirmEmailSubmit.on("click", (event) => {
             event.preventDefault();
             this.sendConfirmContactRequest();
         });
 
-        this.resendConfirmCodeBtn.click((event) => {
+        this.resendConfirmCodeBtn.on("click", (event) => {
             event.preventDefault();
             const alertHolder = this.confirmEmailPanel.find(this.alertHolderSelector);
             alertHolder.empty();
 
             this.client.resendConfirmCode(this.emailContactType).done(() => {
                 const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization
-                    .translateFormat("ConfirmCodeSend", [this.newEmailValue], "Account").value).buildElement();
+                    .translateFormat("ConfirmCodeSend", [this.actualEmailValue], "Account").value).buildElement();
                 alertHolder.empty().append(alert);
             }).fail((response) => {
                 const alert = new AlertComponentBuilder(AlertType.Error)
@@ -106,14 +106,14 @@ class AccountManager {
     }
 
     initAccountDataForm() {
-        $("#account-edit-button").click((event) => {
+        $("#account-edit-button").on("click", (event) => {
             event.preventDefault();
             $(".editable").prop("readonly", false);
             $("#account-view-button-panel").addClass("hide");
             $("#account-editor-button-panel").removeClass("hide");
         });
 
-        $("#account-cancel-button").click((event) => {
+        $("#account-cancel-button").on("click", (event) => {
             event.preventDefault();
             $(".editable").prop("readonly", true);
             $("#account-editor-button-panel").addClass("hide");
@@ -215,7 +215,7 @@ class AccountManager {
         this.newEmailValue = $(this.newEmailInputSelector).val() as string;
         const alertHolder = this.updateEmailPanel.find(this.alertHolderSelector);
         alertHolder.empty();
-        this.client.updateContact(this.emailContactType, this.newEmailValue, this.oldEmailValue).done(() => {
+        this.client.updateContact(this.emailContactType, this.newEmailValue, this.actualEmailValue).done(() => {
             this.emailIsNotVerifiedTitle.removeClass("hide");
             this.confirmEmailPanel.switchClass("panel-default", "panel-warning");
             this.confirmEmailPanel.removeClass("hide");
@@ -224,6 +224,7 @@ class AccountManager {
             const alert = new AlertComponentBuilder(AlertType.Success).addContent(localization
                 .translateFormat("SuccessContactUpdate", [this.newEmailValue], "Account").value).buildElement();
             alertHolder.empty().append(alert);
+            this.actualEmailValue = this.newEmailValue;
         }).fail((response) => {
             const alert = new AlertComponentBuilder(AlertType.Error)
                 .addContent(this.errorHandler.getErrorMessage(response)).buildElement();
