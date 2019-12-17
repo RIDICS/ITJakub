@@ -59,17 +59,17 @@ class AccountManager {
     }
 
     init() {
-        $("#updateEmailSubmit").click((event) => {
+        $("#updateEmailSubmit").on("click",(event) => {
             event.preventDefault();
             this.sendUpdateContactRequest();
         });
 
-        this.confirmEmailSubmit.click((event) => {
+        this.confirmEmailSubmit.on("click", (event) => {
             event.preventDefault();
             this.sendConfirmContactRequest();
         });
 
-        this.resendConfirmCodeBtn.click((event) => {
+        this.resendConfirmCodeBtn.on("click", (event) => {
             event.preventDefault();
             const alertHolder = this.confirmEmailPanel.find(this.alertHolderSelector);
             alertHolder.empty();
@@ -106,14 +106,14 @@ class AccountManager {
     }
 
     initAccountDataForm() {
-        $("#account-edit-button").click((event) => {
+        $("#account-edit-button").on("click", (event) => {
             event.preventDefault();
             $(".editable").prop("readonly", false);
             $("#account-view-button-panel").addClass("hide");
             $("#account-editor-button-panel").removeClass("hide");
         });
 
-        $("#account-cancel-button").click((event) => {
+        $("#account-cancel-button").on("click", (event) => {
             event.preventDefault();
             $(".editable").prop("readonly", true);
             $("#account-editor-button-panel").addClass("hide");
@@ -215,7 +215,7 @@ class AccountManager {
         this.newEmailValue = $(this.newEmailInputSelector).val() as string;
         const alertHolder = this.updateEmailPanel.find(this.alertHolderSelector);
         alertHolder.empty();
-        this.client.updateContact(this.emailContactType, this.newEmailValue, this.oldEmailValue).done(() => {
+        this.client.updateContact(this.emailContactType, this.newEmailValue, this.actualEmailValue).done(() => {
             this.emailIsNotVerifiedTitle.removeClass("hide");
             this.confirmEmailPanel.switchClass("panel-default", "panel-warning");
             this.confirmEmailPanel.removeClass("hide");
