@@ -23,6 +23,7 @@
 
             <div class="sub-content"></div>
             <button id="saveProjectPermissions" type="button" class="btn btn-default" disabled="@(!ViewData.TryGetBooleanValue(PermissionViewConstants.SaveProjectPermissionsEnabled))">
+                <span class="saving-icon loading-small-button hide"></span>
                 @Localizer.Translate("Save", "Permission")
             </button>
         </div>
