@@ -758,22 +758,31 @@ body {
     display: block;
 }
 
-.reader-text-page-new-line div {
-    display: block;
-}
+.reader-text-container {
+    &.reader-text-show-page-names div.page-name, div {
+        display: block;
+    }
 
-.reader-text-page-new-line div.page-name {
-    display: none;
-}
-
-.reader-text-page-new-line.reader-text-show-page-names div.page-name {
-    display: block;
+    div.page-name {
+        display: none;
+    }
 }
 
 .page-wrapper {
     margin-bottom: 5px;
 }
 
+.reader-text-pages-separated {
+    div.page-wrapper {
+        padding-bottom: 1em;
+        margin-bottom: 1em;
+        @page-bottom-border-color: #b3b3b3; 
+        background-image: linear-gradient(to right, white 30%, @page-bottom-border-color 30%, @page-bottom-border-color 70%, rgba(255,255,255,0) 0%);
+        background-position: bottom;
+        background-size: 5% 5px;
+        background-repeat: repeat-x;
+    }
+}
 
 /* CSS block for hide/show notes in text */
 

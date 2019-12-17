@@ -336,28 +336,28 @@
         pageNameSlider.setAttribute("for", showPageNameCheckbox.id);
         checkboxesDiv.appendChild(showPageCheckboxDiv);
 
-        var showPageOnNewLineDiv: HTMLDivElement = window.document.createElement("div");
-        var showPageOnNewLineCheckbox: HTMLInputElement = window.document.createElement("input");
-        showPageOnNewLineCheckbox.type = "checkbox";
+        var separatePagesDiv: HTMLDivElement = window.document.createElement("div");
+        var separatePagesCheckbox: HTMLInputElement = window.document.createElement("input");
+        separatePagesCheckbox.type = "checkbox";
 
-        $(showPageOnNewLineCheckbox).change((eventData) => {
+        $(separatePagesCheckbox).change((eventData) => {
             var readerText = $("#" + this.parentReader.textPanelId).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node);
-            this.parentReader.readerLayout.eventHub.emit("toggleComments", currentTarget.checked, "reader-text-page-new-line");
+            this.parentReader.readerLayout.eventHub.emit("toggleComments", currentTarget.checked, "reader-text-pages-separated");
         });
 
         var pageOnNewLineSlider = document.createElement("label");
         $(pageOnNewLineSlider).addClass("switch");
 
-        var showPageOnNewLineLabel: HTMLLabelElement = window.document.createElement("label");
-        showPageOnNewLineLabel.innerHTML = localization.translate("wrapPages", "BookReader").value;
-        showPageOnNewLineDiv.appendChild(showPageOnNewLineCheckbox);
-        showPageOnNewLineDiv.appendChild(pageOnNewLineSlider);
-        showPageOnNewLineDiv.appendChild(showPageOnNewLineLabel);
-        showPageOnNewLineCheckbox.id = "checkbox-page-breaks";
-        showPageOnNewLineLabel.setAttribute("for", showPageOnNewLineCheckbox.id);
-        pageOnNewLineSlider.setAttribute("for", showPageOnNewLineCheckbox.id);
-        checkboxesDiv.appendChild(showPageOnNewLineDiv);
+        var separatePagesLabel: HTMLLabelElement = window.document.createElement("label");
+        separatePagesLabel.innerHTML = localization.translate("separatePages", "BookReader").value;
+        separatePagesDiv.appendChild(separatePagesCheckbox);
+        separatePagesDiv.appendChild(pageOnNewLineSlider);
+        separatePagesDiv.appendChild(separatePagesLabel);
+        separatePagesCheckbox.id = "checkbox-page-separation";
+        separatePagesLabel.setAttribute("for", separatePagesCheckbox.id);
+        pageOnNewLineSlider.setAttribute("for", separatePagesCheckbox.id);
+        checkboxesDiv.appendChild(separatePagesDiv);
         if (readerOptions.displayNotes) {
             var showCommentCheckboxDiv: HTMLDivElement = window.document.createElement("div");
             var showCommentCheckbox: HTMLInputElement = window.document.createElement("input");
