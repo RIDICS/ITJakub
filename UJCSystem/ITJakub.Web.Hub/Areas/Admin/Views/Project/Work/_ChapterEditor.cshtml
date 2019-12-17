@@ -156,11 +156,7 @@
             </div>
             <div class="buttons">
                 <span class="page-name"></span>
-                <select name="chapter-page" class="form-control select-page selectpicker hide">
-                    @foreach (var pageItem in Model.Pages)
-                    {
-                        <option value="@pageItem.Id">@pageItem.Name</option>
-                    }
+                <select name="chapter-page" class="form-control select-page selectpicker hide" data-inited="false">
                 </select>
                 <a class="edit-chapter btn btn-sm btn-default" title="@Localizer.Translate("EditChapter", "RidicsProject")">
                     <i class="fa fa-pencil"></i>
