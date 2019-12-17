@@ -67,6 +67,8 @@
     "forbidden": "Insufficient permissions for the operation",
     "user-already-assigned-to-role": "The user '{0}' is already assigned to a group '{1}'.",
     "invalid-comment-author-forbidden": "Only the author is allowed to change his comments",
+    "at-least-one-group-must-have-admin-permission": "Permission to admin the work must remain at least in one group",
+    "read-project-required-for-selected-permissions": "Selected permissions also require Permission to read the work",
 
     //Auth service codes
     "generic-error": "Operation failed",

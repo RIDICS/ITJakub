@@ -65,5 +65,7 @@
         public const string Forbidden = "forbidden";
         public const string UserAlreadyAssignedToRole = "user-already-assigned-to-role";
         public const string InvalidCommentAuthorForbidden = "invalid-comment-author-forbidden";
+        public const string AtLeastOneGroupMustHaveAdminPermission = "at-least-one-group-must-have-admin-permission";
+        public const string ReadProjectRequiredForSelectedPermissions = "read-project-required-for-selected-permissions";
     }
 }

@@ -345,5 +345,15 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(() => resourceVersionAlias.Id == resourceVersionId && userGroupAlias.Id == userGroupId && projectAlias.IsRemoved == false)
                 .SingleOrDefault();
         }
+
+        public virtual int GetRequiredPermissionCountForProject(long projectId, PermissionFlag requiredPermission)
+        {
+            var resultCount = GetSession().QueryOver<Permission>()
+                .Where(x => x.Project.Id == projectId)
+                .And(BitwiseExpression.On<Permission>(x => x.Flags).HasBit(requiredPermission))
+                .RowCount();
+            
+            return resultCount;
+        }
     }
 }

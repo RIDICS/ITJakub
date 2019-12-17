@@ -67,6 +67,8 @@
     "forbidden": "Nedostatečná práva pro tuto operaci",
     "user-already-assigned-to-role": "Uživatel '{0}' se již nachází ve skupině '{1}'.",
     "invalid-comment-author-forbidden": "Pouze autor může měnit své komentáře",
+    "at-least-one-group-must-have-admin-permission": "Alespoň jedné skupině musí zůstat Právo spravovat dílo",
+    "read-project-required-for-selected-permissions": "Pro zvolená práva je zároveň potřeba Právo číst dílo",
     
     //Auth service codes
     "generic-error": "Operace se nezdařila",
