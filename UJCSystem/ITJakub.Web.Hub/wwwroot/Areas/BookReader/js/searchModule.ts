@@ -47,7 +47,7 @@
         //var mainMenuLi = $('#editions-menu');
         //$(mainMenuLi).addClass('active');
 
-        this.readerPlugin.readerLayout.eventHub.on("searchDone", (count, searchedText) => {
+        this.readerPlugin.readerLayout.eventHub.on("fulltextSearchDone", (count: number, searchedText: string) => {
             this.search.setLastQuery(searchedText);
             updateQueryStringParameter("searchText", searchedText);
             this.readerPlugin.setResultsPaging(count, this.paginatorPageClickCallback.bind(this));
@@ -59,7 +59,7 @@
         if (this.searchType == SearchType.Fulltext) {
             var textSearch: JQueryXHR = this.sc.textSearchBookCount(this.bookId, this.versionId, text);
             textSearch.done((response: { count: number }) => {
-                this.readerPlugin.readerLayout.eventHub.emit("searchDone", response.count, text)
+                this.readerPlugin.readerLayout.eventHub.emit("fulltextSearchDone", response.count, text);
             });
 
             var textSearchMatchHit: JQueryXHR = this.sc.textSearchMatchHit(this.bookId, this.versionId, text);
@@ -83,8 +83,7 @@
             var advancedSearch: JQueryXHR =
                 this.sc.advancedSearchBookCount(this.bookId, this.versionId, json);
             advancedSearch.done((response: { count: number }) => {
-                updateQueryStringParameter("searchText", json);
-                this.readerPlugin.setResultsPaging(response.count, this.paginatorPageClickCallback.bind(this));
+                this.readerPlugin.readerLayout.eventHub.emit("fulltextSearchDone", response.count, json);
             });
 
             var advancedSearchMatchHit: JQueryXHR = this.sc.advancedSearchMatchHit(this.bookId, this.versionId, json);
