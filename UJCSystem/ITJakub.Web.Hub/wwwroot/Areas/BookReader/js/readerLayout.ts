@@ -615,22 +615,24 @@ class ReaderLayout {
     }
 
     private getTermsResultPanel(): TermsResultPanel {
-        if (this.deviceType === Device.Mobile) {
-            this.createMobileToolPanel(this.termsPanelId, localization.translate(this.termsPanelId, "BookReader").value);
-        } else {
-            this.createDesktopToolPanel(this.termsPanelId, localization.translate(this.termsPanelId, "BookReader").value);
+        if (this.termsResultPanel == null) {
+            if (this.deviceType === Device.Mobile) {
+                this.createMobileToolPanel(this.termsPanelId, localization.translate(this.termsPanelId, "BookReader").value);
+            } else {
+                this.createDesktopToolPanel(this.termsPanelId, localization.translate(this.termsPanelId, "BookReader").value);
+            }
         }
-
         return this.termsResultPanel;
     }
 
     private getTermsSearchPanel(): TermsSearchPanel {
-        if (this.deviceType === Device.Mobile) {
-            this.createMobileToolPanel(this.termsPanelId, localization.translate(this.termsPanelId, "BookReader").value);
-        } else {
-            this.createDesktopToolPanel(this.termsPanelId, localization.translate(this.termsPanelId, "BookReader").value);
+        if (this.termsSearchPanel == null) {
+            if (this.deviceType === Device.Mobile) {
+                this.createMobileToolPanel(this.termsPanelId, localization.translate(this.termsPanelId, "BookReader").value);
+            } else {
+                this.createDesktopToolPanel(this.termsPanelId, localization.translate(this.termsPanelId, "BookReader").value);
+            }
         }
-
         return this.termsSearchPanel;
     }
 
@@ -851,7 +853,7 @@ class ReaderLayout {
             this.showSearchResultInPages(searchQuery, isQueryJson, pages);
         })
 
-        
+
     }
 }
 

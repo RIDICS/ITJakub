@@ -51,7 +51,13 @@
             this.search.setLastQuery(searchedText);
             updateQueryStringParameter("searchText", searchedText);
             this.readerPlugin.setResultsPaging(count, this.paginatorPageClickCallback.bind(this));
-        })
+        });
+
+        this.readerPlugin.readerLayout.eventHub.on("termsSearchDone", (searchedText: string, pageDescription: PageDescription[]) => {
+            this.search.setLastQuery(searchedText);
+            updateQueryStringParameter("searchText", searchedText);
+            this.readerPlugin.showSearchInTermsPanel(pageDescription);
+        });
     }
 
     private basicSearch(text: string) {
@@ -69,8 +75,7 @@
         } else if (this.searchType == SearchType.Terms) {
             var termsSearch: JQueryXHR = this.sc.textSearchOldGrammar(this.bookId, this.versionId, text);
             termsSearch.done((response: {results: PageDescription[]}) => {
-                updateQueryStringParameter("searchText", text);
-                this.readerPlugin.showSearchInTermsPanel(response.results);
+                this.readerPlugin.readerLayout.eventHub.emit("termsSearchDone", text, response.results);
             });
         }
 
@@ -93,8 +98,8 @@
         } else if (this.searchType == SearchType.Terms) {
             var termsSearch: JQueryXHR = this.sc.advancedSearchOldGrammar(this.bookId, this.versionId, json);
             termsSearch.done((response: {results: PageDescription[]}) => {
-                updateQueryStringParameter("searchText", json);
-                this.readerPlugin.showSearchInTermsPanel(response.results);
+                this.readerPlugin.readerLayout.eventHub.emit("termsSearchDone", json, response.results);
+
             });
         }
 
