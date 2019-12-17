@@ -250,10 +250,10 @@ class AccountManager {
 
                 this.emailIsNotVerifiedTitle.addClass("hide");
                 this.confirmEmailPanel.switchClass("panel-warning", "panel-default");
-
-                this.resendConfirmCodeBtn.addClass("disabled");
+                
+                this.resendConfirmCodeBtn.prop("disabled", true);
                 this.confirmEmailCodeInput.prop("readonly", true);
-                this.confirmEmailSubmit.addClass("disabled");
+                this.confirmEmailSubmit.prop("disabled", true);
             }
         }).fail((response) => {
             const alert = new AlertComponentBuilder(AlertType.Error)
