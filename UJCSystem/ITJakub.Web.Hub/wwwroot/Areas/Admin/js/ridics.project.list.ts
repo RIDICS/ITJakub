@@ -66,6 +66,11 @@ class ProjectList {
 
     public reinitProjectListButtons() {
         $(".project-item .delete-button").on("click", (event) => {
+            if ($(event.currentTarget).hasClass("forbidden-access")) {
+                event.preventDefault();
+                return;
+            }
+
             const $projectItem = $(event.currentTarget as Node as Element).closest(".project-item");
             this.projectIdForDelete = Number($projectItem.data("project-id"));
             const projectName = $projectItem.data("project-name");
@@ -77,6 +82,11 @@ class ProjectList {
         });
         
         $(".rename-project-button").on("click", (event) => {
+            if ($(event.currentTarget).hasClass("forbidden-access")) {
+                event.preventDefault();
+                return;
+            }
+
             const $projectItem = $(event.currentTarget as Node as Element).closest(".project-item");
             this.projectIdForRename = Number($projectItem.data("project-id"));
             const projectName = $projectItem.data("project-name");
