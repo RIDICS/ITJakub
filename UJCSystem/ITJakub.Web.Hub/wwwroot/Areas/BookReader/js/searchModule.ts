@@ -46,6 +46,12 @@
         //$('#main-plugins-menu').find('li').removeClass('active');
         //var mainMenuLi = $('#editions-menu');
         //$(mainMenuLi).addClass('active');
+
+        this.readerPlugin.readerLayout.eventHub.on("searchDone", (count, searchedText) => {
+            this.search.setLastQuery(searchedText);
+            updateQueryStringParameter("searchText", searchedText);
+            this.readerPlugin.setResultsPaging(count, this.paginatorPageClickCallback.bind(this));
+        })
     }
 
     private basicSearch(text: string) {
@@ -53,8 +59,7 @@
         if (this.searchType == SearchType.Fulltext) {
             var textSearch: JQueryXHR = this.sc.textSearchBookCount(this.bookId, this.versionId, text);
             textSearch.done((response: { count: number }) => {
-                updateQueryStringParameter("searchText", text);
-                this.readerPlugin.setResultsPaging(response.count, this.paginatorPageClickCallback.bind(this));
+                this.readerPlugin.readerLayout.eventHub.emit("searchDone", response.count, text)
             });
 
             var textSearchMatchHit: JQueryXHR = this.sc.textSearchMatchHit(this.bookId, this.versionId, text);

@@ -572,7 +572,7 @@
                     details.collapse("hide");
                 }
             });
-            
+
             bookHeaderButtons.appendChild(detailsButton);
 
         }
@@ -626,7 +626,7 @@
         bookFullInfoDiv.appendChild(this.getBookDetail());
         hiddenDiv.appendChild(bookFullInfoDiv);
 
-        $(hiddenDiv).on("hidden.bs.collapse shown.bs.collapse", ()=>{
+        $(hiddenDiv).on("hidden.bs.collapse shown.bs.collapse", () => {
             this.parentReader.readerLayout.updateSize();
         });
 
@@ -683,14 +683,10 @@ class ButtonFactory {
         $(button).append(spanText);
 
         $(button).click(() => {
-            if (buttonId === this.readerLayout.searchPanelId) {
-                $(".searchbar-button").first().click(); //WORKAROUND recreating of search result panel
+            if (this.deviceType === Device.Desktop) {
+                this.readerLayout.createDesktopToolPanel(buttonId, spanText.innerHTML);
             } else {
-                if (this.deviceType === Device.Desktop) {
-                    this.readerLayout.createDesktopToolPanel(buttonId, spanText.innerHTML);
-                } else {
-                    this.readerLayout.createMobileToolPanel(buttonId, spanText.innerHTML);
-                }
+                this.readerLayout.createMobileToolPanel(buttonId, spanText.innerHTML);
             }
         });
         return button;

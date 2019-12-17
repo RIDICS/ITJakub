@@ -147,6 +147,18 @@ class SearchResultPanel extends ToolPanel {
     public getPaginator(): Pagination {
         return this.paginator;
     }
+    
+    public replaceSearchPanelContent() {
+        var newContent = this.makeBody(this, window);
+        var $innerContent = $(this.innerContent);
+        var contentParent = $innerContent.parent();
+        
+        $innerContent.remove();
+        contentParent.append(newContent);
+        this.innerContent = newContent;
+        
+        
+    }
 
     protected makeBody(rootReference: Panel, window: Window): HTMLElement {
         var innerContent: HTMLDivElement = window.document.createElement("div");

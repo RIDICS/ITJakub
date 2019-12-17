@@ -602,12 +602,13 @@ class ReaderLayout {
     }
 
     private getSearchPanel(): SearchResultPanel {
-        if (this.deviceType === Device.Mobile) {
-            this.createMobileToolPanel(this.searchPanelId, localization.translate(this.searchPanelId, "BookReader").value);
-        } else {
-            this.createDesktopToolPanel(this.searchPanelId, localization.translate(this.searchPanelId, "BookReader").value);
+        if (this.searchPanel == null) {
+            if (this.deviceType === Device.Mobile) {
+                this.createMobileToolPanel(this.searchPanelId, localization.translate(this.searchPanelId, "BookReader").value);
+            } else {
+                this.createDesktopToolPanel(this.searchPanelId, localization.translate(this.searchPanelId, "BookReader").value);
+            }
         }
-
         var searchButton = $(document as any).find(".search-button");
         searchButton.prop("disabled", false);
         return this.searchPanel;
@@ -716,7 +717,7 @@ class ReaderLayout {
         containerEl.append(this.createTermsSearchPanel());
         containerEl.append(this.createTermsResultPanel());
         $(containerEl).addClass("terms-panel");
-        
+
         return containerEl;
     }
 
@@ -849,6 +850,8 @@ class ReaderLayout {
         this.readerLayout.eventHub.on("showTextSearchMatch", (searchQuery: string, isQueryJson: boolean, pages: Array<IPage>) => {
             this.showSearchResultInPages(searchQuery, isQueryJson, pages);
         })
+
+        
     }
 }
 
