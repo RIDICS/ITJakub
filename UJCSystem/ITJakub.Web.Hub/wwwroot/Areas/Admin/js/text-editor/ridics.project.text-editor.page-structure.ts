@@ -61,10 +61,12 @@
         const editBtn = $(".page-toolbar .edit-page", pageEl);
         if (isContainsText) {
             createBtn.addClass("hidden");
-            editBtn.prop("disabled", false);
         } else {
             createBtn.removeClass("hidden");
-            editBtn.prop("disabled", true);
+        }
+
+        if (new ProjectPermissionsProvider().hasEditPermission()) {
+            editBtn.prop("disabled", !isContainsText);
         }
     }
 
