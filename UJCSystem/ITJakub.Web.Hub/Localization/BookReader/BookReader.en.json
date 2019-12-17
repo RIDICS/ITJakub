@@ -59,6 +59,7 @@
     "PageLoadingErrorWithSearchResults": "Failed to load page number '{0}' with search results",
     "FailedToLoadAudioBook": "Failed to load audio book, please try again later.",
     "FailedToLoadTrack": "Failed to load track, please try again later.",
+    "no-image": "This page has no image scan assigned",
 
     "DownloadChapter": "Download chapter",
     "DownloadAudiobook": "Download audiobook:",

@@ -59,6 +59,7 @@
     "PageLoadingErrorWithSearchResults": "Chyba při načítání stránky '{0}' s výsledky vyhledávání",
     "FailedToLoadAudioBook": "Nepodařilo se načíst audio knihu, opakujte prosím pokus později",
     "FailedToLoadTrack": "Nepodařilo se načíst stopu, opakujte prosím pokus později",
+    "no-image": "Tato stránka nemá přiřazen žádný obrazový sken",
 
     "DownloadChapter": "Stáhnout kapitolu",
     "DownloadAudiobook": "Stáhnout audioknihu:",

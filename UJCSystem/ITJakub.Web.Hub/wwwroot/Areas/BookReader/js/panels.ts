@@ -892,9 +892,9 @@ class ImagePanel extends ContentViewPanel {
 
         var zoomOnClick = false;
 
+        var $innerContent = $(this.innerContent);
         var img = new Image();
         img.onload = () => {
-            var $innerContent = $(this.innerContent);
 
             if (zoomOnClick) {
                 $innerContent.zoom({on: "click"});
@@ -921,6 +921,11 @@ class ImagePanel extends ContentViewPanel {
                 });
 
             }
+        };
+        img.onerror = () => {
+            var alert = new AlertComponentBuilder(AlertType.Info);
+            alert.addContent(localization.translate("no-image", "BookReader").value);
+            $innerContent.html(alert.buildElement());
         };
         img.src = getBaseUrl() + "Reader/GetBookImage?snapshotId=" + this.parentReader.versionId + "&pageId=" + pageInfo.pageId;
 
