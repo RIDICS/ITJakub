@@ -1,4 +1,5 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Helpers
+@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Areas.Admin.Models.ChapterEditorViewModel
 @inject ILocalizationService Localizer
 
@@ -9,7 +10,7 @@
                 <div class="row">
                     <div class="col-xs-8">@Localizer.Translate("UnsavedChanges", "RidicsProject")</div>
                     <div class="col-xs-4 text-right">
-                        <button type="button" class="btn btn-default save-chapters-button">@Localizer.Translate("Save", "Admin")</button>
+                        <button type="button" class="btn btn-default save-chapters-button" disabled="@(!ViewData.HasPermissionFor().EditProject)">@Localizer.Translate("Save", "Admin")</button>
                     </div>
                 </div>
             </div>
@@ -25,8 +26,8 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-9 panel-buttons text-right">
-                            <button type="button" class="btn btn-default form-control" id="project-chapters-edit-button">@Localizer.Translate("CreateChapter", "Admin")</button>
-                            <button type="button" class="btn btn-default form-control" id="generateChapters">@Localizer.Translate("GenerateChapters", "Admin")</button>
+                            <button type="button" class="btn btn-default form-control" id="project-chapters-edit-button" disabled="@(!ViewData.HasPermissionFor().EditProject)">@Localizer.Translate("CreateChapter", "Admin")</button>
+                            <button type="button" class="btn btn-default form-control" id="generateChapters" disabled="@(!ViewData.HasPermissionFor().EditProject)">@Localizer.Translate("GenerateChapters", "Admin")</button>
                         </div>
                     </div>
                 </div>
@@ -35,18 +36,18 @@
                         @await Html.PartialAsync("Work/SubView/_ChapterTable", Model)
                     </div>
                     <div class="panel-bottom-buttons text-right">
-                        <button type="button" class="btn btn-default move-chapter-left" title="@Localizer.Translate("ExcludeChapterFromTheSubCategory", "RidicsProject")">
+                        <button type="button" class="btn btn-default move-chapter-left" title="@Localizer.Translate("ExcludeChapterFromTheSubCategory", "RidicsProject")" disabled="@(!ViewData.HasPermissionFor().EditProject)">
                             <span class="glyphicon glyphicon-arrow-left"></span>
                         </button>
-                        <button type="button" class="btn btn-default move-chapter-right" title="@Localizer.Translate("IncludeChapterToTheSubCategory", "RidicsProject")">
+                        <button type="button" class="btn btn-default move-chapter-right" title="@Localizer.Translate("IncludeChapterToTheSubCategory", "RidicsProject")" disabled="@(!ViewData.HasPermissionFor().EditProject)">
                             <span class="glyphicon glyphicon-arrow-right"></span>
                         </button>
                         <label for="chapterMoveDistance" class="chapter-move-distance-label">@Localizer.Translate("Shift", "RidicsProject")</label>
-                        <input type="number" id="chapterMoveDistance" class="chapter-move-distance form-control" value="1" min="1" max="@Model.Chapters.Count"/>
-                        <button type="button" class="btn btn-default move-chapter-up" title="@Localizer.Translate("ShiftChapterUp", "RidicsProject")">
+                        <input type="number" id="chapterMoveDistance" class="chapter-move-distance form-control" value="1" min="1" max="@Model.Chapters.Count" disabled="@(!ViewData.HasPermissionFor().EditProject)"/>
+                        <button type="button" class="btn btn-default move-chapter-up" title="@Localizer.Translate("ShiftChapterUp", "RidicsProject")" disabled="@(!ViewData.HasPermissionFor().EditProject)">
                             <span class="glyphicon glyphicon-arrow-up"></span>
                         </button>
-                        <button type="button" class="btn btn-default move-chapter-down" title="@Localizer.Translate("ShiftChapterDown", "RidicsProject")">
+                        <button type="button" class="btn btn-default move-chapter-down" title="@Localizer.Translate("ShiftChapterDown", "RidicsProject")" disabled="@(!ViewData.HasPermissionFor().EditProject)">
                             <span class="glyphicon glyphicon-arrow-down"></span>
                         </button>
                     </div>
@@ -78,7 +79,7 @@
     
     <hr style="margin: 0 15px 10px 15px;" />
     <div class="project-bottom-buttons" style="padding-right: 15px;">
-        <button type="button" class="btn btn-default save-chapters-button">@Localizer.Translate("Save", "Admin")</button>
+        <button type="button" class="btn btn-default save-chapters-button" disabled="@(!ViewData.HasPermissionFor().EditProject)">@Localizer.Translate("Save", "Admin")</button>
     </div>
 </div>
 
@@ -158,15 +159,15 @@
                 <span class="page-name"></span>
                 <select name="chapter-page" class="form-control select-page selectpicker hide" data-inited="false">
                 </select>
-                <a class="edit-chapter btn btn-sm btn-default" title="@Localizer.Translate("EditChapter", "RidicsProject")">
+                <button type="button" class="edit-chapter btn btn-sm btn-default" title="@Localizer.Translate("EditChapter", "RidicsProject")" disabled="@(!ViewData.HasPermissionFor().EditProject)">
                     <i class="fa fa-pencil"></i>
-                </a>
-                <a class="discard-chapter-changes btn btn-sm btn-default hide" title="@Localizer.Translate("DiscardChapterChanges", "RidicsProject")">
+                </button>
+                <button type="button" class="discard-chapter-changes btn btn-sm btn-default hide" title="@Localizer.Translate("DiscardChapterChanges", "RidicsProject")" disabled="@(!ViewData.HasPermissionFor().EditProject)">
                                 <i class="fa fa-times"></i>
-                </a>
-                <a class="remove-chapter btn btn-sm btn-default" title="@Localizer.Translate("DeleteChapter", "RidicsProject")">
+                </button>
+                <button type="button" class="remove-chapter btn btn-sm btn-default" title="@Localizer.Translate("DeleteChapter", "RidicsProject")" disabled="@(!ViewData.HasPermissionFor().EditProject)">
                     <i class="fa fa-trash"></i>
-                </a>
+                </button>
             </div>
         </div>
         <div class="sub-chapters">

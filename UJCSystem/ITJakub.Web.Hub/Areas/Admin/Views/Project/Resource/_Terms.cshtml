@@ -1,4 +1,5 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Helpers
+@using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Areas.Admin.Models.TermEditorViewModel
 @inject ILocalizationService Localization
 
@@ -36,7 +37,7 @@
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 panel-buttons text-right">
-                                <button type="button" class="btn btn-default manage-terms-button">@Localization.Translate("EditTerms", "Admin")</button>
+                                <button type="button" class="btn btn-default manage-terms-button" disabled="@(!ViewData.HasPermissionFor().EditProject)">@Localization.Translate("EditTerms", "Admin")</button>
                             </div>
                         </div>
                     </div>
