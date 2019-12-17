@@ -150,8 +150,10 @@ abstract class ProjectModuleBase {
                     if (xmlHttpRequest.status === HttpStatusCode.Success) {
                         this.initModule();
                     } else {
+                        var errorHandler = new ErrorHandler();
+                        var errorMessage = errorHandler.getErrorMessage(xmlHttpRequest, localization.translate("ModuleError", "RidicsProject").value);
                         var alert = new AlertComponentBuilder(AlertType.Error)
-                            .addContent(localization.translate("ModuleError", "RidicsProject").value)
+                            .addContent(errorMessage)
                             .buildElement();
                         $contentContainer.empty().append(alert);
                     }
@@ -225,10 +227,12 @@ class ProjectTermEditorModule extends ProjectModuleBase {
 class ProjectWorkModule extends ProjectModuleBase {
     private moduleIdentificator: string;
     private moduleTab: ProjectModuleTabBase;
+    private errorHandler: ErrorHandler;
 
     constructor(projectId: number, moduleIdentificator: string) {
         super(projectId);
         this.moduleIdentificator = moduleIdentificator;
+        this.errorHandler = new ErrorHandler();
         this.moduleTab = null;
     }
 
@@ -289,8 +293,9 @@ class ProjectWorkModule extends ProjectModuleBase {
                             this.moduleTab.initTab();
                         }
                     } else {
+                        const errorMessage = this.errorHandler.getErrorMessage(xmlHttpRequest, localization.translate("BookmarkError", "RidicsProject").value);
                         const errorDiv = new AlertComponentBuilder(AlertType.Error)
-                            .addContent(localization.translate("BookmarkError", "RidicsProject").value)
+                            .addContent(errorMessage)
                             .buildElement();
                         $contentContainer.empty().append(errorDiv);
                         this.moduleTab = null;

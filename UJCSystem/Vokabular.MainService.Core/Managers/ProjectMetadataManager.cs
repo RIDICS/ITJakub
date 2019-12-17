@@ -17,17 +17,15 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly MetadataRepository m_metadataRepository;
         private readonly AuthenticationManager m_authenticationManager;
-        private readonly AuthorizationManager m_authorizationManager;
         private readonly CategoryRepository m_categoryRepository;
         private readonly IMapper m_mapper;
 
         public ProjectMetadataManager(MetadataRepository metadataRepository,
-            AuthenticationManager authenticationManager, AuthorizationManager authorizationManager,
+            AuthenticationManager authenticationManager,
             CategoryRepository categoryRepository, IMapper mapper)
         {
             m_metadataRepository = metadataRepository;
             m_authenticationManager = authenticationManager;
-            m_authorizationManager = authorizationManager;
             m_categoryRepository = categoryRepository;
             m_mapper = mapper;
         }
@@ -104,7 +102,7 @@ namespace Vokabular.MainService.Core.Managers
         public List<string> GetTitleAutocomplete(string query, BookTypeEnumContract? bookType, ProjectTypeContract? projectType,
             List<int> selectedCategoryIds, List<long> selectedProjectIds)
         {
-            var userId = m_authorizationManager.GetCurrentUserId();
+            var userId = m_authenticationManager.GetCurrentUser(true).Id;
             var bookTypeEnum = m_mapper.Map<BookTypeEnum?>(bookType);
             var projectTypeEnum = m_mapper.Map<ProjectTypeEnum?>(projectType);
             var result = m_metadataRepository.InvokeUnitOfWork(x =>

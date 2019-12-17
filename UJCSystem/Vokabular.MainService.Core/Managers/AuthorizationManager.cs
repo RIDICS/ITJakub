@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using log4net;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Utils;
@@ -114,6 +115,38 @@ namespace Vokabular.MainService.Core.Managers
             projectIds = filtered;
         }
 
+        private string GetUnauthorizedErrorCodeForPermission(PermissionFlag permission)
+        {
+            switch (permission)
+            {
+                case PermissionFlag.ShowPublished:
+                    return MainServiceErrorCode.UserBookReadForbidden;
+                case PermissionFlag.ReadProject:
+                    return MainServiceErrorCode.UserBookReadProjectForbidden;
+                case PermissionFlag.EditProject:
+                    return MainServiceErrorCode.UserBookEditProjectForbidden;
+                case PermissionFlag.AdminProject:
+                    return MainServiceErrorCode.UserBookAdminProjectForbidden;
+                default:
+                    return MainServiceErrorCode.UserBookAccessForbidden;
+            }
+        }
+
+        private string GetResourceUnauthorizedErrorCodeForPermission(PermissionFlag permission)
+        {
+            switch (permission)
+            {
+                case PermissionFlag.ShowPublished:
+                    return MainServiceErrorCode.UserResourceAccessForbidden;
+                case PermissionFlag.ReadProject:
+                    return MainServiceErrorCode.UserResourceReadForbidden;
+                case PermissionFlag.EditProject:
+                    return MainServiceErrorCode.UserResourceEditForbidden;
+                default:
+                    return MainServiceErrorCode.UserResourceAccessForbidden;
+            }
+        }
+
         public void AuthorizeBook(long projectId, PermissionFlag permission)
         {
             var user = m_authenticationManager.GetCurrentUser();
@@ -123,25 +156,7 @@ namespace Vokabular.MainService.Core.Managers
                     x.GetFilteredBookIdListByUserPermissions(user.Id, new List<long> {projectId}, permission));
                 if (filtered == null || filtered.Count == 0)
                 {
-                    string errorCode;
-                    switch (permission)
-                    {
-                        case PermissionFlag.ShowPublished:
-                            errorCode = MainServiceErrorCode.UserBookReadForbidden;
-                            break;
-                        case PermissionFlag.ReadProject:
-                            errorCode = MainServiceErrorCode.UserBookReadProjectForbidden;
-                            break;
-                        case PermissionFlag.EditProject:
-                            errorCode = MainServiceErrorCode.UserBookEditProjectForbidden;
-                            break;
-                        case PermissionFlag.AdminProject:
-                            errorCode = MainServiceErrorCode.UserBookAdminProjectForbidden;
-                            break;
-                        default:
-                            errorCode = MainServiceErrorCode.UserBookAccessForbidden;
-                            break;
-                    }
+                    var errorCode = GetUnauthorizedErrorCodeForPermission(permission);
 
                     throw new MainServiceException(
                         errorCode,
@@ -179,17 +194,19 @@ namespace Vokabular.MainService.Core.Managers
             AuthorizeBook(projectId, permission);
         }
 
-        public void AuthorizeSnapshot(long snapshotId)
+        public void AuthorizeSnapshot(long snapshotId, PermissionFlag permission = PermissionFlag.ShowPublished)
         {
             var user = m_authenticationManager.GetCurrentUser();
             if (user != null)
             {
                 var permissions = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionsForSnapshotByUserId(snapshotId, user.Id));
-                if (permissions == null || !permissions.Any(x => x.Flags.HasFlag(PermissionFlag.ShowPublished)))
+                if (permissions == null || !permissions.Any(x => x.Flags.HasFlag(permission)))
                 {
+                    var errorCode = GetUnauthorizedErrorCodeForPermission(permission);
+
                     throw new MainServiceException(
-                        MainServiceErrorCode.UserBookReadForbidden,
-                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with Snapshot ID '{snapshotId}'",
+                        errorCode,
+                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission {permission} on book with Snapshot ID '{snapshotId}'",
                         HttpStatusCode.Forbidden
                     );
                 }
@@ -198,13 +215,13 @@ namespace Vokabular.MainService.Core.Managers
             {
                 var role = m_authenticationManager.GetUnregisteredRole();
                 var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(role.Id, role.Name));
-                var permission = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionForSnapshotByGroupId(snapshotId, group.Id));
+                var dbPermission = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionForSnapshotByGroupId(snapshotId, group.Id));
 
-                if (permission == null || !permission.Flags.HasFlag(PermissionFlag.ShowPublished))
+                if (dbPermission == null || !dbPermission.Flags.HasFlag(permission))
                 {
                     throw new MainServiceException(
                         MainServiceErrorCode.UnregisteredUserBookAccessForbidden,
-                        $"Unregistered user does not have permission on book with Snapshot ID '{snapshotId}'",
+                        $"Unregistered user does not have permission {permission} on book with Snapshot ID '{snapshotId}'",
                         HttpStatusCode.Forbidden
                     );
                 }
@@ -220,9 +237,11 @@ namespace Vokabular.MainService.Core.Managers
 
                 if (filtered == null)
                 {
+                    var errorCode = GetResourceUnauthorizedErrorCodeForPermission(permission);
+
                     throw new MainServiceException(
-                        MainServiceErrorCode.UserResourceAccessForbidden,
-                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission on book with resource with id '{resourceId}'",
+                        errorCode,
+                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission {permission} on book with resource with id '{resourceId}'",
                         HttpStatusCode.Forbidden
                     );
                 }
@@ -237,7 +256,63 @@ namespace Vokabular.MainService.Core.Managers
                 {
                     throw new MainServiceException(
                         MainServiceErrorCode.UnregisteredUserResourceAccessForbidden,
-                        $"Unregistered user does not have permission on book with resource with id '{resourceId}'",
+                        $"Unregistered user does not have permission {permission} on book with resource with id '{resourceId}'",
+                        HttpStatusCode.Forbidden
+                    );
+                }
+            }
+        }
+
+        public void AuthorizeResourceVersion(long resourceVersionId, PermissionFlag permission)
+        {
+            var user = m_authenticationManager.GetCurrentUser();
+            if (user != null)
+            {
+                var dbPermissions = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionsForResourceVersionByUserId(resourceVersionId, user.Id));
+
+                if (dbPermissions == null || !dbPermissions.Any(x => x.Flags.HasFlag(permission)))
+                {
+                    var errorCode = GetResourceUnauthorizedErrorCodeForPermission(permission);
+
+                    throw new MainServiceException(
+                        errorCode,
+                        $"User with id '{user.Id}' (external id '{user.ExternalId}') does not have permission {permission} on book with resource with versionId '{resourceVersionId}'",
+                        HttpStatusCode.Forbidden
+                    );
+                }
+            }
+            else
+            {
+                var role = m_authenticationManager.GetUnregisteredRole();
+                var group = m_permissionRepository.InvokeUnitOfWork(x => x.FindGroupByExternalIdOrCreate(role.Id, role.Name));
+                var dbPermission = m_permissionRepository.InvokeUnitOfWork(x => x.FindPermissionForResourceVersionByGroupId(resourceVersionId, group.Id));
+
+                if (dbPermission == null || !dbPermission.Flags.HasFlag(permission))
+                {
+                    throw new MainServiceException(
+                        MainServiceErrorCode.UnregisteredUserResourceAccessForbidden,
+                        $"Unregistered user does not have permission {permission} on book with resource with versionId '{resourceVersionId}'",
+                        HttpStatusCode.Forbidden
+                    );
+                }
+            }
+        }
+
+        public void AuthorizeTextComment(long commentId, PermissionFlag permission)
+        {
+            var textComment = m_permissionRepository.InvokeUnitOfWork(x => x.FindById<TextComment>(commentId));
+
+            AuthorizeResource(textComment.ResourceText.Id, permission);
+
+            // Authorize comment author
+            if (permission == PermissionFlag.EditProject)
+            {
+                var currentUserId = GetCurrentUserId();
+                if (textComment.CreatedByUser.Id != currentUserId)
+                {
+                    throw new MainServiceException(
+                        MainServiceErrorCode.InvalidCommentAuthorForbidden,
+                        $"User with id '{currentUserId}' is not author of text comment with id '{commentId}'",
                         HttpStatusCode.Forbidden
                     );
                 }

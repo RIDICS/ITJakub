@@ -151,7 +151,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public FileResultData GetAudio(long audioId)
         {
-            var audioResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetResourceVersion<AudioResource>(audioId, true, true));
+            var audioResource = m_resourceRepository.InvokeUnitOfWork(x => x.GetLatestResourceVersion<AudioResource>(audioId));
             if (audioResource == null)
             {
                 return null;

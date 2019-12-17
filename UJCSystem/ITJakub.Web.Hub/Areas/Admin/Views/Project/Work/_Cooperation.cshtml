@@ -84,7 +84,10 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>
-                        <button type="button" class="btn btn-default" id="addPermissionToUser" data-init="false">@Localizer.Translate("AddPermissionToUser", "Permission", LocTranslationSource.File)</button>
+                        <button type="button" class="btn btn-default" id="addPermissionToUser" data-init="false">
+                            <span class="saving-icon loading-small-button hide"></span>
+                            @Localizer.Translate("AddPermissionToUser", "Permission", LocTranslationSource.File)
+                        </button>
                     </div>
                 </div>
             </div>
