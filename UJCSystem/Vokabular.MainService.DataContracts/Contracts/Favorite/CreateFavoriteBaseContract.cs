@@ -35,4 +35,9 @@ namespace Vokabular.MainService.DataContracts.Contracts.Favorite
     {
         public long PageId { get; set; }
     }
+    
+    public class CreateFavoriteHeadwordContract : CreateFavoriteBaseContract
+    {
+        public long HeadwordId { get; set; }
+    }
 }

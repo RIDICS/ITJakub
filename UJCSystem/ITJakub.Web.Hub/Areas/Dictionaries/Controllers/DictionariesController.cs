@@ -23,6 +23,7 @@ using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.Request;
 using Vokabular.Shared.DataContracts.Types;
 using ITJakub.Web.Hub.Options;
+using Vokabular.MainService.DataContracts.Contracts.Favorite;
 using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
@@ -387,45 +388,32 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(resultPageNumber);
         }
 
-        // Favorite headwords are not currently supported
+        public ActionResult GetHeadwordBookmarks()
+        {
+            var client = GetFavoriteClient();
+            var list = client.GetFavoriteHeadwords();
+            return Json(list);
+        }
 
-        //public ActionResult GetHeadwordPageNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId,
-        //    string headwordEntryXmlId, int pageSize)
-        //{
-        //    using (var client = GetMainServiceClient())
-        //    {
-        //        var rowNumber = client.GetHeadwordRowNumberById(selectedCategoryIds, selectedBookIds, headwordBookId, headwordEntryXmlId, AreaBookType);
-        //        var resultPageNumber = (rowNumber - 1)/pageSize + 1;
-        //        return Json(resultPageNumber);
-        //    }
-        //}
+        public ActionResult AddHeadwordBookmark([FromBody] AddHeadwordBookmarkRequest data)
+        {
+            var client = GetFavoriteClient();
+            var headwordContract = new CreateFavoriteHeadwordContract
+            {
+                Title = data.Title,
+                HeadwordId = data.HeadwordId,
+            };
+            
+            var favoriteHeadwordId = client.CreateFavoriteHeadword(headwordContract);
+            return Json(favoriteHeadwordId);
+        }
 
-        //public ActionResult GetHeadwordBookmarks()
-        //{
-        //    using (var client = GetMainServiceClient())
-        //    {
-        //        var list = client.GetHeadwordBookmarks();
-        //        return Json(list);
-        //    }
-        //}
-
-        //public ActionResult AddHeadwordBookmark([FromBody] AddHeadwordBookmarkRequest request)
-        //{
-        //    using (var client = GetMainServiceClient())
-        //    {
-        //        client.AddHeadwordBookmark(request.BookId, request.EntryXmlId);
-        //        return Json(new {});
-        //    }
-        //}
-
-        //public ActionResult RemoveHeadwordBookmark([FromBody] RemoveHeadwordBookmarkRequest request)
-        //{
-        //    using (var client = GetMainServiceClient())
-        //    {
-        //        client.RemoveHeadwordBookmark(request.BookId, request.EntryXmlId);
-        //        return Json(new {});
-        //    }
-        //}
+        public ActionResult RemoveHeadwordBookmark([FromBody] RemoveHeadwordBookmarkRequest request)
+        {
+            var client = GetFavoriteClient();
+            client.DeleteFavoriteItem(request.FavoriteHeadwordId);
+            return Json(new {});
+        }
 
         public ActionResult GetTypeaheadDictionaryHeadword(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {

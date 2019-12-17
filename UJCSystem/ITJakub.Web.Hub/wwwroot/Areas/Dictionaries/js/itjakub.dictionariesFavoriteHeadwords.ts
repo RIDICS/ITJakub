@@ -3,7 +3,7 @@
     private listContainer: string;
     private mainContainer: string;
     private headwordList: Array<IDictionaryFavoriteHeadword>;
-    private headwordClickCallback: (bookId: string, entryXmlId: string) => void;
+    private headwordClickCallback: (headwordQuery: string) => void;
     private headwordListChangedCallback: (newList: Array<IDictionaryFavoriteHeadword>) => void;
 
     private inited = false;
@@ -15,14 +15,14 @@
         this.mainContainer = mainContainer;
     }
 
-    create(headwordClickCallback: (bookId: string, entryXmlId: string) => void, headwordListChangedCallback: (newList: Array<IDictionaryFavoriteHeadword>) => void = null) {
+    create(headwordClickCallback: (headwordQuery: string) => void, headwordListChangedCallback: (newList: Array<IDictionaryFavoriteHeadword>) => void = null) {
         this.headwordClickCallback = headwordClickCallback;
         this.headwordListChangedCallback = headwordListChangedCallback;
         var areaInitHeight = $(".dictionary-header", $(this.mainContainer)).innerHeight();
         $(this.mainContainer).height(areaInitHeight);
 
         var self = this;
-        $(this.expandButton).click(function () {
+        $(this.expandButton).on("click",function () {
             var area = $(self.mainContainer);
             if (!area.hasClass("uncollapsed")) {
                 $(this).children().removeClass("glyphicon-collapse-down");
@@ -79,14 +79,14 @@
         });
     }
 
-    public addNewHeadword(bookId: string, entryXmlId: string) {
-        $.ajax({
+    public addNewHeadword(title: string, headwordId: number): JQuery.jqXHR {
+        return $.ajax({
             type: "POST",
             traditional: true,
             url: getBaseUrl() + "Dictionaries/Dictionaries/AddHeadwordBookmark",
             data: JSON.stringify({
-                bookId: bookId,
-                entryXmlId: entryXmlId
+                title: title,
+                headwordId: headwordId,
             }),
             dataType: "json",
             contentType: "application/json",
@@ -110,19 +110,20 @@
             var textWordSpan = document.createElement("span");
 
             $(wordSpan).addClass("saved-word");
-            $(wordSpan).data("entryXmlId", favoriteHeadword.entryXmlId);
-            $(wordSpan).data("bookId", favoriteHeadword.bookId);
+            $(wordSpan).data("favorite-id", favoriteHeadword.id);
+            $(wordSpan).data("saved-word-query", favoriteHeadword.query);
+            $(wordSpan).data("saved-word-id", favoriteHeadword.headwordId);
             
             $(removeWordSpan).addClass("saved-word-remove")
                 .addClass("glyphicon")
                 .addClass("glyphicon-remove-circle");
-            $(removeWordSpan).click(event => {
+            $(removeWordSpan).on("click",event => {
                 this.removeHeadword(event.target.parentElement);
             });
 
             $(textWordSpan).addClass("saved-word-text");
-            $(textWordSpan).text(favoriteHeadword.headword);
-            $(textWordSpan).click(event => {
+            $(textWordSpan).text(favoriteHeadword.title);
+            $(textWordSpan).on("click", event => {
                 this.goToPageWithSelectedHeadword(event.target.parentElement);
             });
 
@@ -149,15 +150,12 @@
     }
 
     private goToPageWithSelectedHeadword(element: Element) {
-        var entryXmlId = $(element).data("entryXmlId");
-        var bookId = $(element).data("bookId");
-
-        this.headwordClickCallback(bookId, entryXmlId);
+        const headwordQuery = $(element).data("saved-word-query");
+        this.headwordClickCallback(headwordQuery);
     }
 
     private removeHeadword(element: Element) {
-        var entryXmlId = $(element).data("entryXmlId");
-        var bookId = $(element).data("bookId");
+        const favoriteId = $(element).data("favorite-id");
 
         $(element).fadeOut(null, () => {
             $(element).remove();
@@ -166,7 +164,7 @@
 
         for (var i = 0; i < this.headwordList.length; i++) {
             var headword = this.headwordList[i];
-            if (headword.bookId === bookId && headword.entryXmlId === entryXmlId) {
+            if (headword.id === favoriteId) {
                 this.headwordList.splice(i, 1); // remove item from array
                 break;
             }
@@ -177,8 +175,7 @@
             traditional: true,
             url: getBaseUrl() + "Dictionaries/Dictionaries/RemoveHeadwordBookmark",
             data: JSON.stringify({
-                bookId: bookId,
-                entryXmlId: entryXmlId
+                favoriteHeadwordId: favoriteId,
             }),
             dataType: "json",
             contentType: "application/json",
@@ -187,11 +184,11 @@
         this.headwordListChanged();
     }
 
-    public removeHeadwordById(bookId: string, entryXmlId: string) {
+    public removeHeadwordById(favoriteId) {
         var elements = $(".saved-word", $(this.listContainer));
         for (var i = 0; i < elements.length; i++) {
             var element = elements.get(i);
-            if ($(element as Node as Element).data("bookId") === bookId && $(element as Node as Element).data("entryXmlId") === entryXmlId) {
+            if ($(element as Node as Element).data("favorite-id") === favoriteId) {
                 this.removeHeadword(element as Node as Element);
                 return;
             }
