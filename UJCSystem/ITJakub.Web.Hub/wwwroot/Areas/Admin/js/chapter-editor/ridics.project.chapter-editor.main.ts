@@ -9,6 +9,7 @@ class ChapterEditorMain {
     private pageDetail: JQuery;
     private chapterEdited: boolean;
     private position = 0;
+    private projectId: number;
     
     constructor() {
         this.errorHandler = new ErrorHandler();
@@ -20,6 +21,7 @@ class ChapterEditorMain {
     }
 
     init(projectId: number) {
+        this.projectId = projectId;
         this.moveEditor.init();
         this.readerPagination.init(((pageId, pageIndex, scrollTo) => {
             this.loadPageDetail(pageId);
@@ -60,13 +62,7 @@ class ChapterEditorMain {
                         $("#unsavedChanges").addClass("hide");
                         listing.empty().append(`<div class="loader"></div>`);
                         this.util.generateChapterList(projectId).done(() => {
-                            this.util.getChapterListView(projectId).done((data) => {
-                                listing.html(data);
-                                this.initChapterRowClicks($(".table > .sub-chapters"));
-                            }).fail((error) => {
-                                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
-                                listing.empty().append(alert);
-                            });
+                            this.reloadChapterList(listing);
                         }).fail((error) => {
                             const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
                             listing.empty().append(alert);
@@ -93,18 +89,18 @@ class ChapterEditorMain {
             this.position = 0;
             this.chaptersToSave = [];
             this.getChaptersToSave($(".table > .sub-chapters"));
-            listing.empty().append(`<div class="loader"></div>`);
+            const contentBackup = listing.children();
+            contentBackup.hide();
+            const loader = $(`<div class="loader"></div>`);
+            listing.append(loader);
             this.util.saveChapterList(projectId, this.chaptersToSave).done(() => {
+                contentBackup.remove();
                 $("#chaptersUnsavedChanges").addClass("hide");
                 this.chapterEdited = false;
-                this.util.getChapterListView(projectId).done((data) => {
-                    listing.html(data);
-                    this.initChapterRowClicks($(".table > .sub-chapters"));
-                }).fail((error) => {
-                    const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
-                    listing.empty().append(alert);
-                });                
+                this.reloadChapterList(listing);
             }).fail((error) => {
+                loader.remove();
+                contentBackup.show();
                 bootbox.alert({
                     title: localization.translate("Error").value,
                     message: this.errorHandler.getErrorMessage(error),
@@ -162,6 +158,16 @@ class ChapterEditorMain {
             liveSearch: true,
             maxOptions: 1
         });
+    }
+
+    private reloadChapterList(listingChaptersContainer: JQuery) {
+        this.util.getChapterListView(this.projectId).done((data) => {
+            listingChaptersContainer.html(data);
+            this.initChapterRowClicks($(".table > .sub-chapters"));
+        }).fail((error) => {
+            const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+            listingChaptersContainer.empty().append(alert);
+        });        
     }
 
     public isChangeMade(): boolean {
