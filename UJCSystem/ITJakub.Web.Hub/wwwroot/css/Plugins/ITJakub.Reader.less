@@ -774,15 +774,18 @@ body {
     margin-bottom: 5px;
 }
 
-.reader-text-pages-separated {
-    div.page-wrapper {
-        padding-bottom: 1em;
-        margin-bottom: 2em;
-        @page-bottom-border-color: #999; 
-        background-image: linear-gradient(to right, white 30%, @page-bottom-border-color 30%, @page-bottom-border-color 70%, rgba(255,255,255,0) 0%);
-        background-position: bottom;
-        background-size: 5% 5px;
-        background-repeat: repeat-x;
+.reader-text-container {
+    &.reader-text-pages-separated {
+        div.page-wrapper {
+            padding-bottom: 1em;
+            margin-bottom: 2em;
+            @page-bottom-border-color: #999;
+            border-bottom: 2px solid @page-bottom-border-color;
+        }
+
+        div.page-name {
+            margin-bottom: 0;
+        }
     }
 }
 
