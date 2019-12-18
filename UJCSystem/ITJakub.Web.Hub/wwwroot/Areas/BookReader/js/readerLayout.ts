@@ -638,9 +638,9 @@ class ReaderLayout {
 
     private showSearchResultInPages(searchQuery: string, isQueryJson: boolean, pages: Array<IPage>) {
         this.textPanel.setSearchedQuery(searchQuery, isQueryJson);
-        $(".search-unloaded").removeClass(".search-unloaded");
+        $(".search-unloaded").removeClass("search-unloaded");
         var previousSearchPages = $(".search-loaded");
-        $(previousSearchPages).removeClass(".search-loaded");
+        $(previousSearchPages).removeClass("search-loaded");
         $(previousSearchPages).addClass("unloaded");
         for (var i = 0; i < pages.length; i++) {
             var page = pages[i];

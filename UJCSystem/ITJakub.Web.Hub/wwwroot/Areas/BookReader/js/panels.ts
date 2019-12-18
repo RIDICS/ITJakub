@@ -875,7 +875,7 @@ class TextPanel extends ContentViewPanel {
         bookPage.done((response: { pageText: string }) => {
             $(pageContainer).empty();
             $(pageContainer).append(response.pageText);
-            $(pageContainer).removeClass("loading");
+            $(pageContainer).removeClass("loading-page");
             $(pageContainer).removeClass("unloaded");
             $(pageContainer).removeClass("search-unloaded");
             $(pageContainer).addClass("search-loaded");
