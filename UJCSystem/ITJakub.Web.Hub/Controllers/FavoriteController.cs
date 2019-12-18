@@ -96,12 +96,12 @@ namespace ITJakub.Web.Hub.Controllers
             switch (favoriteItem.FavoriteType)
             {
                 case FavoriteTypeEnumContract.Project:
-                    return RedirectToAction("Listing", "Editions", new {area = "Editions", bookId = favoriteItem.ProjectId});
+                    return RedirectToAction("Listing", "BookReader", new {area = "BookReader", bookId = favoriteItem.ProjectId});
                 case FavoriteTypeEnumContract.Category:
                     return View("AmbiguousFavoriteRedirect");
                 case FavoriteTypeEnumContract.Page:
-                    return RedirectToAction("Listing", "Editions",
-                        new {area = "Editions", bookId = favoriteItem.ProjectId, page = favoriteItem.PageId});
+                    return RedirectToAction("Listing", "BookReader",
+                        new {area = "BookReader", bookId = favoriteItem.ProjectId, pageId = favoriteItem.PageId});
                 case FavoriteTypeEnumContract.Query:
                     if (favoriteItem.BookType == null || favoriteItem.QueryType == null)
                     {
