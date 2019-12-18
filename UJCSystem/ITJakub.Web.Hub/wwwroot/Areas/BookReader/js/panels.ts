@@ -850,7 +850,10 @@ class TextPanel extends ContentViewPanel {
 
     private downloadSearchPageById(query: string, queryIsJson: boolean, page: BookPage, onSuccess: () => any = null, onFailed: () => any = null) {
         var pageContainer = document.getElementById(page.pageId.toString());
-        $(pageContainer).addClass("loading");
+        var loader = lv.create(null, "lv-circles lv-mid sm");
+        $(pageContainer)
+            .addClass("loading-page")
+            .append(loader.getElement());
         var bookPage: JQueryXHR = this.sc.getBookPageSearch(this.parentReader.versionId, page.pageId, queryIsJson, query);
         bookPage.done((response: { pageText: string }) => {
             $(pageContainer).empty();
