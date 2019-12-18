@@ -323,6 +323,7 @@
             var readerText: JQuery = $("#" + this.parentReader.textPanelId).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node);
             this.parentReader.readerLayout.eventHub.emit("toggleComments", currentTarget.checked, "reader-text-show-page-names");
+            this.parentReader.notifyPanelsMovePage(this.actualPageIndex, true);
         });
 
         var pageNameSlider = document.createElement("label");
@@ -346,6 +347,7 @@
             var readerText = $("#" + this.parentReader.textPanelId).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node);
             this.parentReader.readerLayout.eventHub.emit("toggleComments", currentTarget.checked, "reader-text-pages-separated");
+            this.parentReader.notifyPanelsMovePage(this.actualPageIndex, true);
         });
 
         var pageOnNewLineSlider = document.createElement("label");
@@ -369,7 +371,7 @@
                 var readerText = $("#" + this.parentReader.textPanelId).find(".reader-text");
                 var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget as Node);
                 this.parentReader.readerLayout.eventHub.emit("toggleComments", currentTarget.checked, "show-notes");
-
+                this.parentReader.notifyPanelsMovePage(this.actualPageIndex, true);
             });
 
             var commentSlider = document.createElement("label");
