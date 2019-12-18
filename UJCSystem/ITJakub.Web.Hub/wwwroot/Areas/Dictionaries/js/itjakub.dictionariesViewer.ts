@@ -186,6 +186,7 @@
             $(headwordSpan).text(record.headword);
             $(headwordSpan).addClass("dictionary-result-headword");
             headwordLi.appendChild(headwordSpan);
+            this.createHeadwordLinkListener(headwordSpan);
 
             if (this.addNewFavoriteCallback != null) {
                 const favoriteHeadword = this.getFavoriteHeadwordFromArray(record.dictionaries);
@@ -314,6 +315,18 @@
 
         $(this.headwordListContainer).append(listUl);
         $(this.headwordDescriptionContainer).append(descriptionsDiv);
+
+        const searchButton = $("#searchButton");
+        if(searchButton.data("favorite-headword-trigger"))
+        {
+            searchButton.data("favorite-headword-trigger", false);
+            const headwordQuery = $("#searchbox").val();
+            const elem = $(`#headwordList .dictionary-result-headword:contains(${headwordQuery})`);
+            if(elem)
+            {
+                elem.trigger("click");
+            }
+        }
     }
 
     private updateImageVisibility(checkBox: HTMLInputElement) {
@@ -390,6 +403,34 @@
             }
 
             var headwordItem = $(event.target as Node as Element).closest("li");
+            $(headwordItem).siblings().removeClass("dictionary-headword-highlight");
+            $(headwordItem).addClass("dictionary-headword-highlight");
+        });
+    }
+
+    private createHeadwordLinkListener(aLink: HTMLElement) {
+        $(aLink).on("click", event => {
+            event.preventDefault();
+
+            const headwordItem = $(event.target as Node as Element).closest("li");
+            const links = headwordItem.find("a.dictionary-result-headword-book").toArray();
+
+            for (var k = 0; k < this.headwordDescriptionDivs.length; k++) {
+                $(this.headwordDescriptionDivs[k]).addClass("hidden");
+            }
+
+            for (let link of links) {
+                var index: number = $(link).data("entry-index");
+                var headwordDiv = this.headwordDescriptionDivs[index];
+                $(headwordDiv).removeClass("hidden");
+
+                if ($(headwordDiv).hasClass("lazy-loading")) {
+                    this.loadHeadwordDescription(index);
+                }
+            }
+
+            $("#cancelFilter").removeClass("hidden");
+
             $(headwordItem).siblings().removeClass("dictionary-headword-highlight");
             $(headwordItem).addClass("dictionary-headword-highlight");
         });
