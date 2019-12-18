@@ -216,10 +216,18 @@ class SearchResultPanel extends ToolPanel {
 
     showResults(searchResults: SearchHitResult[]) {
         this.clearResults();
-        for (var i = 0; i < searchResults.length; i++) {
-            var result = searchResults[i];
-            var resultItem = this.createResultItem(result);
-            this.searchResultItemsDiv.appendChild(resultItem);
+        if(searchResults.length) {
+            for (var i = 0; i < searchResults.length; i++) {
+                var result = searchResults[i];
+                var resultItem = this.createResultItem(result);
+                this.searchResultItemsDiv.appendChild(resultItem);
+            }
+        }
+        else {
+            var noResultItemDiv = document.createElement("div");
+            $(noResultItemDiv).addClass("no-results");
+            $(noResultItemDiv).text(localization.translate("NoResults", "BookReader").value);
+            this.searchResultItemsDiv.appendChild(noResultItemDiv);
         }
     }
 

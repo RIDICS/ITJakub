@@ -74,6 +74,7 @@
 
     "AllBookmarks": "Všechny záložky",
     
-    "LoadingContentError": "Chyba při načítání obsahu"
+    "LoadingContentError": "Chyba při načítání obsahu",
+    "NoResults": "Text neobsahuje hledaný výraz" 
   }
 }

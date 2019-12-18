@@ -74,6 +74,7 @@
 
     "AllBookmarks": "All bookmarks",
 
-    "LoadingContentError": "Failed to load content"
+    "LoadingContentError": "Failed to load content",
+    "NoResults": "Text does not contain searched expression"
   }
 }
