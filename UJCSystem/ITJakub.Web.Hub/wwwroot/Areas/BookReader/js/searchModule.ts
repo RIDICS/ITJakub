@@ -66,6 +66,7 @@
             var textSearch: JQueryXHR = this.sc.textSearchBookCount(this.bookId, this.versionId, text);
             textSearch.done((response: { count: number }) => {
                 this.readerPlugin.readerLayout.eventHub.emit("fulltextSearchDone", response.count, text);
+                this.showToolPanel();
             });
 
             var textSearchMatchHit: JQueryXHR = this.sc.textSearchMatchHit(this.bookId, this.versionId, text);
@@ -76,6 +77,7 @@
             var termsSearch: JQueryXHR = this.sc.textSearchOldGrammar(this.bookId, this.versionId, text);
             termsSearch.done((response: {results: PageDescription[]}) => {
                 this.readerPlugin.readerLayout.eventHub.emit("termsSearchDone", text, response.results);
+                this.showToolPanel();
             });
         }
 
@@ -89,6 +91,7 @@
                 this.sc.advancedSearchBookCount(this.bookId, this.versionId, json);
             advancedSearch.done((response: { count: number }) => {
                 this.readerPlugin.readerLayout.eventHub.emit("fulltextSearchDone", response.count, json);
+                this.showToolPanel();
             });
 
             var advancedSearchMatchHit: JQueryXHR = this.sc.advancedSearchMatchHit(this.bookId, this.versionId, json);
@@ -99,7 +102,7 @@
             var termsSearch: JQueryXHR = this.sc.advancedSearchOldGrammar(this.bookId, this.versionId, json);
             termsSearch.done((response: {results: PageDescription[]}) => {
                 this.readerPlugin.readerLayout.eventHub.emit("termsSearchDone", json, response.results);
-
+                this.showToolPanel();
             });
         }
 
@@ -175,6 +178,15 @@
         }
 
         return searchResults;
+    }
+    
+    private showToolPanel() {
+        if(this.readerPlugin.deviceType === Device.Desktop) {
+            this.readerPlugin.createDesktopToolPanel(this.readerPlugin.searchPanelId, localization.translate(this.readerPlugin.searchPanelId, "BookReader").value);
+        }
+        else {
+            this.readerPlugin.createMobileToolPanel(this.readerPlugin.searchPanelId, localization.translate(this.readerPlugin.searchPanelId, "BookReader").value);
+        }
     }
 
 }
