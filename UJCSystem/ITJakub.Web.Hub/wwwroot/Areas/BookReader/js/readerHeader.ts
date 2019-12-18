@@ -44,7 +44,8 @@
 
     private getEditionNote(addHeader: boolean): HTMLDivElement {
         var editionNoteDiv = document.createElement("div");
-        $(editionNoteDiv).addClass("loading");
+        var loader = lv.create(null, "edition-note-loading lv-circles lv-mid md");
+        $(editionNoteDiv).append(loader.getElement());
         $(editionNoteDiv).addClass("edition-note-wrapper");
         if (addHeader) {
             var editionNoteHeader = document.createElement("h3");
@@ -62,12 +63,13 @@
                 $(editionNoteText).append(response.editionNote);
             }
             editionNoteDiv.appendChild(editionNoteText);
-            $(editionNoteDiv).removeClass("loading");
         });
         editionNote.fail(() => {
             $(editionNoteDiv).append(localization.translate("failedToLoadNote", "BookReader").value);
-            $(editionNoteDiv).removeClass("loading");
         });
+        editionNote.always(()=>{
+            $(editionNoteDiv).find(".edition-note-loading").remove();
+        })
 
         return editionNoteDiv;
     }

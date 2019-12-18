@@ -14,6 +14,7 @@
 @color4: #888888;
 @lineColor: #e5e5e5;
 @mobile-max-width: 800px;
+@loader-color: @button-background-color;
 
 .lm_tabs {
   z-index: 1;
@@ -61,7 +62,8 @@
   width: auto;
   background-color: white;
   height: 100%;
-
+  position: relative;
+  
   > div {
     @media screen and (max-width: @mobile-max-width) {
       padding: 5px;
@@ -465,6 +467,17 @@ button {
     float: right;
     max-width: 100%;
   }
+  
+  .loading-audio {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 5;
+    background: rgba(0,0,0,0.2);
+    padding-top: 2em;
+  }
 
   @audioPlayerBackgroundColor: #eeeeee;
 
@@ -615,6 +628,7 @@ button {
 .hidden {
   display: none;
 }
+
 
 #book-info-modal {
   @media screen and (max-width: @mobile-max-width) {

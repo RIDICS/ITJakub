@@ -42,6 +42,7 @@ class ContentPanel extends ToolPanel {
     makeBody(rootReference: Panel, window: Window): HTMLElement {
         var bodyDiv: HTMLDivElement = window.document.createElement("div");
         $(bodyDiv).addClass("content-panel-container");
+        this.innerContent = bodyDiv;
         this.downloadBookContent();
         return bodyDiv;
     }
@@ -49,7 +50,8 @@ class ContentPanel extends ToolPanel {
     private downloadBookContent() {
 
         $(this.innerContent).empty();
-        $(this.innerContent).addClass("loader");
+        var loading = lv.create(null, "lv-dots lv-mid md");
+        $(this.innerContent).append(loading.getElement());
         var bookContent: JQueryXHR = this.sc.getBookContent(this.parentReader.bookId);
         bookContent.done((response: { content: IChapterHieararchyContract[] }) => {
             var ulElement = document.createElement("ul");
@@ -58,8 +60,7 @@ class ContentPanel extends ToolPanel {
                 var chapterItem: IChapterHieararchyContract = response.content[i];
                 $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(chapterItem)));
             }
-
-            $(this.innerContent).removeClass("loader");
+            
             $(this.innerContent).empty();
             $(this.innerContent).append(ulElement);
 
@@ -258,12 +259,13 @@ class SearchResultPanel extends ToolPanel {
     }
 
     showLoading() {
-        $(this.searchResultItemsDiv).addClass("loader");
+        var loader = lv.create(null, "loading-animation lv-dots lv-mid md");
+        $(this.searchResultItemsDiv).append(loader.getElement());
 
     }
 
     clearLoading() {
-        $(this.searchResultItemsDiv).removeClass("loader");
+        $(this.searchResultItemsDiv).find(".loading-animation").remove();
     }
 
     clearResults() {
@@ -486,7 +488,9 @@ class TermsSearchPanel extends TermsPanel {
             .append(`<h3>${localization.translate(this.identificator, "BookReader").value} </h3>`);
 
         var searchResultItemsLoadDiv = window.document.createElement("div");
-        $(searchResultItemsLoadDiv).addClass("reader-terms-search-result-items-div-load loader");
+        $(searchResultItemsLoadDiv).addClass("reader-terms-search-result-items-div-load");
+        var loader = lv.create(null, "lv-dots lv-mid md");
+        $(searchResultItemsLoadDiv).append(loader.getElement());
         this.searchResultItemsLoadDiv = searchResultItemsLoadDiv;
         $(searchResultItemsLoadDiv).hide();
         searchResultDiv.appendChild(searchResultItemsLoadDiv);
@@ -583,7 +587,9 @@ class TermsResultPanel extends TermsPanel {
             .append(`<h3>${localization.translate(this.identificator, "BookReader").value} </h3>`);
 
         var termsResultItemsLoadDiv = window.document.createElement("div");
-        $(termsResultItemsLoadDiv).addClass("reader-terms-result-items-div-load loader");
+        $(termsResultItemsLoadDiv).addClass("reader-terms-result-items-div-load");
+        var loader = lv.create(null, "lv-dots lv-mid md");
+        $(termsResultItemsLoadDiv).append(loader.getElement());
         this.termsResultItemsLoadDiv = termsResultItemsLoadDiv;
         $(termsResultItemsLoadDiv).hide();
         termsResultDiv.appendChild(termsResultItemsLoadDiv);
@@ -778,7 +784,7 @@ class TextPanel extends ContentViewPanel {
         var pageDiv = document.getElementById(page.pageId.toString());
         var pageLoaded: boolean = !($(pageDiv).hasClass("unloaded"));
         var pageSearchUnloaded: boolean = $(pageDiv).hasClass("search-unloaded");
-        var pageLoading: boolean = $(pageDiv).hasClass("loading");
+        var pageLoading: boolean = $(pageDiv).hasClass("loading-page");
         if (!pageLoading) {
             if (pageSearchUnloaded) {
                 this.downloadSearchPageById(this.query, this.queryIsJson, page, onSuccess, onFailed);
@@ -809,12 +815,15 @@ class TextPanel extends ContentViewPanel {
 
     private downloadPageById(page: BookPage, onSuccess: () => any = null, onFailed: () => any = null) {
         var pageContainer = document.getElementById(page.pageId.toString());
-        $(pageContainer).addClass("loading");
+        var loader = lv.create(null, "lv-circles lv-mid sm");
+        $(pageContainer)
+            .addClass("loading-page")
+            .append(loader.getElement());
         var bookPage: JQueryXHR = this.sc.getBookPage(this.parentReader.versionId, page.pageId);
         bookPage.done((response: { pageText: string }) => {
             $(pageContainer).empty();
             $(pageContainer).append(response.pageText);
-            $(pageContainer).removeClass("loading");
+            $(pageContainer).removeClass("loading-page");
             $(pageContainer).removeClass("unloaded");
 
             if (this.parentReader.clickedMoveToPage) {
@@ -827,7 +836,7 @@ class TextPanel extends ContentViewPanel {
         });
         bookPage.fail(() => {
             $(pageContainer).empty();
-            $(pageContainer).removeClass("loading");
+            $(pageContainer).removeClass("loading-page");
             $(pageContainer).append(localization.translateFormat("PageLoadingError", new Array<string>(page.text), "BookReader").value);
 
             if (onFailed != null) {
@@ -953,8 +962,8 @@ class AudioPanel extends ContentViewPanel {
     protected makeBody(rootReference: Panel, window: Window): HTMLElement {
         var audioContainerDiv: HTMLDivElement = document.createElement("div");
         $(audioContainerDiv).addClass("reader-audio-container");
-        $(audioContainerDiv).addClass("loading");
-
+        this.showLoading(audioContainerDiv);
+        
         var trackName = document.createElement("h3");
         $(trackName).addClass("track-name");
         audioContainerDiv.appendChild(trackName);
@@ -979,7 +988,7 @@ class AudioPanel extends ContentViewPanel {
 
             this.trackId = 0;
             this.reloadTrack();
-            $(".reader-audio-container").removeClass("loading");
+            this.clearLoading();
         });
         book.fail(() => {
             $(".reader-audio-container").empty();
@@ -1020,6 +1029,8 @@ class AudioPanel extends ContentViewPanel {
         if (this.currentTrack) {
             this.currentTrack.pause();
         }
+        
+        this.showLoading();
         var getTrack: JQueryXHR = this.sc.getTrack(this.parentReader.bookId, this.trackId);
         getTrack.done((response: { track: ITrackWithRecordingContract }) => {
             $(".track-name").html(response.track.Name);
@@ -1034,6 +1045,7 @@ class AudioPanel extends ContentViewPanel {
                 $(".track").append(download);
             }
             this.buildAudioPlayer(response.track, autoplay);
+            this.clearLoading();
 
         });
         getTrack.fail(() => {
@@ -1041,7 +1053,7 @@ class AudioPanel extends ContentViewPanel {
             $(".reader-audio-container").append(localization.translate("FailedToLoadTrack", "BookReader").value);
         });
     }
-
+    
     private buildAudioPlayer(track: ITrackWithRecordingContract, autoplay: boolean) {
         this.currentTrack = new Audio();
         if (autoplay) {
@@ -1182,5 +1194,25 @@ class AudioPanel extends ContentViewPanel {
 
     private calculatePercentageProgress(audio: HTMLAudioElement): string {
         return `${audio.currentTime / audio.duration * 100}%`;
+    }
+    
+    private showLoading(containerDiv?: HTMLElement) {
+        if(containerDiv == null) {
+            containerDiv = this.innerContent;
+        }
+        var loader = lv.create(null, "lv-circles lv-mid md");
+        
+        var loadingContainer = document.createElement("div");
+        $(loadingContainer)
+            .addClass("loading-audio")
+            .append(loader.getElement());
+        
+        $(containerDiv)
+            .append(loadingContainer);
+    }
+    
+    private clearLoading() {
+        $(this.innerContent)
+            .find(".loading-audio").remove();
     }
 }
