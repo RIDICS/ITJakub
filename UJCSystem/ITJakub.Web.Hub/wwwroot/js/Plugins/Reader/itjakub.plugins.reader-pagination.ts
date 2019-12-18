@@ -10,12 +10,12 @@
         this.pagerDisplayPages = 5;
         this.readerContainer = readerContainer;
     }
-    
+
     init(pageChangedCallback: (pageId: number, pageIndex: number, scrollTo: boolean) => void) {
         this.pageChangedCallback = pageChangedCallback;
     }
-    
-    createPagination(multiStepArrow = false): HTMLElement {
+
+    createPagination(multiStepArrow = false, clickedPaginationLinkCallback?: (pageIndex: number) => void, clickedPageNumberCallback?: (pageIndex: number) => void): HTMLElement {
         const paginationUl: HTMLUListElement = document.createElement("ul");
         paginationUl.classList.add("pagination", "pagination-sm");
 
@@ -29,13 +29,17 @@
         $(anchor).text("|<");
         $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
-            this.moveToPageNumber(0, true);
+            if (clickedPaginationLinkCallback) {
+                clickedPaginationLinkCallback(0)
+            } else {
+                this.moveToPageNumber(0, true);
+            }
             return false;
         });
         liElement.appendChild(anchor);
         toLeft.appendChild(liElement);
 
-        if(multiStepArrow) {
+        if (multiStepArrow) {
             liElement = document.createElement("li");
             $(liElement).addClass("page-navigation page-navigation-left");
             anchor = document.createElement("a");
@@ -43,17 +47,21 @@
             $(anchor).text("<<");
             $(anchor).click((event: JQuery.Event) => {
                 event.stopPropagation();
-                this.moveToPageNumber(this.actualPageIndex - 5, true);
+                if (clickedPaginationLinkCallback) {
+                    clickedPaginationLinkCallback(this.actualPageIndex - 5)
+                } else {
+                    this.moveToPageNumber(this.actualPageIndex - 5, true);
+                }
                 return false;
             });
             liElement.appendChild(anchor);
             toLeft.appendChild(liElement);
         }
-        
-        
+
+
         let toRight = document.createElement("ul");
         toRight.classList.add("page-navigation-container", "page-navigation-container-right");
-        
+
         liElement = document.createElement("li");
         $(liElement).addClass("page-navigation page-navigation-left");
         anchor = document.createElement("a");
@@ -61,12 +69,16 @@
         $(anchor).text("<");
         $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
-            this.moveToPageNumber(this.actualPageIndex - 1, true);
+            if (clickedPaginationLinkCallback) {
+                clickedPaginationLinkCallback(this.actualPageIndex - 1)
+            } else {
+                this.moveToPageNumber(this.actualPageIndex - 1, true);
+            }
             return false;
         });
         liElement.appendChild(anchor);
         toLeft.appendChild(liElement);
-        
+
         liElement = document.createElement("li");
         $(liElement).addClass("page-navigation page-navigation-right");
         anchor = document.createElement("a");
@@ -74,14 +86,18 @@
         $(anchor).text(">");
         $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
-            this.moveToPageNumber(this.actualPageIndex + 1, true);
+            if (clickedPaginationLinkCallback) {
+                clickedPaginationLinkCallback(this.actualPageIndex + 1)
+            } else {
+                this.moveToPageNumber(this.actualPageIndex + 1, true);
+            }
             return false;
         });
         liElement.appendChild(anchor);
         toRight.appendChild(liElement);
 
 
-        if(multiStepArrow) {
+        if (multiStepArrow) {
             liElement = document.createElement("li");
             $(liElement).addClass("page-navigation page-navigation-right");
             anchor = document.createElement("a");
@@ -89,13 +105,17 @@
             $(anchor).text(">>");
             $(anchor).click((event: JQuery.Event) => {
                 event.stopPropagation();
-                this.moveToPageNumber(this.actualPageIndex + 5, true);
+                if (clickedPaginationLinkCallback) {
+                    clickedPaginationLinkCallback(this.actualPageIndex + 5)
+                } else {
+                    this.moveToPageNumber(this.actualPageIndex + 5, true);
+                }
                 return false;
             });
             liElement.appendChild(anchor);
             toRight.appendChild(liElement);
         }
-        
+
         liElement = document.createElement("li");
         $(liElement).addClass("page-navigation page-navigation-right");
         anchor = document.createElement("a");
@@ -103,7 +123,11 @@
         $(anchor).text(">|");
         $(anchor).click((event: JQuery.Event) => {
             event.stopPropagation();
-            this.moveToPageNumber(this.pages.length - 1, true);
+            if (clickedPaginationLinkCallback) {
+                clickedPaginationLinkCallback(this.pages.length - 1)
+            } else {
+                this.moveToPageNumber(this.pages.length - 1, true);
+            }
             return false;
         });
         liElement.appendChild(anchor);
@@ -123,7 +147,11 @@
             $(anchor).text(page.text);
             $(anchor).click((event: JQuery.Event) => {
                 event.stopPropagation();
-                this.moveToPage(page.pageId);
+                if(clickedPageNumberCallback) {
+                    clickedPageNumberCallback(page.pageId);
+                } else {
+                    this.moveToPage(page.pageId);
+                }
                 return false;
             });
             liElement.appendChild(anchor);
@@ -154,7 +182,7 @@
         if (!scrollTo) {
             this.clickedMoveToPage = true;
         }
-        
+
         this.actualPageIndex = pageIndex;
         this.actualizePagination(pageIndex);
 

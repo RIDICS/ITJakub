@@ -71,6 +71,10 @@ class Search {
         }
     }
 
+    public setLastQuery(searchQuery: string) {
+        this.lastQuery = searchQuery;
+    }
+    
     limitFullTextSearchToOne() {
         this.fulltextIsLimited = true;
     }

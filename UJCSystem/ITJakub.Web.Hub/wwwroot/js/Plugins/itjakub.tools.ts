@@ -1,4 +1,6 @@
-﻿enum HttpStatusCode {
+﻿const MAX_INTEGER = 2147483647;
+
+enum HttpStatusCode {
     Success = 200,
     BadRequest = 400,
     Unauthorized = 401,

@@ -27,6 +27,10 @@
       "HeadwordDescriptionTokenDistance": true,
       "SelectedCategory": true,
       "Term": true
+    },
+
+    "ReaderConfig": {
+      "DisplayNotes": true
     }
   }
 }
