@@ -56,4 +56,11 @@ namespace Vokabular.MainService.DataContracts.Contracts.Favorite
 
         public FavoriteLabelContract FavoriteLabel { get; set; }
     }
+    
+    public class FavoriteHeadwordContract : FavoriteBaseInfoContract
+    {
+        public string Query { get; set; }
+        
+        public long HeadwordId { get; set; }
+    }
 }

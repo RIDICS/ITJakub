@@ -255,6 +255,23 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+        
+        public List<FavoriteHeadwordContract> GetFavoriteHeadwords()
+        {
+            try
+            {
+                var url = UrlQueryBuilder.Create("favorite/headword").ToResult();
+                var result = m_client.Get<List<FavoriteHeadwordContract>>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
 
         public long CreateFavoriteBook(CreateFavoriteProjectContract data)
         {
@@ -309,6 +326,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = m_client.Post<long>("favorite/page", data);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", m_client.GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+        
+        public long CreateFavoriteHeadword(CreateFavoriteHeadwordContract data)
+        {
+            try
+            {
+                var result = m_client.Post<long>("favorite/headword", data);
                 return result;
             }
             catch (HttpRequestException e)

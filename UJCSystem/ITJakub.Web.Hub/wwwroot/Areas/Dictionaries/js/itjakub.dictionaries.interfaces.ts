@@ -16,12 +16,10 @@ interface IHeadwordList {
 }
 
 interface IDictionaryFavoriteHeadword {
-    headword: string;
-    entryXmlId: string;
-    bookId: string;
-
-    fakeHeadwordId?: number; // TODO update this DataContract according to new API
-    fakeBookId?: number;
+    id: number;
+    title: string;
+    query: string;
+    headwordId: number;
 }
 
 interface IHeadwordContract {

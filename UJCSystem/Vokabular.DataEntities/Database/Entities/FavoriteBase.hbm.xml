@@ -72,9 +72,12 @@
       name="FavoriteHeadword"
       discriminator-value="Headword">
 
-      <!--<many-to-one name="DefaultHeadwordResource"
+      <property name="Query" />
+      
+      <many-to-one name="DefaultHeadwordResource"
+                   column="Resource"
                    class="Resource"
-                   lazy="proxy" />-->
+                   lazy="proxy" />
 
     </subclass>
 

@@ -46,6 +46,11 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .IncludeBase<FavoriteBase, FavoriteBaseInfoContract>()
                 .ForMember(dest => dest.FavoriteLabel, opt => opt.MapFrom(src => src.FavoriteLabel))
                 .ForMember(dest => dest.PageId, opt => opt.MapFrom(src => src.ResourcePage.Id));
+            
+            CreateMap<FavoriteHeadword, FavoriteHeadwordContract>()
+                .IncludeBase<FavoriteBase, FavoriteBaseInfoContract>()
+                .ForMember(dest => dest.Query, opt => opt.MapFrom(src => src.Query))
+                .ForMember(dest => dest.HeadwordId, opt => opt.MapFrom(src => src.DefaultHeadwordResource.Id));
 
             // Enum
 

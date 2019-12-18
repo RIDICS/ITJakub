@@ -5,7 +5,7 @@
     private storage: IStorage;
     private isUserLoggedIn: boolean;
     private apiClient: FavoriteApiClient;
-
+    private favoriteHeadwordItemsKey = "favoriteHeadwordItems";
     //private localization : Localization;
 	private localizationScope = "FavoriteJs";
 
@@ -54,6 +54,7 @@
             this.storage.delete("favoriteLabeledBooks");
             this.storage.delete("favoriteLabeledCategories");
             this.storage.delete("favoriteQueries");
+            this.storage.delete(this.favoriteHeadwordItemsKey);
             this.storage.save("favoriteStorageVersion", FavoriteManager.localStorageVersion);
         }
     }
@@ -123,6 +124,20 @@
                     storageIndex: i,
                     storageItem: favoriteQuery,
                     storage: favoriteQueries
+                };
+            }
+        }
+
+        var favoriteHeadwords: IDictionaryFavoriteHeadword[] = this.getFromStorage(this.favoriteHeadwordItemsKey);
+        for (let i = 0; i < favoriteHeadwords.length; i++) {
+            var favoriteHeadword = favoriteHeadwords[i];
+            if (favoriteHeadword.id === id) {
+                return {
+                    favoriteType: FavoriteType.Headword,
+                    storageItemIndex: null,
+                    storageIndex: i,
+                    storageItem: favoriteHeadword,
+                    storage: favoriteHeadwords
                 };
             }
         }
@@ -422,6 +437,11 @@
 
                         this.storage.save("favoritePageBookmarkItems", bookmarkStorage);
                         break;
+                    case FavoriteType.Headword:
+                        var headwordStorage = <IDictionaryFavoriteHeadword[]>storageItemInfo.storage;
+                        headwordStorage.splice(storageItemInfo.storageIndex, 1);
+                        this.storage.save("favoriteQueries", headwordStorage);                       
+                        break;
                     default:
                         throw Error("Not supported FavoriteType");
                 }
@@ -577,6 +597,34 @@
         }
 
         this.apiClient.createPageBookmark(bookId, pageId, favoriteTitle, favoriteLabelIds, callback);
+    }
+
+    public getAllHeadwords(callback: (favoriteHeadwords:  Array<IDictionaryFavoriteHeadword>) => void) {
+        if (!this.isUserLoggedIn) {
+            const favoriteHeadwordItems: IDictionaryFavoriteHeadword[] = this.getFromStorage(this.favoriteHeadwordItemsKey);
+            callback(favoriteHeadwordItems);
+            return;
+        }
+
+        this.apiClient.getAllHeadwords(callback);
+    }
+
+    public addNewHeadword(title: string, headwordId: number, callback: (favoriteHeadwordId: number) => void) {
+        if (!this.isUserLoggedIn) {
+            const favoriteHeadwordItems: IDictionaryFavoriteHeadword[] = this.getFromStorage(this.favoriteHeadwordItemsKey);
+            let item: IDictionaryFavoriteHeadword  = {
+                id: this.generateLocalId(),
+                headwordId: headwordId,
+                title: title,
+                query: title,
+            };
+            favoriteHeadwordItems.push(item);
+            this.storage.save(this.favoriteHeadwordItemsKey, favoriteHeadwordItems);
+            callback(item.id);
+            return;
+        }
+
+        this.apiClient.addNewHeadword(title, headwordId, callback);
     }
 }
 

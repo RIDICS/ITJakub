@@ -25,7 +25,7 @@ namespace Vokabular.MainService.Core.Managers
         private readonly IMapper m_mapper;
         private readonly ResourceRepository m_resourceRepository;
 
-        //private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        //private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethoNd().DeclaringType);
 
         public FavoriteManager(AuthenticationManager authenticationManager, CatalogValueRepository catalogValueRepository,
             ResourceRepository resourceRepository, FavoritesRepository favoritesRepository, IMapper mapper)
@@ -49,40 +49,13 @@ namespace Vokabular.MainService.Core.Managers
             var resultId = work.Execute();
             return resultId;
         }
-        
-        //public IList<HeadwordBookmarkContract> GetHeadwordBookmarks()
-        //{
-        //    var userName = m_userManager.GetCurrentUserName();
-        //    if (string.IsNullOrWhiteSpace(userName))
-        //        return new List<HeadwordBookmarkContract>();
 
-        //    var headwordResults = m_favoritesRepository.GetAllHeadwordBookmarks(userName);
-        //    return m_mapper.Map<IList<HeadwordBookmarkContract>>(headwordResults);
-        //}
-
-        //public void AddHeadwordBookmark(string bookXmlId, string entryXmlId)
-        //{
-        //    var now = DateTime.UtcNow;
-        //    var user = TryGetUser();
-        //    var defaultFavoriteLabel = m_favoritesRepository.GetDefaultFavoriteLabel(user.Id);
-
-        //    var bookmark = new HeadwordBookmark
-        //    {
-        //        Book = m_bookRepository.FindBookByGuid(bookXmlId),
-        //        User = user,
-        //        XmlEntryId = entryXmlId,
-        //        CreateTime = now,
-        //        FavoriteLabel = defaultFavoriteLabel
-        //    };
-            
-        //    m_favoritesRepository.Save(bookmark);
-        //}
-
-        //public void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId)
-        //{
-        //    var userName = m_userManager.GetCurrentUserName();
-        //    m_favoritesRepository.DeleteHeadwordBookmark(bookXmlId, entryXmlId, userName);
-        //}
+        public long CreateHeadwordBookmark(CreateFavoriteHeadwordContract data)
+        {
+            var userId = m_authenticationManager.GetCurrentUserId();
+            var work = new CreateFavoriteHeadwordWork(m_favoritesRepository, data, userId);
+            return work.Execute();
+        }
 
         public List<FavoriteBookGroupedContract> GetFavoriteLabeledBooks(IList<long> projectIds, BookTypeEnumContract? bookType,
             ProjectTypeContract? projectType)
@@ -205,6 +178,15 @@ namespace Vokabular.MainService.Core.Managers
             var allBookmarks = m_favoritesRepository.InvokeUnitOfWork(x => x.GetAllPageBookmarksByBookId(projectId, user.Id));
 
             return m_mapper.Map<List<FavoritePageContract>>(allBookmarks);
+        }
+        
+        public List<FavoriteHeadwordContract> GetFavoriteHeadwords()
+        {
+            var user = TryGetUser();
+            
+            var allHeadwords = m_favoritesRepository.InvokeUnitOfWork(x => x.GetAllFavoriteHeadwords( user.Id));
+
+            return m_mapper.Map<List<FavoriteHeadwordContract>>(allHeadwords);
         }
 
         private FavoriteLabelWithBooksAndCategories CreateFavoriteLabelWithBooksAndCategories(FavoriteLabel favoriteLabelEntity)

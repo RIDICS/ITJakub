@@ -14,8 +14,8 @@
     private favoriteHeadwordList: IDictionaryFavoriteHeadword[];
     private dictionariesMetadataList: IBookListDictionary;
     private showPageCallback: (pageNumber: number) => void;
-    private addNewFavoriteCallback: (bookId: number, headwordId: number) => void;
-    private removeFavoriteCallback: (bookId: number, headwordId: number) => void;
+    private addNewFavoriteCallback: (headwordName: string, headwordId: number, callback: (favoriteHeadwordId: number) => void) => void;
+    private removeFavoriteCallback: (favoriteId) => void;
     private searchCriteria: string;
     private isCriteriaJson: boolean;
     private defaultPageNumber: number;
@@ -37,7 +37,7 @@
         this.localization = localization;
     }
 
-    public createViewer(recordCount: number, showPageCallback: (pageNumber: number) => void, pageSize: number, searchCriteria: string = null,
+    public createViewer(recordCount: number, showPageCallback: (pageNumber: number) => number, pageSize: number, searchCriteria: string = null,
         isCriteriaJson: boolean = false)
     {
         this.recordCount = recordCount;
@@ -62,7 +62,7 @@
         this.pagination.goToPage(pageNumber);
     }
 
-    public setFavoriteCallback(addNewFavoriteCallback: (bookId: number, headwordId: number) => void, removeFavoriteCallback: (bookId: number, headwordId: number) => void) {
+    public setFavoriteCallback(addNewFavoriteCallback: (headwordName: string, headwordId: number, callback: (favoriteHeadwordId: number) => void) => void, removeFavoriteCallback: (favoriteId) => void) {
         this.addNewFavoriteCallback = addNewFavoriteCallback;
         this.removeFavoriteCallback = removeFavoriteCallback;
     }
@@ -90,7 +90,7 @@
     private isHeadwordFavorite(headwordDictionaryInfo: IHeadwordBookInfo): boolean {
         for (var i = 0; i < this.favoriteHeadwordList.length; i++) {
             var favoriteHeadword = this.favoriteHeadwordList[i];
-            if (headwordDictionaryInfo.bookId === favoriteHeadword.fakeBookId && headwordDictionaryInfo.headwordId === favoriteHeadword.fakeHeadwordId)
+            if(headwordDictionaryInfo.headwordId === favoriteHeadword.headwordId)
                 return true;
         }
         return false;
@@ -102,6 +102,24 @@
                 return true;
         }
         return false;
+    }
+
+    private getFavoriteHeadword(headwordDictionaryInfo: IHeadwordBookInfo): IDictionaryFavoriteHeadword {
+        for (let i = 0; i < this.favoriteHeadwordList.length; i++) {
+            const favoriteHeadword = this.favoriteHeadwordList[i];
+            if(headwordDictionaryInfo.headwordId === favoriteHeadword.headwordId)
+                return favoriteHeadword;
+        }
+        return null;
+    }
+
+    private getFavoriteHeadwordFromArray(array: Array<IHeadwordBookInfo>): IDictionaryFavoriteHeadword {
+        for (var i = 0; i < array.length; i++) {
+            const favoriteHeadword = this.getFavoriteHeadword(array[i]);
+            if (favoriteHeadword != null)
+                return favoriteHeadword;
+        }
+        return null;
     }
 
     private searchAndDisplay(pageNumber: number) {
@@ -170,13 +188,18 @@
             headwordLi.appendChild(headwordSpan);
 
             if (this.addNewFavoriteCallback != null) {
-                var isFavorite = this.isHeadwordFavoriteFromArray(record.dictionaries);
-                var favoriteGlyphSpan = document.createElement("span");
+                const favoriteHeadword = this.getFavoriteHeadwordFromArray(record.dictionaries);
+                const isFavorite = favoriteHeadword != null;
+                const favoriteGlyphSpan = document.createElement("span");
                 favoriteGlyphSpan.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length));
+                
+                if(isFavorite) {
+                    $(favoriteGlyphSpan).data("favorite-headword-id", favoriteHeadword.id);
+                }
                 $(favoriteGlyphSpan).addClass("glyphicon")
                     .addClass(isFavorite ? "glyphicon-star" : "glyphicon-star-empty")
                     .addClass("dictionary-result-headword-favorite");
-                $(favoriteGlyphSpan).click(event => {
+                $(favoriteGlyphSpan).on("click", event => {
                     this.favoriteHeadwordClick(event.target as Node as Element);
                 });
 
@@ -334,15 +357,19 @@
         var index: number = $(element).data("entry-index");
         var isFavorite = $(element).hasClass("glyphicon-star");
         var dictionaryInfo = this.dictionariesInfo[index];
-
+        const headwordName = $(element).siblings(".dictionary-result-headword").text().trim();
+ 
+        
         if (isFavorite) {
             $(element).removeClass("glyphicon-star");
             $(element).addClass("glyphicon-star-empty");
-            this.removeFavoriteCallback(dictionaryInfo.bookId, dictionaryInfo.headwordId);
+            this.removeFavoriteCallback($(element).data("favorite-headword-id"));
         } else {
-            $(element).removeClass("glyphicon-star-empty");
-            $(element).addClass("glyphicon-star");
-            this.addNewFavoriteCallback(dictionaryInfo.bookId, dictionaryInfo.headwordId);
+            this.addNewFavoriteCallback(headwordName, dictionaryInfo.headwordId, (favoriteHeadwordId: number) => {
+                $(element).removeClass("glyphicon-star-empty");
+                $(element).addClass("glyphicon-star");
+                $(element).data("favorite-headword-id", favoriteHeadwordId)
+            });            
         }
     }
 
