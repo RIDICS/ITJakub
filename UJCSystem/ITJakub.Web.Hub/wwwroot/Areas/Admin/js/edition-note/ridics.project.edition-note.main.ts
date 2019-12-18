@@ -54,7 +54,9 @@
         if (note == null) {
             note = "";
         }
-        
+
+        const editPermission = new ProjectPermissionsProvider().hasEditPermission();
+
         this.originalNote = note;        
         const textAreaEl = $(".note-editor-textarea");
         $(".note-editor .bottom-buttons").removeClass("hide");
@@ -88,9 +90,17 @@
                 this.simpleMdeIcons.toolSeparator
             ]
         };
+        if (!editPermission) {
+            simpleMdeOptions.toolbar = false;
+        }
+
         this.simpleMde = new SimpleMDE(simpleMdeOptions);
         this.simpleMde.value(note);
         this.simpleMde.codemirror.focus();
+
+        if (!editPermission) {
+            this.simpleMde.codemirror.options.readOnly = true;
+        }
     }
 
     private saveNote(noteValue: string) {

@@ -45,6 +45,8 @@
                 connections.init();
                 const numberOfPages = data.length;
                 this.numberOfPages = numberOfPages;
+                const editPermission = new ProjectPermissionsProvider().hasEditPermission();
+                const disableByPermissionAttr = editPermission ? "" : "disabled=\"disabled\"";
                 for (let i = 0; i < numberOfPages; i++) {
                     const projectPage = data[i];
                     if(projectPage.position > this.maxPosition)
@@ -72,11 +74,11 @@
                                                         <button type="button" class="btn btn-default refresh-text" title="${localization.translate("RefreshTextPage", "RidicsProject").value}">
                                                             <i class="fa fa-refresh"></i>
                                                         </button>
-                                                        <button type="button" class="btn btn-default create-text hidden" title="${localization.translate("CreateTextPage", "RidicsProject").value}">
+                                                        <button type="button" class="btn btn-default create-text hidden" title="${localization.translate("CreateTextPage", "RidicsProject").value}" ${disableByPermissionAttr}>
                                                             <i class="fa fa-plus-circle"></i>
                                                             ${localization.translate("CreateText", "RidicsProject").value}
                                                         </button>
-                                                        <button type="button" class="btn btn-default edit-page" title="${localization.translate("EditPage", "RidicsProject").value}">
+                                                        <button type="button" class="btn btn-default edit-page" title="${localization.translate("EditPage", "RidicsProject").value}" ${disableByPermissionAttr}>
                                                             <i class="fa fa-pencil"></i>
                                                             ${localization.translate("Edit", "RidicsProject").value}
                                                         </button>
