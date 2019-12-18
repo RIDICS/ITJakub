@@ -401,6 +401,9 @@ class BookmarksPanel extends ToolPanel {
 
         const actionHook = () => {
             var pageId = bookmark.pageId;
+            if (this.parentReader.deviceType === Device.Mobile && !$(".lm_popin").is("div")) {
+                $($(".view-control button")[1] as Node as HTMLElement).click();
+            }
             this.parentReader.readerLayout.eventHub.emit("navigationClicked", pageId);
         };
         bookmarkIco.addEventListener("click", actionHook);
