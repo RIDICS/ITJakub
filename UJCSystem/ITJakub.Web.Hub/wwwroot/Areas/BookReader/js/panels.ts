@@ -3,6 +3,7 @@
     innerContent: HTMLElement;
     sc: ServerCommunication;
     parentReader: ReaderLayout;
+
     constructor(identificator: string, readerLayout: ReaderLayout, sc: ServerCommunication) {
         this.identificator = identificator;
         this.sc = sc;
@@ -56,13 +57,21 @@ class ContentPanel extends ToolPanel {
         bookContent.done((response: { content: IChapterHieararchyContract[] }) => {
             var ulElement = document.createElement("ul");
             $(ulElement).addClass("content-item-root-list");
-            for (var i = 0; i < response.content.length; i++) {
-                var chapterItem: IChapterHieararchyContract = response.content[i];
-                $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(chapterItem)));
+
+            if (response.content.length > 0) {
+                for (var i = 0; i < response.content.length; i++) {
+                    var chapterItem: IChapterHieararchyContract = response.content[i];
+                    $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(chapterItem)));
+                }
+
+                $(this.innerContent).empty();
+                $(this.innerContent).append(ulElement);
+            } else {
+                var alert = new AlertComponentBuilder(AlertType.Info);
+                alert.addContent(localization.translate("no-content", "BookReader").value);
+                $(this.innerContent).html(alert.buildElement());
+
             }
-            
-            $(this.innerContent).empty();
-            $(this.innerContent).append(ulElement);
 
         });
         bookContent.fail(() => {
@@ -148,17 +157,17 @@ class SearchResultPanel extends ToolPanel {
     public getPaginator(): Pagination {
         return this.paginator;
     }
-    
+
     public replaceSearchPanelContent() {
         var newContent = this.makeBody(this, window);
         var $innerContent = $(this.innerContent);
         var contentParent = $innerContent.parent();
-        
+
         $innerContent.remove();
         contentParent.append(newContent);
         this.innerContent = newContent;
-        
-        
+
+
     }
 
     protected makeBody(rootReference: Panel, window: Window): HTMLElement {
@@ -470,7 +479,7 @@ class BookmarksPanel extends ToolPanel {
 
 abstract class TermsPanel extends ToolPanel {
     protected termClickedCallback: (termId: number, text: string) => void;
-    
+
     setTermClickedCallback(callback: (termId: number, text: string) => void) {
         this.termClickedCallback = callback;
     }
@@ -506,7 +515,7 @@ class TermsSearchPanel extends TermsPanel {
         this.searchResultOrderedList = window.document.createElement("ol");
 
         this.searchResultItemsDiv.appendChild(this.searchResultOrderedList);
-        
+
         this.clearResults();
         return searchResultDiv;
     }
@@ -897,12 +906,12 @@ class ImagePanel extends ContentViewPanel {
     }
 
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {
-        if(pageIndex === this.parentReader.actualPageIndex && !$(this.innerContent).is(":empty")) {
+        if (pageIndex === this.parentReader.actualPageIndex && !$(this.innerContent).is(":empty")) {
             return;
         }
         var pageInfo = this.parentReader.bookHeader.pages[pageIndex];
         $(this.innerContent).empty();
-        
+
         var image: HTMLImageElement = document.createElement("img");
         image.classList.add("reader-image");
         image.src = getBaseUrl() + "Reader/GetBookImage?snapshotId=" + this.parentReader.versionId + "&pageId=" + pageInfo.pageId;
@@ -969,7 +978,7 @@ class AudioPanel extends ContentViewPanel {
         var audioContainerDiv: HTMLDivElement = document.createElement("div");
         $(audioContainerDiv).addClass("reader-audio-container");
         this.showLoading(audioContainerDiv);
-        
+
         var trackName = document.createElement("h3");
         $(trackName).addClass("track-name");
         audioContainerDiv.appendChild(trackName);
@@ -1035,7 +1044,7 @@ class AudioPanel extends ContentViewPanel {
         if (this.currentTrack) {
             this.currentTrack.pause();
         }
-        
+
         this.showLoading();
         var getTrack: JQueryXHR = this.sc.getTrack(this.parentReader.bookId, this.trackId);
         getTrack.done((response: { track: ITrackWithRecordingContract }) => {
@@ -1059,7 +1068,7 @@ class AudioPanel extends ContentViewPanel {
             $(".reader-audio-container").append(localization.translate("FailedToLoadTrack", "BookReader").value);
         });
     }
-    
+
     private buildAudioPlayer(track: ITrackWithRecordingContract, autoplay: boolean) {
         this.currentTrack = new Audio();
         if (autoplay) {
@@ -1070,7 +1079,7 @@ class AudioPanel extends ContentViewPanel {
         }
         this.currentTrackDuration = this.parseStringTimeToSeconds(track.Recordings[0].Duration);
         for (var recording of track.Recordings) {
-            
+
             var source = document.createElement("source");
             source.src = this.sc.getTrackDownloadUrl(recording.Id, recording.AudioType);
             source.type = recording.MimeType;
@@ -1150,7 +1159,7 @@ class AudioPanel extends ContentViewPanel {
                 .removeClass("glyphicon-pause")
                 .addClass("glyphicon-play");
         });
-        
+
         progressBar.append(currentProgressEl);
         audioContainer.append(progressBar);
 
@@ -1201,22 +1210,22 @@ class AudioPanel extends ContentViewPanel {
     private calculatePercentageProgress(audio: HTMLAudioElement): string {
         return `${audio.currentTime / audio.duration * 100}%`;
     }
-    
+
     private showLoading(containerDiv?: HTMLElement) {
-        if(containerDiv == null) {
+        if (containerDiv == null) {
             containerDiv = this.innerContent;
         }
         var loader = lv.create(null, "lv-circles lv-mid md");
-        
+
         var loadingContainer = document.createElement("div");
         $(loadingContainer)
             .addClass("loading-audio")
             .append(loader.getElement());
-        
+
         $(containerDiv)
             .append(loadingContainer);
     }
-    
+
     private clearLoading() {
         $(this.innerContent)
             .find(".loading-audio").remove();
