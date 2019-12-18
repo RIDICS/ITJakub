@@ -3,12 +3,14 @@
     innerContent: HTMLElement;
     sc: ServerCommunication;
     parentReader: ReaderLayout;
-
+    protected readonly errorHandler: ErrorHandler;
+    
     constructor(identificator: string, readerLayout: ReaderLayout, sc: ServerCommunication) {
         this.identificator = identificator;
         this.sc = sc;
         this.parentReader = readerLayout;
-
+        this.errorHandler = new ErrorHandler();
+        
         this.innerContent = this.makeBody(this, window);
     }
 
@@ -229,6 +231,12 @@ class SearchResultPanel extends ToolPanel {
             $(noResultItemDiv).text(localization.translate("NoResults", "BookReader").value);
             this.searchResultItemsDiv.appendChild(noResultItemDiv);
         }
+    }
+
+    showErrorResults(error: JQueryXHR) {
+        this.clearResults();
+        const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error));
+        this.searchResultItemsDiv.appendChild(alert.buildElement());
     }
 
     private createResultItem(result: SearchHitResult): HTMLDivElement {
@@ -546,7 +554,6 @@ class TermsSearchPanel extends TermsPanel {
     }
 
     showResults(searchResults: PageDescription[]) {
-
         $(this.searchResultOrderedList).empty();
         $(this.searchResultOrderedList).removeClass("no-items");
 
@@ -558,8 +565,15 @@ class TermsSearchPanel extends TermsPanel {
 
         if (searchResults.length === 0) {
             $(this.searchResultOrderedList).addClass("no-items");
-            $(this.searchResultOrderedList).append(localization.translate("NoOccurancesOnPage", "BookReader").value);
+            $(this.searchResultOrderedList).append(localization.translate("NoOccurrencesOnPage", "BookReader").value);
         }
+    }
+
+    showError(error: JQueryXHR) {
+        $(this.searchResultOrderedList).empty();
+        $(this.searchResultOrderedList).removeClass("no-items");
+        const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error));
+        $(this.searchResultOrderedList).append(alert.buildElement());
     }
 
     private createResultItem(page: PageDescription): HTMLLIElement {

@@ -597,6 +597,10 @@ class ReaderLayout {
         this.getSearchPanel().createPagination(pageChangedCallback, itemsCount, this.getSearchPanel().getPaginator().getCurrentPage());
     }
 
+    setErrorResult(error: JQueryXHR) {
+        this.getSearchPanel().showErrorResults(error);
+    }
+
     getSearchResultsCountOnPage(): number {
         return this.getSearchPanel().getResultsCountOnPage();
     }
@@ -681,6 +685,9 @@ class ReaderLayout {
 
     showSearchInTermsPanel(searchResults: Array<PageDescription>) {
         this.getTermsSearchPanel().showResults(searchResults);
+    }
+    showSearchErrorInTermsPanel(error: JQueryXHR) {
+        this.getTermsSearchPanel().showError(error);
     }
 
     protected createBookmarksPanel(): HTMLDivElement {
