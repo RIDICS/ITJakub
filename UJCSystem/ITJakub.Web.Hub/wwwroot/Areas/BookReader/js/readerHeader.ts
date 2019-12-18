@@ -147,39 +147,41 @@
 
         var toolButtonsDiv = document.createElement("div");
         $(toolButtonsDiv).addClass("tool-panel buttons");
-
+        var buttonsContainer = document.createElement("div");
+        $(buttonsContainer).addClass("buttons-container");
         var button = new ButtonFactory(this.parentReader, deviceType);
 
         var addBookmarksButton = button.createAddBookmarkButton("bookmark",
             localization.translate("addBoookmark", "BookReader").value,
             this.parentReader.bookmarksPanelId
         );
-        toolButtonsDiv.appendChild(addBookmarksButton);
+        buttonsContainer.appendChild(addBookmarksButton);
         this.toolButtons = this.toolButtons.add(addBookmarksButton);
 
         var bookmarksButton =
             button.createToolButton("bookmark",
                 localization.translate(this.parentReader.bookmarksPanelId, "BookReader").value,
                 this.parentReader.bookmarksPanelId);
-        toolButtonsDiv.appendChild(bookmarksButton);
+        buttonsContainer.appendChild(bookmarksButton);
         this.toolButtons = this.toolButtons.add(bookmarksButton);
 
         var contentButton = button.createToolButton("book",
             localization.translate(this.parentReader.contentPanelId, "BookReader").value,
             this.parentReader.contentPanelId);
-        toolButtonsDiv.appendChild(contentButton);
+        buttonsContainer.appendChild(contentButton);
         this.toolButtons = this.toolButtons.add(contentButton);
 
         var searchResultButton = button.createToolButton("search",
             localization.translate(this.parentReader.searchPanelId, "BookReader").value,
             this.parentReader.searchPanelId);
-        toolButtonsDiv.appendChild(searchResultButton);
+        buttonsContainer.appendChild(searchResultButton);
         this.toolButtons = this.toolButtons.add(searchResultButton);
 
         var termsButton = button.createToolButton("list-alt",
             localization.translate(this.parentReader.termsPanelId, "BookReader").value,
             this.parentReader.termsPanelId);
-        toolButtonsDiv.appendChild(termsButton);
+        buttonsContainer.appendChild(termsButton);
+        toolButtonsDiv.appendChild(buttonsContainer);
         this.toolButtons = this.toolButtons.add(termsButton);
         
         if (deviceType === Device.Mobile) {
@@ -205,6 +207,8 @@
 
             toolButtonsDiv.appendChild(showPanelButton);
         }
+        
+        
 
         return toolButtonsDiv;
 
