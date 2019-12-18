@@ -79,6 +79,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var client = GetProjectClient();
             var result = client.GetProject(id, fetchPermissions: true);
             var viewModel = Mapper.Map<ProjectItemViewModel>(result);
+            ViewData[ProjectConstants.CurrentUserPermissions] = result.CurrentUserPermissions;
             return View(viewModel);
         }
 
