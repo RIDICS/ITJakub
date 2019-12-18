@@ -44,14 +44,14 @@
 
     private getEditionNote(addHeader: boolean): HTMLDivElement {
         var editionNoteDiv = document.createElement("div");
-        var loader = lv.create(null, "edition-note-loading lv-circles lv-mid md");
-        $(editionNoteDiv).append(loader.getElement());
+        var loader = lv.create(null, "edition-note-loading lv-circles lv-mid sm");
         $(editionNoteDiv).addClass("edition-note-wrapper");
         if (addHeader) {
             var editionNoteHeader = document.createElement("h3");
             $(editionNoteHeader).append(localization.translate("editionNote", "BookReader").value);
             $(editionNoteDiv).append(editionNoteHeader);
         }
+        $(editionNoteDiv).append(loader.getElement());
 
         var editionNote: JQueryXHR = this.sc.getEditionNote(this.bookId);
         editionNote.done((response: { editionNote: string }) => {
@@ -67,9 +67,9 @@
         editionNote.fail(() => {
             $(editionNoteDiv).append(localization.translate("failedToLoadNote", "BookReader").value);
         });
-        editionNote.always(()=>{
+        editionNote.always(() => {
             $(editionNoteDiv).find(".edition-note-loading").remove();
-        })
+        });
 
         return editionNoteDiv;
     }
@@ -277,7 +277,7 @@
                     if (this.audioOnly) {
                         this.toolButtons.each((index, element: HTMLButtonElement) => {
                             (element as HTMLButtonElement).disabled = true;
-                        })
+                        });
                     }
                 }
             });
