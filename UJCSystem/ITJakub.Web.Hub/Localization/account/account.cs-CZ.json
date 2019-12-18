@@ -52,6 +52,9 @@
 
     "UserCode": "Kód uživatele",
     "GenerateNewUserCode": "Vygenerovat nový kód uživatele",
-    "UserCodeHelp": "Kód uživatele slouží k umožnění spolupráce na dílech ostatních uživatelů. Sdělte svůj uživatelský kód editorovi díla na kterém budete spolupracovat."
+    "UserCodeHelp": "Kód uživatele slouží k umožnění spolupráce na dílech ostatních uživatelů. Sdělte svůj uživatelský kód editorovi díla na kterém budete spolupracovat.",
+    "UserRoles": "Uživatelské skupiny",
+    "Name": "Název",
+    "Description": "Popis"
   }
 }

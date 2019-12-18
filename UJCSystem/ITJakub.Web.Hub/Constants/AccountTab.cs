@@ -7,5 +7,6 @@
         UpdateContact,
         UpdateTwoFactorVerification,
         UserCode,
+        UserRoles,
     }
 }
