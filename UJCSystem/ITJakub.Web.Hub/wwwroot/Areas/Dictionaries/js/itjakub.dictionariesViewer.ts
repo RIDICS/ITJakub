@@ -14,7 +14,7 @@
     private favoriteHeadwordList: IDictionaryFavoriteHeadword[];
     private dictionariesMetadataList: IBookListDictionary;
     private showPageCallback: (pageNumber: number) => void;
-    private addNewFavoriteCallback: (headwordName: string, headwordId: number) => JQuery.jqXHR;
+    private addNewFavoriteCallback: (headwordName: string, headwordId: number, callback: (favoriteHeadwordId: number) => void) => void;
     private removeFavoriteCallback: (favoriteId) => void;
     private searchCriteria: string;
     private isCriteriaJson: boolean;
@@ -62,7 +62,7 @@
         this.pagination.goToPage(pageNumber);
     }
 
-    public setFavoriteCallback(addNewFavoriteCallback: (headwordName: string, headwordId: number) => JQuery.jqXHR, removeFavoriteCallback: (favoriteId) => void) {
+    public setFavoriteCallback(addNewFavoriteCallback: (headwordName: string, headwordId: number, callback: (favoriteHeadwordId: number) => void) => void, removeFavoriteCallback: (favoriteId) => void) {
         this.addNewFavoriteCallback = addNewFavoriteCallback;
         this.removeFavoriteCallback = removeFavoriteCallback;
     }
@@ -365,7 +365,7 @@
             $(element).addClass("glyphicon-star-empty");
             this.removeFavoriteCallback($(element).data("favorite-headword-id"));
         } else {
-            this.addNewFavoriteCallback(headwordName, dictionaryInfo.headwordId).done((favoriteHeadwordId: number) => {
+            this.addNewFavoriteCallback(headwordName, dictionaryInfo.headwordId, (favoriteHeadwordId: number) => {
                 $(element).removeClass("glyphicon-star-empty");
                 $(element).addClass("glyphicon-star");
                 $(element).data("favorite-headword-id", favoriteHeadwordId)

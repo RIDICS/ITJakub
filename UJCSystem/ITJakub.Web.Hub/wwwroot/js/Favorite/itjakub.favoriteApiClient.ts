@@ -359,4 +359,51 @@
             }
         });
     }
+
+    getAllHeadwords(callback: (data: Array<IDictionaryFavoriteHeadword>) => void) {
+        return $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordBookmarks",
+            data: {},
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                callback(response);
+            }
+        });
+    }
+
+    addNewHeadword(title: string, headwordId: number, callback: (favoriteHeadwordId: number) => void) {
+        return $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/AddHeadwordBookmark",
+            data: JSON.stringify({
+                title: title,
+                headwordId: headwordId,
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: (id) => {
+                callback(id);
+            }
+        });
+    }
+
+    removeHeadword(favoriteId: number, callback: () => void) {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/RemoveHeadwordBookmark",
+            data: JSON.stringify({
+                favoriteHeadwordId: favoriteId,
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: () => {
+                callback();
+            }
+        });
+    }
 }

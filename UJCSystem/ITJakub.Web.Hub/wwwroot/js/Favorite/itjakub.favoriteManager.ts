@@ -578,6 +578,32 @@
 
         this.apiClient.createPageBookmark(bookId, pageId, favoriteTitle, favoriteLabelIds, callback);
     }
+
+    public getAllHeadwords(callback: (favoriteHeadwords:  Array<IDictionaryFavoriteHeadword>) => void) {
+        if (!this.isUserLoggedIn) {
+            callback([]);
+            console.error("Not supported for anonymous users");
+            return;
+        }
+
+        this.apiClient.getAllHeadwords(callback);
+    }
+
+    addNewHeadword(title: string, headwordId: number, callback: (favoriteHeadwordId: number) => void) {
+        if (!this.isUserLoggedIn) {
+            throw new Error("Not supported for anonymous users");
+        }
+
+        this.apiClient.addNewHeadword(title, headwordId, callback);
+    }
+
+    removeHeadword(favoriteId: number, callback: () => void) {
+        if (!this.isUserLoggedIn) {
+            throw new Error("Not supported for anonymous users");
+        }
+
+        this.apiClient.removeHeadword(favoriteId, callback);
+    }
 }
 
 class FavoriteHelper {

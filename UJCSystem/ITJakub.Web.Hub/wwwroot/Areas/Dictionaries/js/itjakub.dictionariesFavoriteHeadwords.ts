@@ -1,4 +1,5 @@
 ﻿class DictionaryFavoriteHeadwords {
+    private readonly favoriteManager: FavoriteManager;
     private expandButton: string;
     private listContainer: string;
     private mainContainer: string;
@@ -10,6 +11,7 @@
     private afterInitCallbacks:Array<()=>any>=[];
 
     constructor(mainContainer: string, listContainer: string, expandButton: string) {
+        this.favoriteManager = new FavoriteManager();
         this.expandButton = expandButton;
         this.listContainer = listContainer;
         this.mainContainer = mainContainer;
@@ -49,6 +51,20 @@
         this.getAllHeadwords();
     }
 
+    public getAllHeadwords() {
+        $(this.listContainer).addClass("loading");
+        this.favoriteManager.getAllHeadwords((favoriteHeadwords: Array<IDictionaryFavoriteHeadword>) => {
+            $(this.listContainer).removeClass("loading");
+            this.showHeadwordList(favoriteHeadwords);
+
+            this.inited = true;
+            while (this.afterInitCallbacks.length) {
+                const callback = this.afterInitCallbacks.pop();
+                callback();
+            }
+        });
+    }
+    
     public callAfterInit(callback:() => any) {
         if (this.inited) {
             callback();
@@ -58,41 +74,11 @@
         }
     }
 
-    public getAllHeadwords() {
-        $(this.listContainer).addClass("loading");
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordBookmarks",
-            data: {},
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
-                $(this.listContainer).removeClass("loading");
-                this.showHeadwordList(response);
 
-                this.inited = true;
-                while (this.afterInitCallbacks.length) {
-                    this.afterInitCallbacks.pop()();
-                }
-            }
-        });
-    }
-
-    public addNewHeadword(title: string, headwordId: number): JQuery.jqXHR {
-        return $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Dictionaries/Dictionaries/AddHeadwordBookmark",
-            data: JSON.stringify({
-                title: title,
-                headwordId: headwordId,
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: () => {
-                this.getAllHeadwords();
-            }
+    public addNewHeadword(title: string, headwordId: number, callback: (favoriteHeadwordId: number) => void) {
+        this.favoriteManager.addNewHeadword(title, headwordId, (favoriteHeadwordId) => {
+            this.getAllHeadwords();
+            callback(favoriteHeadwordId);
         });
     }
 
@@ -156,32 +142,23 @@
 
     private removeHeadword(element: Element) {
         const favoriteId = $(element).data("favorite-id");
+        
+        this.favoriteManager.removeHeadword(favoriteId,() => {
+            $(element).fadeOut(null, () => {
+                $(element).remove();
+                this.updateVisibleHeight();
+            });
 
-        $(element).fadeOut(null, () => {
-            $(element).remove();
-            this.updateVisibleHeight();
-        });
-
-        for (var i = 0; i < this.headwordList.length; i++) {
-            var headword = this.headwordList[i];
-            if (headword.id === favoriteId) {
-                this.headwordList.splice(i, 1); // remove item from array
-                break;
+            for (var i = 0; i < this.headwordList.length; i++) {
+                var headword = this.headwordList[i];
+                if (headword.id === favoriteId) {
+                    this.headwordList.splice(i, 1); // remove item from array
+                    break;
+                }
             }
-        }
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Dictionaries/Dictionaries/RemoveHeadwordBookmark",
-            data: JSON.stringify({
-                favoriteHeadwordId: favoriteId,
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: () => {}
-        });
-        this.headwordListChanged();
+            this.headwordListChanged();
+        });        
     }
 
     public removeHeadwordById(favoriteId) {
