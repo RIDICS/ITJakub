@@ -60,6 +60,7 @@
     "FailedToLoadAudioBook": "Nepodařilo se načíst audio knihu, opakujte prosím pokus později",
     "FailedToLoadTrack": "Nepodařilo se načíst stopu, opakujte prosím pokus později",
     "no-image": "Tato stránka nemá přiřazen žádný obrazový sken",
+    "no-content": "Tato kniha nemá seznam kapitol",
 
     "DownloadChapter": "Stáhnout kapitolu",
     "DownloadAudiobook": "Stáhnout audioknihu:",

@@ -60,6 +60,7 @@
     "FailedToLoadAudioBook": "Failed to load audio book, please try again later.",
     "FailedToLoadTrack": "Failed to load track, please try again later.",
     "no-image": "This page has no image scan assigned",
+    "no-content": "This book has no content list",
 
     "DownloadChapter": "Download chapter",
     "DownloadAudiobook": "Download audiobook:",
