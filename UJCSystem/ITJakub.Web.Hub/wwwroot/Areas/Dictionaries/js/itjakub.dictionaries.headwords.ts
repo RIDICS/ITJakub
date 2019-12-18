@@ -131,7 +131,7 @@ class DictionaryViewerListWrapper {
         this.dictionaryViewer.setFavoriteHeadwordList(list);
     }
 
-    private addNewFavoriteHeadword(headwordName: string, headwordId: number): jqXHR {
+    private addNewFavoriteHeadword(headwordName: string, headwordId: number): JQuery.jqXHR {
         return this.favoriteHeadwords.addNewHeadword(headwordName, headwordId);
     }
 
