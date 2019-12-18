@@ -390,20 +390,4 @@
             }
         });
     }
-
-    removeHeadword(favoriteId: number, callback: () => void) {
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: getBaseUrl() + "Dictionaries/Dictionaries/RemoveHeadwordBookmark",
-            data: JSON.stringify({
-                favoriteHeadwordId: favoriteId,
-            }),
-            dataType: "json",
-            contentType: "application/json",
-            success: () => {
-                callback();
-            }
-        });
-    }
 }

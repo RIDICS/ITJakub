@@ -407,14 +407,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             var favoriteHeadwordId = client.CreateFavoriteHeadword(headwordContract);
             return Json(favoriteHeadwordId);
         }
-
-        public ActionResult RemoveHeadwordBookmark([FromBody] RemoveHeadwordBookmarkRequest request)
-        {
-            var client = GetFavoriteClient();
-            client.DeleteFavoriteItem(request.FavoriteHeadwordId);
-            return Json(new {});
-        }
-
+        
         public ActionResult GetTypeaheadDictionaryHeadword(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             var client = GetBookClient();

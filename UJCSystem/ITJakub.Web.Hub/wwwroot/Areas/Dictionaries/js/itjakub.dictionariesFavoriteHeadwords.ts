@@ -143,7 +143,7 @@
     private removeHeadword(element: Element) {
         const favoriteId = $(element).data("favorite-id");
         
-        this.favoriteManager.removeHeadword(favoriteId,() => {
+        this.favoriteManager.deleteFavoriteItem(favoriteId,() => {
             $(element).fadeOut(null, () => {
                 $(element).remove();
                 this.updateVisibleHeight();
