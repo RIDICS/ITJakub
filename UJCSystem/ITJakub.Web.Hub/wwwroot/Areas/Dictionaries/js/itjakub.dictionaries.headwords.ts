@@ -124,6 +124,7 @@ class DictionaryViewerListWrapper {
 
     private goToPageWithHeadword(headwordQuery: string) {
         $("#searchbox").val(headwordQuery);
+        $("#searchButton").data("favorite-headword-trigger", true);
         $("#searchButton").trigger("click");
     }
 
