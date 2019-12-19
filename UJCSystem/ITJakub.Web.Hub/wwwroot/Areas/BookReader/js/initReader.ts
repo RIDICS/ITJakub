@@ -8,7 +8,7 @@
 
 
     function readerPageChangedCallback(pageId: number) {
-        updateQueryStringParameter("page", pageId);
+        updateQueryStringParameter("pageId", pageId);
     }
 
     var readerPanels = [
