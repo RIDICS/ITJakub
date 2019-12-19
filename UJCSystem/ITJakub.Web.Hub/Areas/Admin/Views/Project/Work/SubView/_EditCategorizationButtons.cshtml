@@ -1,11 +1,12 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Helpers
+@using Scalesoft.Localization.AspNetCore
 @inject ILocalizationService Localizer
 
 <div class="row">
     <div class="col-xs-12">
     <div class="project-form-bottom-buttons col-md-12">
         <div class="work-categorization-view-button-panel text-right">
-            <button class="btn btn-default work-categorization-edit-button">
+            <button class="btn btn-default work-categorization-edit-button" disabled="@(!ViewData.HasPermissionFor().EditProject)">
                 @Localizer.Translate("Edit", "Admin")
             </button>
         </div>

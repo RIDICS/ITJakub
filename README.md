@@ -9,11 +9,11 @@ Required software:
   * .NET desktop development (for BatchImport client app)
   * .NET Core cross-platform development
 * Microsoft SQL Server
-* Java
+* Java runtime
 * eXist-db 2.1
 * .NET Core 2.2 SDK
 * Altova XML 2013 Community Edition (installer is in repository - Resources folder)
-* Enable following Windows features (from Turn Windows features on or off dialog)
+* Enable following Windows features (from Turn Windows features on or off dialog):
   * Internet Information Services
   * Internet Information Services Hostable Web Core
   * .NET Framework 4.x Advanced Services > WCF Services > HTTP activation
@@ -107,13 +107,19 @@ ASP.NET Core services are deployed to IIS Express for development purposes.
 Required software:
 * Microsoft Windows Server
 * Microsoft SQL Server
+  * SQL Management Studio is also recommended
+* Java runtime
 * eXist-db 2.1
 * .NET Core 2.2 with Windows Hosting Bundle
-* Altova XML 2013 Community Edition (installer is in repository)
-* Internet Information Services
+* Altova XML 2013 Community Edition (installer is in this repository - Resources folder)
+* Add following roles or features (using Add Role an Features Wizard):
+  * Role: Web Server (IIS)
+  * Feature: IIS Hostable Web Core
+  * Feature: .NET Framework 4.x Features > WCF Services > HTTP activation
 * Elasticsearch 5.5.2
 
-Build computer environment configuration
+Environment configuration on build computer
+* Checkout repositories as described in *Setup developer computer*
 * Create configuration files in itjakub-secrets folder (it is desribed in following chapter: *Configuration for different environments*)
 
 Server environment configuration
@@ -122,7 +128,10 @@ Server environment configuration
 * Configure Application Pools in IIS
   1. Create new Application Pool (e.g. .NET Core) with ".NET CLR version" set to "No Managed Code"
   2. Configure ASP.NET Core services to use .NET Core Application Pool (every ASP.NET Core service run as separate process with Kestrel server)
+  3. Optionally configure this Application Pool to disable supending (app will be always running)
+* Configure JAVA_HOME environment variable to Java folder
 * Copy Database folder from itjakub folder to the server and run script `InitFulltextDatabases.ps1` to check if fulltext databases are correctly installed and initialize them.
+* Build and deploy the app as described in *The project build and deployment* section
 
 ## Configuration for different environments
 

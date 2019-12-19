@@ -630,7 +630,7 @@ class FavoriteManagementItem {
                 break;
             case FavoriteType.Headword:
                 $(icon).addClass("glyphicon-font")
-                    .attr("title", localization.translate("Headword", this.localizationScope).value);
+                    .attr("title", localization.translate("DictionaryHeadword", this.localizationScope).value);
                 break;
             default:
                 $(icon).addClass("glyphicon-question-sign")

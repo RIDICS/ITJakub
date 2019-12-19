@@ -372,6 +372,18 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
     }
 }
 
+class ProjectPermissionsProvider {
+    private readonly permissionsJq = $("#project-permissions");
+
+    private hasPermission(name: string) {
+        return this.permissionsJq.attr(name).toLowerCase() === "true";
+    }
+
+    public hasEditPermission() {
+        return this.hasPermission("data-edit");
+    }
+}
+
 enum ProjectModuleType {
     Resource = 0,
     Preview = 1,

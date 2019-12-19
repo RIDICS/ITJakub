@@ -30,13 +30,13 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
         public ActionResult HasBookImage(long bookId, long? snapshotId)
         {
             var client = GetBookClient();
-            return Json(new {HasBookImage = client.HasBookAnyImage(bookId)}, GetJsonSerializerSettings());
+            return Json(new {hasBookImage = client.HasBookAnyImage(bookId)}, GetJsonSerializerSettings());
         }
 
         public ActionResult HasBookText(long bookId, long? snapshotId)
         {
             var client = GetBookClient();
-            return Json(new {HasBookPage = client.HasBookAnyText(bookId)}, GetJsonSerializerSettings());
+            return Json(new {hasBookPage = client.HasBookAnyText(bookId)}, GetJsonSerializerSettings());
         }
 
         public ActionResult GetBookPage(long? snapshotId, long pageId)
@@ -114,6 +114,35 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             var client = GetBookClient();
             var contentItems = client.GetBookChapterList(bookId);
             return Json(new {content = contentItems});
+        }
+
+        public ActionResult GetEditionNote(long projectId, TextFormatEnumContract format)
+        {
+            var client = GetBookClient();
+            var editionNote = client.GetEditionNoteText(projectId, TextFormatEnumContract.Html);
+            return Json(new { editionNote }, GetJsonSerializerSettings());
+        }
+
+        public ActionResult GetProjectDetail(long projectId)
+        {
+            var client = GetBookClient();
+            var projectDetail = client.GetBookDetail(projectId);
+            return Json(new {detail = projectDetail}, GetJsonSerializerSettings());
+        }
+
+        public ActionResult GetAudioBook(long projectId)
+        {
+            var client = GetBookClient();
+            var audioBook = client.GetAudioBookDetail(projectId);
+
+            return Json(new {audioBook}, GetJsonSerializerSettings());
+        }
+
+        public ActionResult GetAudioBookTrack(long projectId, int trackId)
+        {
+            var client = GetBookClient();
+            var audioBookTrack = client.GetAudioBookDetail(projectId).Tracks[trackId];
+            return Json(new { track = audioBookTrack }, GetJsonSerializerSettings());
         }
     }
 }

@@ -4,20 +4,14 @@
 @inject ILocalizationService Localizer
 @inject TextTypeLocalizer TextTypeLocalizer
 
-<style>
-    a.disabled {
-        cursor: not-allowed;
-    }
-</style>
-
 @foreach (var viewModel in Model.List)
 {
     var permissions = viewModel.Permissions;
 
     <div class="project-item row" data-project-id="@viewModel.Id" data-project-name="@viewModel.Name">
         <div class="col-md-6">
-            @*TODO instead of class "disabled" use disabling whole element and also remove style in upper part of this file*@
-            <a href="@Url.Action("Project", "Project", new {id = viewModel.Id})" class="@(permissions.ReadProject ? string.Empty : "disabled")">
+            @{ var projectUrl = permissions.ReadProject ? Url.Action("Project", "Project", new {id = viewModel.Id}) : "#"; }
+            <a href="@projectUrl" class="@(permissions.ReadProject ? string.Empty : "forbidden-access")">
                 <div>
                     <strong>@viewModel.Name</strong>
                     <small>- @TextTypeLocalizer.TranslateTextTypeFull(viewModel.TextType)</small>
@@ -35,13 +29,13 @@
             @Localizer.Translate("Created", "Admin"): @viewModel.CreateDate.ToLocalTime().ToString(Localizer.GetRequestCulture()) @Localizer.Translate("ByUser", "Admin") @viewModel.CreateUser
         </div>
         <div class="col-md-2 project-item-buttons">
-            <a href="#" class="delete-button @(permissions.AdminProject ? string.Empty : "disabled")">
+            <a href="#" class="delete-button @(permissions.AdminProject ? string.Empty : "forbidden-access")">
                 <div>
                     <span class="glyphicon glyphicon-trash"></span>
                 </div>
                 <div>@Localizer.Translate("Delete", "Admin")</div>
             </a>
-            <a href="#" class="rename-project-button @(permissions.EditProject ? string.Empty : "disabled")">
+            <a href="#" class="rename-project-button @(permissions.EditProject ? string.Empty : "forbidden-access")">
                 <div>
                     <span class="glyphicon glyphicon-pencil"></span>
                 </div>

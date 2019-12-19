@@ -162,6 +162,12 @@ function BuildMigrator {
 
 dotnet restore UJCSystem\UJCSystem.sln
 
+if ($LASTEXITCODE -ne 0)
+{
+  Write-Error "Failed to run 'dotnet restore'. Maybe missing required .NET Core version?"
+  exit 1
+}
+
 foreach ($ProjectToBuild in $ServiceProjectsToBuild)
 {
   BuildServiceProject($ProjectToBuild)

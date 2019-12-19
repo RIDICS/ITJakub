@@ -14,8 +14,8 @@
 
     clickedMoveToPage: boolean;
 
-    leftSidePanels: Array<SidePanel>;
-    rightSidePanels: Array<SidePanel>;
+    leftSidePanels: Array<SidePanelOld>;
+    rightSidePanels: Array<SidePanelOld>;
 
 
     imagePanelIdentificator: string = "ImagePanel";
@@ -26,13 +26,13 @@
     settingsPanelIdentificator: string = "SettingsPanel";
     contentPanelIdentificator: string = "ContentPanel";
 
-    imagePanel: ImagePanel;
-    textPanel: TextPanel;
-    searchPanel: SearchResultPanel;
-    bookmarksPanel: BookmarksPanel;
+    imagePanel: ImagePanelOld;
+    textPanel: TextPanelOld;
+    searchPanel: SearchResultPanelOld;
+    bookmarksPanel: BookmarksPanelOld;
     settingsPanel: SettingsPanel;
-    contentPanel: ContentPanel;
-    termsPanel: TermsPanel;
+    contentPanel: ContentPanelOld;
+    termsPanel: TermsPanelOld;
 
     showPanelList: Array<ReaderPanelEnum>;
     showLeftSidePanelsButtonList: Array<PanelButtonEnum>;
@@ -64,8 +64,8 @@
         this.pages = new Array<BookPage>();
         this.pagesById = {};
         this.bookmarks = new Array<IBookmarkPosition>(pageList.length);
-        this.leftSidePanels = new Array<SidePanel>();
-        this.rightSidePanels = new Array<SidePanel>();
+        this.leftSidePanels = new Array<SidePanelOld>();
+        this.rightSidePanels = new Array<SidePanelOld>();
 
         $(window.document.documentElement).on("beforeunload", (event: JQuery.Event) => {
             for (var k = 0; k < this.leftSidePanels.length; k++) {
@@ -241,7 +241,7 @@
         return this.pages[pageIndex];
     }
 
-    private makeTitle(bookTitle: string): HTMLDivElement {
+    public makeTitle(bookTitle: string): HTMLDivElement {
         var titleDiv: HTMLDivElement = document.createElement("div");
         $(titleDiv).addClass("title");
         titleDiv.innerHTML = bookTitle;
@@ -400,7 +400,7 @@
         $(bookmarkButton).click((event: JQuery.Event) => {
             var panelId = this.bookmarksPanelIdentificator;
             if (!this.existSidePanel(panelId)) {
-                var bookmarksPanel: BookmarksPanel = new BookmarksPanel(panelId, this, this.showLeftSidePanelsButtonList);
+                var bookmarksPanel: BookmarksPanelOld = new BookmarksPanelOld(panelId, this, this.showLeftSidePanelsButtonList);
                 this.loadSidePanel(bookmarksPanel.panelHtml);
                 this.leftSidePanels.push(bookmarksPanel);
                 this.bookmarksPanel = bookmarksPanel;
@@ -456,7 +456,7 @@
             $(searchResultButton).click((event: JQuery.Event) => {
                 var panelId = this.searchPanelIdentificator;
                 if (!this.existSidePanel(panelId)) {
-                    var searchPanel = new SearchResultPanel(panelId, this, this.showLeftSidePanelsButtonList);
+                    var searchPanel = new SearchResultPanelOld(panelId, this, this.showLeftSidePanelsButtonList);
                     this.loadSidePanel(searchPanel.panelHtml);
                     this.leftSidePanels.push(<any>searchPanel);
                     this.searchPanel = searchPanel;
@@ -484,7 +484,7 @@
             $(termsButton).click((event: JQuery.Event) => {
                 var panelId = this.termsPanelIdentificator;
                 if (!this.existSidePanel(panelId)) {
-                    var termsPanel = new TermsPanel(panelId, this, this.showLeftSidePanelsButtonList);
+                    var termsPanel = new TermsPanelOld(panelId, this, this.showLeftSidePanelsButtonList);
                     this.loadSidePanel(termsPanel.panelHtml);
                     this.leftSidePanels.push(<any>termsPanel);
                     this.termsPanel = termsPanel;
@@ -513,7 +513,7 @@
                 $(contentButton).click((event: JQuery.Event) => {
                     var panelId = this.contentPanelIdentificator;
                     if (!this.existSidePanel(panelId)) {
-                        var contentPanel: ContentPanel = new ContentPanel(panelId, this, this.showLeftSidePanelsButtonList);
+                        var contentPanel: ContentPanelOld = new ContentPanelOld(panelId, this, this.showLeftSidePanelsButtonList);
                         this.loadSidePanel(contentPanel.panelHtml);
                         this.leftSidePanels.push(contentPanel);
                         this.contentPanel = contentPanel;
@@ -537,7 +537,7 @@
         return controlsDiv;
     }
 
-    private activateTypeahead(input: HTMLInputElement) {
+    public activateTypeahead(input: HTMLInputElement) {
 
         var pagesTexts = new Array<string>();
         $.each(this.pages, (index, page: BookPage) => {
@@ -620,7 +620,7 @@
         }
     }
 
-    findPanelInstanceById(panelIdentificator: string): SidePanel {
+    findPanelInstanceById(panelIdentificator: string): SidePanelOld {
         for (var k = 0; k < this.leftSidePanels.length; k++) {
             if (this.leftSidePanels[k].identificator === panelIdentificator) {
                 return this.leftSidePanels[k];
@@ -640,13 +640,13 @@
         var bodyContainerDiv: HTMLDivElement = document.createElement("div");
         $(bodyContainerDiv).addClass("reader-body-container content-container");
 
-        var textPanel: TextPanel = null;
+        var textPanel: TextPanelOld = null;
         if (this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {
             textPanel = this.appendTextPanel(bodyContainerDiv);
         }
 
         if (this.showPanelList.indexOf(ReaderPanelEnum.ImagePanel) >= 0) {
-            var imagePanel: ImagePanel =this.appendImagePanel(bodyContainerDiv);
+            var imagePanel: ImagePanelOld =this.appendImagePanel(bodyContainerDiv);
 
             if (textPanel !== null && this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {
                 this.hasBookPage(this.bookId, this.versionId, null, () => {
@@ -663,8 +663,8 @@
         return bodyContainerDiv;
     }
 
-    protected appendTextPanel(bodyContainerDiv: HTMLDivElement): TextPanel {
-        var textPanel: TextPanel = new TextPanel(this.textPanelIdentificator, this, this.showMainPanelsButtonList);
+    protected appendTextPanel(bodyContainerDiv: HTMLDivElement): TextPanelOld {
+        var textPanel: TextPanelOld = new TextPanelOld(this.textPanelIdentificator, this, this.showMainPanelsButtonList);
         this.rightSidePanels.push(textPanel);
         this.textPanel = textPanel;
 
@@ -672,9 +672,9 @@
 
         return textPanel;
     }
-
-    protected appendImagePanel(bodyContainerDiv: HTMLDivElement): ImagePanel {
-        var imagePanel: ImagePanel = new ImagePanel(this.imagePanelIdentificator, this, this.showMainPanelsButtonList);
+    
+    protected appendImagePanel(bodyContainerDiv: HTMLDivElement): ImagePanelOld {
+        var imagePanel: ImagePanelOld = new ImagePanelOld(this.imagePanelIdentificator, this, this.showMainPanelsButtonList);
         this.rightSidePanels.push(imagePanel);
         this.imagePanel = imagePanel;
 
@@ -991,7 +991,7 @@
         }
     }
 
-    populatePanelOnTop(panel: SidePanel) {
+    populatePanelOnTop(panel: SidePanelOld) {
         if (!panel.isDraggable) {
             return;
         }
@@ -1032,10 +1032,10 @@
         return this.getSearchPanel().getResultsCountOnPage();
     }
 
-    private getSearchPanel(): SearchResultPanel {
+    private getSearchPanel(): SearchResultPanelOld {
         var panelId = this.searchPanelIdentificator;
         if (!this.existSidePanel(panelId)) {
-            var searchPanel = new SearchResultPanel(panelId, this, this.showLeftSidePanelsButtonList);
+            var searchPanel = new SearchResultPanelOld(panelId, this, this.showLeftSidePanelsButtonList);
             this.loadSidePanel(searchPanel.panelHtml);
             this.leftSidePanels.push(<any>searchPanel);
             this.searchPanel = searchPanel;
@@ -1080,10 +1080,10 @@
         this.getTermsPanel().showResults(searchResults);
     }
 
-    private getTermsPanel(): TermsPanel {
+    private getTermsPanel(): TermsPanelOld {
         var panelId = this.termsPanelIdentificator;
         if (!this.existSidePanel(panelId)) {
-            var termPanel = new TermsPanel(panelId, this, this.showLeftSidePanelsButtonList);
+            var termPanel = new TermsPanelOld(panelId, this, this.showLeftSidePanelsButtonList);
             this.loadSidePanel(termPanel.panelHtml);
             this.leftSidePanels.push(<any>termPanel);
             this.termsPanel = termPanel;
@@ -1114,7 +1114,7 @@
 }
 
 
-class SidePanel {
+class SidePanelOld {
     panelHtml: HTMLDivElement;
     panelBodyHtml: HTMLDivElement;
     closeButton: HTMLButtonElement;
@@ -1197,7 +1197,7 @@ class SidePanel {
             this.panelHeaderDiv.appendChild(newWindowButton);
         }
 
-        sidePanelDiv.appendChild(this.panelHeaderDiv);
+        //sidePanelDiv.appendChild(this.panelHeaderDiv);
 
         this.innerContent = this.makeBody(this, window);
         var panelBodyDiv = this.makePanelBody(this.innerContent, this, window);
@@ -1221,7 +1221,7 @@ class SidePanel {
         return panelBodyDiv;
     }
 
-    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+    protected makeBody(rootReference: SidePanelOld, window: Window): HTMLElement {
         throw new Error("Not implemented");
     }
 
@@ -1280,14 +1280,10 @@ class SidePanel {
 }
 
 
-class LeftSidePanel extends SidePanel {
+class LeftSidePanel extends SidePanelOld {
     decorateSidePanel(sidePanelDiv: HTMLDivElement) {
         $(sidePanelDiv).addClass("reader-left-panel");
-        $(sidePanelDiv).resizable({
-            handles: "e",
-            maxWidth: 250,
-            minWidth: 100
-        });
+        
     }
 
     onPinButtonClick(sidePanelDiv: HTMLDivElement) {
@@ -1329,7 +1325,7 @@ class SettingsPanel extends LeftSidePanel {
         super(identificator, localization.translate("View", "PluginsJs").value, readerModule, showPanelButtonList);
     }
 
-    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+    protected makeBody(rootReference: SidePanelOld, window: Window): HTMLElement {
         var textButtonSpan = window.document.createElement("span");
         $(textButtonSpan).addClass("glyphicon glyphicon-text-size");
         var textButton = window.document.createElement("button");
@@ -1452,12 +1448,12 @@ class SettingsPanel extends LeftSidePanel {
     }
 }
 
-class BookmarksPanel extends LeftSidePanel {
+class BookmarksPanelOld extends LeftSidePanel {
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
         super(identificator, localization.translate("Bookmarks", "PluginsJs").value, readerModule, showPanelButtonList);
     }
 
-    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+    protected makeBody(rootReference: SidePanelOld, window: Window): HTMLElement {
         var innerContent: HTMLDivElement = window.document.createElement("div");
         this.createBookmarkList(innerContent, rootReference);
         return innerContent;
@@ -1465,7 +1461,7 @@ class BookmarksPanel extends LeftSidePanel {
 
     public createBookmarkList(
         innerContent: HTMLElement,
-        rootReference: SidePanel
+        rootReference: SidePanelOld
     ) {
         const bookmarksPerPage = 20;
         const actualBookmarkPage = 1;
@@ -1539,7 +1535,7 @@ class BookmarksPanel extends LeftSidePanel {
         $(pagesContainer).children(`[data-page-index="${page}"]`).removeClass("hide");
     }
 
-    protected createBookmark(bookmark: IBookPageBookmark, rootReference: SidePanel, pageIndex: number) {
+    protected createBookmark(bookmark: IBookPageBookmark, rootReference: SidePanelOld, pageIndex: number) {
         const bookmarkItem = document.createElement("li");
         bookmarkItem.classList.add("reader-bookmarks-content-item");
 
@@ -1621,7 +1617,7 @@ class BookmarksPanel extends LeftSidePanel {
         return bookmarkItem;
     }
     
-    protected setBookmarkTitle(titleItem: HTMLElement, rootReference: SidePanel, bookmarkId: number, pageIndex: number, title: string) {
+    protected setBookmarkTitle(titleItem: HTMLElement, rootReference: SidePanelOld, bookmarkId: number, pageIndex: number, title: string) {
         rootReference.parentReader.setBookmarkTitle(bookmarkId, pageIndex, title);
 
         if (!title) {
@@ -1633,7 +1629,7 @@ class BookmarksPanel extends LeftSidePanel {
     }
 }
 
-class SearchResultPanel extends LeftSidePanel {
+class SearchResultPanelOld extends LeftSidePanel {
     private searchResultItemsDiv: HTMLDivElement;
     private searchPagingDiv: HTMLDivElement;
 
@@ -1660,7 +1656,7 @@ class SearchResultPanel extends LeftSidePanel {
     }
 
 
-    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+    protected makeBody(rootReference: SidePanelOld, window: Window): HTMLElement {
         var innerContent: HTMLDivElement = window.document.createElement("div");
 
         var searchResultItemsDiv = window.document.createElement("div");
@@ -1738,13 +1734,13 @@ class SearchResultPanel extends LeftSidePanel {
     }
 }
 
-class ContentPanel extends LeftSidePanel {
+class ContentPanelOld extends LeftSidePanel {
 
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
         super(identificator, localization.translate("Content", "PluginsJs").value, readerModule, showPanelButtonList);
     }
 
-    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+    protected makeBody(rootReference: SidePanelOld, window: Window): HTMLElement {
         var bodyDiv: HTMLDivElement = window.document.createElement("div");
         $(bodyDiv).addClass("content-panel-container");
         this.downloadBookContent();
@@ -1841,7 +1837,7 @@ class ContentPanel extends LeftSidePanel {
 }
 
 
-class RightSidePanel extends SidePanel {
+class RightSidePanel extends SidePanelOld {
     decorateSidePanel(sidePanelDiv: HTMLDivElement) {
         $(sidePanelDiv).addClass("reader-right-panel");
     }
@@ -1891,7 +1887,7 @@ class RightSidePanel extends SidePanel {
     }
 }
 
-class ImagePanel extends RightSidePanel {
+class ImagePanelOld extends RightSidePanel {
     isDisabled: boolean;
 
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
@@ -1899,7 +1895,7 @@ class ImagePanel extends RightSidePanel {
         this.isDisabled = false;
     }
 
-    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+    protected makeBody(rootReference: SidePanelOld, window: Window): HTMLElement {
         var imageContainerDiv: HTMLDivElement = window.document.createElement("div");
         imageContainerDiv.classList.add("reader-image-container");
         return imageContainerDiv;
@@ -1964,7 +1960,7 @@ class ImagePanel extends RightSidePanel {
     }
 }
 
-class TextPanel extends RightSidePanel {
+class TextPanelOld extends RightSidePanel {
     preloadPagesBefore: number;
     preloadPagesAfter: number;
 
@@ -1975,7 +1971,7 @@ class TextPanel extends RightSidePanel {
         super(identificator, localization.translate("Text", "PluginsJs").value, readerModule, showPanelButtonList);
         this.preloadPagesBefore = 5;
         this.preloadPagesAfter = 10;
-
+        
         if (readerModule.readerContainer.getAttribute("data-can-print")==="True") {
             const sidePanelPrintButton = document.createElement("button");
             sidePanelPrintButton.classList.add("print-button");
@@ -1991,7 +1987,7 @@ class TextPanel extends RightSidePanel {
         }
     }
 
-    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+    protected makeBody(rootReference: SidePanelOld, window: Window): HTMLElement {
         var textContainerDiv: HTMLDivElement = window.document.createElement("div");
         $(textContainerDiv).addClass("reader-text-container");
 
@@ -2273,7 +2269,7 @@ class TextPanel extends RightSidePanel {
     }
 }
 
-class TermsPanel extends LeftSidePanel {
+class TermsPanelOld extends LeftSidePanel {
     private searchResultItemsDiv: HTMLDivElement;
     private termsResultItemsDiv: HTMLDivElement;
     private searchResultOrderedList: HTMLOListElement;
@@ -2288,7 +2284,7 @@ class TermsPanel extends LeftSidePanel {
         super(identificator, localization.translate("Topics", "PluginsJs").value, readerModule, showPanelButtonList);
     }
 
-    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+    protected makeBody(rootReference: SidePanelOld, window: Window): HTMLElement {
         var innerContent: HTMLDivElement = window.document.createElement("div");
         $(innerContent).addClass("reader-terms-div");
 
@@ -2381,7 +2377,7 @@ class TermsPanel extends LeftSidePanel {
 
         if (searchResults.length === 0) {
             $(this.searchResultOrderedList).addClass("no-items");
-            $(this.searchResultOrderedList).append(localization.translate("NoOccurencesOnPage", "PluginsJs").value);
+            $(this.searchResultOrderedList).append(localization.translate("NoOccurrencesOnPage", "PluginsJs").value);
         }
     }
 
@@ -2395,11 +2391,11 @@ class TermsPanel extends LeftSidePanel {
         var hrefElement = document.createElement("a");
         hrefElement.href = "#";
         $(hrefElement).click(() => {
-            this.parentReader.moveToPage(page.pageId, true);
+            this.parentReader.moveToPage(page.id, true);
         });
 
         var textSpanElement = document.createElement("span");
-        textSpanElement.innerHTML = `[${page.pageName}]`;
+        textSpanElement.innerHTML = `[${page.name}]`;
         
         $(hrefElement).append(textSpanElement);
 
@@ -2546,8 +2542,8 @@ class SearchHitResult {
 }
 
 class PageDescription {
-    pageId: number;
-    pageName: string;
+    id: number;
+    name: string;
 }
 
 interface IBookmarkPosition {

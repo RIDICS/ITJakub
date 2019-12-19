@@ -53,6 +53,13 @@ font-awesome@4.7.0:
   dependencies:
     jquery ">=1.9.1"
 
+golden-layout@1.5.9:
+  version "1.5.9"
+  resolved "https://registry.yarnpkg.com/golden-layout/-/golden-layout-1.5.9.tgz#a39bc1f6a67e6f886b797c016dd924e9426ba77f"
+  integrity sha1-o5vB9qZ+b4hreXwBbdkk6UJrp38=
+  dependencies:
+    jquery "*"
+
 he@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
@@ -92,11 +99,7 @@ jquery-zoom@1.7.20:
   dependencies:
     jquery ">=1.7"
 
-jquery@3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
-
-jquery@>=1.7, jquery@>=1.8, jquery@>=1.9.1, "jquery@^1.7 || ^2.0 || ^3.1", jquery@^3.3.1:
+jquery@*, jquery@3.4.1, jquery@>=1.7, jquery@>=1.8, jquery@>=1.9.1, "jquery@^1.7 || ^2.0 || ^3.1", jquery@^3.3.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
   integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
@@ -104,15 +107,16 @@ jquery@>=1.7, jquery@>=1.8, jquery@>=1.9.1, "jquery@^1.7 || ^2.0 || ^3.1", jquer
 jquery@^2.1.0:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-2.2.4.tgz#2c89d6889b5eac522a7eea32c14521559c6cbf02"
+  integrity sha1-LInWiJterFIqfuoywUUhVZxsvwI=
 
 lazysizes@4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/lazysizes/-/lazysizes-4.0.1.tgz#428fe9561d7ff5c3b2b2787b78ed54080986420b"
 
-loading-visualization@1.2.12:
-  version "1.2.12"
-  resolved "https://registry.yarnpkg.com/loading-visualization/-/loading-visualization-1.2.12.tgz#1903506d22fb9ebd7261c5d3e1e26f581ad7697a"
-  integrity sha512-gZTWqn09zdm/0FR/WZffmO5GLkqde6+zb1UEBpZ+n0nFkTEek92gll4YmeTxl3k7lWdeAhhFi3xz8zvugzo33A==
+loading-visualization@1.2.13:
+  version "1.2.13"
+  resolved "https://registry.yarnpkg.com/loading-visualization/-/loading-visualization-1.2.13.tgz#063368df47543e8f971fc63edf4a426f8f30cd60"
+  integrity sha512-WblEVfsBCbKMt1esNVzDOUSVICGGBxZp89kpzhd6U/B1ksIPy2+NOM1eLORW0iaqFPFGOW2jsA77plSPi8lGuA==
 
 marked@*:
   version "0.6.2"

@@ -108,6 +108,13 @@ foreach ($DeploymentScript in $DeploymentScripts)
   
   & $DeploymentScript -enableRule:DoNotDeleteRule -enablerule:AppOffline $AdditionalArguments
   
+  if ($LASTEXITCODE -ne 0)
+  {
+    # This if works only for .NET Core apps (WCF app deployment script doesn't contain correct setting of exit code)
+    Write-Error "Deployment failed, see errors above"
+    exit 1
+  }
+  
   if (-Not $disableInteractive)
   {
     Write-Host
