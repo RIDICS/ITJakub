@@ -117,6 +117,8 @@ Required software:
   * Feature: IIS Hostable Web Core
   * Feature: .NET Framework 4.x Features > WCF Services > HTTP activation
 * Elasticsearch 5.5.2
+* Web Platform Installer (WebPI)
+* Web Deploy (MsDeploy) from WebPI
 
 Environment configuration on build computer
 * Checkout repositories as described in *Setup developer computer*
@@ -129,6 +131,10 @@ Server environment configuration
   1. Create new Application Pool (e.g. .NET Core) with ".NET CLR version" set to "No Managed Code"
   2. Configure ASP.NET Core services to use .NET Core Application Pool (every ASP.NET Core service run as separate process with Kestrel server)
   3. Optionally configure this Application Pool to disable supending (app will be always running)
+* Add new Website in IIS (used for internal services)
+  * Name: LocalhostServices
+  * Application Pool: (created in previous step)
+  * Type: HTTP, port: 85, host name: localhost (restrict access only from localhost)
 * Configure JAVA_HOME environment variable to Java folder
 * Copy Database folder from itjakub folder to the server and run script `InitFulltextDatabases.ps1` to check if fulltext databases are correctly installed and initialize them.
 * Build and deploy the app as described in *The project build and deployment* section
