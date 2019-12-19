@@ -82,7 +82,10 @@
                         </div>
 
                         <div class="right-align-btn">
-                            <input type="submit" id="startImportBtn" value="@Localizer.Translate("Import", "RepositoryImport")" class="btn btn-default disabled" disabled="disabled"/>
+                            <div class="alert alert-warning inline-alert" style="display: inline-block; text-align: center; margin-bottom: 0.5rem;">
+                                @Localizer.Translate("ImportedRecordsPermissionAlert", "RepositoryImport")
+                            </div>
+                            <input type="submit" id="startImportBtn" value="@Localizer.Translate("Import", "RepositoryImport")" class="btn btn-default disabled" disabled="disabled" style="margin-left: 2rem; margin-top: -3px;" />
                         </div>
                     }
                 </div>
