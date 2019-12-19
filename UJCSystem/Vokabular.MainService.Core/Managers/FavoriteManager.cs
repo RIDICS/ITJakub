@@ -313,6 +313,11 @@ namespace Vokabular.MainService.Core.Managers
                     result.QueryType = m_mapper.Map<QueryTypeEnumContract>(favoriteQuery.QueryType);
                     result.Query = favoriteQuery.Query;
                     break;
+                case FavoriteTypeEnum.Headword:
+                    var favoriteHeadword = (FavoriteHeadword) favoriteItem;
+                    result.Query = favoriteHeadword.Query;
+                    result.ResourceId = favoriteHeadword.DefaultHeadwordResource.Id;
+                    break;
             }
             return result;
         }
