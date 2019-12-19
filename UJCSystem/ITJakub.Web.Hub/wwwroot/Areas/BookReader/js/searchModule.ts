@@ -21,11 +21,15 @@
 
     public initSearchModule(initPageId: string, searchedText: string) {
         var enabledOptions = new Array<SearchTypeEnum>();
-        enabledOptions.push(SearchTypeEnum.Fulltext);
-        enabledOptions.push(SearchTypeEnum.TokenDistance);
-        enabledOptions.push(SearchTypeEnum.Sentence);
-        enabledOptions.push(SearchTypeEnum.Heading);
-
+        if (this.searchType === SearchType.Terms) {
+            enabledOptions.push(SearchTypeEnum.Term);
+        } else {
+            enabledOptions.push(SearchTypeEnum.Fulltext);
+            enabledOptions.push(SearchTypeEnum.TokenDistance);
+            enabledOptions.push(SearchTypeEnum.Sentence);
+            enabledOptions.push(SearchTypeEnum.Heading);
+        }
+        
         this.search.makeSearch(enabledOptions, false);
 
         var decodedText: string;
