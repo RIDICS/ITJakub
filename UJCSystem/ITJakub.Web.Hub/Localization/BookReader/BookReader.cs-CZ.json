@@ -54,6 +54,7 @@
     "minimise": "Minimalizovat",
     "popout": "Otevřít v novém okně",
     
+    "BookFromAnotherPortalError": "Nelze zobrazit toto dílo, protože patří do druhého typu portálu.",
     "searchResultFailed": "Nepodařilo se načíst výsledky vyhledávání, opakujte prosím vyhledávání později",
     "PageLoadingError": "Chyba při načítání stránky '{0}'",
     "PageLoadingErrorWithSearchResults": "Chyba při načítání stránky '{0}' s výsledky vyhledávání",

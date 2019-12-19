@@ -2,8 +2,10 @@
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
+using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.Shared.AspNetCore.Extensions;
@@ -38,6 +40,16 @@ namespace ITJakub.Web.Hub.Areas.BookReader.Controllers
             if (bookDetail == null)
             {
                 return NotFound();
+            }
+
+            if (bookDetail.ProjectType != GetDefaultProjectType())
+            {
+                return RedirectToAction("Index", "Error", new
+                {
+                    Area = "",
+                    errorCode = StatusCodes.Status400BadRequest,
+                    message = Localizer.Translate("BookFromAnotherPortalError", "BookReader"),
+                });
             }
 
             switch (bookDetail.BookType)

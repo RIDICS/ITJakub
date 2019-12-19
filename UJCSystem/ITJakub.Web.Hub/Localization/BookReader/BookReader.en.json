@@ -54,6 +54,7 @@
     "minimise": "Minimize",
     "popout": "Open in new window",
 
+    "BookFromAnotherPortalError": "Cannot display this book because it belongs to the second portal type.",
     "searchResultFailed": "Failed to load search results, please try again later.",
     "PageLoadingError": "Failed to load page number '{0}'",
     "PageLoadingErrorWithSearchResults": "Failed to load page number '{0}' with search results",
