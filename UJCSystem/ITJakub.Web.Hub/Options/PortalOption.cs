@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Vokabular.MainService.DataContracts.Contracts.Permission;
 
 namespace ITJakub.Web.Hub.Options
 {
@@ -19,5 +20,7 @@ namespace ITJakub.Web.Hub.Options
         public Dictionary<string, bool> AllowedSearchOptions { get; set; }
         
         public PortalReaderOption ReaderConfig { get; set; }
+
+        public PermissionDataContract UsedProjectPermissions { get; set; }
     }
 }

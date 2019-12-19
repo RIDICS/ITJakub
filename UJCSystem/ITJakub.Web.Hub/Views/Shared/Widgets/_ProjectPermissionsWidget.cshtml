@@ -1,30 +1,38 @@
 ﻿@using ITJakub.Web.Hub.Models
+@using ITJakub.Web.Hub.Options
+@using Microsoft.Extensions.Options
 @using Scalesoft.Localization.AspNetCore
 @model Vokabular.MainService.DataContracts.Contracts.Permission.PermissionDataContract
 @inject ILocalizationService Localizer
+@inject IOptions<PortalOption> PortalOptions
 
+@{ var usedPermissions = PortalOptions.Value.UsedProjectPermissions; }
 
+@await Html.PartialAsync("_RidicsCheckbox", new RidicsCheckboxViewModel
+{
+    IsChecked = Model.ShowPublished,
+    Label = Localizer.Translate("ReadPublishedProjectPermission", "Permission"),
+    Name = "show-published",
+    IsDisabled = !usedPermissions.ShowPublished,
+})
 @await Html.PartialAsync("_RidicsCheckbox", new RidicsCheckboxViewModel
 {
     IsChecked = Model.ReadProject,
     Label = Localizer.Translate("ReadProjectPermission", "Permission"),
-    Name = "read-project"
+    Name = "read-project",
+    IsDisabled = !usedPermissions.ReadProject,
 })
 @await Html.PartialAsync("_RidicsCheckbox", new RidicsCheckboxViewModel
 {
     IsChecked = Model.EditProject,
     Label = Localizer.Translate("EditProjectPermission", "Permission"),
-    Name = "edit-project"
-})
-@await Html.PartialAsync("_RidicsCheckbox", new RidicsCheckboxViewModel
-{
-    IsChecked = Model.ShowPublished,
-    Label = Localizer.Translate("ReadPublishedProjectPermission", "Permission"),
-    Name = "show-published"
+    Name = "edit-project",
+    IsDisabled = !usedPermissions.EditProject,
 })
 @await Html.PartialAsync("_RidicsCheckbox", new RidicsCheckboxViewModel
 {
     IsChecked = Model.AdminProject,
     Label = Localizer.Translate("AdminProjectPermission", "Permission"),
-    Name = "admin-project"
+    Name = "admin-project",
+    IsDisabled = !usedPermissions.AdminProject,
 })

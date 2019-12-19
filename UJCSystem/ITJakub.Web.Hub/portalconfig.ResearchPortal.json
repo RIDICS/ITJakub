@@ -28,9 +28,14 @@
       "SelectedCategory": true,
       "Term": true
     },
-
     "ReaderConfig": {
       "DisplayNotes": true
+    },
+    "UsedProjectPermissions": {
+      "ShowPublished": true,
+      "ReadProject": false,
+      "EditProject": false,
+      "AdminProject": false
     }
   }
 }

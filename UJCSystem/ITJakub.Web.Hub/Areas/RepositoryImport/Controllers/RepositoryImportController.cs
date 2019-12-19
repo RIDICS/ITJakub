@@ -1,15 +1,19 @@
 ﻿using System.Linq;
 using ITJakub.Web.Hub.Areas.RepositoryImport.Models;
+using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core;
+using ITJakub.Web.Hub.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts;
+using Vokabular.Shared.Const;
 
 namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
 {
     [RequireHttps]
-    [Authorize]
+    [LimitedAccess(PortalType.ResearchPortal)]
+    [Authorize(VokabularPermissionNames.ManageBibliographyImport)]
     [Area("RepositoryImport")]
     public class RepositoryImportController : BaseController
     {
