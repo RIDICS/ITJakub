@@ -1,4 +1,5 @@
-﻿using Vokabular.DataEntities.Database.Entities.Enums;
+﻿using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.DataContracts;
 
@@ -15,6 +16,13 @@ namespace Vokabular.MainService.Core.Works.Permission
 
         public void CheckRemainingAdministrator(long projectId)
         {
+            var project = m_permissionRepository.FindById<Project>(projectId);
+            if (project.ProjectType == ProjectTypeEnum.Research || project.ProjectType == ProjectTypeEnum.Bibliography)
+            {
+                // No check for books in Research portal or for bibliography items
+                return;
+            }
+
             m_permissionRepository.Flush();
 
             var adminPermissionCount = m_permissionRepository.GetRequiredPermissionCountForProject(projectId, PermissionFlag.AdminProject);
