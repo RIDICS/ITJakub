@@ -186,7 +186,7 @@
             $(headwordSpan).text(record.headword);
             $(headwordSpan).addClass("dictionary-result-headword");
             headwordLi.appendChild(headwordSpan);
-            this.createHeadwordLinkListener(headwordSpan);
+            this.createAllHeadwordsLinkListener(headwordSpan);
 
             if (this.addNewFavoriteCallback != null) {
                 const favoriteHeadword = this.getFavoriteHeadwordFromArray(record.dictionaries);
@@ -321,10 +321,12 @@
         {
             searchButton.data("favorite-headword-trigger", false);
             const headwordQuery = $("#searchbox").val();
-            const elem = $(`#headwordList .dictionary-result-headword:contains(${headwordQuery})`);
-            if(elem)
-            {
-                elem.trigger("click");
+            const elem = $(`#headwordList .dictionary-result-headword`);
+            for (var k = 0; k < elem.length; k++) {
+                const rowElem = $(elem[k]);
+                if (rowElem.text() === headwordQuery) {
+                    rowElem.trigger("click");
+                }
             }
         }
     }
@@ -408,7 +410,7 @@
         });
     }
 
-    private createHeadwordLinkListener(aLink: HTMLElement) {
+    private createAllHeadwordsLinkListener(aLink: HTMLElement) {
         $(aLink).on("click", event => {
             event.preventDefault();
 
