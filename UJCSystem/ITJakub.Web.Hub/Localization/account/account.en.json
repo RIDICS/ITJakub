@@ -53,7 +53,8 @@
     "UserCode": "User code",
     "GenerateNewUserCode": "Generate new user code",
     "UserCodeHelp": "User code is used for enabling cooperation on works of other users. Provide your user code to the editor of the work on which you will cooperate.",
-    "UserRoles": "User roles",
+    "UserRoles": "User groups",
+    "UserIsMemberOfGroups": "User is member of following groups:",
     "Name": "Name",
     "Description": "Description"
   }
