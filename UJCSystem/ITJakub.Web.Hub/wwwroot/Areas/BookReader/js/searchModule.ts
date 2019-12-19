@@ -81,7 +81,7 @@
             }).fail((error) => {
                 this.readerPlugin.readerLayout.eventHub.emit("fulltextSearchFailed", error, text);
             }).always(() => {
-                this.showToolPanel();
+                this.showToolPanel(this.readerPlugin.searchPanelId);
             });
             
             var textSearchMatchHit: JQueryXHR = this.sc.textSearchMatchHit(this.bookId, this.versionId, text);
@@ -94,6 +94,8 @@
                 this.readerPlugin.readerLayout.eventHub.emit("termsSearchDone", text, response.results);
             }).fail((error) => {
                 this.readerPlugin.readerLayout.eventHub.emit("termsSearchFailed", error, text);
+            }).always(() => {
+                this.showToolPanel(this.readerPlugin.termsPanelId);
             });
         }
     }
@@ -105,11 +107,10 @@
                 this.sc.advancedSearchBookCount(this.bookId, this.versionId, json);
             advancedSearch.done((response: { count: number }) => {
                 this.readerPlugin.readerLayout.eventHub.emit("fulltextSearchDone", response.count, json);
-                this.showToolPanel();
             }).fail((error) => {
                 this.readerPlugin.readerLayout.eventHub.emit("fulltextSearchFailed", error, json);
             }).always(() => {
-                this.showToolPanel();
+                this.showToolPanel(this.readerPlugin.searchPanelId);
             });
 
             var advancedSearchMatchHit: JQueryXHR = this.sc.advancedSearchMatchHit(this.bookId, this.versionId, json);
@@ -122,6 +123,8 @@
                 this.readerPlugin.readerLayout.eventHub.emit("termsSearchDone", json, response.results);
             }).fail((error) => {
                 this.readerPlugin.readerLayout.eventHub.emit("termsSearchFailed", error, json);
+            }).always(() => {
+                this.showToolPanel(this.readerPlugin.termsPanelId);
             });
         }
     }
@@ -193,12 +196,12 @@
         return searchResults;
     }
     
-    private showToolPanel() {
+    private showToolPanel(panelId: string) {
         if(this.readerPlugin.deviceType === Device.Desktop) {
-            this.readerPlugin.createDesktopToolPanel(this.readerPlugin.searchPanelId, localization.translate(this.readerPlugin.searchPanelId, "BookReader").value);
+            this.readerPlugin.createDesktopToolPanel(panelId, localization.translate(panelId, "BookReader").value);
         }
         else {
-            this.readerPlugin.createMobileToolPanel(this.readerPlugin.searchPanelId, localization.translate(this.readerPlugin.searchPanelId, "BookReader").value);
+            this.readerPlugin.createMobileToolPanel(panelId, localization.translate(panelId, "BookReader").value);
         }
     }
 }
