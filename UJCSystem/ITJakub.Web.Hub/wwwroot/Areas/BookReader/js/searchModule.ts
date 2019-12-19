@@ -52,11 +52,23 @@
             updateQueryStringParameter("searchText", searchedText);
             this.readerPlugin.setResultsPaging(count, this.paginatorPageClickCallback.bind(this));
         });
+        
+        this.readerPlugin.readerLayout.eventHub.on("fulltextSearchFailed", (error: JQueryXHR, searchedText: string) => {
+            this.search.setLastQuery(searchedText);
+            updateQueryStringParameter("searchText", searchedText);
+            this.readerPlugin.setErrorResult(error);
+        });
 
         this.readerPlugin.readerLayout.eventHub.on("termsSearchDone", (searchedText: string, pageDescription: PageDescription[]) => {
             this.search.setLastQuery(searchedText);
             updateQueryStringParameter("searchText", searchedText);
             this.readerPlugin.showSearchInTermsPanel(pageDescription);
+        });
+
+        this.readerPlugin.readerLayout.eventHub.on("termsSearchFailed", (error: JQueryXHR, searchedText: string) => {
+            this.search.setLastQuery(searchedText);
+            updateQueryStringParameter("searchText", searchedText);
+            this.readerPlugin.showSearchErrorInTermsPanel(error);
         });
     }
 
@@ -66,8 +78,12 @@
             var textSearch: JQueryXHR = this.sc.textSearchBookCount(this.bookId, this.versionId, text);
             textSearch.done((response: { count: number }) => {
                 this.readerPlugin.readerLayout.eventHub.emit("fulltextSearchDone", response.count, text);
+            }).fail((error) => {
+                this.readerPlugin.readerLayout.eventHub.emit("fulltextSearchFailed", error, text);
+            }).always(() => {
+                this.showToolPanel(this.readerPlugin.searchPanelId);
             });
-
+            
             var textSearchMatchHit: JQueryXHR = this.sc.textSearchMatchHit(this.bookId, this.versionId, text);
             textSearchMatchHit.done((response: { pages: Array<IPage> }) => {
                 this.readerPlugin.readerLayout.eventHub.emit("showTextSearchMatch", text, false, response.pages);
@@ -76,10 +92,12 @@
             var termsSearch: JQueryXHR = this.sc.textSearchOldGrammar(this.bookId, this.versionId, text);
             termsSearch.done((response: {results: PageDescription[]}) => {
                 this.readerPlugin.readerLayout.eventHub.emit("termsSearchDone", text, response.results);
+            }).fail((error) => {
+                this.readerPlugin.readerLayout.eventHub.emit("termsSearchFailed", error, text);
+            }).always(() => {
+                this.showToolPanel(this.readerPlugin.termsPanelId);
             });
         }
-
-
     }
 
     private advancedSearch(json: string) {
@@ -89,6 +107,10 @@
                 this.sc.advancedSearchBookCount(this.bookId, this.versionId, json);
             advancedSearch.done((response: { count: number }) => {
                 this.readerPlugin.readerLayout.eventHub.emit("fulltextSearchDone", response.count, json);
+            }).fail((error) => {
+                this.readerPlugin.readerLayout.eventHub.emit("fulltextSearchFailed", error, json);
+            }).always(() => {
+                this.showToolPanel(this.readerPlugin.searchPanelId);
             });
 
             var advancedSearchMatchHit: JQueryXHR = this.sc.advancedSearchMatchHit(this.bookId, this.versionId, json);
@@ -99,15 +121,15 @@
             var termsSearch: JQueryXHR = this.sc.advancedSearchOldGrammar(this.bookId, this.versionId, json);
             termsSearch.done((response: {results: PageDescription[]}) => {
                 this.readerPlugin.readerLayout.eventHub.emit("termsSearchDone", json, response.results);
-
+            }).fail((error) => {
+                this.readerPlugin.readerLayout.eventHub.emit("termsSearchFailed", error, json);
+            }).always(() => {
+                this.showToolPanel(this.readerPlugin.termsPanelId);
             });
         }
-
-
     }
 
     private paginatorPageClickCallback(pageNumber: number) {
-
         this.readerPlugin.searchPanelClearResults();
         this.readerPlugin.searchPanelShowLoading();
 
@@ -126,7 +148,6 @@
 
         var advancedSearch: JQueryXHR = this.sc.advancedSearchBookPaged(this.bookId, this.versionId, json, start, count);
         advancedSearch.done((response: { results: Array<IPageWithContext> }) => {
-
             var convertedResults = this.convertSearchResults(response.results);
             this.readerPlugin.searchPanelRemoveLoading();
             this.readerPlugin.showSearchInPanel(convertedResults);
@@ -136,7 +157,6 @@
                 localization.translate("searchResultFailed", "BookReader").value;
             this.readerPlugin.searchPanelRemoveLoading();
         });
-
     }
 
     private editionBasicSearchPaged(text: string, pageNumber: number) {
@@ -157,7 +177,6 @@
                 localization.translate("searchResultFailed", "BookReader").value;
             this.readerPlugin.searchPanelRemoveLoading();
         });
-
     }
 
     private convertSearchResults(responseResults: Array<Object>): SearchHitResult[] {
@@ -176,7 +195,15 @@
 
         return searchResults;
     }
-
+    
+    private showToolPanel(panelId: string) {
+        if(this.readerPlugin.deviceType === Device.Desktop) {
+            this.readerPlugin.createDesktopToolPanel(panelId, localization.translate(panelId, "BookReader").value);
+        }
+        else {
+            this.readerPlugin.createMobileToolPanel(panelId, localization.translate(panelId, "BookReader").value);
+        }
+    }
 }
 
 enum SearchType {

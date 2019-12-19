@@ -3,12 +3,14 @@
     innerContent: HTMLElement;
     sc: ServerCommunication;
     parentReader: ReaderLayout;
-
+    protected readonly errorHandler: ErrorHandler;
+    
     constructor(identificator: string, readerLayout: ReaderLayout, sc: ServerCommunication) {
         this.identificator = identificator;
         this.sc = sc;
         this.parentReader = readerLayout;
-
+        this.errorHandler = new ErrorHandler();
+        
         this.innerContent = this.makeBody(this, window);
     }
 
@@ -216,11 +218,25 @@ class SearchResultPanel extends ToolPanel {
 
     showResults(searchResults: SearchHitResult[]) {
         this.clearResults();
-        for (var i = 0; i < searchResults.length; i++) {
-            var result = searchResults[i];
-            var resultItem = this.createResultItem(result);
-            this.searchResultItemsDiv.appendChild(resultItem);
+        if(searchResults.length) {
+            for (var i = 0; i < searchResults.length; i++) {
+                var result = searchResults[i];
+                var resultItem = this.createResultItem(result);
+                this.searchResultItemsDiv.appendChild(resultItem);
+            }
         }
+        else {
+            var noResultItemDiv = document.createElement("div");
+            $(noResultItemDiv).addClass("no-results");
+            $(noResultItemDiv).text(localization.translate("NoResults", "BookReader").value);
+            this.searchResultItemsDiv.appendChild(noResultItemDiv);
+        }
+    }
+
+    showErrorResults(error: JQueryXHR) {
+        this.clearResults();
+        const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error));
+        this.searchResultItemsDiv.appendChild(alert.buildElement());
     }
 
     private createResultItem(result: SearchHitResult): HTMLDivElement {
@@ -538,7 +554,6 @@ class TermsSearchPanel extends TermsPanel {
     }
 
     showResults(searchResults: PageDescription[]) {
-
         $(this.searchResultOrderedList).empty();
         $(this.searchResultOrderedList).removeClass("no-items");
 
@@ -550,8 +565,15 @@ class TermsSearchPanel extends TermsPanel {
 
         if (searchResults.length === 0) {
             $(this.searchResultOrderedList).addClass("no-items");
-            $(this.searchResultOrderedList).append(localization.translate("NoOccurancesOnPage", "BookReader").value);
+            $(this.searchResultOrderedList).append(localization.translate("NoOccurrencesOnPage", "BookReader").value);
         }
+    }
+
+    showError(error: JQueryXHR) {
+        $(this.searchResultOrderedList).empty();
+        $(this.searchResultOrderedList).removeClass("no-items");
+        const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error));
+        $(this.searchResultOrderedList).append(alert.buildElement());
     }
 
     private createResultItem(page: PageDescription): HTMLLIElement {
@@ -867,7 +889,7 @@ class TextPanel extends ContentViewPanel {
         bookPage.done((response: { pageText: string }) => {
             $(pageContainer).empty();
             $(pageContainer).append(response.pageText);
-            $(pageContainer).removeClass("loading");
+            $(pageContainer).removeClass("loading-page");
             $(pageContainer).removeClass("unloaded");
             $(pageContainer).removeClass("search-unloaded");
             $(pageContainer).addClass("search-loaded");

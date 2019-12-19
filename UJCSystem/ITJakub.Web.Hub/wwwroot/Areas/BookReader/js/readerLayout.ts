@@ -597,6 +597,10 @@ class ReaderLayout {
         this.getSearchPanel().createPagination(pageChangedCallback, itemsCount, this.getSearchPanel().getPaginator().getCurrentPage());
     }
 
+    setErrorResult(error: JQueryXHR) {
+        this.getSearchPanel().showErrorResults(error);
+    }
+
     getSearchResultsCountOnPage(): number {
         return this.getSearchPanel().getResultsCountOnPage();
     }
@@ -638,9 +642,9 @@ class ReaderLayout {
 
     private showSearchResultInPages(searchQuery: string, isQueryJson: boolean, pages: Array<IPage>) {
         this.textPanel.setSearchedQuery(searchQuery, isQueryJson);
-        $(".search-unloaded").removeClass(".search-unloaded");
+        $(".search-unloaded").removeClass("search-unloaded");
         var previousSearchPages = $(".search-loaded");
-        $(previousSearchPages).removeClass(".search-loaded");
+        $(previousSearchPages).removeClass("search-loaded");
         $(previousSearchPages).addClass("unloaded");
         for (var i = 0; i < pages.length; i++) {
             var page = pages[i];
@@ -681,6 +685,9 @@ class ReaderLayout {
 
     showSearchInTermsPanel(searchResults: Array<PageDescription>) {
         this.getTermsSearchPanel().showResults(searchResults);
+    }
+    showSearchErrorInTermsPanel(error: JQueryXHR) {
+        this.getTermsSearchPanel().showError(error);
     }
 
     protected createBookmarksPanel(): HTMLDivElement {
