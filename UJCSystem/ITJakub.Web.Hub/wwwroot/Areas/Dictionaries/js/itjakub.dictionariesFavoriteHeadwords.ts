@@ -93,6 +93,7 @@
 
             var wordSpan = document.createElement("span");
             var removeWordSpan = document.createElement("span");
+            var spaceWordSpan = document.createElement("span");
             var textWordSpan = document.createElement("span");
 
             $(wordSpan).addClass("saved-word");
@@ -107,6 +108,7 @@
                 this.removeHeadword(event.target.parentElement);
             });
 
+            $(spaceWordSpan).text(" ");
             $(textWordSpan).addClass("saved-word-text");
             $(textWordSpan).text(favoriteHeadword.title);
             $(textWordSpan).on("click", event => {
@@ -114,6 +116,7 @@
             });
 
             wordSpan.appendChild(removeWordSpan);
+            wordSpan.appendChild(spaceWordSpan);
             wordSpan.appendChild(textWordSpan);
             listDiv.appendChild(wordSpan);
         }
