@@ -4,15 +4,17 @@ namespace ITJakub.Web.Hub.Models.User
 {
     public class AccountDetailViewModel
     {
-        public UpdateUserViewModel UpdateUserViewModel;
+        public UpdateUserViewModel UpdateUserViewModel { get; set; }
 
-        public UpdatePasswordViewModel UpdatePasswordViewModel;
+        public UpdatePasswordViewModel UpdatePasswordViewModel { get; set; }
 
-        public UpdateContactViewModel UpdateContactViewModel;
+        public UpdateContactViewModel UpdateContactViewModel { get; set; }
 
-        public UpdateTwoFactorVerificationViewModel UpdateTwoFactorVerificationViewModel;
+        public UpdateTwoFactorVerificationViewModel UpdateTwoFactorVerificationViewModel { get; set; }
         
-        public UserCodeViewModel UserCodeViewModel;
+        public UserCodeViewModel UserCodeViewModel { get; set; }
+        
+        public UserRolesViewModel UserRolesViewModel { get; set; }
 
         public AccountTab ActualTab { get; set; }
     }

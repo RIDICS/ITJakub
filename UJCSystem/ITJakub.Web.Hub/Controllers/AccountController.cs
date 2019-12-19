@@ -357,6 +357,7 @@ namespace ITJakub.Web.Hub.Controllers
                 UpdateContactViewModel = Mapper.Map<UpdateContactViewModel>(user),
                 UpdateTwoFactorVerificationViewModel = CreateUpdateTwoFactorVerificationViewModel(user),
                 UserCodeViewModel = new UserCodeViewModel {UserCode = userCode},
+                UserRolesViewModel = new UserRolesViewModel{Roles = user.Roles},
                 ActualTab = accountTab
             };
         }
