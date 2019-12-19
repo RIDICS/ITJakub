@@ -17,17 +17,18 @@
         this.deleteEntryButtonEl.text(localization.translate("Delete", "KeyTable").value);
         this.titleEl.text(localization.translate("KeywordHeadline", "KeyTable").value);
         this.unbindEventsDialog();
-            const initialPage = 1;
-            const initial = true;
-            this.loadPage(initialPage, initial);
-            this.currentPage = initialPage;
-            this.keywordRename();
-            this.keywordDelete();
-            this.keywordCreation();
+        const initialPage = 1;
+        const initial = true;
+        this.loadPage(initialPage, initial);
+        this.currentPage = initialPage;
+        this.translateButtons();
+        this.keywordRename();
+        this.keywordDelete();
+        this.keywordCreation();
     };
 
     private loadPage(pageNumber: number, initial?: boolean) {
-        const listEl = $(".selectable-list-div");
+        const listEl = $(".key-table-div");
         const startIndex = (pageNumber - 1) * this.numberOfItemsPerPage;
         const pagedResponsiblePersonListAjax = this.util.getKeywordList(startIndex, this.numberOfItemsPerPage);
         pagedResponsiblePersonListAjax.done((data: IPagedResult<IKeywordContract>) => {
@@ -38,6 +39,9 @@
             const generatedListStructure = this.generateKeywordList(data.list, listEl);
             listEl.append(generatedListStructure);
             this.makeSelectable(listEl);
+            this.translateButtons();
+            this.keywordRename();
+            this.keywordDelete();
         }).fail(() => {
             const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("EditorLoadError", "KeyTable").value);
             $("#project-layout-content").empty().append(error.buildElement());
@@ -57,8 +61,7 @@
     }
 
     private keywordCreation() {
-        $(".crud-buttons-div").on("click",
-            ".create-key-table-entry",
+        $("button.create-key-table-entry").click(
             () => {
                 this.gui.showSingleInputDialog(localization.translate("KeywordInputHeadline", "KeyTable").value, localization.translate("KeywordNameInput", "KeyTable").value);
                 $(".info-dialog-ok-button").on("click",
@@ -77,65 +80,68 @@
                             $(".info-dialog-ok-button").off();
                         });
                     });
+                $(".info-dialog-close-button").click(
+                    () => {
+                        const textareaEl = $(".input-dialog-textarea");
+                        textareaEl.val("");
+                    });
             });
     }
 
     private keywordRename() {
-        $(".crud-buttons-div").on("click",
-            ".rename-key-table-entry",
-            () => {
-                const selectedPageEl = $(".list-group").children(".page-list-item-selected");
-                if (selectedPageEl.length) {
-                    this.gui.showSingleInputDialog(localization.translate("KeywordInputHeadline", "KeyTable").value, localization.translate("KeywordNameInput", "KeyTable").value);
-                    const textareaEl = $(".input-dialog-textarea");
-                    const originalText = selectedPageEl.text();
-                    textareaEl.val(originalText);
+        $("button.rename-key-table-entry").click(
+            (event) => {
+                const itemSelector = '*[data-key-id=' + event.currentTarget.dataset["target"] + ']';
+                const selectedPageEl = $(itemSelector);
+                this.gui.showSingleInputDialog(localization.translate("KeywordInputHeadline", "KeyTable").value, localization.translate("KeywordNameInput", "KeyTable").value);
+                const textareaEl = $(".input-dialog-textarea");
+                const originalText = selectedPageEl.children()[1].innerHTML;
+                textareaEl.val(originalText);
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const keywordName = textareaEl.val() as string;
-                            const keywordId = selectedPageEl.data("key-id") as number;
-                            const renameAjax = this.util.renameKeyword(keywordId, keywordName);
-                            renameAjax.done(() => {
-                                textareaEl.val("");
-                                this.gui.showInfoDialog(localization.translate("Success", "KeyTable").value, localization.translate("KeywordRenameSuccess", "KeyTable").value);
-                                $(".info-dialog-ok-button").off();
-                                this.updateContentAfterChange();
-                            });
-                            renameAjax.fail(() => {
-                                this.gui.showInfoDialog(localization.translate("Error", "KeyTable").value, localization.translate("KeywordRenameError", "KeyTable").value);
-                                $(".info-dialog-ok-button").off();
-                            });
+                        const keywordId = selectedPageEl.data("key-id") as number;
+                        const renameAjax = this.util.renameKeyword(keywordId, keywordName);
+                        renameAjax.done(() => {
+                            textareaEl.val("");
+                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("KeywordRenameSuccess", "KeyTable").value);
+                            $(".info-dialog-ok-button").off();
+                            this.updateContentAfterChange();
+                        });
+                        renameAjax.fail(() => {
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("KeywordRenameError", "KeyTable").value);
+                            $(".info-dialog-ok-button").off();
+                        });
                     });
-                } else {
-                    this.gui.showInfoDialog("Warning", "Please choose a keyword");
-                }
+                $(".info-dialog-close-button").click(
+                    () => {
+                        const textareaEl = $(".input-dialog-textarea");
+                        textareaEl.val("");
+                    });
             });
     }
 
     private keywordDelete() {
-        $(".crud-buttons-div").on("click",
-            ".delete-key-table-entry",
-            () => {
-                const selectedPageEl = $(".list-group").find(".page-list-item-selected");
-                if (selectedPageEl.length) {
-                    this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("KeywordConfirmMessage", "KeyTable").value);
+        $("button.delete-key-table-entry").click(
+            (event) => {
+                const itemSelector = '*[data-key-id=' + event.currentTarget.dataset["target"] + ']';
+                const selectedPageEl = $(itemSelector);
+                this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("KeywordConfirmMessage", "KeyTable").value);
                 $(".confirmation-ok-button").on("click",
                     () => {
-                            const id = selectedPageEl.data("key-id") as number;
-                            const deleteAjax = this.util.deleteKeyword(id);
-                            deleteAjax.done(() => {
-                                $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("KeywordDeleteSuccess", "KeyTable").value);
-                                this.updateContentAfterChange();
-                            });
-                            deleteAjax.fail(() => {
-                                $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("KeywordDeleteError", "KeyTable").value);
-                            });
+                        const id = selectedPageEl.data("key-id") as number;
+                        const deleteAjax = this.util.deleteKeyword(id);
+                        deleteAjax.done(() => {
+                            $(".confirmation-ok-button").off();
+                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("KeywordRemoveSuccess", "KeyTable").value);
+                            this.updateContentAfterChange();
+                        });
+                        deleteAjax.fail(() => {
+                            $(".confirmation-ok-button").off();
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("KeywordRemoveError", "KeyTable").value);
+                        });
                     });
-                } else {
-                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("KeywordInfoMessage", "KeyTable").value);
-                }
+                
             });
     }
 }

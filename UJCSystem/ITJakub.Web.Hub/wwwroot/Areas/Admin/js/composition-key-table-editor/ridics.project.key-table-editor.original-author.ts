@@ -21,6 +21,7 @@
             const initial = true;
             this.loadPage(initialPage, initial);
             this.currentPage = initialPage;
+            this.translateButtons();
             this.authorRename();
             this.authorDelete();
             this.authorCreation();
@@ -34,7 +35,7 @@
     }
 
     private loadPage(pageNumber: number, initial?: boolean) {
-        const listEl = $(".selectable-list-div");
+        const listEl = $(".key-table-div");
         const startIndex = (pageNumber - 1) * this.numberOfItemsPerPage;
         const pagedAuthorListAjax = this.util.getOriginalAuthorList(startIndex, this.numberOfItemsPerPage);
         pagedAuthorListAjax.done((data: IPagedResult<IOriginalAuthor>) => {
@@ -43,6 +44,9 @@
                 this.initPagination(data.totalCount, this.numberOfItemsPerPage, this.loadPage.bind(this));
             }
             listEl.append(this.generateListStructure(data.list));
+            this.translateButtons();
+            this.authorRename();
+            this.authorDelete();
             this.makeSelectable(listEl);
         }).fail(() => {
             const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("EditorLoadError", "KeyTable").value);
@@ -51,17 +55,29 @@
     }
 
     private generateListStructure(originalAuthorItemList: IOriginalAuthor[]): JQuery {
-        const listStart = `<div class="list-group">`;
-        const listItemEnd = `</div>`;
-        const listEnd = "</div>";
+        const listStart = `<div class="table-responsive"><table class="table table-hover"><tbody>`;
+        const listItemEnd = `</tr>`;
+        const listEnd = "</tbody></table></div>";
         var elm = "";
         elm += listStart;
         for (let i = 0; i < originalAuthorItemList.length; i++) {
             const listItemStart =
-                `<div class="page-list-item list-group-item" data-key-id="${originalAuthorItemList[i].id}"><span class="person-name">${
-                    originalAuthorItemList[i].firstName}</span><span class="person-surname">${originalAuthorItemList[i]
-                    .lastName}</span>`;
+                `<tr class="page-list-item" data-key-id="${originalAuthorItemList[i].id}"><td><div class="glyphicon empty-glyphicon"></div></td><td class="person-name">${
+                    originalAuthorItemList[i].firstName}</td><td class="person-surname">${originalAuthorItemList[i]
+                    .lastName}</td>`;
             elm += listItemStart;
+            const changeButton =
+                `<td class="key-table-button-cell"><button type="button" class="btn btn-default rename-key-table-entry" data-target="${originalAuthorItemList[i].id}">
+                <i class="fa fa-pencil" aria - hidden="true"> </i>
+                <span class="rename-key-table-entry-description"> Rename table of keys entry </span>
+                </button>`;
+            elm += changeButton;
+            const removeButton =
+                `<button type="button" class="btn btn-default delete-key-table-entry separate-button" data-target="${originalAuthorItemList[i].id}">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                <span class="delete-key-table-entry-description">Delete table of keys entry</span>
+                </button></td>`;
+            elm += removeButton;
             elm += listItemEnd;
         }
         elm += listEnd;
@@ -70,8 +86,7 @@
     }
 
     private authorCreation() {
-        $(".crud-buttons-div").on("click",
-            ".create-key-table-entry",
+        $("button.create-key-table-entry").click(
             () => {
                 this.gui.showAuthorInputDialog(localization.translate("OrigAuthInputHeadline", "KeyTable").value,
                     localization.translate("OrigAuthNameInput", "KeyTable").value,
@@ -95,72 +110,79 @@
                             $(".info-dialog-ok-button").off();
                         });
                     });
+                $(".info-dialog-close-button").click(
+                    () => {
+                        const nameTextareaEl = $(".primary-input-author-textarea");
+                        const surnameTextareaEl = $(".secondary-input-author-textarea");
+                        nameTextareaEl.val("");
+                        surnameTextareaEl.val("");
+                    });
             });
     }
 
     private authorRename() {
-        $(".crud-buttons-div").on("click",
-            ".rename-key-table-entry",
-            () => {
-                const selectedPageEl = $(".list-group").children(".page-list-item-selected");
-                if (selectedPageEl.length) {
-                    this.gui.showAuthorInputDialog(localization.translate("OrigAuthInputHeadline", "KeyTable").value,
-                        localization.translate("OrigAuthNameInput", "KeyTable").value,
-                        localization.translate("OrigAuthSurnameInput", "KeyTable").value);
-                    const nameTextareaEl = $(".primary-input-author-textarea");
-                    const surnameTextareaEl = $(".secondary-input-author-textarea");
-                    const originalName = selectedPageEl.children(".person-name").text();
-                    const originalSurname = selectedPageEl.children(".person-surname").text();
-                    nameTextareaEl.val(originalName);
-                    surnameTextareaEl.val(originalSurname);
-                    $(".info-dialog-ok-button").on("click",
-                        () => {
-                            const nameString = nameTextareaEl.val() as string;
-                            const surnameString = surnameTextareaEl.val() as string;
-                            const authorId = selectedPageEl.data("key-id") as number;
-                            const renameAjax = this.util.renameOriginalAuthor(authorId, nameString, surnameString);
-                            renameAjax.done(() => {
-                                nameTextareaEl.val("");
-                                surnameTextareaEl.val("");
-                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("OrigAuthRenameSuccess", "KeyTable").value);
-                                $(".info-dialog-ok-button").off();
-                                this.updateContentAfterChange();
-                            });
-                            renameAjax.fail(() => {
-                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("OrigAuthRenameError", "KeyTable").value);
-                                $(".info-dialog-ok-button").off();
-                            });
+        $("button.rename-key-table-entry").click(
+            (event) => {
+                const itemSelector = '*[data-key-id=' + event.currentTarget.dataset["target"] + ']';
+                const selectedPageEl = $(itemSelector);
+                this.gui.showAuthorInputDialog(localization.translate("OrigAuthInputHeadline", "KeyTable").value,
+                    localization.translate("OrigAuthNameInput", "KeyTable").value,
+                    localization.translate("OrigAuthSurnameInput", "KeyTable").value);
+                const nameTextareaEl = $(".primary-input-author-textarea");
+                const surnameTextareaEl = $(".secondary-input-author-textarea");
+                const originalName = selectedPageEl.children(".person-name").text();
+                const originalSurname = selectedPageEl.children(".person-surname").text();
+                nameTextareaEl.val(originalName);
+                surnameTextareaEl.val(originalSurname);
+                $(".info-dialog-ok-button").on("click",
+                    () => {
+                        const nameString = nameTextareaEl.val() as string;
+                        const surnameString = surnameTextareaEl.val() as string;
+                        const authorId = selectedPageEl.data("key-id") as number;
+                        const renameAjax = this.util.renameOriginalAuthor(authorId, nameString, surnameString);
+                        renameAjax.done(() => {
+                            nameTextareaEl.val("");
+                            surnameTextareaEl.val("");
+                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("OrigAuthRenameSuccess", "KeyTable").value);
+                            $(".info-dialog-ok-button").off();
+                            this.updateContentAfterChange();
                         });
-                } else {
-                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("OrigAuthInfoMessage", "KeyTable").value);
-                }
+                        renameAjax.fail(() => {
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("OrigAuthRenameError", "KeyTable").value);
+                            $(".info-dialog-ok-button").off();
+                        });
+                    });
+                $(".info-dialog-close-button").click(
+                    () => {
+                        const nameTextareaEl = $(".primary-input-author-textarea");
+                        const surnameTextareaEl = $(".secondary-input-author-textarea");
+                        nameTextareaEl.val("");
+                        surnameTextareaEl.val("");
+                    });
             });
+
     }
 
     private authorDelete() {
-        $(".crud-buttons-div").on("click",
-            ".delete-key-table-entry",
-            () => {
-                const selectedPageEl = $(".list-group").find(".page-list-item-selected");
-                if (selectedPageEl.length) {
-                    this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("OrigAuthConfirmMessage", "KeyTable").value);
-                    $(".confirmation-ok-button").on("click",
-                        () => {
-                            const id = selectedPageEl.data("key-id") as number;
-                            const deleteAjax = this.util.deleteOriginalAuthor(id);
-                            deleteAjax.done(() => {
-                                $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("OrigAuthDeleteSuccess", "KeyTable").value);
-                                this.updateContentAfterChange();
-                            });
-                            deleteAjax.fail(() => {
-                                $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("OrigAuthDeleteError", "KeyTable").value);
-                            });
+        $("button.delete-key-table-entry").click(
+            (event) => {
+                const itemSelector = '*[data-key-id=' + event.currentTarget.dataset["target"] + ']';
+                const selectedPageEl = $(itemSelector);
+                this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("OrigAuthConfirmMessage", "KeyTable").value);
+                $(".confirmation-ok-button").on("click",
+                    () => {
+                        const id = selectedPageEl.data("key-id") as number;
+                        const deleteAjax = this.util.deleteOriginalAuthor(id);
+                        deleteAjax.done(() => {
+                            $(".confirmation-ok-button").off();
+                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("OrigAuthRemoveSuccess", "KeyTable").value);
+                            this.updateContentAfterChange();
                         });
-                } else {
-                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("OrigAuthInfoMessage", "KeyTable").value);
-                }
-            });
+                        deleteAjax.fail(() => {
+                            $(".confirmation-ok-button").off();
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("OrigAuthRemoveError", "KeyTable").value);
+                        });
+                    });
+                });
     }
 }

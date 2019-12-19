@@ -24,6 +24,7 @@
             const initialPage = 1;
             this.loadPage(initialPage);
             this.currentPage = initialPage;
+            this.translateButtons();
             this.literaryOriginalRename();
             this.literaryOriginalDelete();
             this.literaryOriginalCreation();
@@ -34,11 +35,14 @@
     };
 
     private loadPage(pageNumber: number) {
-        const listEl = $(".selectable-list-div");
+        const listEl = $(".key-table-div");
         const splitArray = this.splitArray(this.literaryOriginalItemList, pageNumber);
         listEl.empty();
         const generatedListStructure = this.generateLiteraryOriginalList(splitArray, listEl);
         listEl.append(generatedListStructure);
+        this.translateButtons();
+        this.literaryOriginalRename();
+        this.literaryOriginalDelete();
         this.makeSelectable(listEl);
     }
 
@@ -61,8 +65,7 @@
     }
 
     private literaryOriginalCreation() {
-        $(".crud-buttons-div").on("click",
-            ".create-key-table-entry",
+        $("button.create-key-table-entry").click(
             () => {
                 this.gui.showSingleInputDialog(localization.translate("LitOriginInputHeadline", "KeyTable").value, localization.translate("LitOriginNameInput", "KeyTable").value);
                 $(".info-dialog-ok-button").on("click",
@@ -81,66 +84,68 @@
                             $(".info-dialog-ok-button").off();
                         });
                     });
+                $(".info-dialog-close-button").click(
+                    () => {
+                        const textareaEl = $(".input-dialog-textarea");
+                        textareaEl.val("");
+                    });
             });
     }
 
     private literaryOriginalRename() {
-        $(".crud-buttons-div").on("click",
-            ".rename-key-table-entry",
-            () => {
-                const selectedPageEl = $(".list-group").children(".page-list-item-selected");
-                if (selectedPageEl.length) {
-                    this.gui.showSingleInputDialog(localization.translate("LitOriginInputHeadline", "KeyTable").value, localization.translate("LitOriginNameInput", "KeyTable").value);
-                    const textareaEl = $(".input-dialog-textarea");
-                    const originalText = selectedPageEl.text();
-                    textareaEl.val(originalText);
-                    $(".info-dialog-ok-button").on("click",
-                        () => {
-                            const literaryOriginalName = textareaEl.val() as string;
-                                const literaryOriginalId = selectedPageEl.data("key-id") as number;
-                                const renameAjax =
-                                    this.util.renameLiteraryOriginal(literaryOriginalId, literaryOriginalName);
-                                renameAjax.done(() => {
-                                    textareaEl.val("");
-                                    this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("LitOriginRenameSuccess", "KeyTable").value);
-                                    $(".info-dialog-ok-button").off();
-                                    this.updateContentAfterChange();
-                                });
-                                renameAjax.fail(() => {
-                                    this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("LitOriginRenameError", "KeyTable").value);
-                                    $(".info-dialog-ok-button").off();
-                                });
-                        });
-                } else {
-                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("LitOriginInfoMessage", "KeyTable").value);
-                }
+        $("button.rename-key-table-entry").click(
+            (event) => {
+                const itemSelector = '*[data-key-id=' + event.currentTarget.dataset["target"] + ']';
+                const selectedPageEl = $(itemSelector);
+                this.gui.showSingleInputDialog(localization.translate("LitOriginInputHeadline", "KeyTable").value, localization.translate("LitOriginNameInput", "KeyTable").value);
+                const textareaEl = $(".input-dialog-textarea");
+                const originalText = selectedPageEl.children()[1].innerText;
+                textareaEl.val(originalText);
+                $(".info-dialog-ok-button").on("click",
+                    () => {
+                        const literaryOriginalName = textareaEl.val() as string;
+                            const literaryOriginalId = selectedPageEl.data("key-id") as number;
+                            const renameAjax =
+                                this.util.renameLiteraryOriginal(literaryOriginalId, literaryOriginalName);
+                            renameAjax.done(() => {
+                                textareaEl.val("");
+                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("LitOriginRenameSuccess", "KeyTable").value);
+                                $(".info-dialog-ok-button").off();
+                                this.updateContentAfterChange();
+                            });
+                            renameAjax.fail(() => {
+                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("LitOriginRenameError", "KeyTable").value);
+                                $(".info-dialog-ok-button").off();
+                            });
+                    });
+                $(".info-dialog-close-button").click(
+                    () => {
+                        const textareaEl = $(".input-dialog-textarea");
+                        textareaEl.val("");
+                    });
             });
     }
 
     private literaryOriginalDelete() {
-        $(".crud-buttons-div").on("click",
-            ".delete-key-table-entry",
-            () => {
-                const selectedPageEl = $(".list-group").find(".page-list-item-selected");
-                if (selectedPageEl.length) {
-                    this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("KindConfirmMessage", "KeyTable").value);
-                    $(".confirmation-ok-button").on("click",
-                        () => {
-                                const literaryOriginalId = selectedPageEl.data("key-id") as number;
-                                const deleteAjax = this.util.deleteLiteraryOriginal(literaryOriginalId);
-                                deleteAjax.done(() => {
-                                    $(".confirmation-ok-button").off();
-                                    this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("LitOriginRenameSuccess", "KeyTable").value);
-                                    this.updateContentAfterChange();
-                                });
-                                deleteAjax.fail(() => {
-                                    $(".confirmation-ok-button").off();
-                                    this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("LitOriginRenameError", "KeyTable").value);
-                                });
+        $("button.delete-key-table-entry").click(
+            (event) => {
+                const itemSelector = '*[data-key-id=' + event.currentTarget.dataset["target"] + ']';
+                const selectedPageEl = $(itemSelector);
+                this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("KindConfirmMessage", "KeyTable").value);
+                $(".confirmation-ok-button").on("click",
+                    () => {
+                        const literaryOriginalId = selectedPageEl.data("key-id") as number;
+                        const deleteAjax = this.util.deleteLiteraryOriginal(literaryOriginalId);
+                        deleteAjax.done(() => {
+                            $(".confirmation-ok-button").off();
+                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("LitOriginRemoveSuccess", "KeyTable").value);
+                            this.updateContentAfterChange();
                         });
-                } else {
-                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("LitOriginInfoMessage", "KeyTable").value);
-                }
-            });
+                        deleteAjax.fail(() => {
+                            $(".confirmation-ok-button").off();
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("LitOriginRemoveError", "KeyTable").value);
+                        });
+                    });
+                });
     }
 }

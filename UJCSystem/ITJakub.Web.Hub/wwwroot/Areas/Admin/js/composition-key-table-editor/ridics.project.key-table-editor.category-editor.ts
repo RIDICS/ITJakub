@@ -14,8 +14,6 @@
         this.showLoading();
         $("#project-layout-content").find("*").off();
         this.createEntryButtonEl.text(localization.translate("Create", "KeyTable").value);
-        this.changeEntryButtonEl.text(localization.translate("Change", "KeyTable").value);
-        this.deleteEntryButtonEl.text(localization.translate("Delete", "KeyTable").value);
         this.titleEl.text(localization.translate("CategoryHeadline", "KeyTable").value);
         this.unbindEventsDialog();
         this.util.getCategoryList().done((data: ICategoryContract[]) => {
@@ -28,6 +26,7 @@
             const initialPage = 1;
             this.loadPage(initialPage);
             this.currentPage = initialPage;
+            this.translateButtons();
             this.categoryRename();
             this.categoryDelete();
         }).fail(() => {
@@ -39,8 +38,7 @@
     private updateContentAfterChange() {
         this.showLoading();
         this.util.getCategoryList().done((data: ICategoryContract[]) => {
-            this.categoryItemList = this.generateListStructure(data);
-            const numberOfParentCategories = this.categoryItemList.children(".page-list-item").length;
+            const numberOfParentCategories = this.categoryItemList.find(".page-list-item").length;
             this.categoryItemListArray = data;
             this.loadPage(this.currentPage);
             const itemsOnPage = this.numberOfItemsPerPage;
@@ -51,11 +49,13 @@
     }
 
     private loadPage(pageNumber: number) {
-        const listEl = $(".selectable-list-div");
+        const listEl = $(".key-table-div");
         listEl.empty();
-        const splitArray = this.splitCategoryArray(this.categoryItemList.children(".page-list-item"), pageNumber);
-        listEl.append(`<div class="list-group"></div>`);
-        listEl.children(".list-group").append(splitArray);
+        const splitArray = this.splitCategoryArray(this.categoryItemList, pageNumber);
+        listEl.append(this.categoryItemList);
+        this.translateButtons();
+        this.categoryRename();
+        this.categoryDelete();
         this.makeSelectable(listEl);
         this.collapseCategories();
     }
@@ -69,16 +69,29 @@
     }
 
     private generateListStructure(categoryItemList: ICategoryContract[]):JQuery {
-        const listStart = `<div class="list-group">`;
-        const listItemEnd = `</div>`;
-        const listEnd = "</div>";
+        const listStart = `<div class="table-responsive"><table class="table table-hover"><tbody>`;
+        const listItemEnd = `</tr>`;
+        const listEnd = "</tbody></table></div>";
         var elm = "";
         elm += listStart;
         for (let i = 0; i < categoryItemList.length; i++) {
             const listItemStart =
-                `<div class="page-list-item list-group-item" data-category-id="${categoryItemList[i].id}" data-parent-category-id="${categoryItemList[i].parentCategoryId}">`;
+                `<tr class="page-list-item" data-category-id="${categoryItemList[i].id}" data-parent-category-id="${categoryItemList[i].parentCategoryId}">`;
             elm += listItemStart;
-            elm += categoryItemList[i].description;
+            elm += "<td><div class=glyphicon></div></td>";
+            elm += "<td>" + categoryItemList[i].description + "</td>";
+            const changeButton =
+                `<td class="key-table-button-cell"><button type="button" class="btn btn-default rename-key-table-entry" data-target="${categoryItemList[i].id}">
+                <i class="fa fa-pencil" aria - hidden="true"> </i>
+                <span class="rename-key-table-entry-description"> Rename table of keys entry </span>
+                </button>`;
+            elm += changeButton;
+            const removeButton =
+                `<button type="button" class="btn btn-default delete-key-table-entry separate-button" data-target="${categoryItemList[i].id}">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                <span class="delete-key-table-entry-description">Delete table of keys entry</span>
+                </button></td>`;
+            elm += removeButton;
             elm += listItemEnd;
         }
         elm += listEnd;
@@ -98,7 +111,7 @@
         return jListEl;
     }
 
-    private hierarchicallySortCategories(jEl: JQuery):JQuery {
+    private hierarchicallySortCategories(jEl: JQuery): JQuery {
         const pageListItem = jEl.children(".page-list-item");
         pageListItem.each((index, element) => {
             const listItemEl = $(element);
@@ -114,13 +127,14 @@
     }
 
     private collapseCategories() {
-        const mainCategoriesEls = $(".list-group").children(".page-list-item");
+        const mainCategoriesEls = $(".key-table-div").children(".page-list-item");
         mainCategoriesEls.each((index, element:Node) => {
             const mainCategoryEl = $(element as Element);
             const childrenCategories = mainCategoryEl.children(".child-category");
             if (childrenCategories.length) {
                 childrenCategories.hide();
-                mainCategoryEl.append(`<span class="collapse-category-button" title="${localization.translate("CollapseButtonTitle", "KeyTable").value}"><i class="fa fa-arrows-v fa-pull-right" aria-hidden="true"></i></span>`);
+                mainCategoryEl.children("glyphicon").addClass("glyphicon-plus");
+                mainCategoryEl.children(".glyphicon").attr("title", `${localization.translate("CollapseButtonTitle", "KeyTable").value}`);
                 this.trackCollapseCategoryButton(childrenCategories);
             }
         });
@@ -133,8 +147,7 @@
     }
 
     private categoryCreation() {
-        $(".crud-buttons-div").on("click",
-            ".create-key-table-entry",
+        $("button.create-key-table-entry").click(
             () => {
                 this.gui.showCategoryInputDialog(localization.translate("CategoryInputHeadline", "KeyTable").value, localization.translate("CategoryNameInput", "KeyTable").value, localization.translate("ParentNameInput", "KeyTable").value);
                 const dialogEl = $(".category-change-input-modal-dialog");
@@ -177,76 +190,68 @@
     }
 
     private categoryRename() {
-        $(".crud-buttons-div").on("click",
-            ".rename-key-table-entry",
-            () => {
-                const selectedPageEl = $(".list-group").find(".page-list-item-selected");
-                if (selectedPageEl.length) {
-                    this.gui.showCategoryInputDialog(localization.translate("CategoryInputHeadline", "KeyTable").value, localization.translate("CategoryNameInput", "KeyTable").value, localization.translate("ParentNameInput", "KeyTable").value);
-                    const dialogEl = $(".category-change-input-modal-dialog");
-                    const textareaEl = dialogEl.find(".primary-input-dialog-textarea");
-                    const parentCategoryIdSelectEl = dialogEl.find(".id-method-selection");
-                    parentCategoryIdSelectEl.empty();
-                    const newCategoryOption =
-                        `<option value="null" data-parent-category-id="null">` + localization.translate("NoParentCategory", "KeyTable").value + `</option>`;
-                    parentCategoryIdSelectEl.append(newCategoryOption);
-                    parentCategoryIdSelectEl.append(this.generateComboboxFromList(this.categoryItemListArray));
-                    const originalText = selectedPageEl.clone().children().remove().end().text();
-                    textareaEl.val(originalText);
-                    const id = selectedPageEl.data("category-id") as number;
-                    const parentCategoryid = selectedPageEl.data("parent-category-id") as number;
-                    parentCategoryIdSelectEl.val(parentCategoryid);
-                    const okButtonEl = dialogEl.find(".info-dialog-ok-button");
-                    okButtonEl.on("click",
-                        () => {
-                            const categoryString = textareaEl.val() as string;
-                            const newParentCategory = parentCategoryIdSelectEl.val() as number;
-                            if (!categoryString) {
-                                this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("CategoryWarningMessage", "KeyTable").value);
-                            } else {
-                                const renameAjax = this.util.renameCategory(id, categoryString, newParentCategory);
-                                    renameAjax.done(() => {
-                                        textareaEl.val("");
-                                        this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("CategoryRenameSuccess", "KeyTable").value);
-                                        okButtonEl.off();
-                                        this.updateContentAfterChange();
-                                    });
-                                    renameAjax.fail(() => {
-                                        this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("CategoryRenameError", "KeyTable").value);
-                                        okButtonEl.off();
-                                    });
-                            }
-                        });
-                } else {
-                    this.gui.showInfoDialog(localization.translate("ModalInfo", "KeyTable").value, localization.translate("CategoryInfoMessage", "KeyTable").value);
-                }
+        $("button.rename-key-table-entry").click(
+            (event) => {
+                const itemSelector = '*[data-key-id=' + event.currentTarget.dataset["target"] + ']';
+                const selectedPageEl = $(itemSelector);
+                this.gui.showCategoryInputDialog(localization.translate("CategoryInputHeadline", "KeyTable").value, localization.translate("CategoryNameInput", "KeyTable").value, localization.translate("ParentNameInput", "KeyTable").value);
+                const dialogEl = $(".category-change-input-modal-dialog");
+                const textareaEl = dialogEl.find(".primary-input-dialog-textarea");
+                const parentCategoryIdSelectEl = dialogEl.find(".id-method-selection");
+                parentCategoryIdSelectEl.empty();
+                const newCategoryOption =
+                    `<option value="null" data-parent-category-id="null">` + localization.translate("NoParentCategory", "KeyTable").value + `</option>`;
+                parentCategoryIdSelectEl.append(newCategoryOption);
+                parentCategoryIdSelectEl.append(this.generateComboboxFromList(this.categoryItemListArray));
+                const originalText = selectedPageEl.clone().children().remove().end().text();
+                textareaEl.val(originalText);
+                const id = selectedPageEl.data("category-id") as number;
+                const parentCategoryid = selectedPageEl.data("parent-category-id") as number;
+                parentCategoryIdSelectEl.val(parentCategoryid);
+                const okButtonEl = dialogEl.find(".info-dialog-ok-button");
+                okButtonEl.on("click",
+                    () => {
+                        const categoryString = textareaEl.val() as string;
+                        const newParentCategory = parentCategoryIdSelectEl.val() as number;
+                        if (!categoryString) {
+                            this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("CategoryWarningMessage", "KeyTable").value);
+                        } else {
+                            const renameAjax = this.util.renameCategory(id, categoryString, newParentCategory);
+                                renameAjax.done(() => {
+                                    textareaEl.val("");
+                                    this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("CategoryRenameSuccess", "KeyTable").value);
+                                    okButtonEl.off();
+                                    this.updateContentAfterChange();
+                                });
+                                renameAjax.fail(() => {
+                                    this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("CategoryRenameError", "KeyTable").value);
+                                    okButtonEl.off();
+                                });
+                        }
+                    });
             });
     }
 
     private categoryDelete() {
-        $(".crud-buttons-div").on("click",
-            ".delete-key-table-entry",
-            () => {
-                const selectedPageEl = $(".list-group").find(".page-list-item-selected");
-                if (selectedPageEl.length) {
-                    this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("CategoryConfirmMessage", "KeyTable").value);
-                    $(".confirmation-ok-button").on("click",
-                        () => {
-                                const id = selectedPageEl.data("category-id") as number;
-                                const deleteAjax = this.util.deleteCategory(id);
-                                deleteAjax.done(() => {
-                                    $(".confirmation-ok-button").off();
-                                    this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("CategoryDeleteSuccess", "KeyTable").value);
-                                    this.updateContentAfterChange();
-                                });
-                                deleteAjax.fail(() => {
-                                    $(".confirmation-ok-button").off();
-                                    this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("CategoryDeleteSuccess", "KeyTable").value);
-                                });
-                        });
-                } else {
-                    this.gui.showInfoDialog(localization.translate("ModalInfo", "KeyTable").value, localization.translate("CategoryInfoMessage", "KeyTable").value);
-                }
+        $("button.delete-key-table-entry").click(
+            (event) => {
+                const itemSelector = '*[data-key-id=' + event.currentTarget.dataset["target"] + ']';
+                const selectedPageEl = $(itemSelector);
+                this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("CategoryConfirmMessage", "KeyTable").value);
+                $(".confirmation-ok-button").on("click",
+                    () => {
+                            const id = selectedPageEl.data("category-id") as number;
+                            const deleteAjax = this.util.deleteCategory(id);
+                            deleteAjax.done(() => {
+                                $(".confirmation-ok-button").off();
+                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("CategoryRemoveSuccess", "KeyTable").value);
+                                this.updateContentAfterChange();
+                            });
+                            deleteAjax.fail(() => {
+                                $(".confirmation-ok-button").off();
+                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("CategoryRemoveSuccess", "KeyTable").value);
+                            });
+                    });
             });
     }
 }

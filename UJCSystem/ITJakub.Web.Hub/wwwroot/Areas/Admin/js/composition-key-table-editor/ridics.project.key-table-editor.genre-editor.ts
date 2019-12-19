@@ -13,8 +13,6 @@
         this.showLoading();
         $("#project-layout-content").find("*").off();
         this.createEntryButtonEl.text(localization.translate("Create", "KeyTable").value);
-        this.changeEntryButtonEl.text(localization.translate("Change", "KeyTable").value);
-        this.deleteEntryButtonEl.text(localization.translate("Delete", "KeyTable").value);
         this.titleEl.text(localization.translate("GenreHeadline", "KeyTable").value);
         this.unbindEventsDialog();
         this.util.getLiteraryGenreList().done((data: IGenreResponseContract[]) => {
@@ -24,6 +22,7 @@
             const initialPage = 1;
             this.loadPage(initialPage);
             this.currentPage = initialPage;
+            this.translateButtons();
             this.genreRename();
             this.genreDelete();
             this.genreCreation();
@@ -46,11 +45,15 @@
     }
 
     private loadPage(pageNumber: number) {
-        const listEl = $(".selectable-list-div");
+        const listEl = $(".key-table-div");
         const splitArray = this.splitArray(this.genreItemList, pageNumber);
         listEl.empty();
         const generatedListStructure = this.generateGenreList(splitArray, listEl);
         listEl.append(generatedListStructure);
+        this.translateButtons();
+        this.genreRename();
+        this.genreDelete();
+        this.genreCreation();
         this.makeSelectable(listEl);
     }
 
@@ -61,8 +64,7 @@
     }
 
     private genreCreation() {
-        $(".crud-buttons-div").on("click",
-            ".create-key-table-entry",
+        $(".create-key-table-entry").on("click",
             () => {
                 this.gui.showSingleInputDialog(localization.translate("GenreInputHeadline", "KeyTable").value, localization.translate("GenreNameInput", "KeyTable").value);
                 $(".info-dialog-ok-button").on("click",
@@ -81,65 +83,67 @@
                             $(".info-dialog-ok-button").off();
                         });
                     });
+                $(".info-dialog-close-button").click(
+                    () => {
+                        const textareaEl = $(".input-dialog-textarea");
+                        textareaEl.val("");
+                    });
             });
     }
 
     private genreRename() {
-        $(".crud-buttons-div").on("click",
-            ".rename-key-table-entry",
-            () => {
-                const selectedPageEl = $(".list-group").children(".page-list-item-selected");
-                if (selectedPageEl.length) {
-                    this.gui.showSingleInputDialog(localization.translate("GenreInputHeadline", "KeyTable").value, localization.translate("GenreNameInput", "KeyTable").value);
-                    const textareaEl = $(".input-dialog-textarea");
-                    const originalText = selectedPageEl.text();
-                    textareaEl.val(originalText);
+        $("button.rename-key-table-entry").click(
+            (event) => {
+                const itemSelector = '*[data-key-id=' + event.currentTarget.dataset["target"] + ']';
+                const selectedPageEl = $(itemSelector);
+                this.gui.showSingleInputDialog(localization.translate("GenreInputHeadline", "KeyTable").value, localization.translate("GenreNameInput", "KeyTable").value);
+                const textareaEl = $(".input-dialog-textarea");
+                const originalText = selectedPageEl.children()[1].innerHTML;
+                textareaEl.val(originalText);
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const genreName = textareaEl.val() as string;
-                            const genreId = selectedPageEl.data("key-id") as number;
-                            const renameAjax = this.util.renameGenre(genreId, genreName);
-                            renameAjax.done(() => {
-                                textareaEl.val("");
-                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("GenreRenameSuccess", "KeyTable").value);
-                                $(".info-dialog-ok-button").off();
-                                this.updateContentAfterChange();
-                            });
-                            renameAjax.fail(() => {
-                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("GenreRenameError", "KeyTable").value);
-                                $(".info-dialog-ok-button").off();
-                            });
+                        const genreId = selectedPageEl.data("key-id") as number;
+                        const renameAjax = this.util.renameGenre(genreId, genreName);
+                        renameAjax.done(() => {
+                            textareaEl.val("");
+                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("GenreRenameSuccess", "KeyTable").value);
+                            $(".info-dialog-ok-button").off();
+                            this.updateContentAfterChange();
+                        });
+                        renameAjax.fail(() => {
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("GenreRenameError", "KeyTable").value);
+                            $(".info-dialog-ok-button").off();
+                        });
                     });
-                } else {
-                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("GenreInfoMessage", "KeyTable").value);
-                }
+                $(".info-dialog-close-button").click(
+                    () => {
+                        const textareaEl = $(".input-dialog-textarea");
+                        textareaEl.val("");
+                    });
             });
     }
 
     private genreDelete() {
-        $(".crud-buttons-div").on("click",
-            ".delete-key-table-entry",
-            () => {
-                const selectedPageEl = $(".list-group").find(".page-list-item-selected");
-                if (selectedPageEl.length) {
-                    this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("GenreConfirmMessage", "KeyTable").value);
-                    $(".confirmation-ok-button").on("click",
-                        () => {
-                                const id = selectedPageEl.data("key-id") as number;
-                                const deleteAjax = this.util.deleteGenre(id);
-                                deleteAjax.done(() => {
-                                    $(".confirmation-ok-button").off();
-                                    this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("GenreRemoveSuccess", "KeyTable").value);
-                                    this.updateContentAfterChange();
-                                });
-                                deleteAjax.fail(() => {
-                                    $(".confirmation-ok-button").off();
-                                    this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("GenreRemoveError", "KeyTable").value);
-                                });
+        $("button.delete-key-table-entry").click(
+            (event) => {
+                const itemSelector = "*[data-key-id=" + event.currentTarget.dataset["target"] + ']';
+                const selectedPageEl = $(itemSelector);
+                this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("GenreConfirmMessage", "KeyTable").value);
+                $(".confirmation-ok-button").on("click",
+                    () => {
+                        const id = selectedPageEl.data("key-id") as number;
+                        const deleteAjax = this.util.deleteGenre(id);
+                        deleteAjax.done(() => {
+                            $(".confirmation-ok-button").off();
+                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("GenreRemoveSuccess", "KeyTable").value);
+                            this.updateContentAfterChange();
                         });
-                } else {
-                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("GenreInfoMessage", "KeyTable").value);
-                }
+                        deleteAjax.fail(() => {
+                            $(".confirmation-ok-button").off();
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("GenreRemoveError", "KeyTable").value);
+                        });
+                    });
             });
     }
 }

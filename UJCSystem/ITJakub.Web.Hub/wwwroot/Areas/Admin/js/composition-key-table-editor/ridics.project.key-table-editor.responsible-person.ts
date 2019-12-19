@@ -21,6 +21,7 @@
         const initial = true;
         this.loadPage(initialPage, initial);
         this.currentPage = initialPage;
+        this.translateButtons();
         this.responsiblePersonRename();
         this.responsiblePersonDelete();
         this.responsiblePersonCreation();
@@ -33,7 +34,7 @@
     }
 
     private loadPage(pageNumber: number, initial?: boolean) {
-        const listEl = $(".selectable-list-div");
+        const listEl = $(".key-table-div");
         const startIndex = (pageNumber - 1) * this.numberOfItemsPerPage;
         const pagedResponsiblePersonListAjax = this.util.getResponsiblePersonList(startIndex, this.numberOfItemsPerPage);
         pagedResponsiblePersonListAjax.done((data: IPagedResult<IResponsiblePerson>) => {
@@ -42,6 +43,9 @@
                 this.initPagination(data.totalCount, this.numberOfItemsPerPage, this.loadPage.bind(this));
             }
             listEl.append(this.generateListStructure(data.list));
+            this.translateButtons();
+            this.responsiblePersonRename();
+            this.responsiblePersonDelete();
             this.makeSelectable(listEl);
         }).fail(() => {
             const error = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("EditorLoadError", "KeyTable").value);
@@ -50,17 +54,29 @@
     }
 
     private generateListStructure(responsiblePersonItemList: IResponsiblePerson[]): JQuery {
-        const listStart = `<div class="list-group">`;
-        const listItemEnd = `</div>`;
-        const listEnd = "</div>";
+        const listStart = `<div class="table=responsive"><table class="table table-hover"><tbody>`;
+        const listItemEnd = `</tr>`;
+        const listEnd = "</tbody></table></div>";
         var elm = "";
         elm += listStart;
         for (let i = 0; i < responsiblePersonItemList.length; i++) {
             const listItemStart =
-                `<div class="page-list-item list-group-item" data-key-id="${responsiblePersonItemList[i].id
-                    }"><span class="person-name">${responsiblePersonItemList[i].firstName
-                    }</span><span class="person-surname">${responsiblePersonItemList[i].lastName}</span>`;
+                `<tr class="page-list-item" data-key-id="${responsiblePersonItemList[i].id
+                    }"><div class="glyphicon empty-glyphicon"></div><td class="person-name">${responsiblePersonItemList[i].firstName
+                    }</td><td class="person-surname">${responsiblePersonItemList[i].lastName}</td>`;
             elm += listItemStart;
+            const changeButton =
+                `<td class="key-table-button-cell"><button type="button" class="btn btn-default rename-key-table-entry" data-target="${responsiblePersonItemList[i].id}">
+                <i class="fa fa-pencil" aria - hidden="true"> </i>
+                <span class="rename-key-table-entry-description"> Rename table of keys entry </span>
+                </button>`;
+            elm += changeButton;
+            const removeButton =
+                `<button type="button" class="btn btn-default delete-key-table-entry separate-button" data-target="${responsiblePersonItemList[i].id}">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                <span class="delete-key-table-entry-description">Delete table of keys entry</span>
+                </button></td>`;
+            elm += removeButton;
             elm += listItemEnd;
         }
         elm += listEnd;
@@ -69,8 +85,7 @@
     }
 
     private responsiblePersonCreation() {
-        $(".crud-buttons-div").on("click",
-            ".create-key-table-entry",
+        $("button.create-key-table-entry").click(
             () => {
                 this.gui.showAuthorInputDialog(localization.translate("RespPerInputHeadline", "KeyTable").value,
                     localization.translate("RespPerNameInput", "KeyTable").value,
@@ -94,74 +109,80 @@
                             $(".info-dialog-ok-button").off();
                         });
                     });
+                $(".info-dialog-close-button").click(
+                    () => {
+                        const nameTextareaEl = $(".primary-input-author-textarea");
+                        const surnameTextareaEl = $(".secondary-input-author-textarea");
+                        nameTextareaEl.val("");
+                        surnameTextareaEl.val("");
+                    });
             });
     }
 
     private responsiblePersonRename() {
-        $(".crud-buttons-div").on("click",
-            ".rename-key-table-entry",
-            () => {
-                const selectedPageEl = $(".list-group").children(".page-list-item-selected");
-                if (selectedPageEl.length) {
-                    const nameTextareaEl = $(".primary-input-author-textarea");
-                    const surnameTextareaEl = $(".secondary-input-author-textarea");
-                    const originalName = selectedPageEl.children(".person-name").text();
-                    const originalSurname = selectedPageEl.children(".person-surname").text();
-                    nameTextareaEl.val(originalName);
-                    surnameTextareaEl.val(originalSurname);
-                    this.gui.showAuthorInputDialog(localization.translate("RespPerInputHeadline", "KeyTable").value,
-                        localization.translate("RespPerNameInput", "KeyTable").value,
-                        localization.translate("RespPerSurnameInput", "KeyTable").value);
-                    $(".info-dialog-ok-button").on("click",
-                        () => {
-                            const nameString = nameTextareaEl.val() as string;
-                            const surnameString = surnameTextareaEl.val() as string;
-                            const responsiblePersonId = selectedPageEl.data("key-id") as number;
-                            const renameAjax = this.util.renameResponsiblePerson(responsiblePersonId,
-                                nameString,
-                                surnameString);
-                            renameAjax.done(() => {
-                                nameTextareaEl.val("");
-                                surnameTextareaEl.val("");
-                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("RespPerRenameSuccess", "KeyTable").value);
-                                $(".info-dialog-ok-button").off();
-                                this.updateContentAfterChange();
-                            });
-                            renameAjax.fail(() => {
-                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("RespPerRenameError", "KeyTable").value);
-                                $(".info-dialog-ok-button").off();
-                            });
+        $("button.rename-key-table-entry").click(
+            (event) => {
+                const itemSelector = '*[data-key-id=' + event.currentTarget.dataset["target"] + ']';
+                const selectedPageEl = $(itemSelector);
+                const nameTextareaEl = $(".primary-input-author-textarea");
+                const surnameTextareaEl = $(".secondary-input-author-textarea");
+                const originalName = selectedPageEl.children(".person-name").text();
+                const originalSurname = selectedPageEl.children(".person-surname").text();
+                nameTextareaEl.val(originalName);
+                surnameTextareaEl.val(originalSurname);
+                this.gui.showAuthorInputDialog(localization.translate("RespPerInputHeadline", "KeyTable").value,
+                    localization.translate("RespPerNameInput", "KeyTable").value,
+                    localization.translate("RespPerSurnameInput", "KeyTable").value);
+                $(".info-dialog-ok-button").on("click",
+                    () => {
+                        const nameString = nameTextareaEl.val() as string;
+                        const surnameString = surnameTextareaEl.val() as string;
+                        const responsiblePersonId = selectedPageEl.data("key-id") as number;
+                        const renameAjax = this.util.renameResponsiblePerson(responsiblePersonId,
+                            nameString,
+                            surnameString);
+                        renameAjax.done(() => {
+                            nameTextareaEl.val("");
+                            surnameTextareaEl.val("");
+                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("RespPerRenameSuccess", "KeyTable").value);
+                            $(".info-dialog-ok-button").off();
+                            this.updateContentAfterChange();
                         });
-                } else {
-                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("RespPerInfoMessage", "KeyTable").value);
-                }
+                        renameAjax.fail(() => {
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("RespPerRenameError", "KeyTable").value);
+                            $(".info-dialog-ok-button").off();
+                        });
+                    });
+                $(".info-dialog-close-button").click(
+                    () => {
+                        const nameTextareaEl = $(".primary-input-author-textarea");
+                        const surnameTextareaEl = $(".secondary-input-author-textarea");
+                        nameTextareaEl.val("");
+                        surnameTextareaEl.val("");
+                    });
             });
     }
 
     private responsiblePersonDelete() {
-        $(".crud-buttons-div").on("click",
-            ".delete-key-table-entry",
-            () => {
-                const selectedPageEl = $(".list-group").find(".page-list-item-selected");
-                if (selectedPageEl.length) {
-                    this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("RespPerConfirmMessage", "KeyTable").value);
-                    $(".confirmation-ok-button").on("click",
-                        () => {
-                            const id = selectedPageEl.data("key-id") as number;
-                            const deleteAjax = this.util.deleteResponsiblePerson(id);
-                            deleteAjax.done(() => {
-                                $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("RespPerDeleteSuccess", "KeyTable").value);
-                                this.updateContentAfterChange();
-                            });
-                            deleteAjax.fail(() => {
-                                $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("RespPerDeleteError", "KeyTable").value);
-                            });
+        $("button.delete-key-table-entry").click(
+            (event) => {
+                const itemSelector = '*[data-key-id=' + event.currentTarget.dataset["target"] + ']';
+                const selectedPageEl = $(itemSelector);
+                this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("RespPerConfirmMessage", "KeyTable").value);
+                $(".confirmation-ok-button").on("click",
+                    () => {
+                        const id = selectedPageEl.data("key-id") as number;
+                        const deleteAjax = this.util.deleteResponsiblePerson(id);
+                        deleteAjax.done(() => {
+                            $(".confirmation-ok-button").off();
+                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("RespPerRemoveSuccess", "KeyTable").value);
+                            this.updateContentAfterChange();
                         });
-                } else {
-                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("RespPerInfoMessage", "KeyTable").value);
-                }
+                        deleteAjax.fail(() => {
+                            $(".confirmation-ok-button").off();
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("RespPerRemoveError", "KeyTable").value);
+                        });
+                    });
             });
     }
 }

@@ -24,6 +24,7 @@
             const initialPage = 1;
             this.loadPage(initialPage);
             this.currentPage = initialPage;
+            this.translateButtons();
             this.responsibleTypeChange();
             this.responsibleTypeDelete();
             this.responsibleTypeCreation();
@@ -46,24 +47,40 @@
     }
 
     private loadPage(pageNumber: number) {
-        const listEl = $(".selectable-list-div");
+        const listEl = $(".key-table-div");
         const splitArray = this.splitArray(this.responsibleTypeItemList, pageNumber);
         listEl.empty();
         listEl.append(this.generateListStructure(splitArray));
+        this.translateButtons();
+        this.responsibleTypeChange();
+        this.responsibleTypeDelete();
         this.makeSelectable(listEl);
     }
 
     private generateListStructure(responsibleTypeItemList: IResponsibleType[]): JQuery {
-        const listStart = `<div class="list-group">`;
-        const listItemEnd = `</div>`;
-        const listEnd = "</div>";
+        const listStart = `<div class="table-responsive"><table class="table table-hover"><tbody>`;
+        const listItemEnd = `</tr>`;
+        const listEnd = "</tbody></table></div>";
         var elm = "";
         elm += listStart;
         for (let i = 0; i < responsibleTypeItemList.length; i++) {
             const listItemStart =
-                `<div class="page-list-item list-group-item" data-key-id="${responsibleTypeItemList[i].id}" data-responsibility-type="${ResponsibleTypeEnum[responsibleTypeItemList[i].type]}">`;
+                `<tr class="page-list-item" data-key-id="${responsibleTypeItemList[i].id}" data-responsibility-type="${ResponsibleTypeEnum[responsibleTypeItemList[i].type]}">`;
             elm += listItemStart;
-            elm += responsibleTypeItemList[i].text;
+            elm += '<td><div class="empty-glyphicon"></div></td>';
+            elm += `<td>${responsibleTypeItemList[i].text}</td>`;
+            const changeButton =
+                `<td class="key-table-button-cell"><button type="button" class="btn btn-default rename-key-table-entry" data-target="${responsibleTypeItemList[i].id}">
+                <i class="fa fa-pencil" aria - hidden="true"> </i>
+                <span class="rename-key-table-entry-description"> Rename table of keys entry </span>
+                </button>`;
+            elm += changeButton;
+            const removeButton =
+                `<button type="button" class="btn btn-default delete-key-table-entry separate-button" data-target="${responsibleTypeItemList[i].id}">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                <span class="delete-key-table-entry-description">Delete table of keys entry</span>
+                </button></td>`;
+            elm += removeButton;
             elm += listItemEnd;
         }
         elm += listEnd;
@@ -72,12 +89,11 @@
     }
 
     private responsibleTypeCreation() {
-        $(".crud-buttons-div").on("click",
-            ".create-key-table-entry",
+        $("button.create-key-table-entry").click(
             () => {
-                this.gui.showResponsibleTypeInputDialog(localization.translate("RespPerTypeTypeInputHeadline", "KeyTable").value,
-                    localization.translate("RespPerTypeTypeNameInput", "KeyTable").value,
-                    localization.translate("RespPerTypeTypeInput", "KeyTable").value);
+                this.gui.showResponsibleTypeInputDialog(localization.translate("RespPerTypeInputHeadline", "KeyTable").value,
+                    localization.translate("RespPerTypeNameInput", "KeyTable").value,
+                    localization.translate("RespPerTypeInput", "KeyTable").value);
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const textareaEl = $(".responsible-type-text-input-dialog-textarea");
@@ -102,77 +118,79 @@
                             });
                         }
                     });
+                $(".info-dialog-close-button").click(
+                    () => {
+                        const textareaEl = $(".responsible-type-text-input-dialog-textarea");
+                        textareaEl.val("");
+                    });
             });
     }
 
     private responsibleTypeChange() {
-        $(".crud-buttons-div").on("click",
-            ".rename-key-table-entry",
-            () => {
-                const selectedPageEl = $(".list-group").children(".page-list-item-selected");
-                if (selectedPageEl.length) {
-                    this.gui.showResponsibleTypeInputDialog(localization.translate("RespPerTypeTypeInputHeadline", "KeyTable").value,
-                        localization.translate("RespPerTypeTypeNameInput", "KeyTable").value,
-                        localization.translate("RespPerTypeTypeInput", "KeyTable").value);
-                    const textareaEl = $(".responsible-type-text-input-dialog-textarea");
-                    const originalText = selectedPageEl.text();
-                    textareaEl.val(originalText);
-                    const responsibilityType = selectedPageEl.data("responsibility-type") as ResponsibleTypeEnum;
-                    const responsibilityTypeSelectEl = $(".responsible-type-selection");
-                    responsibilityTypeSelectEl.val(responsibilityType);
-                    $(".info-dialog-ok-button").on("click",
-                        () => {
-                            const typeDescriptionString = textareaEl.val() as string;
-                            const responsibilityTypeSelect = responsibilityTypeSelectEl.val() as ResponsibleTypeEnum;
-                            if (!typeDescriptionString) {
-                                this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("RespPerTypeWarningMessage", "KeyTable").value);
-                            } else {
-                                    const responsibleTypeId = selectedPageEl.data("key-id") as number;
-                                    const renameAjax = this.util.renameResponsiblePersonType(responsibleTypeId,
-                                        responsibilityTypeSelect,
-                                        typeDescriptionString);
-                                    renameAjax.done(() => {
-                                        textareaEl.val("");
-                                        this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("RespPerTypeRenameSuccess", "KeyTable").value);
-                                        $(".info-dialog-ok-button").off();
-                                        this.updateContentAfterChange();
-                                    });
-                                    renameAjax.fail(() => {
-                                        this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("RespPerTypeRenameError", "KeyTable").value);
-                                        $(".info-dialog-ok-button").off();
-                                    });
-                            }
-                        });
-                } else {
-                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("RespPerTypeInfoMessage", "KeyTable").value);
-                }
+        $("button.rename-key-table-entry").click(
+            (event) => {
+                const itemSelector = '*[data-key-id=' + event.currentTarget.dataset["target"] + ']';
+                const selectedPageEl = $(itemSelector);
+                this.gui.showResponsibleTypeInputDialog(localization.translate("RespPerTypeInputHeadline", "KeyTable").value,
+                    localization.translate("RespPerTypeNameInput", "KeyTable").value,
+                    localization.translate("RespPerTypeInput", "KeyTable").value);
+                const textareaEl = $(".responsible-type-text-input-dialog-textarea");
+                const originalText = selectedPageEl.children()[1].innerText;
+                textareaEl.val(originalText);
+                const responsibilityType = selectedPageEl.data("responsibility-type") as ResponsibleTypeEnum;
+                const responsibilityTypeSelectEl = $(".responsible-type-selection");
+                responsibilityTypeSelectEl.val(responsibilityType);
+                $(".info-dialog-ok-button").on("click",
+                    () => {
+                        const typeDescriptionString = textareaEl.val() as string;
+                        const responsibilityTypeSelect = responsibilityTypeSelectEl.val() as ResponsibleTypeEnum;
+                        if (!typeDescriptionString) {
+                            this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("RespPerTypeWarningMessage", "KeyTable").value);
+                        } else {
+                                const responsibleTypeId = selectedPageEl.data("key-id") as number;
+                                const renameAjax = this.util.renameResponsiblePersonType(responsibleTypeId,
+                                    responsibilityTypeSelect,
+                                    typeDescriptionString);
+                                renameAjax.done(() => {
+                                    textareaEl.val("");
+                                    this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("RespPerTypeRenameSuccess", "KeyTable").value);
+                                    $(".info-dialog-ok-button").off();
+                                    this.updateContentAfterChange();
+                                });
+                                renameAjax.fail(() => {
+                                    this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("RespPerTypeRenameError", "KeyTable").value);
+                                    $(".info-dialog-ok-button").off();
+                                });
+                        }
+                    });
+                $(".info-dialog-close-button").click(
+                    () => {
+                        const textareaEl = $(".responsible-type-text-input-dialog-textarea");
+                        textareaEl.val("");
+                    });
             });
     }
 
     private responsibleTypeDelete() {
-        $(".crud-buttons-div").on("click",
-            ".delete-key-table-entry",
-            () => {
-                const selectedPageEl = $(".list-group").find(".page-list-item-selected");
-                if (selectedPageEl.length) {
-                    this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("RespPerTypeConfirmMessage", "KeyTable").value);
-                    $(".confirmation-ok-button").on("click",
-                        () => {
-                            const id = selectedPageEl.data("key-id") as number;
-                            const deleteAjax = this.util.deleteResponsiblePersonType(id);
-                            deleteAjax.done(() => {
-                                $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("RespPerTypeDeleteSuccess", "KeyTable").value);
-                                this.updateContentAfterChange();
-                            });
-                            deleteAjax.fail(() => {
-                                $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("RespPerTypeDeleteError", "KeyTable").value);
-                            });
+        $("button.delete-key-table-entry").click(
+            (event) => {
+                const itemSelector = '*[data-key-id=' + event.currentTarget.dataset["target"] + ']';
+                const selectedPageEl = $(itemSelector);
+                this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("RespPerTypeConfirmMessage", "KeyTable").value);
+                $(".confirmation-ok-button").on("click",
+                    () => {
+                        const id = selectedPageEl.data("key-id") as number;
+                        const deleteAjax = this.util.deleteResponsiblePersonType(id);
+                        deleteAjax.done(() => {
+                            $(".confirmation-ok-button").off();
+                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("RespPerTypeRemoveSuccess", "KeyTable").value);
+                            this.updateContentAfterChange();
                         });
-                } else {
-                    this.gui.showInfoDialog(localization.translate("ModalWarning", "KeyTable").value, localization.translate("RespPerTypeInfoMessage", "KeyTable").value);
-                }
+                        deleteAjax.fail(() => {
+                            $(".confirmation-ok-button").off();
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("RespPerTypeRemoveError", "KeyTable").value);
+                        });
+                    });
             });
     }
 }
