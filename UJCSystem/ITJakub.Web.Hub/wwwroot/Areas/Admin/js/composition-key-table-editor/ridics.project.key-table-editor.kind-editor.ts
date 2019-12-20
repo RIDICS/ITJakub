@@ -137,12 +137,12 @@
                         const deleteAjax = this.util.deleteLiteraryKind(literaryKindId);
                         deleteAjax.done(() => {
                             $(".confirmation-ok-button").off();
-                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, "Kind deletion was successful");
+                            this.gui.showInfoDialog(localization.translate("ModalSuccess", "KeyTable").value, localization.translate("KindRemoveSuccess", "KeyTable").value);
                             this.updateContentAfterChange();
                         });
                         deleteAjax.fail(() => {
                             $(".confirmation-ok-button").off();
-                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, "Kind deletion was not successful");
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("KindRemoveError", "KeyTable").value);
                         });
                     });
             });

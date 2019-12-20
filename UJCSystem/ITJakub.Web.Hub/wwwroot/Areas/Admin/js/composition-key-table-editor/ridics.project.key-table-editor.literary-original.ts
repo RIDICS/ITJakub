@@ -80,7 +80,7 @@
                             this.updateContentAfterChange();
                         });
                         newLiteraryOriginalAjax.fail(() => {
-                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, "New literary original has not been created");
+                            this.gui.showInfoDialog(localization.translate("ModalError", "KeyTable").value, localization.translate("LitOriginCreateError", "KeyTable").value);
                             $(".info-dialog-ok-button").off();
                         });
                     });
