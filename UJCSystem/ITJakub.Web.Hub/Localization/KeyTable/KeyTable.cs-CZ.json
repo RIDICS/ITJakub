@@ -12,14 +12,10 @@
     "Kind": "Druh",
     "ResponsiblePerson": "Odpovědá osoba",
     "ResponsiblePersonType": "Typ odpovědné osoby",
-    "LiteraryOriginal": "Literární originál",
-    "OriginalAuthor": "Původní autor",
+    "LiteraryOriginal": "Předloha",
+    "OriginalAuthor": "Autor",
     "Keyword": "Klíčové slovo",
-
-    "Unknown": "Neznámý",
-    "Editor": "Editor",
-    "Collation": "Řazení",
-
+    
     "Create": "Vytvořit",
     "Change": "Přejmenovat",
     "Delete": "Odstranit",
@@ -34,9 +30,9 @@
 
     "ResponsiblePersonTypeHeadline": "Typy odpovědných osob",
 
-    "LiteraryOriginalHeadline": "Literární originály",
+    "LiteraryOriginalHeadline": "Předlohy",
 
-    "OriginalAuthorHeadline": "Původní autoři",
+    "OriginalAuthorHeadline": "Autoři",
 
     "KeywordHeadline": "Klíčová slova",
 

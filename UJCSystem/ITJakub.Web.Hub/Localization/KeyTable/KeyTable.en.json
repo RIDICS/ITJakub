@@ -1,5 +1,6 @@
 {
   "culture": "en",
+  "scope": "KeyTable",
   "dictionary": {
     "KeyTableTitle": "Key table administration",
 
@@ -12,12 +13,8 @@
     "ResponsiblePerson": "Responsible person",
     "ResponsiblePersonType": "Responsible person type",
     "LiteraryOriginal": "Literary original",
-    "OriginalAuthor": "Original Author",
+    "OriginalAuthor": "Author",
     "Keyword": "Keyword",
-
-    "Unknown": "Unknown",
-    "Editor": "Editor",
-    "Collation": "Collation",
 
     "Create": "Create",
     "Change": "Remove",
@@ -35,7 +32,7 @@
 
     "LiteraryOriginalHeadline": "Literary originals",
 
-    "OriginalAuthorHeadline": "Original authors",
+    "OriginalAuthorHeadline": "Authors",
 
     "KeywordHeadline": "Keywords",
 
@@ -145,7 +142,7 @@
 
     "RespPerTypeInputHeadline": "Responsible person type",
     "RespPerTypeNameInput": "Responsible person type name:",
-    "RespPerTypeInput": "Type:", 
+    "RespPerTypeInput": "Type:",
     "RespPerTypeWarningMessage": "Nothing has been entered",
     "RespPerTypeCreateSuccess": "New responsible person type has been created",
     "RespPerTypeCreateError": "New responsible person type has not been created",
@@ -155,6 +152,5 @@
     "RespPerTypeDeleteSuccess": "Deletion was successful",
     "RespPerTypeDeleteError": "Deletion was not successful",
     "RespPerTypeInfoMessage": "Please choose a responsible person type"
-  },
-  "scope": "KeyTable"
+  }
 }
