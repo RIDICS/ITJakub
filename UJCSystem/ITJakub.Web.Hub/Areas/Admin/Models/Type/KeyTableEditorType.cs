@@ -9,6 +9,7 @@
         ResponsiblePersonType = 4,
         Keyword = 5,
         OriginalAuthor = 6,
-        LiteraryOriginal = 7
+        LiteraryOriginal = 7,
+        Term = 8,
     }
 }

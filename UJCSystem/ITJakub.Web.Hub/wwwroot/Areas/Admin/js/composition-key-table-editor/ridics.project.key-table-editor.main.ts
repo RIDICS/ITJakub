@@ -69,12 +69,33 @@ class KeyTableEditorMain {
             literaryOriginalEditor.init();
             break;
         case KeyTableEditorType.OriginalAuthor:
-                const originalAuthorEditor = new KeyTableOriginalAuthorEditor();
+            const originalAuthorEditor = new KeyTableOriginalAuthorEditor();
             originalAuthorEditor.init();
+            break;
+        case KeyTableEditorType.Term:
+            const termEditor = new KeyTableTermEditor();
+            termEditor.init();
             break;
         default:
             const error = new AlertComponentBuilder(AlertType.Error).addContent("Invalid editor type");
             $("#project-layout-content").empty().append(error.buildElement());
         }
+    }
+}
+
+class KeyTableTermEditor extends KeyTableEditorBase {
+    init() {
+        $("#project-layout-content").find("*").off();
+        this.createEntryButtonEl.text("Create");
+        this.changeEntryButtonEl.text("Rename");
+        this.deleteEntryButtonEl.text("Delete");
+        this.titleEl.text("Terms");
+        this.unbindEventsDialog();
+
+        const listEl = $(".selectable-list-div");
+        listEl.empty();
+        listEl.text("Terms editing is not supported. Terms are created automatically during DOCX import.");
+
+        this.initPagination(0, 1, () => {});
     }
 }
