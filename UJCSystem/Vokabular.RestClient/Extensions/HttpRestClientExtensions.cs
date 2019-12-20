@@ -37,6 +37,10 @@ namespace Vokabular.RestClient.Extensions
             using (var textReader = new StreamReader(stream))
             {
                 var contentString = await textReader.ReadToEndAsync();
+                if (string.IsNullOrEmpty(contentString))
+                {
+                    return default;
+                }
 
                 using (var stringReader = new StringReader(contentString))
                 using (var jsonReader = new JsonTextReader(stringReader))
