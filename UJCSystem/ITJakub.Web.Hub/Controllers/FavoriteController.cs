@@ -45,7 +45,8 @@ namespace ITJakub.Web.Hub.Controllers
                     new FavoriteFilterViewModel(FavoriteTypeEnumContract.Project, m_localizer.Translate("Books", "Favorite")),
                     new FavoriteFilterViewModel(FavoriteTypeEnumContract.Category, m_localizer.Translate("Category", "Favorite")),
                     new FavoriteFilterViewModel(FavoriteTypeEnumContract.Page, m_localizer.Translate("PageBookmark", "Favorite")),
-                    new FavoriteFilterViewModel(FavoriteTypeEnumContract.Query, m_localizer.Translate("Query", "Favorite"))
+                    new FavoriteFilterViewModel(FavoriteTypeEnumContract.Query, m_localizer.Translate("Query", "Favorite")),
+                    new FavoriteFilterViewModel(FavoriteTypeEnumContract.Headword, m_localizer.Translate("DictionaryHeadwords", "Favorite")),
                 }
             };
             return View("FavoriteManagement", viewModel);
