@@ -2,6 +2,7 @@
 {
     public class ForumOption
     {
-        public string Url { get; set; }
+        // The same structure as Vokabular.ForumSite.Core.Options.ForumOption
+        public string ForumBaseUrl { get; set; }
     }
 }

@@ -191,7 +191,7 @@ namespace ITJakub.Web.Hub
             services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 1048576000; });
             services.Configure<PortalOption>(Configuration.GetSection("PortalConfig"));
             services.Configure<AutoLoginCookieConfiguration>(Configuration.GetSection("AutoLoginCookie"));
-            services.Configure<ForumOption>(Configuration.GetSection("Forum"));
+            services.Configure<ForumOption>(Configuration.GetSection("ForumOptions")); // The same config as Vokabular.ForumSite.Core.Options.ForumOption
             services.PostConfigure<AutoLoginCookieConfiguration>(config =>
             {
                 config.CookieName = $"{AutoLoginCookieConfiguration.CookieNamePrefix}{portalConfig.PortalType}";
