@@ -1,4 +1,4 @@
-﻿function initDictionaryViewer(categoryIdList: string, bookIdList: string, pageNumber: string) {
+﻿function initDictionaryViewer(categoryIdList: string, bookIdList: string, pageNumber: string, pageSize: number) {
     var selectedCategoryIds: Array<number> = [];
     var selectedBookIds: Array<number> = [];
     var defaultPageNumber: number = Number(pageNumber);
@@ -13,8 +13,7 @@
     const headwordListSelector = "#headwordList";
     const paginationSelector = "#pagination";
     const headwordDescriptionSelector = "#headwordDescription";
-    var pageSize = 50;
-    
+
     var dictionaryViewer = new DictionaryViewer(headwordListSelector, paginationSelector, headwordDescriptionSelector, true);
     var dictionaryViewerWrapper = new DictionaryViewerListWrapper(dictionaryViewer, pageSize);
 

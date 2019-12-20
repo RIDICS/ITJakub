@@ -1,4 +1,5 @@
-﻿@using ITJakub.Web.Hub.Options
+﻿@using ITJakub.Web.Hub.Constants
+@using ITJakub.Web.Hub.Options
 @using Microsoft.Extensions.Options
 @using Scalesoft.Localization.AspNetCore
 @inject ILocalizationService Localizer
@@ -16,6 +17,7 @@
 }
 
 <div id="allowedSearchOptions" class="hide" data-options="@Html.Encode(Json.Serialize(PortalOption.Value.AllowedSearchOptions.ToArray()))"></div>
+<div id="dictionarySearchOptions" class="hide" data-page-size="@PageSizes.SearchHeadwords"></div>
 
 <div class="transparent-content-container">
     <div class="search-with-saved-word-area">

@@ -19,7 +19,7 @@ class DictionarySearch {
     private localization : Localization;
 
     constructor() {
-        var pageSize = 25;
+        var pageSize = Number($("#dictionarySearchOptions").attr("data-page-size"));
 
         this.localization = localization;
 

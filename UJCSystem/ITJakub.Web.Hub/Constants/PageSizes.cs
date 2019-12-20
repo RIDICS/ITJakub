@@ -9,6 +9,8 @@
         public const int ProjectListInDialog = 12;
         public const int SnapshotList = 10;
         public const int CooperationList = 10;
+        public const int Headwords = 50;
+        public const int SearchHeadwords = 25;
 
         public const int NewsFeed = 10;
         public const int News = 5;

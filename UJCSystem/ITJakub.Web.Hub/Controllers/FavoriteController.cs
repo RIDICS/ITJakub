@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Models.Favorite;
 using ITJakub.Web.Hub.Models.Requests.Favorite;
@@ -123,7 +124,7 @@ namespace ITJakub.Web.Hub.Controllers
                             SelectedCategoryIds = null,
                         }
                     }, GetDefaultProjectType());
-                    var pageNumber = rowNumber / 50 + 1;
+                    var pageNumber = rowNumber / PageSizes.Headwords + 1;
 
                     return RedirectToAction("Listing", "Dictionaries", new {Area = "Dictionaries", page = pageNumber});
                 default:
