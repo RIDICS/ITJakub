@@ -13,17 +13,6 @@ class KeyTableEditorMain {
         this.initEditor(editorId);
         firstEditorListItem.addClass("active");
         this.switchOnClick();
-        //const $splitterButton = $("#splitter-button");
-        //$splitterButton.click(() => {
-        //    const $leftMenu = $("#left-menu");
-        //    if ($leftMenu.is(":visible")) {
-        //        $leftMenu.hide("slide", { direction: "left" });
-        //        $splitterButton.html("<span class=\"glyphicon glyphicon-menu-right\"></span>");
-        //    } else {
-        //        $leftMenu.show("slide", { direction: "left" });
-        //        $splitterButton.html("<span class=\"glyphicon glyphicon-menu-left\"></span>");
-        //    }
-        //});
     }
 
     private switchOnClick() {
