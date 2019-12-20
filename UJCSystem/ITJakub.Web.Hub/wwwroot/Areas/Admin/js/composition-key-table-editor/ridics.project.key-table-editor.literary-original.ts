@@ -131,7 +131,7 @@
             (event) => {
                 const itemSelector = '*[data-key-id=' + event.currentTarget.dataset["target"] + ']';
                 const selectedPageEl = $(itemSelector);
-                this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("KindConfirmMessage", "KeyTable").value);
+                this.gui.showConfirmationDialog(localization.translate("ModalConfirm", "KeyTable").value, localization.translate("LitOriginConfirmMessage", "KeyTable").value);
                 $(".confirmation-ok-button").on("click",
                     () => {
                         const literaryOriginalId = selectedPageEl.data("key-id") as number;
