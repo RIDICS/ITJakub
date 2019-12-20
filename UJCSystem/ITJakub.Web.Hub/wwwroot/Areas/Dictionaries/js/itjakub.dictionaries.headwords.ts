@@ -27,6 +27,13 @@
     //keyboardComponent.registerInput($("#searchbox")[0]);
     keyboardComponent.registerButton(keyboardButton, inputElement, newQuery => searchBox.value(newQuery));
 
+    $(inputElement).keypress((event: any) => {
+        var keyCode = event.which || event.keyCode;
+        if (keyCode === 13) {     //13 = Enter
+            $("#searchButton").click();
+        }
+    });
+
     var updateSearchBox = (state: State) => {
         var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
         searchBox.clearAndDestroy();
