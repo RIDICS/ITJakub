@@ -119,7 +119,7 @@
             const mainCategoryEl = $(element as Element);
             const childrenCategories = mainCategoryEl.children(".child-category");
             if (childrenCategories.length) {
-                childrenCategories.hide();
+                //childrenCategories.hide(); // implicitly show all categories
                 mainCategoryEl.append(`<span class="collapse-category-button" title="Toggle collapsed category"><i class="fa fa-arrows-v fa-pull-right" aria-hidden="true"></i></span>`);
                 this.trackCollapseCategoryButton(childrenCategories);
             }
