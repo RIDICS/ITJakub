@@ -1,4 +1,5 @@
 ﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ForumViewModel
+@using ITJakub.Web.Hub.Helpers
 @using Scalesoft.Localization.AspNetCore
 @inject ILocalizationService Localizer
 
@@ -57,7 +58,7 @@
                             <div id="forum-button-panel">
                                 <div class="alert alert-success" id="forum-repair-success">@Localizer.Translate("ForumRepairSuccess", "Admin")</div>
                                 <div class="alert alert-danger" id="forum-repair-error">@Localizer.Translate("ForumRepairError", "Admin")</div>
-                                <button type="submit" id="forum-repair-button" class="btn btn-default save-button">
+                                <button type="submit" id="forum-repair-button" class="btn btn-default save-button" disabled="@(!ViewData.HasPermissionFor().EditProject)">
                                     <span class="saving-icon loading-small-button"></span>@Localizer.Translate("Repair", "Admin")
                                 </button>
                             </div>

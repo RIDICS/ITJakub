@@ -57,6 +57,15 @@ namespace Vokabular.MainService.Core.Works.Permission
                 user.Groups = new List<UserGroup>();
             }
 
+            if (user.Groups.Contains(group))
+            {
+                
+                throw new MainServiceException(MainServiceErrorCode.UserAlreadyAssignedToRole, 
+                    $"User with ID={user.Id} is already assigned to group with ID={group.Id}",
+                    HttpStatusCode.BadRequest,
+                    user.ExtUsername, group.Name 
+                );
+            }
             // Assign group to user (fetch lower amount of data)
 
             user.Groups.Add(group);

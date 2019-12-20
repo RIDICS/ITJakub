@@ -32,6 +32,9 @@
         <li role="presentation" @(Model.ActualTab == AccountTab.UserCode ? "class=active" : string.Empty)>
             <a href="#userCode" id="userCodeButton" data-toggle="tab" role="tab">@Localizer.Translate("UserCode", "Account")</a>
         </li>
+        <li role="presentation" @(Model.ActualTab == AccountTab.UserRoles ? "class=active" : string.Empty)>
+            <a href="#userRoles" id="userRolesButton" data-toggle="tab" role="tab">@Localizer.Translate("UserRoles", "Account")</a>
+        </li>
     </ul>
 
     <div class="tab-content">
@@ -49,6 +52,9 @@
         </div>
         <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UserCode ? "active" : string.Empty)" id="userCode">
             @await Html.PartialAsync("UserProfile/_UserCode", Model.UserCodeViewModel)
+        </div>
+        <div role="tabpanel" class="tab-pane @(Model.ActualTab == AccountTab.UserRoles ? "active" : string.Empty)" id="userRoles">
+            @await Html.PartialAsync("UserProfile/_UserRoles", Model.UserRolesViewModel)
         </div>
     </div>
 </div>

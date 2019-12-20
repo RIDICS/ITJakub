@@ -2,8 +2,8 @@
 {
     public class AddHeadwordBookmarkRequest
     {
-        public string BookId { get; set; }
-
-        public string EntryXmlId { get; set; }
+        public string Title { get; set; }
+        
+        public long HeadwordId { get; set; }
     }
 }

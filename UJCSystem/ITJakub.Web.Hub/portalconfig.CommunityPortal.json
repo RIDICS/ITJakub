@@ -27,6 +27,15 @@
       "HeadwordDescriptionTokenDistance": true,
       "SelectedCategory": true,
       "Term": true
+    },
+    "ReaderConfig": {
+      "DisplayNotes": false
+    },
+    "UsedProjectPermissions": {
+      "ShowPublished": true,
+      "ReadProject": true,
+      "EditProject": true,
+      "AdminProject": true
     }
   }
 }

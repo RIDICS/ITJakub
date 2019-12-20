@@ -12,6 +12,7 @@
         this.gui = new EditorsGui();
         this.errorHandler = new ErrorHandler();
         this.util = new EditorsApiClient();
+        this.pageListEdited = false;
 
         jQuery.extend(jQuery.validator.messages,
             {

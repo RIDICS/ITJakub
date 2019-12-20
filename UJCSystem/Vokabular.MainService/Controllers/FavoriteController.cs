@@ -101,6 +101,14 @@ namespace Vokabular.MainService.Controllers
             var result = m_favoriteManager.GetPageBookmarks(projectId.Value);
             return Ok(result);
         }
+        
+        [HttpGet("headword")]
+        [ProducesResponseType(typeof(List<FavoriteHeadwordContract>), StatusCodes.Status200OK)]
+        public IActionResult GetFavoriteHeadwords()
+        {
+            var result = m_favoriteManager.GetFavoriteHeadwords();
+            return Ok(result);
+        }
 
         [HttpGet("{favoriteId}/detail")]
         public FavoriteFullInfoContract GetFavoriteItem(long favoriteId)
@@ -190,6 +198,13 @@ namespace Vokabular.MainService.Controllers
         public long CreateFavoritePage([FromBody] CreateFavoritePageContract data)
         {
             var resultId = m_favoriteManager.CreateFavoritePage(data);
+            return resultId;
+        }
+        
+        [HttpPost("headword")]
+        public long CreateFavoriteHeadword([FromBody] CreateFavoriteHeadwordContract data)
+        {
+            var resultId = m_favoriteManager.CreateHeadwordBookmark(data);
             return resultId;
         }
     }

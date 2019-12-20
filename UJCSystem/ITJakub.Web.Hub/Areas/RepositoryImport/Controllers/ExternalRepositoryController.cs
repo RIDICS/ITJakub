@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using ITJakub.Web.Hub.Areas.RepositoryImport.Models;
+using ITJakub.Web.Hub.Authorization;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core;
+using ITJakub.Web.Hub.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +14,13 @@ using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts.ExternalBibliography;
 using Vokabular.MainService.DataContracts.Contracts.OaiPmh;
 using Vokabular.ProjectImport.Shared.Const;
+using Vokabular.Shared.Const;
 
 namespace ITJakub.Web.Hub.Areas.RepositoryImport.Controllers
 {
     [RequireHttps]
-    [Authorize]
+    [LimitedAccess(PortalType.ResearchPortal)]
+    [Authorize(VokabularPermissionNames.ManageBibliographyImport)]
     [Area("RepositoryImport")]
     public class ExternalRepositoryController : BaseController
     {

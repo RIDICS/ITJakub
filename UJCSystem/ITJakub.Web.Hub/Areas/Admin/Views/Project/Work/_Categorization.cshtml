@@ -170,8 +170,8 @@
                 <div class="form-group" id="project-group-projects">
                     <div class="col-md-12">
                         <div>
-                            <button class="btn btn-default" id="add-project-to-group-button">@Localizer.Translate("AddProjectToGroup", "Admin")</button>
-                            <button class="btn btn-default" id="remove-project-from-group-button">@Localizer.Translate("RemoveProjectFromGroup", "Admin")</button>
+                            <button class="btn btn-default" id="add-project-to-group-button" disabled="@(!ViewData.HasPermissionFor().EditProject)">@Localizer.Translate("AddProjectToGroup", "Admin")</button>
+                            <button class="btn btn-default" id="remove-project-from-group-button" disabled="@(!ViewData.HasPermissionFor().EditProject)">@Localizer.Translate("RemoveProjectFromGroup", "Admin")</button>
                         </div>
                         <div style="margin-top: 3rem;">
                             <h4>@Localizer.Translate("ProjectsInGroup", "Admin")</h4>

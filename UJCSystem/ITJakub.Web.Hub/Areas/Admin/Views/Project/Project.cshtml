@@ -40,6 +40,7 @@
 }
 
 <div id="project-id" class="hidden">@Model.Id</div>
+<div id="project-permissions" class="hidden" data-show-published="@Model.Permissions.ShowPublished" data-read="@Model.Permissions.ReadProject" data-edit="@Model.Permissions.EditProject" data-admin="@Model.Permissions.AdminProject"></div>
 
 <div class="content-container">
     <div class="row project-layout">
@@ -47,7 +48,7 @@
         <div class="col-xs-12">
             <div class="project-title-header">
                 <span class="project-title">@Model.Name</span>
-                <button class="rename-project-button btn btn-default" title="@Localizer.Translate("Rename", "Admin")">
+                <button class="rename-project-button btn btn-default" title="@Localizer.Translate("Rename", "Admin")" disabled="@(!ViewData.HasPermissionFor().EditProject)">
                     <i class="fa fa-pencil"></i>
                 </button>
                 <br/>

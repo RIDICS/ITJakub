@@ -68,7 +68,10 @@
         $(glyphIcon)
             .attr("data-title", localization.translate("ThisItemLabels", this.localizationScope).value)
             .attr("data-toggle", "popover")
-            .popover(popoverOptions);
+            .popover(popoverOptions)
+            .click(event => {
+                event.preventDefault();
+            });
         $(glyphIcon).on("shown.bs.popover", () => {
             this.initPopoverEvents();
         });
@@ -79,7 +82,8 @@
     }
 
     private initPopoverEvents() {
-        $(".show-all-favorite-button").click(() => {
+        $(".show-all-favorite-button").click((event) => {
+            event.preventDefault();
             $(this.starGlyphIcon).popover("hide");
 
             this.favoriteDialog.setSaveCallback(this.createFavoriteItem.bind(this));
@@ -87,6 +91,7 @@
         });
 
         $(".fast-add-favorite-label").click((event) => {
+            event.preventDefault();
             var labelId = $(event.currentTarget as Node as Element).data("id");
             var labelName = $(event.currentTarget as Node as Element).data("name");
             var labelColor = $(event.currentTarget as Node as Element).data("color");
@@ -95,6 +100,7 @@
         });
 
         $(".favorite-book-remove").click((event) => {
+            event.preventDefault();
             var elementJQuery = $(event.currentTarget as Node as HTMLElement);
             var id = <number>elementJQuery.data("id");
 

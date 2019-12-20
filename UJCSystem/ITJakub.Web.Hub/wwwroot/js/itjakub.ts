@@ -50,7 +50,7 @@ $(document as Node as Element).ready(() => {
     navbarItems.on("touchstart",
         (event) => {
             var target = $(event.target as Node as Element);
-            if (target.is("a")) {
+            if (target.is("a") || target.parents(".navbar-login").length) {
                 return;
             }
             event.preventDefault();
@@ -111,6 +111,9 @@ function updateQueryStringParameter(key, value) {
 
 function getBaseUrl() {
     var baseUrl = $("#baseUrl").data("path") as string;
+    if (typeof baseUrl === "undefined") {
+        baseUrl = "/";
+    }
     return baseUrl;
 }
 

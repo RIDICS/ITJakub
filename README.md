@@ -4,19 +4,22 @@
 
 Required software:
 * Microsoft Windows
-* Microsoft Visual Studio 2017
+* Microsoft Visual Studio 2017 / 2019
   * ASP.NET and web development
   * .NET desktop development (for BatchImport client app)
   * .NET Core cross-platform development
-  * (Git - for restoring NPM/Yarn dependencies)
-  * (Node.js - for restoring NPM/Yarn)
 * Microsoft SQL Server
-* Java
+* Java runtime
 * eXist-db 2.1
 * .NET Core 2.2 SDK
-* Altova XML 2013 Community Edition (installer is in repository)
-* Internet Information Services (installed from Windows features dialog)
+* Altova XML 2013 Community Edition (installer is in repository - Resources folder)
+* Enable following Windows features (from Turn Windows features on or off dialog):
+  * Internet Information Services
+  * Internet Information Services Hostable Web Core
+  * .NET Framework 4.x Advanced Services > WCF Services > HTTP activation
 * Yarn package manager
+* Git - for restoring NPM/Yarn dependencies
+* (Node.js - used by Authentication service for restoring NPM/Yarn)
 * Elasticsearch 5.5.2
 
 Recommended software:
@@ -36,31 +39,33 @@ Environment configuration
 * Other databases which should be created automatically from Forum and Authentication setup are following:
   * VokabularForumDB - database for Forum
   * VokabularAuthDB - database for Authentication service
-* Prepare Elasticsearch:
-  * Install Experimental highlighter plugin using following command: "./bin/elasticsearch-plugin install org.wikimedia.search.highlighter:experimental-highlighter-elasticsearch-plugin:5.5.2.2" in Elasticsearch installation directory.
-* Run script `InitFulltextDatabases.ps1` to check if fulltext databases are correctly installed and initialize them. The script will do following steps:
+* Configure JAVA_HOME environment variable to Java folder
+* Run script `Database\InitFulltextDatabases.ps1` to check if fulltext databases are correctly installed and initialize them. The script will do following steps:
   * Check if eXist-db is correctly installed and running
   * Check if Elasticsearch is correctly installed and running
-  * Check if Elasticsearch has installed required plugin
+  * Check if Elasticsearch has installed required plugin or install it (Experimental highlighter)
   * Upload required resources to eXist-db (xqueries)
   * Create indices in Elasticsearch
 * Restore Yarn dependencies (for development) using `YarnInstall.ps1` script.
 * Run `SelectPortalTheme.{SELECTED_PORTAL}.ps1` to choose portal style otherwise build fails because of missing styles. Run this script any time you want to change a theme.
 
 Fulltext databases manual initialization (instead of running `InitFulltextDatabases.ps1` script)
-* Prepare eXist-db collection (it's possible either to use script `ExistDB-Recreate.cmd` or copy ExistDB folder content manually).
-  * Automatic script use predefined default values or values specified as parameters in following order:
-    1. eXist URL (default is xmldb:exist://localhost:8080/exist/xmlrpc)
-    2. scripts path on disk (default is C:\Pool\itjakub\Database\ExistDB)
-    3. collection name (default is jacob)
-    4. username
-    5. password
+* Prepare eXist-db collection (it's possible either to use script `ExistDB-Update.ps1` or copy ExistDB folder content manually).
+  * Automatic script use predefined default values or values specified as parameters:
+    1. -url eXist URL (default is xmldb:exist://localhost:8080/exist/xmlrpc)
+    2. -path Scripts path on disk (default is C:\Pool\itjakub\Database\ExistDB)
+    3. -collectionName Collection name (default is jacob)
+    4. -username Username
+    5. -password Password
+	6. -recreateMode Determine if DB should be deleted and then created new (default is $false)
+	7. -installationPath Path where eXist-db is installed (default will try some predefined paths)
   * Manual file copying
     1. open eXist-db Java Admin Client
 	2. create collection with name "apps/jacob"
 	3. copy content of "Database/ExistDB" folder except "config" folder to app collection named "jacob"
 	4. copy content of "Database/ExistDB/config" folder to collection "/system/config/db/apps/jacob"
 * Prepare Elasticsearch:
+  * Install Experimental highlighter plugin using following command: "./bin/elasticsearch-plugin install org.wikimedia.search.highlighter:experimental-highlighter-elasticsearch-plugin:5.5.2.2" in Elasticsearch installation directory.
   * Create indices using Elasticsearch-Update.ps1 script or manually using REST calls to Elasticsearch with configuration stored in "Database/Elasticsearch" folder (every file represents configuration for one index, index name is the same as file name).
   * Elasticsearch-Update.ps1 script has following parameters:
     1. -url URL of database (default is "http://localhost:9200")
@@ -87,7 +92,6 @@ Services to deploy:
 * ITJakub.Web.Hub - web portal (ASP.NET Core) with two modes available (Research and Community)
 * Vokabular.MainService - main service for direct client communication (ASP.NET Core)
 * Vokabular.FulltextService - service for searching in fulltext database of Community portal (in Elasticsearch) (ASP.NET Core)
-* ~~ITJakub.ITJakubService~~ - original main service (will be completetly replaced by Vokabular.MainService) (WCF service)
 * ITJakub.FileProcessing.Service - service for importing books from DOCX format (WCF service)
 * ITJakub.SearchService - service for searching in fulltext database of Research portal (in eXist-db) (WCF service)
 * ITJakub.Lemmatization.Service - service for lemmatization (WCF service)
@@ -103,13 +107,21 @@ ASP.NET Core services are deployed to IIS Express for development purposes.
 Required software:
 * Microsoft Windows Server
 * Microsoft SQL Server
+  * SQL Management Studio is also recommended
+* Java runtime
 * eXist-db 2.1
 * .NET Core 2.2 with Windows Hosting Bundle
-* Altova XML 2013 Community Edition (installer is in repository)
-* Internet Information Services
+* Altova XML 2013 Community Edition (installer is in this repository - Resources folder)
+* Add following roles or features (using Add Role an Features Wizard):
+  * Role: Web Server (IIS)
+  * Feature: IIS Hostable Web Core
+  * Feature: .NET Framework 4.x Features > WCF Services > HTTP activation
 * Elasticsearch 5.5.2
+* Web Platform Installer (WebPI)
+* Web Deploy (MsDeploy) from WebPI
 
-Build computer environment configuration
+Environment configuration on build computer
+* Checkout repositories as described in *Setup developer computer*
 * Create configuration files in itjakub-secrets folder (it is desribed in following chapter: *Configuration for different environments*)
 
 Server environment configuration
@@ -118,9 +130,14 @@ Server environment configuration
 * Configure Application Pools in IIS
   1. Create new Application Pool (e.g. .NET Core) with ".NET CLR version" set to "No Managed Code"
   2. Configure ASP.NET Core services to use .NET Core Application Pool (every ASP.NET Core service run as separate process with Kestrel server)
-* Prepare Elasticsearch:
-  * Install Experimental highlighter plugin using following command: "./bin/elasticsearch-plugin install org.wikimedia.search.highlighter:experimental-highlighter-elasticsearch-plugin:5.5.2.2" in Elasticsearch installation directory.
+  3. Optionally configure this Application Pool to disable supending (app will be always running)
+* Add new Website in IIS (used for internal services)
+  * Name: LocalhostServices
+  * Application Pool: (created in previous step)
+  * Type: HTTP, port: 85, host name: localhost (restrict access only from localhost)
+* Configure JAVA_HOME environment variable to Java folder
 * Copy Database folder from itjakub folder to the server and run script `InitFulltextDatabases.ps1` to check if fulltext databases are correctly installed and initialize them.
+* Build and deploy the app as described in *The project build and deployment* section
 
 ## Configuration for different environments
 
@@ -212,7 +229,6 @@ Description: This user has PortalAdmin role which is used for managing portal We
 Currently secured services are:
 * ITJakub.Web.Hub - web portal using Authentication service
 * Vokabular.MainService - main service, secured by access token from Authentication service
-* ~~ITJakub.ITJakubService - original main service, secured by communication token~~
 
 **Other services are not intended for direct client communication, so they should be accessible only for MainService or Web.Hub.**
 The default configuration assumes deployment of these services to IIS Site which is configured only for access from http://localhost:85 address.
@@ -222,13 +238,6 @@ The default configuration assumes deployment of these services to IIS Site which
 
 **Install Elasticsearch plugin failed with error: The syntax of the command is incorrect.**  
 Java is not installed or Java folder is missing in PATH variable.
-
-
-~~**Publish failed with: Error MSB3073: The command "npm install" exited with code 9009.**~~
-~~NPM is not added to system path.~~
-
-~~**Publish failed with: Error MSB3073: The command "gulp clean" exited with code 9009.**~~
-~~Gulp is not installed as global package.~~
 
 **IIS error 500.19 - The requested page cannot be accessed because the related configuration data for the page is invalid.**  
 Check if ".NET Core Windows Server Hosting" is installed.

@@ -20,12 +20,12 @@
         this.savePermissionButtonSelector = "#saveProjectPermissions";
     }
 
-    public init(clearPermissions = false) {
+    public init(clearPermissions = false, saveStateToUrl = true) {
         if (this.projectId != null) {
             this.roleList = new ListWithPagination(`Admin/Project/CooperationList?projectId=${this.projectId}`,
                 "role",
                 ViewType.Widget,
-                true,
+                saveStateToUrl,
                 false,
                 this.initRoleClicks,
                 this);
@@ -60,7 +60,7 @@
         this.permissionPanel.find(".sub-content").empty();
         const errorAlert = new AlertComponentBuilder(AlertType.Info).addContent(localization.translate("RoleIsNotSelected", "PermissionJs").value);
         alertHolder.empty().append(errorAlert.buildElement());
-        $("#saveProjectPermissions").addClass("hide");
+        $(this.savePermissionButtonSelector).addClass("hide");
     }
     
     public reloadRoles() {
@@ -100,10 +100,14 @@
     private initRemoveRoleFromProjectButton() {
         $(".remove-role").on("click", (event) => {
             event.stopPropagation();
-            const roleRow = $(event.currentTarget as Node as Element).parents(".role-row");
+            const currentRemoveButton = $(event.currentTarget as Node as Element);
+            const roleRow = currentRemoveButton.parents(".role-row");
             const alert = roleRow.find(".alert");
             alert.hide();
 
+            currentRemoveButton.find("i.fa").addClass("hide");
+            currentRemoveButton.find(".saving-icon").removeClass("hide");
+   
             const roleId = roleRow.data("role-id");
             this.client.removeProjectFromRole(this.projectId, roleId).done(() => {
                 this.roleList.reloadPage();
@@ -133,7 +137,7 @@
                 subContent.html(result);
                 saveButton.removeClass("hide");
             }).fail((error) => {
-                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement;
+                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
                 subContent.empty();
                 alertHolder.empty().append(alert);
             });
@@ -188,6 +192,7 @@
             });
 
             addProjectPermissionToRoleBtn.on("click", () => {
+                const savingIcon = addProjectPermissionToRoleBtn.find(".saving-icon");
                 roleError.empty();
                 if (typeof this.currentRoleSelectedItem == "undefined" || this.currentRoleSelectedItem == null) {
                     const errorAlert = new AlertComponentBuilder(AlertType.Error)
@@ -195,6 +200,7 @@
                     roleError.empty().append(errorAlert.buildElement());
                     return;
                 } else {
+                    savingIcon.removeClass("hide");
                     const requestContract = this.getRequestContract(this.currentRoleSelectedItem.id, addProjectPermissionModal);
                     this.client.addProjectToRole(requestContract).done(() => {
                         this.roleList.reloadPage();
@@ -205,6 +211,8 @@
                             .addContent(this.errorHandler.getErrorMessage(error,
                                 localization.translate("AddProjectToRoleError", "PermissionJs").value));
                         roleError.empty().append(errorAlert.buildElement());
+                    }).always(() => {
+                        savingIcon.addClass("hide");
                     });
                 }
             });
@@ -212,12 +220,16 @@
     }
 
     private initPermissionsSaving() {
-        $(this.savePermissionButtonSelector).off();
-        $(this.savePermissionButtonSelector).on("click", () => {
+        const savePermissionButton = $(this.savePermissionButtonSelector);
+        savePermissionButton.off();
+        savePermissionButton.on("click", () => {
+            const savingIcon = savePermissionButton.find(".saving-icon");
+            savingIcon.removeClass("hide");
             const roleId = $(".role-row.active").data("role-id");
             const alertHolder = this.permissionPanel.find(".alert-holder");
             alertHolder.empty();
             const requestContract = this.getRequestContract(roleId, this.permissionPanel);
+            
             this.client.updateOrAddProjectToRole(requestContract).done(() => {
                 const errorAlert = new AlertComponentBuilder(AlertType.Success)
                     .addContent(localization.translate("ChangesSavedSuccessfully", "PermissionJs").value);
@@ -227,6 +239,8 @@
                 const errorAlert = new AlertComponentBuilder(AlertType.Error)
                     .addContent(this.errorHandler.getErrorMessage(error));
                 alertHolder.empty().append(errorAlert.buildElement());
+            }).always(() => {
+                savingIcon.addClass("hide");
             });
         });
     }

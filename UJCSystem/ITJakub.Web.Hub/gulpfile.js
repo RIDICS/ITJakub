@@ -432,6 +432,25 @@ gulp.task("bundle:ridics_admin_composition-key-table-editor", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js/composition-key-table-editor"));
 });
 
+gulp.task("bundle:ridics_new_reader", function() {
+    return gulp.src([
+        paths.webroot + "Areas/BookReader/js/initReader.js",
+        paths.webroot + "Areas/BookReader/js/readerLayout.js",
+        paths.webroot + "Areas/BookReader/js/config.js",
+        paths.webroot + "Areas/BookReader/js/panels.js",
+        paths.webroot + "Areas/BookReader/js/searchModule.js",
+        paths.webroot + "Areas/BookReader/js/readerHeader.js",
+        paths.webroot + "Areas/BookReader/js/serverCommunication.js",
+        paths.webroot + "js/itjakub.imageZoom.js"
+      
+    ])
+    .pipe(sourcemaps.init({ loadMaps: true }))
+    .pipe(concat("new-reader.bundle.js"))
+    //.pipe(uglify())
+    .pipe(sourcemaps.write("."))
+    .pipe(gulp.dest(paths.webroot + "Areas/BookReader/js"));
+});
+
 gulp.task("bundle:ridics_admin-snapshot-editor", function () {
     return gulp.src([
             paths.webroot + "Areas/Admin/js/ridics.project.client.js",
@@ -467,6 +486,7 @@ gulp.task("bundlejs_areas", gulp.parallel
     "bundle:itjakub_dictionary_headwords",
     "bundle:itjakub_lemmatization",
     "bundle:itjakub_professionalliterature_list",
+    "bundle:ridics_new_reader",
     "bundle:ridics_admin_project-editor",
     "bundle:ridics_admin_editors-common-base",
     "bundle:ridics_admin_text-editor",

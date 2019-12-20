@@ -11,8 +11,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
     public class ChapterEditorRowViewModel
     {
         public ChapterHierarchyViewModel Chapter { get; set; }
-        public IList<PageViewModel> Pages { get; set; }
-        
+
         public int LevelOfHierarchy { get; set; }
     }
     

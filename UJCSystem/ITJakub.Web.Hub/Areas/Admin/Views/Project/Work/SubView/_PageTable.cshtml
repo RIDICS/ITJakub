@@ -1,4 +1,5 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using ITJakub.Web.Hub.Helpers
+@using Scalesoft.Localization.AspNetCore
 @model IList<Vokabular.MainService.DataContracts.Contracts.PageContract>
 @inject ILocalizationService Localizer
 
@@ -33,13 +34,13 @@
                             <div class="alert alert-danger"></div>
                         </td>
                         <td class="buttons">
-                            <button type="button" class="edit-page btn btn-sm btn-default" title="@Localizer.Translate("EditPageName", "RidicsProject")">
+                            <button type="button" class="edit-page btn btn-sm btn-default" title="@Localizer.Translate("EditPageName", "RidicsProject")" disabled="@(!ViewData.HasPermissionFor().EditProject)">
                                 <i class="fa fa-pencil"></i>
                             </button>
-                            <button type="button" class="discard-changes btn btn-sm btn-default hide" title="@Localizer.Translate("DiscardChanges", "RidicsProject")">
+                            <button type="button" class="discard-changes btn btn-sm btn-default hide" title="@Localizer.Translate("DiscardChanges", "RidicsProject")" disabled="@(!ViewData.HasPermissionFor().EditProject)">
                                 <i class="fa fa-times"></i>
                             </button>
-                            <button type="button" class="remove-page btn btn-sm btn-default" title="@Localizer.Translate("DeletePage", "RidicsProject")">
+                            <button type="button" class="remove-page btn btn-sm btn-default" title="@Localizer.Translate("DeletePage", "RidicsProject")" disabled="@(!ViewData.HasPermissionFor().EditProject)">
                                 <i class="fa fa-trash"></i>
                             </button>
                         </td>

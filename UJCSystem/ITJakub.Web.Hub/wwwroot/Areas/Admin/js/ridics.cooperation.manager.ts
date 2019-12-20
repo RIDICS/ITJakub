@@ -12,7 +12,7 @@
     }
     
     public init() {
-        this.projectPermissionManager.init(true);
+        this.projectPermissionManager.init(true, false);
         this.initAddProjectToUserDialog();
     }
 
@@ -36,6 +36,8 @@
             const userCodeInput = String($("#userCodeInput").val());
             if(userCodeInput !== "")
             {
+                const savingIcon = submitPermissions.find(".saving-icon");
+                savingIcon.removeClass("hide");
                 this.addPermissionsOnProjectToUser(userCodeInput, addProjectPermissionModal).done(() => {
                     this.projectPermissionManager.reloadRoles();
                     this.projectPermissionManager.clearPermissionSection();
@@ -45,6 +47,8 @@
                         .addContent(this.errorHandler.getErrorMessage(error,
                             localization.translate("AddProjectToUserError", "PermissionJs").value));
                     errorAlertHolder.empty().append(errorAlert.buildElement());
+                }).always(() => {
+                    savingIcon.addClass("hide");
                 });
             }
             else {

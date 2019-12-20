@@ -188,6 +188,24 @@ namespace Vokabular.DataEntities.Database.Repositories
             return permissions;
         }
 
+        public virtual IList<Permission> FindPermissionsByUserAndBook(int userId, long bookId)
+        {
+            Project projectAlias = null;
+            Permission permissionAlias = null;
+            UserGroup groupAlias = null;
+            User userAlias = null;
+
+            var permissions = GetSession().QueryOver(() => permissionAlias)
+                .JoinAlias(() => permissionAlias.Project, () => projectAlias)
+                .JoinAlias(() => permissionAlias.UserGroup, () => groupAlias)
+                .JoinAlias(() => groupAlias.Users, () => userAlias)
+                .Where(() => userAlias.Id == userId && projectAlias.IsRemoved == false)
+                .And(() => projectAlias.Id == bookId)
+                .List<Permission>();
+
+            return permissions;
+        }
+
         public virtual void CreatePermissionIfNotExist(Permission permission)
         {
             var tmpPermission = FindPermissionByBookAndGroup(permission.Project.Id, permission.UserGroup.Id);
@@ -291,6 +309,51 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => projectAlias.Snapshots, () => snapshotAlias)
                 .Where(() => snapshotAlias.Id == snapshotId && userGroupAlias.Id == userGroupId && projectAlias.IsRemoved == false)
                 .SingleOrDefault();
+        }
+
+
+        public virtual IList<Permission> FindPermissionsForResourceVersionByUserId(long resourceVersionId, int userId)
+        {
+            UserGroup userGroupAlias = null;
+            User userAlias = null;
+            Project projectAlias = null;
+            Resource resourceAlias = null;
+            ResourceVersion resourceVersionAlias = null;
+
+            return GetSession().QueryOver<Permission>()
+                .JoinAlias(x => x.UserGroup, () => userGroupAlias)
+                .JoinAlias(() => userGroupAlias.Users, () => userAlias)
+                .JoinAlias(x => x.Project, () => projectAlias)
+                .JoinAlias(() => projectAlias.Resources, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.ResourceVersions, () => resourceVersionAlias)
+                .Where(() => resourceVersionAlias.Id == resourceVersionId && userAlias.Id == userId && projectAlias.IsRemoved == false)
+                .List();
+        }
+
+        public virtual Permission FindPermissionForResourceVersionByGroupId(long resourceVersionId, int userGroupId)
+        {
+            UserGroup userGroupAlias = null;
+            Project projectAlias = null;
+            Resource resourceAlias = null;
+            ResourceVersion resourceVersionAlias = null;
+
+            return GetSession().QueryOver<Permission>()
+                .JoinAlias(x => x.UserGroup, () => userGroupAlias)
+                .JoinAlias(x => x.Project, () => projectAlias)
+                .JoinAlias(() => projectAlias.Resources, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.ResourceVersions, () => resourceVersionAlias)
+                .Where(() => resourceVersionAlias.Id == resourceVersionId && userGroupAlias.Id == userGroupId && projectAlias.IsRemoved == false)
+                .SingleOrDefault();
+        }
+
+        public virtual int GetRequiredPermissionCountForProject(long projectId, PermissionFlag requiredPermission)
+        {
+            var resultCount = GetSession().QueryOver<Permission>()
+                .Where(x => x.Project.Id == projectId)
+                .And(BitwiseExpression.On<Permission>(x => x.Flags).HasBit(requiredPermission))
+                .RowCount();
+            
+            return resultCount;
         }
     }
 }

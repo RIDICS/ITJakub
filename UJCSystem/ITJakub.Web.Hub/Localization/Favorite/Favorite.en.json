@@ -63,6 +63,7 @@
     "Books": "translate[Knihy]",
     "Category": "translate[Kategorie]",
     "PageBookmark": "translate[Záložky na stránky]",
-    "Query": "translate[Vyhledávací dotazy]"
+    "Query": "translate[Vyhledávací dotazy]",
+    "DictionaryHeadwords": "translate[Slovníková hesla]"
   }
 }

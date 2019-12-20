@@ -1,4 +1,4 @@
-﻿function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string, initPageXmlId?: string) {
+function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string, initPageXmlId?: string) {
 
 
     function readerPageChangedCallback(pageId: number) {
@@ -52,7 +52,6 @@
     }
 
     function editionBasicSearchPaged(text: string, pageNumber: number) {
-
         if (typeof text === "undefined" || text === null || text === "") return;
 
         var start = (pageNumber - 1) * readerPlugin.getSearchResultsCountOnPage();
@@ -178,20 +177,20 @@
     $(mainMenuLi).addClass('active');
 }
 
-function listBookReadClicked(target) {
+function listBookReadClickedOld(target) {
     return context => {
         var bookId = $(target).parents("li.list-item").attr("data-id");
         if (context.search.isLastQueryJson()) { //only text seach criteria we should propagate
-            return onClickHref(context.event, getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
+            return onClickHref(context.event, getBaseUrl() + "BookReader/BookReader/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
         } else {
-            return onClickHref(context.event, getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId);
+            return onClickHref(context.event, getBaseUrl() + "BookReader/BookReader/Listing?bookId=" + bookId);
         }
     };
 }
 
-function searchBookReadClicked(target) {
+function searchBookReadClickedOld(target) {
     return context => {
         var bookId = $(target).parents("li.list-item").attr("data-id");
-        return onClickHref(context.event, getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
+        return onClickHref(context.event, getBaseUrl() + "BookReader/BookReader/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
     };
 }

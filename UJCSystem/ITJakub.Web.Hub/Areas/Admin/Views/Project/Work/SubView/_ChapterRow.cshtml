@@ -1,4 +1,5 @@
 ﻿@using ITJakub.Web.Hub.Areas.Admin.Models
+@using ITJakub.Web.Hub.Helpers
 @using Scalesoft.Localization.AspNetCore
 @model ITJakub.Web.Hub.Areas.Admin.Models.ChapterEditorRowViewModel
 @inject ILocalizationService Localizer
@@ -23,28 +24,17 @@
         </div>
         <div class="buttons">
             <span class="page-name">[@Model.Chapter.BeginningPageName]</span>
-            <select name="chapter-page" class="form-control select-page selectpicker hide" value="@Model.Chapter.BeginningPageName">
-                @foreach (var pageItem in Model.Pages)
-                {
-                    if (pageItem.Id == Model.Chapter.BeginningPageId)
-                    {
-                        <option value="@pageItem.Id" selected="selected">@pageItem.Name</option>
-                    }
-                    else
-                    {
-                        <option value="@pageItem.Id" >@pageItem.Name</option>
-                    }
-                }
+            <select name="chapter-page" class="form-control select-page selectpicker hide" value="@Model.Chapter.BeginningPageName" data-inited="false" >
             </select>
-            <a class="edit-chapter btn btn-sm btn-default" title="@Localizer.Translate("EditChapter", "RidicsProject")">
+            <button type="button" class="edit-chapter btn btn-sm btn-default" title="@Localizer.Translate("EditChapter", "RidicsProject")" disabled="@(!ViewData.HasPermissionFor().EditProject)">
                 <i class="fa fa-pencil"></i>
-            </a>
-            <a class="discard-chapter-changes btn btn-sm btn-default hide" title="@Localizer.Translate("DiscardChapterChanges", "RidicsProject")">
+            </button>
+            <button type="button" class="discard-chapter-changes btn btn-sm btn-default hide" title="@Localizer.Translate("DiscardChapterChanges", "RidicsProject")" disabled="@(!ViewData.HasPermissionFor().EditProject)">
                 <i class="fa fa-times"></i>
-            </a>
-            <a class="remove-chapter btn btn-sm btn-default" title="@Localizer.Translate("DeleteChapter", "RidicsProject")">
+            </button>
+            <button type="button" class="remove-chapter btn btn-sm btn-default" title="@Localizer.Translate("DeleteChapter", "RidicsProject")" disabled="@(!ViewData.HasPermissionFor().EditProject)">
                 <i class="fa fa-trash"></i>
-            </a>
+            </button>
         </div>
     </div>
     <div class="sub-chapters">
@@ -54,7 +44,6 @@
             {
                 @await Html.PartialAsync("Work/SubView/_ChapterRow", new ChapterEditorRowViewModel{
                     Chapter = chapter,
-                    Pages = Model.Pages,
                     LevelOfHierarchy = Model.LevelOfHierarchy + 1
                 }, ViewData)
             }

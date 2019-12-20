@@ -27,6 +27,10 @@
     }
     
     checkMoveButtonsAvailability() {
+        if (!new ProjectPermissionsProvider().hasEditPermission()) {
+            return; // buttons are always disabled
+        }
+
         if (this.checkSameSubChapter()) {
             if (this.checkVerticalMoving(ChapterVerticalMoveDirection.Up)) {
                 this.moveChapterUpButton.prop("disabled", false);

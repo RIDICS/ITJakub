@@ -200,12 +200,12 @@ namespace Vokabular.MainService.Core.Managers
             var countValue = PagingHelper.GetAutocompleteCount(count);
 
             var client = m_communicationProvider.GetAuthRoleApiClient();
-            var authResultList = client.GetRoleListAsync(0, countValue, query).GetAwaiter().GetResult();
+            var authResultList = client.GetRolesAutocompleteAsync(countValue, query).GetAwaiter().GetResult();
             
-            var dbUserGroups = new GetOrCreateUserGroupsWork<AuthRoleContract>(m_userRepository, authResultList.Items).Execute();
+            var dbUserGroups = new GetOrCreateUserGroupsWork<AuthRoleContractBase>(m_userRepository, authResultList).Execute();
 
             var resultList = new List<RoleContract>();
-            foreach (var authRole in authResultList.Items)
+            foreach (var authRole in authResultList)
             {
                 var resultRole = m_mapper.Map<RoleContract>(authRole);
                 resultRole.Id = dbUserGroups.First(x => x.ExternalId == resultRole.ExternalId).Id;

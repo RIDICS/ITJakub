@@ -41,6 +41,7 @@
     "ImportRunning": "Probíhá import bibliografických údajů z externích databází",
     "SelectAll": "Vybrat vše",
     "ImportExternalRepositoryList": "Import bibliografických údajů z externích databází",
+    "ImportedRecordsPermissionAlert": "Právo pro zobrazení importovaných bibliografických záznamů budou mít pouze uživatelské skupiny, které mají právo: Automatické získání práva k zobrazení Bibliografie.",
     "ImportStatusLoading": "Načítání informací o průběhu importu",
     "CancelImportTask": "Zrušit import",
     "Import": "Importovat",

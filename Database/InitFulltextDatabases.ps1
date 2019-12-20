@@ -10,7 +10,9 @@ param (
 $DefaultElasticLocations = @(
     "C:\Tools\Elastic\Elasticsearch",
     "D:\Tools\Elastic\Elasticsearch",
-    "C:\Program Files\Elastic\Elasticsearch"
+	"C:\Tools\Elasticsearch",
+	"D:\Tools\Elasticsearch",
+	"C:\Program Files\Elastic\Elasticsearch"
 )
 
 $CurrentPath = (Get-Location -PSProvider FileSystem).ProviderPath

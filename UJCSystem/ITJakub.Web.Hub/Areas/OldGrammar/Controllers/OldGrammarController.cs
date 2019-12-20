@@ -107,13 +107,12 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 View(new BookListingModel
                 {
                     BookId = book.Id,
-                    BookXmlId = book.Id.ToString(),
-                    VersionXmlId = null,
-                    BookTitle = book.Title,
-                    BookPages = pages,
-                    SearchText = searchText,
-                    InitPageXmlId = page,
-                    JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
+                        SnapshotId = null,
+                        BookTitle = book.Title,
+                        BookPages = pages,
+                        SearchText = searchText,
+                        InitPageId = page,
+                        JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                 });
         }
         

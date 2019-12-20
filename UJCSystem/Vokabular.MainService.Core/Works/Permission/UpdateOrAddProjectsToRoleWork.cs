@@ -17,6 +17,7 @@ namespace Vokabular.MainService.Core.Works.Permission
         private readonly int m_roleId;
         private readonly IList<long> m_bookIds;
         private readonly PermissionFlag m_permissionFlags;
+        private readonly ProjectPermissionsSubwork m_permissionsSubwork;
 
         public UpdateOrAddProjectsToRoleWork(PermissionRepository permissionRepository, int roleId, IList<long> bookIds,
             PermissionFlag permissionFlags) : base(permissionRepository)
@@ -25,10 +26,13 @@ namespace Vokabular.MainService.Core.Works.Permission
             m_roleId = roleId;
             m_bookIds = bookIds;
             m_permissionFlags = permissionFlags;
+            m_permissionsSubwork = new ProjectPermissionsSubwork(m_permissionRepository);
         }
 
         protected override void ExecuteWorkImplementation()
         {
+            m_permissionsSubwork.CheckPermissionConsistency(m_permissionFlags);
+
             var group = m_permissionRepository.FindById<UserGroup>(m_roleId);
 
             var allBookIds = new List<long>();
@@ -72,6 +76,11 @@ namespace Vokabular.MainService.Core.Works.Permission
                         m_log.WarnFormat("Cannot save permission for group witd id '{0}' on book with id '{1}' for reason '{2}'", permission.UserGroup.Id, permission.Project.Id, ex.InnerException);
                     throw;
                 }
+            }
+
+            foreach (var bookId in allBookIds)
+            {
+                m_permissionsSubwork.CheckRemainingAdministrator(bookId);
             }
         }
     }

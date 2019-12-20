@@ -1,0 +1,40 @@
+﻿@using Scalesoft.Localization.AspNetCore
+@model ITJakub.Web.Hub.Models.User.UserRolesViewModel
+@inject ILocalizationService Localizer
+
+<div class="row">
+    <div class="col-md-offset-1 col-lg-offset-2 col-md-10 col-lg-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">@Localizer.Translate("UserIsMemberOfGroups", "Account")</div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Localizer.Translate("Name", "Account")
+                                </th>
+                                <th>
+                                    @Localizer.Translate("Description", "Account")
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var role in Model.Roles)
+                            {
+                                <tr>
+                                    <td>
+                                       @role.Name
+                                    </td>
+                                    <td>
+                                        @role.Description
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

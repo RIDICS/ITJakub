@@ -178,7 +178,7 @@
     },
     "right-panel": {
       "read-button": {
-        "onclick-callable": "listBookReadClicked(this)"
+        "onclick-callable": "listBookReadClickedOld(this)"
       },
       "favorite-button": {},
       "load-detail-url": "Bibliography/GetBookDetailInfo?bookId={BookId}",

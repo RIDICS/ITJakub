@@ -1,4 +1,6 @@
-﻿@using Scalesoft.Localization.AspNetCore
+﻿@using Ridics.Core.Structures.Shared
+@using Scalesoft.Localization.AspNetCore
+@using Vokabular.Shared.AspNetCore.Extensions
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<ITJakub.Web.Hub.Models.User.UserDetailViewModel>
 @inject ILocalizationService Localizer
 
@@ -19,12 +21,32 @@
             @Html.DisplayFor(modelItem => user.Email)
         </td>
         <td class="buttons">
-            <a asp-action="EditUser" asp-route-userId="@user.Id" class="btn btn-sm btn-default">
-                @Localizer.Translate("Edit", "Permission")
-            </a>
-            <a asp-action="EditUserRoles" asp-route-userId="@user.Id" class="btn btn-sm btn-default">
-                @Localizer.Translate("Groups", "Permission")
-            </a>
+            @if (User.HasPermission(PermissionNames.EditAnyUsersData))
+            {
+                <a asp-action="EditUser" asp-route-userId="@user.Id" class="btn btn-sm btn-default">
+                    @Localizer.Translate("Edit", "Permission")
+                </a>
+            }
+            else
+            {
+                <a href="#" class="btn btn-sm btn-default disabled">
+                    @Localizer.Translate("Edit", "Permission")
+                </a>
+            }
+
+            @if (User.HasPermission(PermissionNames.EditAnyUsersData) && User.HasPermission(PermissionNames.ManageUserRoles))
+            {
+                <a asp-action="EditUserRoles" asp-route-userId="@user.Id" class="btn btn-sm btn-default">
+                    @Localizer.Translate("Groups", "Permission")
+                </a>
+            }
+            else
+            {
+                <a href="#" class="btn btn-sm btn-default disabled">
+                    @Localizer.Translate("Groups", "Permission")
+                </a>
+            }
+
         </td>
     </tr>
 }

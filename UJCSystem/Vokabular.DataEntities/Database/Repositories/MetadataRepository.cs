@@ -122,7 +122,6 @@ namespace Vokabular.DataEntities.Database.Repositories
             int start, int count)
         {
             Resource resourceAlias = null;
-            Project projectAlias = null;
             Snapshot snapshotAlias = null;
             BookType bookTypeAlias = null;
             Permission permissionAlias = null;
@@ -131,15 +130,16 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             var resultList = GetSession().QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
-                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
-                .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias)
-                .JoinAlias(() => snapshotAlias.BookTypes, () => bookTypeAlias)
-                .Where(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved && bookTypeAlias.Type == bookTypeEnum)
-                .And(() => projectAlias.ProjectType == projectType && projectAlias.IsRemoved == false)
-                .WithSubquery.WhereExists(QueryOver.Of(() => permissionAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && !resourceAlias.IsRemoved)
+                .WithSubquery.WhereProperty(() => resourceAlias.Project.Id).In(QueryOver.Of<Project>()
+                    .Where(x => x.ProjectType == projectType && x.IsRemoved == false)
+                    .JoinAlias(x => x.LatestPublishedSnapshot, () => snapshotAlias)
+                    .JoinAlias(() => snapshotAlias.BookTypes, () => bookTypeAlias)
+                    .Where(() => bookTypeAlias.Type == bookTypeEnum)
+                    .JoinAlias(x => x.Permissions, () => permissionAlias)
                     .JoinAlias(() => permissionAlias.UserGroup, () => userGroupAlias)
                     .JoinAlias(() => userGroupAlias.Users, () => userAlias)
-                    .Where(() => userAlias.Id == userId && permissionAlias.Project.Id == projectAlias.Id)
+                    .Where(() => userAlias.Id == userId)
                     .And(BitwiseExpression.On(() => permissionAlias.Flags).HasBit(PermissionFlag.ShowPublished))
                     .Select(x => x.Id))
                 .OrderBy(x => x.Title).Asc

@@ -37,6 +37,8 @@ namespace Vokabular.MainService.DataContracts.Contracts.Favorite
         public QueryTypeEnumContract? QueryType { get; set; }
 
         public string Query { get; set; }
+
+        public long? ResourceId { get; set; }
     }
 
     public class FavoriteQueryContract : FavoriteBaseInfoContract
@@ -55,5 +57,12 @@ namespace Vokabular.MainService.DataContracts.Contracts.Favorite
         public long PageId { get; set; }
 
         public FavoriteLabelContract FavoriteLabel { get; set; }
+    }
+    
+    public class FavoriteHeadwordContract : FavoriteBaseInfoContract
+    {
+        public string Query { get; set; }
+        
+        public long HeadwordId { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ITJakub.Web.Hub.Constants;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Models.Favorite;
 using ITJakub.Web.Hub.Models.Requests.Favorite;
@@ -6,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Scalesoft.Localization.AspNetCore;
 using Vokabular.MainService.DataContracts.Contracts.Favorite;
+using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Types.Favorite;
 
@@ -42,7 +45,8 @@ namespace ITJakub.Web.Hub.Controllers
                     new FavoriteFilterViewModel(FavoriteTypeEnumContract.Project, m_localizer.Translate("Books", "Favorite")),
                     new FavoriteFilterViewModel(FavoriteTypeEnumContract.Category, m_localizer.Translate("Category", "Favorite")),
                     new FavoriteFilterViewModel(FavoriteTypeEnumContract.Page, m_localizer.Translate("PageBookmark", "Favorite")),
-                    new FavoriteFilterViewModel(FavoriteTypeEnumContract.Query, m_localizer.Translate("Query", "Favorite"))
+                    new FavoriteFilterViewModel(FavoriteTypeEnumContract.Query, m_localizer.Translate("Query", "Favorite")),
+                    new FavoriteFilterViewModel(FavoriteTypeEnumContract.Headword, m_localizer.Translate("DictionaryHeadwords", "Favorite")),
                 }
             };
             return View("FavoriteManagement", viewModel);
@@ -96,12 +100,12 @@ namespace ITJakub.Web.Hub.Controllers
             switch (favoriteItem.FavoriteType)
             {
                 case FavoriteTypeEnumContract.Project:
-                    return RedirectToAction("Listing", "Editions", new {area = "Editions", bookId = favoriteItem.ProjectId});
+                    return RedirectToAction("Listing", "BookReader", new {area = "BookReader", bookId = favoriteItem.ProjectId});
                 case FavoriteTypeEnumContract.Category:
                     return View("AmbiguousFavoriteRedirect");
                 case FavoriteTypeEnumContract.Page:
-                    return RedirectToAction("Listing", "Editions",
-                        new {area = "Editions", bookId = favoriteItem.ProjectId, page = favoriteItem.PageId});
+                    return RedirectToAction("Listing", "BookReader",
+                        new {area = "BookReader", bookId = favoriteItem.ProjectId, pageId = favoriteItem.PageId});
                 case FavoriteTypeEnumContract.Query:
                     if (favoriteItem.BookType == null || favoriteItem.QueryType == null)
                     {
@@ -109,6 +113,21 @@ namespace ITJakub.Web.Hub.Controllers
                     }
 
                     return RedirectToFavoriteQuery(favoriteItem.BookType.Value, favoriteItem.QueryType.Value, favoriteItem.Query);
+                case FavoriteTypeEnumContract.Headword:
+                    var bookClient = GetBookClient();
+                    var rowNumber = bookClient.SearchHeadwordRowNumber(new HeadwordRowNumberSearchRequestContract
+                    {
+                        Query = favoriteItem.Query,
+                        Category = new SelectedCategoryCriteriaContract
+                        {
+                            BookType = BookTypeEnumContract.Dictionary,
+                            SelectedBookIds = null,
+                            SelectedCategoryIds = null,
+                        }
+                    }, GetDefaultProjectType());
+                    var pageNumber = rowNumber / PageSizes.Headwords + 1;
+
+                    return RedirectToAction("Listing", "Dictionaries", new {Area = "Dictionaries", page = pageNumber});
                 default:
                     return RedirectToAction("Management");
             }

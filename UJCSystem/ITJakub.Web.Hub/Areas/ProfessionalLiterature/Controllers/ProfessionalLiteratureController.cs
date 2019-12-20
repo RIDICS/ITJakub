@@ -59,14 +59,13 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
             return
                 View(new BookListingModel
                 {
-                    BookId = book.Id,
-                    BookXmlId = book.Id.ToString(),
-                    VersionXmlId = null,
-                    BookTitle = book.Title,
-                    BookPages = pages,
-                    SearchText = searchText,
-                    InitPageXmlId = page,
-                    JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
+                        BookId = book.Id,
+                        SnapshotId = null,
+                        BookTitle = book.Title,
+                        BookPages = pages,
+                        SearchText = searchText,
+                        InitPageId = page,
+                        JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                 });
         }
         

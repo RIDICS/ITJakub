@@ -177,7 +177,7 @@
     },
     "right-panel": {
       "read-button": {
-        "url": "Editions\\Editions\\Listing?bookId={BookId}"
+        "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
       },
       "favorite-button": {},
       "load-detail-url": "Bibliography/GetBookDetailInfo?bookId={BookId}",
@@ -406,7 +406,7 @@
     },
     "right-panel": {
       "read-button": {
-        "url": "Editions\\Editions\\Listing?bookId={BookId}"
+        "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
       },
       "favorite-button": {},
       "load-detail-url": "Bibliography/GetBookDetailInfo?bookId={BookId}",
@@ -516,6 +516,9 @@
       "body": "<img src='{$baseUrl}images/logo/logo-bib.{ProjectType}.png' title='{ProjectTypeString}'>"
     },
     "right-panel": {
+      "read-button": {
+        "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
+      },
       "favorite-button": {},
       "load-detail-url": "Bibliography/GetAudioBookDetailInfo?bookId={BookId}"
     },
@@ -742,7 +745,7 @@
     },
     "right-panel": {
       "read-button": {
-        "url": "OldGrammar\\OldGrammar\\Listing?bookId={BookId}"
+        "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
       },
       "favorite-button": {},
       "load-detail-url": "Bibliography/GetBookDetailInfo?bookId={BookId}",
@@ -934,7 +937,7 @@
     },
     "right-panel": {
       "read-button": {
-        "url": "ProfessionalLiterature\\ProfessionalLiterature\\Listing?bookId={BookId}"
+        "url": "BookReader\\BookReader\\Listing?bookId={BookId}"
       },
       "favorite-button": {},
       "load-detail-url": "Bibliography/GetBookDetailInfo?bookId={BookId}",

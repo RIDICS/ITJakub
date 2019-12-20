@@ -44,7 +44,7 @@ class ProjectModule {
             e.preventDefault();
             const navigationLink = $(e.currentTarget);
             
-            if (this.currentModule.isEditModeEnabled()) {
+            if (this.currentModule.isEditModeOpened()) {
                 bootbox.dialog({
                     title: localization.translate("Warning", "RidicsProject").value,
                     message: localization.translate("SwitchTabWithoutSaving", "RidicsProject").value,
@@ -134,7 +134,7 @@ abstract class ProjectModuleBase {
 
     public abstract getModuleType(): ProjectModuleType;
 
-    public abstract isEditModeEnabled(): boolean;
+    public abstract isEditModeOpened(): boolean;
 
     public abstract initModule(): void;
 
@@ -150,8 +150,10 @@ abstract class ProjectModuleBase {
                     if (xmlHttpRequest.status === HttpStatusCode.Success) {
                         this.initModule();
                     } else {
+                        var errorHandler = new ErrorHandler();
+                        var errorMessage = errorHandler.getErrorMessage(xmlHttpRequest, localization.translate("ModuleError", "RidicsProject").value);
                         var alert = new AlertComponentBuilder(AlertType.Error)
-                            .addContent(localization.translate("ModuleError", "RidicsProject").value)
+                            .addContent(errorMessage)
                             .buildElement();
                         $contentContainer.empty().append(alert);
                     }
@@ -175,7 +177,7 @@ class ProjectImageViewerModule extends ProjectModuleBase {
         this.editor.init(this.projectId);
     }
 
-    isEditModeEnabled(): boolean {
+    isEditModeOpened(): boolean {
         return false;
     }
 }
@@ -196,7 +198,7 @@ class ProjectTextPreviewModule extends ProjectModuleBase {
         this.editor.init(this.projectId);
     }
 
-    isEditModeEnabled(): boolean {
+    isEditModeOpened(): boolean {
         return this.editor.isEditModeEnabled();
     }
 }
@@ -205,7 +207,7 @@ class ProjectTermEditorModule extends ProjectModuleBase {
     private editor: TermEditorMain;
     
     constructor(projectId: number) {
-        super(projectId)
+        super(projectId);
     }
 
     getModuleType(): ProjectModuleType {
@@ -217,7 +219,7 @@ class ProjectTermEditorModule extends ProjectModuleBase {
         this.editor.init(this.projectId);
     }
 
-    isEditModeEnabled(): boolean {
+    isEditModeOpened(): boolean {
         return false;
     }
 }
@@ -225,14 +227,17 @@ class ProjectTermEditorModule extends ProjectModuleBase {
 class ProjectWorkModule extends ProjectModuleBase {
     private moduleIdentificator: string;
     private moduleTab: ProjectModuleTabBase;
+    private errorHandler: ErrorHandler;
 
     constructor(projectId: number, moduleIdentificator: string) {
         super(projectId);
         this.moduleIdentificator = moduleIdentificator;
+        this.errorHandler = new ErrorHandler();
+        this.moduleTab = null;
     }
 
     getModuleType(): ProjectModuleType {
-        return null
+        return null;
     }
 
     initModule(): void {
@@ -288,8 +293,9 @@ class ProjectWorkModule extends ProjectModuleBase {
                             this.moduleTab.initTab();
                         }
                     } else {
+                        const errorMessage = this.errorHandler.getErrorMessage(xmlHttpRequest, localization.translate("BookmarkError", "RidicsProject").value);
                         const errorDiv = new AlertComponentBuilder(AlertType.Error)
-                            .addContent(localization.translate("BookmarkError", "RidicsProject").value)
+                            .addContent(errorMessage)
                             .buildElement();
                         $contentContainer.empty().append(errorDiv);
                         this.moduleTab = null;
@@ -302,14 +308,18 @@ class ProjectWorkModule extends ProjectModuleBase {
         this.init();
     }
 
-    isEditModeEnabled(): boolean {
-        return this.moduleTab.isEditModeEnabled();
+    isEditModeOpened(): boolean {
+        if (this.moduleTab == null) {
+            return false;
+        }
+
+        return this.moduleTab.isEditModeOpened();
     }
 }
 
 abstract class ProjectModuleTabBase {
     public abstract initTab();
-    public abstract isEditModeEnabled(): boolean;
+    public abstract isEditModeOpened(): boolean;
 }
 
 interface IProjectMetadataTabConfiguration {
@@ -327,7 +337,7 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
         this.disableEdit();
     }
 
-    isEditModeEnabled() {
+    isEditModeOpened() {
         return this.editModeEnabled;
     }
 
@@ -359,6 +369,18 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
         config.$editorButtonPanel.hide();
         $inputs.add($selects).add(copyrightTextarea).prop("disabled", true);
         $buttons.hide();
+    }
+}
+
+class ProjectPermissionsProvider {
+    private readonly permissionsJq = $("#project-permissions");
+
+    private hasPermission(name: string) {
+        return this.permissionsJq.attr(name).toLowerCase() === "true";
+    }
+
+    public hasEditPermission() {
+        return this.hasPermission("data-edit");
     }
 }
 

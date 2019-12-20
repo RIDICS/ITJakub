@@ -73,6 +73,8 @@ namespace Vokabular.DataEntities.Database.Entities
         public override FavoriteTypeEnum FavoriteTypeEnum => FavoriteTypeEnum.Headword;
 
         public virtual Resource DefaultHeadwordResource { get; set; }
+        
+        public virtual string Query { get; set; }
     }
 
     public class FavoriteQuery : FavoriteBase

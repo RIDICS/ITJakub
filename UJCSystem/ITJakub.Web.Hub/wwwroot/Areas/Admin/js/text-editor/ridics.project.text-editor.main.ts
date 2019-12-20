@@ -23,6 +23,9 @@
     }
     
     isEditModeEnabled(): boolean {
+        if(typeof this.pageTextEditor == "undefined")
+            return false;
+        
         return this.pageTextEditor.isEditModeEnabled();
     }
 
@@ -42,6 +45,8 @@
                 connections.init();
                 const numberOfPages = data.length;
                 this.numberOfPages = numberOfPages;
+                const editPermission = new ProjectPermissionsProvider().hasEditPermission();
+                const disableByPermissionAttr = editPermission ? "" : "disabled=\"disabled\"";
                 for (let i = 0; i < numberOfPages; i++) {
                     const projectPage = data[i];
                     if(projectPage.position > this.maxPosition)
@@ -58,7 +63,7 @@
                         commentAreaClass = "comment-area-collapsed-odd";
                     }
                     const compositionAreaDiv =
-                        `<div class="col-xs-7 composition-area"><div class="loading composition-area-loading"></div><div class="page"><div class="viewer"><span class="rendered-text"></span></div></div></div>`;
+                        `<div class="col-xs-7 composition-area"><div class="page"><div class="viewer"><span class="rendered-text"></span></div></div></div>`;
                     const commentAreaDiv = `<div class="col-xs-5 comment-area ${
                         commentAreaClass}"></div>`;
                     
@@ -69,11 +74,11 @@
                                                         <button type="button" class="btn btn-default refresh-text" title="${localization.translate("RefreshTextPage", "RidicsProject").value}">
                                                             <i class="fa fa-refresh"></i>
                                                         </button>
-                                                        <button type="button" class="btn btn-default create-text hidden" title="${localization.translate("CreateTextPage", "RidicsProject").value}">
+                                                        <button type="button" class="btn btn-default create-text hidden" title="${localization.translate("CreateTextPage", "RidicsProject").value}" ${disableByPermissionAttr}>
                                                             <i class="fa fa-plus-circle"></i>
                                                             ${localization.translate("CreateText", "RidicsProject").value}
                                                         </button>
-                                                        <button type="button" class="btn btn-default edit-page" title="${localization.translate("EditPage", "RidicsProject").value}">
+                                                        <button type="button" class="btn btn-default edit-page" title="${localization.translate("EditPage", "RidicsProject").value}" ${disableByPermissionAttr}>
                                                             <i class="fa fa-pencil"></i>
                                                             ${localization.translate("Edit", "RidicsProject").value}
                                                         </button>

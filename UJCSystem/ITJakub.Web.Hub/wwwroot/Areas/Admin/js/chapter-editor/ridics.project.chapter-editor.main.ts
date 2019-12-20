@@ -9,6 +9,7 @@ class ChapterEditorMain {
     private pageDetail: JQuery;
     private chapterEdited: boolean;
     private position = 0;
+    private projectId: number;
     
     constructor() {
         this.errorHandler = new ErrorHandler();
@@ -16,9 +17,11 @@ class ChapterEditorMain {
         this.moveEditor = new ChapterMoveEditor();
         this.pageDetail = $("#chaptersPageDetail");
         this.readerPagination = new ReaderPagination(this.pageDetail[0]);
+        this.chapterEdited = false;
     }
 
     init(projectId: number) {
+        this.projectId = projectId;
         this.moveEditor.init();
         this.readerPagination.init(((pageId, pageIndex, scrollTo) => {
             this.loadPageDetail(pageId);
@@ -59,13 +62,7 @@ class ChapterEditorMain {
                         $("#unsavedChanges").addClass("hide");
                         listing.empty().append(`<div class="loader"></div>`);
                         this.util.generateChapterList(projectId).done(() => {
-                            this.util.getChapterListView(projectId).done((data) => {
-                                listing.html(data);
-                                this.initChapterRowClicks($(".table > .sub-chapters"));
-                            }).fail((error) => {
-                                const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
-                                listing.empty().append(alert);
-                            });
+                            this.reloadChapterList(listing);
                         }).fail((error) => {
                             const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
                             listing.empty().append(alert);
@@ -92,18 +89,18 @@ class ChapterEditorMain {
             this.position = 0;
             this.chaptersToSave = [];
             this.getChaptersToSave($(".table > .sub-chapters"));
-            listing.empty().append(`<div class="loader"></div>`);
+            const contentBackup = listing.children();
+            contentBackup.hide();
+            const loader = $(`<div class="loader"></div>`);
+            listing.append(loader);
             this.util.saveChapterList(projectId, this.chaptersToSave).done(() => {
+                contentBackup.remove();
                 $("#chaptersUnsavedChanges").addClass("hide");
                 this.chapterEdited = false;
-                this.util.getChapterListView(projectId).done((data) => {
-                    listing.html(data);
-                    this.initChapterRowClicks($(".table > .sub-chapters"));
-                }).fail((error) => {
-                    const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
-                    listing.empty().append(alert);
-                });                
+                this.reloadChapterList(listing);
             }).fail((error) => {
+                loader.remove();
+                contentBackup.show();
                 bootbox.alert({
                     title: localization.translate("Error").value,
                     message: this.errorHandler.getErrorMessage(error),
@@ -163,10 +160,28 @@ class ChapterEditorMain {
         });
     }
 
+    private reloadChapterList(listingChaptersContainer: JQuery) {
+        this.util.getChapterListView(this.projectId).done((data) => {
+            listingChaptersContainer.html(data);
+            this.initChapterRowClicks($(".table > .sub-chapters"));
+        }).fail((error) => {
+            const alert = new AlertComponentBuilder(AlertType.Error).addContent(this.errorHandler.getErrorMessage(error)).buildElement();
+            listingChaptersContainer.empty().append(alert);
+        });        
+    }
+
     public isChangeMade(): boolean {
         return this.chapterEdited;
     }
 
+    private copyPageList(chapterRow: JQuery) {
+        const pageList = $("#pageList").html();
+        const beginningPageId = chapterRow.data("beginning-page-id");
+        const selectChapterElement = chapterRow.find(".select-page");
+        selectChapterElement.html(pageList);
+        selectChapterElement.find(`option[value="${beginningPageId}"]`).attr("selected", "selected");        
+    }
+    
     private getChaptersToSave(subChaptersElements: JQuery<HTMLElement>, parentId: number = null): void {
         const chapters = subChaptersElements.children(".chapter-container");
         
@@ -194,18 +209,18 @@ class ChapterEditorMain {
     }
 
     private initChapterRowClicks(subChapters: JQuery<HTMLElement>) {
-        subChapters.find(".chapter-row .ridics-checkbox").change(() => {
+        subChapters.find(".chapter-row .ridics-checkbox").on("change",() => {
             this.moveEditor.checkMoveButtonsAvailability();
         });
 
         subChapters.find(".chapter-row .ridics-checkbox label").off();
-        subChapters.find(".chapter-row .ridics-checkbox label").click((event) => {
+        subChapters.find(".chapter-row .ridics-checkbox label").on("click",(event) => {
             event.stopPropagation(); //stop propagation to prevent loading detail, while is clicked on the checkbox
         });
 
 
         subChapters.find(".chapter-row .remove-chapter").off();
-        subChapters.find(".chapter-row .remove-chapter").click((event) => {
+        subChapters.find(".chapter-row .remove-chapter").on("click", (event) => {
             event.stopPropagation();
             const chapterContainer = $(event.currentTarget).parent(".buttons").parent(".chapter-row").parent(".chapter-container");
             chapterContainer.remove();
@@ -234,13 +249,7 @@ class ChapterEditorMain {
                 this.moveEditor.checkMoveButtonsAvailability();
             }
         });
-        
-        subChapters.find("select[name=\"chapter-page\"]").selectpicker({
-            liveSearch: true,
-            maxOptions: 1,
-            container: "body"
-        });
-        
+                
         subChapters.find(".chapter-row input[name=\"chapter-name\"]").on("click", (event) => {
             event.stopPropagation();
         });
@@ -249,6 +258,17 @@ class ChapterEditorMain {
     private editChapter(element: JQuery) {
         const editButton = element.find("i.fa");
         const chapterRow = editButton.parents(".chapter-row");
+        const chapterSelect = chapterRow.find("select[name=\"chapter-page\"]");
+        if(chapterSelect.data("inited") == false)
+        {
+            this.copyPageList(chapterRow);
+            chapterSelect.selectpicker({
+                liveSearch: true,
+                maxOptions: 1,
+                container: "body"
+            });
+            chapterSelect.data("inited", true);
+        }
         const nameElement = chapterRow.find(".chapter-name");
         const pageElement = chapterRow.find(".page-name");
         const discardButton = chapterRow.find(".discard-chapter-changes");

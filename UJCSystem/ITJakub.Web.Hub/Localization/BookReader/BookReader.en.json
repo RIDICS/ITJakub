@@ -1,0 +1,81 @@
+﻿{
+  "culture": "en",
+  "scope": "BookReader",
+  "dictionary": {
+    //Tab names
+    "text": "Text",
+    "audio": "Audio track",
+    "image": "Image",
+    "content": "Book contents",
+    "bookmarks": "Bookmarks",
+    "search": "Search results",
+    "terms": "Linguistic terms",
+    "termsResult": "Terms on page",
+    "termsSearch": "Search results on page",
+
+
+    //Button names
+    "addBoookmark": "Add bookmark",
+    "pageNames": "Page numbers",
+    "separatePages": "Separate pages",
+    "notes": "Notes",
+
+    "editionNote": "Edition note",
+    "noEditionNote": "This book has no edition note",
+    "failedToLoadNote": "Failed to load edition note",
+
+    "information": "Book information",
+    "editor": "Editor",
+    "original": "Original book",
+    "relicAbbr": "Relic abbreviation",
+    "sourceAbbr": "Source abbreviation",
+    "literaryType": "translate[Literární druh]",
+    "literaryGenre": "Literary genre",
+    "EditionLastModification": "Last book edition",
+    "FailedToLoadInfo": "Failed to load book information",
+
+    "failedToLoadAuthors": "Failed to load authors",
+
+    "page": "Page",
+    "GoToPage": "Go to page...",
+
+    "nullValue": "Empty",
+
+    "BookmarksGt4": " bookmarks",
+    "BookmarksLt4": " bookmarks",
+    "Bookmark": " bookmark",
+    "CreatingBookmarkError": "Failed to create bookmark",
+
+    "BookSources": "Book sources",
+    "Label": "{0} (Label: {1})",
+
+    "close": "Close",
+    "maximise": "Maximize",
+    "minimise": "Minimize",
+    "popout": "Open in new window",
+
+    "BookFromAnotherPortalError": "Cannot display this book because it belongs to the second portal type.",
+    "searchResultFailed": "Failed to load search results, please try again later.",
+    "PageLoadingError": "Failed to load page number '{0}'",
+    "PageLoadingErrorWithSearchResults": "Failed to load page number '{0}' with search results",
+    "FailedToLoadAudioBook": "Failed to load audio book, please try again later.",
+    "FailedToLoadTrack": "Failed to load track, please try again later.",
+    "no-image": "This page has no image scan assigned",
+    "no-content": "This book has no content list",
+
+    "DownloadChapter": "Download chapter",
+    "DownloadAudiobook": "Download audiobook:",
+
+    "NoOccurrencesOnPage": "No occurrences on current page",
+    "NoTopicOnPage": "No topic on current page",
+    "LoadingTopicsError": "Failed to load terms on page '{0}'",
+    "UseSearch": "For display search results please first use search.",
+
+    "NoName": "<no name>",
+
+    "AllBookmarks": "All bookmarks",
+
+    "LoadingContentError": "Failed to load content",
+    "NoResults": "Text does not contain searched expression"
+  }
+}

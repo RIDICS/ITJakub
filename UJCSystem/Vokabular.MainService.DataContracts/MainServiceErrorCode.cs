@@ -16,7 +16,13 @@
         public const string UnregisteredUserResourceAccessForbidden = "unregistered-user-resource-access-forbidden";
         public const string UserCardFileAccessForbidden = "user-cardfile-access-forbidden";
         public const string UserBookAccessForbidden = "user-book-access-forbidden";
+        public const string UserBookReadForbidden = "user-book-read-forbidden";
+        public const string UserBookReadProjectForbidden = "user-book-read-project-forbidden";
+        public const string UserBookEditProjectForbidden = "user-book-edit-project-forbidden";
+        public const string UserBookAdminProjectForbidden = "user-book-admin-project-forbidden";
         public const string UserResourceAccessForbidden = "user-resource-access-forbidden";
+        public const string UserResourceReadForbidden = "user-resource-read-forbidden";
+        public const string UserResourceEditForbidden = "user-resource-edit-forbidden";
         public const string ProjectIdOrResourceId = "project-id-or-resource-id";
         public const string CreateAnonymousFeedback = "create-anonymous-feedback";
         public const string UserHasMissingExternalId = "user-has-missing-external-id";
@@ -56,5 +62,10 @@
         public const string GroupAlreadyAssignedToProject = "group-already-assigned-to-project";
         public const string UserAlreadyAssignedToProject = "user-already-assigned-to-project";
         public const string SnapshotMustContainMetadata = "snapshot-must-contain-metadata";
+        public const string Forbidden = "forbidden";
+        public const string UserAlreadyAssignedToRole = "user-already-assigned-to-role";
+        public const string InvalidCommentAuthorForbidden = "invalid-comment-author-forbidden";
+        public const string AtLeastOneGroupMustHaveAdminPermission = "at-least-one-group-must-have-admin-permission";
+        public const string ReadProjectRequiredForSelectedPermissions = "read-project-required-for-selected-permissions";
     }
 }

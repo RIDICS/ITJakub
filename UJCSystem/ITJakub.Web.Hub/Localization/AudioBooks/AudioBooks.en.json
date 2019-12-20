@@ -4,6 +4,7 @@
   "dictionary": {
     "AudioBooksFeedback": "translate[Audioknihy - Připomínky]",
     "AudioBooksInformation": "translate[Audioknihy - Informace]",
-    "AudioBooksList": "translate[Audioknihy - Seznam]"
+    "AudioBooksList": "translate[Audioknihy - Seznam]",
+    "AudioBookListing": "translate[Audioknihy - Čtečka děl]"
   }
 }

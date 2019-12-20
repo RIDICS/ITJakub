@@ -1,4 +1,4 @@
-﻿function initDictionaryViewer(categoryIdList: string, bookIdList: string, pageNumber: string) {
+﻿function initDictionaryViewer(categoryIdList: string, bookIdList: string, pageNumber: string, pageSize: number) {
     var selectedCategoryIds: Array<number> = [];
     var selectedBookIds: Array<number> = [];
     var defaultPageNumber: number = Number(pageNumber);
@@ -13,8 +13,7 @@
     const headwordListSelector = "#headwordList";
     const paginationSelector = "#pagination";
     const headwordDescriptionSelector = "#headwordDescription";
-    var pageSize = 50;
-    
+
     var dictionaryViewer = new DictionaryViewer(headwordListSelector, paginationSelector, headwordDescriptionSelector, true);
     var dictionaryViewerWrapper = new DictionaryViewerListWrapper(dictionaryViewer, pageSize);
 
@@ -27,6 +26,13 @@
     var keyboardComponent = KeyboardManager.getKeyboard("0");
     //keyboardComponent.registerInput($("#searchbox")[0]);
     keyboardComponent.registerButton(keyboardButton, inputElement, newQuery => searchBox.value(newQuery));
+
+    $(inputElement).keypress((event: any) => {
+        var keyCode = event.which || event.keyCode;
+        if (keyCode === 13) {     //13 = Enter
+            $("#searchButton").click();
+        }
+    });
 
     var updateSearchBox = (state: State) => {
         var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
@@ -106,7 +112,7 @@ class DictionaryViewerListWrapper {
     constructor(dictionaryViewer: DictionaryViewer, pageSize: number) {
         this.pageSize = pageSize;
         this.dictionaryViewer = dictionaryViewer;
-        //this.dictionaryViewer.setFavoriteCallback(this.addNewFavoriteHeadword.bind(this), this.removeFavoriteHeadword.bind(this));
+        this.dictionaryViewer.setFavoriteCallback(this.addNewFavoriteHeadword.bind(this), this.removeFavoriteHeadword.bind(this));
         
         window.matchMedia("print").addListener(mql => {
             if (mql.matches) {
@@ -114,55 +120,30 @@ class DictionaryViewerListWrapper {
             }
         });
 
-        //this.favoriteHeadwords = new DictionaryFavoriteHeadwords("#saved-word-area", "#saved-word-area .saved-words-body", "#saved-word-area .saved-word-area-more");
-        //this.favoriteHeadwords.create(this.goToPageWithHeadword.bind(this), this.favoriteHeadwordsChanged.bind(this));
-
-        //disabled favorites:
-        $("#saved-word-area").addClass("hidden");
+        this.favoriteHeadwords = new DictionaryFavoriteHeadwords("#saved-word-area", "#saved-word-area .saved-words-body", "#saved-word-area .saved-word-area-more");
+        this.favoriteHeadwords.create(this.goToPageWithHeadword.bind(this), this.favoriteHeadwordsChanged.bind(this));
     }
 
     callAfterFavouriteHeadwordsInit(callback: () => any) {
-        //this.favoriteHeadwords.callAfterInit(callback);
-
-        //disabled favorites:
-        this.favoriteHeadwordsChanged([]);
-        callback();
+        this.favoriteHeadwords.callAfterInit(callback);
     }
 
-    private goToPageWithHeadword(bookId: string, entryXmlId: string) {
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordPageNumberById",
-            data: {
-                selectedBookIds: this.selectedBookIds,
-                selectedCategoryIds: this.selectedCategoryIds,
-                headwordBookId: bookId,
-                headwordEntryXmlId: entryXmlId,
-                pageSize: this.pageSize
-            } as JQuery.PlainObject,
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
-                var resultPageNumber = response;
-                this.dictionaryViewer.goToPage(resultPageNumber);
-            },
-            error: (jqXHR) => {
-                this.dictionaryViewer.showErrors(jqXHR);
-            }
-        });
+    private goToPageWithHeadword(headwordQuery: string) {
+        $("#searchbox").val(headwordQuery);
+        $("#searchButton").data("favorite-headword-trigger", true);
+        $("#searchButton").trigger("click");
     }
 
     private favoriteHeadwordsChanged(list: Array<IDictionaryFavoriteHeadword>) {
         this.dictionaryViewer.setFavoriteHeadwordList(list);
     }
 
-    private addNewFavoriteHeadword(bookId: string, entryXmlId: string) {
-        this.favoriteHeadwords.addNewHeadword(bookId, entryXmlId);
+    private addNewFavoriteHeadword(headwordName: string, headwordId: number, callback: (favoriteHeadwordId: number) => void) {
+        this.favoriteHeadwords.addNewHeadword(headwordName, headwordId, callback);
     }
 
-    private removeFavoriteHeadword(bookId: string, entryXmlId: string) {
-        this.favoriteHeadwords.removeHeadwordById(bookId, entryXmlId);
+    private removeFavoriteHeadword(favoriteId: number) {
+        this.favoriteHeadwords.removeHeadwordById(favoriteId);
     }
 
     loadDefault(categoryIds: Array<number>, bookIds: Array<number>, defaultPageNumber: number) {

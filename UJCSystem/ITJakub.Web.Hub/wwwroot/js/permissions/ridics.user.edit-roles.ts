@@ -52,7 +52,9 @@ class UserRolesEditor {
             $("#addToGroupDialog").modal();
         });
 
-        $("#add-user-to-group").on("click", () => {
+        const addUserToGroupButton = $("#add-user-to-group");
+        const savingIcon = addUserToGroupButton.find(".saving-icon");
+        addUserToGroupButton.on("click", () => {
             if ($("#tab2-select-existing").hasClass("active")) {
                 const alertHolder = $("#add-user-to-role-error");
                 alertHolder.empty();
@@ -63,6 +65,7 @@ class UserRolesEditor {
                     alertHolder.empty().append(errorAlert.buildElement());
                 }
                 else {
+                    savingIcon.removeClass("hide");
                     const roleId = this.roleSearchCurrentSelectedItem.id;
                     this.client.addUserToRole(this.userId, roleId).done(() => {
                         $("#addToGroupDialog").modal("hide");
@@ -72,9 +75,12 @@ class UserRolesEditor {
                         const errorAlert = new AlertComponentBuilder(AlertType.Error)
                             .addContent(this.errorHandler.getErrorMessage(error, localization.translate("AddUserToRoleError", "PermissionJs").value));
                         alertHolder.empty().append(errorAlert.buildElement());
+                    }).always(() => {
+                        savingIcon.addClass("hide");
                     });
                 }
             } else {
+                savingIcon.removeClass("hide");
                 const alertHolder = $("#create-role-with-user-error");
                 alertHolder.empty();
                 const roleName = $("#new-group-name").val() as string;
@@ -86,6 +92,8 @@ class UserRolesEditor {
                     const errorAlert = new AlertComponentBuilder(AlertType.Error)
                         .addContent(this.errorHandler.getErrorMessage(error, localization.translate("CreateRoleWithUserError", "PermissionJs").value));
                     alertHolder.empty().append(errorAlert.buildElement());
+                }).always(() => {
+                    savingIcon.addClass("hide");
                 });
             }
         });
@@ -93,7 +101,8 @@ class UserRolesEditor {
 
     private initRemoveUserFromRoleButton() {
         $(".remove-role").on("click", (event) => {
-            const roleRow = $(event.currentTarget as Node as HTMLElement).parents(".role-row");
+            const removeButton = $(event.currentTarget as Node as HTMLElement);
+            const roleRow = removeButton.parents(".role-row");
             const roleName = roleRow.find(".name").text().trim();
 
             if (roleName === this.registeredRoleName) {
@@ -122,6 +131,11 @@ class UserRolesEditor {
     }
     
     private removeUserFromRole(roleRowElement: JQuery<HTMLElement>) {
+        const removeButton =  roleRowElement.find(".remove-role");
+        const removeButtonIcon =  removeButton.find("fa.i");
+        removeButtonIcon.addClass("hide");
+        const savingIcon = removeButton.find("saving-icon");
+        savingIcon.removeClass("hide");
         const roleId = roleRowElement.data("role-id");
         const alert = roleRowElement.find(".alert");
         alert.hide();
@@ -129,6 +143,8 @@ class UserRolesEditor {
         this.client.removeUserFromRole(this.userId, roleId).done(() => {
             this.roleList.reloadPage();
         }).fail((error) => {
+            savingIcon.addClass("hide");
+            removeButtonIcon.removeClass("hide");
             alert.text(this.errorHandler.getErrorMessage(error, localization.translate("RemoveUserFromRoleError", "PermissionJs").value));
             alert.show();
         });

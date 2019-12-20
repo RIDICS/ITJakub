@@ -62,7 +62,7 @@
                 <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
             </a>
         }
-        else if (User.HasPermission(VokabularPermissionNames.ManageBibliographyImport))
+        else if (User.HasPermission(VokabularPermissionNames.ManageBibliographyImport) && portalType == PortalType.ResearchPortal)
         {
             <a href='@Url.Action("List", "ExternalRepository", new {area = "RepositoryImport"})'>
                 <span>@Localizer.Translate("Administration", "layout", LocTranslationSource.File)</span>
@@ -158,7 +158,7 @@
                 </li>
             }
 
-            @if (User.HasPermission(VokabularPermissionNames.ManageBibliographyImport))
+            @if (User.HasPermission(VokabularPermissionNames.ManageBibliographyImport) && portalType == PortalType.ResearchPortal)
             {
                 <li>
                     <a href='@Url.Action("List", "RepositoryImport", new {area = "RepositoryImport"})'>

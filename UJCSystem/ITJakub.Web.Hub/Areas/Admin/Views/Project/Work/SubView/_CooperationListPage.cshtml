@@ -1,7 +1,6 @@
-﻿@using Ridics.Core.Structures.Shared
+﻿@using ITJakub.Web.Hub.Helpers
 @using Scalesoft.Localization.AspNetCore
 @using Vokabular.MainService.DataContracts.Contracts.Type
-@using Vokabular.Shared.AspNetCore.Extensions
 @model ITJakub.Web.Hub.Areas.Admin.Models.ListViewModel<Vokabular.MainService.DataContracts.Contracts.Permission.UserGroupContract>
 @inject ILocalizationService Localizer
 
@@ -16,13 +15,11 @@
             <div class="description">@descriptionPrefix@role.Description</div>
             <div class="alert alert-danger"></div>
         </td>
-        @if (User.HasPermission(PermissionNames.ManageUserRoles))
-        {
-            <td class="buttons">
-                <a class="remove-role btn btn-sm btn-default">
-                    <i class="fa fa-trash"></i>
-                </a>
-            </td>
-        }
+        <td class="buttons">
+            <button type="button" class="remove-role btn btn-sm btn-default" disabled="@(!ViewData.HasPermissionFor().AdminProject)">
+                <i class="fa fa-trash"></i>
+                <span class="saving-icon loading-small-button hide"></span>
+            </button>
+        </td>
     </tr>
 }

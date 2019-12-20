@@ -60,14 +60,13 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 View(new BookListingModel
                 {
                     BookId = book.Id,
-                    BookXmlId = book.Id.ToString(), // TODO remove this property
-                    VersionXmlId = null, // TODO replace this property with snapshot ID
-                    BookTitle = book.Title,
-                    BookPages = pages,
-                    SearchText = searchText,
-                    InitPageXmlId = page, // TODO rename to InitPageId
-                    CanPrintEdition = User.HasPermission(VokabularPermissionNames.EditionPrintText),
-                    JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
+                        SnapshotId = null, 
+                        BookTitle = book.Title,
+                        BookPages = pages,
+                        SearchText = searchText,
+                        InitPageId = page, 
+                        CanPrintEdition = User.HasPermission(VokabularPermissionNames.EditionPrintText),
+                        JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                 });
         }
 
