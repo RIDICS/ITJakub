@@ -46,8 +46,9 @@
     <p>
         Tvorba <i>Vokabuláře webového</i> je <a href='@Url.Action("Support", "Home", new {Area = ""})'>podporována</a> z různých zdrojů.
     </p>*@
-
-    <div class="version-info">
+    
+    @*Version info is hidden because no build server is configured*@
+    @*<div class="version-info">
         @Localizer.TranslateFormat("VokabularVersion", "Home", LocTranslationSource.File, VersionInfo.Version)
-    </div>
+    </div>*@
 </div>
