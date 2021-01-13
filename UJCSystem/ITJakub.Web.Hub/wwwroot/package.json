@@ -17,7 +17,7 @@
     "jquery-appear": "https://github.com/emn178/jquery-appear.git#0.2.6",
     "jquery-eu-cookie-law-popup": "https://github.com/beubi/jquery-eu-cookie-law-popup.git#1.1.0",
     "jquery-ui-dist": "1.12.1",
-    "jquery-validation": "1.17.0",
+    "jquery-validation": "1.19.3",
     "jquery-validation-unobtrusive": "3.2.6",
     "jquery-zoom": "1.7.20",
     "lazysizes": "4.0.1",
