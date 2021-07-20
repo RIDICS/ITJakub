@@ -28,7 +28,7 @@
     "scalesoft-localization-web": "2.1.1",
     "simplemde-custom-markdown-mode": "https://github.com/RIDICS/simplemde-markdown-editor.git#71b7a583e230b967116c99141291d94276ba1433",
     "stickybits": "3.0.4",
-    "urijs": "1.19.1",
+    "urijs": "1.19.7",
     "wheelzoom": "3.1.3"
   }
 }
